@@ -1,0 +1,42 @@
+<wicket:head>
+	<style type="text/css">
+		div.menu-list {
+			width: 12em;
+		}
+		div.menu-list a {
+			color: blue;
+		}
+		div.menu-list em {
+			background-color: #ddd;
+		}
+		
+		div.menu-list a,
+		div.menu-list em {
+			display: block;
+			padding: 2px;
+		}
+	</style>
+</wicket:head>
+<wicket:panel>
+
+<table><tr><td style="vertical-align: top">
+	Available Menus:
+	<div class="menu-list">
+		<div wicket:id="listView">
+			<a wicket:id="select"><span wicket:id="label"></span></a>
+		</div>
+	</div>
+	
+</td>
+<td>
+
+	<form wicket:id="form">
+		Item CSS Class <input wicket:id="itemStyleClass"/><br/>
+		Selected Item CSS Class  <input wicket:id="selectedItemStyleClass"/><br/>
+		Outer Container CSS class (ul)  <input wicket:id="outerContainerStyleClass"/><br/>
+		Inner Container CSS class (ul)  <input wicket:id="innerContainerStyleClass"/> (for nested menus)<br/>
+	</form>
+
+</td></tr></table>
+	
+</wicket:panel>

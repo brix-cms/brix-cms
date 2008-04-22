@@ -1,0 +1,54 @@
+<wicket:head>
+	<style type="text/css">
+		table.menu-editor {			
+			border-collapse: collapse;			
+		}
+		table.menu-editor td {
+			vertical-align: top;
+			padding: 0px;
+		}
+		table.menu-editor div.left-menu {
+			width: 12em;
+		}
+		table.menu-editor div.left-menu a {
+			color: blue;
+		}
+		table.menu-editor div.left-menu em {
+			background-color: #ddd;
+		}
+		
+		table.menu-editor div.left-menu a,
+		table.menu-editor div.left-menu em {
+			display: block;
+			padding: 2px;
+		}
+		div.editor {
+			border-left: 4px solid #ddd;
+			border-right: 4px solid #ddd; 
+			padding: 4px;
+			background-color: #f8f8f8;
+		}
+
+	</style>
+</wicket:head>
+<wicket:panel>
+	<table class="menu-editor">
+		<tr>
+			<td>
+				<div class="left-menu">
+					<div wicket:id="listView">
+						<a wicket:id="select"><span wicket:id="label"></span></a>
+					</div>
+					<a wicket:id="newMenu">New Menu</a>
+				</div>
+			</td>
+			
+			<td>
+			
+				<div wicket:id="editor" class="editor">
+				</div>
+			
+			</td>
+		</tr>
+	</table>
+</wicket:panel>

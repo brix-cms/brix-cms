@@ -1,0 +1,20 @@
+<wicket:panel>
+<br/>
+	<form wicket:id="form">
+	title: <input wicket:id="title" type="text" size="60"/><br/>
+	template: <span wicket:id="templatePicker"></span><br/>
+	<input type="checkbox" wicket:id="requiresSSL"/> requires SSL<br/> 
+	content:<br/>
+	
+	<div wicket:id="feedback">
+	</div>
+		
+	<input wicket:id="disable-editors" type="submit" value="Raw Markup Mode"/>
+	<input wicket:id="enable-code-editor" type="submit" value="Code Mode"/>
+	<input wicket:id="enable-wysiwig-editor" type="submit" value="Rich Mode"/>
+	
+	<textarea wicket:id="content" cols="80" rows="30" style="width:100%;"></textarea>
+	<br/>
+	<input type="submit" value="save" wicket:id="save"/>
+	</form>
+</wicket:panel>

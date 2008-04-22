@@ -1,0 +1,71 @@
+<wicket:head>
+	<style type="text/css">
+		div.editor-panel div.tree {
+			margin-top: 0.5em;
+			overflow: auto;
+			width: 22em;
+			height: 15em;
+			border: 1px solid #ddf;
+			background-color: white;
+		}
+		
+		div.editor-panel div.tree table.wicket-tree-content {
+			width: 100%;
+		}
+		
+		div.editor-panel div.tree table.wicket-tree-content td {
+			vertical-align: middle;
+		}
+		
+		div.editor-panel div.tree table.wicket-tree-content a {
+			display: block;		
+			-moz-outline: none;			
+		}
+		
+		div.editor-panel div.tree table.selected span {
+			font-weight: normal;
+			color: black;
+		}
+		
+		div.editor-panel div.editor-form {
+			margin-left: 0.4em;
+			margin-right: 0.4em;
+			margin-top: 1em;
+		}
+		
+		div.editor-panel div.links {
+			overflow: hidden;
+			_height: 0.1%;
+			margin-top: 0.5em;
+		}
+		
+		div.editor-panel div.links a,
+		div.editor-panel div.links span {
+			float: left;			
+			margin-right: 0.5em;
+			border: 1px solid #ddd;
+			padding: 2px 4px;
+			background-color: white;
+		}
+		
+		div.buttons {
+			margin-top: 1em;
+		}	
+		div.buttons input {
+		
+			width: 6em;
+		}	
+	</style>
+</wicket:head>
+<wicket:panel>
+	<form wicket:id="form">
+		Name: <input wicket:id="name"/> <br/>
+		
+		<div wicket:id="editor" class="editor-panel"></div>
+		
+		<div class="buttons">		
+			<input wicket:id="save" type="submit" value="Save"/> <input wicket:id="delete" type="submit" value="Delete"/>
+		</div>
+	</form>
+	<div wicket:id="feedback"></div>
+</wicket:panel>

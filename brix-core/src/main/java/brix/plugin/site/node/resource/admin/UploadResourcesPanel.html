@@ -1,0 +1,19 @@
+<wicket:head>
+<style>
+		.mfuex { padding:5px;margin:5px;background:#eee; }
+		.mfuex .wicket-mfu-container { padding: 5px; margin-top: 3px; background-color: white; border:1px solid black; font-size: xx-small; }
+		.mfuex .wicket-mfu-caption { font-weight: bold; }
+		.mfuex .wicket-mfu-container input { margin-left: 5px; font-size: xx-small; }
+	</style>
+</wicket:head>
+<wicket:panel>
+
+Upload Resources:<br/>
+<div wicket:id="feedback"></div>
+<form wicket:id="form">
+<input wicket:id="overwrite" type="checkbox"/> Overwrite existing files<br/>
+<div wicket:id="uploads" class="mfuex"></div><br/>
+<input type="submit" value="UPLOAD"/>
+</form>
+
+</wicket:panel>

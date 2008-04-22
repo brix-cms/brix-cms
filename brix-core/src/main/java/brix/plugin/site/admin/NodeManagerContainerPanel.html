@@ -1,0 +1,28 @@
+<wicket:panel>
+	
+	<table cellspacing="0" cellpadding="0" style="width: 100%;">
+		<tr>
+			<td>
+			<div wicket:id="path2"></div>
+			</td>
+			<td align="right"><a wicket:id="makeVersionable">MAKE
+			VERSIONABLE</a> &nbsp;&nbsp; <a wicket:id="delete"
+				onclick="return confirm('Are you sure?');">DELETE</a></td>
+		</tr>
+	</table>
+
+	<div wicket:id="sessionFeedback"></div>
+
+	<table
+		style="table-layout: fixed; width: 100%; padding: 0px; margin: 0px; border-collapse: collapse;">
+		<tr>
+			<td style="width: 100%">
+			<div style="overflow: hidden">
+			<div wicket:id="editor"></div>
+			</div>
+			</td>
+		</tr>
+	</table>
+
+
+</wicket:panel>
