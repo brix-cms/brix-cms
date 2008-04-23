@@ -75,8 +75,10 @@ public class ConvertNodePanel extends NodeManagerPanel
         SitePlugin.get().getNodePluginForType(type).getConverterForNode(getNode()).convert(node);
         node.save();
         node.checkin();
+        
+        getModel().detach();
 
-        NavigationTreeNode treeNode = new SiteNavigationTreeNode(node);
+        NavigationTreeNode treeNode = new SiteNavigationTreeNode(getNode());
         getNavigation().selectNode(treeNode);
 
     }
