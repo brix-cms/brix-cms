@@ -150,8 +150,8 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         ws.setNullValid(false);
         add(ws);
 
-        add(new PublishLink("publishToIntegration", Brix.STATE_INTEGRATION, Brix.STATE_DEVELOPMENT));
-        add(new PublishLink("publishToProduction", Brix.STATE_PRODUCTION, Brix.STATE_INTEGRATION));
+        add(new PublishLink("publishToStaging", Brix.STATE_STAGING, Brix.STATE_DEVELOPMENT));
+        add(new PublishLink("publishToProduction", Brix.STATE_PRODUCTION, Brix.STATE_STAGING));
 
 
     }

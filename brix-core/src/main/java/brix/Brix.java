@@ -135,7 +135,7 @@ public abstract class Brix
     }
 
     public static final String STATE_DEVELOPMENT = "development";
-    public static final String STATE_INTEGRATION = "integration";
+    public static final String STATE_STAGING = "staging";
     public static final String STATE_PRODUCTION = "production";
 
     public String getWorkspaceState(String workspaceName)
