@@ -41,7 +41,7 @@ class EditTab extends NodeManagerPanel
 
         String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
         NodeFilter filter = new NodeTypeFilter(TileTemplateNodePlugin.TYPE);
-        form.add(new NodePickerPanel("templatePicker", adapter.forProperty("template"), workspace,
+        form.add(new NodePickerPanel("templatePicker", adapter.forNodeProperty("template"), workspace,
                 filter));
 
         form.add(new CheckBox("requiresSSL", adapter.forProperty("requiresSSL")));
