@@ -75,6 +75,25 @@ public abstract class NavigationPanel extends Panel<Object>
             NavigationTreeNode node = (NavigationTreeNode)model.getObject();
             return node.newLinkPanel(id, this);
         }
+
+        @Override
+        protected String getItemClass(Object node)
+        {
+            NavigationTreeNode treeNode = (NavigationTreeNode)node;
+            if (!getTreeState().getSelectedNodes().isEmpty())
+            {
+                NavigationTreeNode selected = (NavigationTreeNode)getTreeState().getSelectedNodes()
+                    .iterator().next();
+
+                boolean s = selected.equals(node) ||
+                    (selected.getParent().equals(treeNode) && treeNode.getIndex(selected) == -1);
+                return s ? getSelectedClass() : null;
+            }
+            else
+            {
+                return super.getItemClass(node);
+            }
+        }
     };
 
     private final NavigationTreeModel treeModel;
@@ -108,18 +127,7 @@ public abstract class NavigationPanel extends Panel<Object>
 
     public void selectNode(NavigationTreeNode node)
     {
-        Collection<?> selected = tree.getTreeState().getSelectedNodes();
-        if (selected.size() > 0)
-        {
-            NavigationTreeNode current = (NavigationTreeNode)selected.iterator().next();
-            if ((node.getParent().equals(current) && current.getIndex(node) == -1) ||
-                 node.equals(current))
-            {
-                onNodeSelected(node);
-                return;
-            }
-        }
-        tree.getTreeState().selectNode(node, true);           
+        tree.getTreeState().selectNode(node, true);
     }
 
     public void allNodesCollapsed()
@@ -144,10 +152,11 @@ public abstract class NavigationPanel extends Panel<Object>
 
     public void nodeSelected(Object node)
     {
-        for (Object n = node; n != null; n = ((ExtendedTreeModel)tree.getModelObject()).getParent(n))
+        for (Object n = node; n != null; n = ((ExtendedTreeModel)tree.getModelObject())
+            .getParent(n))
         {
             tree.getTreeState().expandNode(n);
-        }    
+        }
         onNodeSelected((NavigationTreeNode)node);
     }
 
