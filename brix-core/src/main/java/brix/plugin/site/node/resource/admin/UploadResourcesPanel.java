@@ -70,7 +70,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
                 }
             }
 
-            JcrNode newNode = parentNode.addNode(fileName);
+            JcrNode newNode = parentNode.addNode(fileName, "nt:file");
 
             try
             {
