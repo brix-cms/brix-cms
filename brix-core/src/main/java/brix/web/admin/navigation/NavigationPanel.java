@@ -86,7 +86,7 @@ public abstract class NavigationPanel extends Panel<Object>
                     .iterator().next();
 
                 boolean s = selected.equals(node) ||
-                    (selected.getParent().equals(treeNode) && treeNode.getIndex(selected) == -1);
+                    (selected.getParent() != null && selected.getParent().equals(treeNode) && treeNode.getIndex(selected) == -1);
                 return s ? getSelectedClass() : null;
             }
             else
