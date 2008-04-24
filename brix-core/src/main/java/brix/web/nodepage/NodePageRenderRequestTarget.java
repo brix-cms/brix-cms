@@ -55,15 +55,10 @@ class NodePageRenderRequestTarget
                     page = pageFactory.newPage();
                 }
                 String componentPath = iface.substring(0, separator);
+                page.beforeRender();
                 Component component = page.get(componentPath);
                 if (component == null)
-                {
-                    // this is quite a hack to get components in repeater work.
-                    // But it still can fail if the repeater is a paging one or on every
-                    // render
-                    // it will generate new index for the items...
-                    page.beforeRender();
-                    component = page.get(componentPath);
+                {                    
                     if (component == null)
                     {
                         throw new WicketRuntimeException(
