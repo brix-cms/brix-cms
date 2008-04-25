@@ -7,18 +7,9 @@ import java.util.Properties;
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
-import brix.Path;
-
 public class ApplicationProperties
 {
     private static final String FILE_PREFIX = "brix/demo/application.";
-    private String svnRepository;
-    private String svnUsername;
-    private String svnPassword;
-
-    private Path adminRoot;
-    private Path siteRoot;
-    private Path siteRoots;
 
     private String jcrRepositoryLocation;
     private String jcrLogin;
@@ -63,30 +54,6 @@ public class ApplicationProperties
 
     private void set(Properties properties)
     {
-        if (properties.containsKey("svn.repo"))
-        {
-            svnRepository = properties.getProperty("svn.repo");
-        }
-        if (properties.containsKey("svn.repo.username"))
-        {
-            svnUsername = properties.getProperty("svn.repo.username");
-        }
-        if (properties.containsKey("svn.repo.password"))
-        {
-            svnPassword = properties.getProperty("svn.repo.password");
-        }
-        if (properties.containsKey("admin.root"))
-        {
-            adminRoot = new Path(properties.getProperty("admin.root"));
-        }
-        if (properties.containsKey("site.root"))
-        {
-            siteRoot = new Path(properties.getProperty("site.root"));
-        }
-        if (properties.containsKey("site.roots"))
-        {
-            siteRoots = new Path(properties.getProperty("site.roots"));
-        }
         if (properties.containsKey("jcr.repository.location"))
         {
             jcrRepositoryLocation = properties.getProperty("jcr.repository.location");
@@ -105,36 +72,6 @@ public class ApplicationProperties
             jcrDefaultWorkspace = properties.getProperty("jcr.defaultWorkspace");
         }
 
-    }
-
-    public String getSvnRepository()
-    {
-        return svnRepository;
-    }
-
-    public String getSvnUsername()
-    {
-        return svnUsername;
-    }
-
-    public String getSvnPassword()
-    {
-        return svnPassword;
-    }
-
-    public Path getAdminRoot()
-    {
-        return adminRoot;
-    }
-
-    public Path getSiteRoot()
-    {
-        return siteRoot;
-    }
-
-    public String[] getSiteRoots()
-    {
-        return siteRoots.toString().split(",");
     }
 
     public String getJcrRepositoryLocation()
