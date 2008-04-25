@@ -55,7 +55,7 @@ public class SimpleServlet extends SimpleWebdavServlet
     @Override
     public Repository getRepository()
     {
-        WicketApplication app = (WicketApplication)Application.get("wicket.brix");
+        WicketApplication app = (WicketApplication)Application.get("wicket.brix-demo");
         return app.getRepository();
     }
 
