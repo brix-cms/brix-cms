@@ -1,16 +1,15 @@
 package brix.web.admin.navigation;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.DefaultTreeState;
+import org.apache.wicket.markup.html.tree.ExtendedTreeModel;
 import org.apache.wicket.markup.html.tree.ITreeState;
 import org.apache.wicket.markup.html.tree.ITreeStateListener;
-import org.apache.wicket.markup.html.tree.ExtendedTreeModel;
 import org.apache.wicket.markup.html.tree.BaseTree.LinkType;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -39,6 +38,10 @@ public abstract class NavigationPanel extends Panel<Object>
                     {
                         if (selected == true)
                         {
+                            if (super.isNodeSelected(node))
+                            {
+                                super.selectNode(node, false);
+                            }
                             super.selectNode(node, selected);
                         }
                     }
@@ -126,7 +129,7 @@ public abstract class NavigationPanel extends Panel<Object>
     }
 
     public void selectNode(NavigationTreeNode node)
-    {
+    {        
         tree.getTreeState().selectNode(node, true);
     }
 

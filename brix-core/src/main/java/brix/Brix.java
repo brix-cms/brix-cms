@@ -138,28 +138,28 @@ public abstract class Brix
     public static final String STATE_STAGING = "staging";
     public static final String STATE_PRODUCTION = "production";
 
-    public String getWorkspaceState(String workspaceName)
+    private WorkspaceResolver workspaceResolver;
+    
+    public WorkspaceResolver getWorkspaceResolver()
     {
-        String parts[] = workspaceName.split("\\^");
-        if (parts.length == 3)
+        if (workspaceResolver == null)
         {
-            return parts[2];
+            workspaceResolver = newWorkspaceResolver();
         }
-        else
-        {
-            return null;
-        }
+        return workspaceResolver;
     }
-
+    
+    protected WorkspaceResolver newWorkspaceResolver()
+    {
+        return new DefaultWorkspaceResolver('^');
+    }
+    
     public String getWorkspaceNameForState(String workspaceName, String state)
     {
-        String parts[] = workspaceName.split("\\^");
-        if (parts.length != 3)
-        {
-            throw new IllegalArgumentException("'" + workspaceName +
-                    "' is not a valid workspace name (must be in form of 'site-name-state').");
-        }
-        return parts[0] + "^" + parts[1] + "^" + state;
+        String prefix = getWorkspaceResolver().getWorkspacePrefix(workspaceName);
+        String id = getWorkspaceResolver().getWorkspaceId(workspaceName);
+        
+        return getWorkspaceResolver().getWorkspaceName(prefix, id, state);               
     }
 
     public void publish(String workspace, String targetState, SessionProvider sessionProvider)

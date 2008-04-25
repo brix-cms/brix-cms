@@ -8,9 +8,13 @@ import java.util.Calendar;
 import javax.jcr.Node;
 
 import org.apache.wicket.util.io.Streams;
+import org.apache.wicket.util.string.Strings;
 
+import brix.BrixRequestCycle;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.plugin.site.SitePlugin;
+import brix.plugin.site.node.resource.ResourceNodePlugin;
 
 public class BrixFileNode extends BrixNode
 {
@@ -43,7 +47,7 @@ public class BrixFileNode extends BrixNode
     public String getEncoding()
     {
         return getContent().hasProperty("jcr:encoding") ? getContent().getProperty("jcr:encoding")
-                .getString() : null;
+            .getString() : null;
     }
 
     public void setMimeType(String mimeType)
@@ -53,7 +57,19 @@ public class BrixFileNode extends BrixNode
 
     public String getMimeType()
     {
-        return getContent().getProperty("jcr:mimeType").getString();
+        return getMimeType(true);
+    }
+
+    public String getMimeType(boolean useExtension)
+    {
+        String mime = getContent().getProperty("jcr:mimeType").getString();
+        if (useExtension && (Strings.isEmpty(mime) || mime.equals("application/octet-stream")))
+        {
+            ResourceNodePlugin plugin = (ResourceNodePlugin)SitePlugin.get(BrixRequestCycle.Locator.getBrix())
+                .getNodePluginForType(ResourceNodePlugin.TYPE);
+            return plugin.resolveMimeTypeFromFileName(getName());
+        }
+        return mime;
     }
 
     public void setData(String data)
@@ -93,7 +109,7 @@ public class BrixFileNode extends BrixNode
 
     public static BrixFileNode initialize(JcrNode node, String mimeType)
     {
-        if (node.isNodeType("nt:file") == false) 
+        if (node.isNodeType("nt:file") == false)
         {
             throw new IllegalStateException("Argument 'node' must have JCR type nt:file.");
         }

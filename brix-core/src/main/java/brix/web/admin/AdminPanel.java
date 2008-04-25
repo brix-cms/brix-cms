@@ -17,6 +17,7 @@ import org.apache.wicket.model.PropertyModel;
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Path;
+import brix.WorkspaceResolver;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.auth.WorkspaceAction;
@@ -39,7 +40,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
     private String workspace;
 
     public String getWorkspace()
-    {   
+    {
         return workspace;
     }
 
@@ -69,7 +70,8 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         };
         add(navigation);
 
-        NavigationTreeModel model = (NavigationTreeModel)navigation.getTree().getModel().getObject();
+        NavigationTreeModel model = (NavigationTreeModel)navigation.getTree().getModel()
+            .getObject();
         TreeNode root = (TreeNode)model.getRoot();
         NavigationTreeNode node;
         if (root.getChildCount() > 0)
@@ -81,7 +83,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         {
             node = null;
             onNodeSelected(node);
-        }        
+        }
     }
 
     private void onNodeSelected(NavigationTreeNode node)
@@ -105,35 +107,35 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
     {
         super(id);
 
-        if (workspace == null) 
+        if (workspace == null)
         {
             workspace = filterWorkspaces(Locator.getBrix().getVisibleWorkspaces()).get(0);
         }
-        
+
         this.workspace = workspace;
 
         setupNavigation();
 
         DropDownChoice ws = new DropDownChoice("workspace", new PropertyModel(this, "workspace"),
-                new LoadableDetachableModel()
+            new LoadableDetachableModel()
+            {
+                @Override
+                protected Object load()
                 {
-                    @Override
-                    protected Object load()
-                    {
-                        return filterWorkspaces(Locator.getBrix().getVisibleWorkspaces());
-                    }
-                }, new IChoiceRenderer()
+                    return filterWorkspaces(Locator.getBrix().getVisibleWorkspaces());
+                }
+            }, new IChoiceRenderer()
+            {
+                public Object getDisplayValue(Object object)
                 {
-                    public Object getDisplayValue(Object object)
-                    {
-                        return ((String)object).replace("^", " - ");
-                    }
+                    return getVisibleWorkspaceName((String)object);
+                }
 
-                    public String getIdValue(Object object, int index)
-                    {
-                        return "" + index;
-                    }
-                })
+                public String getIdValue(Object object, int index)
+                {
+                    return "" + index;
+                }
+            })
         {
             @Override
             protected boolean wantOnSelectionChangedNotifications()
@@ -156,6 +158,16 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
 
     }
 
+    private String getVisibleWorkspaceName(String workspaceName)
+    {
+        WorkspaceResolver resolver = BrixRequestCycle.Locator.getBrix().getWorkspaceResolver();
+        String id = resolver.getWorkspaceId(workspaceName);
+
+        return resolver.getWorkspacePrefix(workspaceName) + " - " +
+            resolver.getUserVisibleWorkspaceName(id) + " - " +
+            resolver.getWorkspaceState(workspaceName);
+    }
+
     private class PublishLink extends Link
     {
 
@@ -173,19 +185,20 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         public void onClick()
         {
             Locator.getBrix().publish(getWorkspace(), targetState,
-                    BrixRequestCycle.Locator.getSessionProvider());
+                BrixRequestCycle.Locator.getSessionProvider());
         }
 
         @Override
         public boolean isVisible()
         {
             Action action = new PublishWorkspaceActionImpl(Context.ADMINISTRATION,
-                    AdminPanel.this.workspace, targetState);
+                AdminPanel.this.workspace, targetState);
 
             Brix brix = Locator.getBrix();
 
-            return requiredState.equals(brix.getWorkspaceState(getWorkspace())) &&
-                    brix.getAuthorizationStrategy().isActionAuthorized(action);
+            return requiredState.equals(brix.getWorkspaceResolver().getWorkspaceState(
+                getWorkspace())) &&
+                brix.getAuthorizationStrategy().isActionAuthorized(action);
         }
 
     };
@@ -208,7 +221,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         for (String s : workspaces)
         {
             Action action = new WorkspaceActionImpl(Action.Context.ADMINISTRATION,
-                    WorkspaceAction.Type.VIEW, s);
+                WorkspaceAction.Type.VIEW, s);
             if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
             {
                 result.add(s);
