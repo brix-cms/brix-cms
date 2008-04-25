@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.web.reference.Reference;
 
@@ -123,8 +124,8 @@ public class NodePickerPanel extends FormComponentPanel
     {
         if (isRequired())
         {
-            Reference ref = (Reference)getModelObject();
-            if (ref == null || ref.isEmpty())
+            JcrNode node = (JcrNode) getModelObject();
+            if (node == null)
             {
                 return false;
             }

@@ -1,13 +1,14 @@
 package brix.web.tile.pagetile;
 
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
-import brix.Path;
+import brix.BrixNodeModel;
 import brix.jcr.api.JcrNode;
+import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
-import brix.web.util.validators.NodePathValidator;
+import brix.web.picker.node.NodeFilter;
+import brix.web.picker.node.NodePickerPanel;
+import brix.web.picker.node.NodeTypeFilter;
 
 public class PageTileEditorPanel extends TileEditorPanel
 {
@@ -16,31 +17,28 @@ public class PageTileEditorPanel extends TileEditorPanel
     {
         super(id, tileContainerNode);
 
-        TextField tf;
-        add(tf = new TextField("node", new PropertyModel(this, "node")));
-        tf.setRequired(true);
-        tf.add(new NodePathValidator(tileContainerNode));
+        NodeFilter filter = new NodeTypeFilter(TilePageNodePlugin.TYPE); 
+        NodePickerPanel picker = new NodePickerPanel("nodePicker", targetNodeModel, tileContainerNode.getObject().getSession().getWorkspace().getName(), filter);
+        picker.setRequired(true);
+        add(picker);
     }
 
-    private String node;
+    private IModel<JcrNode> targetNodeModel = new BrixNodeModel(null);
 
     @Override
     public void load(JcrNode node)
     {
-        JcrNode pageNode = node.getProperty("pageNode").getNode();
-        this.node = pageNode.getPath();
+        if (node.hasProperty("pageNode"))
+        {
+            JcrNode pageNode = node.getProperty("pageNode").getNode();
+            targetNodeModel.setObject(pageNode);
+        }
     }
 
     @Override
     public void save(JcrNode node)
-    {
-        Path path = new Path(this.node);
-        if (path.isAbsolute() == false)
-        {
-            path = new Path(((JcrNode)getModelObject()).getPath()).parent().append(path);
-        }
-        JcrNode pageNode = (JcrNode)node.getSession().getItem(path.toString());
-        node.setProperty("pageNode", pageNode);
+    {        
+        node.setProperty("pageNode", targetNodeModel.getObject());
     }
 
 }
