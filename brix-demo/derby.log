@@ -1,0 +1,18 @@
+----------------------------------------------------------------
+2008-04-25 03:24:58.296 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.2.1.6 - (452058): instance c013800d-0119-839c-bfcb-0000002a0e10
+on database directory C:\dev\tmp\brix\version\db  
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+2008-04-25 03:24:59.374 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.2.1.6 - (452058): instance e03f4017-0119-839c-bfcb-0000002a0e10
+on database directory C:\dev\tmp\brix\workspaces\default\db  
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+2008-04-25 03:25:09.421 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.2.1.6 - (452058): instance 80840021-0119-839c-bfcb-0000002a0e10
+on database directory C:\dev\tmp\brix\workspaces\site^localhost^sandbox\db  
+
+Database Class Loader started - derby.database.classpath=''
