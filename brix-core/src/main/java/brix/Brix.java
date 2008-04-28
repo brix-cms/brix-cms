@@ -1,6 +1,6 @@
 package brix;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -44,9 +44,9 @@ public abstract class Brix
     public static final String NS_PREFIX = NS + ":";
 
     public Brix()
-    {    
+    {
         wrapperRegistry.registerWrapper(FolderNode.class);
-        
+
         registerPlugin(new SitePlugin());
         registerPlugin(new MenuPlugin());
     }
@@ -69,18 +69,29 @@ public abstract class Brix
          * or have some brix-level registery
          */
         application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
-    }    
+    }
 
-    public List<String> getVisibleWorkspaces() {
+    public List<String> getVisibleWorkspaces()
+    {
         return getAvailableWorkspaces(BrixRequestCycle.Locator.getSession(null));
     }
-    
+
     public List<String> getAvailableWorkspaces(JcrSession session)
     {
-        return Arrays.asList(session.getWorkspace()
-                .getAccessibleWorkspaceNames());
-    }
+        String workspaces[] = session.getWorkspace().getAccessibleWorkspaceNames();
 
+        List<String> res = new ArrayList<String>(workspaces.length);
+
+        for (String s : workspaces)
+        {
+            if (getWorkspaceResolver().isValidWorkspaceName(s))
+            {
+                res.add(s);
+            }
+        }
+
+        return res;
+    }
 
     public void createWorkspace(JcrSession session, String name)
     {
@@ -129,7 +140,7 @@ public abstract class Brix
             if (node.getName().equals("jcr:system") == false)
             {
                 destSession.getWorkspace().clone(srcSession.getWorkspace().getName(),
-                        "/" + node.getName(), "/" + node.getName(), true);
+                    "/" + node.getName(), "/" + node.getName(), true);
             }
         }
     }
@@ -139,7 +150,7 @@ public abstract class Brix
     public static final String STATE_PRODUCTION = "production";
 
     private WorkspaceResolver workspaceResolver;
-    
+
     public WorkspaceResolver getWorkspaceResolver()
     {
         if (workspaceResolver == null)
@@ -148,18 +159,18 @@ public abstract class Brix
         }
         return workspaceResolver;
     }
-    
+
     protected WorkspaceResolver newWorkspaceResolver()
     {
         return new DefaultWorkspaceResolver('^');
     }
-    
+
     public String getWorkspaceNameForState(String workspaceName, String state)
     {
         String prefix = getWorkspaceResolver().getWorkspacePrefix(workspaceName);
         String id = getWorkspaceResolver().getWorkspaceId(workspaceName);
-        
-        return getWorkspaceResolver().getWorkspaceName(prefix, id, state);               
+
+        return getWorkspaceResolver().getWorkspaceName(prefix, id, state);
     }
 
     public void publish(String workspace, String targetState, SessionProvider sessionProvider)
@@ -177,7 +188,8 @@ public abstract class Brix
 
             cleanWorkspace(BrixRequestCycle.Locator.getSession(dest));
 
-            cloneWorkspace(BrixRequestCycle.Locator.getSession(workspace), BrixRequestCycle.Locator.getSession(dest));
+            cloneWorkspace(BrixRequestCycle.Locator.getSession(workspace), BrixRequestCycle.Locator
+                .getSession(dest));
         }
     }
 
@@ -267,7 +279,7 @@ public abstract class Brix
             type += " mixin";
 
             manager.registerNodeTypes(new StringInputStream(type),
-                    JackrabbitNodeTypeManager.TEXT_X_JCR_CND, true);
+                JackrabbitNodeTypeManager.TEXT_X_JCR_CND, true);
         }
     }
 
@@ -304,7 +316,7 @@ public abstract class Brix
         catch (Exception e)
         {
             log.error("Couldn't init jackrabbit repository, make sure you"
-                    + " have the jcr.repository.location config property set", e);
+                + " have the jcr.repository.location config property set", e);
         }
     }
 
@@ -347,13 +359,13 @@ public abstract class Brix
     }
 
     private List<Plugin> plugins = new CopyOnWriteArrayList<Plugin>();
-    
-    public void registerPlugin(Plugin plugin) 
+
+    public void registerPlugin(Plugin plugin)
     {
         plugins.add(plugin);
     }
-    
-    public Plugin getPlugin(String id) 
+
+    public Plugin getPlugin(String id)
     {
         if (id == null)
         {
@@ -363,16 +375,16 @@ public abstract class Brix
         {
             if (id.equals(p.getId()))
             {
-                return p;               
+                return p;
             }
         }
         return null;
     }
-    
-    public Collection<Plugin> getPlugins() 
+
+    public Collection<Plugin> getPlugins()
     {
-        return Collections.unmodifiableList(plugins);        
+        return Collections.unmodifiableList(plugins);
     }
-    
+
     private static final Logger log = LoggerFactory.getLogger(Brix.class);
 }

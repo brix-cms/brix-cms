@@ -51,4 +51,9 @@ public class DefaultWorkspaceResolver implements WorkspaceResolver
     {
         return visibleWorkspaceName;
     }
+    
+    public boolean isValidWorkspaceName(String workspaceName)
+    {
+        return (workspaceName != null) && (Strings.split(workspaceName, separator).length == 3);
+    }
 }

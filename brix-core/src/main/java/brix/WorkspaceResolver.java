@@ -13,4 +13,6 @@ public interface WorkspaceResolver
     public String getUserVisibleWorkspaceName(String workspaceId);
     
     public String getWorkspaceIdFromVisibleName(String visibleWorkspaceName);
+    
+    public boolean isValidWorkspaceName(String workspaceName);
 }

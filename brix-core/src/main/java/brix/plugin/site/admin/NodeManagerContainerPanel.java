@@ -10,6 +10,7 @@ import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -29,7 +30,7 @@ import brix.web.util.PathLabel;
 
 public class NodeManagerContainerPanel extends NodeManagerPanel
 {
-    
+
     private Component editor;
 
     public NodeManagerContainerPanel(String id, IModel<JcrNode> model)
@@ -44,6 +45,25 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             {
                 JcrNode node = (JcrNode)getNode().getSession().getItem(path.toString());
                 selectNode(node);
+            }
+        });
+
+        add(new Link("rename")
+        {
+            @Override
+            public void onClick()
+            {
+                final Component<?> old = editor;
+                Panel<JcrNode> renamePanel = new RenamePanel(EDITOR_ID, NodeManagerContainerPanel.this
+                    .getModel())
+                {
+                    @Override
+                    protected void onLeave()
+                    {
+                        setupEditor(old);
+                    }
+                };
+                setupEditor(renamePanel);
             }
         });
 
@@ -64,10 +84,10 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             public boolean isVisible()
             {
                 Action action = new NodeActionImpl(Context.ADMINISTRATION,
-                        NodeActionImpl.Type.NODE_EDIT, getNode());
+                    NodeActionImpl.Type.NODE_EDIT, getNode());
                 return getNode() != null && getNode().isNodeType("nt:file") &&
-                        !getNode().isNodeType("mix:versionable") &&
-                        Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                    !getNode().isNodeType("mix:versionable") &&
+                    Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
         });
 
@@ -81,13 +101,13 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
                 JcrNode parent = node.getParent();
 
                 selectNode(parent);
-                
+
                 node.remove();
 
                 try
-                {                    
+                {
                     parent.save();
-                    rebuildChildren(parent);                                        
+                    rebuildChildren(parent);
                 }
                 catch (JcrException e)
                 {
@@ -96,9 +116,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
                         parent.getSession().refresh(false);
                         NodeManagerContainerPanel.this.getModel().detach();
                         // parent.refresh(false);
-                        getSession()
-                                .error(
-                                        "Couldn't delete node. Other nodes contain references to this node.");
+                        getSession().error(
+                            "Couldn't delete node. Other nodes contain references to this node.");
                         selectNode(getNode());
                     }
                     else
@@ -112,12 +131,12 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             public boolean isVisible()
             {
                 Action action = new NodeActionImpl(Context.ADMINISTRATION,
-                        NodeActionImpl.Type.NODE_DELETE, getNode());
+                    NodeActionImpl.Type.NODE_DELETE, getNode());
                 Brix brix = BrixRequestCycle.Locator.getBrix();
                 String path = getNode().getPath();
                 return path.startsWith(brix.getWebPath()) &&
-                        path.length() > brix.getWebPath().length() &&
-                        Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                    path.length() > brix.getWebPath().length() &&
+                    Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
         });
@@ -125,7 +144,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
         editor = new WebMarkupContainer("editor");
         add(editor);
         setupEditor();
-        
+
         add(new SessionFeedbackPanel("sessionFeedback"));
     }
 
@@ -138,24 +157,31 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
     {
         getNavigation().nodeDeleted(new SiteNavigationTreeNode(node));
     }
-    
+
     private void rebuildChildren(JcrNode parent)
     {
         getNavigation().nodeChildrenChanged(new SiteNavigationTreeNode(parent));
     }
-    
+
+    private void setupEditor(Component newEditor)
+    {
+        editor.replaceWith(newEditor);
+        editor = newEditor;
+    }
+
     private void setupEditor()
     {
         final Component newEditor;
 
         SiteNodePlugin plugin = SitePlugin.get().getNodePluginForNode(getNode());
 
-        newEditor = plugin.newManageNodePanel("editor", getModel());
+        newEditor = plugin.newManageNodePanel(EDITOR_ID, getModel());
 
-        editor.replaceWith(newEditor);
-        editor = newEditor;
+        setupEditor(newEditor);
     }
-    
+
+    private static final String EDITOR_ID = "editor";
+
     private static class SessionFeedbackPanel extends FeedbackPanel
     {
 
