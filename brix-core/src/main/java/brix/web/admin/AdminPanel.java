@@ -1,11 +1,18 @@
 package brix.web.admin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.ImportUUIDBehavior;
+import javax.jcr.Session;
 import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.IRequestTarget;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -13,6 +20,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.protocol.http.WebResponse;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
@@ -115,6 +123,34 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         this.workspace = workspace;
 
         setupNavigation();
+
+        add(new Link("downloadWorkspace")
+        {
+            @Override
+            public void onClick()
+            {
+                getRequestCycle().setRequestTarget(new IRequestTarget()
+                {
+
+                    public void detach(RequestCycle requestCycle)
+                    {
+
+                    }
+
+                    public void respond(RequestCycle requestCycle)
+                    {
+                        WebResponse resp = (WebResponse)requestCycle.getResponse();
+                        resp.setAttachmentHeader("workspace.xml");
+                        JcrSession session = BrixRequestCycle.Locator
+                            .getSession(AdminPanel.this.workspace);
+                        Brix brix = BrixRequestCycle.Locator.getBrix();
+                        session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
+                            false);
+                    }
+
+                });
+            }
+        });
 
         DropDownChoice ws = new DropDownChoice("workspace", new PropertyModel(this, "workspace"),
             new LoadableDetachableModel()
