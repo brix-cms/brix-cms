@@ -10,6 +10,7 @@ import brix.web.nodepage.BrixPageParameters;
 
 public class MenuTile implements Tile
 {
+    public static final String TYPE_NAME = MenuTile.class.getName();
 
     public String getDisplayName()
     {
@@ -18,15 +19,15 @@ public class MenuTile implements Tile
 
     public String getTypeName()
     {
-        return getClass().getName();
+        return TYPE_NAME;
     }
 
-    public TileEditorPanel<?> newEditor(String id, IModel<JcrNode> tileContainerNode)
+    public TileEditorPanel< ? > newEditor(String id, IModel<JcrNode> tileContainerNode)
     {
         return new MenuTileEditor(id, tileContainerNode);
     }
 
-    public Component<?> newViewer(String id, IModel<JcrNode> tileNode,
+    public Component< ? > newViewer(String id, IModel<JcrNode> tileNode,
             BrixPageParameters tilePageParameters)
     {
         return new MenuRenderer(id, tileNode);

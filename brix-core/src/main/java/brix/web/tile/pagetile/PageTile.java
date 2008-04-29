@@ -18,6 +18,7 @@ import brix.web.nodepage.BrixPageParameters;
 
 public class PageTile implements Tile
 {
+    public static String TYPE_NAME = PageTile.class.getName();
 
     public PageTile()
     {
@@ -30,7 +31,7 @@ public class PageTile implements Tile
 
     public String getTypeName()
     {
-        return PageTile.class.getName();
+        return TYPE_NAME;
     }
 
     public TileEditorPanel newEditor(String id, IModel<JcrNode> containerNode)
@@ -38,7 +39,8 @@ public class PageTile implements Tile
         return new PageTileEditorPanel(id, containerNode);
     }
 
-    public Component newViewer(String id, IModel<JcrNode> tileNode, BrixPageParameters pageParameters)
+    public Component newViewer(String id, IModel<JcrNode> tileNode,
+            BrixPageParameters pageParameters)
     {
         return new PageTileViewerPanel(id, tileNode);
     }
