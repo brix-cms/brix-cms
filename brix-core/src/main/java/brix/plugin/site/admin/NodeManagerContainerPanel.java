@@ -65,6 +65,13 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
                 };
                 setupEditor(renamePanel);
             }
+            @Override
+            public boolean isVisible()
+            {
+                String path = NodeManagerContainerPanel.this.getModelObject().getPath();
+                String web = BrixRequestCycle.Locator.getBrix().getWebPath();
+                return path.length() > web.length() && path.startsWith(web);
+            }
         });
 
         add(new Link("makeVersionable")
