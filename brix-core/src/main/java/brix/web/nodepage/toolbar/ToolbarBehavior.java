@@ -72,7 +72,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     {
         if (workspaces == null)
         {
-            workspaces = filterWorkspaces(Locator.getBrix().getVisibleWorkspaces());
+            workspaces = filterWorkspaces(Locator.getBrix().getAvailableWorkspaces());
         }
         return workspaces;
     }

@@ -35,6 +35,7 @@ import brix.plugin.site.node.folder.FolderNodePlugin;
 import brix.plugin.site.node.tilepage.TileContainerNode;
 import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
+import brix.plugin.snapshot.SnapshotPlugin;
 import brix.util.StringInputStream;
 import brix.web.nodepage.PageParametersAwareEnabler;
 
@@ -49,6 +50,7 @@ public abstract class Brix
 
         registerPlugin(new SitePlugin());
         registerPlugin(new MenuPlugin());
+        registerPlugin(new SnapshotPlugin());
     }
 
 
@@ -71,11 +73,11 @@ public abstract class Brix
         application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
     }
 
-    public List<String> getVisibleWorkspaces()
+    public List<String> getAvailableWorkspaces()
     {
         return getAvailableWorkspaces(BrixRequestCycle.Locator.getSession(null));
     }
-
+    
     public List<String> getAvailableWorkspaces(JcrSession session)
     {
         String workspaces[] = session.getWorkspace().getAccessibleWorkspaceNames();
@@ -92,7 +94,32 @@ public abstract class Brix
 
         return res;
     }
-
+    
+    private List<String> filterWorkspaces(String prefix, String id, String state, List<String> original)
+    {
+        List<String> res = new ArrayList<String>();
+        for (String s : original)
+        {
+            String currentPrefix = getWorkspaceResolver().getWorkspacePrefix(s);
+            String currentId = getWorkspaceResolver().getWorkspaceId(s);
+            String currentState = getWorkspaceResolver().getWorkspaceState(s);
+            
+            if (prefix != null && !prefix.equals(currentPrefix))
+                continue;
+            if (id != null && !currentId.equals(currentId))
+                continue;
+            if (state != null && !state.equals(currentState))
+                continue;
+            res.add(s);
+        }
+        return res;
+    }
+    
+    public List<String> getAvailableWorkspacesFiltered(String prefix, String id, String state)
+    {
+        return filterWorkspaces(prefix, id, state, getAvailableWorkspaces(BrixRequestCycle.Locator.getSession(null)));
+    }
+    
     public void createWorkspace(JcrSession session, String name)
     {
         WorkspaceImpl workspace = (WorkspaceImpl)session.getWorkspace().getDelegate();
@@ -180,7 +207,7 @@ public abstract class Brix
         if (workspace.equals(dest) == false)
         {
 
-            List<String> workspaces = getVisibleWorkspaces();
+            List<String> workspaces = getAvailableWorkspaces();
             if (workspaces.contains(dest) == false)
             {
                 createWorkspace(sessionProvider.getJcrSession(null), dest);

@@ -46,21 +46,54 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
     private Component content;
     private NavigationPanel navigation;
     private String workspace;
+    private String workspaceLabel;
 
     public String getWorkspace()
     {
         return workspace;
     }
 
+    public void setWorkspace(String workspace, String label)
+    {
+        if (workspace.equals(this.workspace) == false)
+        {
+            this.workspace = workspace;
+            this.workspaceLabel = label;
+            setupNavigation();
+        }
+    }
+
     public void setWorkspace(String workspace)
     {
-        this.workspace = workspace;
+        setWorkspace(workspace, null);
     }
 
     public Navigation getNavigation()
     {
         return navigation;
     }
+
+    private class Renderer implements IChoiceRenderer<String>
+    {
+
+        public Object getDisplayValue(String object)
+        {
+            if (object.equals(workspace) && workspaceLabel != null)
+            {
+                return workspaceLabel;
+            }
+            else
+            {
+                return getVisibleWorkspaceName(object);
+            }
+        }
+
+        public String getIdValue(String object, int index)
+        {
+            return "" + index;
+        }
+
+    };
 
     private void setupNavigation()
     {
@@ -111,46 +144,23 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         add(content);
     }
 
+    private final String PREFIX = "site";
+
     public AdminPanel(String id, String workspace, Path root)
     {
         super(id);
 
         if (workspace == null)
         {
-            workspace = filterWorkspaces(Locator.getBrix().getVisibleWorkspaces()).get(0);
+            workspace = filterWorkspaces(
+                Locator.getBrix().getAvailableWorkspacesFiltered(PREFIX, null, null)).get(0);
         }
 
         this.workspace = workspace;
 
         setupNavigation();
 
-        add(new Link("downloadWorkspace")
-        {
-            @Override
-            public void onClick()
-            {
-                getRequestCycle().setRequestTarget(new IRequestTarget()
-                {
-
-                    public void detach(RequestCycle requestCycle)
-                    {
-
-                    }
-
-                    public void respond(RequestCycle requestCycle)
-                    {
-                        WebResponse resp = (WebResponse)requestCycle.getResponse();
-                        resp.setAttachmentHeader("workspace.xml");
-                        JcrSession session = BrixRequestCycle.Locator
-                            .getSession(AdminPanel.this.workspace);
-                        Brix brix = BrixRequestCycle.Locator.getBrix();
-                        session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
-                            false);
-                    }
-
-                });
-            }
-        });
+        
 
         DropDownChoice ws = new DropDownChoice("workspace", new PropertyModel(this, "workspace"),
             new LoadableDetachableModel()
@@ -158,20 +168,10 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
                 @Override
                 protected Object load()
                 {
-                    return filterWorkspaces(Locator.getBrix().getVisibleWorkspaces());
+                    return filterWorkspaces(Locator.getBrix().getAvailableWorkspacesFiltered(
+                        PREFIX, null, null));
                 }
-            }, new IChoiceRenderer()
-            {
-                public Object getDisplayValue(Object object)
-                {
-                    return getVisibleWorkspaceName((String)object);
-                }
-
-                public String getIdValue(Object object, int index)
-                {
-                    return "" + index;
-                }
-            })
+            }, new Renderer())
         {
             @Override
             protected boolean wantOnSelectionChangedNotifications()
@@ -182,6 +182,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
             @Override
             protected void onSelectionChanged(Object newSelection)
             {
+                detach();
                 setupNavigation();
             }
         };
@@ -264,6 +265,11 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
             }
         }
 
+        if (workspace != null && !result.contains(workspace))
+        {
+            result.add(workspace);
+        }
+        
         return result;
     }
 }

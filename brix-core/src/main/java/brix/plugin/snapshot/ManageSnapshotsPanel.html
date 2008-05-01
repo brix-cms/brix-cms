@@ -1,0 +1,48 @@
+<wicket:head>
+	<style type="text/css">
+		table.snapshots td {
+			vertical-align: top;			
+		}
+		div.snapshot {
+			width: 30em;
+			border-top: 1px dotted #ddd;
+			padding: 0.2em;
+		}
+		td.actions {
+			border-top: 1px dotted #ddd;
+			border-left: 1px solid #ddd;
+			border-right: 1px solid #ddd;			
+		}
+		div.action {
+			border-bottom: 1px dotted #ddd;
+			padding: 0.4em;
+		}
+	</style>
+</wicket:head>
+<wicket:panel>
+	<table class="snapshots"><tr>
+	<td>
+		Available Snapshots:
+		<div wicket:id="snapshots" class="snapshot">
+			<span wicket:id="label"></span> <a wicket:id="browse">browse</a>&nbsp;<a wicket:id="restore" onclick="return confirm('Are you sure you want to restore the snapshot?')">restore</a>
+		</div>
+			
+	</td>
+	
+	<td class="actions">
+		<div class="action">
+			<a wicket:id="createSnapshot">Create Snapshot</a> <br/>
+		</div>
+		<div class="action">
+			<a wicket:id="downloadWorkspace">Download Workspace as XML</a> <br/>
+		</div>
+		<div class="action">
+			<form wicket:id="uploadForm">
+				Restore Workspace from XML <br/> 
+				<input wicket:id="upload" type="file"/> <input wicket:id="submit" type="submit" value="Submit"/>
+			</form>
+		</div>
+	</td>
+	
+	</tr></table>
+</wicket:panel>
