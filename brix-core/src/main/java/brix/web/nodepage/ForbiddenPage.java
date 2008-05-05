@@ -8,7 +8,7 @@ import org.apache.wicket.protocol.http.WebResponse;
 
 import brix.web.nodepage.toolbar.ToolbarBehavior;
 
-public class ForbiddenPage extends WebPage
+public class ForbiddenPage extends WebPage<Object>
 {
 
     public ForbiddenPage()
