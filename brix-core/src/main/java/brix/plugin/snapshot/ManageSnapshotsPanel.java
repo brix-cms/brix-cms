@@ -2,8 +2,6 @@ package brix.plugin.snapshot;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.jcr.ImportUUIDBehavior;
@@ -54,11 +52,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Object>
             @Override
             protected void populateItem(final ListItem<String> item)
             {
-                long millis = Long.valueOf(item.getModelObject());
-                Date d = new Date(millis);
-                DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM);
-
-                final String formatted = df.format(d);
+                final String formatted = SnapshotPlugin.get().getSnapshotSuffixFormatted(item.getModelObject());
 
                 String suffix = item.getModelObject();
                 final Brix brix = BrixRequestCycle.Locator.getBrix();

@@ -36,6 +36,7 @@ import brix.plugin.site.node.tilepage.TileContainerNode;
 import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 import brix.plugin.snapshot.SnapshotPlugin;
+import brix.plugin.template.TemplatePlugin;
 import brix.util.StringInputStream;
 import brix.web.nodepage.PageParametersAwareEnabler;
 
@@ -51,6 +52,7 @@ public abstract class Brix
         registerPlugin(new SitePlugin());
         registerPlugin(new MenuPlugin());
         registerPlugin(new SnapshotPlugin());
+        registerPlugin(new TemplatePlugin());
     }
 
 

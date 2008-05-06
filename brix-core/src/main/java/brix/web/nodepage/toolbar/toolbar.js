@@ -292,11 +292,11 @@
 		
 		for (var i = 0; i < revisions.length; ++i) {
 			var rev = revisions[i];
-			if (rev == revision) {
+			if (rev.value == revision) {
 				selected = i;
 			}
 			var o = document.createElement("option");
-			o.innerHTML = rev;
+			o.innerHTML = rev.name;
 			select.appendChild(o);
 		}
 		
@@ -309,7 +309,7 @@
 	
 	BrixToolbar.prototype.onChange = function() {
 		var select = Wicket.$(this.selectId);
-		var revision = this.revisions[select.selectedIndex];
+		var revision = this.revisions[select.selectedIndex].value;
 		setCookie(revision);
 		window.location.reload();
 	};

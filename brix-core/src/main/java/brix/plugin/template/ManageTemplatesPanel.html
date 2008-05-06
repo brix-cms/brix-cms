@@ -1,0 +1,49 @@
+<wicket:head>
+	<style type="text/css">
+		table.templates td {
+			vertical-align: top;			
+		}
+		div.template {
+			width: 30em;
+			border-top: 1px dotted #ddd;
+			padding: 0.2em;
+		}
+		td.actions {
+			border-top: 1px dotted #ddd;
+			border-left: 1px solid #ddd;
+			border-right: 1px solid #ddd;			
+		}
+		div.action {
+			border-bottom: 1px dotted #ddd;
+			padding: 0.4em;
+		}
+	</style>
+</wicket:head>
+
+<wicket:panel>
+
+	<table class="templates"><tr>
+	<td>
+		Available Templates:
+		<div wicket:id="templates" class="template">
+			<span wicket:id="label"></span> <a wicket:id="browse">browse</a>&nbsp;<a wicket:id="restore" onclick="return confirm('Are you sure you want to restore the template?')">restore</a>
+		</div>
+			
+	</td>
+	
+	<td class="actions">
+		
+		<div class="action">
+			<form wicket:id="form">
+				Create new template <br/> 
+				Name: <input wicket:id="templateName"/> <input wicket:id="submit" type="submit" value="Create"/>
+			</form>
+		</div>
+	</td>
+	
+	</tr></table>
+	
+	<div wicket:id="feedback">
+	</div>
+	
+</wicket:panel>
