@@ -18,7 +18,7 @@ public class JcrServlet extends JCRWebdavServerServlet
     @Override
     protected Repository getRepository()
     {
-        WicketApplication app = (WicketApplication)Application.get("wicket.brix");
+        WicketApplication app = (WicketApplication)Application.get("wicket.brix-demo");
         return app.getRepository();
     }
 
