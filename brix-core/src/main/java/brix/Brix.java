@@ -49,7 +49,7 @@ public abstract class Brix
     {
         wrapperRegistry.registerWrapper(FolderNode.class);
 
-        registerPlugin(new SitePlugin());
+        registerPlugin(new SitePlugin(this));
         registerPlugin(new MenuPlugin());
         registerPlugin(new SnapshotPlugin());
         registerPlugin(new TemplatePlugin());

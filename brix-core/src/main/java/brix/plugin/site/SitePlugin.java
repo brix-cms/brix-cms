@@ -25,6 +25,8 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
     public static final String PREFIX = "site";
     private static final String ID = SitePlugin.class.getName();
 
+    private final Brix brix;
+        
     public String getId()
     {
         return ID;
@@ -32,13 +34,13 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
 
     public NavigationTreeNode newNavigationTreeNode(String workspaceName)
     {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
         JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
         return new SiteNavigationTreeNode((JcrNode)session.getItem(getSiteRootPath()));
     }
 
-    public SitePlugin()
+    public SitePlugin(Brix brix)    
     {
+        this.brix = brix;
         registerNodePlugin(new FolderNodePlugin());
         registerNodePlugin(new ResourceNodePlugin());
     }
@@ -104,7 +106,6 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
 
     public List<Entry> getVisibleWorkspaces(String currentWorkspaceName)
     {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
         List<String> workspaces = brix.getAvailableWorkspacesFiltered(PREFIX, null, null);
         List<Entry> res = new ArrayList<Entry>();
         for (String s : workspaces)
@@ -124,12 +125,12 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
     
     public String getSiteRootPath()
     {
-        return BrixRequestCycle.Locator.getBrix().getRootPath() + "/" + WEB_NODE_NAME;
+        return brix.getRootPath() + "/" + WEB_NODE_NAME;
     }
 
     public void initWorkspace(JcrSession workspaceSession)
     {
-        JcrNode root = (JcrNode)workspaceSession.getItem(BrixRequestCycle.Locator.getBrix().getRootPath());
+        JcrNode root = (JcrNode)workspaceSession.getItem(brix.getRootPath());
         JcrNode web;
         if (root.hasNode(WEB_NODE_NAME))
         {
