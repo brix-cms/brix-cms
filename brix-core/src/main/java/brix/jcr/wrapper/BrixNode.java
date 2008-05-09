@@ -14,6 +14,7 @@ import brix.BrixRequestCycle.Locator;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.wrapper.NodeWrapper;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.folder.FolderNodePlugin;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 import brix.web.util.validators.NodeNameValidator;
@@ -183,42 +184,6 @@ public class BrixNode extends NodeWrapper
     public static boolean canHandle(JcrNode node)
     {
         return true;
-    }
-
-    public JcrNode nodeForPath(Path path)
-    {
-        return nodeForPath(path.toString());
-    }
-
-    public JcrNode nodeForPath(String path)
-    {
-
-        Path realPath = new Path(Locator.getBrix().toRealWebNodePath(path));
-
-        if (realPath.isAbsolute() == false)
-        {
-            Path base = new Path(getPath());
-            if (!isFolder())
-            {
-                base = base.parent();
-            }
-            realPath = base.append(realPath);
-        }
-
-        String strPath = realPath.toString();
-        if (getSession().itemExists(strPath) == false)
-        {
-            return null;
-        }
-        else
-        {
-            return ((JcrNode)getSession().getItem(strPath));
-        }
-    }
-
-    public String pathForNode(JcrNode node)
-    {
-        return Locator.getBrix().fromRealWebNodePath(node.getPath());
     }
 
     public static boolean isValidNodeName(String nodeName)

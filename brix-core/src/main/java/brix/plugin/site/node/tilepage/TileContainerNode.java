@@ -156,7 +156,7 @@ public abstract class TileContainerNode extends BrixFileNode
         }
         else
         {
-            JcrNode node = nodeForPath(path);
+            JcrNode node = SitePlugin.get().nodeForPath(this, path);
 
             if (node == null)
             {
@@ -170,7 +170,7 @@ public abstract class TileContainerNode extends BrixFileNode
     public String getTemplatePath()
     {
         JcrNode template = getTemplate();
-        return template != null ? pathForNode(template) : null;
+        return template != null ? SitePlugin.get().pathForNode(template) : null;
     }
 
     public JcrNode createTile(String tileId, String typeName)

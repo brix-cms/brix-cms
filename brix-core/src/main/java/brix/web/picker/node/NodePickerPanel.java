@@ -13,7 +13,7 @@ import org.apache.wicket.model.Model;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.web.reference.Reference;
+import brix.plugin.site.SitePlugin;
 
 public class NodePickerPanel extends FormComponentPanel
 {
@@ -108,7 +108,7 @@ public class NodePickerPanel extends FormComponentPanel
             {
                 IModel model = NodePickerPanel.this.getModel();
                 BrixNode node = (BrixNode)model.getObject();
-                return node != null ? node.pathForNode(node) : "";
+                return node != null ? SitePlugin.get().pathForNode(node) : "";
             }
         };
     }

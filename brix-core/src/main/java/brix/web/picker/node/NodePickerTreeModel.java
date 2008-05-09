@@ -6,6 +6,7 @@ import brix.BrixRequestCycle;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SitePlugin;
 import brix.web.tree.AbstractTreeModel;
 import brix.web.tree.AbstractTreeNode;
 
@@ -63,8 +64,7 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel
     {
         JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
 
-        root = new NodePickerTreeNode((JcrNode)session.getItem(BrixRequestCycle.Locator.getBrix()
-                .getWebPath()));
+        root = new NodePickerTreeNode((JcrNode)session.getItem(SitePlugin.get().getSiteRootPath()));
     }
 
     public Object getRoot()

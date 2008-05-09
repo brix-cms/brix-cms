@@ -37,7 +37,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
     {
         super(id, model);
 
-        Path root = new Path(BrixRequestCycle.Locator.getBrix().getWebPath());
+        Path root = new Path(SitePlugin.get().getSiteRootPath());
         add(new PathLabel("path2", new PropertyModel(this, "node.path"), root)
         {
             @Override
@@ -69,7 +69,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             public boolean isVisible()
             {
                 String path = NodeManagerContainerPanel.this.getModelObject().getPath();
-                String web = BrixRequestCycle.Locator.getBrix().getWebPath();
+                String web = SitePlugin.get().getSiteRootPath();
                 return path.length() > web.length() && path.startsWith(web);
             }
         });
@@ -141,8 +141,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
                     NodeActionImpl.Type.NODE_DELETE, getNode());
                 Brix brix = BrixRequestCycle.Locator.getBrix();
                 String path = getNode().getPath();
-                return path.startsWith(brix.getWebPath()) &&
-                    path.length() > brix.getWebPath().length() &&
+                return path.startsWith(SitePlugin.get().getSiteRootPath()) &&
+                    path.length() > SitePlugin.get().getSiteRootPath().length() &&
                     Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 

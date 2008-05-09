@@ -13,7 +13,6 @@ import org.apache.wicket.model.PropertyModel;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.admin.AdminPanel;
-import brix.web.picker.reference.ReferenceEditor;
 import brix.web.picker.reference.ReferenceEditorConfiguration;
 import brix.web.picker.reference.ReferenceEditorPanel;
 import brix.web.reference.Reference;

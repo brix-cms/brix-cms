@@ -5,6 +5,7 @@ import org.apache.wicket.util.convert.ConversionException;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrProperty;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SitePlugin;
 
 class NodePathPropertyAdapter extends BasePropertyAdapter
 {
@@ -17,13 +18,13 @@ class NodePathPropertyAdapter extends BasePropertyAdapter
     @Override
     protected Object extractValue(JcrProperty property)
     {
-        return ((BrixNode)getNode()).pathForNode(property.getNode());
+        return SitePlugin.get().pathForNode(property.getNode());
     }
 
     @Override
     protected void setProperty(JcrNode node, String propertyName, Object value)
     {
-        JcrNode nodeOnPath = ((BrixNode)node).nodeForPath((String)value);
+        JcrNode nodeOnPath = SitePlugin.get().nodeForPath((BrixNode)node, (String)value);
 
         if (nodeOnPath == null)
         {

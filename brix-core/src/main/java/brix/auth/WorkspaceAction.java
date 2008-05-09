@@ -2,7 +2,6 @@ package brix.auth;
 
 public interface WorkspaceAction extends Action
 {
-
     public enum Type {
         PUBLISH,
         VIEW
@@ -11,5 +10,4 @@ public interface WorkspaceAction extends Action
     public Type getType();
 
     public String getWorkspaceName();
-
 }

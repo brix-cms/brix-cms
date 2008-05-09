@@ -28,6 +28,7 @@ import brix.demo.ApplicationProperties;
 import brix.demo.web.admin.AdminPage;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.BrixNodeWebPage;
@@ -78,7 +79,7 @@ public class WicketApplication extends WebApplication
             @Override
             public JcrNode getNodeForUriPath(Path path)
             {
-                String nodePath = Locator.getBrix().toRealWebNodePath(path.toString());
+                String nodePath = SitePlugin.get().toRealWebNodePath(path.toString());
 
                 String workspace = getWorkspace();
                 JcrSession session = ((BrixRequestCycle)RequestCycle.get())
@@ -98,7 +99,7 @@ public class WicketApplication extends WebApplication
             @Override
             public Path getUriPathForNode(JcrNode node)
             {
-                return new Path(Locator.getBrix().fromRealWebNodePath(node.getPath()));
+                return new Path(SitePlugin.get().fromRealWebNodePath(node.getPath()));
             }
 
             @Override

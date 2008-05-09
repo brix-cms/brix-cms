@@ -124,6 +124,7 @@ public abstract class Brix
     
     public void createWorkspace(JcrSession session, String name)
     {
+        // TODO: Decouple this from BRIX
         WorkspaceImpl workspace = (WorkspaceImpl)session.getWorkspace().getDelegate();
         try
         {
@@ -222,45 +223,6 @@ public abstract class Brix
         }
     }
 
-    public String fromRealWebNodePath(String nodePath)
-    {
-        Path prefix = new Path(getWebPath());
-        Path path = new Path(nodePath);
-
-        if (path.equals(prefix))
-        {
-            path = new Path("/");
-        }
-        else if (path.isDescendantOf(prefix))
-        {
-            path = path.toRelative(prefix);
-        }
-
-        if (!path.isAbsolute())
-        {
-            path = new Path("/").append(path);
-        }
-
-        return path.toString();
-    }
-
-    public String toRealWebNodePath(String nodePath)
-    {
-        Path prefix = new Path(getWebPath());
-        Path path = new Path(nodePath);
-
-        if (path.isRoot())
-        {
-            path = new Path(".");
-        }
-        else if (path.isAbsolute())
-        {
-            path = path.toRelative(new Path("/"));
-        }
-
-        return prefix.append(path).toString();
-    }
-
     private AuthorizationStrategy authorizationStrategy = null;
 
     public final AuthorizationStrategy getAuthorizationStrategy()
@@ -276,16 +238,9 @@ public abstract class Brix
 
     public static final String ROOT_NODE_NAME = NS_PREFIX + "root";
 
-    public static final String WEB_NODE_NAME = NS_PREFIX + "web";
-
     public String getRootPath()
     {
         return "/" + ROOT_NODE_NAME;
-    }
-
-    public String getWebPath()
-    {
-        return getRootPath() + "/" + WEB_NODE_NAME;
     }
 
     private void registerType(Workspace workspace, String typeName, boolean referenceable,
@@ -364,19 +319,10 @@ public abstract class Brix
         {
             root.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
         }
-
-        JcrNode web;
-        if (root.hasNode(WEB_NODE_NAME))
+        
+        for (Plugin p : plugins)
         {
-            web = root.getNode(WEB_NODE_NAME);
-        }
-        else
-        {
-            web = root.addNode(WEB_NODE_NAME, "nt:folder");
-        }
-        if (!web.isNodeType(BrixNode.JCR_TYPE_BRIX_NODE))
-        {
-            web.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
+            p.initWorkspace(session);
         }
     }
 

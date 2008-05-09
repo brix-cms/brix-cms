@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.protocol.http.WebResponse;
 
+import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.toolbar.ToolbarBehavior;
 
 public class ForbiddenPage extends WebPage<Object>
@@ -23,7 +24,7 @@ public class ForbiddenPage extends WebPage<Object>
             @Override
             protected String getWorkspaceName()
             {                
-                return null;
+                return ((BrixRequestCycleProcessor)getRequestCycle().getProcessor()).getWorkspace();
             }
         });
     }

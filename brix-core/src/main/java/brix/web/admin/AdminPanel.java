@@ -34,6 +34,7 @@ import brix.auth.impl.PublishWorkspaceActionImpl;
 import brix.auth.impl.WorkspaceActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.plugin.site.SitePlugin;
 import brix.web.admin.navigation.Navigation;
 import brix.web.admin.navigation.NavigationContainer;
 import brix.web.admin.navigation.NavigationPanel;
@@ -144,8 +145,6 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         add(content);
     }
 
-    private final String PREFIX = "site";
-
     public AdminPanel(String id, String workspace, Path root)
     {
         super(id);
@@ -153,7 +152,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         if (workspace == null)
         {
             workspace = filterWorkspaces(
-                Locator.getBrix().getAvailableWorkspacesFiltered(PREFIX, null, null)).get(0);
+                Locator.getBrix().getAvailableWorkspacesFiltered(SitePlugin.PREFIX, null, null)).get(0);
         }
 
         this.workspace = workspace;
@@ -169,7 +168,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
                 protected Object load()
                 {
                     return filterWorkspaces(Locator.getBrix().getAvailableWorkspacesFiltered(
-                        PREFIX, null, null));
+                        SitePlugin.PREFIX, null, null));
                 }
             }, new Renderer())
         {

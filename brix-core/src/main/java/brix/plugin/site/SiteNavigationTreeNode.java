@@ -43,7 +43,7 @@ public class SiteNavigationTreeNode extends AbstractTreeNode implements Navigati
     {
         JcrNode node = getNodeModel().getObject();
         Brix brix = BrixRequestCycle.Locator.getBrix();
-        if (node.getPath().equals(brix.getWebPath())) 
+        if (node.getPath().equals(SitePlugin.get().getSiteRootPath())) 
         {
             return "Site";
         }

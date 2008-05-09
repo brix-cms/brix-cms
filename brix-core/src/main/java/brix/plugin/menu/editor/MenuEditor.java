@@ -188,14 +188,14 @@ public class MenuEditor extends Panel<Menu>
         return node.getParent().getIndex(node);
     }
 
-    private WebMarkupContainer links;
-    private Component editor;
+    private WebMarkupContainer<?> links;
+    private Component<?> editor;
 
     private static final String EDITOR_ID = "editor";
 
     private void selectionChanged(AjaxRequestTarget target)
     {
-        Component c;
+        Component<?> c;
         if (getSelected().getEntry() instanceof ChildEntry)
         {
             c = new ChildPanel(EDITOR_ID, new Model<ChildEntry>() {

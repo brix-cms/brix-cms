@@ -9,9 +9,7 @@ import brix.jcr.api.JcrNode;
  */
 public interface SelectNewNodeTypeAction extends Action
 {
-
     public String getNodeType();
 
     public JcrNode getParentNode();
-
 }

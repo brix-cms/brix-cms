@@ -6,9 +6,9 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import brix.Path;
-import brix.BrixRequestCycle.Locator;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SitePlugin;
 
 public class NodePathValidator implements IValidator
 {
@@ -47,7 +47,7 @@ public class NodePathValidator implements IValidator
             }
             else
             {
-                path = new Path(Locator.getBrix().toRealWebNodePath(path.toString()));
+                path = new Path(SitePlugin.get().toRealWebNodePath(path.toString()));
             }
             if (node.getSession().itemExists(path.toString()) == false)
             {

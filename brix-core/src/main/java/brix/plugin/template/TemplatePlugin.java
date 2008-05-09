@@ -194,6 +194,11 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
         
         return res;
     }
+    
+    public void initWorkspace(JcrSession workspaceSession)
+    {
+        
+    }
 
     private static final ResourceReference ICON = new ResourceReference(TemplatePlugin.class,
         "layers.png");

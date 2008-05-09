@@ -20,6 +20,7 @@ import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.WorkspaceResolver;
 import brix.jcr.api.JcrSession;
+import brix.plugin.site.SitePlugin;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.nodepage.toolbar.WorkspaceListProvider;
@@ -88,7 +89,7 @@ public class SnapshotPlugin implements Plugin, WorkspaceListProvider
         Brix brix = BrixRequestCycle.Locator.getBrix();
         String id = brix.getWorkspaceResolver().getWorkspaceId(snapshotWorkspaceName);
         
-        String targetWorkspace = brix.getWorkspaceResolver().getWorkspaceName("site", id, Brix.STATE_DEVELOPMENT);
+        String targetWorkspace = brix.getWorkspaceResolver().getWorkspaceName(SitePlugin.PREFIX, id, Brix.STATE_DEVELOPMENT);
         JcrSession sourceSession = BrixRequestCycle.Locator.getSession(snapshotWorkspaceName);
         if (brix.getAvailableWorkspaces(sourceSession).contains(targetWorkspace) == false)
         {
@@ -190,5 +191,10 @@ public class SnapshotPlugin implements Plugin, WorkspaceListProvider
         return res;
     }
 
+    public void initWorkspace(JcrSession workspaceSession)
+    {
+        
+    }
+    
     private static final ResourceReference ICON = new ResourceReference(SnapshotPlugin.class, "camera.png");
 }

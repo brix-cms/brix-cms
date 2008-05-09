@@ -20,6 +20,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.web.admin.AdminPanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
@@ -142,13 +143,13 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
     {
         Brix brix = BrixRequestCycle.Locator.getBrix();
         String prefix = brix.getWorkspaceResolver().getWorkspacePrefix(workspaceName);
-        return "site".equals(prefix) || SnapshotPlugin.PREFIX.equals(prefix);
+        return SitePlugin.PREFIX.equals(prefix) || SnapshotPlugin.PREFIX.equals(prefix);
     }
 
     private boolean isCurrentWorkspaceSiteDevelopment()
     {
         Brix brix = BrixRequestCycle.Locator.getBrix();
-        return "site".equals(brix.getWorkspaceResolver().getWorkspacePrefix(workspaceName)) &&
+        return SitePlugin.PREFIX.equals(brix.getWorkspaceResolver().getWorkspacePrefix(workspaceName)) &&
             Brix.STATE_DEVELOPMENT.equals(brix.getWorkspaceResolver().getWorkspaceState(
                 workspaceName));
     }

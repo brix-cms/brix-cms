@@ -184,4 +184,9 @@ public class MenuPlugin implements Plugin
         node.getSession().save();
         return node;
     }
+    
+    public void initWorkspace(JcrSession workspaceSession)
+    {
+        
+    }
 }

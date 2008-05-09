@@ -1,7 +1,6 @@
 package brix.plugin.menu.editor;
 
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 
 import brix.plugin.menu.Menu.Entry;
 

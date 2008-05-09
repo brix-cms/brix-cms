@@ -24,7 +24,7 @@ public class ConvertNodePanel extends NodeManagerPanel
     {
         super(id, nodeModel);
 
-        RepeatingView converters = new RepeatingView("converters");
+        RepeatingView<?> converters = new RepeatingView<Void>("converters");
         add(converters);
 
         JcrNode node = getNode();
@@ -45,11 +45,11 @@ public class ConvertNodePanel extends NodeManagerPanel
 
                     found = true;
 
-                    WebMarkupContainer item = new WebMarkupContainer(converters.newChildId());
+                    WebMarkupContainer<?> item = new WebMarkupContainer<Void>(converters.newChildId());
                     converters.add(item);
 
-                    Model typeName = new Model(plugin.getNodeType());
-                    item.add(new TextLink("convert", typeName, new Model(plugin.getName()))
+                    Model<String> typeName = new Model<String>(plugin.getNodeType());
+                    item.add(new TextLink("convert", typeName, new Model<String>(plugin.getName()))
                     {
 
                         @Override

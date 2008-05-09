@@ -9,6 +9,7 @@ import java.util.Map;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
+import brix.Path;
 import brix.Plugin;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -21,6 +22,7 @@ import brix.web.nodepage.toolbar.WorkspaceListProvider;
 
 public class SitePlugin implements Plugin, WorkspaceListProvider
 {
+    public static final String PREFIX = "site";
     private static final String ID = SitePlugin.class.getName();
 
     public String getId()
@@ -32,7 +34,7 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
     {
         Brix brix = BrixRequestCycle.Locator.getBrix();
         JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
-        return new SiteNavigationTreeNode((JcrNode)session.getItem(brix.getWebPath()));
+        return new SiteNavigationTreeNode((JcrNode)session.getItem(getSiteRootPath()));
     }
 
     public SitePlugin()
@@ -103,7 +105,7 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
     public List<Entry> getVisibleWorkspaces(String currentWorkspaceName)
     {
         Brix brix = BrixRequestCycle.Locator.getBrix();
-        List<String> workspaces = brix.getAvailableWorkspacesFiltered("site", null, null);
+        List<String> workspaces = brix.getAvailableWorkspacesFiltered(PREFIX, null, null);
         List<Entry> res = new ArrayList<Entry>();
         for (String s : workspaces)
         {
@@ -117,4 +119,104 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
         }
         return res;
     }
+    
+    public static final String WEB_NODE_NAME = Brix.NS_PREFIX + "web";
+    
+    public String getSiteRootPath()
+    {
+        return BrixRequestCycle.Locator.getBrix().getRootPath() + "/" + WEB_NODE_NAME;
+    }
+
+    public void initWorkspace(JcrSession workspaceSession)
+    {
+        JcrNode root = (JcrNode)workspaceSession.getItem(BrixRequestCycle.Locator.getBrix().getRootPath());
+        JcrNode web;
+        if (root.hasNode(WEB_NODE_NAME))
+        {
+            web = root.getNode(WEB_NODE_NAME);
+        }
+        else
+        {
+            web = root.addNode(WEB_NODE_NAME, "nt:folder");
+        }
+        if (!web.isNodeType(BrixNode.JCR_TYPE_BRIX_NODE))
+        {
+            web.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
+        }
+    }
+    
+    public String fromRealWebNodePath(String nodePath)
+    {
+        Path prefix = new Path(getSiteRootPath());
+        Path path = new Path(nodePath);
+
+        if (path.equals(prefix))
+        {
+            path = new Path("/");
+        }
+        else if (path.isDescendantOf(prefix))
+        {
+            path = path.toRelative(prefix);
+        }
+
+        if (!path.isAbsolute())
+        {
+            path = new Path("/").append(path);
+        }
+
+        return path.toString();
+    }
+
+    public String toRealWebNodePath(String nodePath)
+    {
+        Path prefix = new Path(getSiteRootPath());
+        Path path = new Path(nodePath);
+
+        if (path.isRoot())
+        {
+            path = new Path(".");
+        }
+        else if (path.isAbsolute())
+        {
+            path = path.toRelative(new Path("/"));
+        }
+
+        return prefix.append(path).toString();
+    }
+    
+    public JcrNode nodeForPath(BrixNode baseNode, Path path)
+    {
+        return nodeForPath(baseNode, path.toString());
+    }
+
+    public JcrNode nodeForPath(BrixNode baseNode, String path)
+    {
+        Path realPath = new Path(SitePlugin.get().toRealWebNodePath(path));
+
+        if (realPath.isAbsolute() == false)
+        {
+            Path base = new Path(baseNode.getPath());
+            if (!baseNode.isFolder())
+            {
+                base = base.parent();
+            }
+            realPath = base.append(realPath);
+        }
+
+        String strPath = realPath.toString();
+        if (baseNode.getSession().itemExists(strPath) == false)
+        {
+            return null;
+        }
+        else
+        {
+            return ((JcrNode)baseNode.getSession().getItem(strPath));
+        }
+    }
+
+    public String pathForNode(JcrNode node)
+    {
+        return SitePlugin.get().fromRealWebNodePath(node.getPath());
+    }
+
 }

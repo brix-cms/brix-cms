@@ -54,7 +54,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 		private static final long serialVersionUID = 1L;
     };
 
-    protected String getWorkspace()
+    public String getWorkspace()
     {
         RequestCycle rc = RequestCycle.get();
         String workspace = rc.getMetaData(WORKSPACE_METADATA);
