@@ -20,6 +20,7 @@ import brix.Path;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.auth.Action.Context;
+import brix.auth.NodeAction.Type;
 import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.jcr.exception.JcrException;
@@ -53,9 +54,9 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             @Override
             public void onClick()
             {
-                final Component<?> old = editor;
-                Panel<JcrNode> renamePanel = new RenamePanel(EDITOR_ID, NodeManagerContainerPanel.this
-                    .getModel())
+                final Component< ? > old = editor;
+                Panel<JcrNode> renamePanel = new RenamePanel(EDITOR_ID,
+                    NodeManagerContainerPanel.this.getModel())
                 {
                     @Override
                     protected void onLeave()
@@ -65,12 +66,17 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
                 };
                 setupEditor(renamePanel);
             }
+
             @Override
             public boolean isVisible()
             {
+                Action action = new NodeActionImpl(Context.ADMINISTRATION, Type.NODE_RENAME,
+                    getNode());
                 String path = NodeManagerContainerPanel.this.getModelObject().getPath();
                 String web = SitePlugin.get().getSiteRootPath();
-                return path.length() > web.length() && path.startsWith(web);
+                Brix brix = BrixRequestCycle.Locator.getBrix();
+                return brix.getAuthorizationStrategy().isActionAuthorized(action) &&
+                    path.length() > web.length() && path.startsWith(web);
             }
         });
 

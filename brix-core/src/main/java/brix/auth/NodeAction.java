@@ -10,7 +10,8 @@ public interface NodeAction extends Action
         NODE_VIEW_CHILDREN,
         NODE_ADD_CHILD,
         NODE_EDIT,
-        NODE_DELETE
+        NODE_DELETE,
+        NODE_RENAME,
     };
 
     public Type getType();

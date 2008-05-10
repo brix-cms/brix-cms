@@ -2,6 +2,9 @@ package brix.plugin.template;
 
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -10,9 +13,11 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -44,13 +49,25 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
             }
         };
 
+        Form<Void> modalWindowForm = new Form<Void>("modalWindowForm");
+        add(modalWindowForm);
+
+        final ModalWindow modalWindow = new ModalWindow("modalWindow");
+        modalWindow.setInitialWidth(64);
+        modalWindow.setWidthUnit("em");
+        modalWindow.setUseInitialHeight(false);
+        modalWindow.setResizable(false);
+        modalWindow.setTitle(new ResourceModel("selectItems"));
+        modalWindowForm.add(modalWindow);
+
+
         add(new ListView<String>("templates", templatesModel)
         {
             @Override
             protected void populateItem(final ListItem<String> item)
             {
                 item.add(new Label<String>("label", item.getModel()));
-                item.add(new Link<Object>("browse")
+                item.add(new Link<Void>("browse")
                 {
                     @Override
                     public void onClick()
@@ -61,7 +78,22 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
                         panel.setWorkspace(workspace, label);
                     }
                 });
-                item.add(new Link<Object>("restore")
+
+                item.add(new AjaxLink<Void>("restoreItems")
+                {
+                    @Override
+                    public void onClick(AjaxRequestTarget target)
+                    {
+                        String templateWorkspace = TemplatePlugin.get().getTemplateWorkspaceName(
+                            item.getModelObject());
+                        Panel<Void> panel = new SelectItemsPanel(modalWindow.getContentId(),
+                            templateWorkspace, workspaceName);
+                        modalWindow.setContent(panel);
+                        modalWindow.show(target);
+                    }
+                });
+
+                item.add(new Link<Void>("restore")
                 {
                     @Override
                     public void onClick()
@@ -103,12 +135,13 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
             @Override
             public void onSubmit()
             {
-                TemplatePlugin.get().createTemplate(workspaceName, ManageTemplatesPanel.this.templateName);
+                TemplatePlugin.get().createTemplate(workspaceName,
+                    ManageTemplatesPanel.this.templateName);
             }
         });
-        
+
         add(form);
-        
+
         add(new FeedbackPanel("feedback"));
     }
 
@@ -149,7 +182,8 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
     private boolean isCurrentWorkspaceSiteDevelopment()
     {
         Brix brix = BrixRequestCycle.Locator.getBrix();
-        return SitePlugin.PREFIX.equals(brix.getWorkspaceResolver().getWorkspacePrefix(workspaceName)) &&
+        return SitePlugin.PREFIX.equals(brix.getWorkspaceResolver().getWorkspacePrefix(
+            workspaceName)) &&
             Brix.STATE_DEVELOPMENT.equals(brix.getWorkspaceResolver().getWorkspaceState(
                 workspaceName));
     }

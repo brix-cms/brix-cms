@@ -4,8 +4,8 @@
 			vertical-align: top;			
 		}
 		div.template {
-			width: 30em;
-			border-top: 1px dotted #ddd;
+			width: 32em;
+			border-top: 1px dotted #aaa;
 			padding: 0.2em;
 		}
 		td.actions {
@@ -21,12 +21,15 @@
 </wicket:head>
 
 <wicket:panel>
-
+	
 	<table class="templates"><tr>
 	<td>
 		Available Templates:
 		<div wicket:id="templates" class="template">
-			<span wicket:id="label"></span> <a wicket:id="browse">browse</a>&nbsp;<a wicket:id="restore" onclick="return confirm('Are you sure you want to restore the template?')">restore</a>
+			<span wicket:id="label"></span> <br/>
+			<a wicket:id="browse">Browse</a>&nbsp;
+			<a wicket:id="restoreItems">Restore Selected Items</a>&nbsp;
+			<a wicket:id="restore" onclick="return confirm('Are you sure you want to restore the template?')">Restore Whole Workspace</a>
 		</div>
 			
 	</td>
@@ -45,5 +48,10 @@
 	
 	<div wicket:id="feedback">
 	</div>
+	
+	<form wicket:id="modalWindowForm">
+		<div wicket:id="modalWindow">
+		</div>
+	</form>
 	
 </wicket:panel>

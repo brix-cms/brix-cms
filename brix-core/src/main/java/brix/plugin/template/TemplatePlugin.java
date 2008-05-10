@@ -3,8 +3,11 @@ package brix.plugin.template;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.jcr.PropertyType;
 import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.ResourceReference;
@@ -16,8 +19,14 @@ import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
+import brix.Path;
 import brix.Plugin;
+import brix.jcr.api.JcrNode;
+import brix.jcr.api.JcrNodeIterator;
+import brix.jcr.api.JcrProperty;
+import brix.jcr.api.JcrPropertyIterator;
 import brix.jcr.api.JcrSession;
+import brix.plugin.site.SitePlugin;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.nodepage.toolbar.WorkspaceListProvider;
@@ -42,7 +51,7 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
         return get(BrixRequestCycle.Locator.getBrix());
     }
 
-    static final String PREFIX = "template";
+    public static final String PREFIX = "template";
 
     public List<String> getTemplates()
     {
@@ -193,6 +202,98 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
         }
         
         return res;
+    }
+    
+    private List<JcrNode> filterRedundantNodes(List<JcrNode> nodes)
+    {
+        List<JcrNode> result = new ArrayList<JcrNode>(nodes);
+        
+        for (JcrNode n : nodes)
+        {
+            String pathCurrent = n.getPath();
+            for (JcrNode n2 : result)
+            {
+                String pathExisting = n2.getPath();
+                if (pathCurrent.startsWith(pathExisting) && n != n2)
+                {
+                    result.remove(n);
+                    break;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private void checkDependencies(JcrNode node, JcrNode parent, Set<String> nodesWithWrongDependencies)
+    {
+        String parentPath = parent.getPath();
+        JcrPropertyIterator i = node.getProperties();
+        while (i.hasNext())
+        {
+            JcrProperty prop = i.nextProperty();
+            if (prop.getType() == PropertyType.REFERENCE)
+            {
+                JcrNode ref = prop.getNode();
+                String refPath = ref.getPath();
+                if (!refPath.startsWith(parentPath))
+                {
+                    nodesWithWrongDependencies.add(SitePlugin.get().fromRealWebNodePath(parentPath));
+                }
+            }
+        }
+        
+        JcrNodeIterator children = node.getNodes();
+        while (children.hasNext())
+        {
+            JcrNode child = children.nextNode();
+            checkDependencies(child, parent, nodesWithWrongDependencies);
+        }
+    }
+    
+    private void ensureFolderExists(JcrSession session, Path path)
+    {
+        if (!session.itemExists(path.toString()))
+        {
+            Path parent = path.parent();
+            ensureFolderExists(session, parent);
+            JcrNode parentNode = (JcrNode)session.getItem(parent.toString());
+            parentNode.addNode(path.getName(), "nt:folder");
+            parentNode.save();
+        }
+        
+    }
+    
+    public List<String> restoreNodes(List<JcrNode> nodes, String targetWorkspaceName)
+    {
+        
+        List<JcrNode> filtered = filterRedundantNodes(nodes);
+    
+        Set<String> nodesWithWrongDependencies = new HashSet<String>();
+        
+        for (JcrNode n : filtered)
+        {
+            checkDependencies(n, n, nodesWithWrongDependencies);
+        }
+        
+        if (nodesWithWrongDependencies.isEmpty())
+        {
+            JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspaceName);
+            for (JcrNode node : filtered)
+            {
+                JcrSession sourceSession = node.getSession();
+                String path = node.getPath();
+                ensureFolderExists(targetSession, new Path(path).parent());
+                targetSession.getWorkspace().clone(sourceSession.getWorkspace().getName(), path, path, true);
+            }
+        }
+        
+        for (String s : nodesWithWrongDependencies)
+        {
+            System.out.println(s);
+        }
+        
+        return new ArrayList<String>(nodesWithWrongDependencies);
     }
     
     public void initWorkspace(JcrSession workspaceSession)
