@@ -46,11 +46,10 @@ public class PageTile implements Tile
     }
 
     // needed to detect loop during #requiresSSL call
-    private static final MetaDataKey NODE_SET_KEY = new MetaDataKey(Set.class)
+    private static final MetaDataKey<Set<Path>> NODE_SET_KEY = new MetaDataKey<Set<Path>>()
     {
     };
 
-    @SuppressWarnings("unchecked")
     public boolean requiresSSL(IModel<JcrNode> tileNode)
     {
 
@@ -59,7 +58,7 @@ public class PageTile implements Tile
         if (set == null)
         {
             set = new HashSet<Path>();
-            RequestCycle.get().setMetaData(NODE_SET_KEY, (Serializable)set);
+            RequestCycle.get().setMetaData(NODE_SET_KEY, set);
         }
 
 

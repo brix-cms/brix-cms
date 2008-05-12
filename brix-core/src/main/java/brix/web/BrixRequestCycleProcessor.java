@@ -49,7 +49,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
     private static final String COOKIE_NAME = "brix-revision";
 
-    private static final MetaDataKey<String> WORKSPACE_METADATA = new MetaDataKey<String>(String.class)
+    private static final MetaDataKey<String> WORKSPACE_METADATA = new MetaDataKey<String>()
     {
 		private static final long serialVersionUID = 1L;
     };
