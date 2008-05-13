@@ -8,8 +8,9 @@ import javax.jcr.RepositoryException;
  */
 public class JcrException extends RuntimeException
 {
+	private static final long serialVersionUID = 1L;
 
-    public JcrException(RepositoryException cause)
+	public JcrException(RepositoryException cause)
     {
         super(cause);
     }

@@ -5,7 +5,6 @@ import java.util.Calendar;
 
 import javax.jcr.Node;
 import javax.jcr.ValueFactory;
-import javax.jcr.ValueFormatException;
 
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrValue;
