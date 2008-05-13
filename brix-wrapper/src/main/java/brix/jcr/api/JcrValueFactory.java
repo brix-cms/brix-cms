@@ -5,7 +5,6 @@ import java.util.Calendar;
 
 import javax.jcr.Node;
 import javax.jcr.ValueFactory;
-import javax.jcr.ValueFormatException;
 
 import brix.jcr.api.wrapper.WrapperAccessor;
 
@@ -40,6 +39,6 @@ public interface JcrValueFactory extends ValueFactory
 
     public JcrValue createValue(Node value);
 
-    public JcrValue createValue(String value, int type) throws ValueFormatException;
+    public JcrValue createValue(String value, int type);
 
 }
