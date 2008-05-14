@@ -44,9 +44,20 @@ public class NodePickerModalWindow extends ModalWindow
                 super.onOk(target);
                 NodePickerModalWindow.this.onOk(target);
             }
+            
+            @Override
+            public boolean isDisplayFiles()
+            {
+                return NodePickerModalWindow.this.isDisplayFiles();
+            }
         });
     }
 
+    public boolean isDisplayFiles()
+    {
+        return true;
+    }
+    
     @Override
     public void show(AjaxRequestTarget target)
     {

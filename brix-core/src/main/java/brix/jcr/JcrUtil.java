@@ -22,8 +22,13 @@ import brix.jcr.api.JcrPropertyIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrValue;
 import brix.jcr.api.JcrValueFactory;
+import brix.jcr.api.JcrWorkspace;
 import brix.jcr.exception.JcrException;
 
+/**
+ * 
+ * @author Matej Knopp
+ */
 public class JcrUtil
 {
     /**
@@ -32,11 +37,11 @@ public class JcrUtil
      * @param node
      * @return
      */
-    private static List<JcrNode> getParents(JcrNode node)
+    private static List<JcrNode> getParents(JcrNode node, ParentLimiter parentLimiter)
     {
         List<JcrNode> result = new ArrayList<JcrNode>();
         JcrNode p = node.getParent();
-        while (p.getDepth() > 0)
+        while (p.getDepth() > 0 && (parentLimiter == null || !parentLimiter.isFinalParent(node, p)))
         {
             result.add(0, p);
             p = p.getParent();
@@ -55,9 +60,10 @@ public class JcrUtil
      * @param targetRootNode
      * @return
      */
-    private static JcrNode ensureParentExists(JcrNode originalNode, JcrNode targetRootNode)
+    private static JcrNode ensureParentExists(JcrNode originalNode, JcrNode targetRootNode,
+            ParentLimiter parentLimiter)
     {
-        List<JcrNode> originalParents = getParents(originalNode);
+        List<JcrNode> originalParents = getParents(originalNode, parentLimiter);
         for (JcrNode node : originalParents)
         {
             String name = node.getName();
@@ -343,11 +349,13 @@ public class JcrUtil
      * @param uuidBehavior
      * @param uuidMap
      * @param nodes
+     * @param parentLimiter
      */
     private static void createNode(JcrNode originalNode, JcrNode targetRootNode, String xmlns,
-            int uuidBehavior, Map<String, String> uuidMap, List<NodePair> nodes)
+            int uuidBehavior, Map<String, String> uuidMap, List<NodePair> nodes,
+            ParentLimiter parentLimiter)
     {
-        JcrNode targetParent = ensureParentExists(originalNode, targetRootNode);
+        JcrNode targetParent = ensureParentExists(originalNode, targetRootNode, parentLimiter);
 
         createNodeAndChildren(originalNode, targetParent, xmlns, uuidBehavior, uuidMap, nodes);
     }
@@ -394,6 +402,37 @@ public class JcrUtil
      */
     public static void cloneNodes(List<JcrNode> nodes, JcrNode targetRootNode, int uuidBehavior)
     {
+        cloneNodes(nodes, targetRootNode, uuidBehavior, null);
+    }
+
+    /**
+     * Interface that allows to limit copy of parent hierarchy for cloned nodes.
+     * 
+     * @author Matej Knopp
+     */
+    public static interface ParentLimiter
+    {
+        public boolean isFinalParent(JcrNode node, JcrNode parent);
+    };
+
+    /**
+     * Clones the given list of nodes. The clones will be located relative to targetRootNode.
+     * 
+     * @see ImportUUIDBehavior
+     * 
+     * @param nodes
+     *            list of nodes to clone
+     * @param targetRootNode
+     *            parent for clones
+     * @param uuidBehavior
+     *            determines behavior on UUID clashes
+     * @param parentLimiter
+     *            (non mandatory) allows to skip certain nodes when creating parent hierarchy for
+     *            cloned nodes
+     */
+    public static void cloneNodes(List<JcrNode> nodes, JcrNode targetRootNode, int uuidBehavior,
+            ParentLimiter parentLimiter)
+    {
         String xmlns = createXMLNS(targetRootNode.getSession());
         Map<String, String> uuidMap = new HashMap<String, String>();
 
@@ -403,9 +442,143 @@ public class JcrUtil
 
         for (JcrNode node : nodes)
         {
-            createNode(node, targetRootNode, xmlns, uuidBehavior, uuidMap, processedNodes);
+            createNode(node, targetRootNode, xmlns, uuidBehavior, uuidMap, processedNodes,
+                parentLimiter);
         }
 
         assignProperties(processedNodes, uuidMap);
+    }
+
+    /**
+     * Checks if the node referenced by the value is either a child node of a node from paths or the
+     * node exists in targetWorkspace (if targetWorkspace is not null).
+     * 
+     * @param value
+     * @param node
+     * @param paths
+     * @param targetWorkspace
+     * @param result
+     */
+    private static void checkReferenceValue(JcrValue value, JcrNode node, List<String> paths,
+            JcrWorkspace targetWorkspace, Map<JcrNode, List<JcrNode>> result)
+    {
+        // get the referenced node and it's path
+        JcrNode target = node.getSession().getNodeByUUID(value.getString());
+        String path = target.getPath();
+
+        // check if the node is child of node form paths
+        boolean found = false;
+        for (String p : paths)
+        {
+            if (path.startsWith(p))
+            {
+                found = true;
+                break;
+            }
+        }
+
+        // in case it is not check if node with same uuid exists in target workspace
+        if (found == false && targetWorkspace != null)
+        {
+            try
+            {
+                targetWorkspace.getSession().getNodeByUUID(value.getString());
+                found = true;
+            }
+            catch (JcrException ignore)
+            {
+
+            }
+
+        }
+
+        // if the node wasn't found add it to result
+        if (found == false)
+        {
+            List<JcrNode> list = result.get(node);
+            if (list == null)
+            {
+                list = new ArrayList<JcrNode>();
+                result.put(node, list);
+            }
+            if (!list.contains(target))
+            {
+                list.add(target);
+            }
+        }
+    }
+
+    /**
+     * Checks for the dependencies of the given node and it's children
+     * 
+     * @param node
+     * @param paths
+     * @param targetWorkspace
+     * @param result
+     */
+    private static void checkDependencies(JcrNode node, List<String> paths,
+            JcrWorkspace targetWorkspace, Map<JcrNode, List<JcrNode>> result)
+    {
+        // go through all properties
+        JcrPropertyIterator iterator = node.getProperties();
+        while (iterator.hasNext())
+        {
+            JcrProperty property = iterator.nextProperty();
+
+            // if it is a reference property
+            if (property.getType() == PropertyType.REFERENCE)
+            {
+                // if the property has multiple values
+                if (property.getDefinition().isMultiple())
+                {
+                    JcrValue values[] = property.getValues();
+                    for (JcrValue value : values)
+                    {
+                        checkReferenceValue(value, node, paths, targetWorkspace, result);
+                    }
+                }
+                else
+                {
+                    JcrValue value = property.getValue();
+                    checkReferenceValue(value, node, paths, targetWorkspace, result);
+                }
+            }
+        }
+
+        // go through children and do a recursive check for dependencies
+        JcrNodeIterator nodes = node.getNodes();
+        while (nodes.hasNext())
+        {
+            JcrNode child = nodes.nextNode();
+            checkDependencies(child, paths, targetWorkspace, result);
+        }
+    }
+
+    /**
+     * Scans the given list of nodes and their children for references that target nodes outside
+     * subtrees of the nodes in the list. Alternatively, if the referenced node is not part of any
+     * subtree and targetWorkspace is not null, the targetWorkspace is checked for node with same
+     * uuid as the referenced node.
+     * 
+     * @param nodes
+     * @param targetWorkspace
+     * @return Map of Node->List of Referenced Nodes
+     */
+    public static Map<JcrNode, List<JcrNode>> getUnsatisfiedDependencies(List<JcrNode> nodes,
+            JcrWorkspace targetWorkspace)
+    {
+        List<String> paths = new ArrayList<String>();
+        for (JcrNode node : nodes)
+        {
+            paths.add(node.getPath());
+        }
+        Map<JcrNode, List<JcrNode>> result = new HashMap<JcrNode, List<JcrNode>>();
+
+        for (JcrNode node : nodes)
+        {
+            checkDependencies(node, paths, targetWorkspace, result);
+        }
+
+        return result;
     }
 }

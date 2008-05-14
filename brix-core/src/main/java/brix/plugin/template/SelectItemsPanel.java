@@ -5,15 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
 import brix.jcr.api.JcrNode;
@@ -27,10 +23,21 @@ import com.inmethod.grid.column.PropertyColumn;
 import com.inmethod.grid.column.tree.PropertyTreeColumn;
 import com.inmethod.grid.treegrid.TreeGrid;
 
-public class SelectItemsPanel extends Panel<Void>
+public class SelectItemsPanel<T> extends Panel<T>
 {
-    private final String workspaceName;
 
+    public SelectItemsPanel(String id, IModel<T> model, String workspaceName)
+    {
+        super(id, model);
+        init(workspaceName);
+    }
+    
+    public SelectItemsPanel(String id, String workspaceName)
+    {
+        super(id);
+        init(workspaceName);
+    }
+    
     protected List<IGridColumn> newGridColumns()
     {
         IGridColumn columns[] = { new CheckBoxColumn("checkbox"),
@@ -73,12 +80,9 @@ public class SelectItemsPanel extends Panel<Void>
     };
 
     private TreeGrid treeGrid;
-
-    public SelectItemsPanel(String id, String workspaceName, final String targetWorkspaceName)
+    
+    private void init(String workspaceName)
     {
-        super(id);
-        this.workspaceName = workspaceName;
-
         treeGrid = new TreeGrid("grid", new SelectItemsTreeModel(workspaceName), newGridColumns());
         treeGrid.setContentHeight(15, SizeUnit.EM);
         treeGrid.setClickRowToSelect(true);
@@ -86,43 +90,78 @@ public class SelectItemsPanel extends Panel<Void>
         treeGrid.getTree().setRootLess(true);
 
         add(treeGrid);
-        
-        final Component<String> message = new MultiLineLabel<String>("message", new Model<String>(""));
-        message.setOutputMarkupId(true);
-        add(message);
-
-        add(new AjaxLink<Void>("restore")
-        {
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-                List<JcrNode> nodes = new ArrayList<JcrNode>();
-                for (IModel model : treeGrid.getSelectedItems())
-                {
-                    SelectItemsTreeNode node = (SelectItemsTreeNode)model.getObject();
-                    nodes.add(node.getNodeModel().getObject());
-                }
-                List<String> result = TemplatePlugin.get().restoreNodes(nodes, targetWorkspaceName);
-                
-                if (!result.isEmpty())
-                {
-                    StringBuilder msg = new StringBuilder();
-                    msg.append("The following nodes have dependencies outside selected items:\n");
-                    for (String s : result)
-                    {
-                        msg.append(s);
-                        msg.append("\n");
-                    }
-                    message.setModelObject(msg.toString());
-                    target.addComponent(message);
-                } 
-                else
-                {
-                    findParent(ModalWindow.class).close(target);
-                }
-            }
-        });
     }
 
+    public TreeGrid getTreeGrid()
+    {
+        return treeGrid;
+    }
+    
+    private String getNodePath(JcrNode node)
+    {
+        String path = node.getPath();
+        if (path.startsWith(SitePlugin.get().getSiteRootPath()))
+        {
+            return SitePlugin.get().pathForNode(node);           
+        }
+        else
+        {
+            return path;
+        }
+    }
+    
+    protected String getDependenciesMessage(Map<JcrNode, List<JcrNode>> dependencies)
+    {
+        StringBuilder b = new StringBuilder();
+        
+        b.append("The following dependencies are not satisfied:\n");
+        
+        for (Entry<JcrNode, List<JcrNode>> entry : dependencies.entrySet())
+        {
+            b.append(getNodePath(entry.getKey()));
+            b.append(" -> ");
+            
+            if (entry.getValue().size() == 1)
+            {
+                b.append(getNodePath(entry.getValue().iterator().next()));
+            }
+            else
+            {
+                b.append("(");
+                boolean first = true;
+                
+                for (JcrNode node : entry.getValue())
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        b.append(", ");
+                    }
+                    b.append(getNodePath(node));
+                }
+                
+                b.append(")");
+            }
+            
+            b.append("\n");
+        }
+        return b.toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected List<JcrNode> getSelectedNodes()
+    {
+        List<JcrNode> nodes = new ArrayList<JcrNode>();
+        for (IModel model : getTreeGrid().getSelectedItems())
+        {
+            SelectItemsTreeNode node = (SelectItemsTreeNode)model.getObject();
+            nodes.add(node.getNode());
+        }
+
+        return nodes;
+    }
 
 }

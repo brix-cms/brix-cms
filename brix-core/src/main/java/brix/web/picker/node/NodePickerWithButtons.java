@@ -17,20 +17,34 @@ public class NodePickerWithButtons extends Panel
         init(workspaceName, nodeFilter);
     }
 
-    public NodePickerWithButtons(String id, IModel model, String workspaceName, NodeFilter nodeFilter)
+    public NodePickerWithButtons(String id, IModel model, String workspaceName,
+            NodeFilter nodeFilter)
     {
         super(id, model);
         init(workspaceName, nodeFilter);
     }
 
     private IModel<JcrNode> nodeModel;
+
+    public boolean isDisplayFiles()
+    {
+        return true;
+    }
     
-    private void init(String workspaceName, NodeFilter nodeFilter) {
+    private void init(String workspaceName, NodeFilter nodeFilter)
+    {
         JcrNode initial = (JcrNode)getModelObject();
         nodeModel = new BrixNodeModel(initial);
-        
-        add(new NodePicker("picker", this.nodeModel, workspaceName, nodeFilter));
-        
+
+        add(new NodePicker("picker", this.nodeModel, workspaceName, nodeFilter)
+        {
+            @Override
+            public boolean isDisplayFiles()
+            {
+                return NodePickerWithButtons.this.isDisplayFiles();
+            }
+        });
+
         add(new AjaxLink("ok")
         {
             @Override
@@ -49,11 +63,12 @@ public class NodePickerWithButtons extends Panel
             }
         });
     }
-    
-    protected IModel<JcrNode> getNodeModel() {
+
+    protected IModel<JcrNode> getNodeModel()
+    {
         return nodeModel;
     }
-    
+
     protected void onCancel(AjaxRequestTarget target)
     {
 
@@ -62,5 +77,5 @@ public class NodePickerWithButtons extends Panel
     protected void onOk(AjaxRequestTarget target)
     {
         setModelObject(getNodeModel().getObject());
-    }   
+    }
 }

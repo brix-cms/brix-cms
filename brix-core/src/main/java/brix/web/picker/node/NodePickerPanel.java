@@ -116,9 +116,21 @@ public class NodePickerPanel extends FormComponentPanel
     
     protected Component newModalWindow(String id)
     {
-        return new NodePickerModalWindow(id, getModel(), getWorkspaceName(), getNodeFilter());
+        return new NodePickerModalWindow(id, getModel(), getWorkspaceName(), getNodeFilter()) {
+            @Override
+            public boolean isDisplayFiles()
+            {
+                return NodePickerPanel.this.isDisplayFiles();
+            }
+        };
     }
 
+    public boolean isDisplayFiles()
+    {
+        return true;
+    }
+    
+    
     @Override
     public boolean checkRequired()
     {

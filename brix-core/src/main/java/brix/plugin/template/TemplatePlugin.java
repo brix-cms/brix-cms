@@ -3,11 +3,10 @@ package brix.plugin.template;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import javax.jcr.PropertyType;
+import javax.jcr.ImportUUIDBehavior;
 import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.ResourceReference;
@@ -15,18 +14,17 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Path;
 import brix.Plugin;
+import brix.jcr.JcrUtil;
+import brix.jcr.JcrUtil.ParentLimiter;
 import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrNodeIterator;
-import brix.jcr.api.JcrProperty;
-import brix.jcr.api.JcrPropertyIterator;
 import brix.jcr.api.JcrSession;
-import brix.plugin.site.SitePlugin;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.nodepage.toolbar.WorkspaceListProvider;
@@ -100,6 +98,25 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
 
         JcrSession destSession = BrixRequestCycle.Locator.getSession(templateWorkspaceName);
         brix.clone(originalSession, destSession);
+    }
+
+    public void createTemplate(List<JcrNode> nodes, String templateName)
+    {
+        if (nodes.isEmpty())
+        {
+            throw new IllegalStateException("Node list can not be empty.");
+        }
+        Brix brix = BrixRequestCycle.Locator.getBrix();
+        String templateWorkspaceName = getTemplateWorkspaceName(templateName);
+
+        JcrSession originalSession = nodes.iterator().next().getSession();
+        brix.createWorkspace(originalSession, templateWorkspaceName);
+
+        JcrSession destSession = BrixRequestCycle.Locator.getSession(templateWorkspaceName);
+
+        JcrUtil.cloneNodes(nodes, destSession.getRootNode(),
+            ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
+        destSession.save();
     }
 
     public void restoreTemplateSnapshot(String templateWorkspaceName, String targetWorkspaceName)
@@ -187,118 +204,91 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
             return new ManageTemplatesPanel(id, workspaceName);
         }
     };
-    
+
     public List<Entry> getVisibleWorkspaces(String currentWorkspaceName)
-    {        
-        List<String> workspaces = BrixRequestCycle.Locator.getBrix().getAvailableWorkspacesFiltered(PREFIX, null, null);
+    {
+        List<String> workspaces = BrixRequestCycle.Locator.getBrix()
+            .getAvailableWorkspacesFiltered(PREFIX, null, null);
         List<Entry> res = new ArrayList<Entry>();
-     
+
         for (String w : workspaces)
         {
             Entry e = new Entry();
             e.workspaceName = w;
-            e.userVisibleName = "Template " + BrixRequestCycle.Locator.getBrix().getWorkspaceResolver().getWorkspaceId(w);            
+            e.userVisibleName = "Template " +
+                BrixRequestCycle.Locator.getBrix().getWorkspaceResolver().getWorkspaceId(w);
             res.add(e);
         }
-        
+
         return res;
     }
-    
-    private List<JcrNode> filterRedundantNodes(List<JcrNode> nodes)
+
+    private String getCommonParentPath(List<JcrNode> nodes)
     {
-        List<JcrNode> result = new ArrayList<JcrNode>(nodes);
-        
-        for (JcrNode n : nodes)
+        Path current = null;
+        for (JcrNode node : nodes)
         {
-            String pathCurrent = n.getPath();
-            for (JcrNode n2 : result)
+            if (current == null)
             {
-                String pathExisting = n2.getPath();
-                if (pathCurrent.startsWith(pathExisting) && n != n2)
+                current = new Path(node.getPath()).parent();
+            }
+            else
+            {
+                Path another = new Path(node.getPath()).parent();
+
+                Path common = Path.ROOT;
+
+                Iterator<String> i1 = current.iterator();
+                Iterator<String> i2 = another.iterator();
+                while (i1.hasNext() && i2.hasNext())
                 {
-                    result.remove(n);
-                    break;
+                    String s1 = i1.next();
+                    String s2 = i2.next();
+                    if (Objects.equal(s1, s2))
+                    {
+                        common = common.append(new Path(s1));
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
+
+                current = common;
             }
         }
-        
-        return result;
+
+        return current.toString();
     }
-    
-    private void checkDependencies(JcrNode node, JcrNode parent, Set<String> nodesWithWrongDependencies)
+
+    public void restoreNodes(List<JcrNode> nodes, JcrNode targetRootNode)
     {
-        String parentPath = parent.getPath();
-        JcrPropertyIterator i = node.getProperties();
-        while (i.hasNext())
+        if (nodes.isEmpty())
         {
-            JcrProperty prop = i.nextProperty();
-            if (prop.getType() == PropertyType.REFERENCE)
+            throw new IllegalStateException("List 'nodes' must contain at least one node.");
+        }
+
+        ParentLimiter limiter = null;
+
+        if (targetRootNode.getDepth() > 0)
+        {
+            final String commonParent = getCommonParentPath(nodes);
+            limiter = new ParentLimiter()
             {
-                JcrNode ref = prop.getNode();
-                String refPath = ref.getPath();
-                if (!refPath.startsWith(parentPath))
+                public boolean isFinalParent(JcrNode node, JcrNode parent)
                 {
-                    nodesWithWrongDependencies.add(SitePlugin.get().fromRealWebNodePath(parentPath));
+                    return parent.getPath().equals(commonParent);
                 }
-            }
+            };
         }
-        
-        JcrNodeIterator children = node.getNodes();
-        while (children.hasNext())
-        {
-            JcrNode child = children.nextNode();
-            checkDependencies(child, parent, nodesWithWrongDependencies);
-        }
+
+        JcrUtil.cloneNodes(nodes, targetRootNode, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW, limiter);
+        targetRootNode.save();
     }
-    
-    private void ensureFolderExists(JcrSession session, Path path)
-    {
-        if (!session.itemExists(path.toString()))
-        {
-            Path parent = path.parent();
-            ensureFolderExists(session, parent);
-            JcrNode parentNode = (JcrNode)session.getItem(parent.toString());
-            parentNode.addNode(path.getName(), "nt:folder");
-            parentNode.save();
-        }
-        
-    }
-    
-    public List<String> restoreNodes(List<JcrNode> nodes, String targetWorkspaceName)
-    {
-        
-        List<JcrNode> filtered = filterRedundantNodes(nodes);
-    
-        Set<String> nodesWithWrongDependencies = new HashSet<String>();
-        
-        for (JcrNode n : filtered)
-        {
-            checkDependencies(n, n, nodesWithWrongDependencies);
-        }
-        
-        if (nodesWithWrongDependencies.isEmpty())
-        {
-            JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspaceName);
-            for (JcrNode node : filtered)
-            {
-                JcrSession sourceSession = node.getSession();
-                String path = node.getPath();
-                ensureFolderExists(targetSession, new Path(path).parent());
-                targetSession.getWorkspace().clone(sourceSession.getWorkspace().getName(), path, path, true);
-            }
-        }
-        
-        for (String s : nodesWithWrongDependencies)
-        {
-            System.out.println(s);
-        }
-        
-        return new ArrayList<String>(nodesWithWrongDependencies);
-    }
-    
+
     public void initWorkspace(JcrSession workspaceSession)
     {
-        
+
     }
 
     private static final ResourceReference ICON = new ResourceReference(TemplatePlugin.class,

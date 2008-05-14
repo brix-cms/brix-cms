@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -86,10 +86,16 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
                     {
                         String templateWorkspace = TemplatePlugin.get().getTemplateWorkspaceName(
                             item.getModelObject());
-                        Panel<Void> panel = new SelectItemsPanel(modalWindow.getContentId(),
+                        Panel<Void> panel = new RestoreItemsPanel(modalWindow.getContentId(),
                             templateWorkspace, workspaceName);
                         modalWindow.setContent(panel);
                         modalWindow.show(target);
+                    }
+                    
+                    @Override
+                    public boolean isVisible()
+                    {
+                        return isCurrentWorkspaceSiteDevelopment();
                     }
                 });
 
@@ -130,19 +136,32 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
         templateName.add(new TemplateNameValidator());
         templateName.add(new UniqueTemplateNameValidator());
 
-        form.add(new Button<Object>("submit")
+        final FeedbackPanel feedback;
+        
+        add(feedback = new FeedbackPanel("feedback"));
+        feedback.setOutputMarkupId(true);
+        
+        form.add(new AjaxButton<Void>("submit")
         {
             @Override
-            public void onSubmit()
+            public void onSubmit(AjaxRequestTarget target, Form< ? > form)
             {
-                TemplatePlugin.get().createTemplate(workspaceName,
-                    ManageTemplatesPanel.this.templateName);
+                CreateTemplatePanel panel = new CreateTemplatePanel(modalWindow.getContentId(),
+                    workspaceName, ManageTemplatesPanel.this.templateName);
+                modalWindow.setContent(panel);
+                modalWindow.show(target);
+                // TemplatePlugin.get().createTemplate(workspaceName,
+                // ManageTemplatesPanel.this.templateName);
+            }
+            @Override
+            protected void onError(AjaxRequestTarget target, Form< ? > form)
+            {
+                target.addComponent(feedback);
             }
         });
 
         add(form);
-
-        add(new FeedbackPanel("feedback"));
+        
     }
 
     private String templateName;
