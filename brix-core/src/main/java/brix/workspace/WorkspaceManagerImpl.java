@@ -78,6 +78,12 @@ public class WorkspaceManagerImpl implements WorkspaceManager
     }
     
     private Map<AttributeKeyAndValue, String> attributeToWorkspaceListMap = new HashMap<AttributeKeyAndValue, String>();
+
+    public void deleteWorkspace(String workspaceId)
+    {
+        // TODO Auto-generated method stub
+        
+    }
     
     
 }
