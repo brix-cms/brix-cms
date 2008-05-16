@@ -9,9 +9,9 @@ public interface WorkspaceManager
     
     public List<Workspace> getWorkspacesFiltered(String workspaceName, Map<String, String> workspaceAttributes);    
     
-    public Workspace createWorkspace();
+    public Workspace createWorkspace();    
     
-    public Workspace getWorkspace(String id);
+    public Workspace getWorkspace(String workspaceId);
     
-    public void deleteWorkspace(Workspace workspace);       
+    public void deleteWorkspace(String workspaceId);       
 }
