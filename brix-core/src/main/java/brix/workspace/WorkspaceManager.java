@@ -7,7 +7,7 @@ public interface WorkspaceManager
 {
     public List<Workspace> getWorkspaces();
     
-    public List<Workspace> getWorkspacesFiltered(String workspaceName, Map<String, String> workspaceAttributes);    
+    public List<Workspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes);    
     
     public Workspace createWorkspace();    
     
