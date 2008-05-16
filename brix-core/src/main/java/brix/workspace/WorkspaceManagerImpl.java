@@ -84,6 +84,12 @@ public class WorkspaceManagerImpl implements WorkspaceManager
         // TODO Auto-generated method stub
         
     }
+
+    public List<Workspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
     
     
 }
