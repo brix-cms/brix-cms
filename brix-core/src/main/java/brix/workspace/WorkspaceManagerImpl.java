@@ -306,7 +306,8 @@ public abstract class WorkspaceManagerImpl implements WorkspaceManager
         }
     }
     
-    private synchronized void delete(String workspaceId)
+    
+    private void delete(String workspaceId)
     {
         if (!availableWorkspaceNames.contains(workspaceId))
         {
@@ -315,6 +316,7 @@ public abstract class WorkspaceManagerImpl implements WorkspaceManager
         }
         JcrSession session = getSession(workspaceId);
         cleanWorkspace(session);
+                
         JcrNode node = (JcrNode)session.getItem(NODE_PATH);
         if (node.hasNode(PROPERTIES_NODE))
         {
@@ -323,8 +325,11 @@ public abstract class WorkspaceManagerImpl implements WorkspaceManager
         node.setProperty(DELETED_PROPERTY, true);
         node.save();
 
-        availableWorkspaceNames.remove(workspaceId);
-        deletedWorkspaceNames.add(workspaceId);
+        synchronized (this)
+        {
+            availableWorkspaceNames.remove(workspaceId);
+            deletedWorkspaceNames.add(workspaceId);   
+        }        
     }
 
     public Workspace getWorkspace(String workspaceId)
