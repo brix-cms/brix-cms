@@ -1,17 +1,17 @@
 package brix.workspace.rmi;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 
 import brix.workspace.Workspace;
 
-public class ServerWorkspace implements RemoteWorkspace
+public class ServerWorkspace extends UnicastRemoteObject implements RemoteWorkspace
 {
     private final Workspace delegate;
 
-    public ServerWorkspace(Workspace delegate)
+    public ServerWorkspace(Workspace delegate) throws RemoteException
     {
-        super();
         this.delegate = delegate;
     }
 

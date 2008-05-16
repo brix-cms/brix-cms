@@ -25,17 +25,18 @@ public class TestRmi
 
         EasyMock.replay(remote, workspace);
 
-        Registry registry = LocateRegistry.getRegistry();
+        Registry registry = LocateRegistry.createRegistry(10000);
 
         ServerWorkspaceManager server = new ServerWorkspaceManager(remote);
         RemoteStub stub = UnicastRemoteObject.exportObject(server);
         registry.rebind("wm", stub);
 
-        ServerWorkspaceManager client = (ServerWorkspaceManager)registry.lookup("wm");
+        RemoteWorkspaceManager client = (RemoteWorkspaceManager)registry.lookup("wm");
         WorkspaceManager local = new ClientWorkspaceManager(client);
+
         Workspace w = local.createWorkspace();
 
-        EasyMock.verify(server, workspace);
+        EasyMock.verify(remote, workspace);
 
 
     }

@@ -39,6 +39,7 @@ public class ServerWorkspaceManager implements RemoteWorkspaceManager
     }
 
     private static List<RemoteWorkspace> localToRemote(List<Workspace> local)
+            throws RemoteException
     {
         ArrayList<RemoteWorkspace> remote = new ArrayList<RemoteWorkspace>(local.size());
         for (Workspace workspace : local)
