@@ -276,7 +276,7 @@ public class IntersectTest
     private static void testIntersect(int count, int maxStep)
     {
         List<Integer> l1 = generateList(count, maxStep, 0);
-        List<Integer> l2 = generateList(count, maxStep, 95000);
+        List<Integer> l2 = generateList(count, maxStep, 0);
         
         List<Integer> res1 = new ArrayList<Integer>();
     
@@ -309,7 +309,7 @@ public class IntersectTest
     {
         for (int i = 0; i < 100; ++i)
         {
-            testIntersect(10000, 20);
+            testIntersect(100000, 20);
         }
         
         System.out.println("1: " + took1);
