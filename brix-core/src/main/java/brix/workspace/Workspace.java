@@ -11,4 +11,6 @@ public interface Workspace
     public String getAttribute(String attributeKey);
     
     public Iterator<String> getAttributeKeys();
+    
+    public void delete();
 }
