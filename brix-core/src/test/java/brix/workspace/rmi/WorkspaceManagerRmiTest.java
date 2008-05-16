@@ -11,7 +11,7 @@ import org.junit.Test;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
-public class TestRmi
+public class WorkspaceManagerRmiTest
 {
     @Test
     public void test() throws Exception
@@ -22,6 +22,7 @@ public class TestRmi
         Workspace workspace = EasyMock.createMock(Workspace.class);
 
         EasyMock.expect(remote.createWorkspace()).andReturn(workspace);
+        workspace.delete();
 
         EasyMock.replay(remote, workspace);
 
@@ -35,9 +36,10 @@ public class TestRmi
         WorkspaceManager local = new ClientWorkspaceManager(client);
 
         Workspace w = local.createWorkspace();
-
+        w.delete();
         EasyMock.verify(remote, workspace);
 
+        UnicastRemoteObject.unexportObject(server, true);
 
     }
 }
