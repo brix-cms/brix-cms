@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -54,42 +55,16 @@ public class UsersPage extends WebPage<Void>
                 item.add(new Label<String>("login", new PropertyModel<String>(item.getModel(),
                         "login")));
                 item.add(new Label<String>("roles", new UserRolesModel(item.getModel())));
-                item.add(new Link<User>("edit", item.getModel())
+
+                final User user = item.getModelObject();
+                if (user.isLocked())
                 {
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void onClick()
-                    {
-                        onEditUser(getModel());
-                    }
-
-                    @Override
-                    public boolean isVisible()
-                    {
-                        return !getModelObject().isLocked();
-                    }
-
-                });
-
-                item.add(new Link<User>("password", item.getModel())
+                    item.add(new LockedFragment("actions", item.getModel()));
+                }
+                else
                 {
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void onClick()
-                    {
-                        onChangePassword(getModel());
-                    }
-
-                    @Override
-                    public boolean isVisible()
-                    {
-                        return !getModelObject().isLocked();
-                    }
-
-                });
-
+                    item.add(new ActionsFragment("actions", item.getModel()));
+                }
             }
         });
         add(new PagingNavigator("pager", list));
@@ -248,4 +223,56 @@ public class UsersPage extends WebPage<Void>
         }
     }
 
+    private class LockedFragment extends Fragment<User>
+    {
+
+        public LockedFragment(String id, IModel<User> model)
+        {
+            super(id, "locked", UsersPage.this, model);
+        }
+    }
+    private class ActionsFragment extends Fragment<User>
+    {
+
+        public ActionsFragment(String id, IModel<User> model)
+        {
+            super(id, "actions", UsersPage.this, model);
+            add(new Link<User>("edit", model)
+            {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void onClick()
+                {
+                    onEditUser(getModel());
+                }
+
+                @Override
+                public boolean isVisible()
+                {
+                    return !getModelObject().isLocked();
+                }
+
+            });
+
+            add(new Link<User>("password", model)
+            {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public void onClick()
+                {
+                    onChangePassword(getModel());
+                }
+
+                @Override
+                public boolean isVisible()
+                {
+                    return !getModelObject().isLocked();
+                }
+
+            });
+        }
+
+    }
 }

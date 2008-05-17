@@ -18,6 +18,48 @@ public class UserService
         public String password;
         public List<Role> roles = new ArrayList<Role>();
         public boolean locked = false;
+
+        public String getLogin()
+        {
+            return login;
+        }
+
+        public void setLogin(String login)
+        {
+            this.login = login;
+        }
+
+        public String getPassword()
+        {
+            return password;
+        }
+
+        public void setPassword(String password)
+        {
+            this.password = password;
+        }
+
+        public List<Role> getRoles()
+        {
+            return roles;
+        }
+
+        public void setRoles(List<Role> roles)
+        {
+            this.roles = roles;
+        }
+
+        public boolean isLocked()
+        {
+            return locked;
+        }
+
+        public void setLocked(boolean locked)
+        {
+            this.locked = locked;
+        }
+
+
     }
 
     private SessionFactory sf;
@@ -79,13 +121,13 @@ public class UserService
     public List<User> query(int first, int count)
     {
         return sf.getCurrentSession().getNamedQuery("user.list").setFirstResult(first)
-            .setMaxResults(count).list();
+                .setMaxResults(count).list();
     }
 
     public int queryCount()
     {
         return ((Number)sf.getCurrentSession().getNamedQuery("user.count").uniqueResult())
-            .intValue();
+                .intValue();
     }
 
     @Transactional

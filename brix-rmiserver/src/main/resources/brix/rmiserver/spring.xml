@@ -11,6 +11,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:brix/rmiserver/server.properties</value>
+				<value>classpath:brix/rmiserver/server.${user}.properties</value>
 			</list>
 		</property>
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
@@ -27,11 +28,6 @@
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<!-- 
-		<property name="namingStrategy">
-			<bean class="biggie.persist.HibernateNamingStrategy" />
-		</property>
-		 -->
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
@@ -70,6 +66,7 @@
 	<bean id="jackrabbit" class="brix.rmiserver.jackrabbit.RepositoryFactoryBean">
 		<property name="repositoryHomeDir" value="${jcr.location}" />
 		<property name="userService" ref="userService" />
+		<property name="repositoryConfig" value="${jcr.config}"/>
 	</bean>
 	<bean id="jackrabbit.remote" class="brix.rmiserver.jackrabbit.RemoteRepositoryExporterBean">
 		<property name="repository" ref="jackrabbit" />

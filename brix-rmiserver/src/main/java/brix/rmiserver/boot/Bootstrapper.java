@@ -38,7 +38,6 @@ public class Bootstrapper
             Configuration configuration, SessionFactory sessionFactory, UserService userService,
             String workspaceManagerLogin, String workspaceManagerPassword)
     {
-        super();
         this.datasource = datasource;
         this.configuration = configuration;
         this.sessionFactory = sessionFactory;
@@ -46,7 +45,6 @@ public class Bootstrapper
         this.userService = userService;
         this.workspaceManagerLogin = workspaceManagerLogin;
         this.workspaceManagerPassword = workspaceManagerPassword;
-
     }
 
 

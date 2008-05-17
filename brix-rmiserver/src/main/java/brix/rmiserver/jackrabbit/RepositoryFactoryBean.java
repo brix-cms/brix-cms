@@ -16,7 +16,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import brix.rmiserver.UserService;
 
@@ -27,6 +27,7 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
     private RepositoryImpl repository;
     private String repositoryHomeDir;
     private Authorizer authorizer;
+    private Resource repositoryConfig;
 
     @Required
     public void setUserService(UserService userService)
@@ -38,6 +39,12 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
     public void setRepositoryHomeDir(String repositoryHomeDir)
     {
         this.repositoryHomeDir = repositoryHomeDir;
+    }
+
+    @Required
+    public void setRepositoryConfig(Resource repositoryConfig)
+    {
+        this.repositoryConfig = repositoryConfig;
     }
 
     public Object getObject() throws Exception
@@ -100,8 +107,7 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
         InputStream fis = null;
         try
         {
-            ClassPathResource xml = new ClassPathResource("brix/rmiserver/jackrabbit.xml");
-            fis = xml.getInputStream();
+            fis = repositoryConfig.getInputStream();
             config = RepositoryConfig.create(fis, repositoryHomeDir);
         }
         catch (Exception e)

@@ -25,7 +25,7 @@ public class AdminApplication extends WebApplication
     /**
      * @see wicket.Application#getHomePage()
      */
-    public Class< ? extends WebPage<?>> getHomePage()
+    public Class< ? extends WebPage< ? >> getHomePage()
     {
         return HomePage.class;
     }
@@ -35,6 +35,8 @@ public class AdminApplication extends WebApplication
     {
         addComponentInstantiationListener(new SpringComponentInjector(this));
         getSecuritySettings().setAuthorizationStrategy(new AdminAuthorizationStrategy());
+
+        mountBookmarkablePage("/users", UsersPage.class);
     }
 
     @Override

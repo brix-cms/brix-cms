@@ -18,8 +18,7 @@
 			<tr wicket:id="list">
 				<td><span wicket:id="login">Bob</span></td>
 				<td><span wicket:id="roles">ADMIN, RMI</span></td>
-				<td><a wicket:id="edit">edit</a> |
-				<a wicket:id="password">change password</a></td>
+				<td><div wicket:id="actions"></div></td>
 			</tr>
 		</table>
 		</td>
@@ -31,3 +30,7 @@
 </body>
 </html>
 
+<wicket:fragment wicket:id="actions">
+<a wicket:id="edit">edit</a> | <a wicket:id="password">change password</a>
+</wicket:fragment>
+<wicket:fragment wicket:id="locked">user is locked</wicket:fragment>

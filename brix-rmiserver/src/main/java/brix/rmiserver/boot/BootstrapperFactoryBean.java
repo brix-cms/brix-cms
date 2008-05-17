@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.orm.hibernate3.LocalSessionFactoryBean;
@@ -26,32 +27,38 @@ public class BootstrapperFactoryBean implements ApplicationContextAware, Initial
     private String workspaceManagerLogin;
     private String workspaceManagerPassword;
 
+
+    @Required
     public void setSessionFactory(SessionFactory sessionFactory)
     {
         this.sessionFactory = sessionFactory;
     }
 
+    @Required
     public void setUserService(UserService userService)
     {
         this.userService = userService;
     }
 
+    @Required
     public void setTransactionManager(PlatformTransactionManager transactionManager)
     {
         this.transactionManager = transactionManager;
     }
 
+    @Required
     public void setDataSource(DataSource dataSource)
     {
         this.dataSource = dataSource;
     }
 
-
+    @Required
     public void setWorkspaceManagerLogin(String workspaceManagerLogin)
     {
         this.workspaceManagerLogin = workspaceManagerLogin;
     }
 
+    @Required
     public void setWorkspaceManagerPassword(String workspaceManagerPassword)
     {
         this.workspaceManagerPassword = workspaceManagerPassword;

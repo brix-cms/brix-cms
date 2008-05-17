@@ -29,6 +29,7 @@ public class User
 {
     @Id
     @GeneratedValue
+    @Column(name="u_id")
     private Long id;
 
     @Column(length = 32, nullable = false, unique = true, name = "u_login")
@@ -41,6 +42,7 @@ public class User
     @Column(length = 32)
     @Enumerated(EnumType.STRING)
     @JoinTable(name = "rmiserver_user_role")
+    @JoinColumn(name="fk_user_id")
     private Set<Role> roles;
 
     @Column(name = "u_locked")
