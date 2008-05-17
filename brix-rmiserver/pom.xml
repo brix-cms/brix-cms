@@ -9,7 +9,7 @@
 	<groupId>brix</groupId>
 	<artifactId>brix-rmiserver</artifactId>
 	<packaging>war</packaging>
-	<name>quickstart</name>
+	<name>Stand-alone JackRabbit RMI Server</name>
 	<version>1.0-SNAPSHOT</version>
 	<description></description>
 	<licenses>
@@ -158,13 +158,6 @@
 			<artifactId>jackrabbit-jcr-rmi</artifactId>
 			<version>1.4.1</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.apache.jackrabbit</groupId>
-			<artifactId>jackrabbit-ocm</artifactId>
-		</dependency>
-		 --> 
-    
     <!--+
         | JETTY
         +-->
