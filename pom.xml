@@ -23,6 +23,7 @@
     <module>brix-tinymce</module>
     <module>brix-wrapper</module>
     <module>brix-demo</module>
+    <module>brix-rmiserver</module>
   </modules>
 
 

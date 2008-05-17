@@ -1,0 +1,12 @@
+----------------------------------------------------------------
+2008-05-17 21:32:03.694 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.2.1.6 - (452058): instance c013800d-0119-f8cb-eabf-0000000c4488
+on database directory C:\dev\tmp\biggie\jcr-server\version\db  
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+2008-05-17 21:32:04.554 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.2.1.6 - (452058): instance e03f4017-0119-f8cb-eabf-0000000c4488
+on database directory C:\dev\tmp\biggie\jcr-server\workspaces\default\db  
+
+Database Class Loader started - derby.database.classpath=''

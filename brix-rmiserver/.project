@@ -1,0 +1,18 @@
+<projectDescription>
+  <name>brix-rmiserver</name>
+  <comment></comment>
+  <projects>
+    <project>brix-codepress</project>
+    <project>brix-core</project>
+    <project>brix-tinymce</project>
+    <project>brix-wrapper</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
