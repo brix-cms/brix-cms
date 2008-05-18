@@ -1,29 +1,32 @@
-<?xml version="1.0"?><project>
-  <parent>
-    <artifactId>brix</artifactId>
-    <groupId>brix</groupId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <artifactId>brix-tinymce</artifactId>
-  <name>brix tinymce integration</name>
-  <version>1.0-SNAPSHOT</version>
-  <url></url>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.wicket</groupId>
-      <artifactId>wicket</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-  </dependencies>
+<?xml version="1.0"?>
+<project>
+	<parent>
+		<artifactId>brix</artifactId>
+		<groupId>brix</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>brix-tinymce</artifactId>
+	<name>Brix TinyMCE Integration</name>
+	<description>Makes TinyMCE[1] available as a Wicket component for
+		integration into admin panel [1] http://tinymce.moxiecode.com/</description>
+	<version>1.0-SNAPSHOT</version>
+	<url></url>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
 </project>

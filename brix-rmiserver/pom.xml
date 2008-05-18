@@ -10,8 +10,9 @@
 	<artifactId>brix-rmiserver</artifactId>
 	<packaging>war</packaging>
 	<name>Stand-Alone JackRabbit RMI Server</name>
+	<description>Provides a stand alone JackRabbit RMI server in a
+		fully functioning environment</description>
 	<version>1.0-SNAPSHOT</version>
-	<description></description>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>

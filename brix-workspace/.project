@@ -1,6 +1,7 @@
 <projectDescription>
   <name>brix-workspace</name>
-  <comment></comment>
+  <comment>Adds a WorkspaceManager that fills in the void of
+		workspace-management API in JCR 1.0</comment>
   <projects/>
   <buildSpec>
     <buildCommand>

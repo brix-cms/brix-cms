@@ -9,6 +9,8 @@
 	<groupId>brix</groupId>
 	<artifactId>brix-workspace</artifactId>
 	<name>Brix JCR Workspace Manager Addon</name>
+	<description>Adds a WorkspaceManager that fills in the void of
+		workspace-management API in JCR 1.0</description>
 	<version>1.0-SNAPSHOT</version>
 	<url>http://maven.apache.org</url>
 	<dependencies>
