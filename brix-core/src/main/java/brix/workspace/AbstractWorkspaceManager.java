@@ -19,7 +19,7 @@ import brix.jcr.api.JcrProperty;
 import brix.jcr.api.JcrPropertyIterator;
 import brix.jcr.api.JcrSession;
 
-public abstract class WorkspaceManagerImpl implements WorkspaceManager
+public abstract class AbstractWorkspaceManager implements WorkspaceManager
 {
     private class AttributeKeyAndValue
     {
@@ -235,22 +235,22 @@ public abstract class WorkspaceManagerImpl implements WorkspaceManager
 
         public String getAttribute(String attributeKey)
         {
-            return WorkspaceManagerImpl.this.getAttribute(getId(), attributeKey);
+            return AbstractWorkspaceManager.this.getAttribute(getId(), attributeKey);
         }
 
         public Iterator<String> getAttributeKeys()
         {
-            return WorkspaceManagerImpl.this.getAtributeKeys(getId());
+            return AbstractWorkspaceManager.this.getAtributeKeys(getId());
         }
 
         public void setAttribute(String attributeKey, String attributeValue)
         {
-            WorkspaceManagerImpl.this.setAttribute(getId(), attributeKey, attributeValue);
+            AbstractWorkspaceManager.this.setAttribute(getId(), attributeKey, attributeValue);
         }
 
         public void delete()
         {
-            WorkspaceManagerImpl.this.delete(getId());
+            AbstractWorkspaceManager.this.delete(getId());
         }
     };
 

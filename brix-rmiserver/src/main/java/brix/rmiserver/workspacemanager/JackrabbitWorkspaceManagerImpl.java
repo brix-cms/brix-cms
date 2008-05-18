@@ -11,9 +11,9 @@ import org.apache.jackrabbit.core.WorkspaceImpl;
 
 import brix.jcr.api.JcrSession;
 import brix.jcr.exception.JcrException;
-import brix.workspace.WorkspaceManagerImpl;
+import brix.workspace.AbstractWorkspaceManager;
 
-public class JackrabbitWorkspaceManagerImpl extends WorkspaceManagerImpl
+public class JackrabbitWorkspaceManagerImpl extends AbstractWorkspaceManager
 {
     private final RepositoryImpl repository;
     private final Credentials credentials;
