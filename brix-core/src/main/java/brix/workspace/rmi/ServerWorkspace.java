@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import brix.workspace.Workspace;
 
-public class ServerWorkspace extends UnicastRemoteObject implements RemoteWorkspace
+class ServerWorkspace extends UnicastRemoteObject implements RemoteWorkspace
 {
     private final Workspace delegate;
 

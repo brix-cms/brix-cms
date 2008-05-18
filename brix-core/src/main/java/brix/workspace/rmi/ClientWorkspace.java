@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import brix.workspace.Workspace;
 
-public class ClientWorkspace implements Workspace
+class ClientWorkspace implements Workspace
 {
     private final RemoteWorkspace delegate;
 

@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
-public interface RemoteWorkspaceManager extends Remote
+interface RemoteWorkspaceManager extends Remote
 {
     public List<RemoteWorkspace> getWorkspaces() throws RemoteException;
 

@@ -4,7 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 
-public interface RemoteWorkspace extends Remote
+interface RemoteWorkspace extends Remote
 {
     public String getId() throws RemoteException;
 
