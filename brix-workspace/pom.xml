@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<project>
+	<parent>
+		<artifactId>brix</artifactId>
+		<groupId>brix</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>brix</groupId>
+	<artifactId>brix-workspace</artifactId>
+	<name>Brix JCR Workspace Manager Addon</name>
+	<version>1.0-SNAPSHOT</version>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+  	<!--+
+  	    | JCR
+  	    +-->
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+		</dependency>
+  	<!--+
+  	    | UNIT TESTING
+  	    +-->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymockclassextension</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

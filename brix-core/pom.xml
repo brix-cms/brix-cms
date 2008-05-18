@@ -37,6 +37,7 @@
       <groupId>brix</groupId>
       <artifactId>brix-wrapper</artifactId>
     </dependency>
+    
 
 
     <dependency>
@@ -84,7 +85,6 @@
     <dependency>
     	<groupId>org.apache.jackrabbit</groupId>
     	<artifactId>jackrabbit-api</artifactId>
-    	<version>${jackrabbit.base-version}</version>   
     	<exclusions>
           <exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion>
         <exclusion>
@@ -97,7 +97,6 @@
 	<dependency>
 	    <groupId>org.apache.jackrabbit</groupId>
 	    <artifactId>jackrabbit-core</artifactId>
-	    <version>${jackrabbit.version}</version>
 	    <exclusions>
           <exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion>
         <exclusion>
@@ -110,7 +109,6 @@
 	<dependency>
 	    <groupId>org.apache.jackrabbit</groupId>
 	    <artifactId>jackrabbit-jcr-commons</artifactId>
-	    <version>${jackrabbit.version}</version>
 	    <exclusions>
            <exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion>
        <exclusion>
@@ -123,7 +121,6 @@
 	<dependency>
 	    <groupId>org.apache.jackrabbit</groupId>
 	    <artifactId>jackrabbit-jcr-server</artifactId>
-	    <version>${jackrabbit.base-version}</version>
 	    <exclusions>
            <exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion>
        <exclusion>
@@ -133,18 +130,7 @@
       </exclusions>
 	</dependency> 
 
-	 <dependency>
-	    <groupId>org.apache.jackrabbit</groupId>
-	    <artifactId>jackrabbit-ocm</artifactId>
-	    <version>${jackrabbit.base-version}</version>
-	    <exclusions>
-        <exclusion><groupId>commons-logging</groupId><artifactId>commons-logging</artifactId></exclusion>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-	</dependency> 
+	
 
     <!--  WICKET DEPENDENCIES -->
 

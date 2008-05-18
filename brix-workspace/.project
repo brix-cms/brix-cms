@@ -1,9 +1,7 @@
 <projectDescription>
-  <name>brix-rmiserver</name>
+  <name>brix-workspace</name>
   <comment></comment>
-  <projects>
-    <project>brix-workspace</project>
-  </projects>
+  <projects/>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>

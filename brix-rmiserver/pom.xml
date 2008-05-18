@@ -9,7 +9,7 @@
 	<groupId>brix</groupId>
 	<artifactId>brix-rmiserver</artifactId>
 	<packaging>war</packaging>
-	<name>Stand-alone JackRabbit RMI Server</name>
+	<name>Stand-Alone JackRabbit RMI Server</name>
 	<version>1.0-SNAPSHOT</version>
 	<description></description>
 	<licenses>
@@ -93,17 +93,14 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket</artifactId>
-			<version>1.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>
-			<version>1.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
-			<version>1.4-SNAPSHOT</version>
 		</dependency>
     <!--+
         | POSTGRES
@@ -118,11 +115,7 @@
         +-->
 		<dependency>
 			<groupId>brix</groupId>
-			<artifactId>brix-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>brix</groupId>
-			<artifactId>brix-wrapper</artifactId>
+			<artifactId>brix-workspace</artifactId>
 		</dependency>
 
     <!--+
@@ -131,32 +124,26 @@
 		<dependency>
 			<groupId>javax.jcr</groupId>
 			<artifactId>jcr</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-api</artifactId>
-			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-core</artifactId>
-			<version>1.4.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-jcr-commons</artifactId>
-			<version>1.4.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-jcr-server</artifactId>
-			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-jcr-rmi</artifactId>
-			<version>1.4.1</version>
 		</dependency>
     <!--+
         | JETTY
