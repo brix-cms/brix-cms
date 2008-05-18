@@ -12,12 +12,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import brix.Brix;
-import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrNodeIterator;
-import brix.jcr.api.JcrProperty;
-import brix.jcr.api.JcrPropertyIterator;
-import brix.jcr.api.JcrSession;
 
 public abstract class AbstractWorkspaceManager implements WorkspaceManager
 {
@@ -135,69 +137,84 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 
     public void initialize()
     {
-        availableWorkspaceNames = new ArrayList<String>();
-        deletedWorkspaceNames = new ArrayList<String>();
-
-        List<String> accessibleWorkspaces = getAccessibleWorkspaceNames();
-        for (String workspace : accessibleWorkspaces)
+        try
         {
-            if (isBrixWorkspace(workspace))
+            availableWorkspaceNames = new ArrayList<String>();
+
+            deletedWorkspaceNames = new ArrayList<String>();
+
+            List<String> accessibleWorkspaces = getAccessibleWorkspaceNames();
+            for (String workspace : accessibleWorkspaces)
             {
-
-                JcrSession session = getSession(workspace);
-
-                if (session.itemExists(NODE_PATH))
+                if (isBrixWorkspace(workspace))
                 {
-                    JcrNode node = (JcrNode)session.getItem(NODE_PATH);
 
-                    if (node.hasProperty(DELETED_PROPERTY) &&
-                        node.getProperty(DELETED_PROPERTY).getBoolean() == true)
+                    Session session = getSession(workspace);
+
+                    if (session.itemExists(NODE_PATH))
                     {
-                        deletedWorkspaceNames.add(workspace);
-                    }
-                    else
-                    {
-                        availableWorkspaceNames.add(workspace);
-                        if (node.hasNode(PROPERTIES_NODE))
+                        Node node = (Node)session.getItem(NODE_PATH);
+
+                        if (node.hasProperty(DELETED_PROPERTY) &&
+                            node.getProperty(DELETED_PROPERTY).getBoolean() == true)
                         {
-                            JcrNode properties = node.getNode(PROPERTIES_NODE);
-                            JcrPropertyIterator iterator = properties.getProperties();
-                            while (iterator.hasNext())
+                            deletedWorkspaceNames.add(workspace);
+                        }
+                        else
+                        {
+                            availableWorkspaceNames.add(workspace);
+                            if (node.hasNode(PROPERTIES_NODE))
                             {
-                                JcrProperty property = iterator.nextProperty();
-                                setCachedAttribute(workspace, property.getName(), property
-                                    .getValue().getString());
+                                Node properties = node.getNode(PROPERTIES_NODE);
+                                PropertyIterator iterator = properties.getProperties();
+                                while (iterator.hasNext())
+                                {
+                                    Property property = iterator.nextProperty();
+                                    setCachedAttribute(workspace, property.getName(), property
+                                        .getValue().getString());
+                                }
                             }
                         }
                     }
                 }
             }
         }
+        catch (RepositoryException e)
+        {
+            throw new JcrException(e);
+        }
     }
 
     protected synchronized void setAttribute(String workspaceId, String key, String value)
     {
-        if (!availableWorkspaceNames.contains(workspaceId))
+        try
         {
-            throw new IllegalStateException("Can not set attribute '" + key +
-                "' on deleted or non-existing workspace '" + workspaceId + "'.");
-        }
-        setCachedAttribute(workspaceId, key, value);
-        JcrSession session = getSession(workspaceId);
-        JcrNode node = (JcrNode)session.getItem(NODE_PATH);
-        JcrNode properties;
-        if (!node.hasNode(PROPERTIES_NODE))
-        {
-            properties = node.addNode(PROPERTIES_NODE, "nt:unstructured");
-        }
-        else
-        {
-            properties = node.getNode(PROPERTIES_NODE);
-        }
+            if (!availableWorkspaceNames.contains(workspaceId))
+            {
+                throw new IllegalStateException("Can not set attribute '" + key +
+                    "' on deleted or non-existing workspace '" + workspaceId + "'.");
+            }
+            setCachedAttribute(workspaceId, key, value);
+            Session session = getSession(workspaceId);
+            Node node = (Node)session.getItem(NODE_PATH);
+            Node properties;
+            if (!node.hasNode(PROPERTIES_NODE))
+            {
+                properties = node.addNode(PROPERTIES_NODE, "nt:unstructured");
+            }
+            else
+            {
+                properties = node.getNode(PROPERTIES_NODE);
+            }
 
-        properties.setProperty(key, value);
+            properties.setProperty(key, value);
 
-        node.save();
+            node.save();
+        }
+        catch (RepositoryException e)
+        {
+            throw new JcrException(e);
+        }
     }
 
     protected synchronized Iterator<String> getAtributeKeys(String workspaceId)
@@ -250,7 +267,14 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 
         public void delete()
         {
-            AbstractWorkspaceManager.this.delete(getId());
+            try
+            {
+                AbstractWorkspaceManager.this.delete(getId());
+            }
+            catch (RepositoryException e)
+            {
+                throw new JcrException(e);
+            }
         }
     };
 
@@ -270,54 +294,61 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 
     public synchronized Workspace createWorkspace()
     {
-        if (deletedWorkspaceNames.size() > 0)
+        try
         {
-            String id = deletedWorkspaceNames.get(deletedWorkspaceNames.size() - 1);
-            deletedWorkspaceNames.remove(deletedWorkspaceNames.size() - 1);
-            JcrSession session = getSession(id);
-            JcrNode node = (JcrNode)session.getItem(NODE_PATH);
-            node.setProperty(DELETED_PROPERTY, (String)null);
-            node.save();
-            return new WorkspaceImpl(id);
+            if (deletedWorkspaceNames.size() > 0)
+            {
+                String id = deletedWorkspaceNames.get(deletedWorkspaceNames.size() - 1);
+                deletedWorkspaceNames.remove(deletedWorkspaceNames.size() - 1);
+                Session session = getSession(id);
+                Node node = (Node)session.getItem(NODE_PATH);
+                node.setProperty(DELETED_PROPERTY, (String)null);
+                node.save();
+                return new WorkspaceImpl(id);
+            }
+            else
+            {
+                String id = getWorkspaceId(UUID.randomUUID().toString());
+                createWorkspace(id);
+                Session session = getSession(id);
+                Node node = session.getRootNode().addNode(NODE_NAME, "nt:unstructured");
+                node.addNode(PROPERTIES_NODE, "nt:unstructured");
+                session.save();
+                return new WorkspaceImpl(id);
+            }
         }
-        else
+        catch (RepositoryException e)
         {
-            String id = getWorkspaceId(UUID.randomUUID().toString());
-            createWorkspace(id);
-            JcrSession session = getSession(id);
-            JcrNode node = session.getRootNode().addNode(NODE_NAME, "nt:unstructured");
-            node.addNode(PROPERTIES_NODE, "nt:unstructured");
-            session.save();
-            return new WorkspaceImpl(id);
+            throw new JcrException(e);
         }
     }
 
-    private void cleanWorkspace(JcrSession session)
+    private void cleanWorkspace(Session session) throws RepositoryException
     {
-        JcrNode root = session.getRootNode();
-        JcrNodeIterator iterator = root.getNodes();
+        Node root = session.getRootNode();
+        NodeIterator iterator = root.getNodes();
         while (iterator.hasNext())
         {
-            JcrNode node = iterator.nextNode();
+            Node node = iterator.nextNode();
             if (!node.getName().equals(NODE_NAME) && !node.getName().equals("jcr:root"))
             {
                 node.remove();
             }
         }
     }
-    
-    
-    private void delete(String workspaceId)
+
+
+    private void delete(String workspaceId) throws RepositoryException
     {
         if (!availableWorkspaceNames.contains(workspaceId))
         {
             throw new IllegalStateException("Workspace " + workspaceId +
                 " either does not exist or was already deleted.");
         }
-        JcrSession session = getSession(workspaceId);
+        Session session = getSession(workspaceId);
         cleanWorkspace(session);
-                
-        JcrNode node = (JcrNode)session.getItem(NODE_PATH);
+
+        Node node = (Node)session.getItem(NODE_PATH);
         if (node.hasNode(PROPERTIES_NODE))
         {
             node.getNode(PROPERTIES_NODE).remove();
@@ -328,8 +359,8 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
         synchronized (this)
         {
             availableWorkspaceNames.remove(workspaceId);
-            deletedWorkspaceNames.add(workspaceId);   
-        }        
+            deletedWorkspaceNames.add(workspaceId);
+        }
     }
 
     public Workspace getWorkspace(String workspaceId)
@@ -406,15 +437,15 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
         });
 
         Set<String> current = sets.get(0);
-        
+
         for (int i = 1; i < sets.size(); ++i)
         {
             current = intersect(current, sets.get(i));
         }
-        
+
         return current;
     }
-    
+
     private Set<String> intersect(Set<String> s1, Set<String> s2)
     {
         Set<String> result = new HashSet<String>(s1.size());
@@ -430,7 +461,7 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 
     abstract protected List<String> getAccessibleWorkspaceNames();
 
-    abstract protected JcrSession getSession(String workspaceName);
+    abstract protected Session getSession(String workspaceName);
 
     abstract protected void createWorkspace(String workspaceName);
 }
