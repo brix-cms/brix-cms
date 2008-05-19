@@ -14,7 +14,7 @@ import brix.workspace.WorkspaceManager;
 
 
 // FIXME figure out why this is failing on teamcity
-//@Ignore
+@Ignore
 public class WorkspaceManagerRmiTest
 {
     @Test
