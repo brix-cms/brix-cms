@@ -2,6 +2,7 @@ package brix.web.tab;
 
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
@@ -10,7 +11,7 @@ import org.apache.wicket.markup.html.list.Loop.LoopItem;
 public class BrixTabbedPanel extends TabbedPanel
 {
 
-    public BrixTabbedPanel(String id, List<BrixTab> tabs)
+    public BrixTabbedPanel(String id, List<ITab<?>> tabs)
     {
         super(id, tabs);
     }
@@ -57,10 +58,10 @@ public class BrixTabbedPanel extends TabbedPanel
     {
         if (!hasBeenRendered() && getSelectedTab() == -1)
         {
-            List<BrixTab> tabs = getTabs();
+            List<ITab<?>> tabs = getTabs();
             for (int i = 0; i < tabs.size(); ++i)
             {
-                BrixTab tab = tabs.get(i);
+                BrixTab<?> tab = (BrixTab<?>)tabs.get(i);
                 if (tab.isVisible())
                 {
                     setSelectedTab(i);

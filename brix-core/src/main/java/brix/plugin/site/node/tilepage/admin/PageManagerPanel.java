@@ -3,6 +3,7 @@ package brix.plugin.site.node.tilepage.admin;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -24,7 +25,7 @@ public class PageManagerPanel extends NodeManagerPanel
     {
         super(id, nodeModel);
 
-        List<BrixTab> tabs = new ArrayList<BrixTab>();
+        List<ITab<?>> tabs = new ArrayList<ITab<?>>();
 
         tabs.add(new AbstractBrixTab(new Model("view"))
         {

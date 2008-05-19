@@ -3,6 +3,7 @@ package brix.plugin.site.node.folder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -24,7 +25,7 @@ public class FolderManagerPanel extends NodeManagerPanel
     {
         super(id, folderModel);
 
-        List<BrixTab> tabs = new ArrayList<BrixTab>(2);
+        List<ITab<?>> tabs = new ArrayList<ITab<?>>(2);
         tabs.add(new AbstractBrixTab(new Model("Listing"))
         {
 

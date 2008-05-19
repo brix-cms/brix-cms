@@ -3,6 +3,7 @@ package brix.web.picker.reference;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -37,7 +38,7 @@ public class ReferenceEditor extends Panel<Reference>
 
     private void init()
     {
-        List<BrixTab> tabs = new ArrayList<BrixTab>();
+        List<ITab<?>> tabs = new ArrayList<ITab<?>>();
         tabs.add(new CachingAbstractBrixTab(new ResourceModel("reference"))
         {
             @Override

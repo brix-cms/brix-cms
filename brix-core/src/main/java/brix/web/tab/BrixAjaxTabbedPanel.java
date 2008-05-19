@@ -4,12 +4,13 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
 public class BrixAjaxTabbedPanel extends BrixTabbedPanel
 {
 
-    public BrixAjaxTabbedPanel(String id, List<BrixTab> tabs)
+    public BrixAjaxTabbedPanel(String id, List<ITab<?>> tabs)
     {
         super(id, tabs);
         setOutputMarkupId(true);
