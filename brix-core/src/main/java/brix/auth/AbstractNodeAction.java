@@ -1,6 +1,8 @@
 package brix.auth;
 
+import brix.BrixRequestCycle;
 import brix.jcr.api.JcrNode;
+import brix.workspace.Workspace;
 
 
 public abstract class AbstractNodeAction extends AbstractAction
@@ -16,6 +18,19 @@ public abstract class AbstractNodeAction extends AbstractAction
     public JcrNode getNode()
     {
         return node;
+    }
+    
+    public Workspace getWorkspace()
+    {
+        if (node == null)
+        {
+            return null;
+        }
+        else
+        {
+            String id = node.getSession().getWorkspace().getName();
+            return BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspace(id);
+        }
     }
 
 }
