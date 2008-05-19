@@ -6,42 +6,48 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class StartJackrabbitServer {
+public class StartJackrabbitServer
+{
 
-	public static void main(String[] args) throws Exception {
-		Server server = new Server();
-		SocketConnector connector = new SocketConnector();
-		// Set some timeout options to make debugging easier.
-		connector.setMaxIdleTime(1000 * 60 * 60);
-		connector.setSoLingerTime(-1);
-		connector.setPort(8080);
-		server.setConnectors(new Connector[] { connector });
+    public static void main(String[] args) throws Exception
+    {
+        final int port = Integer.parseInt(System.getProperty("jetty.port", "10000"));
 
-		WebAppContext bb = new WebAppContext();
-		bb.setServer(server);
-		bb.setContextPath("/");
-		bb.setWar("src/main/webapp");
+        Server server = new Server();
+        SocketConnector connector = new SocketConnector();
+        // Set some timeout options to make debugging easier.
+        connector.setMaxIdleTime(1000 * 60 * 60);
+        connector.setSoLingerTime(-1);
+        connector.setPort(port);
+        server.setConnectors(new Connector[] { connector });
 
-		
-		// START JMX SERVER
-		// MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		// MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
-		// server.getContainer().addEventListener(mBeanContainer);
-		// mBeanContainer.start();
-		
-		server.addHandler(bb);
+        WebAppContext bb = new WebAppContext();
+        bb.setServer(server);
+        bb.setContextPath("/");
+        bb.setWar("src/main/webapp");
 
-		try {
-			System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
-			server.start();
-			while (System.in.available() == 0) {
-				Thread.sleep(5000);
-			}
-			server.stop();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(100);
-		}
-	}
+
+        // START JMX SERVER
+        // MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+        // MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
+        // server.getContainer().addEventListener(mBeanContainer);
+        // mBeanContainer.start();
+
+        server.addHandler(bb);
+
+        try
+        {
+            System.out.println(">>> STARTING EMBEDDED JETTY SERVER ON PORT: " + port +
+                    ", PRESS ANY KEY TO STOP");
+            server.start();
+            System.in.read();
+            server.stop();
+            server.join();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.exit(100);
+        }
+    }
 }
