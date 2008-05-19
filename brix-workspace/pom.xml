@@ -101,10 +101,6 @@
 				</configuration>
 				<version>2.0.2</version>
 			</plugin>
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>maven-jetty-plugin</artifactId>
-			</plugin>
 		</plugins>
 	</build>
 </project>
