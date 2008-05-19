@@ -27,8 +27,9 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy
         return true;
     }
 
-    public boolean isInstantiationAuthorized(Class< ? extends Component< ? >> componentClass)
-    {
+    public <T extends Component<?>> boolean isInstantiationAuthorized(
+    		Class<T> componentClass) 
+    {    	
         boolean authorized = false;
         if (Page.class.isAssignableFrom(componentClass))
         {

@@ -1,65 +1,58 @@
 package brix.web.admin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jcr.ImportUUIDBehavior;
-import javax.jcr.Session;
 import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.WebResponse;
+import org.apache.wicket.util.lang.Objects;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Path;
-import brix.WorkspaceResolver;
-import brix.BrixRequestCycle.Locator;
-import brix.auth.Action;
-import brix.auth.WorkspaceAction;
+import brix.Plugin;
 import brix.auth.Action.Context;
-import brix.auth.impl.PublishWorkspaceActionImpl;
-import brix.auth.impl.WorkspaceActionImpl;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
-import brix.plugin.site.SitePlugin;
 import brix.web.admin.navigation.Navigation;
 import brix.web.admin.navigation.NavigationContainer;
 import brix.web.admin.navigation.NavigationPanel;
 import brix.web.admin.navigation.NavigationTreeModel;
 import brix.web.admin.navigation.NavigationTreeNode;
+import brix.workspace.Workspace;
+import brix.workspace.WorkspaceManager;
 
-public class AdminPanel extends Panel<Object> implements NavigationContainer
+public class AdminPanel extends Panel<Void> implements NavigationContainer
 {
 
-    private Component content;
+    private Component< ? > content;
     private NavigationPanel navigation;
-    private String workspace;
-    private String workspaceLabel;
+
+    private WorkspaceEntry currentWorkspace;
 
     public String getWorkspace()
     {
-        return workspace;
+        return currentWorkspace != null ? currentWorkspace.id : null;
     }
 
-    public void setWorkspace(String workspace, String label)
+    public void setWorkspace(String workspaceId, String label)
     {
-        if (workspace.equals(this.workspace) == false)
+        WorkspaceEntry entry = new WorkspaceEntry();
+        entry.id = workspaceId;
+        entry.visibleName = label;
+
+        if (entry.equals(currentWorkspace) == false)
         {
-            this.workspace = workspace;
-            this.workspaceLabel = label;
+            currentWorkspace = entry;
             setupNavigation();
         }
     }
@@ -74,35 +67,13 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         return navigation;
     }
 
-    private class Renderer implements IChoiceRenderer<String>
-    {
-
-        public Object getDisplayValue(String object)
-        {
-            if (object.equals(workspace) && workspaceLabel != null)
-            {
-                return workspaceLabel;
-            }
-            else
-            {
-                return getVisibleWorkspaceName(object);
-            }
-        }
-
-        public String getIdValue(String object, int index)
-        {
-            return "" + index;
-        }
-
-    };
-
     private void setupNavigation()
     {
         if (navigation != null)
         {
             navigation.remove();
         }
-        navigation = new NavigationPanel("navigation", workspace)
+        navigation = new NavigationPanel("navigation", getWorkspace())
         {
             @Override
             protected void onNodeSelected(NavigationTreeNode node)
@@ -140,7 +111,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         }
         else
         {
-            content = new WebMarkupContainer("content");
+            content = new WebMarkupContainer<Void>("content");
         }
         add(content);
     }
@@ -149,28 +120,10 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
     {
         super(id);
 
-        if (workspace == null)
-        {
-            workspace = filterWorkspaces(
-                Locator.getBrix().getAvailableWorkspacesFiltered(SitePlugin.PREFIX, null, null)).get(0);
-        }
-
-        this.workspace = workspace;
-
-        setupNavigation();
-
-        
-
-        DropDownChoice ws = new DropDownChoice("workspace", new PropertyModel(this, "workspace"),
-            new LoadableDetachableModel()
-            {
-                @Override
-                protected Object load()
-                {
-                    return filterWorkspaces(Locator.getBrix().getAvailableWorkspacesFiltered(
-                        SitePlugin.PREFIX, null, null));
-                }
-            }, new Renderer())
+        IModel<WorkspaceEntry> model = new PropertyModel<WorkspaceEntry>(this, "currentWorkspace");
+        IChoiceRenderer<WorkspaceEntry> renderer = new ChoiceRenderer<WorkspaceEntry>("visibleName");
+        DropDownChoice<WorkspaceEntry> ws = new DropDownChoice<WorkspaceEntry>("workspace", model,
+            workspaceEntriesModel, renderer)
         {
             @Override
             protected boolean wantOnSelectionChangedNotifications()
@@ -179,7 +132,7 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
             }
 
             @Override
-            protected void onSelectionChanged(Object newSelection)
+            protected void onSelectionChanged(WorkspaceEntry newSelection)
             {
                 detach();
                 setupNavigation();
@@ -188,87 +141,94 @@ public class AdminPanel extends Panel<Object> implements NavigationContainer
         ws.setNullValid(false);
         add(ws);
 
-        add(new PublishLink("publishToStaging", Brix.STATE_STAGING, Brix.STATE_DEVELOPMENT));
-        add(new PublishLink("publishToProduction", Brix.STATE_PRODUCTION, Brix.STATE_STAGING));
-
 
     }
 
-    private String getVisibleWorkspaceName(String workspaceName)
+    private boolean isCurrentWorkspaceValid()
     {
-        WorkspaceResolver resolver = BrixRequestCycle.Locator.getBrix().getWorkspaceResolver();
-        String id = resolver.getWorkspaceId(workspaceName);
-
-        return resolver.getWorkspacePrefix(workspaceName) + " - " +
-            resolver.getUserVisibleWorkspaceName(id) + " - " +
-            resolver.getWorkspaceState(workspaceName);
+        WorkspaceManager manager = BrixRequestCycle.Locator.getBrix().getWorkspaceManager();
+        return currentWorkspace != null && manager.workspaceExists(currentWorkspace.id);
     }
 
-    private class PublishLink extends Link
+    @Override
+    protected void onBeforeRender()
     {
-
-        private final String targetState;
-        private final String requiredState;
-
-        public PublishLink(String id, String targetState, String requireState)
+        if (!isCurrentWorkspaceValid())
         {
-            super(id);
-            this.targetState = targetState;
-            this.requiredState = requireState;
+            List< ? extends WorkspaceEntry> entries = workspaceEntriesModel.getObject();
+            if (!entries.isEmpty())
+            {
+                currentWorkspace = entries.get(0);
+            }
+            setupNavigation();
         }
+        else if (!hasBeenRendered())
+        {
+            setupNavigation();
+        }
+        
+        super.onBeforeRender();
+
+    }
+
+    private static class WorkspaceEntry implements Serializable
+    {
+        private String id;
+        @SuppressWarnings("unused")
+        // used by ChoiceRenderer
+        private String visibleName;
 
         @Override
-        public void onClick()
+        public boolean equals(Object obj)
         {
-            Locator.getBrix().publish(getWorkspace(), targetState,
-                BrixRequestCycle.Locator.getSessionProvider());
+            if (this == obj)
+                return true;
+            if (obj instanceof WorkspaceEntry == false)
+                return false;
+            WorkspaceEntry that = (WorkspaceEntry)obj;
+            return Objects.equal(id, that.id);
         }
-
-        @Override
-        public boolean isVisible()
-        {
-            Action action = new PublishWorkspaceActionImpl(Context.ADMINISTRATION,
-                AdminPanel.this.workspace, targetState);
-
-            Brix brix = Locator.getBrix();
-
-            return requiredState.equals(brix.getWorkspaceResolver().getWorkspaceState(
-                getWorkspace())) &&
-                brix.getAuthorizationStrategy().isActionAuthorized(action);
-        }
-
     };
-
-    public JcrNode getNode()
-    {
-        return (JcrNode)getModelObject();
-    }
-
 
     protected JcrSession getJcrSession()
     {
-        return BrixRequestCycle.Locator.getSession(workspace);
+        return BrixRequestCycle.Locator.getSession(getWorkspace());
     }
 
 
-    private List<String> filterWorkspaces(List<String> workspaces)
+    private IModel<List< ? extends WorkspaceEntry>> workspaceEntriesModel = new LoadableDetachableModel<List< ? extends WorkspaceEntry>>()
     {
-        List<String> result = new ArrayList<String>(workspaces.size());
-        for (String s : workspaces)
+        @Override
+        protected List<WorkspaceEntry> load()
         {
-            Action action = new WorkspaceActionImpl(Action.Context.ADMINISTRATION,
-                WorkspaceAction.Type.VIEW, s);
-            if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+            return getWorkspaces();
+        }
+    };
+
+    private List<WorkspaceEntry> getWorkspaces()
+    {
+        Brix brix = BrixRequestCycle.Locator.getBrix();
+        List<WorkspaceEntry> workspaces = new ArrayList<WorkspaceEntry>();
+        Workspace currentWorkspace = getWorkspace() != null ? brix.getWorkspaceManager()
+            .getWorkspace(getWorkspace()) : null;
+
+        for (Plugin p : brix.getPlugins())
+        {
+            List<Workspace> filtered = brix.filterVisibleWorkspaces(p.getWorkspaces(
+                currentWorkspace, false), Context.ADMINISTRATION);
+            for (Workspace w : filtered)
             {
-                result.add(s);
+                WorkspaceEntry we = new WorkspaceEntry();
+                we.id = w.getId();
+                we.visibleName = p.getUserVisibleName(w, false);
+                workspaces.add(we);
             }
         }
 
-        if (workspace != null && !result.contains(workspace))
+        if (this.currentWorkspace != null && !workspaces.contains(this.currentWorkspace))
         {
-            result.add(workspace);
+            workspaces.add(this.currentWorkspace);
         }
-        
-        return result;
+        return workspaces;
     }
 }

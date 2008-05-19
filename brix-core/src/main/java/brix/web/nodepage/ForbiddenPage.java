@@ -22,7 +22,7 @@ public class ForbiddenPage extends WebPage<Object>
         add(new Label("name", name));
         add(new ToolbarBehavior() {
             @Override
-            protected String getWorkspaceName()
+            protected String getCurrentWorkspaceId()
             {                
                 return ((BrixRequestCycleProcessor)getRequestCycle().getProcessor()).getWorkspace();
             }

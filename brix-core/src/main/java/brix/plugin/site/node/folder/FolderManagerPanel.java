@@ -10,10 +10,9 @@ import org.apache.wicket.model.Model;
 
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.NodeAction;
-import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.admin.NodeManagerPanel;
+import brix.plugin.site.auth.SiteNodeAction;
 import brix.web.tab.AbstractBrixTab;
 import brix.web.tab.BrixTabbedPanel;
 
@@ -37,8 +36,8 @@ public class FolderManagerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                    NodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
+                Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
+                        SiteNodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
                 return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
@@ -55,8 +54,8 @@ public class FolderManagerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                    NodeAction.Type.NODE_ADD_CHILD, folderModel.getObject());
+                Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
+                        SiteNodeAction.Type.NODE_ADD_CHILD, folderModel.getObject());
                 return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
@@ -73,8 +72,8 @@ public class FolderManagerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                    NodeAction.Type.NODE_EDIT, folderModel.getObject());
+                Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
+                        SiteNodeAction.Type.NODE_EDIT, folderModel.getObject());
                 return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 

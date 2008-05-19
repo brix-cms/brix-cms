@@ -20,13 +20,13 @@ import brix.Path;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.auth.Action.Context;
-import brix.auth.NodeAction.Type;
-import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.jcr.exception.JcrException;
 import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.auth.SiteNodeAction.Type;
 import brix.web.util.PathLabel;
 
 public class NodeManagerContainerPanel extends NodeManagerPanel
@@ -70,7 +70,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                Action action = new NodeActionImpl(Context.ADMINISTRATION, Type.NODE_RENAME,
+                Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_RENAME,
                     getNode());
                 String path = NodeManagerContainerPanel.this.getModelObject().getPath();
                 String web = SitePlugin.get().getSiteRootPath();
@@ -96,8 +96,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                Action action = new NodeActionImpl(Context.ADMINISTRATION,
-                    NodeActionImpl.Type.NODE_EDIT, getNode());
+                Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_EDIT,
+                    getNode());
                 return getNode() != null && getNode().isNodeType("nt:file") &&
                     !getNode().isNodeType("mix:versionable") &&
                     Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
@@ -143,13 +143,13 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                Action action = new NodeActionImpl(Context.ADMINISTRATION,
-                    NodeActionImpl.Type.NODE_DELETE, getNode());
+                Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_DELETE,
+                    getNode());
                 Brix brix = BrixRequestCycle.Locator.getBrix();
                 String path = getNode().getPath();
                 return path.startsWith(SitePlugin.get().getSiteRootPath()) &&
                     path.length() > SitePlugin.get().getSiteRootPath().length() &&
-                    Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                    brix.getAuthorizationStrategy().isActionAuthorized(action);
             }
 
         });

@@ -1,10 +1,11 @@
 package brix.plugin.template;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.swing.tree.TreeNode;
@@ -15,7 +16,6 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Objects;
-import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
@@ -27,9 +27,10 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
-import brix.web.nodepage.toolbar.WorkspaceListProvider;
+import brix.workspace.Workspace;
+import brix.workspace.WorkspaceModel;
 
-public class TemplatePlugin implements Plugin, WorkspaceListProvider
+public class TemplatePlugin implements Plugin
 {
 
     private static final String ID = TemplatePlugin.class.getName();
@@ -49,54 +50,53 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
         return get(BrixRequestCycle.Locator.getBrix());
     }
 
-    public static final String PREFIX = "template";
+    private static final String WORKSPACE_TYPE = "brix:template";
 
-    public List<String> getTemplates()
+    private static final String WORKSPACE_ATTRIBUTE_TEMPLATE_NAME = "brix:template-name";
+
+    public boolean isTemplateWorkspace(Workspace workspace)
     {
-        List<String> workspaces = BrixRequestCycle.Locator.getBrix()
-            .getAvailableWorkspacesFiltered(PREFIX, null, null);
-        List<String> res = new ArrayList<String>(workspaces.size());
-        for (String s : workspaces)
-        {
-            res.add(BrixRequestCycle.Locator.getBrix().getWorkspaceResolver().getWorkspaceId(s));
-        }
-        return res;
+        return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
     }
 
-    public boolean isValidTemplateName(String templateName)
+    public void setTemplateName(Workspace workspace, String name)
     {
-        if (Strings.isEmpty(templateName))
-            return false;
-        for (int i = 0; i < templateName.length(); ++i)
-        {
-            char c = templateName.charAt(i);
-            if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && c != '_')
-            {
-                return false;
-            }
-        }
-        return true;
+        workspace.setAttribute(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME, name);
     }
 
-    public String getTemplateWorkspaceName(String templateName)
+    public String getTemplateName(Workspace workspace)
+    {
+        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME);
+    }
+
+
+    public List<Workspace> getTemplates()
+    {
+        Map<String, String> attributes = new HashMap<String, String>();
+        attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        return BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+            attributes);
+    }
+
+    public boolean templateExists(String templateName)
+    {
+        Map<String, String> attributes = new HashMap<String, String>();
+        attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        attributes.put(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME, templateName);
+        return !BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+            attributes).isEmpty();
+    }
+
+    public void createTemplate(Workspace originalWorkspace, String templateName)
     {
         Brix brix = BrixRequestCycle.Locator.getBrix();
-        String templateSuffix = "";
-        String id = templateName;
-        String templateWorkspaceName = brix.getWorkspaceResolver().getWorkspaceName(PREFIX, id,
-            templateSuffix);
-        return templateWorkspaceName;
-    }
 
-    public void createTemplate(String workspaceName, String templateName)
-    {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
-        String templateWorkspaceName = getTemplateWorkspaceName(templateName);
+        Workspace workspace = brix.getWorkspaceManager().createWorkspace();
+        workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        setTemplateName(workspace, templateName);
 
-        JcrSession originalSession = BrixRequestCycle.Locator.getSession(workspaceName);
-        brix.createWorkspace(originalSession, templateWorkspaceName);
-
-        JcrSession destSession = BrixRequestCycle.Locator.getSession(templateWorkspaceName);
+        JcrSession originalSession = BrixRequestCycle.Locator.getSession(originalWorkspace.getId());
+        JcrSession destSession = BrixRequestCycle.Locator.getSession(workspace.getId());
         brix.clone(originalSession, destSession);
     }
 
@@ -107,34 +107,21 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
             throw new IllegalStateException("Node list can not be empty.");
         }
         Brix brix = BrixRequestCycle.Locator.getBrix();
-        String templateWorkspaceName = getTemplateWorkspaceName(templateName);
 
-        JcrSession originalSession = nodes.iterator().next().getSession();
-        brix.createWorkspace(originalSession, templateWorkspaceName);
+        Workspace workspace = brix.getWorkspaceManager().createWorkspace();
+        workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        setTemplateName(workspace, templateName);
 
-        JcrSession destSession = BrixRequestCycle.Locator.getSession(templateWorkspaceName);
+        JcrSession destSession = BrixRequestCycle.Locator.getSession(workspace.getId());
 
         JcrUtil.cloneNodes(nodes, destSession.getRootNode(),
             ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
         destSession.save();
     }
 
-    public void restoreTemplateSnapshot(String templateWorkspaceName, String targetWorkspaceName)
+    public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
     {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
-
-        JcrSession sourceSession = BrixRequestCycle.Locator.getSession(templateWorkspaceName);
-        if (brix.getAvailableWorkspaces(sourceSession).contains(targetWorkspaceName) == false)
-        {
-            brix.createWorkspace(sourceSession, targetWorkspaceName);
-        }
-        JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspaceName);
-        brix.clone(sourceSession, targetSession);
-    }
-
-    public NavigationTreeNode newNavigationTreeNode(String workspaceName)
-    {
-        return new Node(workspaceName);
+        return new Node(workspace.getId());
     }
 
     private static class Node implements NavigationTreeNode
@@ -201,27 +188,9 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
 
         public NavigationAwarePanel< ? > newManagePanel(String id)
         {
-            return new ManageTemplatesPanel(id, workspaceName);
+            return new ManageTemplatesPanel(id, new WorkspaceModel(workspaceName));
         }
     };
-
-    public List<Entry> getVisibleWorkspaces(String currentWorkspaceName)
-    {
-        List<String> workspaces = BrixRequestCycle.Locator.getBrix()
-            .getAvailableWorkspacesFiltered(PREFIX, null, null);
-        List<Entry> res = new ArrayList<Entry>();
-
-        for (String w : workspaces)
-        {
-            Entry e = new Entry();
-            e.workspaceName = w;
-            e.userVisibleName = "Template " +
-                BrixRequestCycle.Locator.getBrix().getWorkspaceResolver().getWorkspaceId(w);
-            res.add(e);
-        }
-
-        return res;
-    }
 
     private String getCommonParentPath(List<JcrNode> nodes)
     {
@@ -282,13 +251,34 @@ public class TemplatePlugin implements Plugin, WorkspaceListProvider
             };
         }
 
-        JcrUtil.cloneNodes(nodes, targetRootNode, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW, limiter);
+        JcrUtil.cloneNodes(nodes, targetRootNode, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW,
+            limiter);
         targetRootNode.save();
     }
 
-    public void initWorkspace(JcrSession workspaceSession)
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
     {
 
+    }
+
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend)
+    {
+        return "Template " + getTemplateName(workspace);
+    }
+
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
+    {
+        if (isFrontend)
+        {
+            Map<String, String> attributes = new HashMap<String, String>();
+            attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+            return BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+                attributes);
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private static final ResourceReference ICON = new ResourceReference(TemplatePlugin.class,

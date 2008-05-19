@@ -12,6 +12,7 @@ import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.web.tree.AbstractTreeModel;
+import brix.workspace.Workspace;
 
 public class NavigationTreeModel extends AbstractTreeModel
 {
@@ -48,7 +49,8 @@ public class NavigationTreeModel extends AbstractTreeModel
                 Brix brix = BrixRequestCycle.Locator.getBrix();
                 for (Plugin p : brix.getPlugins())
                 {
-                    NavigationTreeNode node = p.newNavigationTreeNode(workspaceName);
+                    Workspace workspace = BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspace(workspaceId);
+                    NavigationTreeNode node = p.newNavigationTreeNode(workspace);
                     if (node != null)
                     {
                         children.add(node);
@@ -94,11 +96,11 @@ public class NavigationTreeModel extends AbstractTreeModel
         }
     };
 
-    private final String workspaceName;
+    private final String workspaceId;
 
     public NavigationTreeModel(String workspaceName)
     {
-        this.workspaceName = workspaceName;
+        this.workspaceId = workspaceName;
     }
 
 }

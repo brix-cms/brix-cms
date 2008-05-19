@@ -17,7 +17,7 @@ public class TilePageRenderPage extends BrixNodeWebPage
         add(new TilePageRenderPanel("view", node, this));
         add(new ToolbarBehavior() {
             @Override
-            protected String getWorkspaceName()
+            protected String getCurrentWorkspaceId()
             {
                 return node.getObject().getSession().getWorkspace().getName();
             }

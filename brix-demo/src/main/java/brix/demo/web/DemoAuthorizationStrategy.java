@@ -2,14 +2,14 @@ package brix.demo.web;
 
 import brix.auth.Action;
 import brix.auth.AuthorizationStrategy;
-import brix.auth.NodeAction;
+import brix.plugin.site.auth.SiteNodeAction;
 
 public class DemoAuthorizationStrategy implements AuthorizationStrategy
 {
 
-    private boolean isActionAuthorized(NodeAction action)
+    private boolean isActionAuthorized(SiteNodeAction action)
     {
-        if (action.getType() == NodeAction.Type.NODE_VIEW_CHILDREN &&
+        if (action.getType() == SiteNodeAction.Type.NODE_VIEW_CHILDREN &&
                 action.getNode().getName().equals("content"))
             return false;
         else
@@ -18,9 +18,9 @@ public class DemoAuthorizationStrategy implements AuthorizationStrategy
 
     public boolean isActionAuthorized(Action action)
     {
-        if (action instanceof NodeAction)
+        if (action instanceof SiteNodeAction)
         {
-            return isActionAuthorized((NodeAction)action);
+            return isActionAuthorized((SiteNodeAction)action);
         }
         return true;
     }

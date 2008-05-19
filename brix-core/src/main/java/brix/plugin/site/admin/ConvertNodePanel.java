@@ -9,11 +9,11 @@ import org.apache.wicket.model.Model;
 
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.impl.ConvertNodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.auth.ConvertNodeAction;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.util.TextLink;
 
@@ -37,7 +37,7 @@ public class ConvertNodePanel extends NodeManagerPanel
             if (plugin.getConverterForNode(node) != null)
             {
 
-                Action action = new ConvertNodeActionImpl(Action.Context.ADMINISTRATION, node,
+                Action action = new ConvertNodeAction(Action.Context.ADMINISTRATION, node,
                         plugin.getNodeType());
 
                 if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))

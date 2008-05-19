@@ -22,70 +22,105 @@ import org.apache.wicket.protocol.http.WebResponse;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
+import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.exception.BrixException;
 import brix.jcr.api.JcrSession;
+import brix.plugin.snapshot.auth.CreateSnapshotAction;
+import brix.plugin.snapshot.auth.DeleteSnapshotAction;
+import brix.plugin.snapshot.auth.RestoreSnapshotAction;
 import brix.web.admin.AdminPanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
+import brix.workspace.Workspace;
+import brix.workspace.WorkspaceModel;
 
-public class ManageSnapshotsPanel extends NavigationAwarePanel<Object>
+public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
 {
-    private final String currentWorkspaceName;
 
-    public ManageSnapshotsPanel(String id, final String currentWorkspaceName)
+    public ManageSnapshotsPanel(String id, IModel<Workspace> model)
     {
-        super(id);
-        this.currentWorkspaceName = currentWorkspaceName;
+        super(id, model);
 
-        IModel<List<String>> snapshotsModel = new LoadableDetachableModel<List<String>>()
+        IModel<List<Workspace>> snapshotsModel = new LoadableDetachableModel<List<Workspace>>()
         {
             @Override
-            protected List<String> load()
+            protected List<Workspace> load()
             {
-                return SnapshotPlugin.get().getSnapshotsForWorkspace(currentWorkspaceName);
+                List<Workspace> list = SnapshotPlugin.get().getSnapshotsForWorkspace(
+                    getModelObject());
+                return BrixRequestCycle.Locator.getBrix().filterVisibleWorkspaces(list,
+                    Context.ADMINISTRATION);
             }
 
         };
 
-        add(new ListView<String>("snapshots", snapshotsModel)
+        add(new ListView<Workspace>("snapshots", snapshotsModel)
         {
+            @Override
+            protected IModel<Workspace> getListItemModel(IModel<List<Workspace>> listViewModel,
+                    int index)
+            {
+                return new WorkspaceModel(listViewModel.getObject().get(index));
+            }
 
             @Override
-            protected void populateItem(final ListItem<String> item)
+            protected void populateItem(final ListItem<Workspace> item)
             {
-                final String formatted = SnapshotPlugin.get().getSnapshotSuffixFormatted(item.getModelObject());
-
-                String suffix = item.getModelObject();
-                final Brix brix = BrixRequestCycle.Locator.getBrix();
-                final String id = brix.getWorkspaceResolver().getWorkspaceId(currentWorkspaceName);
-                final String workspaceName = brix.getWorkspaceResolver().getWorkspaceName(
-                    SnapshotPlugin.PREFIX, id, suffix);
+                Workspace workspace = item.getModelObject();
+                final String name = SnapshotPlugin.get().getUserVisibleName(workspace, true);
 
                 Link<Object> link = new Link<Object>("browse")
                 {
                     @Override
                     public void onClick()
                     {
-
-
+                        Workspace workspace = item.getModelObject();
                         AdminPanel adminPanel = findParent(AdminPanel.class);
-                        String visibleName = brix.getWorkspaceResolver()
-                            .getUserVisibleWorkspaceName(id);
-                        adminPanel.setWorkspace(workspaceName, "Snapshot " + visibleName + " " +
-                            formatted);
+                        adminPanel.setWorkspace(workspace.getId(), name);
                     }
                 };
                 item.add(link);
 
-                item.add(new Link("restore")
+                item.add(new Link<Void>("restore")
                 {
                     @Override
                     public void onClick()
                     {
-                        SnapshotPlugin.get().restoreSnapshot(workspaceName);
+                        Workspace target = ManageSnapshotsPanel.this.getModelObject();
+                        SnapshotPlugin.get().restoreSnapshot(item.getModelObject(), target);
+                    }
+
+                    @Override
+                    public boolean isVisible()
+                    {
+                        Workspace target = ManageSnapshotsPanel.this.getModelObject();
+                        Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, item
+                            .getModelObject(), target);
+                        return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                            .isActionAuthorized(action);
                     }
                 });
 
-                item.add(new Label<String>("label", formatted));
+                item.add(new Link<Void>("delete")
+                {
+                    @Override
+                    public void onClick()
+                    {
+                        Workspace snapshot = item.getModelObject();
+                        snapshot.delete();
+                    }
+
+                    @Override
+                    public boolean isVisible()
+                    {
+                        Action action = new DeleteSnapshotAction(Context.ADMINISTRATION, item
+                            .getModelObject());
+                        return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                            .isActionAuthorized(action);
+                    }
+                });
+
+                item.add(new Label<String>("label", name));
             }
         });
 
@@ -94,13 +129,16 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Object>
             @Override
             public void onClick()
             {
-                SnapshotPlugin.get().createSnapshot(currentWorkspaceName);
+                SnapshotPlugin.get().createSnapshot(ManageSnapshotsPanel.this.getModelObject());
             }
 
             @Override
             public boolean isVisible()
             {
-                return !isCurrentWorkspaceSnapshot();
+                Workspace current = ManageSnapshotsPanel.this.getModelObject();
+                Action action = new CreateSnapshotAction(Context.ADMINISTRATION, current);
+                return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                    .isActionAuthorized(action);
             }
         });
 
@@ -120,8 +158,8 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Object>
                     {
                         WebResponse resp = (WebResponse)requestCycle.getResponse();
                         resp.setAttachmentHeader("workspace.xml");
-                        JcrSession session = BrixRequestCycle.Locator
-                            .getSession(currentWorkspaceName);
+                        String id = ManageSnapshotsPanel.this.getModelObject().getId();
+                        JcrSession session = BrixRequestCycle.Locator.getSession(id);
                         Brix brix = BrixRequestCycle.Locator.getBrix();
                         session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
                             false);
@@ -136,7 +174,10 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Object>
             @Override
             public boolean isVisible()
             {
-                return !isCurrentWorkspaceSnapshot();
+                Workspace target = ManageSnapshotsPanel.this.getModelObject();
+                Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, target);
+                return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                    .isActionAuthorized(action);
             }
         };
 
@@ -154,8 +195,8 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Object>
                     try
                     {
                         InputStream s = u.getInputStream();
-                        JcrSession session = BrixRequestCycle.Locator
-                            .getSession(currentWorkspaceName);
+                        String id = ManageSnapshotsPanel.this.getModelObject().getId();
+                        JcrSession session = BrixRequestCycle.Locator.getSession(id);
                         Brix brix = BrixRequestCycle.Locator.getBrix();
                         if (session.itemExists(brix.getRootPath()))
                         {
@@ -175,13 +216,6 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Object>
         });
 
         add(uploadForm);
-    }
-
-    private boolean isCurrentWorkspaceSnapshot()
-    {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
-        return brix.getWorkspaceResolver().getWorkspacePrefix(currentWorkspaceName).equals(
-            SnapshotPlugin.PREFIX);
     }
 
 }

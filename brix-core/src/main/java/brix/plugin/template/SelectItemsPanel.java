@@ -26,10 +26,10 @@ import com.inmethod.grid.treegrid.TreeGrid;
 public class SelectItemsPanel<T> extends Panel<T>
 {
 
-    public SelectItemsPanel(String id, IModel<T> model, String workspaceName)
+    public SelectItemsPanel(String id, IModel<T> model, String workspaceId)
     {
         super(id, model);
-        init(workspaceName);
+        init(workspaceId);
     }
     
     public SelectItemsPanel(String id, String workspaceName)

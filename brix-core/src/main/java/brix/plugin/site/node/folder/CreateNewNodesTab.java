@@ -18,10 +18,10 @@ import org.apache.wicket.model.PropertyModel;
 import brix.Brix;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.impl.SelectNewNodeTypeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.auth.SelectNewNodeTypeAction;
 
 public class CreateNewNodesTab extends Panel<JcrNode>
 {
@@ -93,7 +93,7 @@ public class CreateNewNodesTab extends Panel<JcrNode>
             List<PluginEntry> types = new ArrayList<PluginEntry>(plugins.size());
             for (SiteNodePlugin plugin : plugins)
             {
-                Action action = new SelectNewNodeTypeActionImpl(Action.Context.ADMINISTRATION,
+                Action action = new SelectNewNodeTypeAction(Action.Context.ADMINISTRATION,
                         (JcrNode)CreateNewNodesTab.this.getModelObject(), plugin.getNodeType());
 
                 if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))

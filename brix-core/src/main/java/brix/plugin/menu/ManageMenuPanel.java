@@ -27,22 +27,20 @@ import brix.jcr.exception.JcrException;
 import brix.plugin.menu.editor.MenuEditor;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.util.AbstractModel;
+import brix.workspace.Workspace;
 
-public class ManageMenuPanel extends NavigationAwarePanel<Object>
+public class ManageMenuPanel extends NavigationAwarePanel<Workspace>
 {
-    private final String workspaceName;
-
-    public ManageMenuPanel(String id, final String workspaceName)
+    public ManageMenuPanel(String id, final IModel<Workspace> model)
     {
-        super(id);
-        this.workspaceName = workspaceName;
+        super(id, model);
 
         IModel<List<JcrNode>> listViewModel = new LoadableDetachableModel<List<JcrNode>>()
         {
             @Override
             protected List<JcrNode> load()
             {
-                return MenuPlugin.get().getMenuNodes(workspaceName);
+                return MenuPlugin.get().getMenuNodes(ManageMenuPanel.this.getModelObject().getId());
             }
         };
 
@@ -158,8 +156,8 @@ public class ManageMenuPanel extends NavigationAwarePanel<Object>
                 public void onSubmit()
                 {
                     MenuPlugin plugin = MenuPlugin.get();
-                    currentNode.setObject(plugin.saveMenu(model.getObject(), workspaceName,
-                        currentNode.getObject()));
+                    currentNode.setObject(plugin.saveMenu(model.getObject(), ManageMenuPanel.this
+                        .getModelObject().getId(), currentNode.getObject()));
                 }
             });
 
@@ -184,7 +182,8 @@ public class ManageMenuPanel extends NavigationAwarePanel<Object>
                         {
                             currentNode.getObject().getSession().refresh(false);
                             currentNode.detach();
-                            getSession().error("Couldn't delete menu, it is referenced from a tile(s).");
+                            getSession().error(
+                                "Couldn't delete menu, it is referenced from a tile(s).");
                         }
                     }
 

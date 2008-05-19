@@ -1,6 +1,5 @@
 package brix.plugin.site;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,27 +17,27 @@ import brix.plugin.site.node.fallback.FallbackNodePlugin;
 import brix.plugin.site.node.folder.FolderNodePlugin;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 import brix.web.admin.navigation.NavigationTreeNode;
-import brix.web.nodepage.toolbar.WorkspaceListProvider;
+import brix.workspace.Workspace;
 
-public class SitePlugin implements Plugin, WorkspaceListProvider
+public class SitePlugin implements Plugin
 {
     public static final String PREFIX = "site";
     private static final String ID = SitePlugin.class.getName();
 
     private final Brix brix;
-        
+
     public String getId()
     {
         return ID;
     }
 
-    public NavigationTreeNode newNavigationTreeNode(String workspaceName)
+    public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
     {
-        JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
+        JcrSession session = BrixRequestCycle.Locator.getSession(workspace.getId());
         return new SiteNavigationTreeNode((JcrNode)session.getItem(getSiteRootPath()));
     }
 
-    public SitePlugin(Brix brix)    
+    public SitePlugin(Brix brix)
     {
         this.brix = brix;
         registerNodePlugin(new FolderNodePlugin());
@@ -104,31 +103,83 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
         return get(BrixRequestCycle.Locator.getBrix());
     }
 
-    public List<Entry> getVisibleWorkspaces(String currentWorkspaceName)
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend)
     {
-        List<String> workspaces = brix.getAvailableWorkspacesFiltered(PREFIX, null, null);
-        List<Entry> res = new ArrayList<Entry>();
-        for (String s : workspaces)
-        {
-            Entry e = new Entry();
-            e.workspaceName = s;
-            String id = brix.getWorkspaceResolver().getWorkspaceId(s);
-            e.userVisibleName = "Site " +
-                brix.getWorkspaceResolver().getUserVisibleWorkspaceName(id) + " " +
-                brix.getWorkspaceResolver().getWorkspaceState(s);
-            res.add(e);
-        }
-        return res;
+        return "Site - " + getWorkspaceName(workspace) + " - " + getWorkspaceState(workspace);
+    }
+
+    public void setWorkspaceName(Workspace workspace, String name)
+    {
+        workspace.setAttribute(WORKSPACE_ATTRIBUTE_NAME, name);
+    }
+
+    public String getWorkspaceName(Workspace workspace)
+    {
+        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_NAME);
+    }
+
+    public void setWorkspaceState(Workspace workspace, String state)
+    {
+        workspace.setAttribute(WORKSPACE_ATTRIBUTE_STATE, state);
+    }
+
+    public String getWorkspaceState(Workspace workspace)
+    {
+        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_STATE);
+    }
+
+    public boolean isSiteWorkspace(Workspace workspace)
+    {
+        return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
+    }
+
+    private static final String WORKSPACE_TYPE = "brix:site";
+
+    private static final String WORKSPACE_ATTRIBUTE_NAME = "brix:site-name";
+
+    private static final String WORKSPACE_ATTRIBUTE_STATE = "brix:site-state";
+    
+    public Workspace createSite(String name, String state)
+    {
+        Workspace workspace = brix.getWorkspaceManager().createWorkspace();
+        workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        setWorkspaceName(workspace, name);
+        setWorkspaceState(workspace, state);
+        return workspace;
+    }
+
+    public Workspace getSiteWorkspace(String name, String state)
+    {
+        Map<String, String> attributes = new HashMap<String, String>();
+        attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        attributes.put(WORKSPACE_ATTRIBUTE_NAME, name);
+        attributes.put(WORKSPACE_ATTRIBUTE_STATE, state);
+        List<Workspace> res = brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
+        return res.isEmpty() ? null : res.get(0);
     }
     
-    public static final String WEB_NODE_NAME = Brix.NS_PREFIX + "web";
+    public boolean siteExists(String name, String state)
+    {
+        return getSiteWorkspace(name, state) != null;
+    }
     
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
+    {
+        Map<String, String> attributes = new HashMap<String, String>();
+        attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        List<Workspace> workspaces = brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
+        // TODO sort workspaces
+        return workspaces;
+    }
+
+    public static final String WEB_NODE_NAME = Brix.NS_PREFIX + "web";
+
     public String getSiteRootPath()
     {
         return brix.getRootPath() + "/" + WEB_NODE_NAME;
     }
 
-    public void initWorkspace(JcrSession workspaceSession)
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
     {
         JcrNode root = (JcrNode)workspaceSession.getItem(brix.getRootPath());
         JcrNode web;
@@ -145,7 +196,7 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
             web.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
         }
     }
-    
+
     public String fromRealWebNodePath(String nodePath)
     {
         Path prefix = new Path(getSiteRootPath());
@@ -184,7 +235,7 @@ public class SitePlugin implements Plugin, WorkspaceListProvider
 
         return prefix.append(path).toString();
     }
-    
+
     public JcrNode nodeForPath(BrixNode baseNode, Path path)
     {
         return nodeForPath(baseNode, path.toString());

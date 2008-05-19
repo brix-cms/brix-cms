@@ -11,5 +11,7 @@ public interface WorkspaceManager
     
     public Workspace createWorkspace();    
     
-    public Workspace getWorkspace(String workspaceId);       
+    public Workspace getWorkspace(String workspaceId);
+    
+    public boolean workspaceExists(String workspaceId);
 }

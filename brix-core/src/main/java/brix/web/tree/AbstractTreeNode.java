@@ -15,12 +15,11 @@ import org.apache.wicket.util.lang.Objects;
 import brix.BrixNodeModel;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.NodeAction;
 import brix.auth.Action.Context;
-import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.auth.SiteNodeAction;
 
 
 public class AbstractTreeNode implements TreeNode, IDetachable
@@ -116,7 +115,7 @@ public class AbstractTreeNode implements TreeNode, IDetachable
         for (JcrNode entry : entries)
         {
             BrixNode brixNode = (BrixNode)entry;
-            Action view = new NodeActionImpl(Context.ADMINISTRATION, NodeAction.Type.NODE_VIEW,
+            Action view = new SiteNodeAction(Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW,
                     entry);
             if (!brixNode.isHidden() && (displayFoldersOnly() == false || brixNode.isFolder()) &&
                     Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(view))
@@ -135,8 +134,8 @@ public class AbstractTreeNode implements TreeNode, IDetachable
     {
         if (children == null)
         {
-            Action viewChildren = new NodeActionImpl(Context.ADMINISTRATION,
-                    NodeAction.Type.NODE_VIEW_CHILDREN, nodeModel.getObject());
+            Action viewChildren = new SiteNodeAction(Context.ADMINISTRATION,
+                    SiteNodeAction.Type.NODE_VIEW_CHILDREN, nodeModel.getObject());
             if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(viewChildren))
             {
                 children = loadChildren();

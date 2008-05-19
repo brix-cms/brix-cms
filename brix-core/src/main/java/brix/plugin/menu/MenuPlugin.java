@@ -21,6 +21,8 @@ import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
+import brix.workspace.Workspace;
+import brix.workspace.WorkspaceModel;
 
 public class MenuPlugin implements Plugin
 {
@@ -47,18 +49,18 @@ public class MenuPlugin implements Plugin
         return get(BrixRequestCycle.Locator.getBrix());
     }
 
-    public NavigationTreeNode newNavigationTreeNode(String workspaceName)
+    public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
     {
-        return new Node(workspaceName);
+        return new Node(workspace.getId());
     }
 
     private static class Node implements NavigationTreeNode
     {
-        private final String workspaceName;
+        private final String workspaceId;
 
-        public Node(String workspaceName)
+        public Node(String workspaceId)
         {
-            this.workspaceName = workspaceName;
+            this.workspaceId = workspaceId;
         }
 
         public boolean getAllowsChildren()
@@ -116,7 +118,7 @@ public class MenuPlugin implements Plugin
 
         public NavigationAwarePanel< ? > newManagePanel(String id)
         {
-            return new ManageMenuPanel(id, workspaceName);
+            return new ManageMenuPanel(id, new WorkspaceModel(workspaceId));
         }
     };
 
@@ -129,9 +131,9 @@ public class MenuPlugin implements Plugin
         return BrixRequestCycle.Locator.getBrix().getRootPath() + "/" + ROOT_NODE_NAME;
     }
 
-    private JcrNode getRootNode(String workspaceName, boolean createIfNotExist)
+    private JcrNode getRootNode(String workspaceId, boolean createIfNotExist)
     {
-        JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
+        JcrSession session = BrixRequestCycle.Locator.getSession(workspaceId);
 
         if (session.itemExists(getRootPath()) == false)
         {
@@ -150,9 +152,9 @@ public class MenuPlugin implements Plugin
         return (JcrNode)session.getItem(getRootPath());
     }
 
-    public List<JcrNode> getMenuNodes(String workspaceName)
+    public List<JcrNode> getMenuNodes(String workspaceId)
     {
-        JcrNode root = getRootNode(workspaceName, false);
+        JcrNode root = getRootNode(workspaceId, false);
         if (root != null)
         {
             List<JcrNode> result = new ArrayList<JcrNode>();
@@ -169,7 +171,7 @@ public class MenuPlugin implements Plugin
         }
     }
 
-    public JcrNode saveMenu(Menu menu, String workspaceName, JcrNode node)
+    public JcrNode saveMenu(Menu menu, String workspaceId, JcrNode node)
     {
         if (node != null)
         {
@@ -177,7 +179,7 @@ public class MenuPlugin implements Plugin
         }
         else
         {
-            JcrNode root = getRootNode(workspaceName, true);
+            JcrNode root = getRootNode(workspaceId, true);
             node = root.addNode("menu");
             menu.save(node);
         }
@@ -185,8 +187,19 @@ public class MenuPlugin implements Plugin
         return node;
     }
     
-    public void initWorkspace(JcrSession workspaceSession)
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
     {
         
     }
+    
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend)
+    {        
+        return null;
+    }
+    
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
+    {        
+        return null;
+    }
+    
 }

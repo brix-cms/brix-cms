@@ -15,4 +15,6 @@ interface RemoteWorkspaceManager extends Remote
     public RemoteWorkspace createWorkspace() throws RemoteException;
 
     public RemoteWorkspace getWorkspace(String workspaceId) throws RemoteException;
+    
+    public boolean workspaceExists(String workspaceId) throws RemoteException;
 }

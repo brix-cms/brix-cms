@@ -21,7 +21,7 @@ public class ClientWorkspaceManager implements WorkspaceManager
     public Workspace createWorkspace()
     {
         try
-        {
+        {        	
             return new ClientWorkspace(delegate.createWorkspace());
         }
         catch (RemoteException e)
@@ -32,14 +32,7 @@ public class ClientWorkspaceManager implements WorkspaceManager
 
     public Workspace getWorkspace(String workspaceId)
     {
-        try
-        {
-            return new ClientWorkspace(delegate.getWorkspace(workspaceId));
-        }
-        catch (RemoteException e)
-        {
-            throw new CommunicationException(e);
-        }
+        return new ClientWorkspace(workspaceId, delegate);        
     }
 
     public List<Workspace> getWorkspaces()
@@ -53,6 +46,18 @@ public class ClientWorkspaceManager implements WorkspaceManager
             throw new CommunicationException(e);
         }
 
+    }
+    
+    public boolean workspaceExists(String workspaceId)
+    {
+    	try
+		{
+			return delegate.workspaceExists(workspaceId);
+		}
+		catch (RemoteException e)
+		{
+			throw new CommunicationException(e);
+		}
     }
 
     public List<Workspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes)

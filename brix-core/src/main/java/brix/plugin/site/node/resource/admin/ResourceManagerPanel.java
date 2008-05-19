@@ -10,12 +10,11 @@ import org.apache.wicket.model.Model;
 
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.NodeAction;
-import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
+import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.node.resource.ResourceManager;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 import brix.web.tab.AbstractBrixTab;
@@ -108,15 +107,15 @@ public class ResourceManagerPanel extends NodeManagerPanel
 
     private boolean hasViewPermission()
     {
-        Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                NodeAction.Type.NODE_VIEW, getNode());
+        Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
+                SiteNodeAction.Type.NODE_VIEW, getNode());
         return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
     private boolean hasEditPermission()
     {
-        Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                NodeAction.Type.NODE_EDIT, getNode());
+        Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
+                SiteNodeAction.Type.NODE_EDIT, getNode());
         return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
     }
 

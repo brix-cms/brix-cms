@@ -6,9 +6,8 @@ import org.apache.wicket.model.IModel;
 
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.NodeAction;
-import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
+import brix.plugin.site.auth.SiteNodeAction;
 
 public class BrixNodeWebPage extends WebPage
 {
@@ -34,8 +33,8 @@ public class BrixNodeWebPage extends WebPage
     protected void checkAccess()
     {
         JcrNode node = getNodeModel().getObject();
-        Action action = new NodeActionImpl(Action.Context.PRESENTATION,
-                NodeAction.Type.NODE_VIEW, node);
+        Action action = new SiteNodeAction(Action.Context.PRESENTATION,
+                SiteNodeAction.Type.NODE_VIEW, node);
         if (!Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
         {
             throw new RestartResponseException(ForbiddenPage.class);

@@ -1,7 +1,9 @@
 package brix.web.nodepage.toolbar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -10,13 +12,16 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
+import org.apache.wicket.util.lang.Objects;
 
+import brix.Brix;
+import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.WorkspaceAction;
-import brix.auth.impl.WorkspaceActionImpl;
-import brix.web.nodepage.toolbar.WorkspaceListProvider.Entry;
+import brix.auth.ViewWorkspaceAction;
+import brix.auth.Action.Context;
+import brix.workspace.Workspace;
 
 public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
 {
@@ -38,15 +43,14 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
         response.renderCSSReference(cssReference);
         response.renderJavascriptReference(javascriptReference);
 
-        String defaultWorkspace = getWorkspaceName();
-        List<Entry> workspaces = getWorkspaces();
+        String defaultWorkspace = getCurrentWorkspaceId();
+        List<WorkspaceEntry> workspaces = getWorkspaces();
 
         String workspaceArray[] = new String[workspaces.size()];
         for (int i = 0; i < workspaces.size(); ++i)
         {
-            Entry e = workspaces.get(i);
-            workspaceArray[i] = "{ name: '" + e.userVisibleName + "', value: '" + e.workspaceName +
-                "' }";
+            WorkspaceEntry e = workspaces.get(i);
+            workspaceArray[i] = "{ name: '" + e.visibleName + "', value: '" + e.id + "' }";
         }
 
         if (defaultWorkspace == null)
@@ -62,55 +66,71 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
             defaultWorkspace + ");", "brix-toolbar-init");
     }
 
-    protected abstract String getWorkspaceName();
+    protected abstract String getCurrentWorkspaceId();
 
     @Override
-    public boolean getStatelessHint(Component component)
+    public boolean getStatelessHint(Component< ? > component)
     {
         return true;
     }
 
-    private List<Entry> workspaces;
+    private List<WorkspaceEntry> workspaces;
 
-    public List<Entry> getWorkspaces()
+    private List<WorkspaceEntry> loadWorkspaces()
+    {
+        Brix brix = BrixRequestCycle.Locator.getBrix();
+        List<WorkspaceEntry> workspaces = new ArrayList<WorkspaceEntry>();
+        Workspace currentWorkspace = getCurrentWorkspaceId() != null ? brix.getWorkspaceManager()
+            .getWorkspace(getCurrentWorkspaceId()) : null;
+
+        for (Plugin p : brix.getPlugins())
+        {
+            List<Workspace> filtered = brix.filterVisibleWorkspaces(p.getWorkspaces(
+                currentWorkspace, true), Context.PRESENTATION);
+            for (Workspace w : filtered)
+            {
+                WorkspaceEntry we = new WorkspaceEntry();
+                we.id = w.getId();
+                we.visibleName = p.getUserVisibleName(w, true);
+                workspaces.add(we);
+            }
+        }
+
+        return workspaces;
+    }
+
+    private List<WorkspaceEntry> getWorkspaces()
     {
         if (workspaces == null)
         {
-            workspaces = new ArrayList<Entry>();
-            for (Plugin p : Locator.getBrix().getPlugins())
-            {
-                if (p instanceof WorkspaceListProvider)
-                {
-                    workspaces.addAll(filterWorkspaces(((WorkspaceListProvider)p)
-                        .getVisibleWorkspaces(getWorkspaceName())));
-                }
-            }
+            workspaces = loadWorkspaces();
         }
         return workspaces;
     }
 
-    private List<Entry> filterWorkspaces(List<Entry> workspaces)
+    private static class WorkspaceEntry implements Serializable
     {
-        List<Entry> result = new ArrayList<Entry>(workspaces.size());
-        for (Entry e : workspaces)
-        {
-            Action action = new WorkspaceActionImpl(Action.Context.PRESENTATION,
-                WorkspaceAction.Type.VIEW, e.workspaceName);
-            if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
-            {
-                result.add(e);
-            }
-        }
+        private String id;
+        private String visibleName;
 
-        return result;
-    }
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+                return true;
+            if (obj instanceof WorkspaceEntry)
+                return false;
+            WorkspaceEntry that = (WorkspaceEntry)obj;
+            return Objects.equal(id, that.id);
+        }
+    };
 
     @Override
     public boolean isEnabled(Component< ? > component)
     {
-        List<Entry> workspaces = getWorkspaces();
+        List<WorkspaceEntry> workspaces = getWorkspaces();
         return workspaces.size() > 1 ||
-            (workspaces.size() == 1 && workspaces.get(0).equals(getWorkspaceName()));
+            (workspaces.size() == 1 && workspaces.get(0).id.equals(getCurrentWorkspaceId()));
     }
 
     @Override

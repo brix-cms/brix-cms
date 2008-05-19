@@ -129,7 +129,7 @@ public class WicketApplication extends WebApplication
 
         // allow brix to initialize the repository
         Credentials cred = properties.buildSimpleCredentials();
-
+/*
         try
         {
             javax.jcr.Session classic = repository.login(cred);
@@ -159,7 +159,7 @@ public class WicketApplication extends WebApplication
         {
             throw new RuntimeException("Could not initialize repository with Brix");
         }
-
+*/
         // allow brix to handle any url that wicket cant
         mount(new BrixNodePageUrlCodingStrategy()
         {

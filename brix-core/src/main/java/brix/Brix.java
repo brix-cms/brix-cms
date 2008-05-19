@@ -18,17 +18,19 @@ import org.apache.wicket.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import brix.auth.Action;
 import brix.auth.AuthorizationStrategy;
+import brix.auth.ViewWorkspaceAction;
+import brix.auth.Action.Context;
 import brix.jcr.JcrEventListener;
-import brix.jcr.SessionProvider;
 import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.event.EventUtil;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.jcr.wrapper.WrapperRegistry;
 import brix.plugin.menu.MenuPlugin;
+import brix.plugin.publishing.PublishingPlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.folder.FolderNode;
 import brix.plugin.site.node.folder.FolderNodePlugin;
@@ -39,6 +41,7 @@ import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.template.TemplatePlugin;
 import brix.util.StringInputStream;
 import brix.web.nodepage.PageParametersAwareEnabler;
+import brix.workspace.WorkspaceManager;
 
 public abstract class Brix
 {
@@ -53,6 +56,7 @@ public abstract class Brix
         registerPlugin(new MenuPlugin());
         registerPlugin(new SnapshotPlugin());
         registerPlugin(new TemplatePlugin());
+        registerPlugin(new PublishingPlugin());
     }
 
 
@@ -75,54 +79,7 @@ public abstract class Brix
         application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
     }
 
-    public List<String> getAvailableWorkspaces()
-    {
-        return getAvailableWorkspaces(BrixRequestCycle.Locator.getSession(null));
-    }
-    
-    public List<String> getAvailableWorkspaces(JcrSession session)
-    {
-        String workspaces[] = session.getWorkspace().getAccessibleWorkspaceNames();
-
-        List<String> res = new ArrayList<String>(workspaces.length);
-
-        for (String s : workspaces)
-        {
-            if (getWorkspaceResolver().isValidWorkspaceName(s))
-            {
-                res.add(s);
-            }
-        }
-
-        return res;
-    }
-    
-    private List<String> filterWorkspaces(String prefix, String id, String state, List<String> original)
-    {
-        List<String> res = new ArrayList<String>();
-        for (String s : original)
-        {
-            String currentPrefix = getWorkspaceResolver().getWorkspacePrefix(s);
-            String currentId = getWorkspaceResolver().getWorkspaceId(s);
-            String currentState = getWorkspaceResolver().getWorkspaceState(s);
-            
-            if (prefix != null && !prefix.equals(currentPrefix))
-                continue;
-            if (id != null && !currentId.equals(currentId))
-                continue;
-            if (state != null && !state.equals(currentState))
-                continue;
-            res.add(s);
-        }
-        return res;
-    }
-    
-    public List<String> getAvailableWorkspacesFiltered(String prefix, String id, String state)
-    {
-        return filterWorkspaces(prefix, id, state, getAvailableWorkspaces(BrixRequestCycle.Locator.getSession(null)));
-    }
-    
-    public void createWorkspace(JcrSession session, String name)
+    protected void createWorkspace(JcrSession session, String name)
     {
         // TODO: Decouple this from BRIX
         WorkspaceImpl workspace = (WorkspaceImpl)session.getWorkspace().getDelegate();
@@ -156,72 +113,38 @@ public abstract class Brix
 
     private void cloneWorkspace(JcrSession srcSession, JcrSession destSession)
     {
-        if (true)
-        {
-            String root = getRootPath();
-            destSession.getWorkspace().clone(srcSession.getWorkspace().getName(), root, root, true);
-            return;
-        }
-        JcrNode root = srcSession.getRootNode();
-        JcrNodeIterator nodes = root.getNodes();
-        while (nodes.hasNext())
-        {
-            JcrNode node = nodes.nextNode();
-            if (node.getName().equals("jcr:system") == false)
-            {
-                destSession.getWorkspace().clone(srcSession.getWorkspace().getName(),
-                    "/" + node.getName(), "/" + node.getName(), true);
-            }
-        }
+        String root = getRootPath();
+        destSession.getWorkspace().clone(srcSession.getWorkspace().getName(), root, root, true);
     }
 
-    public static final String STATE_DEVELOPMENT = "development";
-    public static final String STATE_STAGING = "staging";
-    public static final String STATE_PRODUCTION = "production";
+    private WorkspaceManager workspaceManager;
 
-    private WorkspaceResolver workspaceResolver;
+    protected abstract WorkspaceManager newWorkspaceManager();
 
-    public WorkspaceResolver getWorkspaceResolver()
+    public WorkspaceManager getWorkspaceManager()
     {
-        if (workspaceResolver == null)
+        if (workspaceManager == null)
         {
-            workspaceResolver = newWorkspaceResolver();
+            workspaceManager = newWorkspaceManager();
         }
-        return workspaceResolver;
+        return workspaceManager;
     }
 
-    protected WorkspaceResolver newWorkspaceResolver()
-    {
-        return new DefaultWorkspaceResolver('^');
-    }
+    public static final String WORKSPACE_ATTRIBUTE_TYPE = "brix:workspace-type";
 
-    public String getWorkspaceNameForState(String workspaceName, String state)
-    {
-        String prefix = getWorkspaceResolver().getWorkspacePrefix(workspaceName);
-        String id = getWorkspaceResolver().getWorkspaceId(workspaceName);
-
-        return getWorkspaceResolver().getWorkspaceName(prefix, id, state);
-    }
-
-    public void publish(String workspace, String targetState, SessionProvider sessionProvider)
-    {
-        String dest = getWorkspaceNameForState(workspace, targetState);
-
-        if (workspace.equals(dest) == false)
-        {
-
-            List<String> workspaces = getAvailableWorkspaces();
-            if (workspaces.contains(dest) == false)
-            {
-                createWorkspace(sessionProvider.getJcrSession(null), dest);
-            }
-
-            cleanWorkspace(BrixRequestCycle.Locator.getSession(dest));
-
-            cloneWorkspace(BrixRequestCycle.Locator.getSession(workspace), BrixRequestCycle.Locator
-                .getSession(dest));
-        }
-    }
+    /*
+     * public void publish(String workspace, String targetState, SessionProvider sessionProvider) {
+     * String dest = getWorkspaceNameForState(workspace, targetState);
+     * 
+     * if (workspace.equals(dest) == false) { List<String> workspaces = getAvailableWorkspaces();
+     * if (workspaces.contains(dest) == false) {
+     * createWorkspace(sessionProvider.getJcrSession(null), dest); }
+     * 
+     * cleanWorkspace(BrixRequestCycle.Locator.getSession(dest));
+     * 
+     * cloneWorkspace(BrixRequestCycle.Locator.getSession(workspace), BrixRequestCycle.Locator
+     * .getSession(dest)); } }
+     */
 
     private AuthorizationStrategy authorizationStrategy = null;
 
@@ -304,7 +227,7 @@ public abstract class Brix
         }
     }
 
-    public void initWorkspace(JcrSession session)
+    public void initWorkspace(brix.workspace.Workspace workspace, JcrSession session)
     {
         JcrNode root;
         if (session.itemExists(getRootPath()))
@@ -319,10 +242,10 @@ public abstract class Brix
         {
             root.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
         }
-        
+
         for (Plugin p : plugins)
         {
-            p.initWorkspace(session);
+            p.initWorkspace(workspace, session);
         }
     }
 
@@ -359,6 +282,29 @@ public abstract class Brix
     public Collection<Plugin> getPlugins()
     {
         return Collections.unmodifiableList(plugins);
+    }
+
+    public List<brix.workspace.Workspace> filterVisibleWorkspaces(List<brix.workspace.Workspace> workspaces,
+            Context context)
+    {
+        if (workspaces == null)
+        {
+            return Collections.emptyList();
+        }
+        else
+        {
+            List<brix.workspace.Workspace> result = new ArrayList<brix.workspace.Workspace>(workspaces.size());
+            for (brix.workspace.Workspace w : workspaces)
+            {
+                Action action = new ViewWorkspaceAction(context, w);
+                if (getAuthorizationStrategy().isActionAuthorized(action))
+                {
+                    result.add(w);
+                }
+            }
+
+            return result;
+        }
     }
 
     private static final Logger log = LoggerFactory.getLogger(Brix.class);

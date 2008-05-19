@@ -21,10 +21,10 @@ public abstract class NavigationPanel extends Panel<Object>
 {
 
     @SuppressWarnings("unchecked")
-    public NavigationPanel(String id, String workspaceName)
+    public NavigationPanel(String id, String workspaceId)
     {
         super(id);
-        treeModel = new NavigationTreeModel(workspaceName);
+        treeModel = new NavigationTreeModel(workspaceId);
         add(tree = new NavigationTree("tree", new Model((Serializable)treeModel))
         {
             @Override

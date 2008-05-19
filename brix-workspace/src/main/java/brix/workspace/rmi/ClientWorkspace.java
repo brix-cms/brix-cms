@@ -5,74 +5,106 @@ import java.util.Iterator;
 
 import brix.workspace.Workspace;
 
+// TODO: Make it a bit smarter. The RMI communication should be much coarser grained
+// Workspaces objects are short lived, we don't need fresh property values every time
+// we query for them. All properties should be copied from server on workspace initialization
+// (in 1 rmi call)
 class ClientWorkspace implements Workspace
 {
-    private final RemoteWorkspace delegate;
+	private RemoteWorkspace delegate;
 
-    public ClientWorkspace(RemoteWorkspace delegate)
-    {
-        this.delegate = delegate;
-    }
+	private String id;
+	private RemoteWorkspaceManager remoteWorkspaceManager;
 
-    public void delete()
-    {
-        try
-        {
-            delegate.delete();
-        }
-        catch (RemoteException e)
-        {
-            throw new CommunicationException(e);
-        }
-    }
+	public ClientWorkspace(String id, RemoteWorkspaceManager manager)
+	{
+		this.id = id;
+		this.remoteWorkspaceManager = manager;
+	}
 
-    public String getAttribute(String attributeKey)
-    {
-        try
-        {
-            return delegate.getAttribute(attributeKey);
-        }
-        catch (RemoteException e)
-        {
-            throw new CommunicationException(e);
-        }
-    }
+	public ClientWorkspace(RemoteWorkspace delegate)
+	{
+		this.delegate = delegate;
+	}
 
-    public Iterator<String> getAttributeKeys()
-    {
-        try
-        {
-            return delegate.getAttributeKeys();
-        }
-        catch (RemoteException e)
-        {
-            throw new CommunicationException(e);
-        }
-    }
+	public RemoteWorkspace getDelegate()
+	{
+		if (delegate == null)
+		{
+			try
+			{
+				delegate = remoteWorkspaceManager.getWorkspace(id);
+			}
+			catch (RemoteException e)
+			{
+				throw new CommunicationException(e);
+			}
+		}
+		return delegate;
+	}
 
-    public String getId()
-    {
-        try
-        {
-            return delegate.getId();
-        }
-        catch (RemoteException e)
-        {
-            throw new CommunicationException(e);
-        }
+	public void delete()
+	{
+		try
+		{
+			getDelegate().delete();
+		}
+		catch (RemoteException e)
+		{
+			throw new CommunicationException(e);
+		}
+	}
 
-    }
+	public String getAttribute(String attributeKey)
+	{
+		try
+		{
+			return getDelegate().getAttribute(attributeKey);
+		}
+		catch (RemoteException e)
+		{
+			throw new CommunicationException(e);
+		}
+	}
 
-    public void setAttribute(String attributeKey, String attributeValue)
-    {
-        try
-        {
-            delegate.setAttribute(attributeKey, attributeValue);
-        }
-        catch (RemoteException e)
-        {
-            throw new CommunicationException(e);
-        }
+	public Iterator<String> getAttributeKeys()
+	{
+		try
+		{
+			return getDelegate().getAttributeKeys();
+		}
+		catch (RemoteException e)
+		{
+			throw new CommunicationException(e);
+		}
+	}
 
-    }
+	public String getId()
+	{
+		if (id == null)
+		{
+			try
+			{
+				return id = getDelegate().getId();
+			}
+			catch (RemoteException e)
+			{
+				throw new CommunicationException(e);
+			}
+		}
+		return id;
+	}
+
+	public void setAttribute(String attributeKey, String attributeValue)
+	{
+		try
+		{
+			getDelegate().setAttribute(attributeKey, attributeValue);
+		}
+		catch (RemoteException e)
+		{
+			throw new CommunicationException(e);
+		}
+
+	}
 }

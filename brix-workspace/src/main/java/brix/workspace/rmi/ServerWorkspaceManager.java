@@ -37,6 +37,11 @@ public class ServerWorkspaceManager implements RemoteWorkspaceManager
     {
         return localToRemote(delegate.getWorkspacesFiltered(workspaceAttributes));
     }
+    
+    public boolean workspaceExists(String workspaceId) throws RemoteException
+    {
+    	return delegate.workspaceExists(workspaceId);
+    }
 
     private static List<RemoteWorkspace> localToRemote(List<Workspace> local)
             throws RemoteException

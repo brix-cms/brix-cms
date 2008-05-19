@@ -8,7 +8,7 @@ import brix.jcr.api.JcrSession;
 public interface BrixRequestCycle extends SessionProvider
 {
 
-    public JcrSession getJcrSession(String workspaceName);
+    public JcrSession getJcrSession(String workspaceId);
 
     public Brix getBrix();
 
@@ -19,9 +19,9 @@ public interface BrixRequestCycle extends SessionProvider
             return (BrixRequestCycle)RequestCycle.get();
         }
 
-        public static JcrSession getSession(String workspaceName)
+        public static JcrSession getSession(String workspaceId)
         {
-            return ((BrixRequestCycle)RequestCycle.get()).getJcrSession(workspaceName);
+            return ((BrixRequestCycle)RequestCycle.get()).getJcrSession(workspaceId);
         }
 
         public static Brix getBrix()

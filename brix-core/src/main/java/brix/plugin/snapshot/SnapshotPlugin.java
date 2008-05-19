@@ -1,11 +1,13 @@
 package brix.plugin.snapshot;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.tree.TreeNode;
 
@@ -18,99 +20,148 @@ import org.apache.wicket.model.Model;
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Plugin;
-import brix.WorkspaceResolver;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
-import brix.web.nodepage.toolbar.WorkspaceListProvider;
+import brix.workspace.Workspace;
+import brix.workspace.WorkspaceModel;
 
-public class SnapshotPlugin implements Plugin, WorkspaceListProvider
+public class SnapshotPlugin implements Plugin
 {
 
     private static final String ID = SnapshotPlugin.class.getName();
-    
+
     public String getId()
     {
         return ID;
     }
-    
+
     public static SnapshotPlugin get(Brix brix)
     {
         return (SnapshotPlugin)brix.getPlugin(ID);
     }
-    
+
     public static SnapshotPlugin get()
     {
         return get(BrixRequestCycle.Locator.getBrix());
     }
-    
-    public static final String PREFIX = "snapshot";  
-    
-    public List<String> getSnapshotsForWorkspace(String workspaceId)
+
+    private static final String WORKSPACE_TYPE = "brix:snapshot";
+
+    private static final String WORKSPACE_ATTRIBUTE_SITE_NAME = "brix:snapshot-site-name";
+
+    private static final String WORKSPACE_ATTRIBUTE_CREATED = "brix:snapshot-created";
+
+    public boolean isSnapshotWorkspace(Workspace workspace)
     {
-        List<String> res = new ArrayList<String>();
-        
-        List<String> workspaces = BrixRequestCycle.Locator.getBrix().getAvailableWorkspacesFiltered(PREFIX, workspaceId, null);
-        
-        for (String s : workspaces)
+        return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
+    }
+
+    public String getSnapshotSiteName(Workspace workspace)
+    {
+        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_SITE_NAME);
+    }
+
+    public void setCreated(Workspace workspace, Date created)
+    {
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+        String formatted = df.format(created);
+        workspace.setAttribute(WORKSPACE_ATTRIBUTE_CREATED, formatted);
+    }
+
+    public Date getCreated(Workspace workspace)
+    {
+        String formatted = workspace.getAttribute(WORKSPACE_ATTRIBUTE_CREATED);
+        if (formatted == null)
         {
-            res.add(BrixRequestCycle.Locator.getBrix().getWorkspaceResolver().getWorkspaceState(s));
+            return null;
         }
-        
-        return res;
+        else
+        {
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+            Date date;
+            try
+            {
+                date = df.parse(formatted);
+                return date;
+            }
+            catch (ParseException e)
+            {
+                return null;
+            }
+        }
     }
-    
-    public String getSnapshotSuffixFormatted(String suffix)
+
+    public List<Workspace> getSnapshotsForWorkspace(Workspace workspace)
     {
-        long millis = Long.valueOf(suffix);
-        Date d = new Date(millis);
-        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.MEDIUM);
-        return df.format(d);
+        String siteName = null;
+
+        if (SitePlugin.get().isSiteWorkspace(workspace))
+        {
+            siteName = SitePlugin.get().getWorkspaceName(workspace);
+        }
+        else if (SnapshotPlugin.get().isSnapshotWorkspace(workspace))
+        {
+            siteName = getSnapshotSiteName(workspace);
+        }
+
+
+        if (siteName != null)
+        {
+            Map<String, String> attributes = new HashMap<String, String>();
+            attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+            attributes.put(WORKSPACE_ATTRIBUTE_SITE_NAME, siteName);
+            return BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+                attributes);
+        }
+        else
+        {
+            return Collections.emptyList();
+        }
     }
-    
-    public void createSnapshot(String workspaceName)
+
+    public void createSnapshot(Workspace workspace)
+    {
+        if (!SitePlugin.get().isSiteWorkspace(workspace))
+        {
+            throw new IllegalStateException("Workspace must be a Site workspace");
+        }
+        Brix brix = BrixRequestCycle.Locator.getBrix();
+
+        Workspace targetWorkspace = brix.getWorkspaceManager().createWorkspace();
+        targetWorkspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        targetWorkspace.setAttribute(WORKSPACE_ATTRIBUTE_SITE_NAME, SitePlugin.get()
+            .getWorkspaceName(workspace));
+
+        setCreated(targetWorkspace, new Date());
+
+        JcrSession originalSession = BrixRequestCycle.Locator.getSession(workspace.getId());
+        ;
+        JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspace.getId());
+        brix.clone(originalSession, targetSession);
+    }
+
+    public void restoreSnapshot(Workspace snapshotWorkspace, Workspace targetWorkspace)
     {
         Brix brix = BrixRequestCycle.Locator.getBrix();
-        
-        String snapshotSuffix = "" + System.currentTimeMillis();
-        String id = brix.getWorkspaceResolver().getWorkspaceId(workspaceName);
-        String snapshotName = brix.getWorkspaceResolver().getWorkspaceName(PREFIX, id, snapshotSuffix);
-        
-        JcrSession originalSession = BrixRequestCycle.Locator.getSession(workspaceName);
-        brix.createWorkspace(originalSession, snapshotName);
-        
-        JcrSession destSession = BrixRequestCycle.Locator.getSession(snapshotName);
-        brix.clone(originalSession, destSession);
-    }
-    
-    public void restoreSnapshot(String snapshotWorkspaceName)
-    {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
-        String id = brix.getWorkspaceResolver().getWorkspaceId(snapshotWorkspaceName);
-        
-        String targetWorkspace = brix.getWorkspaceResolver().getWorkspaceName(SitePlugin.PREFIX, id, Brix.STATE_DEVELOPMENT);
-        JcrSession sourceSession = BrixRequestCycle.Locator.getSession(snapshotWorkspaceName);
-        if (brix.getAvailableWorkspaces(sourceSession).contains(targetWorkspace) == false)
-        {
-            brix.createWorkspace(sourceSession, targetWorkspace);
-        }
-        JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspace);
+        JcrSession sourceSession = BrixRequestCycle.Locator.getSession(snapshotWorkspace.getId());
+        JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspace.getId());
         brix.clone(sourceSession, targetSession);
     }
 
-    public NavigationTreeNode newNavigationTreeNode(String workspaceName)
+    public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
     {
-        return new Node(workspaceName);
+        return new Node(workspace.getId());
     }
-    
+
     private static class Node implements NavigationTreeNode
     {
-        private final String workspaceName;
+        private final String workspaceId;
 
-        public Node(String workspaceName)
+        public Node(String workspaceId)
         {
-            this.workspaceName = workspaceName;
+            this.workspaceId = workspaceId;
         }
 
         public boolean getAllowsChildren()
@@ -168,33 +219,33 @@ public class SnapshotPlugin implements Plugin, WorkspaceListProvider
 
         public NavigationAwarePanel< ? > newManagePanel(String id)
         {
-            return new ManageSnapshotsPanel(id, workspaceName);
+            return new ManageSnapshotsPanel(id, new WorkspaceModel(workspaceId));
         }
     };
-    
 
-    public List<Entry> getVisibleWorkspaces(String currentWorkspaceName)
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
     {
-        WorkspaceResolver resolver = BrixRequestCycle.Locator.getBrix().getWorkspaceResolver();
-        String id = resolver.getWorkspaceId(currentWorkspaceName);
-        List<String> snapshots = BrixRequestCycle.Locator.getBrix().getAvailableWorkspacesFiltered(PREFIX, id, null);
-        List<Entry> res = new ArrayList<Entry>();
-        
-        for (String s : snapshots)
+
+    }
+
+    private static final ResourceReference ICON = new ResourceReference(SnapshotPlugin.class,
+        "camera.png");
+
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend)
+    {
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+        return "Snapshot - " + getSnapshotSiteName(workspace) + " - " + df.format(getCreated(workspace));
+    }
+
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
+    {
+        if (isFrontend)
         {
-            Entry e = new Entry();            
-            e.workspaceName = s;            
-            e.userVisibleName = "Snapshot " + getSnapshotSuffixFormatted(resolver.getWorkspaceState(s));             
-            res.add(e);
+            return getSnapshotsForWorkspace(currentWorkspace);
         }
-        
-        return res;
+        else
+        {
+            return null;
+        }
     }
-
-    public void initWorkspace(JcrSession workspaceSession)
-    {
-        
-    }
-    
-    private static final ResourceReference ICON = new ResourceReference(SnapshotPlugin.class, "camera.png");
 }

@@ -22,9 +22,9 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
 {
     private IModel<JcrNode> targetNode = new BrixNodeModel(null);
 
-    public RestoreItemsPanel(String id, String workspaceName, final String targetWorkspaceName)
+    public RestoreItemsPanel(String id, String templateWorkspaceId, final String targetWorkspaceId)
     {
-        super(id, workspaceName);
+        super(id, templateWorkspaceId);
 
         final Component<String> message = new MultiLineLabel<String>("message", new Model<String>(
             ""));
@@ -32,7 +32,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
         add(message);
 
 
-        add(new NodePickerPanel("picker", targetNode, targetWorkspaceName, null)
+        add(new NodePickerPanel("picker", targetNode, targetWorkspaceId, null)
         {
             @Override
             public boolean isDisplayFiles()
@@ -49,7 +49,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
                 List<JcrNode> nodes = getSelectedNodes();
                 if (!nodes.isEmpty())
                 {
-                    JcrWorkspace targetWorkspace = BrixRequestCycle.Locator.getSession(targetWorkspaceName).getWorkspace();
+                    JcrWorkspace targetWorkspace = BrixRequestCycle.Locator.getSession(targetWorkspaceId).getWorkspace();
                     Map<JcrNode, List<JcrNode>> dependencies = JcrUtil.getUnsatisfiedDependencies(
                         nodes, targetWorkspace);;
                     if (!dependencies.isEmpty())

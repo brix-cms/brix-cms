@@ -17,9 +17,9 @@ import brix.jcr.api.JcrNode;
 public class CreateTemplatePanel extends SelectItemsPanel<Void>
 {
 
-    public CreateTemplatePanel(String id, String workspaceName, final String targetTemplateName)
+    public CreateTemplatePanel(String id, String workspaceId, final String targetTemplateName)
     {
-        super(id, workspaceName);
+        super(id, workspaceId);
 
         final Component<String> message = new MultiLineLabel<String>("message", new Model<String>(
             ""));

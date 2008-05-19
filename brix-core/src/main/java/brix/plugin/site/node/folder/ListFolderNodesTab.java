@@ -20,8 +20,6 @@ import org.apache.wicket.util.convert.IConverter;
 import brix.BrixNodeModel;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.NodeAction;
-import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixFileNode;
@@ -29,6 +27,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.auth.SiteNodeAction;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 
@@ -170,8 +169,8 @@ public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
         while (iterator.hasNext())
         {
             BrixNode node = (BrixNode)iterator.nextNode();
-            Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                    NodeAction.Type.NODE_VIEW, node);
+            Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
+                    SiteNodeAction.Type.NODE_VIEW, node);
             if (!node.isHidden() &&
                     Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
             {

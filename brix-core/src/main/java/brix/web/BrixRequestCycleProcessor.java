@@ -13,8 +13,11 @@ import org.apache.wicket.request.IRequestCodingStrategy;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
 import brix.Brix;
 import brix.BrixNodeModel;
+import brix.BrixRequestCycle;
 import brix.Path;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
@@ -51,8 +54,14 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
     private static final MetaDataKey<String> WORKSPACE_METADATA = new MetaDataKey<String>()
     {
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
     };
+
+    private boolean checkSession(String workspaceId)
+    {
+        return BrixRequestCycle.Locator.getBrix().getWorkspaceManager()
+            .workspaceExists(workspaceId);
+    }
 
     public String getWorkspace()
     {
@@ -68,6 +77,10 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
             {
                 if (cookie.getValue() != null)
                     workspace = cookie.getValue();
+            }
+            if (!checkSession(workspace))
+            {
+                workspace = getDefaultWorkspaceName();
             }
             if (workspace.toString().equals(getDefaultWorkspaceName()) == false)
                 resp.addCookie(new Cookie(COOKIE_NAME, workspace));
@@ -141,17 +154,18 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
             }
             return new Path(builder.toString(), false);
         }
-        
-        private IRequestTarget getSwitchTarget(JcrNode node) 
+
+        private IRequestTarget getSwitchTarget(JcrNode node)
         {
-        	if (node instanceof BrixNode) 
-        	{
-        		return SwitchProtocolRequestTarget.requireProtocol(((BrixNode) node).getRequiredProtocol());
-        	} 
-        	else
-        	{
-        		return null;
-        	}
+            if (node instanceof BrixNode)
+            {
+                return SwitchProtocolRequestTarget.requireProtocol(((BrixNode)node)
+                    .getRequiredProtocol());
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public IRequestTarget targetForPath(String pathStr, RequestParameters requestParameters)
@@ -176,11 +190,12 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
                 final JcrNode node = getNodeForUriPath(path);
                 if (node != null)
                 {
-                	target = getSwitchTarget(node);
-                	if (target == null)
-                	{
-                		target = SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), requestParameters);
-                	}
+                    target = getSwitchTarget(node);
+                    if (target == null)
+                    {
+                        target = SitePlugin.get().getNodePluginForNode(node).respond(
+                            new BrixNodeModel(node), requestParameters);
+                    }
                 }
                 if (path.isRoot() || path.toString().equals("."))
                 {

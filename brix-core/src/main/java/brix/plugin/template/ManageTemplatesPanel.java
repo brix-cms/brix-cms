@@ -6,6 +6,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow.WindowClosedCallback;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -21,31 +22,34 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.StringValidator;
 
-import brix.Brix;
 import brix.BrixRequestCycle;
-import brix.plugin.site.SitePlugin;
-import brix.plugin.snapshot.SnapshotPlugin;
+import brix.auth.Action;
+import brix.auth.Action.Context;
+import brix.plugin.template.auth.CreateTemplateAction;
+import brix.plugin.template.auth.DeleteTemplateAction;
+import brix.plugin.template.auth.RestoreTemplateAction;
 import brix.web.admin.AdminPanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
+import brix.workspace.Workspace;
+import brix.workspace.WorkspaceModel;
 
-public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
+public class ManageTemplatesPanel extends NavigationAwarePanel<Workspace>
 {
-    private final String workspaceName;
 
-    public ManageTemplatesPanel(String id, final String workspaceName)
+    public ManageTemplatesPanel(String id, IModel<Workspace> model)
     {
-        super(id);
+        super(id, model);
+        setOutputMarkupId(true);
 
-        this.workspaceName = workspaceName;
-
-        IModel<List<String>> templatesModel = new LoadableDetachableModel<List<String>>()
+        IModel<List<Workspace>> templatesModel = new LoadableDetachableModel<List<Workspace>>()
         {
             @Override
-            protected List<String> load()
+            protected List<Workspace> load()
             {
-                return TemplatePlugin.get().getTemplates();
+                List<Workspace> list = TemplatePlugin.get().getTemplates();
+                return BrixRequestCycle.Locator.getBrix().filterVisibleWorkspaces(list,
+                    Context.ADMINISTRATION);
             }
         };
 
@@ -61,21 +65,29 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
         modalWindowForm.add(modalWindow);
 
 
-        add(new ListView<String>("templates", templatesModel)
+        add(new ListView<Workspace>("templates", templatesModel)
         {
             @Override
-            protected void populateItem(final ListItem<String> item)
+            protected IModel<Workspace> getListItemModel(IModel<List<Workspace>> listViewModel,
+                    int index)
             {
-                item.add(new Label<String>("label", item.getModel()));
+                return new WorkspaceModel(listViewModel.getObject().get(index));
+            }
+
+            @Override
+            protected void populateItem(final ListItem<Workspace> item)
+            {
+                TemplatePlugin plugin = TemplatePlugin.get();
+                final String name = plugin.getUserVisibleName(item.getModelObject(), false);
+
+                item.add(new Label<String>("label", name));
                 item.add(new Link<Void>("browse")
                 {
                     @Override
                     public void onClick()
                     {
                         AdminPanel panel = findParent(AdminPanel.class);
-                        String label = item.getModelObject();
-                        String workspace = TemplatePlugin.get().getTemplateWorkspaceName(label);
-                        panel.setWorkspace(workspace, label);
+                        panel.setWorkspace(item.getModelObject().getId(), name);
                     }
                 });
 
@@ -84,36 +96,41 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
                     @Override
                     public void onClick(AjaxRequestTarget target)
                     {
-                        String templateWorkspace = TemplatePlugin.get().getTemplateWorkspaceName(
-                            item.getModelObject());
+                        String templateId = item.getModelObject().getId();
+                        String targetId = ManageTemplatesPanel.this.getModelObject().getId();
                         Panel<Void> panel = new RestoreItemsPanel(modalWindow.getContentId(),
-                            templateWorkspace, workspaceName);
+                            templateId, targetId);
                         modalWindow.setContent(panel);
                         modalWindow.show(target);
                     }
-                    
+
                     @Override
                     public boolean isVisible()
                     {
-                        return isCurrentWorkspaceSiteDevelopment();
+                        Workspace target = ManageTemplatesPanel.this.getModelObject();
+                        Action action = new RestoreTemplateAction(Context.ADMINISTRATION, item
+                            .getModelObject(), target);
+                        return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                            .isActionAuthorized(action);
                     }
                 });
 
-                item.add(new Link<Void>("restore")
+                item.add(new Link<Void>("delete")
                 {
                     @Override
                     public void onClick()
                     {
-                        String templateWorkspace = TemplatePlugin.get().getTemplateWorkspaceName(
-                            item.getModelObject());
-                        TemplatePlugin.get().restoreTemplateSnapshot(templateWorkspace,
-                            workspaceName);
+                        Workspace template = item.getModelObject();
+                        template.delete();
                     }
 
                     @Override
                     public boolean isVisible()
                     {
-                        return isCurrentWorkspaceSiteDevelopment();
+                        Action action = new DeleteTemplateAction(Context.ADMINISTRATION, item
+                            .getModelObject());
+                        return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                            .isActionAuthorized(action);
                     }
                 });
             }
@@ -124,35 +141,44 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
             @Override
             public boolean isVisible()
             {
-                return isCurrentworkspaceSiteOrSnapshot();
+                Workspace current = ManageTemplatesPanel.this.getModelObject();
+                Action action = new CreateTemplateAction(Context.ADMINISTRATION, current);
+                return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                    .isActionAuthorized(action);
             }
         };
+
         TextField<String> templateName = new TextField<String>("templateName",
             new PropertyModel<String>(this, "templateName"));
         form.add(templateName);
 
         templateName.setRequired(true);
-        templateName.add(StringValidator.maximumLength(24));
-        templateName.add(new TemplateNameValidator());
         templateName.add(new UniqueTemplateNameValidator());
 
         final FeedbackPanel feedback;
-        
+
         add(feedback = new FeedbackPanel("feedback"));
         feedback.setOutputMarkupId(true);
-        
+
         form.add(new AjaxButton<Void>("submit")
         {
             @Override
             public void onSubmit(AjaxRequestTarget target, Form< ? > form)
             {
+                String workspaceId = ManageTemplatesPanel.this.getModelObject().getId();
                 CreateTemplatePanel panel = new CreateTemplatePanel(modalWindow.getContentId(),
-                    workspaceName, ManageTemplatesPanel.this.templateName);
+                    workspaceId, ManageTemplatesPanel.this.templateName);
                 modalWindow.setContent(panel);
+                modalWindow.setWindowClosedCallback(new WindowClosedCallback()
+                {
+                    public void onClose(AjaxRequestTarget target)
+                    {
+                        target.addComponent(ManageTemplatesPanel.this);
+                    }
+                });
                 modalWindow.show(target);
-                // TemplatePlugin.get().createTemplate(workspaceName,
-                // ManageTemplatesPanel.this.templateName);
             }
+
             @Override
             protected void onError(AjaxRequestTarget target, Form< ? > form)
             {
@@ -161,29 +187,17 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
         });
 
         add(form);
-        
+
     }
 
     private String templateName;
-
-    private class TemplateNameValidator implements IValidator
-    {
-        public void validate(IValidatable validatable)
-        {
-            String name = (String)validatable.getValue();
-            if (!TemplatePlugin.get().isValidTemplateName(name))
-            {
-                validatable.error(new ValidationError().addMessageKey("TemplateNameValidator"));
-            }
-        }
-    };
 
     private class UniqueTemplateNameValidator implements IValidator
     {
         public void validate(IValidatable validatable)
         {
             String name = (String)validatable.getValue();
-            if (TemplatePlugin.get().getTemplates().contains(name))
+            if (TemplatePlugin.get().templateExists(name))
             {
                 validatable.error(new ValidationError()
                     .addMessageKey("UniqueTemplateNameValidator"));
@@ -191,20 +205,5 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Object>
         }
     }
 
-    private boolean isCurrentworkspaceSiteOrSnapshot()
-    {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
-        String prefix = brix.getWorkspaceResolver().getWorkspacePrefix(workspaceName);
-        return SitePlugin.PREFIX.equals(prefix) || SnapshotPlugin.PREFIX.equals(prefix);
-    }
-
-    private boolean isCurrentWorkspaceSiteDevelopment()
-    {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
-        return SitePlugin.PREFIX.equals(brix.getWorkspaceResolver().getWorkspacePrefix(
-            workspaceName)) &&
-            Brix.STATE_DEVELOPMENT.equals(brix.getWorkspaceResolver().getWorkspaceState(
-                workspaceName));
-    }
 
 }

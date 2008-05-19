@@ -9,10 +9,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import brix.Path;
 import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
-import brix.auth.NodeAction;
-import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.node.tilepage.Markup.ComponentFragment;
 import brix.plugin.site.node.tilepage.Markup.Fragment;
 import brix.plugin.site.node.tilepage.Markup.StaticFragment;
@@ -61,8 +60,8 @@ public class TilePageRenderPanel extends Panel<JcrNode>
     public boolean isVisible()
     {
         JcrNode node = (JcrNode)getModelObject();
-        Action action = new NodeActionImpl(Action.Context.PRESENTATION,
-                NodeAction.Type.NODE_VIEW, node);
+        Action action = new SiteNodeAction(Action.Context.PRESENTATION,
+                SiteNodeAction.Type.NODE_VIEW, node);
         return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
