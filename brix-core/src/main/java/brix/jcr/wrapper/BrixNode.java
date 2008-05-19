@@ -9,12 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brix.Brix;
-import brix.Path;
-import brix.BrixRequestCycle.Locator;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.wrapper.NodeWrapper;
-import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.folder.FolderNodePlugin;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 import brix.web.util.validators.NodeNameValidator;
