@@ -39,7 +39,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
     {
         super(id, nodeModel);
 
-        List<ITab<?>> tabs = new ArrayList<ITab<?>>();
+        List<ITab> tabs = new ArrayList<ITab>();
 
         tabs.add(new AbstractBrixTab(new Model("View"))
         {

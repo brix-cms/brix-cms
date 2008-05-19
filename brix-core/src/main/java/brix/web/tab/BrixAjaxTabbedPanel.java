@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 public class BrixAjaxTabbedPanel extends BrixTabbedPanel
 {
 
-    public BrixAjaxTabbedPanel(String id, List<ITab<?>> tabs)
+    public BrixAjaxTabbedPanel(String id, List<ITab> tabs)
     {
         super(id, tabs);
         setOutputMarkupId(true);

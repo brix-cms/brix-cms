@@ -6,6 +6,14 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The {@link Path} class represents a path that is a string of segments joined together by a
+ * <code>/</code> separator. The {@link Path} class provides various operations that can be
+ * performed on such a string of segments. Path is immutable.
+ * 
+ * @author igor.vaynberg
+ * 
+ */
 public final class Path implements Iterable<String>, Serializable
 {
     private static final String SEPARATOR = "/";
@@ -339,7 +347,7 @@ public final class Path implements Iterable<String>, Serializable
         if (!isDescendantOf(ancestor))
         {
             throw new IllegalArgumentException("Cannot create relative path because this path: " +
-                    this + " is not descendant of ancestor argument: " + ancestor);
+                this + " is not descendant of ancestor argument: " + ancestor);
         }
 
         Path fragment = new Path(path.substring(ancestor.path.length()), false);

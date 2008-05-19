@@ -15,7 +15,6 @@ import brix.auth.impl.NodeActionImpl;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.web.tab.AbstractBrixTab;
-import brix.web.tab.BrixTab;
 import brix.web.tab.BrixTabbedPanel;
 
 public class FolderManagerPanel extends NodeManagerPanel
@@ -25,7 +24,7 @@ public class FolderManagerPanel extends NodeManagerPanel
     {
         super(id, folderModel);
 
-        List<ITab<?>> tabs = new ArrayList<ITab<?>>(2);
+        List<ITab> tabs = new ArrayList<ITab>(2);
         tabs.add(new AbstractBrixTab(new Model("Listing"))
         {
 
@@ -39,7 +38,7 @@ public class FolderManagerPanel extends NodeManagerPanel
             public boolean isVisible()
             {
                 Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                        NodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
+                    NodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
                 return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
@@ -57,7 +56,7 @@ public class FolderManagerPanel extends NodeManagerPanel
             public boolean isVisible()
             {
                 Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                        NodeAction.Type.NODE_ADD_CHILD, folderModel.getObject());
+                    NodeAction.Type.NODE_ADD_CHILD, folderModel.getObject());
                 return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
@@ -75,7 +74,7 @@ public class FolderManagerPanel extends NodeManagerPanel
             public boolean isVisible()
             {
                 Action action = new NodeActionImpl(Action.Context.ADMINISTRATION,
-                        NodeAction.Type.NODE_EDIT, folderModel.getObject());
+                    NodeAction.Type.NODE_EDIT, folderModel.getObject());
                 return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
 

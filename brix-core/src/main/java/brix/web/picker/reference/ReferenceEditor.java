@@ -38,7 +38,7 @@ public class ReferenceEditor extends Panel<Reference>
 
     private void init()
     {
-        List<ITab<?>> tabs = new ArrayList<ITab<?>>();
+        List<ITab> tabs = new ArrayList<ITab>();
         tabs.add(new CachingAbstractBrixTab(new ResourceModel("reference"))
         {
             @Override
