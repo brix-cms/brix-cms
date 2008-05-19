@@ -6,11 +6,15 @@ import java.rmi.server.RemoteStub;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.easymock.classextension.EasyMock;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
+
+// FIXME figure out why this is failing on teamcity
+//@Ignore
 public class WorkspaceManagerRmiTest
 {
     @Test
