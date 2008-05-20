@@ -1,18 +1,16 @@
 package brix.plugin.template;
 
-import javax.swing.tree.TreeNode;
-
 import brix.BrixRequestCycle;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.tree.AbstractTreeModel;
-import brix.web.tree.AbstractTreeNode;
+import brix.web.tree.AbstractJcrTreeNode;
 
 public class SelectItemsTreeModel extends AbstractTreeModel
 {
-    public class SelectItemsTreeNode extends AbstractTreeNode
+    public class SelectItemsTreeNode extends AbstractJcrTreeNode
     {
 
         public SelectItemsTreeNode(JcrNode node)
@@ -21,22 +19,9 @@ public class SelectItemsTreeModel extends AbstractTreeModel
         }
 
         @Override
-        protected AbstractTreeNode newTreeNode(JcrNode node)
+        protected AbstractJcrTreeNode newTreeNode(JcrNode node)
         {
             return new SelectItemsTreeNode(node);
-        }
-
-        @Override
-        public TreeNode getParent()
-        {
-            if (this.equals(root))
-            {
-                return null;
-            }
-            else
-            {
-                return super.getParent();
-            }
         }
 
         @Override

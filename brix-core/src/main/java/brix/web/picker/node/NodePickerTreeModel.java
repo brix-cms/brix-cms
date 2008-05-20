@@ -1,18 +1,16 @@
 package brix.web.picker.node;
 
-import javax.swing.tree.TreeNode;
-
 import brix.BrixRequestCycle;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.tree.AbstractTreeModel;
-import brix.web.tree.AbstractTreeNode;
+import brix.web.tree.AbstractJcrTreeNode;
 
 public abstract class NodePickerTreeModel extends AbstractTreeModel
 {
-    public class NodePickerTreeNode extends AbstractTreeNode
+    public class NodePickerTreeNode extends AbstractJcrTreeNode
     {
 
         public NodePickerTreeNode(JcrNode node)
@@ -21,22 +19,9 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel
         }
 
         @Override
-        protected AbstractTreeNode newTreeNode(JcrNode node)
+        protected AbstractJcrTreeNode newTreeNode(JcrNode node)
         {
             return new NodePickerTreeNode(node);
-        }
-
-        @Override
-        public TreeNode getParent()
-        {
-            if (this.equals(root))
-            {
-                return null;
-            }
-            else
-            {
-                return super.getParent();
-            }
         }
 
         @Override

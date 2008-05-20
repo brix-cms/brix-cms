@@ -2,10 +2,7 @@ package brix.plugin.menu;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-
-import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -19,6 +16,7 @@ import brix.Plugin;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
+import brix.web.admin.navigation.AbstractNavigationTreeNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.workspace.Workspace;
@@ -54,48 +52,11 @@ public class MenuPlugin implements Plugin
         return new Node(workspace.getId());
     }
 
-    private static class Node implements NavigationTreeNode
+    private static class Node extends AbstractNavigationTreeNode
     {
-        private final String workspaceId;
-
         public Node(String workspaceId)
         {
-            this.workspaceId = workspaceId;
-        }
-
-        public boolean getAllowsChildren()
-        {
-            return false;
-        }
-
-        public TreeNode getChildAt(int childIndex)
-        {
-            return null;
-        }
-
-        public int getChildCount()
-        {
-            return 0;
-        }
-
-        public int getIndex(TreeNode node)
-        {
-            return -1;
-        }
-
-        public TreeNode getParent()
-        {
-            return null;
-        }
-
-        public boolean isLeaf()
-        {
-            return true;
-        }
-
-        public Enumeration< ? > children()
-        {
-            return Collections.enumeration(Collections.emptyList());
+            super(workspaceId);
         }
 
         @Override
@@ -109,7 +70,7 @@ public class MenuPlugin implements Plugin
             return new LinkIconPanel(id, new Model<Node>(this), tree)
             {
                 @Override
-                protected ResourceReference getImageResourceReference(BaseTree tree, TreeNode node)
+                protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
                 {
                     return ICON;
                 }
@@ -118,12 +79,13 @@ public class MenuPlugin implements Plugin
 
         public NavigationAwarePanel< ? > newManagePanel(String id)
         {
-            return new ManageMenuPanel(id, new WorkspaceModel(workspaceId));
+            return new ManageMenuPanel(id, new WorkspaceModel(getWorkspaceId()));
         }
     };
 
-    private static final ResourceReference ICON = new ResourceReference(MenuPlugin.class, "icon.png");
-    
+    private static final ResourceReference ICON = new ResourceReference(MenuPlugin.class,
+        "icon.png");
+
     private static String ROOT_NODE_NAME = Brix.NS_PREFIX + "menu";
 
     public String getRootPath()
@@ -186,20 +148,20 @@ public class MenuPlugin implements Plugin
         node.getSession().save();
         return node;
     }
-    
+
     public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
     {
-        
+
     }
-    
+
     public String getUserVisibleName(Workspace workspace, boolean isFrontend)
-    {        
+    {
         return null;
     }
-    
+
     public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
-    {        
+    {
         return null;
     }
-    
+
 }

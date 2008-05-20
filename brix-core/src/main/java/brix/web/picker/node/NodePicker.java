@@ -57,14 +57,19 @@ public class NodePicker extends Panel
             NodePickerTreeNode treeNode = treeModel.treeNodeFor(node);
             grid.selectItem(new Model(treeNode), true);
             
-            NodePickerTreeNode parent = (NodePickerTreeNode)treeNode.getParent();
+            NodePickerTreeNode parent = getParent(treeNode);
             
             while (parent != null)
             {
                 grid.getTreeState().expandNode(parent);
-                parent = (NodePickerTreeNode)parent.getParent();
+                parent = getParent(parent);
             }
         }
+    }
+    
+    private NodePickerTreeNode getParent(NodePickerTreeNode node)
+    {
+        return (NodePickerTreeNode)grid.getTree().getParentNode(node);
     }
 
     protected void initComponents()

@@ -1,17 +1,16 @@
 package brix.web.admin.navigation;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.tree.TreeNode;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.tree.BaseTree;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.web.tree.AbstractTreeModel;
+import brix.web.tree.TreeNode;
 import brix.workspace.Workspace;
 
 public class NavigationTreeModel extends AbstractTreeModel
@@ -24,19 +23,7 @@ public class NavigationTreeModel extends AbstractTreeModel
         return rootNode;
     }
     
-    public Object getParent(Object node)
-    {
-        if (rootNode.getChildren().contains(node))
-        {
-            return rootNode;
-        }
-        else
-        {
-            return ((TreeNode)node).getParent();
-        }
-    }
-    
-    private class RootNode implements TreeNode, Serializable
+    private class RootNode implements NavigationTreeNode
     {
 
         private List<NavigationTreeNode> children;
@@ -60,16 +47,6 @@ public class NavigationTreeModel extends AbstractTreeModel
             return children;
         }
 
-        public Enumeration<NavigationTreeNode> children()
-        {
-            return Collections.enumeration(getChildren());
-        }
-
-        public boolean getAllowsChildren()
-        {
-            return true;
-        }
-
         public TreeNode getChildAt(int childIndex)
         {
             return getChildren().get(childIndex);
@@ -80,19 +57,29 @@ public class NavigationTreeModel extends AbstractTreeModel
             return getChildren().size();
         }
 
-        public int getIndex(TreeNode node)
+        public int getChildIndex(TreeNode node)
         {
             return getChildren().indexOf(node);
-        }
-
-        public TreeNode getParent()
-        {
-            return null;
         }
 
         public boolean isLeaf()
         {
             return false;
+        }
+
+        public void detach()
+        {
+            
+        }
+
+        public Panel< ? > newLinkPanel(String id, BaseTree tree)
+        {
+            return null;
+        }
+
+        public NavigationAwarePanel< ? > newManagePanel(String id)
+        {
+            return null;
         }
     };
 

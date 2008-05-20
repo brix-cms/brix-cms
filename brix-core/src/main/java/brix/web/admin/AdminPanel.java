@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.tree.TreeNode;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -28,6 +26,7 @@ import brix.web.admin.navigation.NavigationContainer;
 import brix.web.admin.navigation.NavigationPanel;
 import brix.web.admin.navigation.NavigationTreeModel;
 import brix.web.admin.navigation.NavigationTreeNode;
+import brix.web.tree.TreeNode;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
@@ -87,9 +86,9 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
             .getObject();
         TreeNode root = (TreeNode)model.getRoot();
         NavigationTreeNode node;
-        if (root.getChildCount() > 0)
+        if (!root.getChildren().isEmpty())
         {
-            node = (NavigationTreeNode)root.getChildAt(0);
+            node = (NavigationTreeNode)root.getChildren().get(0);
             navigation.selectNode(node);
         }
         else

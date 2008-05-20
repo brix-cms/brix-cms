@@ -1,14 +1,11 @@
 package brix.plugin.template;
 
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.jcr.ImportUUIDBehavior;
-import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -25,6 +22,7 @@ import brix.jcr.JcrUtil;
 import brix.jcr.JcrUtil.ParentLimiter;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.web.admin.navigation.AbstractNavigationTreeNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.workspace.Workspace;
@@ -124,48 +122,11 @@ public class TemplatePlugin implements Plugin
         return new Node(workspace.getId());
     }
 
-    private static class Node implements NavigationTreeNode
+    private static class Node extends AbstractNavigationTreeNode
     {
-        private final String workspaceName;
-
-        public Node(String workspaceName)
+        public Node(String workspaceId)
         {
-            this.workspaceName = workspaceName;
-        }
-
-        public boolean getAllowsChildren()
-        {
-            return false;
-        }
-
-        public TreeNode getChildAt(int childIndex)
-        {
-            return null;
-        }
-
-        public int getChildCount()
-        {
-            return 0;
-        }
-
-        public int getIndex(TreeNode node)
-        {
-            return -1;
-        }
-
-        public TreeNode getParent()
-        {
-            return null;
-        }
-
-        public boolean isLeaf()
-        {
-            return true;
-        }
-
-        public Enumeration< ? > children()
-        {
-            return Collections.enumeration(Collections.emptyList());
+            super(workspaceId);
         }
 
         @Override
@@ -179,7 +140,7 @@ public class TemplatePlugin implements Plugin
             return new LinkIconPanel(id, new Model<Node>(this), tree)
             {
                 @Override
-                protected ResourceReference getImageResourceReference(BaseTree tree, TreeNode node)
+                protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
                 {
                     return ICON;
                 }
@@ -188,7 +149,7 @@ public class TemplatePlugin implements Plugin
 
         public NavigationAwarePanel< ? > newManagePanel(String id)
         {
-            return new ManageTemplatesPanel(id, new WorkspaceModel(workspaceName));
+            return new ManageTemplatesPanel(id, new WorkspaceModel(getWorkspaceId()));
         }
     };
 

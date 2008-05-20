@@ -1,10 +1,6 @@
 package brix.plugin.publishing;
 
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-
-import javax.swing.tree.TreeNode;
 
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -17,6 +13,7 @@ import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
+import brix.web.admin.navigation.AbstractNavigationTreeNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.workspace.Workspace;
@@ -94,48 +91,11 @@ public class PublishingPlugin implements Plugin
     {
     }
     
-    private static class Node implements NavigationTreeNode
+    private static class Node extends AbstractNavigationTreeNode
     {
-        private final String workspaceId;
-
         public Node(String workspaceId)
         {
-            this.workspaceId = workspaceId;
-        }
-
-        public boolean getAllowsChildren()
-        {
-            return false;
-        }
-
-        public TreeNode getChildAt(int childIndex)
-        {
-            return null;
-        }
-
-        public int getChildCount()
-        {
-            return 0;
-        }
-
-        public int getIndex(TreeNode node)
-        {
-            return -1;
-        }
-
-        public TreeNode getParent()
-        {
-            return null;
-        }
-
-        public boolean isLeaf()
-        {
-            return true;
-        }
-
-        public Enumeration< ? > children()
-        {
-            return Collections.enumeration(Collections.emptyList());
+            super(workspaceId);
         }
 
         @Override
@@ -149,7 +109,7 @@ public class PublishingPlugin implements Plugin
             return new LinkIconPanel(id, new Model<Node>(this), tree)
             {
                 @Override
-                protected ResourceReference getImageResourceReference(BaseTree tree, TreeNode node)
+                protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
                 {
                     return ICON;
                 }
@@ -158,7 +118,7 @@ public class PublishingPlugin implements Plugin
 
         public NavigationAwarePanel< ? > newManagePanel(String id)
         {
-            return new PublishingPanel(id, new WorkspaceModel(workspaceId));
+            return new PublishingPanel(id, new WorkspaceModel(getWorkspaceId()));
         }
     };
 

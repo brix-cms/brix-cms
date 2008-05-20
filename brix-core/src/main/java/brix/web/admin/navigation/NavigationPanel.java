@@ -7,7 +7,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.DefaultTreeState;
-import org.apache.wicket.markup.html.tree.ExtendedTreeModel;
 import org.apache.wicket.markup.html.tree.ITreeState;
 import org.apache.wicket.markup.html.tree.ITreeStateListener;
 import org.apache.wicket.markup.html.tree.BaseTree.LinkType;
@@ -88,8 +87,10 @@ public abstract class NavigationPanel extends Panel<Object>
                 NavigationTreeNode selected = (NavigationTreeNode)getTreeState().getSelectedNodes()
                     .iterator().next();
 
+                NavigationTreeNode selectedParent = (NavigationTreeNode)getParentNode(selected);
+                
                 boolean s = selected.equals(node) ||
-                    (selected.getParent() != null && selected.getParent().equals(treeNode) && treeNode.getIndex(selected) == -1);
+                    (selectedParent != null && selectedParent.equals(treeNode) && treeNode.getChildren().indexOf(selected) == -1);
                 return s ? getSelectedClass() : null;
             }
             else
@@ -110,22 +111,22 @@ public abstract class NavigationPanel extends Panel<Object>
 
     public void nodeChanged(NavigationTreeNode node)
     {
-        treeModel.nodeChanged(node);
+        treeModel.nodeChanged(getTree(), node);
     }
 
     public void nodeChildrenChanged(NavigationTreeNode node)
     {
-        treeModel.nodeChildrenChanged(node);
+        treeModel.nodeChildrenChanged(getTree(), node);
     }
 
     public void nodeDeleted(NavigationTreeNode node)
     {
-        treeModel.nodeDeleted(node);
+        treeModel.nodeDeleted(getTree(), node);
     }
 
     public void nodeInserted(NavigationTreeNode node)
     {
-        treeModel.nodeInserted(node);
+        treeModel.nodeInserted(getTree(), node);
     }
 
     public void selectNode(NavigationTreeNode node)
@@ -155,8 +156,7 @@ public abstract class NavigationPanel extends Panel<Object>
 
     public void nodeSelected(Object node)
     {
-        for (Object n = node; n != null; n = ((ExtendedTreeModel)tree.getModelObject())
-            .getParent(n))
+        for (Object n = node; n != null; n = tree.getParentNode(n))
         {
             tree.getTreeState().expandNode(n);
         }

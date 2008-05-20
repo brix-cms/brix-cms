@@ -1,22 +1,18 @@
 package brix.plugin.site;
 
-import javax.swing.tree.TreeNode;
-
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.admin.NodeManagerContainerPanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
-import brix.web.tree.AbstractTreeNode;
+import brix.web.tree.AbstractJcrTreeNode;
 
-public class SiteNavigationTreeNode extends AbstractTreeNode implements NavigationTreeNode
+public class SiteNavigationTreeNode extends AbstractJcrTreeNode implements NavigationTreeNode
 {
     public SiteNavigationTreeNode(IModel<JcrNode> nodeModel)
     {
@@ -27,22 +23,11 @@ public class SiteNavigationTreeNode extends AbstractTreeNode implements Navigati
     {
         super(node);
     }
-
-
-    public TreeNode getParent()
-    {
-        // we don't need to worry about the root, model will make sure that this method is not
-        // called for the top level node
-        JcrNode node = getNodeModel().getObject();
-        return new SiteNavigationTreeNode(node.getParent());
-    }
-
     
     @Override
     public String toString()
     {
         JcrNode node = getNodeModel().getObject();
-        Brix brix = BrixRequestCycle.Locator.getBrix();
         if (node.getPath().equals(SitePlugin.get().getSiteRootPath())) 
         {
             return "Site";
@@ -54,17 +39,17 @@ public class SiteNavigationTreeNode extends AbstractTreeNode implements Navigati
     }
     
     @Override
-    protected AbstractTreeNode newTreeNode(JcrNode node)
+    protected AbstractJcrTreeNode newTreeNode(JcrNode node)
     {
         return new SiteNavigationTreeNode(node);
     }
 
-    public Panel newLinkPanel(String id, BaseTree tree)
+    public Panel<?> newLinkPanel(String id, BaseTree tree)
     {
-        return new LinkIconPanel(id, new Model(this), tree);
+        return new LinkIconPanel(id, new Model<SiteNavigationTreeNode>(this), tree);
     }
 
-    public NavigationAwarePanel newManagePanel(String id)
+    public NavigationAwarePanel<?> newManagePanel(String id)
     {
         return new NodeManagerContainerPanel(id, getNodeModel());
     }

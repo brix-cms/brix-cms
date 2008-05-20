@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.tree.TreeNode;
-
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Objects;
@@ -22,11 +20,11 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.auth.SiteNodeAction;
 
 
-public class AbstractTreeNode implements TreeNode, IDetachable
+public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
 {
     private final IModel<JcrNode> nodeModel;
 
-    public AbstractTreeNode(IModel<JcrNode> nodeModel)
+    public AbstractJcrTreeNode(IModel<JcrNode> nodeModel)
     {
         if (nodeModel == null)
         {
@@ -35,7 +33,7 @@ public class AbstractTreeNode implements TreeNode, IDetachable
         this.nodeModel = nodeModel;
     }
 
-    public AbstractTreeNode(JcrNode node)
+    public AbstractJcrTreeNode(JcrNode node)
     {
         if (node == null)
         {
@@ -61,20 +59,20 @@ public class AbstractTreeNode implements TreeNode, IDetachable
     {
         if (this == obj)
             return true;
-        if (obj instanceof AbstractTreeNode == false)
+        if (obj instanceof AbstractJcrTreeNode == false)
             return false;
-        AbstractTreeNode that = (AbstractTreeNode)obj;
+        AbstractJcrTreeNode that = (AbstractJcrTreeNode)obj;
 
         return Objects.equal(nodeModel, that.nodeModel);
     }
 
-    private transient List<AbstractTreeNode> children;
+    private transient List<AbstractJcrTreeNode> children;
 
-    private void sortChildren(List<AbstractTreeNode> children)
+    private void sortChildren(List<AbstractJcrTreeNode> children)
     {
-        Collections.sort(children, new Comparator<AbstractTreeNode>()
+        Collections.sort(children, new Comparator<AbstractJcrTreeNode>()
         {
-            public int compare(AbstractTreeNode o1, AbstractTreeNode o2)
+            public int compare(AbstractJcrTreeNode o1, AbstractJcrTreeNode o2)
             {
                 BrixNode n1 = (BrixNode)o1.nodeModel.getObject();
                 BrixNode n2 = (BrixNode)o2.nodeModel.getObject();
@@ -97,14 +95,14 @@ public class AbstractTreeNode implements TreeNode, IDetachable
         return true;
     }
 
-    protected AbstractTreeNode newTreeNode(JcrNode node)
+    protected AbstractJcrTreeNode newTreeNode(JcrNode node)
     {
-        return new AbstractTreeNode(node);
+        return new AbstractJcrTreeNode(node);
     }
     
-    private List<AbstractTreeNode> loadChildren()
+    private List<AbstractJcrTreeNode> loadChildren()
     {
-        List<AbstractTreeNode> children = new ArrayList<AbstractTreeNode>();
+        List<AbstractJcrTreeNode> children = new ArrayList<AbstractJcrTreeNode>();
         JcrNodeIterator iterator = nodeModel.getObject().getNodes();
         List<JcrNode> entries = new ArrayList<JcrNode>((int)iterator.getSize());
         while (iterator.hasNext())
@@ -130,7 +128,7 @@ public class AbstractTreeNode implements TreeNode, IDetachable
     }
 
 
-    public List<AbstractTreeNode> getChildren()
+    public List<AbstractJcrTreeNode> getChildren()
     {
         if (children == null)
         {
@@ -153,26 +151,6 @@ public class AbstractTreeNode implements TreeNode, IDetachable
         return Collections.enumeration(getChildren());
     }
 
-    public boolean getAllowsChildren()
-    {
-        return true;
-    }
-
-    public TreeNode getChildAt(int childIndex)
-    {
-        return getChildren().get(childIndex);
-    }
-
-    public int getChildCount()
-    {
-        return getChildren().size();
-    }
-
-    public int getIndex(TreeNode node)
-    {
-        return getChildren().indexOf(node);
-    }
-    
     public boolean isLeaf()
     {
         return ((BrixNode)nodeModel.getObject()).isFolder() == false;
@@ -182,20 +160,7 @@ public class AbstractTreeNode implements TreeNode, IDetachable
     {
         children = null;
         nodeModel.detach();
-    }
-    
-    public TreeNode getParent()
-    {
-        JcrNode node = getNodeModel().getObject();
-        if (node.getDepth() == 0)
-        {
-            return null;
-        }
-        else
-        {
-            return newTreeNode(node.getParent());
-        }
-    }
+    }    
     
     @Override
     public String toString()

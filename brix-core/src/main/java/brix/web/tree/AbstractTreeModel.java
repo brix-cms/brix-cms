@@ -6,14 +6,13 @@ import java.util.List;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import org.apache.wicket.markup.html.tree.ExtendedTreeModel;
+import org.apache.wicket.markup.html.tree.AbstractTree;
 
-import brix.web.admin.navigation.NavigationTreeNode;
 
-public abstract class AbstractTreeModel implements ExtendedTreeModel, Serializable
+public abstract class AbstractTreeModel implements Serializable, TreeModel
 {
 
     private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>(0);
@@ -30,17 +29,20 @@ public abstract class AbstractTreeModel implements ExtendedTreeModel, Serializab
 
     public Object getChild(Object parent, int index)
     {
-        return ((TreeNode)parent).getChildAt(index);
+        List< ? > children = ((TreeNode)parent).getChildren();
+        return children != null ? children.get(index) : null;
     }
 
     public int getChildCount(Object parent)
     {
-        return ((TreeNode)parent).getChildCount();
+        List< ? > children = ((TreeNode)parent).getChildren();
+        return children != null ? children.size() : 0;
     }
 
     public int getIndexOfChild(Object parent, Object child)
     {
-        return ((TreeNode)parent).getIndex((TreeNode)child);
+        List< ? > children = ((TreeNode)parent).getChildren();
+        return children != null ? children.indexOf(child) : -1;
     }
 
     public boolean isLeaf(Object node)
@@ -53,29 +55,29 @@ public abstract class AbstractTreeModel implements ExtendedTreeModel, Serializab
 
     }
 
-    public Object getParent(Object node)
+    public Object getParent(AbstractTree tree, Object node)
     {
-        return ((TreeNode)node).getParent();
+        return tree.getParentNode(node);
     }
 
-    private TreePath pathFromNode(TreeNode node)
+    private TreePath pathFromNode(AbstractTree tree, TreeNode node)
     {
         List<TreeNode> l = new ArrayList<TreeNode>();
-        for (TreeNode n = node; n != null; n = (TreeNode)getParent(n))
+        for (TreeNode n = node; n != null; n = (TreeNode)getParent(tree, node))
         {
             l.add(0, n);
         }
         return new TreePath(l.toArray(new TreeNode[l.size()]));
     }
 
-    public void nodeChanged(NavigationTreeNode node)
+    public void nodeChanged(AbstractTree tree, TreeNode node)
     {
-        TreeNode parent = (TreeNode)node.getParent();
-        int index = parent.getIndex(node);
+        TreeNode parent = (TreeNode)getParent(tree, node);
+        int index = parent.getChildren().indexOf(node);
         if (index != -1)
         {
-            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(parent), new int[] { index },
-                    new Object[] { node });
+            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
+                new int[] { index }, new Object[] { node });
             for (TreeModelListener l : listeners)
             {
                 l.treeNodesChanged(e);
@@ -83,14 +85,14 @@ public abstract class AbstractTreeModel implements ExtendedTreeModel, Serializab
         }
     }
 
-    public void nodeInserted(TreeNode node)
+    public void nodeInserted(AbstractTree tree, TreeNode node)
     {
-        TreeNode parent = (TreeNode)node.getParent();
-        int index = parent.getIndex(node);
+        TreeNode parent = (TreeNode)getParent(tree, node);
+        int index = parent.getChildren().indexOf(node);
         if (index != -1)
         {
-            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(parent), new int[] { index },
-                    new Object[] { node });
+            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
+                new int[] { index }, new Object[] { node });
             for (TreeModelListener l : listeners)
             {
                 l.treeNodesInserted(e);
@@ -99,14 +101,14 @@ public abstract class AbstractTreeModel implements ExtendedTreeModel, Serializab
     }
 
     // must be invoked *before* the node is actually deleted
-    public void nodeDeleted(TreeNode node)
+    public void nodeDeleted(AbstractTree tree, TreeNode node)
     {
-        TreeNode parent = (TreeNode)node.getParent();
-        int index = parent.getIndex(node);
+        TreeNode parent = (TreeNode)getParent(tree, node);
+        int index = parent.getChildren().indexOf(node);
         if (index != -1)
         {
-            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(parent), new int[] { index },
-                    new Object[] { node });
+            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
+                new int[] { index }, new Object[] { node });
             for (TreeModelListener l : listeners)
             {
                 l.treeNodesRemoved(e);
@@ -114,9 +116,9 @@ public abstract class AbstractTreeModel implements ExtendedTreeModel, Serializab
         }
     }
 
-    public void nodeChildrenChanged(TreeNode node)
+    public void nodeChildrenChanged(AbstractTree tree, TreeNode node)
     {
-        TreeModelEvent event = new TreeModelEvent(this, pathFromNode(node));
+        TreeModelEvent event = new TreeModelEvent(this, pathFromNode(tree, node));
         for (TreeModelListener l : listeners)
         {
             l.treeStructureChanged(event);

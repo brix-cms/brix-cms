@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.util.string.Strings;
+
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Path;
@@ -105,7 +107,13 @@ public class SitePlugin implements Plugin
 
     public String getUserVisibleName(Workspace workspace, boolean isFrontend)
     {
-        return "Site - " + getWorkspaceName(workspace) + " - " + getWorkspaceState(workspace);
+        String name = "Site - " + getWorkspaceName(workspace);
+        String state = getWorkspaceState(workspace);
+        if (!Strings.isEmpty(state))
+        {
+            name = name + "- " + state;
+        }
+        return name;
     }
 
     public void setWorkspaceName(Workspace workspace, String name)
