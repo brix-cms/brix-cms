@@ -9,6 +9,7 @@ import javax.jcr.Repository;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IDetachable;
 
+import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.jcr.SessionBehavior;
 import brix.jcr.api.JcrSession;
@@ -31,9 +32,14 @@ public class RequestCycleSessionManager implements IDetachable
 
     private final Credentials credentials;
     private final Repository repository;
+    private final Brix brix;
 
-    public RequestCycleSessionManager(Repository repository, Credentials credentials)
+    public RequestCycleSessionManager(Brix brix, Repository repository, Credentials credentials)
     {
+    	if (brix == null)
+    	{
+    		throw new IllegalArgumentException("brix cannot be null");
+    	}
         if (repository == null)
         {
             throw new IllegalArgumentException("repository cannot be null");
@@ -42,8 +48,9 @@ public class RequestCycleSessionManager implements IDetachable
         {
             throw new IllegalArgumentException("credentals cannot be null");
         }
+        this.brix = brix;
         this.repository = repository;
-        this.credentials = credentials;
+        this.credentials = credentials;        
     }
 
     public JcrSession getJcrSession(String workspace)
@@ -62,8 +69,7 @@ public class RequestCycleSessionManager implements IDetachable
                 session = JcrSession.Wrapper.wrap(repository.login(credentials, workspace),
                         behavior);
 
-                behavior
-                        .setWrapperRegistry(BrixRequestCycle.Locator.getBrix().getWrapperRegistry());
+                behavior.setWrapperRegistry(brix.getWrapperRegistry());
                 sessionMap.put(workspace, session);
             }
             catch (Exception e)

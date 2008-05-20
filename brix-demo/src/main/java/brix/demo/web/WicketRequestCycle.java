@@ -15,43 +15,44 @@ import brix.web.RequestCycleSessionManager;
 
 public class WicketRequestCycle extends WebRequestCycle implements BrixRequestCycle
 {
-    public WicketRequestCycle(WebApplication application, WebRequest request, Response response)
-    {
-        super(application, request, response);
+	public WicketRequestCycle(WebApplication application, WebRequest request, Response response)
+	{
+		super(application, request, response);
 
-    }
+	}
 
-    private RequestCycleSessionManager sessionManager;
+	private RequestCycleSessionManager sessionManager;
 
-    public JcrSession getJcrSession(String workspace)
-    {
-        if (sessionManager == null)
-        {
-            WicketApplication app = WicketApplication.get();
-            Credentials cred = app.getProperties().buildSimpleCredentials();
-            sessionManager = new RequestCycleSessionManager(app.getRepository(), cred);
-        }
-        return sessionManager.getJcrSession(workspace);
-    }
+	public JcrSession getJcrSession(String workspace)
+	{
+		if (sessionManager == null)
+		{
+			WicketApplication app = WicketApplication.get();
+			Credentials cred = app.getProperties().buildSimpleCredentials();
+			sessionManager = new RequestCycleSessionManager(BrixRequestCycle.Locator.getBrix(), app.getRepository(),
+					cred);
+		}
+		return sessionManager.getJcrSession(workspace);
+	}
 
-    public Brix getBrix()
-    {
-        return WicketApplication.get().getBrix();
-    }
+	public Brix getBrix()
+	{
+		return WicketApplication.get().getBrix();
+	}
 
-    @Override
-    public void detach()
-    {
-        if (sessionManager != null)
-        {
-            sessionManager.detach();
-        }
-        super.detach();
-    }
+	@Override
+	public void detach()
+	{
+		if (sessionManager != null)
+		{
+			sessionManager.detach();
+		}
+		super.detach();
+	}
 
-    public static WicketRequestCycle get()
-    {
-        return (WicketRequestCycle)RequestCycle.get();
-    }
+	public static WicketRequestCycle get()
+	{
+		return (WicketRequestCycle) RequestCycle.get();
+	}
 
 }

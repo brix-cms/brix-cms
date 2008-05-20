@@ -3,6 +3,8 @@ package brix.demo.web;
 import java.util.Arrays;
 import java.util.List;
 
+import org.mortbay.jetty.security.Credential;
+
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.auth.AuthorizationStrategy;
@@ -14,6 +16,7 @@ import brix.plugin.site.node.tilepage.TilePageNode;
 import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.TileTemplateNode;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
+import brix.web.RequestCycleSessionManager;
 import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.AbstractWorkspaceManager;
@@ -63,8 +66,19 @@ public class DemoBrix extends Brix {
 		return manager;
 	}
 
+	private RequestCycleSessionManager sessionManager;
+	
+	public void setSessionManager(RequestCycleSessionManager sessionManager)
+	{
+		this.sessionManager = sessionManager;
+	}
+	
 	private JcrSession getSession(String workspaceId) {
-		return BrixRequestCycle.Locator.getSession(workspaceId);
+	
+		if (sessionManager != null)
+			return sessionManager.getJcrSession(workspaceId);
+		else
+			return BrixRequestCycle.Locator.getSession(workspaceId);
 	}
 
 	private void addTiles(TileNodePlugin plugin) {
