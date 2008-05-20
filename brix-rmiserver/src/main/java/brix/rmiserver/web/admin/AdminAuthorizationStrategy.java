@@ -27,14 +27,13 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy
         return true;
     }
 
-    public <T extends Component<?>> boolean isInstantiationAuthorized(
-    		Class<T> componentClass) 
-    {    	
+    public boolean isInstantiationAuthorized(Class< ? extends Component> componentClass)
+    {
         boolean authorized = false;
         if (Page.class.isAssignableFrom(componentClass))
         {
             if (Application.get().getApplicationSettings().getAccessDeniedPage().isAssignableFrom(
-                    componentClass))
+                componentClass))
             {
                 return true;
             }
@@ -42,7 +41,7 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy
 
             AdminSession session = AdminSession.get();
             HttpServletRequest req = ((WebRequestCycle)RequestCycle.get()).getWebRequest()
-                    .getHttpServletRequest();
+                .getHttpServletRequest();
 
 
             if (!session.isUserLoggedIn())
@@ -76,7 +75,7 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy
                         public void respond(RequestCycle rc)
                         {
                             HttpServletResponse res = ((WebRequestCycle)rc).getWebResponse()
-                                    .getHttpServletResponse();
+                                .getHttpServletResponse();
 
                             res.setHeader("WWW-Authenticate", "BASIC");
                             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
