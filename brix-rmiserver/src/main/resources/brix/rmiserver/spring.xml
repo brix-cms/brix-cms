@@ -11,7 +11,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:brix/rmiserver/server.properties</value>
-				<value>classpath:brix/rmiserver/server.${user}.properties</value>
+				<value>classpath:brix/rmiserver/server.${user.name}.properties</value>
 			</list>
 		</property>
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
