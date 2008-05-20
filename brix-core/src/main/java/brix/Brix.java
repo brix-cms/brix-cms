@@ -79,6 +79,11 @@ public abstract class Brix
         application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
     }
 
+    /**
+     * @deprecated should forward to workspace manager?
+     * @param session
+     * @param name
+     */
     protected void createWorkspace(JcrSession session, String name)
     {
         // TODO: Decouple this from BRIX
@@ -199,7 +204,7 @@ public abstract class Brix
 
             try
             {
-                nr.registerNamespace(Brix.NS, "http://dexter.ibg.com");
+                nr.registerNamespace(Brix.NS, "http://brix-cms.googlecode.com");
             }
             catch (Exception ignore)
             {
@@ -284,8 +289,8 @@ public abstract class Brix
         return Collections.unmodifiableList(plugins);
     }
 
-    public List<brix.workspace.Workspace> filterVisibleWorkspaces(List<brix.workspace.Workspace> workspaces,
-            Context context)
+    public List<brix.workspace.Workspace> filterVisibleWorkspaces(
+            List<brix.workspace.Workspace> workspaces, Context context)
     {
         if (workspaces == null)
         {
@@ -293,7 +298,8 @@ public abstract class Brix
         }
         else
         {
-            List<brix.workspace.Workspace> result = new ArrayList<brix.workspace.Workspace>(workspaces.size());
+            List<brix.workspace.Workspace> result = new ArrayList<brix.workspace.Workspace>(
+                workspaces.size());
             for (brix.workspace.Workspace w : workspaces)
             {
                 Action action = new ViewWorkspaceAction(context, w);

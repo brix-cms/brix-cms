@@ -1,15 +1,17 @@
 package brix.demo.web;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Credentials;
 import javax.jcr.Repository;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -19,11 +21,11 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
+import org.apache.wicket.util.file.File;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Path;
-import brix.BrixRequestCycle.Locator;
 import brix.demo.ApplicationProperties;
 import brix.demo.web.admin.AdminPage;
 import brix.jcr.api.JcrNode;
@@ -35,6 +37,7 @@ import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.ForbiddenPage;
 import brix.web.nodepage.ResourceNotFoundPage;
+import brix.workspace.Workspace;
 
 /**
  * Application object for your web application. If you want to run this application without
@@ -44,6 +47,9 @@ import brix.web.nodepage.ResourceNotFoundPage;
  */
 public class WicketApplication extends WebApplication
 {
+    private static final boolean USE_RMI = false;
+
+
     private ApplicationProperties properties;
     private Brix brix;
     private Repository repository;
@@ -83,7 +89,7 @@ public class WicketApplication extends WebApplication
 
                 String workspace = getWorkspace();
                 JcrSession session = ((BrixRequestCycle)RequestCycle.get())
-                        .getJcrSession(workspace);
+                    .getJcrSession(workspace);
                 if (session.itemExists(nodePath))
                     return (JcrNode)session.getItem(nodePath);
                 else
@@ -125,41 +131,10 @@ public class WicketApplication extends WebApplication
 
         brix = new DemoBrix();
         properties = new ApplicationProperties();
-        initRepository();
+        createRepository();
+        initializeRepository();
+        initDefaultWorkspace();
 
-        // allow brix to initialize the repository
-        Credentials cred = properties.buildSimpleCredentials();
-/*
-        try
-        {
-            javax.jcr.Session classic = repository.login(cred);
-            JcrSession session = JcrSession.Wrapper.wrap(classic);
-
-            brix.initRepository(classic);
-
-            // create and init the default workspace if its not already there
-
-            List<String> workspaceNames = brix.getAvailableWorkspaces(session);
-            if (!workspaceNames.contains(properties.getJcrDefaultWorkspace()))
-            {
-                brix.createWorkspace(session, properties.getJcrDefaultWorkspace());
-                javax.jcr.Session classic2 = repository.login(cred, properties
-                        .getJcrDefaultWorkspace());
-                JcrSession session2 = JcrSession.Wrapper.wrap(classic2);
-                brix.initWorkspace(session2);
-                session2.save();
-                session2.logout();
-
-            }
-
-            classic.save();
-            classic.logout();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Could not initialize repository with Brix");
-        }
-*/
         // allow brix to handle any url that wicket cant
         mount(new BrixNodePageUrlCodingStrategy()
         {
@@ -182,7 +157,7 @@ public class WicketApplication extends WebApplication
                     int trailingSlashesCount, boolean redirect)
             {
                 return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-                        .get(), null, trailingSlashesCount, redirect);
+                    .get(), null, trailingSlashesCount, redirect);
             }
         });
 
@@ -190,20 +165,82 @@ public class WicketApplication extends WebApplication
         mountBookmarkablePage("/Forbiden", ForbiddenPage.class);
     }
 
-    private void initRepository()
+    private void initDefaultWorkspace()
     {
+        Credentials cred = properties.buildSimpleCredentials();
         try
         {
-            File home = new File(properties.getJcrRepositoryLocation());
-            InputStream configStream = new FileInputStream(new File(home, "repository.xml"));
-            RepositoryConfig config = RepositoryConfig.create(configStream, home.toString());
-            configStream.close();
-            repository = RepositoryImpl.create(config);
+            javax.jcr.Session classic = repository.login(cred);
+            JcrSession session = JcrSession.Wrapper.wrap(classic);
+
+            final String wn = properties.getJcrDefaultWorkspace();
+
+            final Map<String, String> filter = new HashMap<String, String>();
+            filter.put("brix:name", wn);
+            List<Workspace> workspaces = brix.getWorkspaceManager().getWorkspacesFiltered(filter);
+
+            session.logout();
+
+            if (workspaces.isEmpty())
+            {
+
+                Workspace def = brix.getWorkspaceManager().createWorkspace();
+                def.setAttribute("brix:name", wn);
+
+                classic = repository.login(cred, def.getId());
+                session = JcrSession.Wrapper.wrap(classic);
+                brix.initWorkspace(def, session);
+                session.save();
+                session.logout();
+            }
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Couldn't init jackrabbit repository, make sure you"
-                    + " have the jcr.repository.location config property set", e);
+            throw new RuntimeException("Could not initialize jackrabbit workspace with Brix");
+        }
+
+
+    }
+
+    private void initializeRepository()
+    {
+        Credentials cred = properties.buildSimpleCredentials();
+        try
+        {
+            javax.jcr.Session session = repository.login(cred);
+            brix.initRepository(session);
+            session.save();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Couldn't initialize jackrabbit repository", e);
+        }
+    }
+
+    private void createRepository()
+    {
+        try
+        {
+            if (USE_RMI)
+            {
+
+                ClientRepositoryFactory factory = new ClientRepositoryFactory();
+                repository = factory.getRepository("rmi://localhost:1099/jackrabbit");
+            }
+            else
+            {
+                File home = new File(properties.getJcrRepositoryLocation());
+                InputStream configStream = new FileInputStream(new File(home, "repository.xml"));
+                RepositoryConfig config = RepositoryConfig.create(configStream, home.toString());
+                configStream.close();
+                repository = RepositoryImpl.create(config);
+
+            }
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Couldn't create jackrabbit repository, make sure you"
+                + " have the jcr.repository.location config property set", e);
         }
     }
 

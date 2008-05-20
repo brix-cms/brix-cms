@@ -142,7 +142,7 @@ public class UserService
 
         if (result != null)
         {
-            if (!encoder.check(password, result.getPasswordHash()))
+            if (!encoder.check(password.trim(), result.getPasswordHash()))
             {
                 result = null;
             }
