@@ -167,37 +167,37 @@ public class WicketApplication extends WebApplication
 
     private void initDefaultWorkspace()
     {
-        Credentials cred = properties.buildSimpleCredentials();
-        try
-        {
-            javax.jcr.Session classic = repository.login(cred);
-            JcrSession session = JcrSession.Wrapper.wrap(classic);
-
-            final String wn = properties.getJcrDefaultWorkspace();
-
-            final Map<String, String> filter = new HashMap<String, String>();
-            filter.put("brix:name", wn);
-            List<Workspace> workspaces = brix.getWorkspaceManager().getWorkspacesFiltered(filter);
-
-            session.logout();
-
-            if (workspaces.isEmpty())
-            {
-
-                Workspace def = brix.getWorkspaceManager().createWorkspace();
-                def.setAttribute("brix:name", wn);
-
-                classic = repository.login(cred, def.getId());
-                session = JcrSession.Wrapper.wrap(classic);
-                brix.initWorkspace(def, session);
-                session.save();
-                session.logout();
-            }
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Could not initialize jackrabbit workspace with Brix");
-        }
+//        Credentials cred = properties.buildSimpleCredentials();
+//        try
+//        {
+//            javax.jcr.Session classic = repository.login(cred);
+//            JcrSession session = JcrSession.Wrapper.wrap(classic);
+//
+//            final String wn = properties.getJcrDefaultWorkspace();
+//
+//            final Map<String, String> filter = new HashMap<String, String>();
+//            filter.put("brix:name", wn);
+//            List<Workspace> workspaces = brix.getWorkspaceManager().getWorkspacesFiltered(filter);
+//
+//            session.logout();
+//
+//            if (workspaces.isEmpty())
+//            {
+//
+//                Workspace def = brix.getWorkspaceManager().createWorkspace();
+//                def.setAttribute("brix:name", wn);
+//
+//                classic = repository.login(cred, def.getId());
+//                session = JcrSession.Wrapper.wrap(classic);
+//                brix.initWorkspace(def, session);
+//                session.save();
+//                session.logout();
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            throw new RuntimeException("Could not initialize jackrabbit workspace with Brix");
+//        }
 
 
     }
