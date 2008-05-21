@@ -7,8 +7,12 @@ import java.util.Properties;
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ApplicationProperties
 {
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
     private static final String FILE_PREFIX = "brix/demo/application.";
 
     private String jcrRepositoryLocation;
@@ -42,9 +46,11 @@ public class ApplicationProperties
 
     private void set(String path) throws IOException
     {
+
         URL url = getClass().getClassLoader().getResource(path);
         if (url != null)
         {
+            logger.info("Loading application properties: " + path);
             Properties props = new Properties();
             props.load(url.openStream());
             set(props);

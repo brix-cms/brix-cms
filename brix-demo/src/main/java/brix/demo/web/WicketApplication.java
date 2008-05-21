@@ -18,6 +18,8 @@ import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 import org.apache.wicket.util.file.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import brix.Brix;
 import brix.BrixRequestCycle;
@@ -45,7 +47,8 @@ import brix.workspace.Workspace;
  */
 public class WicketApplication extends WebApplication
 {
-	private static final boolean USE_RMI = false;
+    private static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
+    private static final boolean USE_RMI = false;
 
 	private ApplicationProperties properties;
 	private Brix brix;
@@ -230,8 +233,14 @@ public class WicketApplication extends WebApplication
 			}
 			else
 			{
-				File home = new File(properties.getJcrRepositoryLocation());
-				InputStream configStream = new FileInputStream(new File(home, "repository.xml"));
+			    File home = new File(properties.getJcrRepositoryLocation());
+                File configFile = new File(home, "repository.xml");
+
+                logger.info("Jackrabbit repository home: " + home.getAbsolutePath());
+                logger.info("Jackrabbit repository.xml: " + home.getAbsolutePath());
+
+                
+                InputStream configStream = new FileInputStream(new File(home, "repository.xml"));
 				RepositoryConfig config = RepositoryConfig.create(configStream, home.toString());
 				configStream.close();
 				repository = RepositoryImpl.create(config);
