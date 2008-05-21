@@ -32,7 +32,7 @@
       <groupId>brix</groupId>
       <artifactId>brix-wrapper</artifactId>
     </dependency>
-    <dependency>
+   <dependency>
       <groupId>brix</groupId>
       <artifactId>brix-codepress</artifactId>
     </dependency>

@@ -15,6 +15,7 @@ import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.wicket.Application;
+import org.apache.wicket.MetaDataKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,8 @@ import brix.auth.AuthorizationStrategy;
 import brix.auth.ViewWorkspaceAction;
 import brix.auth.Action.Context;
 import brix.jcr.JcrEventListener;
+import brix.jcr.JcrSessionFactory;
+import brix.jcr.SessionBehavior;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.event.EventUtil;
@@ -48,8 +51,16 @@ public abstract class Brix
     public static final String NS = "brix";
     public static final String NS_PREFIX = NS + ":";
 
-    public Brix()
+    private final JcrSessionFactory sessionFactory;
+
+    private static MetaDataKey<Brix> APP_KEY = new MetaDataKey<Brix>()
     {
+    };
+
+    public Brix(JcrSessionFactory sessionFactory)
+    {
+        this.sessionFactory = sessionFactory;
+
         wrapperRegistry.registerWrapper(FolderNode.class);
 
         registerPlugin(new SitePlugin(this));
@@ -59,6 +70,21 @@ public abstract class Brix
         registerPlugin(new PublishingPlugin());
     }
 
+    public static Brix get(Application application)
+    {
+        // TODO arc check, return nonnull check
+        return application.getMetaData(APP_KEY);
+    }
+
+    public JcrSession getCurrentSession(String workspace)
+    {
+
+        SessionBehavior behavior = new SessionBehavior();
+        behavior.setWrapperRegistry(wrapperRegistry);
+        Session session = sessionFactory.getCurrentSession(workspace);
+
+        return JcrSession.Wrapper.wrap(session, behavior);
+    }
 
     /**
      * Performs any {@link Application} specific initialization
@@ -77,6 +103,8 @@ public abstract class Brix
          * or have some brix-level registery
          */
         application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
+
+        application.setMetaData(APP_KEY, this);
     }
 
     /**
@@ -256,8 +284,9 @@ public abstract class Brix
 
     private final WrapperRegistry wrapperRegistry = new WrapperRegistry();
 
-    public WrapperRegistry getWrapperRegistry()
+    public final WrapperRegistry getWrapperRegistry()
     {
+        // we reference this field directly, so getter has to be final
         return wrapperRegistry;
     }
 
