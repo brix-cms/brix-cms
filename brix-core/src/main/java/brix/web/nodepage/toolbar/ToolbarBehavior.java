@@ -3,10 +3,10 @@ package brix.web.nodepage.toolbar;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -17,10 +17,8 @@ import org.apache.wicket.util.lang.Objects;
 import brix.Brix;
 import brix.BrixRequestCycle;
 import brix.Plugin;
-import brix.BrixRequestCycle.Locator;
-import brix.auth.Action;
-import brix.auth.ViewWorkspaceAction;
 import brix.auth.Action.Context;
+import brix.web.BrixRequestCycleProcessor;
 import brix.workspace.Workspace;
 
 public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
@@ -128,9 +126,17 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     @Override
     public boolean isEnabled(Component< ? > component)
     {
-        List<WorkspaceEntry> workspaces = getWorkspaces();
-        return workspaces.size() > 1 ||
-            (workspaces.size() == 1 && workspaces.get(0).id.equals(getCurrentWorkspaceId()));
+    	RequestCycle requestCycle = RequestCycle.get();
+    	if (requestCycle.getRequest().getParameter(BrixRequestCycleProcessor.WORKSPACE_PARAM) != null)
+    	{
+    		return false;
+    	}
+    	else
+    	{
+    		List<WorkspaceEntry> workspaces = getWorkspaces();
+    		return workspaces.size() > 1 ||
+    		(workspaces.size() == 1 && workspaces.get(0).id.equals(getCurrentWorkspaceId()));
+    	}
     }
 
     @Override

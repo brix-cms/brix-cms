@@ -1,6 +1,10 @@
 package brix.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
@@ -12,8 +16,7 @@ import org.apache.wicket.protocol.http.request.WebRequestCodingStrategy;
 import org.apache.wicket.request.IRequestCodingStrategy;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
-
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
 import brix.BrixNodeModel;
@@ -63,10 +66,68 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
             .workspaceExists(workspaceId);
     }
 
+    public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
+    
+    private static String extractWorkspaceFromReferer(String refererURL)
+    {
+    	int i = refererURL.indexOf('?');
+    	if (i != -1 && i != refererURL.length() - 1)
+    	{
+    		String param = refererURL.substring(i + 1);
+    		String params[] = Strings.split(param, '&');
+    		for (String s : params)
+    		{
+    			try {
+					s = URLDecoder.decode(s, "utf-8");
+				} catch (UnsupportedEncodingException e) {
+					// rrright
+					throw new RuntimeException(e);
+				}
+				if (s.startsWith(WORKSPACE_PARAM + "="))
+				{
+					String value = s.substring(WORKSPACE_PARAM.length() + 1);
+					if (value.length() > 0)
+					{
+						return value;
+					}
+				}				
+    		}    		
+    	}
+    	return null;
+    }
+    
+    private String getWorkspaceFromUrl()
+    {
+    	HttpServletRequest request = ((WebRequest)RequestCycle.get().getRequest()).getHttpServletRequest();
+    	
+    	if (request.getParameter(WORKSPACE_PARAM) != null)
+    	{
+    		return request.getParameter(WORKSPACE_PARAM);
+    	}
+    	    	    	
+    	String referer = request.getHeader("referer");
+    	
+    	if (!Strings.isEmpty(referer))
+    	{
+    		return extractWorkspaceFromReferer(referer);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
     public String getWorkspace()
     {
+    	String workspace = getWorkspaceFromUrl();
+    	
+    	if (workspace != null)
+    	{
+    		return workspace;
+    	}
+    	
         RequestCycle rc = RequestCycle.get();
-        String workspace = rc.getMetaData(WORKSPACE_METADATA);
+        workspace = rc.getMetaData(WORKSPACE_METADATA);
         if (workspace == null)
         {
             WebRequest req = (WebRequest)RequestCycle.get().getRequest();
