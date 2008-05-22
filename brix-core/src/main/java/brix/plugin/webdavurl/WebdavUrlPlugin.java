@@ -32,25 +32,33 @@ public class WebdavUrlPlugin implements Plugin {
 	public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
 
 	}
+	
+	private static class Node extends AbstractNavigationTreeNode
+	{
+
+		public Node(String workspaceId) {
+			super(workspaceId);
+		}
+		
+		@Override
+		public NavigationAwarePanel<?> newManagePanel(String id) {
+			return new WebdavUrlPanel(id, new Model<String>(getWorkspaceId()));
+		}
+		
+		@Override
+		public String toString() {
+			return "WebDAV";
+		}
+		
+		@Override
+		public Panel<?> newLinkPanel(String id, BaseTree tree) {
+			return new LinkIconPanel(id, new Model<Node>(this), tree);
+		}
+
+	};
 
 	public NavigationTreeNode newNavigationTreeNode(Workspace workspace) {
-		return new AbstractNavigationTreeNode(workspace.getId())
-		{
-			@Override
-			public NavigationAwarePanel<?> newManagePanel(String id) {
-				return new WebdavUrlPanel(id, new Model<String>(getWorkspaceId()));
-			}
-			
-			@Override
-			public String toString() {
-				return "WebDAV";
-			}
-			
-			@Override
-			public Panel<?> newLinkPanel(String id, BaseTree tree) {
-				return new LinkIconPanel(id, new Model<AbstractNavigationTreeNode>(this), tree);
-			}
-		};		
+		return new Node(workspace.getId());
 	}
 
 }
