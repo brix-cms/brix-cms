@@ -102,7 +102,7 @@ public class SitePlugin implements Plugin
 
     public static SitePlugin get()
     {
-        return get(BrixRequestCycle.Locator.getBrix());
+        return get(Brix.get());
     }
 
     public String getUserVisibleName(Workspace workspace, boolean isFrontend)
@@ -146,7 +146,7 @@ public class SitePlugin implements Plugin
     private static final String WORKSPACE_ATTRIBUTE_NAME = "brix:site-name";
 
     private static final String WORKSPACE_ATTRIBUTE_STATE = "brix:site-state";
-    
+
     public Workspace createSite(String name, String state)
     {
         Workspace workspace = brix.getWorkspaceManager().createWorkspace();
@@ -165,12 +165,12 @@ public class SitePlugin implements Plugin
         List<Workspace> res = brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
         return res.isEmpty() ? null : res.get(0);
     }
-    
+
     public boolean siteExists(String name, String state)
     {
         return getSiteWorkspace(name, state) != null;
     }
-    
+
     public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
     {
         Map<String, String> attributes = new HashMap<String, String>();
