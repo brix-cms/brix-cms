@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import brix.Brix;
 import brix.auth.AuthorizationStrategy;
+import brix.config.BrixConfig;
 import brix.demo.web.tile.TimeTile;
 import brix.jcr.JcrSessionFactory;
 import brix.jcr.api.JcrSession;
@@ -31,7 +32,7 @@ public class DemoBrix extends Brix
 
     public DemoBrix(JcrSessionFactory sf)
     {
-        super(sf);
+        super(new BrixConfig(), sf);
         TileNodePlugin plugin = new TilePageNodePlugin();
         addTiles(plugin);
 
@@ -70,7 +71,7 @@ public class DemoBrix extends Brix
                 protected List<String> getAccessibleWorkspaceNames()
                 {
                     return Arrays.asList(getSession(null).getWorkspace()
-                            .getAccessibleWorkspaceNames());
+                        .getAccessibleWorkspaceNames());
                 }
 
                 @Override

@@ -22,6 +22,7 @@ import brix.auth.Action;
 import brix.auth.AuthorizationStrategy;
 import brix.auth.ViewWorkspaceAction;
 import brix.auth.Action.Context;
+import brix.config.BrixConfig;
 import brix.jcr.JcrEventListener;
 import brix.jcr.JcrSessionFactory;
 import brix.jcr.SessionBehavior;
@@ -54,12 +55,15 @@ public abstract class Brix
 
     private final JcrSessionFactory sessionFactory;
 
+    private final BrixConfig config;
+
     private static MetaDataKey<Brix> APP_KEY = new MetaDataKey<Brix>()
     {
     };
 
-    public Brix(JcrSessionFactory sessionFactory)
+    public Brix(BrixConfig config, JcrSessionFactory sessionFactory)
     {
+        this.config = config;
         this.sessionFactory = sessionFactory;
 
         wrapperRegistry.registerWrapper(FolderNode.class);
@@ -73,8 +77,35 @@ public abstract class Brix
 
     public static Brix get(Application application)
     {
-        // TODO arc check, return nonnull check
-        return application.getMetaData(APP_KEY);
+        if (application == null)
+        {
+            throw new IllegalArgumentException("application cannot be null");
+        }
+        Brix brix = application.getMetaData(APP_KEY);
+        if (brix == null)
+        {
+            throw new IllegalStateException(
+                "Could not find instance of Brix associated with application: " +
+                    application.getApplicationKey() +
+                    ". Make sure Brix.attachTo(this) was called in application's init() method");
+        }
+        return brix;
+    }
+
+    public static Brix get()
+    {
+        Application application = Application.get();
+        if (application == null)
+        {
+            throw new IllegalStateException(
+                "Could not find Application threadlocal; this method can only be called within a Wicket request");
+        }
+        return get(application);
+    }
+
+    public final BrixConfig getConfig()
+    {
+        return config;
     }
 
     public JcrSession getCurrentSession(String workspace)
@@ -223,8 +254,11 @@ public abstract class Brix
 
             manager.registerNodeTypes(new StringInputStream(type),
                 JackrabbitNodeTypeManager.TEXT_X_JCR_CND);
-        } else {
-            logger.info("Type: {} already registered in workspace {}", typeName, workspace.getName());
+        }
+        else
+        {
+            logger.info("Type: {} already registered in workspace {}", typeName, workspace
+                .getName());
         }
     }
 

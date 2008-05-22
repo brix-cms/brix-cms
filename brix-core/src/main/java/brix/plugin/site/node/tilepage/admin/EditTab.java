@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
+import brix.Brix;
 import brix.codepress.CodePressEnabler;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.admin.NodeManagerPanel;
@@ -32,6 +33,11 @@ class EditTab extends NodeManagerPanel
     public EditTab(String id, final IModel<JcrNode> nodeModel)
     {
         super(id, nodeModel);
+
+        Brix brix = Brix.get();
+        final boolean useCodepress = brix.getConfig().getAdminConfig().isEnableCodePress();
+        final boolean useWysiwyg = brix.getConfig().getAdminConfig().isEnableWysiwyg();
+
         Form form = new Form("form");
         add(form);
 
@@ -41,36 +47,42 @@ class EditTab extends NodeManagerPanel
 
         String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
         NodeFilter filter = new NodeTypeFilter(TileTemplateNodePlugin.TYPE);
-        form.add(new NodePickerPanel("templatePicker", adapter.forNodeProperty("template"), workspace,
-                filter));
+        form.add(new NodePickerPanel("templatePicker", adapter.forNodeProperty("template"),
+            workspace, filter));
 
         form.add(new CheckBox("requiresSSL", adapter.forProperty("requiresSSL")));
 
         TextArea content = new TextArea("content", adapter.forProperty("dataAsString"));
         form.add(content);
 
-        content.add(new CodePressEnabler("html", true)
+        if (useCodepress)
         {
-            @Override
-            public boolean isEnabled(Component component)
+            content.add(new CodePressEnabler("html", true)
             {
-                return codeEditorEnabled;
-            }
-        });
-        content.add(new TinyMceEnabler()
+                @Override
+                public boolean isEnabled(Component component)
+                {
+                    return codeEditorEnabled;
+                }
+            });
+        }
+        if (useWysiwyg)
         {
-            @Override
-            public boolean isEnabled(Component component)
+            content.add(new TinyMceEnabler()
             {
-                return wysiwygEditorEnabled;
-            }
-        });
-
+                @Override
+                public boolean isEnabled(Component component)
+                {
+                    return wysiwygEditorEnabled;
+                }
+            });
+        }
         form.add(new ContainerFeedbackPanel("feedback", this));
 
         form.add(new DisableEditorsButton("disable-editors"));
-        form.add(new EnableCodeEditorButton("enable-code-editor"));
-        form.add(new EnableWysiwygEditorButton("enable-wysiwig-editor"));
+        form.add(new EnableCodeEditorButton("enable-code-editor").setVisible(useCodepress));
+        form.add(new EnableWysiwygEditorButton("enable-wysiwig-editor")
+            .setVisibilityAllowed(useWysiwyg));
 
         form.add(new Button("save")
         {
