@@ -34,7 +34,7 @@ public class ServerLoginModule implements LoginModule
      * Constructor
      * 
      * @param authorizer
-     *            authoerizer
+     *            authorizer
      */
     public ServerLoginModule(Authorizer authorizer)
     {

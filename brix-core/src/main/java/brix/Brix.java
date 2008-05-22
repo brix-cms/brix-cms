@@ -199,7 +199,7 @@ public abstract class Brix
         return "/" + ROOT_NODE_NAME;
     }
 
-    private void registerType(Workspace workspace, String typeName, boolean referenceable,
+    protected void registerType(Workspace workspace, String typeName, boolean referenceable,
             boolean orderable) throws Exception
     {
 

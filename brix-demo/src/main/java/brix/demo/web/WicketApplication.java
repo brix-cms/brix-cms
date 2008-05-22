@@ -8,6 +8,7 @@ import javax.jcr.Session;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -48,7 +49,7 @@ import brix.workspace.Workspace;
 public class WicketApplication extends WebApplication
 {
     private static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
-    private static final boolean USE_RMI = false;
+    public static final boolean USE_RMI = false;
 
     private ApplicationProperties properties;
     private Brix brix;
@@ -228,10 +229,8 @@ public class WicketApplication extends WebApplication
             if (USE_RMI)
             {
 
-                // ClientRepositoryFactory factory = new
-                // ClientRepositoryFactory();
-                // repository =
-                // factory.getRepository("rmi://localhost:1099/jackrabbit");
+                ClientRepositoryFactory factory = new ClientRepositoryFactory();
+                repository = factory.getRepository("rmi://localhost:1099/jackrabbit");
             }
             else
             {
