@@ -6,7 +6,7 @@ import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class StartBrix
+public class StartBrixDemo
 {
 
     public static void main(String[] args) throws Exception

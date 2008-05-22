@@ -3,11 +3,6 @@ package brix.demo.web;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.jcr.Workspace;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
-import javax.jcr.nodetype.NodeTypeManager;
-
-import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +17,11 @@ import brix.plugin.site.node.tilepage.TilePageNode;
 import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.TileTemplateNode;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
-import brix.util.StringInputStream;
 import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.AbstractWorkspaceManager;
 import brix.workspace.WorkspaceManager;
 import brix.workspace.rmi.ClientWorkspaceManager;
-import brix.workspace.rmi.ClientWorkspaceNodeTypeManager;
 
 
 public class DemoBrix extends Brix
@@ -55,47 +48,6 @@ public class DemoBrix extends Brix
     }
 
     @Override
-    protected void registerType(Workspace workspace, String typeName, boolean referenceable,
-            boolean orderable) throws Exception
-    {
-        logger.info("Registering node type: {}", typeName);
-
-        if (WicketApplication.USE_RMI)
-        {
-            NodeTypeManager manager = workspace.getNodeTypeManager();
-
-            try
-            {
-                manager.getNodeType(typeName);
-            }
-            catch (NoSuchNodeTypeException e)
-            {
-
-                String type = "[" + typeName + "] > nt:unstructured ";
-
-                if (referenceable)
-                    type += ", mix:referenceable ";
-
-                if (orderable)
-                    type += "orderable ";
-
-                type += " mixin";
-
-                ClientWorkspaceNodeTypeManager client = new ClientWorkspaceNodeTypeManager(
-                    "rmi://localhost:1099/jackrabbitwntm");
-
-                client.registerNodeTypes(workspace.getName(), new StringInputStream(type),
-                    JackrabbitNodeTypeManager.TEXT_X_JCR_CND, true);
-            }
-
-        }
-        else
-        {
-            super.registerType(workspace, typeName, referenceable, orderable);
-        }
-    }
-
-    @Override
     protected WorkspaceManager newWorkspaceManager()
     {
         if (WicketApplication.USE_RMI)
@@ -118,7 +70,7 @@ public class DemoBrix extends Brix
                 protected List<String> getAccessibleWorkspaceNames()
                 {
                     return Arrays.asList(getSession(null).getWorkspace()
-                        .getAccessibleWorkspaceNames());
+                            .getAccessibleWorkspaceNames());
                 }
 
                 @Override

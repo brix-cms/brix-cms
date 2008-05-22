@@ -85,17 +85,5 @@
     <property name="registryPort" value="${rmi.registry.port}" />
     <property name="serviceName" value="${rmi.wm.name}" />
   </bean>
-  <!--+
-      | WORKSPACE NODE TYPE MANAGER
-      +-->
-  <bean id="workspaceNodeTypeManager" class="brix.rmiserver.workspacemanager.WorkspaceNodeTypeManagerFactoryBean">
-    <property name="login" value="${wm.login}" />
-    <property name="password" value="${wm.password}" />
-    <property name="repository" ref="jackrabbit" />
-  </bean>
-  <bean id="workspaceNodeTypeManager.remote" class="brix.rmiserver.workspacemanager.WorkspaceNodeTypeManagerExporterBean">
-    <property name="manager" ref="workspaceNodeTypeManager" />
-    <property name="registryPort" value="${rmi.registry.port}" />
-    <property name="serviceName" value="${rmi.wntm.name}" />
-  </bean>
+
 </beans>

@@ -9,6 +9,7 @@ import javax.jcr.Session;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
+import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
@@ -49,7 +50,7 @@ import brix.workspace.Workspace;
 public class WicketApplication extends WebApplication
 {
     private static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
-    public static final boolean USE_RMI = false;
+    public static final boolean USE_RMI = true;
 
     private ApplicationProperties properties;
     private Brix brix;
@@ -91,7 +92,7 @@ public class WicketApplication extends WebApplication
 
                 String workspace = getWorkspace();
                 JcrSession session = ((BrixRequestCycle)RequestCycle.get())
-                    .getJcrSession(workspace);
+                        .getJcrSession(workspace);
                 if (session.itemExists(nodePath))
                     return (JcrNode)session.getItem(nodePath);
                 else
@@ -134,7 +135,7 @@ public class WicketApplication extends WebApplication
         properties = new ApplicationProperties();
         createRepository();
         sessionFactory = new ThreadLocalSessionFactory(repository, properties
-            .buildSimpleCredentials());
+                .buildSimpleCredentials());
 
         try
         {
@@ -170,7 +171,7 @@ public class WicketApplication extends WebApplication
                     int trailingSlashesCount, boolean redirect)
             {
                 return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-                    .get(), null, trailingSlashesCount, redirect);
+                        .get(), null, trailingSlashesCount, redirect);
             }
         });
 
@@ -229,7 +230,8 @@ public class WicketApplication extends WebApplication
             if (USE_RMI)
             {
 
-                ClientRepositoryFactory factory = new ClientRepositoryFactory();
+                ClientRepositoryFactory factory = new ClientRepositoryFactory(
+                        new JackrabbitClientAdapterFactory());
                 repository = factory.getRepository("rmi://localhost:1099/jackrabbit");
             }
             else
@@ -251,7 +253,7 @@ public class WicketApplication extends WebApplication
         catch (Exception e)
         {
             throw new RuntimeException("Couldn't create jackrabbit repository, make sure you"
-                + " have the jcr.repository.location config property set", e);
+                    + " have the jcr.repository.location config property set", e);
         }
     }
 

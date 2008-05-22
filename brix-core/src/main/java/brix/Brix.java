@@ -13,7 +13,6 @@ import javax.jcr.Workspace;
 
 import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 import org.apache.jackrabbit.core.WorkspaceImpl;
-import org.apache.jackrabbit.core.nodetype.NodeTypeManagerImpl;
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.slf4j.Logger;
@@ -48,6 +47,8 @@ import brix.workspace.WorkspaceManager;
 
 public abstract class Brix
 {
+    private static final Logger logger = LoggerFactory.getLogger(Brix.class);
+
     public static final String NS = "brix";
     public static final String NS_PREFIX = NS + ":";
 
@@ -203,10 +204,12 @@ public abstract class Brix
             boolean orderable) throws Exception
     {
 
-        NodeTypeManagerImpl manager = (NodeTypeManagerImpl)workspace.getNodeTypeManager();
+        JackrabbitNodeTypeManager manager = (JackrabbitNodeTypeManager)workspace
+            .getNodeTypeManager();
 
         if (manager.hasNodeType(typeName) == false)
         {
+            logger.info("Registering node type: {} in workspace {}", typeName, workspace.getName());
 
             String type = "[" + typeName + "] > nt:unstructured ";
 
@@ -219,7 +222,9 @@ public abstract class Brix
             type += " mixin";
 
             manager.registerNodeTypes(new StringInputStream(type),
-                JackrabbitNodeTypeManager.TEXT_X_JCR_CND, true);
+                JackrabbitNodeTypeManager.TEXT_X_JCR_CND);
+        } else {
+            logger.info("Type: {} already registered in workspace {}", typeName, workspace.getName());
         }
     }
 
