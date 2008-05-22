@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
 import brix.Brix;
@@ -94,7 +95,22 @@ class EditTab extends NodeManagerPanel
                 adapter.apply();
                 node.save();
                 node.checkin();
+
+                getSession().info(getString("status.saved"));
             }
+        });
+
+        form.add(new Link("cancel")
+        {
+
+            @Override
+            public void onClick()
+            {
+                getSession().info(getString("status.cancelled"));
+                EditTab me = EditTab.this;
+                me.replaceWith(new EditTab(me.getId(), me.getModel()));
+            }
+
         });
     }
 
