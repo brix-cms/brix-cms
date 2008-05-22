@@ -42,6 +42,7 @@ import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.template.TemplatePlugin;
+import brix.plugin.webdavurl.WebdavUrlPlugin;
 import brix.util.StringInputStream;
 import brix.web.nodepage.PageParametersAwareEnabler;
 import brix.workspace.WorkspaceManager;
@@ -73,6 +74,7 @@ public abstract class Brix
         registerPlugin(new SnapshotPlugin());
         registerPlugin(new TemplatePlugin());
         registerPlugin(new PublishingPlugin());
+        registerPlugin(new WebdavUrlPlugin());
     }
 
     public static Brix get(Application application)
