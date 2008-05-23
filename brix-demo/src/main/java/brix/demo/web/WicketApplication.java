@@ -50,7 +50,7 @@ import brix.workspace.Workspace;
 public class WicketApplication extends WebApplication
 {
     private static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
-    public static final boolean USE_RMI = true;
+    public static final boolean USE_RMI = false;
 
     private ApplicationProperties properties;
     private Brix brix;
