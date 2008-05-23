@@ -34,7 +34,6 @@ public class PointRegistry
         switch (multiplicity)
         {
             case SINGLETON :
-            case SINGLETON_REQUIRED :
                 extensions.clear();
                 break;
 
@@ -64,25 +63,14 @@ public class PointRegistry
         switch (point.getMultiplicity())
         {
             case COLLECTION :
-            case COLLECTION_NOT_EMPTY :
                 break;
             default :
                 // TODO factor out this exception into its own class
                 throw new IllegalArgumentException("Extension point: " + point.getUuid() +
                     " has unsupported multiplicity of: " + point.getMultiplicity() + ". Must be " +
-                    Multiplicity.COLLECTION + " or " + Multiplicity.COLLECTION_NOT_EMPTY);
+                    Multiplicity.COLLECTION);
         }
         Collection<T> extensions = lookup(point);
-        // check multiplicity contract is fulfilled
-        if (extensions.isEmpty())
-        {
-            if (point.getMultiplicity() == Multiplicity.COLLECTION_NOT_EMPTY)
-            {
-                // TODO factor out this exception into its own class
-                throw new IllegalStateException("Point: " + point.getUuid() +
-                    " must have at least one registration");
-            }
-        }
         return extensions;
     }
 
@@ -92,13 +80,12 @@ public class PointRegistry
         switch (point.getMultiplicity())
         {
             case SINGLETON :
-            case SINGLETON_REQUIRED :
                 break;
             default :
                 // TODO factor out this exception into its own class
                 throw new IllegalArgumentException("Extension point: " + point.getUuid() +
                     " has unsupported multiplicity of: " + point.getMultiplicity() + ". Must be " +
-                    Multiplicity.SINGLETON + " or " + Multiplicity.SINGLETON_REQUIRED);
+                    Multiplicity.SINGLETON);
         }
 
         Iterator<T> it = lookup(point).iterator();
@@ -109,13 +96,6 @@ public class PointRegistry
         }
         else
         {
-            // check multiplicity contract is fulfilled
-            if (point.getMultiplicity() == Multiplicity.SINGLETON_REQUIRED)
-            {
-                // TODO factor out this exception into its own class
-                throw new IllegalStateException("Point: " + point.getUuid() +
-                    " must have at least one registration");
-            }
             return null;
         }
     }
