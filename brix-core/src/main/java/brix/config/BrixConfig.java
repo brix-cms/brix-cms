@@ -1,10 +1,10 @@
 package brix.config;
 
-import brix.registry.PointRegistry;
+import brix.registry.ExtensionPointRegistry;
 
 public class BrixConfig
 {
-    private final PointRegistry registry = new PointRegistry();
+    private final ExtensionPointRegistry registry = new ExtensionPointRegistry();
 
     private AdminConfig adminConfig = new AdminConfig();
 
@@ -13,7 +13,7 @@ public class BrixConfig
         return adminConfig;
     }
 
-    public PointRegistry getRegistry()
+    public ExtensionPointRegistry getRegistry()
     {
         return registry;
     }

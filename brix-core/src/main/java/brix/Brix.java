@@ -42,7 +42,7 @@ import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.template.TemplatePlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
-import brix.registry.PointRegistry;
+import brix.registry.ExtensionPointRegistry;
 import brix.util.StringInputStream;
 import brix.web.nodepage.PageParametersAwareEnabler;
 import brix.workspace.WorkspaceManager;
@@ -69,7 +69,7 @@ public abstract class Brix
 
         wrapperRegistry.registerWrapper(FolderNode.class);
 
-        final PointRegistry registry = config.getRegistry();
+        final ExtensionPointRegistry registry = config.getRegistry();
         registry.register(Plugin.POINT, new SitePlugin(this));
         registry.register(Plugin.POINT, new MenuPlugin());
         registry.register(Plugin.POINT, new SnapshotPlugin());

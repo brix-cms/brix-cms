@@ -1,6 +1,6 @@
 package brix.registry;
 
-public interface Point<T>
+public interface ExtensionPoint<T>
 {
     public static enum Multiplicity {
         SINGLETON,

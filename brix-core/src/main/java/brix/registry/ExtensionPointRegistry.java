@@ -8,20 +8,20 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-import brix.registry.Point.Multiplicity;
+import brix.registry.ExtensionPoint.Multiplicity;
 
-public class PointRegistry
+public class ExtensionPointRegistry
 {
-    private final Map<Point< ? >, Collection< ? >> registrations = new HashMap<Point< ? >, Collection< ? >>();
+    private final Map<ExtensionPoint< ? >, Collection< ? >> registrations = new HashMap<ExtensionPoint< ? >, Collection< ? >>();
 
 
     @SuppressWarnings("unchecked")
-    private <T> Collection<T> get(Point<T> point)
+    private <T> Collection<T> get(ExtensionPoint<T> point)
     {
         return (Collection<T>)registrations.get(point);
     }
 
-    public synchronized <T> void register(Point<T> point, T extension)
+    public synchronized <T> void register(ExtensionPoint<T> point, T extension)
     {
         Collection<T> extensions = get(point);
         if (extensions == null)
@@ -42,7 +42,7 @@ public class PointRegistry
         extensions.add(extension);
     }
 
-    private synchronized <T> Collection<T> lookup(Point<T> point)
+    private synchronized <T> Collection<T> lookup(ExtensionPoint<T> point)
     {
         Collection<T> extensions = get(point);
         if (extensions == null)
@@ -57,7 +57,7 @@ public class PointRegistry
         }
     }
 
-    public synchronized <T> Collection<T> lookupCollection(Point<T> point)
+    public synchronized <T> Collection<T> lookupCollection(ExtensionPoint<T> point)
     {
         // check multiplicity
         switch (point.getMultiplicity())
@@ -74,7 +74,7 @@ public class PointRegistry
         return extensions;
     }
 
-    public synchronized <T> T lookupSingleton(Point<T> point)
+    public synchronized <T> T lookupSingleton(ExtensionPoint<T> point)
     {
         // check multiplicity
         switch (point.getMultiplicity())

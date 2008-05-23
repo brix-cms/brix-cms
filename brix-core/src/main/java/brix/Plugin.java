@@ -3,13 +3,13 @@ package brix;
 import java.util.List;
 
 import brix.jcr.api.JcrSession;
-import brix.registry.Point;
+import brix.registry.ExtensionPoint;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.workspace.Workspace;
 
 public interface Plugin
 {
-    public static final Point<Plugin> POINT = new Point<Plugin>()
+    public static final ExtensionPoint<Plugin> POINT = new ExtensionPoint<Plugin>()
     {
 
         public Multiplicity getMultiplicity()

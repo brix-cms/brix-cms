@@ -5,15 +5,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
 import brix.jcr.api.JcrNode;
-import brix.registry.Point;
+import brix.registry.ExtensionPoint;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
 public interface SiteNodePlugin
 {
-    public static Point<SiteNodePlugin> POINT = new Point<SiteNodePlugin>()
+    public static ExtensionPoint<SiteNodePlugin> POINT = new ExtensionPoint<SiteNodePlugin>()
     {
 
-        public brix.registry.Point.Multiplicity getMultiplicity()
+        public brix.registry.ExtensionPoint.Multiplicity getMultiplicity()
         {
             return Multiplicity.COLLECTION;
         }
