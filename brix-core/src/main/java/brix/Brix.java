@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.RepositoryException;
@@ -43,6 +42,7 @@ import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.template.TemplatePlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
+import brix.registry.PointRegistry;
 import brix.util.StringInputStream;
 import brix.web.nodepage.PageParametersAwareEnabler;
 import brix.workspace.WorkspaceManager;
@@ -69,12 +69,13 @@ public abstract class Brix
 
         wrapperRegistry.registerWrapper(FolderNode.class);
 
-        registerPlugin(new SitePlugin(this));
-        registerPlugin(new MenuPlugin());
-        registerPlugin(new SnapshotPlugin());
-        registerPlugin(new TemplatePlugin());
-        registerPlugin(new PublishingPlugin());
-        registerPlugin(new WebdavUrlPlugin());
+        final PointRegistry registry = config.getRegistry();
+        registry.register(Plugin.POINT, new SitePlugin(this));
+        registry.register(Plugin.POINT, new MenuPlugin());
+        registry.register(Plugin.POINT, new SnapshotPlugin());
+        registry.register(Plugin.POINT, new TemplatePlugin());
+        registry.register(Plugin.POINT, new PublishingPlugin());
+        registry.register(Plugin.POINT, new WebdavUrlPlugin());
     }
 
     public static Brix get(Application application)
@@ -317,10 +318,15 @@ public abstract class Brix
             root.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
         }
 
-        for (Plugin p : plugins)
+        for (Plugin p : getPlugins())
         {
             p.initWorkspace(workspace, session);
         }
+    }
+
+    public final Collection<Plugin> getPlugins()
+    {
+        return config.getRegistry().lookup(Plugin.POINT);
     }
 
     private final WrapperRegistry wrapperRegistry = new WrapperRegistry();
@@ -331,20 +337,15 @@ public abstract class Brix
         return wrapperRegistry;
     }
 
-    private List<Plugin> plugins = new CopyOnWriteArrayList<Plugin>();
-
-    public void registerPlugin(Plugin plugin)
-    {
-        plugins.add(plugin);
-    }
-
     public Plugin getPlugin(String id)
     {
         if (id == null)
         {
             throw new IllegalArgumentException("Argument 'id' may not be null.");
         }
-        for (Plugin p : plugins)
+
+
+        for (Plugin p : getPlugins())
         {
             if (id.equals(p.getId()))
             {
@@ -354,10 +355,6 @@ public abstract class Brix
         return null;
     }
 
-    public Collection<Plugin> getPlugins()
-    {
-        return Collections.unmodifiableList(plugins);
-    }
 
     public List<brix.workspace.Workspace> filterVisibleWorkspaces(
             List<brix.workspace.Workspace> workspaces, Context context)
