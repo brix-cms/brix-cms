@@ -1,7 +1,6 @@
 package brix.plugin.site;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +45,6 @@ public class SitePlugin implements Plugin
         registerNodePlugin(new ResourceNodePlugin());
     }
 
-    private Map<String, SiteNodePlugin> nodePlugins = new HashMap<String, SiteNodePlugin>();
-
     public void registerNodePlugin(SiteNodePlugin plugin)
     {
         if (plugin == null)
@@ -55,44 +52,31 @@ public class SitePlugin implements Plugin
             throw new IllegalArgumentException("Argument 'plugin' cannot be null");
         }
 
-        final String type = plugin.getNodeType();
-
-        if (nodePlugins.containsKey(type))
-        {
-            throw new IllegalStateException("Node plugin of type: " + plugin.getNodeType() +
-                " already registered: " + nodePlugins.get(type).getClass().getName());
-        }
-
-        nodePlugins.put(type, plugin);
+        brix.getConfig().getRegistry().register(SiteNodePlugin.POINT, plugin);
     }
 
     public Collection<SiteNodePlugin> getNodePlugins()
     {
-        return Collections.unmodifiableCollection(nodePlugins.values());
+        return brix.getConfig().getRegistry().lookupCollection(SiteNodePlugin.POINT);
     }
 
     public SiteNodePlugin getNodePluginForNode(JcrNode node)
     {
-        final String type = ((BrixNode)node).getNodeType();
-
-        final SiteNodePlugin plugin = nodePlugins.get(type);
-        if (plugin == null)
-        {
-            return fallbackNodePlugin;
-        }
-        return plugin;
+        return getNodePluginForType(((BrixNode)node).getNodeType());
     }
 
     private FallbackNodePlugin fallbackNodePlugin = new FallbackNodePlugin();
 
     public SiteNodePlugin getNodePluginForType(String type)
     {
-        final SiteNodePlugin plugin = nodePlugins.get(type);
-        if (plugin == null)
+        for (SiteNodePlugin plugin : getNodePlugins())
         {
-            return fallbackNodePlugin;
+            if (plugin.getNodeType().equals(type))
+            {
+                return plugin;
+            }
         }
-        return plugin;
+        return fallbackNodePlugin;
     }
 
     public static SitePlugin get(Brix brix)
