@@ -326,7 +326,7 @@ public abstract class Brix
 
     public final Collection<Plugin> getPlugins()
     {
-        return config.getRegistry().lookup(Plugin.POINT);
+        return config.getRegistry().lookupCollection(Plugin.POINT);
     }
 
     private final WrapperRegistry wrapperRegistry = new WrapperRegistry();

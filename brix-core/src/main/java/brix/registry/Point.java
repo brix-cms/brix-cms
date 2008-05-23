@@ -2,12 +2,11 @@ package brix.registry;
 
 public interface Point<T>
 {
-    /*
-     * FIXME implement multiplicities: EXACTLY_ONE, AT_MOST_ONE, AT_LEAST_ONE
-     */
     public static enum Multiplicity {
+        SINGLETON_REQUIRED,
         SINGLETON,
-        COLLECTION
+        COLLECTION_NOT_EMPTY,
+        COLLECTION;
     }
 
     Multiplicity getMultiplicity();

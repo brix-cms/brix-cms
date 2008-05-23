@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -29,22 +30,21 @@ public class PointRegistry
         }
 
         final Multiplicity multiplicity = point.getMultiplicity();
-        if (multiplicity == Multiplicity.SINGLETON)
+        switch (multiplicity)
         {
-            extensions.clear();
-            extensions.add(extension);
+            case SINGLETON :
+            case SINGLETON_REQUIRED :
+                extensions.clear();
+                break;
+            default :
+                throw new IllegalStateException("Unhandled multiplicity: " + multiplicity);
+
         }
-        else if (multiplicity == Multiplicity.COLLECTION)
-        {
-            extensions.add(extension);
-        }
-        else
-        {
-            throw new IllegalStateException("Unhandled multiplicity: " + multiplicity);
-        }
+
+        extensions.add(extension);
     }
 
-    public synchronized <T> Collection<T> lookup(Point<T> point)
+    private synchronized <T> Collection<T> lookup(Point<T> point)
     {
         Collection<T> extensions = get(point);
         if (extensions == null)
@@ -59,5 +59,22 @@ public class PointRegistry
         }
     }
 
+    public synchronized <T> Collection<T> lookupCollection(Point<T> point)
+    {
+        return lookup(point);
+    }
+
+    public synchronized <T> T lookupSingleton(Point<T> point)
+    {
+        Iterator<T> it = lookup(point).iterator();
+        if (it.hasNext())
+        {
+            return it.next();
+        }
+        else
+        {
+            return null;
+        }
+    }
 
 }
