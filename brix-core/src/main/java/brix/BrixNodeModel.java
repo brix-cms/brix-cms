@@ -67,7 +67,7 @@ public class BrixNodeModel implements IModel<JcrNode>
     {
         if (id != null)
         {
-            JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
+            JcrSession session = Brix.get().getCurrentSession(workspaceName);
             if (id.startsWith("/"))
                 return (JcrNode)session.getItem(id);
             else

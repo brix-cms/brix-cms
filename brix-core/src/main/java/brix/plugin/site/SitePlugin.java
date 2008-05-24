@@ -8,7 +8,6 @@ import java.util.Map;
 import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Path;
 import brix.Plugin;
 import brix.jcr.api.JcrNode;
@@ -34,7 +33,7 @@ public class SitePlugin implements Plugin
 
     public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
     {
-        JcrSession session = BrixRequestCycle.Locator.getSession(workspace.getId());
+        JcrSession session = Brix.get().getCurrentSession(workspace.getId());
         return new SiteNavigationTreeNode((JcrNode)session.getItem(getSiteRootPath()));
     }
 

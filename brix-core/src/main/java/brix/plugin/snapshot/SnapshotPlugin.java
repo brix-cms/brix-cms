@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.Model;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
@@ -42,7 +41,7 @@ public class SnapshotPlugin implements Plugin
 
     public static SnapshotPlugin get()
     {
-        return get(BrixRequestCycle.Locator.getBrix());
+        return get(Brix.get());
     }
 
     private static final String WORKSPACE_TYPE = "brix:snapshot";
@@ -110,7 +109,7 @@ public class SnapshotPlugin implements Plugin
             Map<String, String> attributes = new HashMap<String, String>();
             attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
             attributes.put(WORKSPACE_ATTRIBUTE_SITE_NAME, siteName);
-            return BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+            return Brix.get().getWorkspaceManager().getWorkspacesFiltered(
                 attributes);
         }
         else
@@ -125,7 +124,7 @@ public class SnapshotPlugin implements Plugin
         {
             throw new IllegalStateException("Workspace must be a Site workspace");
         }
-        Brix brix = BrixRequestCycle.Locator.getBrix();
+        Brix brix = Brix.get();
 
         Workspace targetWorkspace = brix.getWorkspaceManager().createWorkspace();
         targetWorkspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
@@ -134,17 +133,17 @@ public class SnapshotPlugin implements Plugin
 
         setCreated(targetWorkspace, new Date());
 
-        JcrSession originalSession = BrixRequestCycle.Locator.getSession(workspace.getId());
+        JcrSession originalSession = brix.getCurrentSession(workspace.getId());
         ;
-        JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspace.getId());
+        JcrSession targetSession = brix.getCurrentSession(targetWorkspace.getId());
         brix.clone(originalSession, targetSession);
     }
 
     public void restoreSnapshot(Workspace snapshotWorkspace, Workspace targetWorkspace)
     {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
-        JcrSession sourceSession = BrixRequestCycle.Locator.getSession(snapshotWorkspace.getId());
-        JcrSession targetSession = BrixRequestCycle.Locator.getSession(targetWorkspace.getId());
+        Brix brix = Brix.get();
+        JcrSession sourceSession = brix.getCurrentSession(snapshotWorkspace.getId());
+        JcrSession targetSession = brix.getCurrentSession(targetWorkspace.getId());
         brix.clone(sourceSession, targetSession);
     }
 

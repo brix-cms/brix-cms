@@ -3,19 +3,18 @@ package brix.plugin.site.node.tilepage.admin;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.BrixRequestCycle.Locator;
+import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.web.tab.AbstractBrixTab;
-import brix.web.tab.BrixTab;
-import brix.web.tab.BrixTabbedPanel;
 
 public class PageManagerPanel extends NodeManagerPanel
 {
@@ -26,7 +25,7 @@ public class PageManagerPanel extends NodeManagerPanel
 
         List<ITab> tabs = new ArrayList<ITab>();
 
-        tabs.add(new AbstractBrixTab(new Model("view"))
+        tabs.add(new AbstractTab(new Model("view"))
         {
 
             @Override
@@ -43,7 +42,7 @@ public class PageManagerPanel extends NodeManagerPanel
 
         });
 
-        tabs.add(new AbstractBrixTab(new Model("edit"))
+        tabs.add(new AbstractTab(new Model("edit"))
         {
 
             @Override
@@ -59,7 +58,7 @@ public class PageManagerPanel extends NodeManagerPanel
             }
 
         });
-        tabs.add(new AbstractBrixTab(new Model("tiles"))
+        tabs.add(new AbstractTab(new Model("tiles"))
         {
 
             @Override
@@ -76,7 +75,7 @@ public class PageManagerPanel extends NodeManagerPanel
 
         });
 
-        tabs.add(new AbstractBrixTab(new Model("convert"))
+        tabs.add(new AbstractTab(new Model("convert"))
         {
 
             @Override
@@ -92,7 +91,7 @@ public class PageManagerPanel extends NodeManagerPanel
             }
         });
 
-        add(new BrixTabbedPanel("tabs", tabs));
+        add(new TabbedPanel("tabs", tabs));
 
     }
 
@@ -100,14 +99,14 @@ public class PageManagerPanel extends NodeManagerPanel
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                 SiteNodeAction.Type.NODE_VIEW, getNode());
-        return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+        return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
     private boolean hasEditPermission()
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                 SiteNodeAction.Type.NODE_EDIT, getNode());
-        return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+        return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
 }

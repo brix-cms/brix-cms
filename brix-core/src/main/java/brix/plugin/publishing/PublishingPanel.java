@@ -3,7 +3,7 @@ package brix.plugin.publishing;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
-import brix.BrixRequestCycle;
+import brix.Brix;
 import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.plugin.publishing.auth.PublishWorkspaceAction;
@@ -49,7 +49,7 @@ public class PublishingPanel extends NavigationAwarePanel<Workspace>
                 targetState);
             
             return requiredState.equals(state) &&
-                BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(
+                Brix.get().getAuthorizationStrategy().isActionAuthorized(
                     action);
         }
 

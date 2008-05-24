@@ -7,7 +7,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.BrixRequestCycle.Locator;
+import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.SiteNavigationTreeNode;
@@ -40,7 +40,7 @@ public class ConvertNodePanel extends NodeManagerPanel
                 Action action = new ConvertNodeAction(Action.Context.ADMINISTRATION, node,
                         plugin.getNodeType());
 
-                if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+                if (Brix.get().getAuthorizationStrategy().isActionAuthorized(action))
                 {
 
                     found = true;

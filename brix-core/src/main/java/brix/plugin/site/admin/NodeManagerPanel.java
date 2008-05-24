@@ -3,7 +3,6 @@ package brix.plugin.site.admin;
 import org.apache.wicket.model.IModel;
 
 import brix.Brix;
-import brix.BrixRequestCycle.Locator;
 import brix.jcr.api.JcrNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
@@ -17,7 +16,7 @@ public class NodeManagerPanel extends NavigationAwarePanel<JcrNode>
 
     protected Brix getBrix()
     {
-        return Locator.getBrix();
+        return Brix.get();
     }
 
     public final JcrNode getNode()

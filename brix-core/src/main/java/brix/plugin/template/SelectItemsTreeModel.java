@@ -1,12 +1,12 @@
 package brix.plugin.template;
 
-import brix.BrixRequestCycle;
+import brix.Brix;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.web.tree.AbstractTreeModel;
 import brix.web.tree.AbstractJcrTreeNode;
+import brix.web.tree.AbstractTreeModel;
 
 public class SelectItemsTreeModel extends AbstractTreeModel
 {
@@ -45,7 +45,7 @@ public class SelectItemsTreeModel extends AbstractTreeModel
 
     public SelectItemsTreeModel(String workspaceName)
     {
-        JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
+        JcrSession session = Brix.get().getCurrentSession(workspaceName);
 
         root = new SelectItemsTreeNode((JcrNode)session.getItem(SitePlugin.get().getSiteRootPath()));
     }

@@ -16,7 +16,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.Brix;
-import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.SiteNodePlugin;
@@ -88,7 +87,7 @@ public class CreateNewNodesTab extends Panel<JcrNode>
         @Override
         protected Object load()
         {
-            Brix brix = Locator.getBrix();
+            Brix brix = Brix.get();
             Collection<SiteNodePlugin> plugins = new ArrayList<SiteNodePlugin>(SitePlugin.get().getNodePlugins());
             List<PluginEntry> types = new ArrayList<PluginEntry>(plugins.size());
             for (SiteNodePlugin plugin : plugins)
@@ -96,7 +95,7 @@ public class CreateNewNodesTab extends Panel<JcrNode>
                 Action action = new SelectNewNodeTypeAction(Action.Context.ADMINISTRATION,
                         (JcrNode)CreateNewNodesTab.this.getModelObject(), plugin.getNodeType());
 
-                if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+                if (brix.getAuthorizationStrategy().isActionAuthorized(action))
                 {
                     PluginEntry entry = new PluginEntry();
                     entry.nodeType = plugin.getNodeType();

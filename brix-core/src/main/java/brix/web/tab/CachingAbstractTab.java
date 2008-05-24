@@ -4,10 +4,10 @@ import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-public abstract class CachingAbstractBrixTab extends AbstractTab implements BrixTab
+public abstract class CachingAbstractTab extends AbstractTab 
 {
 
-    public CachingAbstractBrixTab(IModel title)
+    public CachingAbstractTab(IModel<String> title)
     {
         super(title);
     }
@@ -18,12 +18,12 @@ public abstract class CachingAbstractBrixTab extends AbstractTab implements Brix
         return true;
     }
 
-    public abstract Panel newPanel(String panelId);
+    public abstract Panel<?> newPanel(String panelId);
 
-    private Panel panel = null;
+    private Panel<?> panel = null;
 
     @Override
-    public Panel getPanel(String panelId)
+    public Panel<?> getPanel(String panelId)
     {
         if (panel == null)
         {

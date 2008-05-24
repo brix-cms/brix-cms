@@ -2,7 +2,7 @@ package brix.workspace;
 
 import org.apache.wicket.model.IModel;
 
-import brix.BrixRequestCycle;
+import brix.Brix;
 
 public class WorkspaceModel implements IModel<Workspace>
 {
@@ -38,7 +38,7 @@ public class WorkspaceModel implements IModel<Workspace>
     {
         if (workspace == null)
         {
-            workspace = BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspace(workspaceId);
+            workspace = Brix.get().getWorkspaceManager().getWorkspace(workspaceId);
         }
         return workspace;
     }

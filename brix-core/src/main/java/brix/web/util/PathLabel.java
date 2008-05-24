@@ -11,8 +11,8 @@ import org.apache.wicket.protocol.http.RequestUtils;
 import org.apache.wicket.request.target.component.listener.ListenerInterfaceRequestTarget;
 import org.apache.wicket.util.value.ValueMap;
 
+import brix.Brix;
 import brix.Path;
-import brix.BrixRequestCycle.Locator;
 
 public abstract class PathLabel extends WebMarkupContainer implements ILinkListener
 {
@@ -48,7 +48,7 @@ public abstract class PathLabel extends WebMarkupContainer implements ILinkListe
         r.write("<a href=\"");
         r.write(createCallbackUrl(path));
         r.write("\"><span>");
-        boolean root = path.toString().equals(Locator.getBrix().getRootPath());
+        boolean root = path.toString().equals(Brix.get().getRootPath());
         r.write(root ? "root" : path.getName());
         r.write("</span></a>");
     }

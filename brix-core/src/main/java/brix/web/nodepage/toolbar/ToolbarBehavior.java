@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
 import org.apache.wicket.util.lang.Objects;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.auth.Action.Context;
 import brix.web.BrixRequestCycleProcessor;
@@ -76,7 +75,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
 
     private List<WorkspaceEntry> loadWorkspaces()
     {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
+        Brix brix = Brix.get();
         List<WorkspaceEntry> workspaces = new ArrayList<WorkspaceEntry>();
         Workspace currentWorkspace = getCurrentWorkspaceId() != null ? brix.getWorkspaceManager()
             .getWorkspace(getCurrentWorkspaceId()) : null;

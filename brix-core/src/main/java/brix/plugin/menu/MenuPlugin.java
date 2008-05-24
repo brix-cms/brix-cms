@@ -11,7 +11,6 @@ import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.Model;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
@@ -44,7 +43,7 @@ public class MenuPlugin implements Plugin
 
     public static MenuPlugin get()
     {
-        return get(BrixRequestCycle.Locator.getBrix());
+        return get(Brix.get());
     }
 
     public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
@@ -90,19 +89,18 @@ public class MenuPlugin implements Plugin
 
     public String getRootPath()
     {
-        return BrixRequestCycle.Locator.getBrix().getRootPath() + "/" + ROOT_NODE_NAME;
+        return Brix.get().getRootPath() + "/" + ROOT_NODE_NAME;
     }
 
     private JcrNode getRootNode(String workspaceId, boolean createIfNotExist)
     {
-        JcrSession session = BrixRequestCycle.Locator.getSession(workspaceId);
+        JcrSession session = Brix.get().getCurrentSession(workspaceId);
 
         if (session.itemExists(getRootPath()) == false)
         {
             if (createIfNotExist)
             {
-                JcrNode parent = (JcrNode)session.getItem(BrixRequestCycle.Locator.getBrix()
-                    .getRootPath());
+                JcrNode parent = (JcrNode)session.getItem(Brix.get().getRootPath());
                 parent.addNode(ROOT_NODE_NAME, "nt:unstructured");
             }
             else

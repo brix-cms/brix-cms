@@ -21,7 +21,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.WebResponse;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.exception.BrixException;
@@ -48,7 +47,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
             {
                 List<Workspace> list = SnapshotPlugin.get().getSnapshotsForWorkspace(
                     getModelObject());
-                return BrixRequestCycle.Locator.getBrix().filterVisibleWorkspaces(list,
+                return Brix.get().filterVisibleWorkspaces(list,
                     Context.ADMINISTRATION);
             }
 
@@ -96,7 +95,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                         Workspace target = ManageSnapshotsPanel.this.getModelObject();
                         Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, item
                             .getModelObject(), target);
-                        return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                        return Brix.get().getAuthorizationStrategy()
                             .isActionAuthorized(action);
                     }
                 });
@@ -115,7 +114,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                     {
                         Action action = new DeleteSnapshotAction(Context.ADMINISTRATION, item
                             .getModelObject());
-                        return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                        return Brix.get().getAuthorizationStrategy()
                             .isActionAuthorized(action);
                     }
                 });
@@ -137,7 +136,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
             {
                 Workspace current = ManageSnapshotsPanel.this.getModelObject();
                 Action action = new CreateSnapshotAction(Context.ADMINISTRATION, current);
-                return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                return Brix.get().getAuthorizationStrategy()
                     .isActionAuthorized(action);
             }
         });
@@ -159,8 +158,8 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                         WebResponse resp = (WebResponse)requestCycle.getResponse();
                         resp.setAttachmentHeader("workspace.xml");
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
-                        JcrSession session = BrixRequestCycle.Locator.getSession(id);
-                        Brix brix = BrixRequestCycle.Locator.getBrix();
+                        Brix brix = Brix.get();
+                        JcrSession session = brix.getCurrentSession(id);                        
                         session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
                             false);
                     }
@@ -176,7 +175,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
             {
                 Workspace target = ManageSnapshotsPanel.this.getModelObject();
                 Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, target);
-                return BrixRequestCycle.Locator.getBrix().getAuthorizationStrategy()
+                return Brix.get().getAuthorizationStrategy()
                     .isActionAuthorized(action);
             }
         };
@@ -196,8 +195,9 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                     {
                         InputStream s = u.getInputStream();
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
-                        JcrSession session = BrixRequestCycle.Locator.getSession(id);
-                        Brix brix = BrixRequestCycle.Locator.getBrix();
+                        Brix brix = Brix.get();
+                        JcrSession session = brix.getCurrentSession(id);
+                        
                         if (session.itemExists(brix.getRootPath()))
                         {
                             session.getItem(brix.getRootPath()).remove();

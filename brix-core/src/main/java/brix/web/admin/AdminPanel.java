@@ -16,7 +16,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Objects;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Path;
 import brix.Plugin;
 import brix.auth.Action.Context;
@@ -145,7 +144,7 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
 
     private boolean isCurrentWorkspaceValid()
     {
-        WorkspaceManager manager = BrixRequestCycle.Locator.getBrix().getWorkspaceManager();
+        WorkspaceManager manager = Brix.get().getWorkspaceManager();
         return currentWorkspace != null && manager.workspaceExists(currentWorkspace.id);
     }
 
@@ -191,7 +190,7 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
 
     protected JcrSession getJcrSession()
     {
-        return BrixRequestCycle.Locator.getSession(getWorkspace());
+        return Brix.get().getCurrentSession(getWorkspace());
     }
 
 
@@ -206,7 +205,7 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
 
     private List<WorkspaceEntry> getWorkspaces()
     {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
+        Brix brix = Brix.get();
         List<WorkspaceEntry> workspaces = new ArrayList<WorkspaceEntry>();
         Workspace currentWorkspace = getWorkspace() != null ? brix.getWorkspaceManager()
             .getWorkspace(getWorkspace()) : null;

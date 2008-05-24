@@ -15,7 +15,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Objects;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Path;
 import brix.Plugin;
 import brix.jcr.JcrUtil;
@@ -45,7 +44,7 @@ public class TemplatePlugin implements Plugin
 
     public static TemplatePlugin get()
     {
-        return get(BrixRequestCycle.Locator.getBrix());
+        return get(Brix.get());
     }
 
     private static final String WORKSPACE_TYPE = "brix:template";
@@ -72,7 +71,7 @@ public class TemplatePlugin implements Plugin
     {
         Map<String, String> attributes = new HashMap<String, String>();
         attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-        return BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+        return Brix.get().getWorkspaceManager().getWorkspacesFiltered(
             attributes);
     }
 
@@ -81,20 +80,20 @@ public class TemplatePlugin implements Plugin
         Map<String, String> attributes = new HashMap<String, String>();
         attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
         attributes.put(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME, templateName);
-        return !BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+        return !Brix.get().getWorkspaceManager().getWorkspacesFiltered(
             attributes).isEmpty();
     }
 
     public void createTemplate(Workspace originalWorkspace, String templateName)
     {
-        Brix brix = BrixRequestCycle.Locator.getBrix();
+        Brix brix = Brix.get();
 
         Workspace workspace = brix.getWorkspaceManager().createWorkspace();
         workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
         setTemplateName(workspace, templateName);
 
-        JcrSession originalSession = BrixRequestCycle.Locator.getSession(originalWorkspace.getId());
-        JcrSession destSession = BrixRequestCycle.Locator.getSession(workspace.getId());
+        JcrSession originalSession = brix.getCurrentSession(originalWorkspace.getId());
+        JcrSession destSession = brix.getCurrentSession(workspace.getId());
         brix.clone(originalSession, destSession);
     }
 
@@ -104,13 +103,13 @@ public class TemplatePlugin implements Plugin
         {
             throw new IllegalStateException("Node list can not be empty.");
         }
-        Brix brix = BrixRequestCycle.Locator.getBrix();
+        Brix brix = Brix.get();
 
         Workspace workspace = brix.getWorkspaceManager().createWorkspace();
         workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
         setTemplateName(workspace, templateName);
 
-        JcrSession destSession = BrixRequestCycle.Locator.getSession(workspace.getId());
+        JcrSession destSession = brix.getCurrentSession(workspace.getId());
 
         JcrUtil.cloneNodes(nodes, destSession.getRootNode(),
             ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
@@ -233,7 +232,7 @@ public class TemplatePlugin implements Plugin
         {
             Map<String, String> attributes = new HashMap<String, String>();
             attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-            return BrixRequestCycle.Locator.getBrix().getWorkspaceManager().getWorkspacesFiltered(
+            return Brix.get().getWorkspaceManager().getWorkspacesFiltered(
                 attributes);
         }
         else

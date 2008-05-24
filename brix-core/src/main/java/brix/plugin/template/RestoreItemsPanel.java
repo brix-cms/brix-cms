@@ -11,8 +11,8 @@ import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import brix.Brix;
 import brix.BrixNodeModel;
-import brix.BrixRequestCycle;
 import brix.jcr.JcrUtil;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrWorkspace;
@@ -49,7 +49,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
                 List<JcrNode> nodes = getSelectedNodes();
                 if (!nodes.isEmpty())
                 {
-                    JcrWorkspace targetWorkspace = BrixRequestCycle.Locator.getSession(targetWorkspaceId).getWorkspace();
+                    JcrWorkspace targetWorkspace = Brix.get().getCurrentSession(targetWorkspaceId).getWorkspace();
                     Map<JcrNode, List<JcrNode>> dependencies = JcrUtil.getUnsatisfiedDependencies(
                         nodes, targetWorkspace);;
                     if (!dependencies.isEmpty())

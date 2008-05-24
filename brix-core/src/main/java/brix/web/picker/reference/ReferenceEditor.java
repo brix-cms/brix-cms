@@ -3,6 +3,7 @@ package brix.web.picker.reference;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -10,9 +11,7 @@ import org.apache.wicket.model.ResourceModel;
 
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.reference.Reference;
-import brix.web.tab.CachingAbstractBrixTab;
-import brix.web.tab.BrixAjaxTabbedPanel;
-import brix.web.tab.BrixTab;
+import brix.web.tab.CachingAbstractTab;
 
 public class ReferenceEditor extends Panel<Reference>
 {
@@ -39,7 +38,7 @@ public class ReferenceEditor extends Panel<Reference>
     private void init()
     {
         List<ITab> tabs = new ArrayList<ITab>();
-        tabs.add(new CachingAbstractBrixTab(new ResourceModel("reference"))
+        tabs.add(new CachingAbstractTab(new ResourceModel("reference"))
         {
             @Override
             public Panel newPanel(String panelId)
@@ -60,7 +59,7 @@ public class ReferenceEditor extends Panel<Reference>
                 return configuration.isAllowNodePicker() || configuration.isAllowURLEdit();
             }
         });
-        tabs.add(new CachingAbstractBrixTab(new ResourceModel("queryParameters"))
+        tabs.add(new CachingAbstractTab(new ResourceModel("queryParameters"))
         {
             @Override
             public Panel newPanel(String panelId)
@@ -81,7 +80,7 @@ public class ReferenceEditor extends Panel<Reference>
                 return configuration.isAllowQueryParameters();
             }
         });
-        tabs.add(new CachingAbstractBrixTab(new ResourceModel("indexedParameters"))
+        tabs.add(new CachingAbstractTab(new ResourceModel("indexedParameters"))
         {
             @Override
             public Panel newPanel(String panelId)
@@ -103,7 +102,7 @@ public class ReferenceEditor extends Panel<Reference>
             }
         });
 
-        add(new BrixAjaxTabbedPanel("tabbedPanel", tabs));
+        add(new AjaxTabbedPanel("tabbedPanel", tabs));
     }
 
     private final ReferenceEditorConfiguration configuration;

@@ -1,12 +1,12 @@
 package brix.web.picker.node;
 
-import brix.BrixRequestCycle;
+import brix.Brix;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.web.tree.AbstractTreeModel;
 import brix.web.tree.AbstractJcrTreeNode;
+import brix.web.tree.AbstractTreeModel;
 
 public abstract class NodePickerTreeModel extends AbstractTreeModel
 {
@@ -47,7 +47,7 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel
 
     public NodePickerTreeModel(String workspaceName)
     {
-        JcrSession session = BrixRequestCycle.Locator.getSession(workspaceName);
+        JcrSession session = Brix.get().getCurrentSession(workspaceName);
 
         root = new NodePickerTreeNode((JcrNode)session.getItem(SitePlugin.get().getSiteRootPath()));
     }

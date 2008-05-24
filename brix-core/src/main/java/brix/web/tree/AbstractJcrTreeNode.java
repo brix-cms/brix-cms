@@ -10,8 +10,8 @@ import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Objects;
 
+import brix.Brix;
 import brix.BrixNodeModel;
-import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.jcr.api.JcrNode;
@@ -116,7 +116,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
             Action view = new SiteNodeAction(Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW,
                     entry);
             if (!brixNode.isHidden() && (displayFoldersOnly() == false || brixNode.isFolder()) &&
-                    Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(view))
+                    Brix.get().getAuthorizationStrategy().isActionAuthorized(view))
             {
                 children.add(newTreeNode(entry));
             }
@@ -134,7 +134,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         {
             Action viewChildren = new SiteNodeAction(Context.ADMINISTRATION,
                     SiteNodeAction.Type.NODE_VIEW_CHILDREN, nodeModel.getObject());
-            if (Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(viewChildren))
+            if (Brix.get().getAuthorizationStrategy().isActionAuthorized(viewChildren))
             {
                 children = loadChildren();
             }

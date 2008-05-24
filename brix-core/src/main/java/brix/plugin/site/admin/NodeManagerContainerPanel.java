@@ -15,9 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Path;
-import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.jcr.api.JcrNode;
@@ -74,7 +72,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
                     getNode());
                 String path = NodeManagerContainerPanel.this.getModelObject().getPath();
                 String web = SitePlugin.get().getSiteRootPath();
-                Brix brix = BrixRequestCycle.Locator.getBrix();
+                Brix brix = Brix.get();
                 return brix.getAuthorizationStrategy().isActionAuthorized(action) &&
                     path.length() > web.length() && path.startsWith(web);
             }
@@ -100,7 +98,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
                     getNode());
                 return getNode() != null && getNode().isNodeType("nt:file") &&
                     !getNode().isNodeType("mix:versionable") &&
-                    Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                    Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
             }
         });
 
@@ -145,7 +143,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
             {
                 Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_DELETE,
                     getNode());
-                Brix brix = BrixRequestCycle.Locator.getBrix();
+                Brix brix = Brix.get();
                 String path = getNode().getPath();
                 return path.startsWith(SitePlugin.get().getSiteRootPath()) &&
                     path.length() > SitePlugin.get().getSiteRootPath().length() &&

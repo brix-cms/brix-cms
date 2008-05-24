@@ -3,18 +3,18 @@ package brix.plugin.site.node.folder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.BrixRequestCycle.Locator;
+import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.web.tab.AbstractBrixTab;
-import brix.web.tab.BrixTabbedPanel;
 
 public class FolderManagerPanel extends NodeManagerPanel
 {
@@ -24,7 +24,7 @@ public class FolderManagerPanel extends NodeManagerPanel
         super(id, folderModel);
 
         List<ITab> tabs = new ArrayList<ITab>(2);
-        tabs.add(new AbstractBrixTab(new Model("Listing"))
+        tabs.add(new AbstractTab(new Model("Listing"))
         {
 
             @Override
@@ -38,11 +38,11 @@ public class FolderManagerPanel extends NodeManagerPanel
             {
                 Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                         SiteNodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
-                return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
         });
-        tabs.add(new AbstractBrixTab(new Model("Create New"))
+        tabs.add(new AbstractTab(new Model("Create New"))
         {
 
             @Override
@@ -56,11 +56,11 @@ public class FolderManagerPanel extends NodeManagerPanel
             {
                 Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                         SiteNodeAction.Type.NODE_ADD_CHILD, folderModel.getObject());
-                return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
         });
-        tabs.add(new AbstractBrixTab(new Model("Properties"))
+        tabs.add(new AbstractTab(new Model("Properties"))
         {
 
             @Override
@@ -74,11 +74,11 @@ public class FolderManagerPanel extends NodeManagerPanel
             {
                 Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                         SiteNodeAction.Type.NODE_EDIT, folderModel.getObject());
-                return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
         });
-        add(new BrixTabbedPanel("tabs", tabs));
+        add(new TabbedPanel("tabs", tabs));
 
     }
 

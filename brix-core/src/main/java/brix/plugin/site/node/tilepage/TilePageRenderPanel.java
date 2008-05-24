@@ -6,8 +6,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.xmlpull.v1.XmlPullParserException;
 
+import brix.Brix;
 import brix.Path;
-import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -62,7 +62,7 @@ public class TilePageRenderPanel extends Panel<JcrNode>
         JcrNode node = (JcrNode)getModelObject();
         Action action = new SiteNodeAction(Action.Context.PRESENTATION,
                 SiteNodeAction.Type.NODE_VIEW, node);
-        return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+        return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
     private static class RawLabel extends Label

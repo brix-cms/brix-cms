@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.Model;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Plugin;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
@@ -32,7 +31,7 @@ public class PublishingPlugin implements Plugin
     
     public static PublishingPlugin get()
     {
-        return get(BrixRequestCycle.Locator.getBrix());
+        return get(Brix.get());
     }
     
     public void publish(Workspace workspace, String targetState)
@@ -64,10 +63,11 @@ public class PublishingPlugin implements Plugin
             target = sitePlugin.createSite(name, targetState);
         }
         
-        JcrSession sourceSession = BrixRequestCycle.Locator.getSession(workspace.getId());
-        JcrSession targetSession = BrixRequestCycle.Locator.getSession(target.getId());
+        Brix brix = Brix.get();
+        JcrSession sourceSession = brix.getCurrentSession(workspace.getId());
+        JcrSession targetSession = brix.getCurrentSession(target.getId());
         
-        BrixRequestCycle.Locator.getBrix().clone(sourceSession, targetSession);        
+        brix.clone(sourceSession, targetSession);        
     }
     
     private static String ID = PublishingPlugin.class.getName();

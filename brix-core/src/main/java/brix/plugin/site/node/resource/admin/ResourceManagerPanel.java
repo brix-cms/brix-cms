@@ -3,12 +3,14 @@ package brix.plugin.site.node.resource.admin;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.BrixRequestCycle.Locator;
+import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixFileNode;
@@ -17,9 +19,6 @@ import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.node.resource.ResourceManager;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
-import brix.web.tab.AbstractBrixTab;
-import brix.web.tab.BrixTab;
-import brix.web.tab.BrixTabbedPanel;
 
 public class ResourceManagerPanel extends NodeManagerPanel
 {
@@ -40,7 +39,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
 
         List<ITab> tabs = new ArrayList<ITab>();
 
-        tabs.add(new AbstractBrixTab(new Model("View"))
+        tabs.add(new AbstractTab(new Model("View"))
         {
             @Override
             public Panel getPanel(String panelId)
@@ -56,7 +55,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
 
         });
 
-        tabs.add(new AbstractBrixTab(new Model("Edit"))
+        tabs.add(new AbstractTab(new Model("Edit"))
         {
             @Override
             public Panel getPanel(String panelId)
@@ -71,7 +70,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
             }
         });
 
-        tabs.add(new AbstractBrixTab(new Model("Properties"))
+        tabs.add(new AbstractTab(new Model("Properties"))
         {
             @Override
             public Panel getPanel(String panelId)
@@ -86,7 +85,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
             }
         });
 
-        tabs.add(new AbstractBrixTab(new Model("Download"))
+        tabs.add(new AbstractTab(new Model("Download"))
         {
             @Override
             public Panel getPanel(String panelId)
@@ -101,7 +100,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
             }
         });
 
-        add(new BrixTabbedPanel("tabbedPanel", tabs));
+        add(new TabbedPanel("tabbedPanel", tabs));
 
     }
 
@@ -109,14 +108,14 @@ public class ResourceManagerPanel extends NodeManagerPanel
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                 SiteNodeAction.Type.NODE_VIEW, getNode());
-        return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+        return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
     private boolean hasEditPermission()
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                 SiteNodeAction.Type.NODE_EDIT, getNode());
-        return Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+        return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
 }

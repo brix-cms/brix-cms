@@ -17,8 +17,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 
+import brix.Brix;
 import brix.BrixNodeModel;
-import brix.BrixRequestCycle.Locator;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
@@ -172,7 +172,7 @@ public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
             Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                     SiteNodeAction.Type.NODE_VIEW, node);
             if (!node.isHidden() &&
-                    Locator.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+                    Brix.get().getAuthorizationStrategy().isActionAuthorized(action))
             {
                 res.add(node);
             }
