@@ -8,10 +8,9 @@ import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.jcr.api.JcrSession;
 
-public class WicketRequestCycle extends WebRequestCycle implements BrixRequestCycle
+public class WicketRequestCycle extends WebRequestCycle 
 {
     public WicketRequestCycle(WebApplication application, WebRequest request, Response response)
     {

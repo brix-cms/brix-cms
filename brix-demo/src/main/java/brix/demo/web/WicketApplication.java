@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brix.Brix;
-import brix.BrixRequestCycle;
 import brix.Path;
 import brix.demo.ApplicationProperties;
 import brix.demo.web.admin.AdminPage;
@@ -91,8 +90,7 @@ public class WicketApplication extends WebApplication
                 String nodePath = SitePlugin.get().toRealWebNodePath(path.toString());
 
                 String workspace = getWorkspace();
-                JcrSession session = ((BrixRequestCycle)RequestCycle.get())
-                        .getJcrSession(workspace);
+                JcrSession session = brix.getCurrentSession(workspace);
                 if (session.itemExists(nodePath))
                     return (JcrNode)session.getItem(nodePath);
                 else
