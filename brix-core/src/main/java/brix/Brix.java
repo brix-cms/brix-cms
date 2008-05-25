@@ -279,7 +279,7 @@ public abstract class Brix
             }
             catch (Exception ignore)
             {
-                logger.warn("Error registering brix namespace, may already be registered", ignore);
+                //logger.warn("Error registering brix namespace, may already be registered", ignore);
             }
 
             EventUtil.registerSaveEventListener(new JcrEventListener());
