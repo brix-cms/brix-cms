@@ -274,11 +274,12 @@ public abstract class Brix
 
             try
             {
+                logger.info("Registering Brix JCR Namespace: {}", Brix.NS);
                 nr.registerNamespace(Brix.NS, "http://brix-cms.googlecode.com");
             }
             catch (Exception ignore)
             {
-
+                logger.warn("Error registering brix namespace, may already be registered", ignore);
             }
 
             EventUtil.registerSaveEventListener(new JcrEventListener());
@@ -297,7 +298,7 @@ public abstract class Brix
         }
         catch (Exception e)
         {
-            log.error("Couldn't init jackrabbit repository, make sure you"
+            throw new RuntimeException("Couldn't init jackrabbit repository, make sure you"
                 + " have the jcr.repository.location config property set", e);
         }
     }
