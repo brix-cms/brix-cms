@@ -63,6 +63,7 @@ public class ThreadLocalSessionFactory implements JcrSessionFactory
                 throw new CannotOpenJcrSessionException(workspace, e);
             }
             map.put(workspace, session);
+            container.set(map);
         }
         return session;
     }
