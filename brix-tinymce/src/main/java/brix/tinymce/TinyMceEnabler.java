@@ -34,7 +34,7 @@ public class TinyMceEnabler extends AbstractBehavior
     {
 
         response.renderJavascriptReference(new ResourceReference(TinyMceEnabler.class,
-            "tinymce/tiny_mce.js"));
+            "tiny_mce/tiny_mce.js"));
 
         response.renderJavascriptReference(new ResourceReference(TinyMceEnabler.class,
         "brix_plugin.js"));
