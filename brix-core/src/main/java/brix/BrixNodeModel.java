@@ -8,15 +8,16 @@ import org.apache.wicket.util.lang.Objects;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.jcr.wrapper.BrixNode;
 
-public class BrixNodeModel implements IModel<JcrNode>
+public class BrixNodeModel implements IModel<BrixNode>
 {
 
     private String id;
     private String workspaceName;
-    private transient JcrNode node;
+    private transient BrixNode node;
 
-    public BrixNodeModel(JcrNode node)
+    public BrixNodeModel(BrixNode node)
     {
         this.node = node;
         if (node != null)
@@ -33,16 +34,16 @@ public class BrixNodeModel implements IModel<JcrNode>
         this.workspaceName = workspaceName;
     }
 
-    public JcrNode getObject()
+    public BrixNode getObject()
     {
         if (node == null)
         {
             node = loadNode(id);
         }
-        return (JcrNode)node;
+        return node;
     }
 
-    public void setObject(JcrNode node)
+    public void setObject(BrixNode node)
     {
         if (node == null)
         {
@@ -63,15 +64,15 @@ public class BrixNodeModel implements IModel<JcrNode>
         node = null;
     }
 
-    private JcrNode loadNode(String id)
+    private BrixNode loadNode(String id)
     {
         if (id != null)
         {
             JcrSession session = Brix.get().getCurrentSession(workspaceName);
             if (id.startsWith("/"))
-                return (JcrNode)session.getItem(id);
+                return (BrixNode) session.getItem(id);
             else
-                return session.getNodeByUUID(id);
+                return (BrixNode) session.getNodeByUUID(id);
         }
         else
         {

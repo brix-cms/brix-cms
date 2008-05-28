@@ -28,8 +28,8 @@ import brix.Path;
 import brix.demo.ApplicationProperties;
 import brix.demo.web.admin.AdminPage;
 import brix.jcr.ThreadLocalSessionFactory;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.tilepage.TilePageNode;
 import brix.web.BrixRequestCycleProcessor;
@@ -85,14 +85,14 @@ public class WicketApplication extends WebApplication
         {
 
             @Override
-            public JcrNode getNodeForUriPath(Path path)
+            public BrixNode getNodeForUriPath(Path path)
             {
                 String nodePath = SitePlugin.get().toRealWebNodePath(path.toString());
 
                 String workspace = getWorkspace();
                 JcrSession session = brix.getCurrentSession(workspace);
                 if (session.itemExists(nodePath))
-                    return (JcrNode)session.getItem(nodePath);
+                    return (BrixNode)session.getItem(nodePath);
                 else
                     return null;
             }
@@ -105,7 +105,7 @@ public class WicketApplication extends WebApplication
             }
 
             @Override
-            public Path getUriPathForNode(JcrNode node)
+            public Path getUriPathForNode(BrixNode node)
             {
                 return new Path(SitePlugin.get().fromRealWebNodePath(node.getPath()));
             }
@@ -151,7 +151,7 @@ public class WicketApplication extends WebApplication
         mount(new BrixNodePageUrlCodingStrategy()
         {
             @Override
-            protected BrixNodeWebPage newPageInstance(IModel<JcrNode> nodeModel,
+            protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
                     BrixPageParameters pageParameters)
             {
                 throw new UnsupportedOperationException();
@@ -193,8 +193,8 @@ public class WicketApplication extends WebApplication
 
                 brix.initWorkspace(w, session);
 
-                JcrNode siteRoot = (JcrNode)session.getItem(sp.getSiteRootPath());
-                JcrNode index = siteRoot.addNode("index.html", "nt:file");
+                BrixNode siteRoot = (BrixNode)session.getItem(sp.getSiteRootPath());
+                BrixNode index = (BrixNode) siteRoot.addNode("index.html", "nt:file");
                 TilePageNode node = TilePageNode.initialize(index);
                 node.setData("<html><head></head><body>Hello, world!</body></html>");
                 session.save();
