@@ -13,7 +13,8 @@ import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
-import brix.plugin.site.node.resource.admin.ResourceManagerPanel;
+import brix.plugin.site.SitePlugin;
+import brix.plugin.site.node.resource.admin.ManageResourceNodeTabFactory;
 import brix.plugin.site.node.resource.admin.UploadResourcesPanel;
 import brix.plugin.site.node.resource.managers.ImageResourceManager;
 import brix.plugin.site.node.resource.managers.TextResourceManager;
@@ -24,10 +25,11 @@ public class ResourceNodePlugin implements SiteNodePlugin
 
     public static final String TYPE = Brix.NS_PREFIX + "resource";
 
-    public ResourceNodePlugin()
+    public ResourceNodePlugin(SitePlugin sp)
     {
         registerBuiltInManagers();
         registerDefaultMimeTypes();
+        sp.registerManageNodeTabFactory(new ManageResourceNodeTabFactory());
     }
 
     public String getNodeType()
@@ -38,11 +40,6 @@ public class ResourceNodePlugin implements SiteNodePlugin
     public String getName()
     {
         return "Resource";
-    }
-
-    public NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel)
-    {
-        return new ResourceManagerPanel(id, nodeModel);
     }
 
     public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
@@ -133,5 +130,5 @@ public class ResourceNodePlugin implements SiteNodePlugin
     }
 
     private final List<ResourceManager> resourceManagers = new ArrayList<ResourceManager>();
-
+    
 }

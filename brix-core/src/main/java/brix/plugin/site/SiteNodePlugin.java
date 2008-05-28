@@ -29,8 +29,6 @@ public interface SiteNodePlugin
 
     String getName();
 
-    NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel);
-
     IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters);
 
     NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode);

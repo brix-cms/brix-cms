@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -14,29 +13,43 @@ import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.node.resource.ResourceManager;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 
-public class ResourceManagerPanel extends NodeManagerPanel
+public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
 {
-
-    private ResourceManager getManager()
+	
+    private static ResourceManager getManager(IModel<BrixNode> nodeModel)
     {
-
-        BrixFileNode node = (BrixFileNode)getModelObject();
+        BrixFileNode node = (BrixFileNode) nodeModel.getObject();
 
         ResourceNodePlugin plugin = (ResourceNodePlugin)SitePlugin.get().getNodePluginForNode(node);
 
         return plugin.getResourceManagerForMimeType(node.getMimeType());
     }
-
-    public ResourceManagerPanel(String id, final IModel<BrixNode> nodeModel)
+    
+    public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
     {
-        super(id, nodeModel);
+    	if (ResourceNodePlugin.TYPE.equals(nodeModel.getObject().getNodeType()))
+    	{
+    		return getTabs(nodeModel);
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    public int getPriority()
+    {
+    	return 0;
+    }
 
+    private static List <ITab> getTabs(final IModel<BrixNode> nodeModel)
+    {    
         List<ITab> tabs = new ArrayList<ITab>();
 
         tabs.add(new AbstractTab(new Model("View"))
@@ -44,13 +57,14 @@ public class ResourceManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return getManager().newViewer(panelId, nodeModel);
+                return getManager(nodeModel).newViewer(panelId, nodeModel);
             }
 
             @Override
             public boolean isVisible()
             {
-                return getManager() != null && getManager().hasViewer() && hasViewPermission();
+            	ResourceManager manager = getManager(nodeModel);
+                return manager != null && manager.hasViewer() && hasViewPermission(nodeModel);
             }
 
         });
@@ -60,13 +74,14 @@ public class ResourceManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return getManager().newEditor(panelId, nodeModel);
+                return getManager(nodeModel).newEditor(panelId, nodeModel);
             }
 
             @Override
             public boolean isVisible()
             {
-                return getManager() != null && getManager().hasEditor() && hasEditPermission();
+            	ResourceManager manager = getManager(nodeModel);
+                return manager != null && manager.hasEditor() && hasEditPermission(nodeModel);
             }
         });
 
@@ -81,7 +96,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                return hasEditPermission();
+                return hasEditPermission(nodeModel);
             }
         });
 
@@ -96,25 +111,24 @@ public class ResourceManagerPanel extends NodeManagerPanel
             @Override
             public boolean isVisible()
             {
-                return hasViewPermission();
+                return hasViewPermission(nodeModel);
             }
         });
 
-        add(new TabbedPanel("tabbedPanel", tabs));
-
+        return tabs;
     }
 
-    private boolean hasViewPermission()
+    private static boolean hasViewPermission(IModel<BrixNode> model)
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                SiteNodeAction.Type.NODE_VIEW, getNode());
+                SiteNodeAction.Type.NODE_VIEW, model.getObject());
         return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
-    private boolean hasEditPermission()
+    private static boolean hasEditPermission(IModel<BrixNode> model)
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                SiteNodeAction.Type.NODE_EDIT, getNode());
+                SiteNodeAction.Type.NODE_EDIT, model.getObject());
         return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 

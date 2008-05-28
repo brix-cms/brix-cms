@@ -12,6 +12,7 @@ import brix.Path;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
+import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.nodepage.ForbiddenPage;
@@ -21,11 +22,6 @@ public class FolderNodePlugin implements SiteNodePlugin
 {
 
     public static final String TYPE = Brix.NS_PREFIX + "folder";
-
-    public NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel)
-    {
-        return new FolderManagerPanel(id, nodeModel);
-    }
 
     public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
     {
@@ -80,4 +76,8 @@ public class FolderNodePlugin implements SiteNodePlugin
         return "Folder";
     }
 
+    public FolderNodePlugin(SitePlugin sp)
+	{
+		sp.registerManageNodeTabFactory(new ManageFolderNodeTabFactory());
+	}
 }

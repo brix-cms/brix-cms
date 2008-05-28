@@ -40,8 +40,17 @@ public class SitePlugin implements Plugin
     public SitePlugin(Brix brix)
     {
         this.brix = brix;
-        registerNodePlugin(new FolderNodePlugin());
-        registerNodePlugin(new ResourceNodePlugin());
+        registerNodePlugin(new FolderNodePlugin(this));
+        registerNodePlugin(new ResourceNodePlugin(this));
+    }
+    
+    public void registerManageNodeTabFactory(ManageNodeTabFactory factory)
+    {
+    	if (factory == null)
+    	{
+    		throw new IllegalArgumentException("Argument 'factory' cannot be null");
+    	}
+    	brix.getConfig().getRegistry().register(ManageNodeTabFactory.POINT, factory);
     }
 
     public void registerNodePlugin(SiteNodePlugin plugin)
@@ -94,7 +103,7 @@ public class SitePlugin implements Plugin
         String state = getWorkspaceState(workspace);
         if (!Strings.isEmpty(state))
         {
-            name = name + "- " + state;
+            name = name + " - " + state;
         }
         return name;
     }

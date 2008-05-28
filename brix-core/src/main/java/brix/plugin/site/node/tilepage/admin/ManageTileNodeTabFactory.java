@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -13,16 +12,33 @@ import org.apache.wicket.model.Model;
 import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.admin.NodeManagerPanel;
+import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.node.tilepage.TilePageNodePlugin;
+import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 
-public class PageManagerPanel extends NodeManagerPanel
+public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 {
-
-    public PageManagerPanel(String id, IModel<BrixNode> nodeModel)
+	public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
+	{
+		String type = nodeModel.getObject().getNodeType();
+		if (TilePageNodePlugin.TYPE.equals(type) || TileTemplateNodePlugin.TYPE.equals(type))
+		{
+			return getTabs(nodeModel);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public int getPriority()
+	{
+		return 0;
+	}
+	
+    private static List<ITab> getTabs(final IModel<BrixNode> nodeModel)
     {
-        super(id, nodeModel);
-
         List<ITab> tabs = new ArrayList<ITab>();
 
         tabs.add(new AbstractTab(new Model("view"))
@@ -31,13 +47,13 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new ViewTab(panelId, PageManagerPanel.this.getModel());
+                return new ViewTab(panelId, nodeModel);
             }
 
             @Override
             public boolean isVisible()
             {
-                return hasViewPermission();
+                return hasViewPermission(nodeModel);
             }
 
         });
@@ -48,13 +64,13 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new EditTab(panelId, PageManagerPanel.this.getModel());
+                return new EditTab(panelId, nodeModel);
             }
 
             @Override
             public boolean isVisible()
             {
-                return hasEditPermission();
+                return hasEditPermission(nodeModel);
             }
 
         });
@@ -64,13 +80,13 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new TilesPanel(panelId, PageManagerPanel.this.getModel());
+                return new TilesPanel(panelId, nodeModel);
             }
 
             @Override
             public boolean isVisible()
             {
-                return hasEditPermission();
+                return hasEditPermission(nodeModel);
             }
 
         });
@@ -81,31 +97,30 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new ConvertTab(panelId, PageManagerPanel.this.getModel());
+                return new ConvertTab(panelId, nodeModel);
             }
 
             @Override
             public boolean isVisible()
             {
-                return hasEditPermission();
+                return hasEditPermission(nodeModel);
             }
         });
 
-        add(new TabbedPanel("tabs", tabs));
-
+        return tabs;
     }
 
-    private boolean hasViewPermission()
+    private static boolean hasViewPermission(IModel<BrixNode> nodeModel)
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                SiteNodeAction.Type.NODE_VIEW, getNode());
+                SiteNodeAction.Type.NODE_VIEW, nodeModel.getObject());
         return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
-    private boolean hasEditPermission()
+    private static boolean hasEditPermission(IModel<BrixNode> nodeModel)
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                SiteNodeAction.Type.NODE_EDIT, getNode());
+                SiteNodeAction.Type.NODE_EDIT, nodeModel.getObject());
         return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 

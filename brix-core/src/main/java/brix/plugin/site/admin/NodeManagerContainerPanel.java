@@ -10,7 +10,6 @@ import javax.jcr.ReferentialIntegrityException;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -28,7 +27,6 @@ import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SiteNavigationTreeNode;
-import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.auth.SiteNodeAction.Type;
@@ -153,13 +151,10 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 
 		});
 
-		editor = new WebMarkupContainer("editor");
+		editor = new WebMarkupContainer(EDITOR_ID);
 		add(editor);
 		
-		SiteNodePlugin p = SitePlugin.get().getNodePluginForNode(model.getObject());
-		setupEditor(p.newManageNodePanel(EDITOR_ID, model));
-		
-	//	setupTabbedPanel(model);
+		setupTabbedPanel(model);
 
 		add(new SessionFeedbackPanel("sessionFeedback"));
 	}
@@ -233,7 +228,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 
 	private void setupTabbedPanel(IModel<BrixNode> nodeModel)
 	{
-		setupEditor(new TabbedPanel("tabbedPanel", getTabs(nodeModel)));
+		setupEditor(new NodeManagerTabbedPanel(EDITOR_ID, getTabs(nodeModel)));
 	}
 
 	private static final String EDITOR_ID = "editor";

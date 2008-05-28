@@ -34,11 +34,6 @@ public class FallbackNodePlugin implements SiteNodePlugin
         return new EmptyPanel(id);
     }
 
-    public NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel)
-    {
-        return new EmptyPanel(id);
-    }
-
     public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
     {
         return EmptyRequestTarget.getInstance();

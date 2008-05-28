@@ -2,21 +2,21 @@ package brix.plugin.site.node.tilepage;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
+import brix.Brix;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
-import brix.plugin.site.node.tilepage.admin.PageManagerPanel;
+import brix.plugin.site.node.tilepage.admin.ManageTileNodeTabFactory;
 import brix.plugin.site.node.tilepage.admin.Tile;
-import brix.plugin.site.node.tilepage.exception.TileAlreadyRegisteredException;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.BrixNodeWebPage;
@@ -25,98 +25,99 @@ import brix.web.tile.unknown.UnknownTile;
 
 public abstract class TileNodePlugin implements SiteNodePlugin
 {
+	public TileNodePlugin(Brix brix)
+	{
+		registerManageNodeTabFactory(brix);
+	}
+	
+	private void registerManageNodeTabFactory(Brix brix)
+	{
+		Collection<ManageNodeTabFactory> factories = brix.getConfig().getRegistry().lookupCollection(ManageNodeTabFactory.POINT);
+		boolean found = false;
+		for (ManageNodeTabFactory f : factories)
+		{
+			if (f instanceof ManageTileNodeTabFactory)
+			{
+				found = true;
+				break;
+			}
+		}	
+		if (!found)
+		{
+			SitePlugin sp = SitePlugin.get(brix);
+			sp.registerManageNodeTabFactory(new ManageTileNodeTabFactory());
+		}
+	}
 
-    private Map<String, Tile> tiles = new HashMap<String, Tile>();
+	public abstract String getNodeType();
 
-    public abstract String getNodeType();
+	private final BrixNodePageUrlCodingStrategy urlCodingStrategy = new BrixNodePageUrlCodingStrategy()
+	{
+		@Override
+		protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters)
+		{
+			return new TilePageRenderPage(nodeModel, pageParameters);
+		}
+	};
 
-    public NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel)
-    {
-        return new PageManagerPanel(id, nodeModel);
-    }
+	public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
+	{
+		return urlCodingStrategy.decode(requestParameters, nodeModel);
+	}
 
-    private final BrixNodePageUrlCodingStrategy urlCodingStrategy = new BrixNodePageUrlCodingStrategy()
-    {
-        @Override
-        protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
-                BrixPageParameters pageParameters)
-        {
-            return new TilePageRenderPage(nodeModel, pageParameters);
-        }
-    };
+	public abstract NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode);
 
+	public NodeConverter getConverterForNode(BrixNode node)
+	{
+		BrixFileNode fileNode = (BrixFileNode) node;
+		if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType()))
+		{
+			String mimeType = fileNode.getMimeType();
+			if (mimeType != null && (mimeType.startsWith("text/") || mimeType.equals("application/xml")))
+				return new FromResourceConverter(getNodeType());
+		}
 
+		return null;
+	}
 
-    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
-    {
-        return urlCodingStrategy.decode(requestParameters, nodeModel);
-    }
+	private static class FromResourceConverter extends SetTypeConverter
+	{
+		public FromResourceConverter(String type)
+		{
+			super(type);
+		}
+	};
 
-    public abstract NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode);
+	protected static class SetTypeConverter implements NodeConverter
+	{
+		private final String type;
 
-    public NodeConverter getConverterForNode(BrixNode node)
-    {
-        BrixFileNode fileNode = (BrixFileNode)node;
-        if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType()))
-        {
-            String mimeType = fileNode.getMimeType();
-            if (mimeType != null &&
-                    (mimeType.startsWith("text/") || mimeType.equals("application/xml")))
-                return new FromResourceConverter(getNodeType());
-        }
+		public SetTypeConverter(String type)
+		{
+			this.type = type;
+		}
 
-        return null;
-    }
+		public void convert(BrixNode node)
+		{
+			((BrixNode) node).setNodeType(type);
+		}
+	}
 
-    private static class FromResourceConverter extends SetTypeConverter
-    {
-        public FromResourceConverter(String type)
-        {
-            super(type);
-        }
-    };
+	public Tile getTileOfType(String type)
+	{
+		for (Tile t : getTiles())
+		{
+			if (t.getTypeName().equals(type))
+			{
+				return t;
+			}
+		}
+		return UnknownTile.INSTANCE;
+	}
 
-    protected static class SetTypeConverter implements NodeConverter
-    {
-        private final String type;
-
-        public SetTypeConverter(String type)
-        {
-            this.type = type;
-        }
-
-        public void convert(BrixNode node)
-        {
-            ((BrixNode)node).setNodeType(type);
-        }
-    }
-
-    public Tile getTileOfType(String type)
-    {
-        Tile tile = tiles.get(type);
-        if (tile != null)
-        {
-            return tile;
-        }
-        else
-        {
-            return UnknownTile.INSTANCE;
-        }
-    }
-
-    public void addTile(Tile tile)
-    {
-        if (tiles.containsKey(tile.getTypeName()))
-        {
-            throw new TileAlreadyRegisteredException("Tile with typeName '" + tile.getTypeName() +
-                    "' is already registered.");
-        }
-        tiles.put(tile.getTypeName(), tile);
-    }
-
-    public Collection<Tile> getTiles()
-    {
-        return Collections.unmodifiableCollection(tiles.values());
-    }
+	public Collection<Tile> getTiles()
+	{
+		return Collections.unmodifiableCollection(Brix.get().getConfig().getRegistry().lookupCollection(Tile.POINT));
+	}
 
 }

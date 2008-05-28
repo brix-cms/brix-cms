@@ -15,7 +15,7 @@ public interface ManageNodeTabFactory
 	{
 		public brix.registry.ExtensionPoint.Multiplicity getMultiplicity()
 		{
-			return Multiplicity.SINGLETON;
+			return Multiplicity.COLLECTION;
 		}
 
 		public String getUuid()
