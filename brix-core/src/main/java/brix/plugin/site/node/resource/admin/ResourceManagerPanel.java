@@ -12,8 +12,8 @@ import org.apache.wicket.model.Model;
 
 import brix.Brix;
 import brix.auth.Action;
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixFileNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.SiteNodeAction;
@@ -33,7 +33,7 @@ public class ResourceManagerPanel extends NodeManagerPanel
         return plugin.getResourceManagerForMimeType(node.getMimeType());
     }
 
-    public ResourceManagerPanel(String id, final IModel<JcrNode> nodeModel)
+    public ResourceManagerPanel(String id, final IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
 

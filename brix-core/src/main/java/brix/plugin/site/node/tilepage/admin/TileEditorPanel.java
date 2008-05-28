@@ -2,7 +2,7 @@ package brix.plugin.site.node.tilepage.admin;
 
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
 public abstract class TileEditorPanel<T> extends NavigationAwarePanel<T>
@@ -18,7 +18,7 @@ public abstract class TileEditorPanel<T> extends NavigationAwarePanel<T>
         super(id, model);
     }
 
-    abstract public void load(JcrNode node);
+    abstract public void load(BrixNode node);
 
-    abstract public void save(JcrNode node);
+    abstract public void save(BrixNode node);
 }

@@ -10,14 +10,14 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.TileContainerNode;
 
-public abstract class TileEditorFragment extends Fragment<JcrNode>
+public abstract class TileEditorFragment extends Fragment<BrixNode>
 {
 
     public TileEditorFragment(String id, String markupId, MarkupContainer markupProvider,
-            final IModel<JcrNode> nodeModel, final String tileId)
+            final IModel<BrixNode> nodeModel, final String tileId)
     {
         super(id, markupId, markupProvider, nodeModel);
 
@@ -40,8 +40,8 @@ public abstract class TileEditorFragment extends Fragment<JcrNode>
             @Override
             public void onSubmit()
             {
-                JcrNode node = (JcrNode)TileEditorFragment.this.getModelObject();
-                JcrNode tile = getTileContainerNode().getTile(tileId);
+                BrixNode node = TileEditorFragment.this.getModelObject();
+                BrixNode tile = getTileContainerNode().getTile(tileId);
                 node.checkout();
                 editor.save(tile);
                 node.save();

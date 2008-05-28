@@ -11,6 +11,7 @@ import brix.Path;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.node.tilepage.Markup.ComponentFragment;
 import brix.plugin.site.node.tilepage.Markup.Fragment;
@@ -18,9 +19,9 @@ import brix.plugin.site.node.tilepage.Markup.StaticFragment;
 import brix.plugin.site.node.tilepage.exception.MarkupParseException;
 import brix.web.nodepage.BrixNodeWebPage;
 
-public class TilePageRenderPanel extends Panel<JcrNode>
+public class TilePageRenderPanel extends Panel<BrixNode>
 {
-    public TilePageRenderPanel(String id, IModel<JcrNode> nodeModel, BrixNodeWebPage page)
+    public TilePageRenderPanel(String id, IModel<BrixNode> nodeModel, BrixNodeWebPage page)
     {
         super(id, nodeModel);
 

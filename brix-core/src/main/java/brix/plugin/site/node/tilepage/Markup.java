@@ -397,7 +397,7 @@ class Markup
 
         public Component newComponent(String id, BrixNodeWebPage tilePage, JcrSession session)
         {
-            TilePageNode node = (TilePageNode)tilePage.getModelObject();
+            TileContainerNode node = (TileContainerNode)tilePage.getModelObject();
             return new Label(id, node.getTitle()).setRenderBodyOnly(true);
         }
     };
@@ -413,7 +413,7 @@ class Markup
         public Component newComponent(String id, BrixNodeWebPage tilePage, JcrSession session)
         {
 
-            TilePageNode node = (TilePageNode)tilePage.getModelObject();
+            TileContainerNode node = (TileContainerNode)tilePage.getModelObject();
 
             String tileId = getAttribute(TileContainerNode.MARKUP_TILE_ID);
 

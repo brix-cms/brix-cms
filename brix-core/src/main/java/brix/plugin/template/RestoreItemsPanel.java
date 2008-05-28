@@ -16,11 +16,12 @@ import brix.BrixNodeModel;
 import brix.jcr.JcrUtil;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrWorkspace;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.picker.node.NodePickerPanel;
 
 public class RestoreItemsPanel extends SelectItemsPanel<Void>
 {
-    private IModel<JcrNode> targetNode = new BrixNodeModel(null);
+    private IModel<BrixNode> targetNode = new BrixNodeModel(null);
 
     public RestoreItemsPanel(String id, String templateWorkspaceId, final String targetWorkspaceId)
     {

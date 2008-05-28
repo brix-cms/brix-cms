@@ -9,7 +9,6 @@ import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
@@ -31,7 +30,7 @@ public abstract class TileNodePlugin implements SiteNodePlugin
 
     public abstract String getNodeType();
 
-    public NavigationAwarePanel newManageNodePanel(String id, IModel<JcrNode> nodeModel)
+    public NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel)
     {
         return new PageManagerPanel(id, nodeModel);
     }
@@ -39,7 +38,7 @@ public abstract class TileNodePlugin implements SiteNodePlugin
     private final BrixNodePageUrlCodingStrategy urlCodingStrategy = new BrixNodePageUrlCodingStrategy()
     {
         @Override
-        protected BrixNodeWebPage newPageInstance(IModel<JcrNode> nodeModel,
+        protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
                 BrixPageParameters pageParameters)
         {
             return new TilePageRenderPage(nodeModel, pageParameters);
@@ -48,14 +47,14 @@ public abstract class TileNodePlugin implements SiteNodePlugin
 
 
 
-    public IRequestTarget respond(IModel<JcrNode> nodeModel, RequestParameters requestParameters)
+    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
     {
         return urlCodingStrategy.decode(requestParameters, nodeModel);
     }
 
-    public abstract NavigationAwarePanel newCreateNodePanel(String id, IModel<JcrNode> parentNode);
+    public abstract NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode);
 
-    public NodeConverter getConverterForNode(JcrNode node)
+    public NodeConverter getConverterForNode(BrixNode node)
     {
         BrixFileNode fileNode = (BrixFileNode)node;
         if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType()))
@@ -86,7 +85,7 @@ public abstract class TileNodePlugin implements SiteNodePlugin
             this.type = type;
         }
 
-        public void convert(JcrNode node)
+        public void convert(BrixNode node)
         {
             ((BrixNode)node).setNodeType(type);
         }

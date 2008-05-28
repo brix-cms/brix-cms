@@ -12,8 +12,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.codepress.CodePressEnabler;
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixFileNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.resource.ResourceManager;
 
 public class TextResourceManager implements ResourceManager
@@ -34,12 +34,12 @@ public class TextResourceManager implements ResourceManager
         return true;
     }
 
-    public Panel newEditor(String id, IModel<JcrNode> nodeModel)
+    public Panel newEditor(String id, IModel<BrixNode> nodeModel)
     {
         return new EditorPanel(id, nodeModel);
     }
 
-    public Panel newViewer(String id, IModel<JcrNode> nodeModel)
+    public Panel newViewer(String id, IModel<BrixNode> nodeModel)
     {
         return new ViewerPanel(id, nodeModel);
     }
@@ -47,7 +47,7 @@ public class TextResourceManager implements ResourceManager
     private static class ViewerPanel extends Panel
     {
 
-        public ViewerPanel(String id, final IModel<JcrNode> nodeModel)
+        public ViewerPanel(String id, final IModel<BrixNode> nodeModel)
         {
             super(id, nodeModel);
 
@@ -66,7 +66,7 @@ public class TextResourceManager implements ResourceManager
 
     }
 
-    private static class EditorPanel extends Panel<JcrNode>
+    private static class EditorPanel extends Panel<BrixNode>
     {
 
         private BrixFileNode getFileNode()
@@ -93,7 +93,7 @@ public class TextResourceManager implements ResourceManager
 
         private String content;
 
-        public EditorPanel(String id, final IModel<JcrNode> nodeModel)
+        public EditorPanel(String id, final IModel<BrixNode> nodeModel)
         {
             super(id, nodeModel);
 

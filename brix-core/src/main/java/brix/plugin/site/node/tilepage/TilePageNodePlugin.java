@@ -3,7 +3,6 @@ package brix.plugin.site.node.tilepage;
 import org.apache.wicket.model.IModel;
 
 import brix.Brix;
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.node.tilepage.admin.CreateTilePagePanel;
@@ -20,7 +19,7 @@ public class TilePageNodePlugin extends TileNodePlugin
     }
 
     @Override
-    public NodeConverter getConverterForNode(JcrNode node)
+    public NodeConverter getConverterForNode(BrixNode node)
     {
         if (TileTemplateNodePlugin.TYPE.equals(((BrixNode)node).getNodeType()))
             return new FromTemplateConverter(getNodeType());
@@ -37,7 +36,7 @@ public class TilePageNodePlugin extends TileNodePlugin
     };
 
     @Override
-    public NavigationAwarePanel newCreateNodePanel(String id, IModel<JcrNode> parentNode)
+    public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
     {
         return new CreateTilePagePanel(id, parentNode, getNodeType());
     }

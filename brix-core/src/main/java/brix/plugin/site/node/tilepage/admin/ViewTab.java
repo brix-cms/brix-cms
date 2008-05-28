@@ -5,12 +5,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.PreviewNodeIFrame;
 
-public class ViewTab extends Panel<JcrNode> {
+public class ViewTab extends Panel<BrixNode> {
 
-	public ViewTab(String id, IModel<JcrNode> model) {
+	public ViewTab(String id, IModel<BrixNode> model) {
 		super(id, model);
 
 		add(new Label("title", new PropertyModel(model, "title")));

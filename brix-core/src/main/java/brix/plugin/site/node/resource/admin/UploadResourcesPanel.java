@@ -17,8 +17,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.io.Streams;
 
 import brix.Brix;
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixFileNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.web.ContainerFeedbackPanel;
@@ -30,7 +30,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
     private Collection<FileUpload> uploads = new ArrayList<FileUpload>();
     private boolean overwrite = false;
 
-    public UploadResourcesPanel(String id, IModel<JcrNode> model)
+    public UploadResourcesPanel(String id, IModel<BrixNode> model)
     {
         super(id, model);
         add(new ContainerFeedbackPanel("feedback", this));
@@ -50,7 +50,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
 
     private void processUploads()
     {
-        final JcrNode parentNode = getNode();
+        final BrixNode parentNode = getNode();
 
         for (FileUpload upload : uploads)
         {
@@ -70,7 +70,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
                 }
             }
 
-            JcrNode newNode = parentNode.addNode(fileName, "nt:file");
+            BrixNode newNode = (BrixNode) parentNode.addNode(fileName, "nt:file");
 
             try
             {

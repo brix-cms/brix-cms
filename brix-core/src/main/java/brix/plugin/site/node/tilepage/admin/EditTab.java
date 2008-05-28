@@ -15,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import brix.Brix;
 import brix.codepress.CodePressEnabler;
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 import brix.tinymce.TinyMceEnabler;
@@ -31,7 +32,7 @@ class EditTab extends NodeManagerPanel
     private boolean codeEditorEnabled = true;
     private boolean wysiwygEditorEnabled = false;
 
-    public EditTab(String id, final IModel<JcrNode> nodeModel)
+    public EditTab(String id, final IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
 

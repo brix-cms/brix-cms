@@ -21,7 +21,6 @@ import org.apache.wicket.util.string.Strings;
 import brix.Brix;
 import brix.BrixNodeModel;
 import brix.Path;
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
@@ -38,9 +37,9 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 		this.brix = brix;
 	}
 
-	public abstract JcrNode getNodeForUriPath(Path path);
+	public abstract BrixNode getNodeForUriPath(Path path);
 
-	public abstract Path getUriPathForNode(JcrNode node);
+	public abstract Path getUriPathForNode(BrixNode node);
 
 	public abstract int getHttpPort();
 
@@ -216,7 +215,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 			return new Path(builder.toString(), false);
 		}
 
-		private IRequestTarget getSwitchTarget(JcrNode node)
+		private IRequestTarget getSwitchTarget(BrixNode node)
 		{
 			if (node instanceof BrixNode)
 			{
@@ -247,7 +246,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
 			while (target == null)
 			{
-				final JcrNode node = getNodeForUriPath(path);
+				final BrixNode node = getNodeForUriPath(path);
 				if (node != null)
 				{
 					target = getSwitchTarget(node);

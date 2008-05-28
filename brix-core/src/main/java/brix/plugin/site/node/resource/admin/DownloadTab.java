@@ -4,13 +4,13 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.resource.ResourceRequestTarget;
 
-public class DownloadTab extends Panel<JcrNode>
+public class DownloadTab extends Panel<BrixNode>
 {
 
-    public DownloadTab(String id, final IModel<JcrNode> nodeModel)
+    public DownloadTab(String id, final IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
 

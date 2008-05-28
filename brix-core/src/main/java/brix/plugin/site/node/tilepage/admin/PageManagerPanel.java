@@ -12,14 +12,14 @@ import org.apache.wicket.model.Model;
 
 import brix.Brix;
 import brix.auth.Action;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.SiteNodeAction;
 
 public class PageManagerPanel extends NodeManagerPanel
 {
 
-    public PageManagerPanel(String id, IModel<JcrNode> nodeModel)
+    public PageManagerPanel(String id, IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
 
@@ -31,7 +31,7 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new ViewTab(panelId, getNodeModel());
+                return new ViewTab(panelId, PageManagerPanel.this.getModel());
             }
 
             @Override
@@ -48,7 +48,7 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new EditTab(panelId, getNodeModel());
+                return new EditTab(panelId, PageManagerPanel.this.getModel());
             }
 
             @Override
@@ -64,7 +64,7 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new TilesPanel(panelId, getNodeModel());
+                return new TilesPanel(panelId, PageManagerPanel.this.getModel());
             }
 
             @Override
@@ -81,7 +81,7 @@ public class PageManagerPanel extends NodeManagerPanel
             @Override
             public Panel getPanel(String panelId)
             {
-                return new ConvertTab(panelId, getNodeModel());
+                return new ConvertTab(panelId, PageManagerPanel.this.getModel());
             }
 
             @Override

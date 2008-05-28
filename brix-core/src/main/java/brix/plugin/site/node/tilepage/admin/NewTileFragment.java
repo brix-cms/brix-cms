@@ -24,13 +24,13 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.TileContainerNode;
 import brix.plugin.site.node.tilepage.TileNodePlugin;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;
 
-abstract class NewTileFragment extends Fragment<JcrNode>
+abstract class NewTileFragment extends Fragment<BrixNode>
 {
     private String newTileId;
     private String newTileTypeName;
@@ -49,7 +49,7 @@ abstract class NewTileFragment extends Fragment<JcrNode>
     }
 
     public NewTileFragment(String id, String fragmentId, MarkupContainer markupContainer,
-            final IModel<JcrNode> nodeModel)
+            final IModel<BrixNode> nodeModel)
     {
         super(id, fragmentId, markupContainer, nodeModel);
         final Form form = new Form("form");

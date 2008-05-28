@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.resource.ResourceManager;
 import brix.plugin.site.node.resource.ResourceRequestTarget;
 
@@ -35,12 +35,12 @@ public class ImageResourceManager implements ResourceManager
         return true;
     }
 
-    public Panel newEditor(String id, IModel<JcrNode> nodeModel)
+    public Panel newEditor(String id, IModel<BrixNode> nodeModel)
     {
         throw new UnsupportedOperationException();
     }
 
-    public Panel newViewer(String id, IModel<JcrNode> nodeModel)
+    public Panel newViewer(String id, IModel<BrixNode> nodeModel)
     {
         return new ViewerPanel(id, nodeModel);
     }
@@ -57,17 +57,17 @@ public class ImageResourceManager implements ResourceManager
                 getRequestCycle().setRequestTarget(new ResourceRequestTarget(getNodeModel()));
             }
 
-            abstract IModel<JcrNode> getNodeModel();
+            abstract IModel<BrixNode> getNodeModel();
         };
 
-        public ViewerPanel(String id, final IModel<JcrNode> nodeModel)
+        public ViewerPanel(String id, final IModel<BrixNode> nodeModel)
         {
             super(id, nodeModel);
 
             final ResourceBehavior behavior = new ResourceBehavior()
             {
                 @Override
-                IModel<JcrNode> getNodeModel()
+                IModel<BrixNode> getNodeModel()
                 {
                     return nodeModel;
                 }

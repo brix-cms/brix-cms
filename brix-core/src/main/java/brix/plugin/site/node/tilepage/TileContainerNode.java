@@ -11,10 +11,10 @@ import brix.Brix;
 import brix.BrixNodeModel;
 import brix.exception.BrixException;
 import brix.exception.NodeNotFoundException;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixFileNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.tilepage.admin.Tile;
 
@@ -61,7 +61,7 @@ public abstract class TileContainerNode extends BrixFileNode
         setProperty(Properties.TITLE, title);
     }
 
-    public JcrNode getTile(String id)
+    public BrixNode getTile(String id)
     {
         if (id == null)
         {
@@ -70,7 +70,7 @@ public abstract class TileContainerNode extends BrixFileNode
         JcrNodeIterator iterator = getNodes(TILE_NODE_NAME);
         while (iterator.hasNext())
         {
-            JcrNode node = iterator.nextNode();
+            BrixNode node = (BrixNode) iterator.nextNode();
             if (node.isNodeType(JCR_TYPE_BRIX_TILE) && id.equals(getTileId(node)))
             {
                 return node;
@@ -79,13 +79,13 @@ public abstract class TileContainerNode extends BrixFileNode
         return null;
     }
 
-    public List<JcrNode> getTileNodes()
+    public List<BrixNode> getTileNodes()
     {
-        List<JcrNode> result = new ArrayList<JcrNode>();
+        List<BrixNode> result = new ArrayList<BrixNode>();
         JcrNodeIterator iterator = getNodes(TILE_NODE_NAME);
         while (iterator.hasNext())
         {
-            JcrNode node = iterator.nextNode();
+            BrixNode node = (BrixNode) iterator.nextNode();
             if (node.isNodeType(JCR_TYPE_BRIX_TILE))
             {
                 result.add(node);
@@ -94,7 +94,7 @@ public abstract class TileContainerNode extends BrixFileNode
         return result;
     }
 
-    public static String getTileId(JcrNode tile)
+    public static String getTileId(BrixNode tile)
     {
         if (tile.hasProperty(Properties.TILE_ID))
         {
@@ -106,7 +106,7 @@ public abstract class TileContainerNode extends BrixFileNode
         }
     }
 
-    public static String getTileClassName(JcrNode tile)
+    public static String getTileClassName(BrixNode tile)
     {
         if (tile.hasProperty(Properties.TILE_CLASS))
         {
@@ -120,7 +120,7 @@ public abstract class TileContainerNode extends BrixFileNode
 
     public String getTileClassName(String tileId)
     {
-        JcrNode tile = getTile(tileId);
+        BrixNode tile = getTile(tileId);
         if (tile != null)
         {
             return getTileClassName(tile);
@@ -131,11 +131,11 @@ public abstract class TileContainerNode extends BrixFileNode
         }
     }
 
-    public JcrNode getTemplate()
+    public BrixNode getTemplate()
     {
         if (hasProperty(Properties.TEMPLATE))
         {
-            return getProperty(Properties.TEMPLATE).getNode();
+            return (BrixNode) getProperty(Properties.TEMPLATE).getNode();
         }
         else
         {
@@ -143,7 +143,7 @@ public abstract class TileContainerNode extends BrixFileNode
         }
     }
 
-    public void setTemplate(JcrNode node)
+    public void setTemplate(BrixNode node)
     {
         setProperty(Properties.TEMPLATE, node);
     }
@@ -156,24 +156,24 @@ public abstract class TileContainerNode extends BrixFileNode
         }
         else
         {
-            JcrNode node = SitePlugin.get().nodeForPath(this, path);
+            BrixNode node = (BrixNode) SitePlugin.get().nodeForPath(this, path);
 
             if (node == null)
             {
                 throw new NodeNotFoundException("No node found on path '" + path + "'.");
             }
 
-            setTemplate((JcrNode)node);
+            setTemplate((BrixNode)node);
         }
     }
 
     public String getTemplatePath()
     {
-        JcrNode template = getTemplate();
+        BrixNode template = getTemplate();
         return template != null ? SitePlugin.get().pathForNode(template) : null;
     }
 
-    public JcrNode createTile(String tileId, String typeName)
+    public BrixNode createTile(String tileId, String typeName)
     {
         if (tileId == null)
         {
@@ -193,7 +193,7 @@ public abstract class TileContainerNode extends BrixFileNode
             throw new BrixException("Tile with id '" + tileId + "' already exists.");
         }
 
-        JcrNode tile = addNode(TILE_NODE_NAME, JCR_TYPE_BRIX_TILE);
+        BrixNode tile = (BrixNode) addNode(TILE_NODE_NAME, JCR_TYPE_BRIX_TILE);
 
         tile.setProperty(Properties.TILE_ID, tileId);
         tile.setProperty(Properties.TILE_CLASS, typeName);
@@ -249,12 +249,12 @@ public abstract class TileContainerNode extends BrixFileNode
 
     private boolean anyTileRequiresSSL()
     {
-        List<JcrNode> tiles = getTileNodes();
-        for (JcrNode tileNode : tiles)
+        List<BrixNode> tiles = getTileNodes();
+        for (BrixNode tileNode : tiles)
         {
             String className = getTileClassName(tileNode);
             Tile tile = getNodePlugin().getTileOfType(className);
-            IModel<JcrNode> tileNodeModel = new BrixNodeModel(tileNode);
+            IModel<BrixNode> tileNodeModel = new BrixNodeModel(tileNode);
             if (tile.requiresSSL(tileNodeModel))
                 return true;
         }

@@ -2,7 +2,7 @@ package brix.plugin.site.node.tilepage;
 
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.toolbar.ToolbarBehavior;
@@ -11,7 +11,7 @@ public class TilePageRenderPage extends BrixNodeWebPage
 {
 
 
-    public TilePageRenderPage(final IModel<JcrNode> node, BrixPageParameters pageParameters)
+    public TilePageRenderPage(final IModel<BrixNode> node, BrixPageParameters pageParameters)
     {
         super(node, pageParameters);
         add(new TilePageRenderPanel("view", node, this));

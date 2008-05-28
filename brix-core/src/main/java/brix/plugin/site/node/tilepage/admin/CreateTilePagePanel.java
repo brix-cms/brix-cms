@@ -7,6 +7,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.node.tilepage.TileContainerNode;
@@ -22,7 +23,7 @@ public class CreateTilePagePanel extends NodeManagerPanel
 
     private String name;
 
-    public CreateTilePagePanel(String id, IModel<JcrNode> containerNodeModel, final String type)
+    public CreateTilePagePanel(String id, IModel<BrixNode> containerNodeModel, final String type)
     {
         super(id, containerNodeModel);
 
