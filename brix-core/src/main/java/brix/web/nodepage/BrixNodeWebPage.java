@@ -7,17 +7,18 @@ import org.apache.wicket.model.IModel;
 import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.auth.SiteNodeAction;
 
-public class BrixNodeWebPage extends WebPage
+public class BrixNodeWebPage extends WebPage<BrixNode>
 {
 
-    public BrixNodeWebPage(IModel<JcrNode> nodeModel)
+    public BrixNodeWebPage(IModel<BrixNode> nodeModel)
     {
         super(nodeModel);
     }
     
-    public BrixNodeWebPage(IModel<JcrNode> nodeModel, BrixPageParameters pageParameters)
+    public BrixNodeWebPage(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters)
     {
         super(nodeModel);
         this.pageParameters = pageParameters;
@@ -32,7 +33,7 @@ public class BrixNodeWebPage extends WebPage
 
     protected void checkAccess()
     {
-        JcrNode node = getNodeModel().getObject();
+        BrixNode node = getNodeModel().getObject();
         Action action = new SiteNodeAction(Action.Context.PRESENTATION,
                 SiteNodeAction.Type.NODE_VIEW, node);
         if (!Brix.get().getAuthorizationStrategy().isActionAuthorized(action))
@@ -50,9 +51,9 @@ public class BrixNodeWebPage extends WebPage
         return pageParameters;
     }
 
-    public IModel<JcrNode> getNodeModel()
+    public IModel<BrixNode> getNodeModel()
     {
-        return (IModel<JcrNode>)(IModel)getModel();
+        return getModel();
     }
 
     @Override

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import brix.Brix;
 import brix.Path;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.NodePageRenderRequestTarget.PageFactory;
 
@@ -95,7 +95,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         return iface;
     }
 
-    private void addIndexedParameters(BrixPageParameters parameters, IModel<JcrNode> nodeModel)
+    private void addIndexedParameters(BrixPageParameters parameters, IModel<BrixNode> nodeModel)
     {
         String requestPathString = RequestCycle.get().getRequest().getPath();
         if (!requestPathString.startsWith("/"))
@@ -118,7 +118,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         }
     }
 
-    protected abstract BrixNodeWebPage newPageInstance(IModel<JcrNode> nodeModel,
+    protected abstract BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
             BrixPageParameters pageParameters);
 
     private Page getPage(PageInfo info)
@@ -147,7 +147,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         }
     }
 
-    public IRequestTarget decode(RequestParameters requestParameters, final IModel<JcrNode> nodeModel)
+    public IRequestTarget decode(RequestParameters requestParameters, final IModel<BrixNode> nodeModel)
     {
         PageInfo pageInfo = null;
         String query = requestParameters.getQueryString();
@@ -224,7 +224,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         return res.toString();
     }
 
-    private CharSequence encode(JcrNode node, BrixPageParameters parameters, PageInfo info,
+    private CharSequence encode(BrixNode node, BrixPageParameters parameters, PageInfo info,
             String iface)
     {
         BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor)RequestCycle.get()
@@ -308,7 +308,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
 
     private CharSequence encode(BrixNodeWebPage page)
     {
-        JcrNode node = (JcrNode)page.getModelObject();
+        BrixNode node = (BrixNode)page.getModelObject();
         PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
                 .getPageMapName());
         return encode(node, page.getBrixPageParameters(), info, null);
@@ -339,7 +339,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         {
             BookmarkableListenerInterfaceRequestTarget target = (BookmarkableListenerInterfaceRequestTarget)requestTarget;
             BrixNodeWebPage page = (BrixNodeWebPage)target.getPage();
-            JcrNode node = page.getNodeModel().getObject();
+            BrixNode node = page.getNodeModel().getObject();
             PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
                     .getPageMapName());
             String componentPath = target.getComponentPath();

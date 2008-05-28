@@ -14,22 +14,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brix.Brix;
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixFileNode;
+import brix.jcr.wrapper.BrixNode;
 
 public class ResourceRequestTarget implements IRequestTarget
 {
-    private final IModel<JcrNode> node;
+    private final IModel<BrixNode> node;
     private final Boolean save;
 
-    public ResourceRequestTarget(IModel<JcrNode> node)
+    public ResourceRequestTarget(IModel<BrixNode> node)
     {
         super();
         this.node = node;
         this.save = null;
     }
 
-    public ResourceRequestTarget(IModel<JcrNode> node, boolean save)
+    public ResourceRequestTarget(IModel<BrixNode> node, boolean save)
     {
         super();
         this.node = node;

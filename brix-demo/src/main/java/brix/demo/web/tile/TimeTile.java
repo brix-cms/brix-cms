@@ -10,6 +10,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.admin.Tile;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 import brix.web.nodepage.BrixPageParameters;
@@ -17,7 +18,7 @@ import brix.web.nodepage.BrixPageParameters;
 public class TimeTile implements Tile
 {
 
-    public Component newViewer(String id, IModel<JcrNode> tileNode, BrixPageParameters pageParameters)
+    public Component newViewer(String id, IModel<BrixNode> tileNode, BrixPageParameters pageParameters)
     {
         return new TimeLabel(id, tileNode).setRenderBodyOnly(true);
     }
@@ -25,7 +26,7 @@ public class TimeTile implements Tile
     private static class TimeLabel extends Label
     {
 
-        public TimeLabel(String id, IModel<JcrNode> nodeModel)
+        public TimeLabel(String id, IModel<BrixNode> nodeModel)
         {
             super(id);
             setModel(new TimeStringModel(nodeModel));
@@ -33,9 +34,9 @@ public class TimeTile implements Tile
 
         private class TimeStringModel extends AbstractReadOnlyModel
         {
-            private final IModel<JcrNode> tileNode;
+            private final IModel<BrixNode> tileNode;
 
-            public TimeStringModel(IModel<JcrNode> tileNode)
+            public TimeStringModel(IModel<BrixNode> tileNode)
             {
                 super();
                 this.tileNode = tileNode;
@@ -66,7 +67,7 @@ public class TimeTile implements Tile
 
     }
 
-    public TileEditorPanel newEditor(String id, IModel<JcrNode> tileContainerNode)
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
     {
         return new TimeTileEditor(id, tileContainerNode);
     }
@@ -81,7 +82,7 @@ public class TimeTile implements Tile
         return "brix.web.TimeTile";
     }
 
-    public boolean requiresSSL(IModel<JcrNode> tileNode)
+    public boolean requiresSSL(IModel<BrixNode> tileNode)
     {
         return false;
     }

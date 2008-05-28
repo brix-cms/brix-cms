@@ -4,7 +4,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.admin.Tile;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 import brix.web.nodepage.BrixPageParameters;
@@ -30,29 +30,29 @@ public class UnknownTile implements Tile
         }
 
         @Override
-        public void load(JcrNode node)
+        public void load(BrixNode node)
         {
 
         }
 
         @Override
-        public void save(JcrNode node)
+        public void save(BrixNode node)
         {
 
         }
     };
 
-    public TileEditorPanel newEditor(String id, IModel<JcrNode> tileContainerNode)
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
     {
         return new Editor(id);
     }
 
-    public Component newViewer(String id, IModel<JcrNode> tileNode, BrixPageParameters tilePageParameters)
+    public Component newViewer(String id, IModel<BrixNode> tileNode, BrixPageParameters tilePageParameters)
     {
         return new Label(id, "Unknown Tile");
     }
 
-    public boolean requiresSSL(IModel<JcrNode> tileNode)
+    public boolean requiresSSL(IModel<BrixNode> tileNode)
     {
         return false;
     }

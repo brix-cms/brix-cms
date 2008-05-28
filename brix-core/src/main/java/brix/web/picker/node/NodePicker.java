@@ -15,9 +15,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-
 import brix.web.picker.node.NodePickerTreeModel.NodePickerTreeNode;
 
 import com.inmethod.grid.IGridColumn;
@@ -29,7 +28,7 @@ import com.inmethod.grid.treegrid.TreeGrid;
 public class NodePicker extends Panel
 {
 
-    public NodePicker(String id, IModel<JcrNode> model, String workspaceName, NodeFilter filter)
+    public NodePicker(String id, IModel<BrixNode> model, String workspaceName, NodeFilter filter)
     {
         super(id, model);
 
@@ -51,7 +50,7 @@ public class NodePicker extends Panel
 
     protected void selectInitial()
     {
-        JcrNode node = (JcrNode)getModelObject();
+        BrixNode node = (BrixNode)getModelObject();
         if (node != null)
         {
             NodePickerTreeNode treeNode = treeModel.treeNodeFor(node);
@@ -79,7 +78,7 @@ public class NodePicker extends Panel
             @Override
             protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
             {
-                JcrNode node = ((NodePickerTreeNode)rowModel.getObject()).getNode();
+                BrixNode node = ((NodePickerTreeNode)rowModel.getObject()).getNode();
                 if (filter == null || filter.isNodeAllowed(node))
                 {
                     if (isItemSelected(rowModel) == false)
@@ -105,7 +104,7 @@ public class NodePicker extends Panel
                     @Override
                     public void onComponentTag(Component component, ComponentTag tag)
                     {
-                        JcrNode node = ((NodePickerTreeNode)component.getModelObject()).getNode();
+                        BrixNode node = ((NodePickerTreeNode)component.getModelObject()).getNode();
                         if (filter != null && filter.isNodeAllowed(node) == false)
                         {
                             tag.put("class", "disabled");
@@ -120,7 +119,7 @@ public class NodePicker extends Panel
         add(grid);
     };
 
-    protected void onNodeSelected(JcrNode node)
+    protected void onNodeSelected(BrixNode node)
     {
         setModelObject(node);
     }

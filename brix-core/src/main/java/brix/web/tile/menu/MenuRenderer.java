@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.plugin.menu.Menu.Entry;
@@ -18,10 +18,10 @@ import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.reference.Reference;
 import brix.web.reference.Reference.Type;
 
-public class MenuRenderer extends WebComponent<JcrNode>
+public class MenuRenderer extends WebComponent<BrixNode>
 {
 
-    public MenuRenderer(String id, IModel<JcrNode> model)
+    public MenuRenderer(String id, IModel<BrixNode> model)
     {
         super(id, model);
     }

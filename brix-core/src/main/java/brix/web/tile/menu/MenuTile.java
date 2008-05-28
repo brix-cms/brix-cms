@@ -3,7 +3,7 @@ package brix.web.tile.menu;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.admin.Tile;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 import brix.web.nodepage.BrixPageParameters;
@@ -22,18 +22,18 @@ public class MenuTile implements Tile
         return TYPE_NAME;
     }
 
-    public TileEditorPanel< ? > newEditor(String id, IModel<JcrNode> tileContainerNode)
+    public TileEditorPanel< ? > newEditor(String id, IModel<BrixNode> tileContainerNode)
     {
         return new MenuTileEditor(id, tileContainerNode);
     }
 
-    public Component< ? > newViewer(String id, IModel<JcrNode> tileNode,
+    public Component< ? > newViewer(String id, IModel<BrixNode> tileNode,
             BrixPageParameters tilePageParameters)
     {
         return new MenuRenderer(id, tileNode);
     }
 
-    public boolean requiresSSL(IModel<JcrNode> tileNode)
+    public boolean requiresSSL(IModel<BrixNode> tileNode)
     {
         // TODO Auto-generated method stub
         return false;

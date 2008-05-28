@@ -11,7 +11,6 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 
 import brix.BrixNodeModel;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrValue;
 import brix.jcr.wrapper.BrixNode;
@@ -21,7 +20,7 @@ import brix.web.nodepage.BrixPageParameters;
 public class Reference implements Serializable, IDetachable
 {
 
-    private IModel<JcrNode> nodeModel;
+    private IModel<BrixNode> nodeModel;
     private String url;
     private BrixPageParameters parameters;
 
@@ -62,7 +61,7 @@ public class Reference implements Serializable, IDetachable
         return type;
     }
 
-    public IModel<JcrNode> getNodeModel()
+    public IModel<BrixNode> getNodeModel()
     {
         if (nodeModel == null)
         {
@@ -71,7 +70,7 @@ public class Reference implements Serializable, IDetachable
         return nodeModel;
     }
 
-    public void setNodeModel(IModel<JcrNode> nodeModel)
+    public void setNodeModel(IModel<BrixNode> nodeModel)
     {
         this.nodeModel = nodeModel;
     }
@@ -102,7 +101,7 @@ public class Reference implements Serializable, IDetachable
 
     public IRequestTarget getRequestTarget()
     {
-        final IModel<JcrNode> model = getNodeModel();
+        final IModel<BrixNode> model = getNodeModel();
         return new BrixNodeRequestTarget(model != null ? model : new BrixNodeModel("invalidId",
                 "invalidWorkspace"), parameters != null ? parameters : new BrixPageParameters())
         {
@@ -121,7 +120,7 @@ public class Reference implements Serializable, IDetachable
         };
     }
 
-    public void save(JcrNode parent, String property)
+    public void save(BrixNode parent, String property)
     {
         if (parent.hasNode(property))
         {
@@ -129,12 +128,12 @@ public class Reference implements Serializable, IDetachable
         }
         if (isEmpty() == false || hasParameters())
         {
-            JcrNode child = parent.addNode(property, "nt:unstructured");
+            BrixNode child = (BrixNode) parent.addNode(property, "nt:unstructured");
             save(child);
         }
     }
 
-    public void save(JcrNode node)
+    public void save(BrixNode node)
     {
 
         BrixNode brixNode = (BrixNode)node;
@@ -160,7 +159,7 @@ public class Reference implements Serializable, IDetachable
             {
                 for (String s : parameters.getQueryParamKeys())
                 {
-                    JcrNode param = node.addNode("parameter", "nt:unstructured");
+                    BrixNode param = (BrixNode) node.addNode("parameter", "nt:unstructured");
                     param.setProperty("key", s);
                     List<StringValue> values = parameters.getQueryParams(s);
                     String valuesArray[] = new String[values.size()];
@@ -174,22 +173,22 @@ public class Reference implements Serializable, IDetachable
         }
     }
 
-    public static Reference load(JcrNode node, String property)
+    public static Reference load(BrixNode node, String property)
     {
         Reference ref = new Reference();
         if (node.hasNode(property))
         {
-            ref.load(node.getNode(property));
+            ref.load((BrixNode) node.getNode(property));
         }
         return ref;
     }
 
-    public void load(JcrNode node)
+    public void load(BrixNode node)
     {
         setType(Type.valueOf(node.getProperty("type").getString()));
         if (node.hasProperty("node"))
         {
-            setNodeModel(new BrixNodeModel(node.getProperty("node").getNode()));
+            setNodeModel(new BrixNodeModel((BrixNode) node.getProperty("node").getNode()));
         }
         if (node.hasProperty("url"))
         {
@@ -210,7 +209,7 @@ public class Reference implements Serializable, IDetachable
             JcrNodeIterator i = node.getNodes("parameter");
             while (i.hasNext())
             {
-                JcrNode n = i.nextNode();
+                BrixNode n = (BrixNode) i.nextNode();
                 if (n.hasProperty("key") && n.hasProperty("values"))
                 {
                     String key = n.getProperty("key").getString();

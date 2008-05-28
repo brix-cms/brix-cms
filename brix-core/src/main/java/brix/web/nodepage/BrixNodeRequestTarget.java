@@ -4,17 +4,17 @@ import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.BrixRequestCycleProcessor;
 
 public class BrixNodeRequestTarget implements IPageRequestTarget
 {
 
-    private final IModel<JcrNode> nodeModel;
+    private final IModel<BrixNode> nodeModel;
     private final BrixNodeWebPage page;
     private BrixPageParameters parameters;
     
-    public BrixNodeRequestTarget(IModel<JcrNode> nodeModel, BrixPageParameters parameters)
+    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel, BrixPageParameters parameters)
     {
 
         if (nodeModel == null)
@@ -32,7 +32,7 @@ public class BrixNodeRequestTarget implements IPageRequestTarget
         this.page = null;
     }
 
-    public BrixNodeRequestTarget(IModel<JcrNode> nodeModel)
+    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel)
     {
         this(nodeModel, new BrixPageParameters());
     }

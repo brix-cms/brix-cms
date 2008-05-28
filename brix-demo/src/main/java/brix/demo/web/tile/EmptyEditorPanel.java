@@ -1,6 +1,6 @@
 package brix.demo.web.tile;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 
 public class EmptyEditorPanel extends TileEditorPanel
@@ -12,12 +12,12 @@ public class EmptyEditorPanel extends TileEditorPanel
     }
 
     @Override
-    public void load(JcrNode node)
+    public void load(BrixNode node)
     {
     }
 
     @Override
-    public void save(JcrNode node)
+    public void save(BrixNode node)
     {
     }
 

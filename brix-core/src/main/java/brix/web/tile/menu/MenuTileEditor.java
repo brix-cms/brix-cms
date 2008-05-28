@@ -14,23 +14,23 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.BrixNodeModel;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.MenuPlugin;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 import brix.web.util.AbstractModel;
 
-public class MenuTileEditor extends TileEditorPanel<JcrNode>
+public class MenuTileEditor extends TileEditorPanel<BrixNode>
 {
 
-    public MenuTileEditor(String id, IModel<JcrNode> containerNode)
+    public MenuTileEditor(String id, IModel<BrixNode> containerNode)
     {
         super(id, containerNode);
 
-        IModel<List<JcrNode>> listViewModel = new LoadableDetachableModel<List<JcrNode>>()
+        IModel<List<BrixNode>> listViewModel = new LoadableDetachableModel<List<BrixNode>>()
         {
             @Override
-            protected List<JcrNode> load()
+            protected List<BrixNode> load()
             {
                 return MenuPlugin.get().getMenuNodes(
                     MenuTileEditor.this.getModelObject().getSession().getWorkspace().getName());
@@ -50,30 +50,30 @@ public class MenuTileEditor extends TileEditorPanel<JcrNode>
     }
 
     @Override
-    public void load(JcrNode node)
+    public void load(BrixNode node)
     {
         currentEntry = new MenuContainer();
         currentEntry.load(node);
     }
 
     @Override
-    public void save(JcrNode node)
+    public void save(BrixNode node)
     {
         currentEntry.save(node);
     }
 
     private MenuContainer currentEntry = new MenuContainer();
 
-    private class MenuListView extends ListView<JcrNode>
+    private class MenuListView extends ListView<BrixNode>
     {
-        public MenuListView(String id, IModel<List<JcrNode>> model)
+        public MenuListView(String id, IModel<List<BrixNode>> model)
         {
             super(id, model);
 
         }
 
         @Override
-        protected void populateItem(final ListItem<JcrNode> item)
+        protected void populateItem(final ListItem<BrixNode> item)
         {
             Link<Object> select = new Link<Object>("select")
             {
@@ -86,7 +86,7 @@ public class MenuTileEditor extends TileEditorPanel<JcrNode>
                 @Override
                 public boolean isEnabled()
                 {
-                    JcrNode current = currentEntry.getMenuNode();
+                    BrixNode current = currentEntry.getMenuNode();
                     return current == null || !item.getModelObject().equals(current);
                 }
             };
@@ -95,7 +95,7 @@ public class MenuTileEditor extends TileEditorPanel<JcrNode>
                 @Override
                 public String getObject()
                 {
-                    JcrNode node = item.getModelObject();
+                    BrixNode node = item.getModelObject();
                     Menu menu = new Menu();
                     menu.loadName(node);
                     return menu.getName();
@@ -106,9 +106,9 @@ public class MenuTileEditor extends TileEditorPanel<JcrNode>
         }
 
         @Override
-        protected IModel<JcrNode> getListItemModel(IModel<List<JcrNode>> listViewModel, int index)
+        protected IModel<BrixNode> getListItemModel(IModel<List<BrixNode>> listViewModel, int index)
         {
-            List<JcrNode> nodes = listViewModel.getObject();
+            List<BrixNode> nodes = listViewModel.getObject();
             return new BrixNodeModel(nodes.get(index));
         }
     };

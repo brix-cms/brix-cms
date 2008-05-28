@@ -13,9 +13,9 @@ import brix.plugin.site.SitePlugin;
 public class NodePathValidator implements IValidator
 {
 
-    private final IModel<JcrNode> nodeModel;
+    private final IModel<BrixNode> nodeModel;
 
-    public NodePathValidator(IModel<JcrNode> nodeModel)
+    public NodePathValidator(IModel<BrixNode> nodeModel)
     {
         this.nodeModel = nodeModel;
     }

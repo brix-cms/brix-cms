@@ -3,17 +3,17 @@ package brix.web.tile.pagetile;
 import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 import brix.web.picker.node.NodeFilter;
 import brix.web.picker.node.NodePickerPanel;
 import brix.web.picker.node.NodeTypeFilter;
 
-public class PageTileEditorPanel extends TileEditorPanel
+public class PageTileEditorPanel extends TileEditorPanel<BrixNode>
 {
 
-    public PageTileEditorPanel(String id, IModel<JcrNode> tileContainerNode)
+    public PageTileEditorPanel(String id, IModel<BrixNode> tileContainerNode)
     {
         super(id, tileContainerNode);
 
@@ -23,20 +23,20 @@ public class PageTileEditorPanel extends TileEditorPanel
         add(picker);
     }
 
-    private IModel<JcrNode> targetNodeModel = new BrixNodeModel(null);
+    private IModel<BrixNode> targetNodeModel = new BrixNodeModel(null);
 
     @Override
-    public void load(JcrNode node)
+    public void load(BrixNode node)
     {
         if (node.hasProperty("pageNode"))
         {
-            JcrNode pageNode = node.getProperty("pageNode").getNode();
+            BrixNode pageNode = (BrixNode) node.getProperty("pageNode").getNode();
             targetNodeModel.setObject(pageNode);
         }
     }
 
     @Override
-    public void save(JcrNode node)
+    public void save(BrixNode node)
     {        
         node.setProperty("pageNode", targetNodeModel.getObject());
     }

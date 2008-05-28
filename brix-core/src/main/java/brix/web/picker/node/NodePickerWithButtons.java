@@ -6,9 +6,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 
-public class NodePickerWithButtons extends Panel
+public class NodePickerWithButtons extends Panel<BrixNode>
 {
 
     public NodePickerWithButtons(String id, String workspaceName, NodeFilter nodeFilter)
@@ -17,14 +17,14 @@ public class NodePickerWithButtons extends Panel
         init(workspaceName, nodeFilter);
     }
 
-    public NodePickerWithButtons(String id, IModel model, String workspaceName,
+    public NodePickerWithButtons(String id, IModel<BrixNode> model, String workspaceName,
             NodeFilter nodeFilter)
     {
         super(id, model);
         init(workspaceName, nodeFilter);
     }
 
-    private IModel<JcrNode> nodeModel;
+    private IModel<BrixNode> nodeModel;
 
     public boolean isDisplayFiles()
     {
@@ -33,7 +33,7 @@ public class NodePickerWithButtons extends Panel
     
     private void init(String workspaceName, NodeFilter nodeFilter)
     {
-        JcrNode initial = (JcrNode)getModelObject();
+        BrixNode initial = getModelObject();
         nodeModel = new BrixNodeModel(initial);
 
         add(new NodePicker("picker", this.nodeModel, workspaceName, nodeFilter)
@@ -64,7 +64,7 @@ public class NodePickerWithButtons extends Panel
         });
     }
 
-    protected IModel<JcrNode> getNodeModel()
+    protected IModel<BrixNode> getNodeModel()
     {
         return nodeModel;
     }

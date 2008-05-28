@@ -10,7 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
 import brix.Brix;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.node.resource.admin.ResourceManagerPanel;
@@ -40,12 +40,12 @@ public class ResourceNodePlugin implements SiteNodePlugin
         return "Resource";
     }
 
-    public NavigationAwarePanel newManageNodePanel(String id, IModel<JcrNode> nodeModel)
+    public NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel)
     {
         return new ResourceManagerPanel(id, nodeModel);
     }
 
-    public IRequestTarget respond(IModel<JcrNode> nodeModel, RequestParameters requestParameters)
+    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
     {
 //    	IRequestTarget switchTarget = SwitchProtocolRequestTarget.requireProtocol(Protocol.HTTP);
 //    	if (switchTarget != null) 
@@ -58,12 +58,12 @@ public class ResourceNodePlugin implements SiteNodePlugin
 //    	}
     }
 
-    public NavigationAwarePanel newCreateNodePanel(String id, IModel<JcrNode> parentNode)
+    public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
     {
         return new UploadResourcesPanel(id, parentNode);
     }
 
-    public NodeConverter getConverterForNode(JcrNode node)
+    public NodeConverter getConverterForNode(BrixNode node)
     {
         return null;
     }

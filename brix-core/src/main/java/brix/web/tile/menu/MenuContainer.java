@@ -4,21 +4,21 @@ import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 
 public class MenuContainer implements IDetachable
 {
-    IModel<JcrNode> menuNodeModel = new BrixNodeModel(null);
+    IModel<BrixNode> menuNodeModel = new BrixNodeModel(null);
     private Menu cachedMenu;
     
-    public void setMenuNode(JcrNode node)
+    public void setMenuNode(BrixNode node)
     {
         this.cachedMenu = null;
         this.menuNodeModel.setObject(node);
     }
     
-    public JcrNode getMenuNode() 
+    public BrixNode getMenuNode() 
     {
         return menuNodeModel.getObject();
     }
@@ -91,7 +91,7 @@ public class MenuContainer implements IDetachable
     
     private static final String PROP_MENU = "menu";
     
-    public void save(JcrNode node)
+    public void save(BrixNode node)
     {
         node.setProperty(PROP_INNER_CONTAINER_STYLE_CLASS, getInnerContainerStyleClass());
         node.setProperty(PROP_OUTER_CONTAINER_STYLE_CLASS, getOuterContainerStyleClass());
@@ -100,7 +100,7 @@ public class MenuContainer implements IDetachable
         node.setProperty(PROP_MENU, getMenuNode());
     }
     
-    public void load(JcrNode node)
+    public void load(BrixNode node)
     {
         if (node.hasProperty(PROP_INNER_CONTAINER_STYLE_CLASS))
         {
@@ -120,7 +120,7 @@ public class MenuContainer implements IDetachable
         }
         if (node.hasProperty(PROP_MENU))
         {
-            setMenuNode(node.getProperty(PROP_MENU).getNode());
+            setMenuNode((BrixNode) node.getProperty(PROP_MENU).getNode());
         }
     }
     

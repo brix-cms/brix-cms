@@ -14,7 +14,6 @@ import brix.Brix;
 import brix.BrixNodeModel;
 import brix.auth.Action;
 import brix.auth.Action.Context;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.auth.SiteNodeAction;
@@ -22,9 +21,9 @@ import brix.plugin.site.auth.SiteNodeAction;
 
 public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
 {
-    private final IModel<JcrNode> nodeModel;
+    private final IModel<BrixNode> nodeModel;
 
-    public AbstractJcrTreeNode(IModel<JcrNode> nodeModel)
+    public AbstractJcrTreeNode(IModel<BrixNode> nodeModel)
     {
         if (nodeModel == null)
         {
@@ -33,7 +32,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         this.nodeModel = nodeModel;
     }
 
-    public AbstractJcrTreeNode(JcrNode node)
+    public AbstractJcrTreeNode(BrixNode node)
     {
         if (node == null)
         {
@@ -42,7 +41,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         this.nodeModel = new BrixNodeModel(node);
     }
 
-    public IModel<JcrNode> getNodeModel()
+    public IModel<BrixNode> getNodeModel()
     {
         return nodeModel;
     }
@@ -95,7 +94,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         return true;
     }
 
-    protected AbstractJcrTreeNode newTreeNode(JcrNode node)
+    protected AbstractJcrTreeNode newTreeNode(BrixNode node)
     {
         return new AbstractJcrTreeNode(node);
     }
@@ -104,13 +103,13 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
     {
         List<AbstractJcrTreeNode> children = new ArrayList<AbstractJcrTreeNode>();
         JcrNodeIterator iterator = nodeModel.getObject().getNodes();
-        List<JcrNode> entries = new ArrayList<JcrNode>((int)iterator.getSize());
+        List<BrixNode> entries = new ArrayList<BrixNode>((int)iterator.getSize());
         while (iterator.hasNext())
         {
-            entries.add(iterator.nextNode());
+            entries.add((BrixNode) iterator.nextNode());
         }
 
-        for (JcrNode entry : entries)
+        for (BrixNode entry : entries)
         {
             BrixNode brixNode = (BrixNode)entry;
             Action view = new SiteNodeAction(Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW,

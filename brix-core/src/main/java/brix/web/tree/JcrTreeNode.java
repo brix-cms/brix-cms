@@ -2,11 +2,11 @@ package brix.web.tree;
 
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 
 public interface JcrTreeNode extends TreeNode
 {
     
-    public IModel<JcrNode> getNodeModel();
+    public IModel<BrixNode> getNodeModel();
     
 }

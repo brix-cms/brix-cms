@@ -1,6 +1,5 @@
 package brix.web.tile.pagetile;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +10,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.Path;
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.TileContainerNode;
 import brix.plugin.site.node.tilepage.admin.Tile;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
@@ -34,12 +34,12 @@ public class PageTile implements Tile
         return TYPE_NAME;
     }
 
-    public TileEditorPanel newEditor(String id, IModel<JcrNode> containerNode)
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> containerNode)
     {
         return new PageTileEditorPanel(id, containerNode);
     }
 
-    public Component newViewer(String id, IModel<JcrNode> tileNode,
+    public Component newViewer(String id, IModel<BrixNode> tileNode,
             BrixPageParameters pageParameters)
     {
         return new PageTileViewerPanel(id, tileNode);
@@ -50,7 +50,7 @@ public class PageTile implements Tile
     {
     };
 
-    public boolean requiresSSL(IModel<JcrNode> tileNode)
+    public boolean requiresSSL(IModel<BrixNode> tileNode)
     {
 
         // get or create set of paths that were already processed

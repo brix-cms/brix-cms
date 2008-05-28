@@ -11,7 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.BrixNodeModel;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 
 public class ModelBuffer implements Serializable
 {
@@ -157,9 +157,9 @@ public class ModelBuffer implements Serializable
         @Override
         public void setObject(Object object)
         {
-            if (object instanceof JcrNode)
+            if (object instanceof BrixNode)
             {
-                super.setObject(new BrixNodeModel((JcrNode)object));
+                super.setObject(new BrixNodeModel((BrixNode)object));
             }
             else
             {

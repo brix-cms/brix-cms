@@ -8,8 +8,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.admin.Tile;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 import brix.web.nodepage.BrixPageParameters;
@@ -18,7 +18,7 @@ import brix.web.reference.Reference;
 public class TreeMenuTile implements Tile
 {
 
-    public TileEditorPanel newEditor(String id, IModel<JcrNode> containerNode)
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> containerNode)
     {
         return new TreeMenuTileEditorPanel(id, containerNode);
     }
@@ -28,7 +28,7 @@ public class TreeMenuTile implements Tile
         return "Tree Menu";
     }
 
-    public Component newViewer(String id, IModel<JcrNode> tileNode, BrixPageParameters pageParameters)
+    public Component newViewer(String id, IModel<BrixNode> tileNode, BrixPageParameters pageParameters)
     {
         return new TreeMenuRenderer(id, tileNode);
     }
@@ -109,7 +109,7 @@ public class TreeMenuTile implements Tile
             this.children = children;
         }
 
-        public void save(JcrNode node)
+        public void save(BrixNode node)
         {
             node.setProperty("name", getName());
             node.setProperty("itemCssId", getItemCssId());
@@ -117,12 +117,12 @@ public class TreeMenuTile implements Tile
             getReference().save(node, "reference");
             for (Item item : children)
             {
-                JcrNode child = node.addNode("child");
+                BrixNode child = (BrixNode) node.addNode("child");
                 item.save(child);
             }
         }
 
-        public void load(JcrNode node)
+        public void load(BrixNode node)
         {
             if (node.hasProperty("name"))
                 setName(node.getProperty("name").getString());
@@ -135,7 +135,7 @@ public class TreeMenuTile implements Tile
             JcrNodeIterator childNodes = node.getNodes("child");
             while (childNodes.hasNext())
             {
-                JcrNode child = childNodes.nextNode();
+                BrixNode child = (BrixNode) childNodes.nextNode();
                 Item item = new Item();
                 item.load(child);
                 children.add(item);
@@ -196,7 +196,7 @@ public class TreeMenuTile implements Tile
         }
 
         @Override
-        public void save(JcrNode node)
+        public void save(BrixNode node)
         {
             node.setProperty("selectedCssClass", getSelectedCssClass());
             node.setProperty("version", getVersion());
@@ -204,7 +204,7 @@ public class TreeMenuTile implements Tile
         }
 
         @Override
-        public void load(JcrNode node)
+        public void load(BrixNode node)
         {
             super.load(node);
             if (node.hasProperty("selectedCssClass"))
@@ -215,22 +215,22 @@ public class TreeMenuTile implements Tile
 
     }
 
-    public static void save(RootItem item, JcrNode tileNode)
+    public static void save(RootItem item, BrixNode tileNode)
     {
         if (tileNode.hasNode("data"))
         {
-            JcrNode data = tileNode.getNode("data");
+            BrixNode data = (BrixNode) tileNode.getNode("data");
             data.remove();
         }
-        JcrNode data = tileNode.addNode("data");
+        BrixNode data = (BrixNode) tileNode.addNode("data");
         item.save(data);
     }
 
-    public static void load(RootItem item, JcrNode tileNode)
+    public static void load(RootItem item, BrixNode tileNode)
     {
         if (tileNode.hasNode("data"))
         {
-            JcrNode data = tileNode.getNode("data");
+            BrixNode data = (BrixNode) tileNode.getNode("data");
             item.load(data);
         }
     }
@@ -240,7 +240,7 @@ public class TreeMenuTile implements Tile
         return "brix.web.tile.treemenu.TreeMenuTile";
     }
 
-    public boolean requiresSSL(IModel<JcrNode> data)
+    public boolean requiresSSL(IModel<BrixNode> data)
     {
         return false;
     }

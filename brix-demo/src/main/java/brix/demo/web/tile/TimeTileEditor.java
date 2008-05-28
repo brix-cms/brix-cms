@@ -10,13 +10,13 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
 
 public class TimeTileEditor extends TileEditorPanel
 {
 
-    public TimeTileEditor(String id, IModel<JcrNode> tileContainerNode)
+    public TimeTileEditor(String id, IModel<BrixNode> tileContainerNode)
     {
         super(id);
         add(new TextField("format", new PropertyModel(this, "format"))
@@ -46,7 +46,7 @@ public class TimeTileEditor extends TileEditorPanel
 
 
     @Override
-    public void load(JcrNode node)
+    public void load(BrixNode node)
     {
         if (node.hasProperty("format"))
         {
@@ -55,7 +55,7 @@ public class TimeTileEditor extends TileEditorPanel
     }
 
     @Override
-    public void save(JcrNode node)
+    public void save(BrixNode node)
     {
         node.setProperty("format", format);
     }

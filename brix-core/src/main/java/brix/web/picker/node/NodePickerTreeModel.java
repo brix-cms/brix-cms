@@ -1,7 +1,6 @@
 package brix.web.picker.node;
 
 import brix.Brix;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
@@ -13,13 +12,13 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel
     public class NodePickerTreeNode extends AbstractJcrTreeNode
     {
 
-        public NodePickerTreeNode(JcrNode node)
+        public NodePickerTreeNode(BrixNode node)
         {
             super(node);
         }
 
         @Override
-        protected AbstractJcrTreeNode newTreeNode(JcrNode node)
+        protected AbstractJcrTreeNode newTreeNode(BrixNode node)
         {
             return new NodePickerTreeNode(node);
         }
@@ -36,7 +35,7 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel
         }
     };
 
-    public NodePickerTreeNode treeNodeFor(JcrNode node)
+    public NodePickerTreeNode treeNodeFor(BrixNode node)
     {
         return new NodePickerTreeNode(node);
     }
@@ -49,7 +48,7 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel
     {
         JcrSession session = Brix.get().getCurrentSession(workspaceName);
 
-        root = new NodePickerTreeNode((JcrNode)session.getItem(SitePlugin.get().getSiteRootPath()));
+        root = new NodePickerTreeNode((BrixNode)session.getItem(SitePlugin.get().getSiteRootPath()));
     }
 
     public Object getRoot()

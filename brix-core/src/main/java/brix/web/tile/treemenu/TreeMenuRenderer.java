@@ -9,17 +9,17 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.reference.Reference;
 import brix.web.reference.Reference.Type;
 import brix.web.tile.treemenu.TreeMenuTile.Item;
 import brix.web.tile.treemenu.TreeMenuTile.RootItem;
 
-public class TreeMenuRenderer extends WebComponent
+public class TreeMenuRenderer extends WebComponent<BrixNode>
 {
 
-    public TreeMenuRenderer(String id, IModel<JcrNode> tileNode)
+    public TreeMenuRenderer(String id, IModel<BrixNode> tileNode)
     {
         super(id, tileNode);
     }
@@ -30,7 +30,7 @@ public class TreeMenuRenderer extends WebComponent
         final Response r = getResponse();
 
         RootItem item = new RootItem();
-        TreeMenuTile.load(item, (JcrNode)getModelObject());
+        TreeMenuTile.load(item, getModelObject());
 
         String url = "/" + getRequest().getPath();
 

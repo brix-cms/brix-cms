@@ -8,6 +8,7 @@ import java.io.Serializable;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.picker.node.NodeFilter;
 
 public class ReferenceEditorConfiguration implements Serializable
@@ -88,7 +89,7 @@ public class ReferenceEditorConfiguration implements Serializable
         return displayFiles;
     }
 
-    public ReferenceEditorConfiguration setWorkspaceName(IModel<JcrNode> nodeModel)
+    public ReferenceEditorConfiguration setWorkspaceName(IModel<BrixNode> nodeModel)
     {
         return setWorkspaceName(nodeModel.getObject().getSession().getWorkspace().getName());
     }
