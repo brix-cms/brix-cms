@@ -49,7 +49,7 @@ public class MenuEditor extends Panel<Menu>
         add(tree = new LinkTree("tree", treeModel)
         {
             @Override
-            protected void onNodeLinkClicked(TreeNode node, BaseTree tree, AjaxRequestTarget target)
+            protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target)
             {
                 super.onNodeLinkClicked(node, tree, target);
                 selectionChanged(target);
