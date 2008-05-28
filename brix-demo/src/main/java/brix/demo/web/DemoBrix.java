@@ -18,6 +18,7 @@ import brix.plugin.site.node.tilepage.TilePageNode;
 import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.TileTemplateNode;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
+import brix.plugin.site.node.tilepage.admin.Tile;
 import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.AbstractWorkspaceManager;
@@ -33,19 +34,18 @@ public class DemoBrix extends Brix
     public DemoBrix(JcrSessionFactory sf)
     {
         super(new BrixConfig(), sf);
-        TileNodePlugin plugin = new TilePageNodePlugin();
-        addTiles(plugin);
+        TileNodePlugin plugin = new TilePageNodePlugin(this);
 
         SitePlugin sitePlugin = SitePlugin.get(this);
         sitePlugin.registerNodePlugin(plugin);
 
-        plugin = new TileTemplateNodePlugin();
-        addTiles(plugin);
+        plugin = new TileTemplateNodePlugin(this);
         sitePlugin.registerNodePlugin(plugin);
 
         getWrapperRegistry().registerWrapper(TilePageNode.class);
         getWrapperRegistry().registerWrapper(TileTemplateNode.class);
 
+        addTiles();
     }
 
     @Override
@@ -86,11 +86,16 @@ public class DemoBrix extends Brix
         }
     }
 
-    private void addTiles(TileNodePlugin plugin)
+    private void addTile(Tile tile)
     {
-        plugin.addTile(new TimeTile());
-        plugin.addTile(new MenuTile());
-        plugin.addTile(new PageTile());
+    	getConfig().getRegistry().register(Tile.POINT, tile);
+    }
+    
+    private void addTiles()
+    {
+        addTile(new TimeTile());
+        addTile(new MenuTile());
+        addTile(new PageTile());
 
         /*
          * plugin.addTile(new TreeMenuTile()); plugin.addTile(new LinkTile()); plugin.addTile(new
