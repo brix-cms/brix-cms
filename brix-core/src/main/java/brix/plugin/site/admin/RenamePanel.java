@@ -12,11 +12,12 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 
-public abstract class RenamePanel extends Panel<JcrNode>
+public abstract class RenamePanel extends Panel<BrixNode>
 {
 
-    public RenamePanel(String id, IModel<JcrNode> model)
+    public RenamePanel(String id, IModel<BrixNode> model)
     {
         super(id, model);
 

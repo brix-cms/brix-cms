@@ -12,9 +12,9 @@ import org.apache.wicket.model.Model;
 
 import brix.Brix;
 import brix.Plugin;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.admin.navigation.AbstractNavigationTreeNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
@@ -92,7 +92,7 @@ public class MenuPlugin implements Plugin
         return Brix.get().getRootPath() + "/" + ROOT_NODE_NAME;
     }
 
-    private JcrNode getRootNode(String workspaceId, boolean createIfNotExist)
+    private BrixNode getRootNode(String workspaceId, boolean createIfNotExist)
     {
         JcrSession session = Brix.get().getCurrentSession(workspaceId);
 
@@ -100,7 +100,7 @@ public class MenuPlugin implements Plugin
         {
             if (createIfNotExist)
             {
-                JcrNode parent = (JcrNode)session.getItem(Brix.get().getRootPath());
+                BrixNode parent = (BrixNode)session.getItem(Brix.get().getRootPath());
                 parent.addNode(ROOT_NODE_NAME, "nt:unstructured");
             }
             else
@@ -109,19 +109,19 @@ public class MenuPlugin implements Plugin
             }
         }
 
-        return (JcrNode)session.getItem(getRootPath());
+        return (BrixNode)session.getItem(getRootPath());
     }
 
-    public List<JcrNode> getMenuNodes(String workspaceId)
+    public List<BrixNode> getMenuNodes(String workspaceId)
     {
-        JcrNode root = getRootNode(workspaceId, false);
+        BrixNode root = getRootNode(workspaceId, false);
         if (root != null)
         {
-            List<JcrNode> result = new ArrayList<JcrNode>();
+            List<BrixNode> result = new ArrayList<BrixNode>();
             JcrNodeIterator i = root.getNodes("menu");
             while (i.hasNext())
             {
-                result.add(i.nextNode());
+                result.add((BrixNode) i.nextNode());
             }
             return result;
         }
@@ -131,7 +131,7 @@ public class MenuPlugin implements Plugin
         }
     }
 
-    public JcrNode saveMenu(Menu menu, String workspaceId, JcrNode node)
+    public BrixNode saveMenu(Menu menu, String workspaceId, BrixNode node)
     {
         if (node != null)
         {
@@ -139,8 +139,8 @@ public class MenuPlugin implements Plugin
         }
         else
         {
-            JcrNode root = getRootNode(workspaceId, true);
-            node = root.addNode("menu");
+            BrixNode root = getRootNode(workspaceId, true);
+            node = (BrixNode) root.addNode("menu");
             menu.save(node);
         }
         node.getSession().save();

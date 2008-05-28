@@ -20,7 +20,6 @@ import org.apache.wicket.util.convert.IConverter;
 import brix.Brix;
 import brix.BrixNodeModel;
 import brix.auth.Action;
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
@@ -31,9 +30,9 @@ import brix.plugin.site.auth.SiteNodeAction;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 
-public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
+public class ListFolderNodesTab extends NavigationAwarePanel<BrixNode>
 {
-    public ListFolderNodesTab(String id, IModel<JcrNode> folderModel)
+    public ListFolderNodesTab(String id, IModel<BrixNode> folderModel)
     {
         super(id, folderModel);
         add(new DataView("dir-listing", new DirListing())
@@ -48,7 +47,7 @@ public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
                     @Override
                     public void onClick()
                     {
-                        JcrNode node = (JcrNode)getModelObject();
+                        BrixNode node = (BrixNode)getModelObject();
                         NavigationTreeNode treeNode = new SiteNavigationTreeNode(node);
                         getNavigation().selectNode(treeNode);
                     }
@@ -65,7 +64,7 @@ public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
 
                     public SiteNodePlugin getObject()
                     {
-                        return SitePlugin.get().getNodePluginForNode((JcrNode)item.getModelObject());
+                        return SitePlugin.get().getNodePluginForNode((BrixNode)item.getModelObject());
                     }
 
                     public void setObject(SiteNodePlugin object)
@@ -133,9 +132,9 @@ public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
         public static final ModifiedConverter INSTANCE = new ModifiedConverter();
     };
 
-    private JcrNode getNode()
+    private BrixNode getNode()
     {
-        return (JcrNode)getModelObject();
+        return (BrixNode)getModelObject();
     }
 
     private class DirListing implements IDataProvider
@@ -149,7 +148,7 @@ public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
 
         public IModel model(Object object)
         {
-            return new BrixNodeModel((JcrNode)object);
+            return new BrixNodeModel((BrixNode)object);
         }
 
         public int size()
@@ -163,9 +162,9 @@ public class ListFolderNodesTab extends NavigationAwarePanel<JcrNode>
 
     }
 
-    private Iterator<JcrNode> visibleNodes(JcrNodeIterator iterator)
+    private Iterator<BrixNode> visibleNodes(JcrNodeIterator iterator)
     {
-        List<JcrNode> res = new ArrayList<JcrNode>();
+        List<BrixNode> res = new ArrayList<BrixNode>();
         while (iterator.hasNext())
         {
             BrixNode node = (BrixNode)iterator.nextNode();

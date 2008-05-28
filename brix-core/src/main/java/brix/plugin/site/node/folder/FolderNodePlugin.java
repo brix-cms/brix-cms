@@ -9,7 +9,7 @@ import org.apache.wicket.request.target.component.PageRequestTarget;
 
 import brix.Brix;
 import brix.Path;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
 import brix.web.BrixRequestCycleProcessor;
@@ -22,14 +22,14 @@ public class FolderNodePlugin implements SiteNodePlugin
 
     public static final String TYPE = Brix.NS_PREFIX + "folder";
 
-    public NavigationAwarePanel newManageNodePanel(String id, IModel<JcrNode> nodeModel)
+    public NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel)
     {
         return new FolderManagerPanel(id, nodeModel);
     }
 
-    public IRequestTarget respond(IModel<JcrNode> nodeModel, RequestParameters requestParameters)
+    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
     {
-        JcrNode node = nodeModel.getObject();
+        BrixNode node = nodeModel.getObject();
 
         String path = requestParameters.getPath();
         if (!path.startsWith("/"))
@@ -60,12 +60,12 @@ public class FolderNodePlugin implements SiteNodePlugin
         }
     }
 
-    public NavigationAwarePanel newCreateNodePanel(String id, IModel<JcrNode> parentNode)
+    public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
     {
         return new CreateFolderPanel(id, parentNode);
     }
 
-    public NodeConverter getConverterForNode(JcrNode node)
+    public NodeConverter getConverterForNode(BrixNode node)
     {
         return null;
     }

@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.apache.wicket.model.IDetachable;
 
-import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.reference.Reference;
 
 public class Menu implements IDetachable
@@ -128,7 +128,7 @@ public class Menu implements IDetachable
         return name;
     }
 
-    private void saveEntry(JcrNode node, Entry entry)
+    private void saveEntry(BrixNode node, Entry entry)
     {
         if (entry instanceof ChildEntry)
         {
@@ -141,12 +141,12 @@ public class Menu implements IDetachable
         }
         for (Entry e : entry.getChildren())
         {
-            JcrNode child = node.addNode("child");
+            BrixNode child = (BrixNode) node.addNode("child");
             saveEntry(child, e);
         }
     }
 
-    public void save(JcrNode node)
+    public void save(BrixNode node)
     {
         if (!node.isNodeType("mix:referenceable"))
         {
@@ -157,11 +157,11 @@ public class Menu implements IDetachable
         {
             node.getNode("menu").remove();
         }
-        JcrNode menu = node.addNode("menu", "nt:unstructured");
+        BrixNode menu = (BrixNode) node.addNode("menu", "nt:unstructured");
         saveEntry(menu, getRoot());
     }
 
-    public void loadName(JcrNode node)
+    public void loadName(BrixNode node)
     {
         if (node.hasProperty("name"))
         {
@@ -169,7 +169,7 @@ public class Menu implements IDetachable
         }
     }
 
-    private void loadChildEntry(JcrNode node, ChildEntry entry)
+    private void loadChildEntry(BrixNode node, ChildEntry entry)
     {
         if (node.hasProperty("title"))
         {
@@ -178,12 +178,12 @@ public class Menu implements IDetachable
         entry.setReference(Reference.load(node, "reference"));
     }
 
-    private void loadEntry(JcrNode node, Entry entry)
+    private void loadEntry(BrixNode node, Entry entry)
     {
         JcrNodeIterator i = node.getNodes("child");
         while (i.hasNext())
         {
-            JcrNode child = i.nextNode();
+            BrixNode child = (BrixNode) i.nextNode();
             ChildEntry e = new ChildEntry(entry);
             loadChildEntry(child, e);
             loadEntry(child, e);
@@ -191,16 +191,16 @@ public class Menu implements IDetachable
         }
     }
 
-    public void loadMenu(JcrNode node)
+    public void loadMenu(BrixNode node)
     {
         root = new RootEntry();
         if (node.hasNode("menu"))
         {
-            loadEntry(node.getNode("menu"), root);
+            loadEntry((BrixNode) node.getNode("menu"), root);
         }
     }
 
-    public void load(JcrNode node)
+    public void load(BrixNode node)
     {
         loadName(node);
         loadMenu(node);

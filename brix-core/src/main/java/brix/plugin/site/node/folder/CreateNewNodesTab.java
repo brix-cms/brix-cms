@@ -18,17 +18,18 @@ import org.apache.wicket.model.PropertyModel;
 import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SelectNewNodeTypeAction;
 
-public class CreateNewNodesTab extends Panel<JcrNode>
+public class CreateNewNodesTab extends Panel<BrixNode>
 {
 
     private Component editor;
     private PluginEntry selectedType;
 
-    public CreateNewNodesTab(String id, IModel<JcrNode> nodeModel)
+    public CreateNewNodesTab(String id, IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
         Form form = new Form("form");

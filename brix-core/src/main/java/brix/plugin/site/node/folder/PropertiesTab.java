@@ -4,16 +4,16 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.model.ModelBuffer;
 import brix.web.picker.reference.ReferenceEditorConfiguration;
 import brix.web.picker.reference.ReferenceEditorPanel;
 
-public class PropertiesTab extends Panel
+public class PropertiesTab extends Panel<BrixNode>
 {
 
-    public PropertiesTab(String id, final IModel<JcrNode> folderNodeModel)
+    public PropertiesTab(String id, final IModel<BrixNode> folderNodeModel)
     {
         super(id, folderNodeModel);
 

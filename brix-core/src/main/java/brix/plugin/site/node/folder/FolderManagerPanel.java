@@ -12,14 +12,14 @@ import org.apache.wicket.model.Model;
 
 import brix.Brix;
 import brix.auth.Action;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.SiteNodeAction;
 
 public class FolderManagerPanel extends NodeManagerPanel
 {
 
-    public FolderManagerPanel(String id, final IModel<JcrNode> folderModel)
+    public FolderManagerPanel(String id, final IModel<BrixNode> folderModel)
     {
         super(id, folderModel);
 

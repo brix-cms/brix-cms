@@ -7,11 +7,12 @@ import java.util.List;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 
 public abstract class NodeAdapter implements IModel
 {
 
-    public static NodeAdapter forNode(final IModel<JcrNode> nodeModel)
+    public static NodeAdapter forNode(final IModel<BrixNode> nodeModel)
     {
         if (nodeModel == null)
         {

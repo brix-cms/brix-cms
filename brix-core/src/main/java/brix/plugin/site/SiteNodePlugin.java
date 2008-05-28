@@ -4,7 +4,7 @@ import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.registry.ExtensionPoint;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
@@ -29,11 +29,11 @@ public interface SiteNodePlugin
 
     String getName();
 
-    NavigationAwarePanel newManageNodePanel(String id, IModel<JcrNode> nodeModel);
+    NavigationAwarePanel newManageNodePanel(String id, IModel<BrixNode> nodeModel);
 
-    IRequestTarget respond(IModel<JcrNode> nodeModel, RequestParameters requestParameters);
+    IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters);
 
-    NavigationAwarePanel newCreateNodePanel(String id, IModel<JcrNode> parentNode);
+    NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode);
 
-    NodeConverter getConverterForNode(JcrNode node);
+    NodeConverter getConverterForNode(BrixNode node);
 }

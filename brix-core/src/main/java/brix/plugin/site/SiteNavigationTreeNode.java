@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerContainerPanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
@@ -14,12 +14,12 @@ import brix.web.tree.AbstractJcrTreeNode;
 
 public class SiteNavigationTreeNode extends AbstractJcrTreeNode implements NavigationTreeNode
 {
-    public SiteNavigationTreeNode(IModel<JcrNode> nodeModel)
+    public SiteNavigationTreeNode(IModel<BrixNode> nodeModel)
     {
         super(nodeModel);
     }
 
-    public SiteNavigationTreeNode(JcrNode node)
+    public SiteNavigationTreeNode(BrixNode node)
     {
         super(node);
     }
@@ -27,7 +27,7 @@ public class SiteNavigationTreeNode extends AbstractJcrTreeNode implements Navig
     @Override
     public String toString()
     {
-        JcrNode node = getNodeModel().getObject();
+        BrixNode node = getNodeModel().getObject();
         if (node.getPath().equals(SitePlugin.get().getSiteRootPath())) 
         {
             return "Site";
@@ -39,7 +39,7 @@ public class SiteNavigationTreeNode extends AbstractJcrTreeNode implements Navig
     }
     
     @Override
-    protected AbstractJcrTreeNode newTreeNode(JcrNode node)
+    protected AbstractJcrTreeNode newTreeNode(BrixNode node)
     {
         return new SiteNavigationTreeNode(node);
     }

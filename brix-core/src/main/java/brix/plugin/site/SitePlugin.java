@@ -34,7 +34,7 @@ public class SitePlugin implements Plugin
     public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
     {
         JcrSession session = Brix.get().getCurrentSession(workspace.getId());
-        return new SiteNavigationTreeNode((JcrNode)session.getItem(getSiteRootPath()));
+        return new SiteNavigationTreeNode((BrixNode)session.getItem(getSiteRootPath()));
     }
 
     public SitePlugin(Brix brix)

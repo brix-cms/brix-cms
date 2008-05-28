@@ -3,13 +3,13 @@ package brix.plugin.site.admin;
 import org.apache.wicket.model.IModel;
 
 import brix.Brix;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
-public class NodeManagerPanel extends NavigationAwarePanel<JcrNode>
+public class NodeManagerPanel extends NavigationAwarePanel<BrixNode>
 {
 
-    public NodeManagerPanel(String id, IModel<JcrNode> nodeModel)
+    public NodeManagerPanel(String id, IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
     }
@@ -19,14 +19,8 @@ public class NodeManagerPanel extends NavigationAwarePanel<JcrNode>
         return Brix.get();
     }
 
-    public final JcrNode getNode()
+    public final BrixNode getNode()
     {
-        return (JcrNode)getModelObject();
+        return getModelObject();
     }
-
-    protected final IModel<JcrNode> getNodeModel()
-    {
-        return (IModel<JcrNode>)getModel();
-    }
-
 }

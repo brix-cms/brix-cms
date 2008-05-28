@@ -8,17 +8,18 @@ import org.apache.wicket.model.IModel;
 import brix.Path;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SiteNavigationTreeNode;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.util.validators.NodeNameValidator;
 
-public class CreateFolderPanel extends NavigationAwarePanel<JcrNode>
+public class CreateFolderPanel extends NavigationAwarePanel<BrixNode>
 {
     private String name;
 
-    public CreateFolderPanel(String id, IModel<JcrNode> model)
+    public CreateFolderPanel(String id, IModel<BrixNode> model)
     {
         super(id, model);
 

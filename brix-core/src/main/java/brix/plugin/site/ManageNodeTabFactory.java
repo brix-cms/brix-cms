@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.model.IModel;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.registry.ExtensionPoint;
 
 public interface ManageNodeTabFactory
@@ -23,7 +23,9 @@ public interface ManageNodeTabFactory
 			return ManageNodeTabFactory.class.getName();
 		}
 	};
+	
+	public int getPriority();
 
-	public List<ITab> getManageNodeTabs(IModel<JcrNode> nodeModel);
+	public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel);
 
 }

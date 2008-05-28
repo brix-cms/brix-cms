@@ -1,9 +1,9 @@
 package brix.plugin.site;
 
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 
 
 public interface NodeConverter
 {
-    void convert(JcrNode node);
+    void convert(BrixNode node);
 }
