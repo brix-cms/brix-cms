@@ -49,11 +49,12 @@ public class MenuEditor extends Panel<Menu>
         add(tree = new LinkTree("tree", treeModel)
         {
             @Override
-            protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target)
+            protected void onNodeLinkClicked(TreeNode node, BaseTree tree, AjaxRequestTarget target)
             {
                 super.onNodeLinkClicked(node, tree, target);
                 selectionChanged(target);
             }
+
 
             @Override
             protected ITreeState newTreeState()
@@ -109,8 +110,8 @@ public class MenuEditor extends Panel<Menu>
                 }
 
                 MenuTreeNode newSelected = (MenuTreeNode)((index >= 0)
-                        ? parent.getChildAt(index)
-                        : parent);
+                    ? parent.getChildAt(index)
+                    : parent);
 
                 tree.getTreeState().selectNode(newSelected, true);
                 selectionChanged(target);
@@ -174,7 +175,7 @@ public class MenuEditor extends Panel<Menu>
             public boolean isEnabled()
             {
                 return getSelected().getParent() != null &&
-                        getIndex(getSelected()) < getSelected().getParent().getChildCount() - 1;
+                    getIndex(getSelected()) < getSelected().getParent().getChildCount() - 1;
             }
         });
 
@@ -188,28 +189,31 @@ public class MenuEditor extends Panel<Menu>
         return node.getParent().getIndex(node);
     }
 
-    private WebMarkupContainer<?> links;
-    private Component<?> editor;
+    private WebMarkupContainer< ? > links;
+    private Component< ? > editor;
 
     private static final String EDITOR_ID = "editor";
 
     private void selectionChanged(AjaxRequestTarget target)
     {
-        Component<?> c;
+        Component< ? > c;
         if (getSelected().getEntry() instanceof ChildEntry)
         {
-            c = new ChildPanel(EDITOR_ID, new Model<ChildEntry>() {
+            c = new ChildPanel(EDITOR_ID, new Model<ChildEntry>()
+            {
                 @Override
                 public ChildEntry getObject()
                 {
                     return (ChildEntry)MenuEditor.this.getSelected().getEntry();
                 }
+
                 @Override
                 public void detach()
                 {
                     MenuEditor.this.getSelected().getEntry().detach();
                 }
-            }) {
+            })
+            {
                 @Override
                 protected void onUpdate()
                 {
@@ -217,23 +221,23 @@ public class MenuEditor extends Panel<Menu>
                     tree.updateTree();
                 }
             };
-        } 
+        }
         else
         {
             c = new RootPanel(EDITOR_ID);
         }
         c.setOutputMarkupId(true);
-        
+
         if (editor != null)
         {
             editor.replaceWith(c);
         }
         else
         {
-            add(c);            
+            add(c);
         }
         editor = c;
-        
+
         if (target != null)
         {
             target.addComponent(links);
