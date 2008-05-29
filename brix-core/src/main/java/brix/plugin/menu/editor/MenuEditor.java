@@ -1,7 +1,5 @@
 package brix.plugin.menu.editor;
 
-import javax.swing.tree.TreeNode;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -49,7 +47,7 @@ public class MenuEditor extends Panel<Menu>
         add(tree = new LinkTree("tree", treeModel)
         {
             @Override
-            protected void onNodeLinkClicked(TreeNode node, BaseTree tree, AjaxRequestTarget target)
+            protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target)
             {
                 super.onNodeLinkClicked(node, tree, target);
                 selectionChanged(target);
@@ -73,7 +71,7 @@ public class MenuEditor extends Panel<Menu>
 
         tree.getTreeState().expandAll();
         tree.getTreeState().setAllowSelectMultiple(false);
-        tree.getTreeState().selectNode((TreeNode)treeModel.getRoot(), true);
+        tree.getTreeState().selectNode(treeModel.getRoot(), true);
 
         links = new WebMarkupContainer("links");
         links.setOutputMarkupId(true);
