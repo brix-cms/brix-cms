@@ -73,30 +73,36 @@ public abstract class AbstractTreeModel implements Serializable, TreeModel
     public void nodeChanged(AbstractTree tree, TreeNode node)
     {
         TreeNode parent = (TreeNode)getParent(tree, node);
-        int index = parent.getChildren().indexOf(node);
-        if (index != -1)
+        if (parent != null)
         {
-            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
-                new int[] { index }, new Object[] { node });
-            for (TreeModelListener l : listeners)
-            {
-                l.treeNodesChanged(e);
-            }
+	        int index = parent.getChildren().indexOf(node);
+	        if (index != -1)
+	        {
+	            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
+	                new int[] { index }, new Object[] { node });
+	            for (TreeModelListener l : listeners)
+	            {
+	                l.treeNodesChanged(e);
+	            }
+	        }
         }
     }
 
     public void nodeInserted(AbstractTree tree, TreeNode node)
     {
         TreeNode parent = (TreeNode)getParent(tree, node);
-        int index = parent.getChildren().indexOf(node);
-        if (index != -1)
+        if (parent != null)
         {
-            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
-                new int[] { index }, new Object[] { node });
-            for (TreeModelListener l : listeners)
-            {
-                l.treeNodesInserted(e);
-            }
+	        int index = parent.getChildren().indexOf(node);
+	        if (index != -1)
+	        {
+	            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
+	                new int[] { index }, new Object[] { node });
+	            for (TreeModelListener l : listeners)
+	            {
+	                l.treeNodesInserted(e);
+	            }
+	        }
         }
     }
 
@@ -104,15 +110,18 @@ public abstract class AbstractTreeModel implements Serializable, TreeModel
     public void nodeDeleted(AbstractTree tree, TreeNode node)
     {
         TreeNode parent = (TreeNode)getParent(tree, node);
-        int index = parent.getChildren().indexOf(node);
-        if (index != -1)
+        if (parent != null)
         {
-            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
-                new int[] { index }, new Object[] { node });
-            for (TreeModelListener l : listeners)
-            {
-                l.treeNodesRemoved(e);
-            }
+	        int index = parent.getChildren().indexOf(node);
+	        if (index != -1)
+	        {
+	            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent),
+	                new int[] { index }, new Object[] { node });
+	            for (TreeModelListener l : listeners)
+	            {
+	                l.treeNodesRemoved(e);
+	            }
+	        }
         }
     }
 
