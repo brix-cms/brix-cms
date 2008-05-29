@@ -131,11 +131,11 @@ public abstract class TileContainerNode extends BrixFileNode
         }
     }
 
-    public BrixNode getTemplate()
+    public TileTemplateNode getTemplate()
     {
         if (hasProperty(Properties.TEMPLATE))
         {
-            return (BrixNode) getProperty(Properties.TEMPLATE).getNode();
+            return (TileTemplateNode) getProperty(Properties.TEMPLATE).getNode();
         }
         else
         {
