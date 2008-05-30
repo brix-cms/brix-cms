@@ -2,7 +2,7 @@ package brix.plugin.menu.editor;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -39,7 +39,7 @@ public class ChildPanel extends Panel<ChildEntry>
     private void init()
     {
         Form<ChildEntry> form = new Form<ChildEntry>("form", new CompoundPropertyModel<ChildEntry>(
-                getModel()));
+            getModel()));
         add(form);
 
         form.add(new TextField<String>("title").setRequired(true));
@@ -54,14 +54,16 @@ public class ChildPanel extends Panel<ChildEntry>
         conf.setWorkspaceName(panel.getWorkspace());
 
         form.add(new ReferenceEditorPanel("referenceEditor", new PropertyModel<Reference>(this,
-                "reference")).setConfiguration(conf));
+            "reference")).setConfiguration(conf));
+
+        form.add(new TextField<String>("cssClass"));
 
         final Component< ? > feedback;
 
         add(feedback = new ContainerFeedbackPanel("feedback", form));
         feedback.setOutputMarkupId(true);
 
-        form.add(new AjaxButton<Object>("update")
+        form.add(new IndicatingAjaxButton<Object>("update")
         {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form< ? > form)
@@ -85,7 +87,7 @@ public class ChildPanel extends Panel<ChildEntry>
     {
 
     }
-    
+
     @Override
     protected void onDetach()
     {

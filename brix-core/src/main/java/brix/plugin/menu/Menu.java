@@ -66,6 +66,7 @@ public class Menu implements IDetachable
 
         private String title;
         private Reference reference;
+        private String cssClass;
 
         public String getTitle()
         {
@@ -85,6 +86,16 @@ public class Menu implements IDetachable
         public void setReference(Reference reference)
         {
             this.reference = reference;
+        }
+
+        public String getCssClass()
+        {
+            return cssClass;
+        }
+
+        public void setCssClass(String cssClass)
+        {
+            this.cssClass = cssClass;
         }
 
         @Override
@@ -134,6 +145,7 @@ public class Menu implements IDetachable
         {
             ChildEntry childEntry = (ChildEntry)entry;
             node.setProperty("title", childEntry.getTitle());
+            node.setProperty("cssClass", childEntry.getCssClass());
             if (childEntry.getReference() != null)
             {
                 childEntry.getReference().save(node, "reference");
@@ -141,7 +153,7 @@ public class Menu implements IDetachable
         }
         for (Entry e : entry.getChildren())
         {
-            BrixNode child = (BrixNode) node.addNode("child");
+            BrixNode child = (BrixNode)node.addNode("child");
             saveEntry(child, e);
         }
     }
@@ -157,7 +169,7 @@ public class Menu implements IDetachable
         {
             node.getNode("menu").remove();
         }
-        BrixNode menu = (BrixNode) node.addNode("menu", "nt:unstructured");
+        BrixNode menu = (BrixNode)node.addNode("menu", "nt:unstructured");
         saveEntry(menu, getRoot());
     }
 
@@ -176,6 +188,10 @@ public class Menu implements IDetachable
             entry.setTitle(node.getProperty("title").getString());
         }
         entry.setReference(Reference.load(node, "reference"));
+        if (node.hasProperty("cssClass"))
+        {
+            entry.setCssClass(node.getProperty("cssClass").getString());
+        }
     }
 
     private void loadEntry(BrixNode node, Entry entry)
@@ -183,7 +199,7 @@ public class Menu implements IDetachable
         JcrNodeIterator i = node.getNodes("child");
         while (i.hasNext())
         {
-            BrixNode child = (BrixNode) i.nextNode();
+            BrixNode child = (BrixNode)i.nextNode();
             ChildEntry e = new ChildEntry(entry);
             loadChildEntry(child, e);
             loadEntry(child, e);
@@ -196,7 +212,7 @@ public class Menu implements IDetachable
         root = new RootEntry();
         if (node.hasNode("menu"))
         {
-            loadEntry((BrixNode) node.getNode("menu"), root);
+            loadEntry((BrixNode)node.getNode("menu"), root);
         }
     }
 

@@ -33,8 +33,6 @@ public class MenuRenderer extends WebComponent<BrixNode>
         container.load(getModelObject());
 
         Set<ChildEntry> selected = getSelectedItems(container.getMenu());
-        
-        System.out.println(selected.size());
 
         Response response = getResponse();
         renderEntry(container, container.getMenu().getRoot(), response, selected);
@@ -59,52 +57,70 @@ public class MenuRenderer extends WebComponent<BrixNode>
         response.write("\n<ul");
         response.write(klass);
         response.write(">\n");
-        
+
         for (ChildEntry e : entry.getChildren())
         {
             renderChild(container, e, response, selected);
         }
-        
+
         response.write("</ul>\n");
 
     }
-    
-    private void renderChild(MenuContainer container, ChildEntry entry, Response response, Set<ChildEntry> selectedSet)
+
+    private void renderChild(MenuContainer container, ChildEntry entry, Response response,
+            Set<ChildEntry> selectedSet)
     {
         boolean selected = selectedSet.contains(entry);
-        
-        String klass="";
-        
+
+        String klass = "";
+
         if (selected && !Strings.isEmpty(container.getSelectedItemStyleClass()))
         {
-            klass = " class='" + container.getSelectedItemStyleClass() + "'";
-        } 
+            klass = container.getSelectedItemStyleClass();
+        }
         else if (!selected && !Strings.isEmpty(container.getItemStyleClass()))
         {
-            klass = " class='" + container.getItemStyleClass() + "'";
+            klass = container.getItemStyleClass();
         }
-        
+
+
+        if (!Strings.isEmpty(entry.getCssClass()))
+        {
+            if (!Strings.isEmpty(klass))
+            {
+                klass += " ";
+            }
+            klass += entry.getCssClass();
+        }
+
         response.write("\n<li");
-        response.write(klass);
+
+        if (!Strings.isEmpty(klass))
+        {
+            response.write(" class=\"");
+            response.write(klass);
+            response.write("\"");
+        }
+
         response.write(">");
-        
+
         final String url = entry.getReference() != null ? entry.getReference().generateUrl() : "#";
-            
+
         response.write("<a href='");
         response.write(url);
         response.write("'>");
-        
+
         // TODO. escape or not (probably a property would be nice?
-        
+
         response.write(entry.getTitle());
-        
+
         response.write("</a>");
-        
+
         if (selected && !entry.getChildren().isEmpty())
         {
             renderEntry(container, entry, response, selectedSet);
         }
-        
+
         response.write("</li>\n");
     }
 
