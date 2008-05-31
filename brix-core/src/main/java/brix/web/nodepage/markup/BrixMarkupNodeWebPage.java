@@ -43,7 +43,7 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
 		super.onBeforeRender();
 	}
 	
-	private MarkupHelper markupHelper;
+	private transient MarkupHelper markupHelper;
 	
 	@Override
 	protected void onDetach()
