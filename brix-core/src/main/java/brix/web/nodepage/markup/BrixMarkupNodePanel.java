@@ -10,6 +10,11 @@ import org.apache.wicket.util.resource.StringResourceStream;
 
 import brix.jcr.wrapper.BrixNode;
 
+/**
+ * Panel that uses {@link MarkupSource} for it's markup and child components.
+ * 
+ * @author Matej Knopp
+ */
 public abstract class BrixMarkupNodePanel extends Panel<BrixNode> implements IMarkupResourceStreamProvider,
 		IMarkupCacheKeyProvider, MarkupSourceProvider
 {

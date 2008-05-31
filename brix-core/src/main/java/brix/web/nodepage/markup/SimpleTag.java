@@ -2,7 +2,11 @@ package brix.web.nodepage.markup;
 
 import java.util.Map;
 
-
+/**
+ * Simple implementation of the {@link Tag} interface.
+ * 
+ * @author Matej Knopp
+ */
 public class SimpleTag implements Tag
 {
 	private final Map<String, String> attributeMap;	

@@ -11,6 +11,12 @@ import brix.jcr.wrapper.BrixNode;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.nodepage.BrixPageParameters;
 
+/**
+ * Page that uses {@link MarkupSource} for it's markup and child components.
+ * 
+ * @author Matej Knopp
+ */
+
 public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements IMarkupResourceStreamProvider,
 		IMarkupCacheKeyProvider, MarkupSourceProvider
 {

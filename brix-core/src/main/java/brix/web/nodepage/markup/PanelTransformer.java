@@ -5,6 +5,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Transformer that makes the markup usable with wicket panel. All &lt;head&gt;
+ * sections are grouped in one &lt;wicket:head&gt; section and the rest of
+ * markup (except for the &lt;html&gt;tag if present) is grouped in a
+ * &lt;wicket:panel&gt; section.
+ * 
+ * Also removes all &lt;body&gt; and &lt;wicket:panel&gt; tags in markup.
+ * 
+ * @author Matej Knopp
+ */
 public class PanelTransformer extends HeadTransformer
 {
 	public PanelTransformer(MarkupSource delegate)
@@ -45,15 +55,15 @@ public class PanelTransformer extends HeadTransformer
 
 		Map<String, String> emptyMap = Collections.emptyMap();
 		List<Item> result = new ArrayList<Item>();
-		
+
 		result.add(new SimpleTag("wicket:head", Tag.Type.OPEN, emptyMap));
 		result.addAll(headContent);
 		result.add(new SimpleTag("wicket:head", Tag.Type.CLOSE, emptyMap));
-		
+
 		result.add(new SimpleTag("wicket:panel", Tag.Type.OPEN, emptyMap));
 		result.addAll(body);
 		result.add(new SimpleTag("wicket:panel", Tag.Type.CLOSE, emptyMap));
-		
+
 		return result;
 	}
 }

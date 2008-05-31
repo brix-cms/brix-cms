@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/**
+ * Renders the given list of items into an XHTML markup.
+ *  
+ * @author Matej Knopp
+ */
 public abstract class MarkupRenderer
 {
 	private final List<Item> items;
@@ -14,6 +19,11 @@ public abstract class MarkupRenderer
 		this.items = items;
 	}
 
+	/**
+	 * Renders the items.
+	 * 
+	 * @return XHTML string
+	 */
 	public String render()
 	{
 		StringBuilder builder = new StringBuilder();

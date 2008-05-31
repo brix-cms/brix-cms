@@ -2,17 +2,38 @@ package brix.web.nodepage.markup;
 
 import java.util.Map;
 
+/**
+ * Represents a HTML tag.
+ * @author Matej Knopp
+ * 
+ * @see ComponentTag
+ */
 public interface Tag extends Item
 {
+	/**
+	 * Returns the name of this tag ("a", "p", "br", "input", etc.). 
+	 * @return
+	 */
 	public String getName();
 
-	// The result does not have to be modifiable
+	/**
+	 * Returns map of tag attributes. The result map does not
+	 * have to be modifiable.
+	 */
 	public Map<String, String> getAttributeMap();
 
+	/**
+	 * Tag type
+	 * @author Matej Knopp
+	 */
 	public enum Type
 	{
 		OPEN, CLOSE, OPEN_CLOSE
 	};
 
+	/**
+	 * Returns the type of this tag.
+	 * @return
+	 */
 	public Type getType();
 }

@@ -1,6 +1,10 @@
 package brix.web.nodepage.markup;
 
-
+/**
+ * Simple implementation of the {@link Comment} interface.
+ * 
+ * @author Matej Knopp
+ */
 public class SimpleComment implements Comment
 {
 	private final String text;

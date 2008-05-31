@@ -1,7 +1,7 @@
 package brix.plugin.site.node.tilepage.markup;
 
 import java.util.Map;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -16,6 +16,11 @@ import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.markup.ComponentTag;
 import brix.web.nodepage.markup.SimpleTag;
 
+/**
+ * ComponentTag that that replaces the &lt;brix:tile&gt; tags. 
+ *  
+ * @author Matej Knopp
+ */
 public class TileTag extends SimpleTag implements ComponentTag
 {
 	private final IModel<BrixNode> tileContainerNodeModel;
@@ -30,8 +35,6 @@ public class TileTag extends SimpleTag implements ComponentTag
 
 		this.tileContainerNodeModel.detach();
 	}
-
-	private final UUID uuid = UUID.randomUUID();
 
 	public Component<?> getComponent(String id)
 	{
@@ -51,9 +54,19 @@ public class TileTag extends SimpleTag implements ComponentTag
 		}
 	}
 
-	public UUID getUUID()
+	private final static AtomicLong atomicLong = new AtomicLong();
+	
+	private final static String PREFIX = "tile-";
+
+	private String id;
+	
+	public String getUniqueId()
 	{
-		return uuid;
+		if (id == null)
+		{
+			id = PREFIX + atomicLong.incrementAndGet();
+		}
+		return id;
 	}
 
 }

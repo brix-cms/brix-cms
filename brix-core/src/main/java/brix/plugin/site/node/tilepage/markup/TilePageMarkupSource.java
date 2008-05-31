@@ -28,6 +28,13 @@ import brix.web.nodepage.markup.SimpleText;
 import brix.web.nodepage.markup.Tag;
 import brix.web.nodepage.markup.Tag.Type;
 
+/**
+ * {@link MarkupSource} for tile markup. Parses and merges the content of tile
+ * container node and it's templates.
+ * 
+ * @author Matej Knopp
+ * 
+ */
 public class TilePageMarkupSource implements MarkupSource
 {
 	private final TileContainerNode node;
@@ -42,6 +49,12 @@ public class TilePageMarkupSource implements MarkupSource
 		return getMostRecentLastModifiedDate();
 	}
 
+	/**
+	 * Returns the most recent date of last modification of tile page and it's
+	 * templates. The date is then used as expiration token.
+	 * 
+	 * @return
+	 */
 	private Date getMostRecentLastModifiedDate()
 	{
 		Date current = null;
