@@ -1,60 +1,22 @@
 package brix.plugin.site.node.tilepage;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
-import org.xmlpull.v1.XmlPullParserException;
 
 import brix.Brix;
-import brix.Path;
 import brix.auth.Action;
 import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.plugin.site.node.tilepage.Markup.ComponentFragment;
-import brix.plugin.site.node.tilepage.Markup.Fragment;
-import brix.plugin.site.node.tilepage.Markup.StaticFragment;
-import brix.plugin.site.node.tilepage.exception.MarkupParseException;
-import brix.web.nodepage.BrixNodeWebPage;
+import brix.plugin.site.node.tilepage.markup.TilePageMarkupSource;
+import brix.web.nodepage.markup.BrixMarkupNodePanel;
+import brix.web.nodepage.markup.MarkupSource;
+import brix.web.nodepage.markup.PanelTransformer;
 
-public class TilePageRenderPanel extends Panel<BrixNode>
+public class TilePageRenderPanel extends BrixMarkupNodePanel
 {
-    public TilePageRenderPanel(String id, IModel<BrixNode> nodeModel, BrixNodeWebPage page)
+    public TilePageRenderPanel(String id, IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
-
-        final JcrNode jcrNode = nodeModel.getObject();
-        final JcrSession session = jcrNode.getSession();
-        final TileContainerNode node = (TileContainerNode)jcrNode;
-        RepeatingView repeater = new RepeatingView("chunks");
-        add(repeater);
-
-        final Markup markup = new Markup();
-        try
-        {
-            markup.parse(session, new Path(node.getPath()));
-        }
-        catch (XmlPullParserException e)
-        {
-            throw new MarkupParseException("Could not parse markup from tile-node '" +
-                    node.getPath() + "'.", e);
-        }
-        for (Fragment fragment : markup.getFragments())
-        {
-            switch (fragment.getType())
-            {
-                case STATIC :
-                    repeater.add(new RawLabel(repeater.newChildId(), ((StaticFragment)fragment)
-                            .getMarkup(session)));
-                    break;
-                case COMPONENT : {
-                    repeater.add(((ComponentFragment)fragment).newComponent(repeater.newChildId(),
-                            page, session));
-                }
-            }
-        }
     }
 
     @Override
@@ -66,16 +28,11 @@ public class TilePageRenderPanel extends Panel<BrixNode>
         return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
-    private static class RawLabel extends Label
+    public MarkupSource getMarkupSource()
     {
-
-        public RawLabel(String id, String label)
-        {
-            super(id, label);
-            setEscapeModelStrings(false);
-            setRenderBodyOnly(true);
-        }
-
+    	MarkupSource source = new TilePageMarkupSource((TileContainerNode)getModelObject());
+    	source = new PanelTransformer(source);
+    	return source;
     }
 
 }

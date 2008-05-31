@@ -17,6 +17,7 @@ import brix.plugin.site.node.fallback.FallbackNodePlugin;
 import brix.plugin.site.node.folder.FolderNodePlugin;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 import brix.web.admin.navigation.NavigationTreeNode;
+import brix.web.nodepage.markup.MarkupCache;
 import brix.workspace.Workspace;
 
 public class SitePlugin implements Plugin
@@ -271,4 +272,10 @@ public class SitePlugin implements Plugin
         return SitePlugin.get().fromRealWebNodePath(node.getPath());
     }
 
+    public MarkupCache getMarkupCache()
+	{
+		return markupCache;
+	}
+    
+    private MarkupCache markupCache = new MarkupCache();
 }

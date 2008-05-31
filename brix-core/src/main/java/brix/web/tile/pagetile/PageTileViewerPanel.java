@@ -48,7 +48,7 @@ public class PageTileViewerPanel extends Panel
 
 			if (pageNode != null)
 			{
-				add(new TilePageRenderPanel("view", new BrixNodeModel(pageNode), (BrixNodeWebPage) getPage()));
+				add(new TilePageRenderPanel("view", new BrixNodeModel(pageNode)));
 			}
 			else
 			{

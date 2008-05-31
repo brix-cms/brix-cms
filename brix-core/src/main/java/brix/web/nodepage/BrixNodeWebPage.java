@@ -6,7 +6,6 @@ import org.apache.wicket.model.IModel;
 
 import brix.Brix;
 import brix.auth.Action;
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.auth.SiteNodeAction;
 

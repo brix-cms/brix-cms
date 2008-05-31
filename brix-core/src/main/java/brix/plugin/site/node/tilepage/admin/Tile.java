@@ -22,9 +22,9 @@ public interface Tile
 	};
 
     // TODO remove tilePageParameters param in favor of PageParametersAware
-    Component newViewer(String id, IModel<BrixNode> tileNode, BrixPageParameters tilePageParameters);
+    Component<?> newViewer(String id, IModel<BrixNode> tileNode, BrixPageParameters tilePageParameters);
 
-    TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode);
+    TileEditorPanel<?> newEditor(String id, IModel<BrixNode> tileContainerNode);
 
     String getDisplayName();
 
