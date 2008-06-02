@@ -66,4 +66,10 @@ public class PanelTransformer extends HeadTransformer
 
 		return result;
 	}
+	
+	@Override
+	public String getDoctype()
+	{
+		return null;
+	}
 }

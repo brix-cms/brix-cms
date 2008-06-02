@@ -41,4 +41,12 @@ public interface MarkupSource
 	 *         <code>false</code> if it is still valid.
 	 */
 	public boolean isMarkupExpired(Object expirationToken);
+
+	/**
+	 * Returns the Doctype string of the document or null if there is no doctype
+	 * present.
+	 * 
+	 * @return
+	 */
+	public String getDoctype();
 }

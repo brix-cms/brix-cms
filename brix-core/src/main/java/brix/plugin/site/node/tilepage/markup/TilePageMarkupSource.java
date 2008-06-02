@@ -89,7 +89,7 @@ public class TilePageMarkupSource implements MarkupSource
 		}
 		else
 		{
-			return false;
+			return true;
 		}
 	}
 
@@ -194,8 +194,12 @@ public class TilePageMarkupSource implements MarkupSource
 		}
 
 		final String tagName = tag.getTagName().toLowerCase();
-
-		if (type == Tag.Type.CLOSE)
+		
+		if ("!doctype".equals(tagName))
+		{
+			this.doctype = tag.toHtml();
+		}
+		else if (type == Tag.Type.CLOSE)
 		{
 			if (!isKnownBrixTag(tagName))
 			{
@@ -259,6 +263,8 @@ public class TilePageMarkupSource implements MarkupSource
 	}
 
 	private Iterator<Item> iterator;
+	
+	private String doctype = null;
 
 	public Item nextMarkupItem()
 	{
@@ -275,6 +281,11 @@ public class TilePageMarkupSource implements MarkupSource
 		{
 			return null;
 		}
+	}
+	
+	public String getDoctype()
+	{
+		return doctype;
 	}
 
 }

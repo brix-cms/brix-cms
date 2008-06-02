@@ -16,6 +16,8 @@ class GeneratedMarkup
 	final List<Item> items;
 
 	final Object expirationToken;
+	
+	final String doctype;
 
 	/**
 	 * Creates new {@link GeneratedMarkup} instance from given
@@ -37,6 +39,7 @@ class GeneratedMarkup
 			items.add(item);
 			item = markupSource.nextMarkupItem();
 		}
+		this.doctype = markupSource.getDoctype();
 	}
 
 }

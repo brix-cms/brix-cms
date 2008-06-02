@@ -12,11 +12,13 @@ import java.util.Map.Entry;
  */
 public abstract class MarkupRenderer
 {
+	private final String doctype;
 	private final List<Item> items;
 
-	MarkupRenderer(List<Item> items)
+	MarkupRenderer(List<Item> items, String doctype)
 	{
 		this.items = items;
+		this.doctype = doctype;
 	}
 
 	/**
@@ -27,6 +29,11 @@ public abstract class MarkupRenderer
 	public String render()
 	{
 		StringBuilder builder = new StringBuilder();
+		
+		if (doctype != null)
+		{
+			builder.append(doctype);
+		}
 
 		for (Item item : items)
 		{

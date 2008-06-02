@@ -35,4 +35,8 @@ public class MarkupSourceWrapper implements MarkupSource
 		return delegate.nextMarkupItem();
 	}
 
+	public String getDoctype()
+	{
+		return delegate.getDoctype();
+	}
 }

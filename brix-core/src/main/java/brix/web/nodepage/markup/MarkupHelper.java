@@ -81,7 +81,7 @@ public class MarkupHelper implements Serializable
 		final Set<String> components = new HashSet<String>();
 		GeneratedMarkup markup = getMarkupCache().getMarkup(component);
 		
-		MarkupRenderer renderer = new MarkupRenderer(markup.items)
+		MarkupRenderer renderer = new MarkupRenderer(markup.items, markup.doctype)
 		{
 			@Override
 			void postprocessTagAttributes(Tag tag, Map<String, String> attributes)
