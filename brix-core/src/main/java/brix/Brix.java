@@ -31,6 +31,7 @@ import brix.jcr.event.EventUtil;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.jcr.wrapper.WrapperRegistry;
+import brix.plugin.fragment.FragmentPlugin;
 import brix.plugin.menu.MenuPlugin;
 import brix.plugin.publishing.PublishingPlugin;
 import brix.plugin.site.SitePlugin;
@@ -76,6 +77,7 @@ public abstract class Brix
         registry.register(Plugin.POINT, new TemplatePlugin());
         registry.register(Plugin.POINT, new PublishingPlugin());
         registry.register(Plugin.POINT, new WebdavUrlPlugin());
+        registry.register(Plugin.POINT, new FragmentPlugin());
     }
 
     public static Brix get(Application application)
@@ -279,7 +281,8 @@ public abstract class Brix
             }
             catch (Exception ignore)
             {
-                //logger.warn("Error registering brix namespace, may already be registered", ignore);
+                // logger.warn("Error registering brix namespace, may already be registered",
+                // ignore);
             }
 
             EventUtil.registerSaveEventListener(new JcrEventListener());
