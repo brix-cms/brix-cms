@@ -23,10 +23,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.Strings;
 
-import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.node.tilepage.TileContainerNode;
+import brix.plugin.site.node.tilepage.TileContainerFacet;
 import brix.plugin.site.node.tilepage.admin.NewTileFragment;
 import brix.plugin.site.node.tilepage.admin.TileEditorFragment;
 
@@ -39,13 +37,10 @@ class TilesPanel extends Panel<BrixNode>
     {
         List<String> result = new ArrayList<String>();
 
-        JcrNode container = getContainerNode();
 
-        JcrNodeIterator iterator = container.getNodes(TileContainerNode.TILE_NODE_NAME);
-        while (iterator.hasNext())
+        for (BrixNode tileNode : getContainer().tiles().getTileNodes())
         {
-            JcrNode tileNode = iterator.nextNode();
-            result.add(TileContainerNode.getTileId((BrixNode)tileNode));
+            result.add(TileContainerFacet.getTileId(tileNode));
         }
         return result;
     }
@@ -136,6 +131,12 @@ class TilesPanel extends Panel<BrixNode>
         return getModelObject();
     }
 
+    protected TileContainer getContainer()
+    {
+        // TODO nice cast exception
+        return (TileContainer)getModelObject();
+    }
+
     private void setupTileEditor()
     {
         Fragment< ? > newEditor = null;
@@ -151,7 +152,7 @@ class TilesPanel extends Panel<BrixNode>
                 {
                     BrixNode containerNode = getContainerNode();
                     containerNode.checkout();
-                    BrixNode node = TileContainerNode.createTile(containerNode, tileId, tileTypeName);
+                    BrixNode node = getContainer().tiles().createTile(tileId, tileTypeName);
                     getEditor().save(node);
                     containerNode.save();
                     containerNode.checkin();
@@ -170,7 +171,7 @@ class TilesPanel extends Panel<BrixNode>
                 @Override
                 protected void onDelete(String tileId)
                 {
-                    BrixNode tile = TileContainerNode.getTile(getContainerNode(), selectedTileId);
+                    BrixNode tile = getContainer().tiles().getTile(selectedTileId);
                     getContainerNode().checkout();
                     tile.remove();
                     getContainerNode().save();

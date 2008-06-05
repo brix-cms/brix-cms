@@ -32,12 +32,13 @@ import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.jcr.wrapper.WrapperRegistry;
 import brix.plugin.fragment.FragmentPlugin;
+import brix.plugin.fragment.FragmentsContainerNode;
 import brix.plugin.menu.MenuPlugin;
 import brix.plugin.publishing.PublishingPlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.folder.FolderNode;
 import brix.plugin.site.node.folder.FolderNodePlugin;
-import brix.plugin.site.node.tilepage.TileContainerNode;
+import brix.plugin.site.node.tilepage.TileContainerFacet;
 import brix.plugin.site.node.tilepage.TilePageNodePlugin;
 import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 import brix.plugin.snapshot.SnapshotPlugin;
@@ -69,7 +70,8 @@ public abstract class Brix
         this.sessionFactory = sessionFactory;
 
         wrapperRegistry.registerWrapper(FolderNode.class);
-
+        wrapperRegistry.registerWrapper(FragmentsContainerNode.class);
+        
         final ExtensionPointRegistry registry = config.getRegistry();
         registry.register(Plugin.POINT, new SitePlugin(this));
         registry.register(Plugin.POINT, new MenuPlugin());
@@ -78,6 +80,7 @@ public abstract class Brix
         registry.register(Plugin.POINT, new PublishingPlugin());
         registry.register(Plugin.POINT, new WebdavUrlPlugin());
         registry.register(Plugin.POINT, new FragmentPlugin(this));
+        
     }
 
     public static Brix get(Application application)
@@ -236,6 +239,7 @@ public abstract class Brix
         return "/" + ROOT_NODE_NAME;
     }
 
+    // TODO rename to registerMixinType
     protected void registerType(Workspace workspace, String typeName, boolean referenceable,
             boolean orderable) throws Exception
     {
@@ -294,9 +298,12 @@ public abstract class Brix
             registerType(w, TilePageNodePlugin.TYPE, false, false);
             registerType(w, TileTemplateNodePlugin.TYPE, false, false);
 
-            registerType(w, TileContainerNode.JCR_TYPE_BRIX_TILE, false, true);
+            registerType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true);
 
             registerType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
+
+            registerType(w, FragmentsContainerNode.TYPE, false, false);
+            
 
         }
         catch (Exception e)

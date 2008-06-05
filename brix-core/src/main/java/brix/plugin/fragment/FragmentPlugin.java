@@ -53,6 +53,10 @@ public class FragmentPlugin implements Plugin
         {
             fragments.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
         }
+        if (!fragments.isNodeType(FragmentsContainerNode.TYPE))
+        {
+            fragments.addMixin(FragmentsContainerNode.TYPE);
+        }
 
     }
 

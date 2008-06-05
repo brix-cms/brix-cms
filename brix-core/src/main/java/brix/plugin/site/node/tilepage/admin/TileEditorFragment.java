@@ -10,7 +10,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
+import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.fragment.TileContainer;
 import brix.plugin.site.node.tilepage.TileContainerNode;
 
 public abstract class TileEditorFragment extends Fragment<BrixNode>
@@ -26,14 +28,14 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
 
         form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
 
-        final String tileClassName = getTileContainerNode().getTileClassName(tileId);
-        final Tile tile = getTileContainerNode().getNodePlugin().getTileOfType(tileClassName);
+        final String tileClassName = getTileContainerNode().tiles().getTileClassName(tileId);
+        final Tile tile = Tile.Helper.getTileOfType(tileClassName, Brix.get());
 
         final TileEditorPanel editor;
 
         form.add(editor = tile.newEditor("editor", nodeModel));
 
-        editor.load(getTileContainerNode().getTile(tileId));
+        editor.load(getTileContainerNode().tiles().getTile(tileId));
 
         form.add(new Button("submit")
         {
@@ -41,7 +43,7 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
             public void onSubmit()
             {
                 BrixNode node = TileEditorFragment.this.getModelObject();
-                BrixNode tile = getTileContainerNode().getTile(tileId);
+                BrixNode tile = getTileContainerNode().tiles().getTile(tileId);
                 node.checkout();
                 editor.save(tile);
                 node.save();
@@ -62,11 +64,9 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
             protected void onComponentTag(ComponentTag tag)
             {
                 super.onComponentTag(tag);
-                tag
-                        .put(
-                                "onclick",
-                                "if (!confirm('Are you sure you want to remove this tile?')) return false; " +
-                                        tag.getAttributes().get("onclick"));
+                tag.put("onclick",
+                    "if (!confirm('Are you sure you want to remove this tile?')) return false; " +
+                        tag.getAttributes().get("onclick"));
             }
 
         });
@@ -74,9 +74,9 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
 
     protected abstract void onDelete(String tileId);
 
-    private TileContainerNode getTileContainerNode()
+    private TileContainer getTileContainerNode()
     {
-        return (TileContainerNode)getModelObject();
+        return (TileContainer)getModelObject();
     }
 
 }

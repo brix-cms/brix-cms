@@ -24,154 +24,159 @@ import org.apache.wicket.util.string.Strings;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
+import brix.plugin.site.node.tilepage.TileContainerFacet;
 import brix.plugin.site.node.tilepage.TileContainerNode;
 
 class TilesPanel extends NodeManagerPanel
 {
-	String selectedTileId;
-	private Component editor;
+    String selectedTileId;
+    private Component editor;
 
-	private List<String> getTileIds()
-	{
-		List<String> result = new ArrayList<String>();
-		List<BrixNode> nodes = getTileContainerNode().getTileNodes();
-		for (BrixNode node : nodes)
-		{
-			result.add(TileContainerNode.getTileId(node));
-		}
-		return result;
-	}
+    private List<String> getTileIds()
+    {
+        List<String> result = new ArrayList<String>();
+        List<BrixNode> nodes = getTileContainerNode().tiles().getTileNodes();
+        for (BrixNode node : nodes)
+        {
+            result.add(TileContainerFacet.getTileId(node));
+        }
+        return result;
+    }
 
-	public TilesPanel(String id, IModel<BrixNode> nodeModel)
-	{
-		super(id, nodeModel);
+    public TilesPanel(String id, IModel<BrixNode> nodeModel)
+    {
+        super(id, nodeModel);
 
-		add(new RefreshingView("tile-selector")
-		{
+        add(new RefreshingView("tile-selector")
+        {
 
-			@SuppressWarnings("unchecked")
-			@Override
-			protected Iterator getItemModels()
-			{
+            @SuppressWarnings("unchecked")
+            @Override
+            protected Iterator getItemModels()
+            {
 
-				List<String> tileIds = getTileIds();
-				List<String> displayIds = new ArrayList<String>(tileIds.size() + 1);
-				displayIds.add(null);
-				displayIds.addAll(tileIds);
-				return new ModelIteratorAdapter(displayIds.iterator())
-				{
+                List<String> tileIds = getTileIds();
+                List<String> displayIds = new ArrayList<String>(tileIds.size() + 1);
+                displayIds.add(null);
+                displayIds.addAll(tileIds);
+                return new ModelIteratorAdapter(displayIds.iterator())
+                {
 
-					@Override
-					protected IModel model(Object object)
-					{
-						return new Model((String) object);
-					}
+                    @Override
+                    protected IModel model(Object object)
+                    {
+                        return new Model((String)object);
+                    }
 
-				};
-			}
+                };
+            }
 
-			@Override
-			protected void populateItem(Item item)
-			{
-				item.add(new AbstractBehavior()
-				{
-					private Item item;
+            @Override
+            protected void populateItem(Item item)
+            {
+                item.add(new AbstractBehavior()
+                {
+                    private Item item;
 
-					@Override
-					public void bind(Component component)
-					{
-						item = (Item) component;
-					}
+                    @Override
+                    public void bind(Component component)
+                    {
+                        item = (Item)component;
+                    }
 
-					@Override
-					public void onComponentTag(Component component, ComponentTag tag)
-					{
-						final boolean selected = Objects.equal(selectedTileId, item.getModel().getObject());
-						if (selected)
-						{
-							tag.put("class", "selected");
-						}
-					}
-				});
+                    @Override
+                    public void onComponentTag(Component component, ComponentTag tag)
+                    {
+                        final boolean selected = Objects.equal(selectedTileId, item.getModel()
+                            .getObject());
+                        if (selected)
+                        {
+                            tag.put("class", "selected");
+                        }
+                    }
+                });
 
-				Link link = new Link("link", item.getModel())
-				{
+                Link link = new Link("link", item.getModel())
+                {
 
-					@Override
-					public void onClick()
-					{
-						selectedTileId = (String) getModel().getObject();
-						setupTileEditor();
-					}
-				};
-				item.add(link);
+                    @Override
+                    public void onClick()
+                    {
+                        selectedTileId = (String)getModel().getObject();
+                        setupTileEditor();
+                    }
+                };
+                item.add(link);
 
-				link.add(new Label("name", (item.getModelObject() == null) ? "Create New" : (String) item.getModel()
-						.getObject()));
-			}
+                link.add(new Label("name", (item.getModelObject() == null)
+                    ? "Create New"
+                    : (String)item.getModel().getObject()));
+            }
 
-		});
+        });
 
-		editor = new WebComponent("tile-editor");
-		add(editor);
+        editor = new WebComponent("tile-editor");
+        add(editor);
 
-		// init first editor
-		setupTileEditor();
+        // init first editor
+        setupTileEditor();
 
-	}
+    }
 
-	private TileContainerNode getTileContainerNode()
-	{
-		return (TileContainerNode) getNode();
-	}
+    private TileContainerNode getTileContainerNode()
+    {
+        return (TileContainerNode)getNode();
+    }
 
-	private void setupTileEditor()
-	{
-		Fragment<?> newEditor = null;
+    private void setupTileEditor()
+    {
+        Fragment< ? > newEditor = null;
 
-		if (Strings.isEmpty(selectedTileId))
-		{
-			newEditor = new NewTileFragment(editor.getId(), "new-tile-form-fragment", this, getModel())
-			{
+        if (Strings.isEmpty(selectedTileId))
+        {
+            newEditor = new NewTileFragment(editor.getId(), "new-tile-form-fragment", this,
+                getModel())
+            {
 
-				@Override
-				protected void onAddTile(String tileId, String tileTypeName)
-				{
-					BrixNode containerNode = getNode();
-					containerNode.checkout();
-					BrixNode node = getTileContainerNode().createTile(tileId, tileTypeName);
-					getEditor().save(node);
-					containerNode.save();
-					containerNode.checkin();
-					selectedTileId = tileId;
-					setupTileEditor();
-				}
+                @Override
+                protected void onAddTile(String tileId, String tileTypeName)
+                {
+                    BrixNode containerNode = getNode();
+                    containerNode.checkout();
+                    BrixNode node = getTileContainerNode().tiles().createTile(tileId,
+                        tileTypeName);
+                    getEditor().save(node);
+                    containerNode.save();
+                    containerNode.checkin();
+                    selectedTileId = tileId;
+                    setupTileEditor();
+                }
 
-			};
-		}
-		else
-		{
-			newEditor = new TileEditorFragment(editor.getId(), "editor-form-fragment", this, getModel(),
-					selectedTileId)
-			{
+            };
+        }
+        else
+        {
+            newEditor = new TileEditorFragment(editor.getId(), "editor-form-fragment", this,
+                getModel(), selectedTileId)
+            {
 
-				@Override
-				protected void onDelete(String tileId)
-				{
-					BrixNode tile = getTileContainerNode().getTile(selectedTileId);
-					getNode().checkout();
-					tile.remove();
-					getNode().save();
-					getNode().checkin();
-					selectedTileId = null;
-					setupTileEditor();
-				}
+                @Override
+                protected void onDelete(String tileId)
+                {
+                    BrixNode tile = getTileContainerNode().tiles().getTile(selectedTileId);
+                    getNode().checkout();
+                    tile.remove();
+                    getNode().save();
+                    getNode().checkin();
+                    selectedTileId = null;
+                    setupTileEditor();
+                }
 
-			};
-		}
-		editor.replaceWith(newEditor);
-		editor = newEditor;
+            };
+        }
+        editor.replaceWith(newEditor);
+        editor = newEditor;
 
-	}
+    }
 
 }

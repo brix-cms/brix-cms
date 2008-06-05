@@ -24,9 +24,10 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
+import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.fragment.TileContainer;
 import brix.plugin.site.node.tilepage.TileContainerNode;
-import brix.plugin.site.node.tilepage.TileNodePlugin;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;
 
@@ -57,11 +58,11 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 
         form.add(new ContainerFeedbackPanel("feedback", form));
         form.add(new TextField("tile-id", new PropertyModel(this, "newTileId")).setLabel(
-                new Model("Tile Id")).setRequired(true).add(new NewTileIdValidator()).add(
-                NodeNameValidator.getInstance()));
+            new Model("Tile Id")).setRequired(true).add(new NewTileIdValidator()).add(
+            NodeNameValidator.getInstance()));
 
         form.add(new DropDownChoice("tile-type", new PropertyModel(this, "newTileTypeName"),
-                new TileTypeNamesModel(), new TileTypeNameRenderer())
+            new TileTypeNamesModel(), new TileTypeNameRenderer())
         {
             private static final long serialVersionUID = 1L;
 
@@ -83,7 +84,7 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
                 }
                 else
                 {
-                    final Tile tile = getCmsPage().getNodePlugin().getTileOfType(tileTypeName);
+                    final Tile tile = Tile.Helper.getTileOfType(tileTypeName, Brix.get());
                     TileEditorPanel ed = tile.newEditor(newTileEditor.getId(), nodeModel);
                     newTileEditor.replaceWith(ed);
                     newTileEditor = ed;
@@ -106,9 +107,9 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
         });
     }
 
-    private TileContainerNode getCmsPage()
+    private TileContainer getTileContainer()
     {
-        return (TileContainerNode)getModelObject();
+        return (TileContainer)getModelObject();
     }
 
     protected abstract void onAddTile(String tileId, String ntileTypeName);
@@ -119,10 +120,10 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
         public void validate(IValidatable validatable)
         {
             final String tileId = (String)validatable.getValue();
-            if (getCmsPage().getTile(tileId) != null)
+            if (getTileContainer().tiles().getTile(tileId) != null)
             {
                 validatable.error(new ValidationError()
-                        .setMessage("A tile with id ${input} already exists"));
+                    .setMessage("A tile with id ${input} already exists"));
             }
         }
     }
@@ -133,7 +134,7 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
         @Override
         protected Object load()
         {
-            final Collection<Tile> tiles = getCmsPage().getNodePlugin().getTiles();
+            final Collection<Tile> tiles = Tile.Helper.getTiles(Brix.get());
             List<String> choices = new ArrayList<String>(tiles.size());
             for (Tile tile : tiles)
             {
@@ -150,8 +151,7 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
         public Object getDisplayValue(Object object)
         {
             String type = (String)object;
-            TileNodePlugin plugin = (TileNodePlugin)getCmsPage().getNodePlugin();
-            return plugin.getTileOfType(type).getDisplayName();
+            return Tile.Helper.getTileOfType(type, Brix.get()).getDisplayName();
         }
 
         public String getIdValue(Object object, int index)
