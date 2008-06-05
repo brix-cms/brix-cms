@@ -77,7 +77,7 @@ public abstract class Brix
         registry.register(Plugin.POINT, new TemplatePlugin());
         registry.register(Plugin.POINT, new PublishingPlugin());
         registry.register(Plugin.POINT, new WebdavUrlPlugin());
-        registry.register(Plugin.POINT, new FragmentPlugin());
+        registry.register(Plugin.POINT, new FragmentPlugin(this));
     }
 
     public static Brix get(Application application)

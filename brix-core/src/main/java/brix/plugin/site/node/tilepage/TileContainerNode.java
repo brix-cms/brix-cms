@@ -9,7 +9,6 @@ import org.apache.wicket.model.IModel;
 
 import brix.Brix;
 import brix.BrixNodeModel;
-import brix.exception.BrixException;
 import brix.exception.NodeNotFoundException;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
@@ -63,14 +62,19 @@ public abstract class TileContainerNode extends BrixFileNode
 
     public BrixNode getTile(String id)
     {
+        return getTile(this, id);
+    }
+
+    public static BrixNode getTile(BrixNode container, String id)
+    {
         if (id == null)
         {
             throw new IllegalArgumentException("tile id cannot be null");
         }
-        JcrNodeIterator iterator = getNodes(TILE_NODE_NAME);
+        JcrNodeIterator iterator = container.getNodes(TILE_NODE_NAME);
         while (iterator.hasNext())
         {
-            BrixNode node = (BrixNode) iterator.nextNode();
+            BrixNode node = (BrixNode)iterator.nextNode();
             if (node.isNodeType(JCR_TYPE_BRIX_TILE) && id.equals(getTileId(node)))
             {
                 return node;
@@ -79,13 +83,19 @@ public abstract class TileContainerNode extends BrixFileNode
         return null;
     }
 
+
     public List<BrixNode> getTileNodes()
     {
+        return getTileNodes(this);
+    }
+
+    public static List<BrixNode> getTileNodes(BrixNode container)
+    {
         List<BrixNode> result = new ArrayList<BrixNode>();
-        JcrNodeIterator iterator = getNodes(TILE_NODE_NAME);
+        JcrNodeIterator iterator = container.getNodes(TILE_NODE_NAME);
         while (iterator.hasNext())
         {
-            BrixNode node = (BrixNode) iterator.nextNode();
+            BrixNode node = (BrixNode)iterator.nextNode();
             if (node.isNodeType(JCR_TYPE_BRIX_TILE))
             {
                 result.add(node);
@@ -135,7 +145,7 @@ public abstract class TileContainerNode extends BrixFileNode
     {
         if (hasProperty(Properties.TEMPLATE))
         {
-            return (TileTemplateNode) getProperty(Properties.TEMPLATE).getNode();
+            return (TileTemplateNode)getProperty(Properties.TEMPLATE).getNode();
         }
         else
         {
@@ -156,7 +166,7 @@ public abstract class TileContainerNode extends BrixFileNode
         }
         else
         {
-            BrixNode node = (BrixNode) SitePlugin.get().nodeForPath(this, path);
+            BrixNode node = (BrixNode)SitePlugin.get().nodeForPath(this, path);
 
             if (node == null)
             {
@@ -175,6 +185,11 @@ public abstract class TileContainerNode extends BrixFileNode
 
     public BrixNode createTile(String tileId, String typeName)
     {
+        return createTile(this, tileId, typeName);
+    }
+
+    public static BrixNode createTile(BrixNode container, String tileId, String typeName)
+    {
         if (tileId == null)
         {
             throw new IllegalArgumentException("Argument 'tileId' may not be null.");
@@ -183,17 +198,18 @@ public abstract class TileContainerNode extends BrixFileNode
         {
             throw new IllegalArgumentException("Argument 'typeName' may not be null.");
         }
-        if (isValidNodeName(tileId) == false)
-        {
-            throw new IllegalArgumentException("Argument 'tileId' is not a valid node name.");
-        }
 
-        if (hasNode(tileId))
-        {
-            throw new BrixException("Tile with id '" + tileId + "' already exists.");
-        }
+        // TODO this check needs to be fixed?
+        // if (isValidNodeName(tileId) == false)
+        // {
+        // throw new IllegalArgumentException("Argument 'tileId' is not a valid node name.");
+        // }
+        // if (hasNode(tileId))
+        // {
+        // throw new BrixException("Tile with id '" + tileId + "' already exists.");
+        // }
 
-        BrixNode tile = (BrixNode) addNode(TILE_NODE_NAME, JCR_TYPE_BRIX_TILE);
+        BrixNode tile = (BrixNode)container.addNode(TILE_NODE_NAME, JCR_TYPE_BRIX_TILE);
 
         tile.setProperty(Properties.TILE_ID, tileId);
         tile.setProperty(Properties.TILE_CLASS, typeName);
@@ -229,17 +245,18 @@ public abstract class TileContainerNode extends BrixFileNode
     {
         return isRequiresSSL() || anyTileRequiresSSL();
     }
-    
+
     @Override
-    public Protocol getRequiredProtocol() {
-    	if (requiresSSL()) 
-    	{
-    		return Protocol.HTTPS;
-    	} 
-    	else
-    	{
-    		return Protocol.HTTP;
-    	}
+    public Protocol getRequiredProtocol()
+    {
+        if (requiresSSL())
+        {
+            return Protocol.HTTPS;
+        }
+        else
+        {
+            return Protocol.HTTP;
+        }
     }
 
     public TileNodePlugin getNodePlugin()

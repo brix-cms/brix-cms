@@ -1,15 +1,17 @@
 package brix.plugin.fragment;
 
+import org.apache.wicket.model.IModel;
+
+import brix.jcr.wrapper.BrixNode;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
-public class FragmentManagerPanel extends NavigationAwarePanel
+public class FragmentManagerPanel extends NavigationAwarePanel<BrixNode>
 {
-    private final String workspaceId;
-
-    public FragmentManagerPanel(String id, String workspaceId)
+    public FragmentManagerPanel(String id, IModel<BrixNode> fragmentsNode)
     {
-        super(id);
-        this.workspaceId = workspaceId;
+        super(id, fragmentsNode);
+        add(new TilesPanel("tiles", fragmentsNode));
+
     }
 
 }

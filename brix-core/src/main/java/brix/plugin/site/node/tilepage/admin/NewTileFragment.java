@@ -30,7 +30,7 @@ import brix.plugin.site.node.tilepage.TileNodePlugin;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;
 
-abstract class NewTileFragment extends Fragment<BrixNode>
+public abstract class NewTileFragment extends Fragment<BrixNode>
 {
     private String newTileId;
     private String newTileTypeName;

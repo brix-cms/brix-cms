@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.model.Model;
 
+import brix.BrixNodeModel;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.workspace.Workspace;
@@ -15,10 +16,12 @@ import brix.workspace.Workspace;
 public class FragmentPluginNavigationTreeNode implements NavigationTreeNode
 {
     private final String workspaceId;
+    private final String fragmentsNodeId;
 
-    public FragmentPluginNavigationTreeNode(Workspace workspace)
+    public FragmentPluginNavigationTreeNode(Workspace workspace, String fragmentsNodeId)
     {
         this.workspaceId = workspace.getId();
+        this.fragmentsNodeId = fragmentsNodeId;
     }
 
     public Panel< ? > newLinkPanel(String id, BaseTree tree)
@@ -28,7 +31,7 @@ public class FragmentPluginNavigationTreeNode implements NavigationTreeNode
 
     public NavigationAwarePanel< ? > newManagePanel(String id)
     {
-        return new FragmentManagerPanel(id, workspaceId);
+        return new FragmentManagerPanel(id, new BrixNodeModel(fragmentsNodeId, workspaceId));
     }
 
     public List< ? extends brix.web.tree.TreeNode> getChildren()
