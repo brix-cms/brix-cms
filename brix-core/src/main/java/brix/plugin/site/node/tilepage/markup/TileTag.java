@@ -1,5 +1,6 @@
 package brix.plugin.site.node.tilepage.markup;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -14,16 +15,17 @@ import brix.plugin.site.node.tilepage.TileNodePlugin;
 import brix.plugin.site.node.tilepage.admin.Tile;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.markup.ComponentTag;
-import brix.web.nodepage.markup.SimpleTag;
+import brix.web.nodepage.markup.simple.SimpleTag;
+import brix.web.nodepage.markup.variable.VariableKeyProvider;
 
 /**
- * ComponentTag that that replaces the &lt;brix:tile&gt; tags. 
- *  
+ * ComponentTag that that replaces the &lt;brix:tile&gt; tags.
+ * 
  * @author Matej Knopp
  */
-public class TileTag extends SimpleTag implements ComponentTag
+public class TileTag extends SimpleTag implements ComponentTag, VariableKeyProvider
 {
-	private final IModel<BrixNode> tileContainerNodeModel;
+	private final BrixNodeModel tileContainerNodeModel;
 	private final String tileName;
 
 	public TileTag(String name, Type type, Map<String, String> attributeMap, TileContainerNode tileContainerNode,
@@ -36,11 +38,11 @@ public class TileTag extends SimpleTag implements ComponentTag
 		this.tileContainerNodeModel.detach();
 	}
 
-	public Component<?> getComponent(String id)
+	public Component<?> getComponent(String id, IModel<BrixNode> pageNodeModel)
 	{
-		TileContainerNode tileContainerNode = (TileContainerNode) tileContainerNodeModel.getObject(); 
+		TileContainerNode tileContainerNode = (TileContainerNode) new BrixNodeModel(tileContainerNodeModel).getObject();
 		BrixNode tileNode = tileContainerNode.getTile(tileName);
-		tileContainerNodeModel.detach();
+		
 		if (tileNode != null)
 		{
 			TileNodePlugin plugin = (TileNodePlugin) SitePlugin.get().getNodePluginForNode(tileContainerNode);
@@ -54,12 +56,29 @@ public class TileTag extends SimpleTag implements ComponentTag
 		}
 	}
 
+	public Collection<String> getVariableKeys()
+	{
+		TileContainerNode tileContainerNode = (TileContainerNode) tileContainerNodeModel.getObject();
+		BrixNode tileNode = tileContainerNode.getTile(tileName);
+		tileContainerNodeModel.detach();
+		if (tileNode != null)
+		{
+			TileNodePlugin plugin = (TileNodePlugin) SitePlugin.get().getNodePluginForNode(tileContainerNode);
+			Tile tile = plugin.getTileOfType(TileContainerNode.getTileClassName(tileNode));
+			if (tile instanceof VariableKeyProvider)
+			{
+				return ((VariableKeyProvider) tile).getVariableKeys();
+			}
+		}
+		return null;
+	}
+
 	private final static AtomicLong atomicLong = new AtomicLong();
-	
+
 	private final static String PREFIX = "tile-";
 
 	private String id;
-	
+
 	public String getUniqueId()
 	{
 		if (id == null)

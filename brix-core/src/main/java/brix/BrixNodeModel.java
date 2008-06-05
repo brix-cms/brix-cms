@@ -17,6 +17,11 @@ public class BrixNodeModel implements IModel<BrixNode>
     private String workspaceName;
     private transient BrixNode node;
 
+    public BrixNodeModel()
+    {
+    	this((BrixNode)null);
+    }
+    
     public BrixNodeModel(BrixNode node)
     {
         this.node = node;
@@ -25,6 +30,17 @@ public class BrixNodeModel implements IModel<BrixNode>
             this.id = getId(node);
             this.workspaceName = node.getSession().getWorkspace().getName();
         }
+    }
+    
+    public BrixNodeModel(BrixNodeModel other)
+    {
+    	if (other == null)
+    	{
+    		throw new IllegalArgumentException("Argument 'other' may not be null.");
+    	}
+    	this.id = other.id;
+    	this.workspaceName = other.workspaceName;
+    	this.node = other.node;
     }
 
     public BrixNodeModel(String id, String workspaceName)

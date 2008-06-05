@@ -10,7 +10,7 @@ import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.node.tilepage.markup.TilePageMarkupSource;
 import brix.web.nodepage.markup.BrixMarkupNodePanel;
 import brix.web.nodepage.markup.MarkupSource;
-import brix.web.nodepage.markup.PanelTransformer;
+import brix.web.nodepage.markup.transform.PanelTransformer;
 
 public class TilePageRenderPanel extends BrixMarkupNodePanel
 {

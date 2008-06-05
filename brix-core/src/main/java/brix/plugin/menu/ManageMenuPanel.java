@@ -203,7 +203,7 @@ public class ManageMenuPanel extends NavigationAwarePanel<Workspace>
 
     private Component<Menu> editor;
 
-    private IModel<BrixNode> currentNode = new BrixNodeModel(null);
+    private IModel<BrixNode> currentNode = new BrixNodeModel();
     private Menu currentMenu = new Menu();
 
     @Override

@@ -23,7 +23,7 @@ public class PageTileEditorPanel extends TileEditorPanel<BrixNode>
         add(picker);
     }
 
-    private IModel<BrixNode> targetNodeModel = new BrixNodeModel(null);
+    private IModel<BrixNode> targetNodeModel = new BrixNodeModel();
 
     @Override
     public void load(BrixNode node)

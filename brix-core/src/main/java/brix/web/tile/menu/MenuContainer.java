@@ -9,7 +9,7 @@ import brix.plugin.menu.Menu;
 
 public class MenuContainer implements IDetachable
 {
-    IModel<BrixNode> menuNodeModel = new BrixNodeModel(null);
+    IModel<BrixNode> menuNodeModel = new BrixNodeModel();
     private Menu cachedMenu;
     
     public void setMenuNode(BrixNode node)

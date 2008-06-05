@@ -1,9 +1,15 @@
-package brix.web.nodepage.markup;
+package brix.web.nodepage.markup.transform;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import brix.web.nodepage.markup.Item;
+import brix.web.nodepage.markup.MarkupSource;
+import brix.web.nodepage.markup.Tag;
+import brix.web.nodepage.markup.Tag.Type;
+import brix.web.nodepage.markup.simple.SimpleTag;
 
 /**
  * Transformer that makes the markup usable with wicket panel. All &lt;head&gt;

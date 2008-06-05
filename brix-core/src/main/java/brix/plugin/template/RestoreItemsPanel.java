@@ -21,7 +21,7 @@ import brix.web.picker.node.NodePickerPanel;
 
 public class RestoreItemsPanel extends SelectItemsPanel<Void>
 {
-    private IModel<BrixNode> targetNode = new BrixNodeModel(null);
+    private IModel<BrixNode> targetNode = new BrixNodeModel();
 
     public RestoreItemsPanel(String id, String templateWorkspaceId, final String targetWorkspaceId)
     {

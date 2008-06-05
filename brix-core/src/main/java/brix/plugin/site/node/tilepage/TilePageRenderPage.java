@@ -6,8 +6,8 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.markup.TilePageMarkupSource;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.markup.BrixMarkupNodeWebPage;
-import brix.web.nodepage.markup.HeadTransformer;
 import brix.web.nodepage.markup.MarkupSource;
+import brix.web.nodepage.markup.transform.HeadTransformer;
 import brix.web.nodepage.toolbar.ToolbarBehavior;
 
 public class TilePageRenderPage extends BrixMarkupNodeWebPage

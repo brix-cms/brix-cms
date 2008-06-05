@@ -102,7 +102,7 @@ public class MarkupHelper implements Serializable
 					else
 					{
 						// otherwise we need to create the component instance
-						Component<?> c = componentTag.getComponent(id);
+						Component<?> c = componentTag.getComponent(id, component.getModel());
 						if (c != null)
 						{
 							attributes.put("wicket:id", id);

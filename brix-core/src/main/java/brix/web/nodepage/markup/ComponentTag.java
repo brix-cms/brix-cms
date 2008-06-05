@@ -1,6 +1,9 @@
 package brix.web.nodepage.markup;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+
+import brix.jcr.wrapper.BrixNode;
 
 /**
  * HTML tag that can have a wicket component attached to it.
@@ -29,7 +32,9 @@ public interface ComponentTag extends Tag
 	 * @param id
 	 *            component id (will be generated and based on
 	 *            {@link #getUniqueId()} result)
+	 * @param pageNodeModel
+	 * 			  model to JcrNode that represents the target page            
 	 * @return
 	 */
-	public Component<?> getComponent(String id);
+	public Component<?> getComponent(String id, IModel<BrixNode> pageNodeModel);
 }

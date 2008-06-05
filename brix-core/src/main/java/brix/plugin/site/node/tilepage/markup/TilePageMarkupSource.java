@@ -22,11 +22,11 @@ import brix.plugin.site.node.tilepage.TileContainerNode;
 import brix.plugin.site.node.tilepage.TileTemplateNode;
 import brix.web.nodepage.markup.Item;
 import brix.web.nodepage.markup.MarkupSource;
-import brix.web.nodepage.markup.SimpleComment;
-import brix.web.nodepage.markup.SimpleTag;
-import brix.web.nodepage.markup.SimpleText;
 import brix.web.nodepage.markup.Tag;
 import brix.web.nodepage.markup.Tag.Type;
+import brix.web.nodepage.markup.simple.SimpleComment;
+import brix.web.nodepage.markup.simple.SimpleTag;
+import brix.web.nodepage.markup.simple.SimpleText;
 
 /**
  * {@link MarkupSource} for tile markup. Parses and merges the content of tile

@@ -1,4 +1,6 @@
-package brix.web.nodepage.markup;
+package brix.web.nodepage.markup.simple;
+
+import brix.web.nodepage.markup.Text;
 
 /**
  * Simple implementation of the {@link Text} interface

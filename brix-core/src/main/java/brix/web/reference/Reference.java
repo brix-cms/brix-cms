@@ -65,7 +65,7 @@ public class Reference implements Serializable, IDetachable
     {
         if (nodeModel == null)
         {
-            nodeModel = new BrixNodeModel(null);
+            nodeModel = new BrixNodeModel();
         }
         return nodeModel;
     }
