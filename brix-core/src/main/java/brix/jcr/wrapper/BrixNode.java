@@ -50,7 +50,6 @@ public class BrixNode extends NodeWrapper
             addMixin(JCR_TYPE_BRIX_NODE);
         }
         setProperty(JCR_PROP_NODE_TYPE, type);
-        addMixin(type);
     }
 
     public String getCreatedBy()
@@ -151,14 +150,7 @@ public class BrixNode extends NodeWrapper
     {
         if (node.hasProperty(JCR_PROP_NODE_TYPE))
         {
-            String type = node.getProperty(JCR_PROP_NODE_TYPE).getString();
-            if (!node.isNodeType(type))
-            {
-                final String msg = "Node has " + JCR_PROP_NODE_TYPE +
-                        " set to '{}' but has no such mixin type assigned";
-                logger.warn(msg, type);
-            }
-            return type;
+            return node.getProperty(JCR_PROP_NODE_TYPE).getString();
         }
         if (node.isNodeType("nt:file"))
         {
