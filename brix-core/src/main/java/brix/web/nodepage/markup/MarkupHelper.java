@@ -35,7 +35,7 @@ public class MarkupHelper implements Serializable
 
 	private String getComponentID(ComponentTag tag)
 	{
-		String uid = tag.getUniqueId();
+		String uid = tag.getUniqueTagId();
 		return COMPONENT_PREFIX + (uid != null ? uid.toString() : "");
 	}
 

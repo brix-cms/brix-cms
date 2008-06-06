@@ -25,9 +25,9 @@ public class VariableComponentTag extends VariableTag implements ComponentTag
 		return getDelegate().getComponent(id, pageNodeModel);
 	}
 
-	public String getUniqueId()
+	public String getUniqueTagId()
 	{
-		return getDelegate().getUniqueId();
+		return getDelegate().getUniqueTagId();
 	}
 
 }

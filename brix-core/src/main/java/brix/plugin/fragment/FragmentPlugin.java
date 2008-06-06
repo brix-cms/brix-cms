@@ -16,6 +16,8 @@ public class FragmentPlugin implements Plugin
 
     private final Brix brix;
 
+    private static final String PLUGIN_ID = "brix.plugin.fragment.FragmentPlugin";
+
     public FragmentPlugin(Brix brix)
     {
         super();
@@ -24,7 +26,7 @@ public class FragmentPlugin implements Plugin
 
     public String getId()
     {
-        return FragmentPlugin.class.getName();
+        return PLUGIN_ID;
     }
 
     public String getUserVisibleName(Workspace workspace, boolean isFrontend)
@@ -68,6 +70,13 @@ public class FragmentPlugin implements Plugin
 
         String uuid = root.getNode(FRAGMENTS_NODE_NAME).getUUID();
         return new FragmentPluginNavigationTreeNode(workspace, uuid);
+    }
+
+    public static final FragmentsContainerNode getContainerNode(Brix brix, String workspaceName)
+    {
+        JcrSession session = brix.getCurrentSession(workspaceName);
+        return (FragmentsContainerNode)((JcrNode)session.getItem(brix.getRootPath()))
+            .getNode(FRAGMENTS_NODE_NAME);
     }
 
 

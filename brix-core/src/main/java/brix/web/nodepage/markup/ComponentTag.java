@@ -23,7 +23,7 @@ public interface ComponentTag extends Tag
 	 * 
 	 * @return
 	 */
-	public String getUniqueId();
+	public String getUniqueTagId();
 
 	/**
 	 * Creates wicket component for this tag. If there is no component returns
@@ -31,7 +31,7 @@ public interface ComponentTag extends Tag
 	 * 
 	 * @param id
 	 *            component id (will be generated and based on
-	 *            {@link #getUniqueId()} result)
+	 *            {@link #getUniqueTagId()} result)
 	 * @param pageNodeModel
 	 * 			  model to JcrNode that represents the target page            
 	 * @return

@@ -11,6 +11,12 @@ import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.node.tilepage.admin.Tile;
 
+/**
+ * Helper for managing node's tile collection
+ * 
+ * @author ivaynberg
+ * 
+ */
 public class TileContainerFacet
 {
     /** Name of the Tile nodes(s) */
