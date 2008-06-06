@@ -50,7 +50,8 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
                 List<JcrNode> nodes = getSelectedNodes();
                 if (!nodes.isEmpty())
                 {
-                    JcrWorkspace targetWorkspace = Brix.get().getCurrentSession(targetWorkspaceId).getWorkspace();
+                	Brix brix = ((BrixNode)nodes.iterator().next()).getBrix();
+                    JcrWorkspace targetWorkspace = brix.getCurrentSession(targetWorkspaceId).getWorkspace();
                     Map<JcrNode, List<JcrNode>> dependencies = JcrUtil.getUnsatisfiedDependencies(
                         nodes, targetWorkspace);;
                     if (!dependencies.isEmpty())

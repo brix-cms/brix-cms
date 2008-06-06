@@ -1,21 +1,20 @@
 package brix.auth;
 
-import brix.Brix;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 import brix.workspace.Workspace;
 
 
 public abstract class AbstractNodeAction extends AbstractAction
 {
-    private final JcrNode node;
+    private final BrixNode node;
     
-    public AbstractNodeAction(Context context, JcrNode node)
+    public AbstractNodeAction(Context context, BrixNode node)
     {
         super(context);
         this.node = node;
     }
     
-    public JcrNode getNode()
+    public BrixNode getNode()
     {
         return node;
     }
@@ -29,7 +28,7 @@ public abstract class AbstractNodeAction extends AbstractAction
         else
         {
             String id = node.getSession().getWorkspace().getName();            
-            return Brix.get().getWorkspaceManager().getWorkspace(id);
+            return node.getBrix().getWorkspaceManager().getWorkspace(id);
         }
     }
 

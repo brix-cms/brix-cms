@@ -1,7 +1,7 @@
 package brix.plugin.site.auth;
 
 import brix.auth.AbstractNodeAction;
-import brix.jcr.api.JcrNode;
+import brix.jcr.wrapper.BrixNode;
 
 public class SiteNodeAction extends AbstractNodeAction
 {
@@ -16,7 +16,7 @@ public class SiteNodeAction extends AbstractNodeAction
 
     private final Type type;
 
-    public SiteNodeAction(Context context, Type type, JcrNode node)
+    public SiteNodeAction(Context context, Type type, BrixNode node)
     {
         super(context, node);
         this.type = type;

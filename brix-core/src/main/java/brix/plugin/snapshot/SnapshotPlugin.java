@@ -131,7 +131,6 @@ public class SnapshotPlugin implements Plugin
         {
             throw new IllegalStateException("Workspace must be a Site workspace");
         }
-        Brix brix = Brix.get();
 
         Workspace targetWorkspace = brix.getWorkspaceManager().createWorkspace();
         targetWorkspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
@@ -148,7 +147,6 @@ public class SnapshotPlugin implements Plugin
 
     public void restoreSnapshot(Workspace snapshotWorkspace, Workspace targetWorkspace)
     {
-        Brix brix = Brix.get();
         JcrSession sourceSession = brix.getCurrentSession(snapshotWorkspace.getId());
         JcrSession targetSession = brix.getCurrentSession(targetWorkspace.getId());
         brix.clone(sourceSession, targetSession);

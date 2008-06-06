@@ -24,6 +24,13 @@ public class PublishingPlugin implements Plugin
     public static final String STATE_STAGING = "staging";
     public static final String STATE_PRODUCTION = "production";
     
+    private final Brix brix;
+    
+    public PublishingPlugin(Brix brix)
+	{
+		this.brix = brix;
+	}
+    
     public static PublishingPlugin get(Brix brix)
     {
         return (PublishingPlugin)brix.getPlugin(ID);
@@ -63,7 +70,6 @@ public class PublishingPlugin implements Plugin
             target = sitePlugin.createSite(name, targetState);
         }
         
-        Brix brix = Brix.get();
         JcrSession sourceSession = brix.getCurrentSession(workspace.getId());
         JcrSession targetSession = brix.getCurrentSession(target.getId());
         

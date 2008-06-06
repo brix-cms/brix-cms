@@ -60,7 +60,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
     private boolean checkSession(String workspaceId)
     {
-        return Brix.get().getWorkspaceManager().workspaceExists(workspaceId);
+        return brix.getWorkspaceManager().workspaceExists(workspaceId);
     }
 
     public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";

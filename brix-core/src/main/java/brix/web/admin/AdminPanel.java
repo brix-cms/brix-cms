@@ -96,6 +96,11 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
             onNodeSelected(node);
         }
     }
+    
+    private Brix getBrix()
+    {
+    	return Brix.get();
+    }
 
     private void onNodeSelected(NavigationTreeNode node)
     {
@@ -144,7 +149,7 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
 
     private boolean isCurrentWorkspaceValid()
     {
-        WorkspaceManager manager = Brix.get().getWorkspaceManager();
+        WorkspaceManager manager = getBrix().getWorkspaceManager();
         return currentWorkspace != null && manager.workspaceExists(currentWorkspace.id);
     }
 
@@ -190,7 +195,7 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
 
     protected JcrSession getJcrSession()
     {
-        return Brix.get().getCurrentSession(getWorkspace());
+        return getBrix().getCurrentSession(getWorkspace());
     }
 
 
@@ -205,7 +210,7 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
 
     private List<WorkspaceEntry> getWorkspaces()
     {
-        Brix brix = Brix.get();
+        Brix brix = getBrix();
         List<WorkspaceEntry> workspaces = new ArrayList<WorkspaceEntry>();
         Workspace currentWorkspace = getWorkspace() != null ? brix.getWorkspaceManager()
             .getWorkspace(getWorkspace()) : null;

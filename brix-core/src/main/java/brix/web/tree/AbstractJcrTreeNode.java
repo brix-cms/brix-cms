@@ -132,7 +132,8 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         {
             Action viewChildren = new SiteNodeAction(Context.ADMINISTRATION,
                 SiteNodeAction.Type.NODE_VIEW_CHILDREN, nodeModel.getObject());
-            if (Brix.get().getAuthorizationStrategy().isActionAuthorized(viewChildren))
+            Brix brix = getNodeModel().getObject().getBrix();
+            if (brix.getAuthorizationStrategy().isActionAuthorized(viewChildren))
             {
                 children = loadChildren();
             }

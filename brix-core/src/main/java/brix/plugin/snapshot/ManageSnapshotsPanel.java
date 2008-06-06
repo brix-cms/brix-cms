@@ -36,6 +36,12 @@ import brix.workspace.WorkspaceModel;
 public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
 {
 
+	private Brix getBrix()
+	{
+		// TODO: We don't really have a node here
+		return Brix.get();
+	}
+	
     public ManageSnapshotsPanel(String id, IModel<Workspace> model)
     {
         super(id, model);
@@ -47,7 +53,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
             {
                 List<Workspace> list = SnapshotPlugin.get().getSnapshotsForWorkspace(
                     getModelObject());
-                return Brix.get().filterVisibleWorkspaces(list,
+                return getBrix().filterVisibleWorkspaces(list,
                     Context.ADMINISTRATION);
             }
 
@@ -95,7 +101,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                         Workspace target = ManageSnapshotsPanel.this.getModelObject();
                         Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, item
                             .getModelObject(), target);
-                        return Brix.get().getAuthorizationStrategy()
+                        return getBrix().getAuthorizationStrategy()
                             .isActionAuthorized(action);
                     }
                 });
@@ -114,7 +120,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                     {
                         Action action = new DeleteSnapshotAction(Context.ADMINISTRATION, item
                             .getModelObject());
-                        return Brix.get().getAuthorizationStrategy()
+                        return getBrix().getAuthorizationStrategy()
                             .isActionAuthorized(action);
                     }
                 });
@@ -136,7 +142,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
             {
                 Workspace current = ManageSnapshotsPanel.this.getModelObject();
                 Action action = new CreateSnapshotAction(Context.ADMINISTRATION, current);
-                return Brix.get().getAuthorizationStrategy()
+                return getBrix().getAuthorizationStrategy()
                     .isActionAuthorized(action);
             }
         });
@@ -158,7 +164,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                         WebResponse resp = (WebResponse)requestCycle.getResponse();
                         resp.setAttachmentHeader("workspace.xml");
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
-                        Brix brix = Brix.get();
+                        Brix brix = getBrix();
                         JcrSession session = brix.getCurrentSession(id);                        
                         session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
                             false);
@@ -175,7 +181,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
             {
                 Workspace target = ManageSnapshotsPanel.this.getModelObject();
                 Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, target);
-                return Brix.get().getAuthorizationStrategy()
+                return getBrix().getAuthorizationStrategy()
                     .isActionAuthorized(action);
             }
         };
@@ -195,7 +201,7 @@ public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
                     {
                         InputStream s = u.getInputStream();
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
-                        Brix brix = Brix.get();
+                        Brix brix = getBrix();
                         JcrSession session = brix.getCurrentSession(id);
                         
                         if (session.itemExists(brix.getRootPath()))

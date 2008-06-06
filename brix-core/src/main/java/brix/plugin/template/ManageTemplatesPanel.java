@@ -37,6 +37,12 @@ import brix.workspace.WorkspaceModel;
 public class ManageTemplatesPanel extends NavigationAwarePanel<Workspace>
 {
 
+	private Brix getBrix()
+	{
+		// TODO: We don't really have a node here
+		return Brix.get();
+	}
+	
 	public ManageTemplatesPanel(String id, IModel<Workspace> model)
 	{
 		super(id, model);
@@ -48,7 +54,7 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Workspace>
 			protected List<Workspace> load()
 			{
 				List<Workspace> list = TemplatePlugin.get().getTemplates();
-				return Brix.get().filterVisibleWorkspaces(list, Context.ADMINISTRATION);
+				return getBrix().filterVisibleWorkspaces(list, Context.ADMINISTRATION);
 			}
 		};
 
@@ -105,7 +111,7 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Workspace>
 					{
 						Workspace target = ManageTemplatesPanel.this.getModelObject();
 						Action action = new RestoreTemplateAction(Context.ADMINISTRATION, item.getModelObject(), target);
-						return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+						return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
 					}
 				});
 
@@ -122,7 +128,7 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Workspace>
 					public boolean isVisible()
 					{
 						Action action = new DeleteTemplateAction(Context.ADMINISTRATION, item.getModelObject());
-						return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+						return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
 					}
 				});
 			}
@@ -135,7 +141,7 @@ public class ManageTemplatesPanel extends NavigationAwarePanel<Workspace>
 			{
 				Workspace current = ManageTemplatesPanel.this.getModelObject();
 				Action action = new CreateTemplateAction(Context.ADMINISTRATION, current);
-				return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+				return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
 			}
 		};
 

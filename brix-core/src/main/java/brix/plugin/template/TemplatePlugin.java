@@ -87,14 +87,12 @@ public class TemplatePlugin implements Plugin
         Map<String, String> attributes = new HashMap<String, String>();
         attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
         attributes.put(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME, templateName);
-        return !Brix.get().getWorkspaceManager().getWorkspacesFiltered(
+        return !brix.getWorkspaceManager().getWorkspacesFiltered(
             attributes).isEmpty();
     }
 
     public void createTemplate(Workspace originalWorkspace, String templateName)
     {
-        Brix brix = Brix.get();
-
         Workspace workspace = brix.getWorkspaceManager().createWorkspace();
         workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
         setTemplateName(workspace, templateName);
@@ -110,8 +108,6 @@ public class TemplatePlugin implements Plugin
         {
             throw new IllegalStateException("Node list can not be empty.");
         }
-        Brix brix = Brix.get();
-
         Workspace workspace = brix.getWorkspaceManager().createWorkspace();
         workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
         setTemplateName(workspace, templateName);
@@ -239,7 +235,7 @@ public class TemplatePlugin implements Plugin
         {
             Map<String, String> attributes = new HashMap<String, String>();
             attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-            return Brix.get().getWorkspaceManager().getWorkspacesFiltered(
+            return brix.getWorkspaceManager().getWorkspacesFiltered(
                 attributes);
         }
         else
