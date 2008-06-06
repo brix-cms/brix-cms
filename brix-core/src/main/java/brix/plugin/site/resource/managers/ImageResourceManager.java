@@ -1,4 +1,4 @@
-package brix.plugin.site.node.resource.managers;
+package brix.plugin.site.resource.managers;
 
 import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.behavior.IBehaviorListener;
@@ -8,8 +8,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.node.resource.ResourceManager;
-import brix.plugin.site.node.resource.ResourceRequestTarget;
+import brix.plugin.site.resource.ResourceManager;
+import brix.plugin.site.resource.ResourceRequestTarget;
 
 public class ImageResourceManager implements ResourceManager
 {

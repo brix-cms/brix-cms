@@ -1,4 +1,4 @@
-package brix.plugin.fragment;
+package brix.plugin.site.page.fragment;
 
 import java.util.Collections;
 import java.util.List;

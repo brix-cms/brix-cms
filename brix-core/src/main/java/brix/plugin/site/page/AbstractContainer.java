@@ -20,8 +20,8 @@ import brix.markup.tag.Item;
 import brix.markup.variable.VariableKeyProvider;
 import brix.markup.variable.VariableTransformer;
 import brix.markup.variable.VariableValueProvider;
-import brix.plugin.fragment.TileContainer;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.page.fragment.TileContainer;
 import brix.plugin.site.page.tile.TileContainerFacet;
 
 public abstract class AbstractContainer extends BrixFileNode

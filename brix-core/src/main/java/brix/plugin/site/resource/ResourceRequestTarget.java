@@ -1,7 +1,7 @@
 /**
  * 
  */
-package brix.plugin.site.node.resource;
+package brix.plugin.site.resource;
 
 import java.io.IOException;
 

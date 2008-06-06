@@ -1,7 +1,7 @@
 /**
  * 
  */
-package brix.plugin.fragment;
+package brix.plugin.site.page.fragment;
 
 import java.util.ArrayList;
 import java.util.Iterator;

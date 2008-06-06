@@ -16,7 +16,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupCache;
 import brix.plugin.site.fallback.FallbackNodePlugin;
 import brix.plugin.site.folder.FolderNodePlugin;
-import brix.plugin.site.node.resource.ResourceNodePlugin;
+import brix.plugin.site.resource.ResourceNodePlugin;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.workspace.Workspace;
 

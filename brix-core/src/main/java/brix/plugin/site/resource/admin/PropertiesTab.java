@@ -1,4 +1,4 @@
-package brix.plugin.site.node.resource.admin;
+package brix.plugin.site.resource.admin;
 
 import java.util.Arrays;
 import java.util.List;

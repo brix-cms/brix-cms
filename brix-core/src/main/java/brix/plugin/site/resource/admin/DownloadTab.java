@@ -1,11 +1,11 @@
-package brix.plugin.site.node.resource.admin;
+package brix.plugin.site.resource.admin;
 
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.node.resource.ResourceRequestTarget;
+import brix.plugin.site.resource.ResourceRequestTarget;
 
 public class DownloadTab extends Panel<BrixNode>
 {

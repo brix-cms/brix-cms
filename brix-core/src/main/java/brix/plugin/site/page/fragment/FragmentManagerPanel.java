@@ -1,4 +1,4 @@
-package brix.plugin.fragment;
+package brix.plugin.site.page.fragment;
 
 import org.apache.wicket.model.IModel;
 

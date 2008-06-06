@@ -3,8 +3,8 @@ package brix.plugin.site.page.tile;
 import java.util.Map;
 
 import brix.BrixNodeModel;
-import brix.plugin.fragment.TileContainer;
 import brix.plugin.site.page.AbstractContainer;
+import brix.plugin.site.page.fragment.TileContainer;
 
 /**
  * ComponentTag that that replaces the &lt;brix:tile&gt; tags.

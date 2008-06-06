@@ -12,7 +12,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.markup.tag.ComponentTag;
 import brix.markup.tag.simple.SimpleTag;
 import brix.markup.variable.VariableKeyProvider;
-import brix.plugin.fragment.TileContainer;
+import brix.plugin.site.page.fragment.TileContainer;
 import brix.web.nodepage.BrixPageParameters;
 
 /**

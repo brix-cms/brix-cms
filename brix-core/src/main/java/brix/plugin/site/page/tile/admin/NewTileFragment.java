@@ -26,7 +26,7 @@ import org.apache.wicket.validation.ValidationError;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.fragment.TileContainer;
+import brix.plugin.site.page.fragment.TileContainer;
 import brix.plugin.site.page.tile.Tile;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;

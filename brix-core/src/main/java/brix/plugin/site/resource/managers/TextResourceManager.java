@@ -1,4 +1,4 @@
-package brix.plugin.site.node.resource.managers;
+package brix.plugin.site.resource.managers;
 
 import java.io.Serializable;
 
@@ -14,7 +14,7 @@ import org.apache.wicket.model.PropertyModel;
 import brix.codepress.CodePressEnabler;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.node.resource.ResourceManager;
+import brix.plugin.site.resource.ResourceManager;
 
 public class TextResourceManager implements ResourceManager
 {

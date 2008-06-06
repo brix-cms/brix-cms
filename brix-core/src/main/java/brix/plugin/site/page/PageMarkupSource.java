@@ -25,7 +25,7 @@ import brix.markup.tag.Tag.Type;
 import brix.markup.tag.simple.SimpleComment;
 import brix.markup.tag.simple.SimpleTag;
 import brix.markup.tag.simple.SimpleText;
-import brix.plugin.fragment.FragmentTag;
+import brix.plugin.site.page.fragment.FragmentTag;
 import brix.plugin.site.page.tile.TileTag;
 
 /**

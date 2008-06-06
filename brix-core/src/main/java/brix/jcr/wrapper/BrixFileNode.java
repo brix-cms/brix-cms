@@ -13,7 +13,7 @@ import org.apache.wicket.util.string.Strings;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.node.resource.ResourceNodePlugin;
+import brix.plugin.site.resource.ResourceNodePlugin;
 
 public class BrixFileNode extends BrixNode
 {

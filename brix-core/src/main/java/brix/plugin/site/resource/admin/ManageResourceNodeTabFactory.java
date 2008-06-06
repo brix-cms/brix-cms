@@ -1,4 +1,4 @@
-package brix.plugin.site.node.resource.admin;
+package brix.plugin.site.resource.admin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.plugin.site.node.resource.ResourceManager;
-import brix.plugin.site.node.resource.ResourceNodePlugin;
+import brix.plugin.site.resource.ResourceManager;
+import brix.plugin.site.resource.ResourceNodePlugin;
 
 public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
 {

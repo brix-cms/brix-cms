@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.fragment.TileContainer;
+import brix.plugin.site.page.fragment.TileContainer;
 import brix.plugin.site.page.tile.Tile;
 
 public abstract class TileEditorFragment extends Fragment<BrixNode>

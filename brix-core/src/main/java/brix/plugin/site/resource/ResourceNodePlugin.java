@@ -1,4 +1,4 @@
-package brix.plugin.site.node.resource;
+package brix.plugin.site.resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,10 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.node.resource.admin.ManageResourceNodeTabFactory;
-import brix.plugin.site.node.resource.admin.UploadResourcesPanel;
-import brix.plugin.site.node.resource.managers.ImageResourceManager;
-import brix.plugin.site.node.resource.managers.TextResourceManager;
+import brix.plugin.site.resource.admin.ManageResourceNodeTabFactory;
+import brix.plugin.site.resource.admin.UploadResourcesPanel;
+import brix.plugin.site.resource.managers.ImageResourceManager;
+import brix.plugin.site.resource.managers.TextResourceManager;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
 public class ResourceNodePlugin implements SiteNodePlugin
