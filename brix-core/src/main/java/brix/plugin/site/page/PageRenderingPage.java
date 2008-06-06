@@ -4,10 +4,10 @@ import org.apache.wicket.model.IModel;
 
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
+import brix.markup.MarkupSource;
+import brix.markup.transform.PanelTransformer;
+import brix.markup.web.BrixMarkupNodePanel;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.web.nodepage.markup.BrixMarkupNodePanel;
-import brix.web.nodepage.markup.MarkupSource;
-import brix.web.nodepage.markup.transform.PanelTransformer;
 
 public class PageRenderingPage extends BrixMarkupNodePanel
 {

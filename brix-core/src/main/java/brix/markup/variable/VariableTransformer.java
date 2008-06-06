@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup.variable;
+package brix.markup.variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.Map;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
-import brix.web.nodepage.markup.ComponentTag;
-import brix.web.nodepage.markup.Item;
-import brix.web.nodepage.markup.MarkupSource;
-import brix.web.nodepage.markup.Tag;
-import brix.web.nodepage.markup.simple.SimpleTag;
-import brix.web.nodepage.markup.transform.MarkupSourceTransformer;
+import brix.markup.MarkupSource;
+import brix.markup.tag.ComponentTag;
+import brix.markup.tag.Item;
+import brix.markup.tag.Tag;
+import brix.markup.tag.simple.SimpleTag;
+import brix.markup.transform.MarkupSourceTransformer;
 
 public class VariableTransformer extends MarkupSourceTransformer
 {

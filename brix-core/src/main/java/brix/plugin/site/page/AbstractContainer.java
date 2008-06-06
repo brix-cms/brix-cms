@@ -16,13 +16,13 @@ import brix.jcr.api.JcrPropertyIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.markup.tag.Item;
+import brix.markup.variable.VariableKeyProvider;
+import brix.markup.variable.VariableTransformer;
+import brix.markup.variable.VariableValueProvider;
 import brix.plugin.fragment.TileContainer;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.tile.TileContainerFacet;
-import brix.web.nodepage.markup.Item;
-import brix.web.nodepage.markup.variable.VariableKeyProvider;
-import brix.web.nodepage.markup.variable.VariableTransformer;
-import brix.web.nodepage.markup.variable.VariableValueProvider;
 
 public abstract class AbstractContainer extends BrixFileNode
         implements

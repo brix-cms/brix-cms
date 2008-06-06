@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup;
+package brix.markup.web;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
@@ -8,6 +8,9 @@ import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.markup.MarkupHelper;
+import brix.markup.MarkupSource;
+import brix.markup.MarkupSourceProvider;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.nodepage.BrixPageParameters;
 

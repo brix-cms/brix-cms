@@ -1,10 +1,10 @@
-package brix.web.nodepage.markup.variable;
+package brix.markup.variable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.web.nodepage.markup.ComponentTag;
+import brix.markup.tag.ComponentTag;
 
 public class VariableComponentTag extends VariableTag implements ComponentTag
 {

@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup;
+package brix.markup.tag;
 
 /**
  * Represents HTML text (text between tags/comments).

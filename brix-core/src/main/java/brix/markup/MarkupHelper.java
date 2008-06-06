@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup;
+package brix.markup;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -10,6 +10,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.markup.tag.ComponentTag;
+import brix.markup.tag.Tag;
 import brix.plugin.site.SitePlugin;
 
 /**

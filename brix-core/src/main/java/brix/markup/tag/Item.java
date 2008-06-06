@@ -1,4 +1,6 @@
-package brix.web.nodepage.markup;
+package brix.markup.tag;
+
+import brix.markup.MarkupSource;
 
 /**
  * Basic interface extended by markup items.

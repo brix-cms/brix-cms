@@ -1,9 +1,9 @@
-package brix.web.nodepage.markup.simple;
+package brix.markup.tag.simple;
 
 import java.util.Map;
 
-import brix.web.nodepage.markup.Tag;
-import brix.web.nodepage.markup.Tag.Type;
+import brix.markup.tag.Tag;
+import brix.markup.tag.Tag.Type;
 
 /**
  * Simple implementation of the {@link Tag} interface.

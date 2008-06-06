@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup.variable;
+package brix.markup.variable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import brix.Brix;
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
-import brix.web.nodepage.markup.Tag;
+import brix.markup.tag.Tag;
 
 public class VariableTag implements Tag, VariableKeyProvider
 {

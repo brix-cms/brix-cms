@@ -1,11 +1,11 @@
-package brix.web.nodepage.markup.variable;
+package brix.markup.variable;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
-import brix.web.nodepage.markup.Text;
+import brix.markup.tag.Text;
 
 public class VariableText implements Text, VariableKeyProvider
 {

@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup.variable;
+package brix.markup.variable;
 
 public interface VariableValueProvider
 {

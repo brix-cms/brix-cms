@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup;
+package brix.markup.tag;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;

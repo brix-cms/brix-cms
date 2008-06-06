@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup.variable;
+package brix.markup.variable;
 
 import java.util.Collection;
 

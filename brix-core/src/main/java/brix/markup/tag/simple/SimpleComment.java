@@ -1,6 +1,6 @@
-package brix.web.nodepage.markup.simple;
+package brix.markup.tag.simple;
 
-import brix.web.nodepage.markup.Comment;
+import brix.markup.tag.Comment;
 
 /**
  * Simple implementation of the {@link Comment} interface.

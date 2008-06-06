@@ -1,4 +1,4 @@
-package brix.web.nodepage.markup;
+package brix.markup;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,7 +1,9 @@
-package brix.web.nodepage.markup;
+package brix.markup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import brix.markup.tag.Item;
 
 /**
  * Contains list of generated markup items and expiration token.

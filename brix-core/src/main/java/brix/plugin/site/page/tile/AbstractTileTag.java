@@ -9,11 +9,11 @@ import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
+import brix.markup.tag.ComponentTag;
+import brix.markup.tag.simple.SimpleTag;
+import brix.markup.variable.VariableKeyProvider;
 import brix.plugin.fragment.TileContainer;
 import brix.web.nodepage.BrixPageParameters;
-import brix.web.nodepage.markup.ComponentTag;
-import brix.web.nodepage.markup.simple.SimpleTag;
-import brix.web.nodepage.markup.variable.VariableKeyProvider;
 
 /**
  * Base class for tags that represent {@link Tile}s

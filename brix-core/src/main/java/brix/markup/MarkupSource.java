@@ -1,4 +1,6 @@
-package brix.web.nodepage.markup;
+package brix.markup;
+
+import brix.markup.tag.Item;
 
 /**
  * Source for Node Page markup. The MarkupSources can be nested, with the

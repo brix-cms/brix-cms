@@ -1,4 +1,6 @@
-package brix.web.nodepage.markup;
+package brix.markup;
+
+import brix.markup.tag.Item;
 
 /**
  * Simple wrapper for {@link MarkupSource} that forwards all calls to delegate

@@ -1,9 +1,14 @@
-package brix.web.nodepage.markup;
+package brix.markup;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import brix.markup.tag.Comment;
+import brix.markup.tag.Item;
+import brix.markup.tag.Tag;
+import brix.markup.tag.Text;
 
 /**
  * Renders the given list of items into an XHTML markup.

@@ -18,15 +18,15 @@ import org.htmlparser.util.ParserException;
 
 import brix.Brix;
 import brix.exception.BrixException;
+import brix.markup.MarkupSource;
+import brix.markup.tag.Item;
+import brix.markup.tag.Tag;
+import brix.markup.tag.Tag.Type;
+import brix.markup.tag.simple.SimpleComment;
+import brix.markup.tag.simple.SimpleTag;
+import brix.markup.tag.simple.SimpleText;
 import brix.plugin.fragment.FragmentTag;
 import brix.plugin.site.page.tile.TileTag;
-import brix.web.nodepage.markup.Item;
-import brix.web.nodepage.markup.MarkupSource;
-import brix.web.nodepage.markup.Tag;
-import brix.web.nodepage.markup.Tag.Type;
-import brix.web.nodepage.markup.simple.SimpleComment;
-import brix.web.nodepage.markup.simple.SimpleTag;
-import brix.web.nodepage.markup.simple.SimpleText;
 
 /**
  * {@link MarkupSource} for tile markup. Parses and merges the content of tile container node and

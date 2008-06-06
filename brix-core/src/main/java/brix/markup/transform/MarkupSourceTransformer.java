@@ -1,13 +1,13 @@
-package brix.web.nodepage.markup.transform;
+package brix.markup.transform;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import brix.web.nodepage.markup.Item;
-import brix.web.nodepage.markup.MarkupSource;
-import brix.web.nodepage.markup.MarkupSourceWrapper;
+import brix.markup.MarkupSource;
+import brix.markup.MarkupSourceWrapper;
+import brix.markup.tag.Item;
 
 /**
  * Base class for {@link MarkupSource} transformers. This class allows to
