@@ -27,7 +27,7 @@ public class VariableTransformer extends MarkupSourceTransformer
 	protected List<Item> transform(List<Item> originalItems)
 	{
 		List<Item> result = new ArrayList<Item>(originalItems.size());
-		for (Item i : result)
+		for (Item i : originalItems)
 		{
 			if (i instanceof Tag)
 			{
@@ -70,11 +70,14 @@ public class VariableTransformer extends MarkupSourceTransformer
 	private Item processSimpleTag(Tag tag)
 	{
 		Map<String, String> attributes = tag.getAttributeMap();
-		for (String s : attributes.values())
+		if (attributes != null)
 		{
-			if (VariableTag.getKey(s) != null)
+			for (String s : attributes.values())
 			{
-				return new VariableTag(pageNode, tag);
+				if (VariableTag.getKey(s) != null)
+				{
+					return new VariableTag(pageNode, tag);
+				}
 			}
 		}
 		return tag;

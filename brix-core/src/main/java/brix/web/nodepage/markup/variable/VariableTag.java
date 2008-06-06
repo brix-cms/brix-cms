@@ -38,7 +38,7 @@ public class VariableTag implements Tag, VariableKeyProvider
 		{
 			key = value.substring(ATTRIBUTE_PREFIX.length());
 		}
-		if (key.length() == 0)
+		if (key != null && key.length() == 0)
 		{
 			key = null;
 		}
