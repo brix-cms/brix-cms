@@ -8,12 +8,12 @@ import brix.plugin.site.NodeConverter;
 import brix.plugin.site.page.admin.CreateTilePagePanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
-public class TileTemplateNodePlugin extends TileNodePlugin
+public class TemplateSiteNodePlugin extends AbstractSitePagePlugin
 {
 
 	public static final String TYPE = Brix.NS_PREFIX + "tileTemplate";
 
-	public TileTemplateNodePlugin(Brix brix)
+	public TemplateSiteNodePlugin(Brix brix)
 	{
 		super(brix);
 	}
@@ -21,7 +21,7 @@ public class TileTemplateNodePlugin extends TileNodePlugin
 	@Override
 	public NodeConverter getConverterForNode(BrixNode node)
 	{
-		if (TilePageNodePlugin.TYPE.equals(((BrixNode) node).getNodeType()))
+		if (PageSiteNodePlugin.TYPE.equals(((BrixNode) node).getNodeType()))
 			return new FromPageConverter(getNodeType());
 		else
 			return super.getConverterForNode(node);
@@ -49,7 +49,7 @@ public class TileTemplateNodePlugin extends TileNodePlugin
 
 	public String getName()
 	{
-		return "Tile Template";
+		return "Template";
 	}
 
 }

@@ -18,13 +18,13 @@ import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.fragment.TileContainer;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.page.markup.TilePageMarkupSource;
+import brix.plugin.site.page.tile.TileContainerFacet;
 import brix.web.nodepage.markup.Item;
 import brix.web.nodepage.markup.variable.VariableKeyProvider;
 import brix.web.nodepage.markup.variable.VariableTransformer;
 import brix.web.nodepage.markup.variable.VariableValueProvider;
 
-public abstract class TileContainerNode extends BrixFileNode
+public abstract class AbstractContainer extends BrixFileNode
         implements
             TileContainer,
             VariableValueProvider,
@@ -33,7 +33,7 @@ public abstract class TileContainerNode extends BrixFileNode
 
     private final TileContainerFacet tileManager;
 
-    public TileContainerNode(Node delegate, JcrSession session)
+    public AbstractContainer(Node delegate, JcrSession session)
     {
         super(delegate, session);
         tileManager = new TileContainerFacet(this);
@@ -70,11 +70,11 @@ public abstract class TileContainerNode extends BrixFileNode
     }
 
 
-    public TileTemplateNode getTemplate()
+    public Template getTemplate()
     {
         if (hasProperty(Properties.TEMPLATE))
         {
-            return (TileTemplateNode)getProperty(Properties.TEMPLATE).getNode();
+            return (Template)getProperty(Properties.TEMPLATE).getNode();
         }
         else
         {
@@ -156,9 +156,9 @@ public abstract class TileContainerNode extends BrixFileNode
         }
     }
 
-    public TileNodePlugin getNodePlugin()
+    public AbstractSitePagePlugin getNodePlugin()
     {
-        return (TileNodePlugin)SitePlugin.get().getNodePluginForNode(this);
+        return (AbstractSitePagePlugin)SitePlugin.get().getNodePluginForNode(this);
     }
 
     public String getVariableValue(String key)
@@ -171,7 +171,7 @@ public abstract class TileContainerNode extends BrixFileNode
                 return node.getProperty(key).getString();
             }
         }
-        TileTemplateNode template = getTemplate();
+        Template template = getTemplate();
         if (template != null)
         {
             return template.getVariableValue(key);
@@ -200,7 +200,7 @@ public abstract class TileContainerNode extends BrixFileNode
     public Collection<String> getVariableKeys()
     {
         Set<String> keys = new HashSet<String>();
-        TilePageMarkupSource source = new TilePageMarkupSource(this);
+        PageMarkupSource source = new PageMarkupSource(this);
         VariableTransformer transfomer = new VariableTransformer(source, this);
         Item i = transfomer.nextMarkupItem();
         while (i != null)

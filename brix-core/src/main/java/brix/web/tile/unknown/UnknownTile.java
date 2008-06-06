@@ -5,8 +5,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.admin.Tile;
-import brix.plugin.site.page.admin.TileEditorPanel;
+import brix.plugin.site.page.tile.Tile;
+import brix.plugin.site.page.tile.admin.TileEditorPanel;
 import brix.web.nodepage.BrixPageParameters;
 
 public class UnknownTile implements Tile

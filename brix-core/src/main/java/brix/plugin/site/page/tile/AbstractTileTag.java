@@ -1,4 +1,4 @@
-package brix.plugin.site.page.markup;
+package brix.plugin.site.page.tile;
 
 import java.util.Collection;
 import java.util.Map;
@@ -10,8 +10,6 @@ import org.apache.wicket.model.IModel;
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.fragment.TileContainer;
-import brix.plugin.site.page.TileContainerFacet;
-import brix.plugin.site.page.admin.Tile;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.markup.ComponentTag;
 import brix.web.nodepage.markup.simple.SimpleTag;

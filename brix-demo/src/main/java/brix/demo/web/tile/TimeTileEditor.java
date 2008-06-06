@@ -11,7 +11,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.admin.TileEditorPanel;
+import brix.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class TimeTileEditor extends TileEditorPanel
 {

@@ -1,7 +1,7 @@
 package brix.demo.web.tile;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.admin.TileEditorPanel;
+import brix.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class EmptyEditorPanel extends TileEditorPanel
 {

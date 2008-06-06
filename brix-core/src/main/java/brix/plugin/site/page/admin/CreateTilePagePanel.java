@@ -10,10 +10,10 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.admin.NodeManagerPanel;
-import brix.plugin.site.page.TileContainerNode;
-import brix.plugin.site.page.TilePageNode;
-import brix.plugin.site.page.TilePageNodePlugin;
-import brix.plugin.site.page.TileTemplateNode;
+import brix.plugin.site.page.AbstractContainer;
+import brix.plugin.site.page.Page;
+import brix.plugin.site.page.PageSiteNodePlugin;
+import brix.plugin.site.page.Template;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.util.validators.NodeNameValidator;
@@ -61,15 +61,15 @@ public class CreateTilePagePanel extends NodeManagerPanel
 
             JcrNode page = parent.addNode(name, "nt:file");
 
-            TileContainerNode node;
+            AbstractContainer node;
 
-            if (type.equals(TilePageNodePlugin.TYPE))
+            if (type.equals(PageSiteNodePlugin.TYPE))
             {
-                node = TilePageNode.initialize(page);
+                node = Page.initialize(page);
             }
             else
             {
-                node = TileTemplateNode.initialize(page);
+                node = Template.initialize(page);
             }
 
             node.setData("");

@@ -1,4 +1,4 @@
-package brix.plugin.site.page.admin;
+package brix.plugin.site.page.tile.admin;
 
 import org.apache.wicket.model.IModel;
 

@@ -38,9 +38,9 @@ import brix.plugin.publishing.PublishingPlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.folder.FolderNode;
 import brix.plugin.site.folder.FolderNodePlugin;
-import brix.plugin.site.page.TileContainerFacet;
-import brix.plugin.site.page.TilePageNodePlugin;
-import brix.plugin.site.page.TileTemplateNodePlugin;
+import brix.plugin.site.page.PageSiteNodePlugin;
+import brix.plugin.site.page.TemplateSiteNodePlugin;
+import brix.plugin.site.page.tile.TileContainerFacet;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.template.TemplatePlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
@@ -295,8 +295,8 @@ public abstract class Brix
 
             // the following three have always brix:node mixin too
             registerType(w, FolderNodePlugin.TYPE, false, false);
-            registerType(w, TilePageNodePlugin.TYPE, false, false);
-            registerType(w, TileTemplateNodePlugin.TYPE, false, false);
+            registerType(w, PageSiteNodePlugin.TYPE, false, false);
+            registerType(w, TemplateSiteNodePlugin.TYPE, false, false);
 
             registerType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true);
 

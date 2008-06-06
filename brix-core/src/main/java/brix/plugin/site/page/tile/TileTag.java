@@ -1,10 +1,10 @@
-package brix.plugin.site.page.markup;
+package brix.plugin.site.page.tile;
 
 import java.util.Map;
 
 import brix.BrixNodeModel;
 import brix.plugin.fragment.TileContainer;
-import brix.plugin.site.page.TileContainerNode;
+import brix.plugin.site.page.AbstractContainer;
 
 /**
  * ComponentTag that that replaces the &lt;brix:tile&gt; tags.
@@ -16,7 +16,7 @@ public class TileTag extends AbstractTileTag
     private final BrixNodeModel tileContainerNodeModel;
 
     public TileTag(String name, Type type, Map<String, String> attributeMap,
-            TileContainerNode tileContainerNode, String tileName)
+            AbstractContainer tileContainerNode, String tileName)
     {
         super(name, type, attributeMap, tileName);
         tileContainerNodeModel = new BrixNodeModel(tileContainerNode);

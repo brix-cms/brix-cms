@@ -8,27 +8,27 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 
-public class TileTemplateNode extends TileContainerNode
+public class Template extends AbstractContainer
 {
 
     public static final String CONTENT_TAG = Brix.NS_PREFIX + "content";
 
-    public TileTemplateNode(Node delegate, JcrSession session)
+    public Template(Node delegate, JcrSession session)
     {
         super(delegate, session);
     }
 
     public static boolean canHandle(JcrNode node)
     {
-        return TileTemplateNodePlugin.TYPE.equals(getNodeType(node));
+        return TemplateSiteNodePlugin.TYPE.equals(getNodeType(node));
     }
 
-    public static TileTemplateNode initialize(JcrNode node)
+    public static Template initialize(JcrNode node)
     {
         BrixNode brixNode = (BrixNode)node;
         BrixFileNode.initialize(node, "text/html");
-        brixNode.setNodeType(TileTemplateNodePlugin.TYPE);
+        brixNode.setNodeType(TemplateSiteNodePlugin.TYPE);
 
-        return new TileTemplateNode(node.getDelegate(), node.getSession());
+        return new Template(node.getDelegate(), node.getSession());
     }
 }

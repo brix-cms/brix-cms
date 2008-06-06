@@ -8,7 +8,7 @@ import org.apache.wicket.model.IModel;
 import brix.BrixNodeModel;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.TilePageRenderPanel;
+import brix.plugin.site.page.PageRenderingPage;
 import brix.web.nodepage.BrixNodeWebPage;
 
 public class PageTileViewerPanel extends Panel
@@ -48,7 +48,7 @@ public class PageTileViewerPanel extends Panel
 
 			if (pageNode != null)
 			{
-				add(new TilePageRenderPanel("view", new BrixNodeModel(pageNode)));
+				add(new PageRenderingPage("view", new BrixNodeModel(pageNode)));
 			}
 			else
 			{

@@ -15,16 +15,16 @@ import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 import brix.plugin.site.page.admin.ManageTileNodeTabFactory;
-import brix.plugin.site.page.admin.Tile;
+import brix.plugin.site.page.tile.Tile;
 import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.tile.unknown.UnknownTile;
 
-public abstract class TileNodePlugin implements SiteNodePlugin
+public abstract class AbstractSitePagePlugin implements SiteNodePlugin
 {
-    public TileNodePlugin(Brix brix)
+    public AbstractSitePagePlugin(Brix brix)
     {
         registerManageNodeTabFactory(brix);
     }
@@ -57,7 +57,7 @@ public abstract class TileNodePlugin implements SiteNodePlugin
         protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
                 BrixPageParameters pageParameters)
         {
-            return new TilePageRenderPage(nodeModel, pageParameters);
+            return new PageRenderingPanel(nodeModel, pageParameters);
         }
     };
 

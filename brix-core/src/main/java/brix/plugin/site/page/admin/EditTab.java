@@ -17,7 +17,7 @@ import brix.codepress.CodePressEnabler;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
-import brix.plugin.site.page.TileTemplateNodePlugin;
+import brix.plugin.site.page.TemplateSiteNodePlugin;
 import brix.tinymce.TinyMceEnabler;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.model.ModelBuffer;
@@ -48,7 +48,7 @@ class EditTab extends NodeManagerPanel
         form.add(new TextField("title", adapter.forProperty("title")));
 
         String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
-        NodeFilter filter = new NodeTypeFilter(TileTemplateNodePlugin.TYPE);
+        NodeFilter filter = new NodeTypeFilter(TemplateSiteNodePlugin.TYPE);
         form.add(new NodePickerPanel("templatePicker", adapter.forNodeProperty("template"),
             workspace, filter));
 

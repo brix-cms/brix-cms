@@ -13,12 +13,12 @@ import brix.demo.web.tile.TimeTile;
 import brix.jcr.JcrSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.page.TileNodePlugin;
-import brix.plugin.site.page.TilePageNode;
-import brix.plugin.site.page.TilePageNodePlugin;
-import brix.plugin.site.page.TileTemplateNode;
-import brix.plugin.site.page.TileTemplateNodePlugin;
-import brix.plugin.site.page.admin.Tile;
+import brix.plugin.site.page.AbstractSitePagePlugin;
+import brix.plugin.site.page.Page;
+import brix.plugin.site.page.PageSiteNodePlugin;
+import brix.plugin.site.page.Template;
+import brix.plugin.site.page.TemplateSiteNodePlugin;
+import brix.plugin.site.page.tile.Tile;
 import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.AbstractWorkspaceManager;
@@ -34,16 +34,16 @@ public class DemoBrix extends Brix
     public DemoBrix(JcrSessionFactory sf)
     {
         super(new BrixConfig(), sf);
-        TileNodePlugin plugin = new TilePageNodePlugin(this);
+        AbstractSitePagePlugin plugin = new PageSiteNodePlugin(this);
 
         SitePlugin sitePlugin = SitePlugin.get(this);
         sitePlugin.registerNodePlugin(plugin);
 
-        plugin = new TileTemplateNodePlugin(this);
+        plugin = new TemplateSiteNodePlugin(this);
         sitePlugin.registerNodePlugin(plugin);
 
-        getWrapperRegistry().registerWrapper(TilePageNode.class);
-        getWrapperRegistry().registerWrapper(TileTemplateNode.class);
+        getWrapperRegistry().registerWrapper(Page.class);
+        getWrapperRegistry().registerWrapper(Template.class);
 
         addTiles();
     }

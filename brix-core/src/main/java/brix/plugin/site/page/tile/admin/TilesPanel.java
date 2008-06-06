@@ -1,7 +1,7 @@
 /**
  * 
  */
-package brix.plugin.site.page.admin;
+package brix.plugin.site.page.tile.admin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,10 +24,10 @@ import org.apache.wicket.util.string.Strings;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
-import brix.plugin.site.page.TileContainerFacet;
-import brix.plugin.site.page.TileContainerNode;
+import brix.plugin.site.page.AbstractContainer;
+import brix.plugin.site.page.tile.TileContainerFacet;
 
-class TilesPanel extends NodeManagerPanel
+public class TilesPanel extends NodeManagerPanel
 {
     String selectedTileId;
     private Component editor;
@@ -123,9 +123,9 @@ class TilesPanel extends NodeManagerPanel
 
     }
 
-    private TileContainerNode getTileContainerNode()
+    private AbstractContainer getTileContainerNode()
     {
-        return (TileContainerNode)getNode();
+        return (AbstractContainer)getNode();
     }
 
     private void setupTileEditor()

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package brix.plugin.site.page.admin;
+package brix.plugin.site.page.tile.admin;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +27,7 @@ import org.apache.wicket.validation.ValidationError;
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.fragment.TileContainer;
+import brix.plugin.site.page.tile.Tile;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;
 

@@ -6,7 +6,7 @@ import brix.Brix;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.TileContainerFacet;
+import brix.plugin.site.page.tile.TileContainerFacet;
 
 public class FragmentsContainerNode extends BrixNode implements TileContainer
 {

@@ -24,9 +24,9 @@ import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.Strings;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.TileContainerFacet;
-import brix.plugin.site.page.admin.NewTileFragment;
-import brix.plugin.site.page.admin.TileEditorFragment;
+import brix.plugin.site.page.tile.TileContainerFacet;
+import brix.plugin.site.page.tile.admin.NewTileFragment;
+import brix.plugin.site.page.tile.admin.TileEditorFragment;
 
 class TilesPanel extends Panel<BrixNode>
 {

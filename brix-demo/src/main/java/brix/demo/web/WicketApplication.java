@@ -31,7 +31,7 @@ import brix.jcr.ThreadLocalSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.page.TilePageNode;
+import brix.plugin.site.page.Page;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.BrixNodeWebPage;
@@ -195,7 +195,7 @@ public class WicketApplication extends WebApplication
 
                 BrixNode siteRoot = (BrixNode)session.getItem(sp.getSiteRootPath());
                 BrixNode index = (BrixNode) siteRoot.addNode("index.html", "nt:file");
-                TilePageNode node = TilePageNode.initialize(index);
+                Page node = Page.initialize(index);
                 node.setData("<html><head></head><body>Hello, world!</body></html>");
                 session.save();
             }

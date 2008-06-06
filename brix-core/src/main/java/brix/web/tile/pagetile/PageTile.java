@@ -11,9 +11,9 @@ import org.apache.wicket.model.IModel;
 import brix.Path;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.TileContainerNode;
-import brix.plugin.site.page.admin.Tile;
-import brix.plugin.site.page.admin.TileEditorPanel;
+import brix.plugin.site.page.AbstractContainer;
+import brix.plugin.site.page.tile.Tile;
+import brix.plugin.site.page.tile.admin.TileEditorPanel;
 import brix.web.nodepage.BrixPageParameters;
 
 public class PageTile implements Tile
@@ -77,7 +77,7 @@ public class PageTile implements Tile
         if (tileNode.getObject().hasProperty("pageNode"))
         {
             JcrNode pageNode = tileNode.getObject().getProperty("pageNode").getNode();
-            result = ((TileContainerNode)pageNode).requiresSSL();
+            result = ((AbstractContainer)pageNode).requiresSSL();
         }
         else
         {

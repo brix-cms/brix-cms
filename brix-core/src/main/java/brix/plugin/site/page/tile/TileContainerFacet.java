@@ -1,4 +1,4 @@
-package brix.plugin.site.page;
+package brix.plugin.site.page.tile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ import brix.Brix;
 import brix.BrixNodeModel;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.admin.Tile;
 
 /**
  * Helper for managing node's tile collection

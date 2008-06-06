@@ -7,7 +7,7 @@ import org.apache.wicket.model.IModel;
 import brix.Brix;
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.markup.AbstractTileTag;
+import brix.plugin.site.page.tile.AbstractTileTag;
 
 /**
  * ComponentTag that that replaces the &lt;brix:fragment&gt; tags.

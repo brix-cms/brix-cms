@@ -17,7 +17,7 @@ import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.MenuPlugin;
-import brix.plugin.site.page.admin.TileEditorPanel;
+import brix.plugin.site.page.tile.admin.TileEditorPanel;
 import brix.web.util.AbstractModel;
 
 public class MenuTileEditor extends TileEditorPanel<BrixNode>

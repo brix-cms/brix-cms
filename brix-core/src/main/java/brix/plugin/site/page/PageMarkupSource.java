@@ -1,4 +1,4 @@
-package brix.plugin.site.page.markup;
+package brix.plugin.site.page;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,8 +19,7 @@ import org.htmlparser.util.ParserException;
 import brix.Brix;
 import brix.exception.BrixException;
 import brix.plugin.fragment.FragmentTag;
-import brix.plugin.site.page.TileContainerNode;
-import brix.plugin.site.page.TileTemplateNode;
+import brix.plugin.site.page.tile.TileTag;
 import brix.web.nodepage.markup.Item;
 import brix.web.nodepage.markup.MarkupSource;
 import brix.web.nodepage.markup.Tag;
@@ -36,11 +35,11 @@ import brix.web.nodepage.markup.simple.SimpleText;
  * @author Matej Knopp
  * 
  */
-public class TilePageMarkupSource implements MarkupSource
+public class PageMarkupSource implements MarkupSource
 {
-    private final TileContainerNode node;
+    private final AbstractContainer node;
 
-    public TilePageMarkupSource(TileContainerNode node)
+    public PageMarkupSource(AbstractContainer node)
     {
         this.node = node;
     }
@@ -59,7 +58,7 @@ public class TilePageMarkupSource implements MarkupSource
     private Date getMostRecentLastModifiedDate()
     {
         Date current = null;
-        for (TileContainerNode node = this.node; node != null; node = (TileContainerNode)node
+        for (AbstractContainer node = this.node; node != null; node = (AbstractContainer)node
             .getTemplate())
         {
             Date lm = node.getLastModified();
@@ -101,11 +100,11 @@ public class TilePageMarkupSource implements MarkupSource
     {
         items = new ArrayList<Item>();
 
-        List<TileContainerNode> nodes = new ArrayList<TileContainerNode>();
+        List<AbstractContainer> nodes = new ArrayList<AbstractContainer>();
         nodes.add(node);
 
-        TileContainerNode n = node;
-        while ((n = (TileContainerNode)n.getTemplate()) != null)
+        AbstractContainer n = node;
+        while ((n = (AbstractContainer)n.getTemplate()) != null)
         {
             if (nodes.contains(n))
             {
@@ -118,9 +117,9 @@ public class TilePageMarkupSource implements MarkupSource
         parseNode(nodes, 0, items);
     }
 
-    private void parseNode(List<TileContainerNode> nodes, int current, List<Item> items)
+    private void parseNode(List<AbstractContainer> nodes, int current, List<Item> items)
     {
-        TileContainerNode node = nodes.get(current);
+        AbstractContainer node = nodes.get(current);
         final String content = node.getDataAsString();
         final Lexer lexer = new Lexer(content);
         Node cursor = null;
@@ -161,7 +160,7 @@ public class TilePageMarkupSource implements MarkupSource
             return false;
         }
         String simpleTagName = tagName.substring(Brix.NS_PREFIX.length());
-        return TileTemplateNode.CONTENT_TAG.equals(tagName) || "tile".equals(simpleTagName) ||
+        return Template.CONTENT_TAG.equals(tagName) || "tile".equals(simpleTagName) ||
             "fragment".equals(simpleTagName);
     }
 
@@ -179,7 +178,7 @@ public class TilePageMarkupSource implements MarkupSource
         }
     }
 
-    private void processTag(List<TileContainerNode> nodes, int current, List<Item> items,
+    private void processTag(List<AbstractContainer> nodes, int current, List<Item> items,
             org.htmlparser.Tag tag)
     {
         final Tag.Type type;
@@ -225,12 +224,12 @@ public class TilePageMarkupSource implements MarkupSource
         }
     }
 
-    private void processBrixTag(List<TileContainerNode> nodes, int current, List<Item> items,
+    private void processBrixTag(List<AbstractContainer> nodes, int current, List<Item> items,
             String tagName, Map<String, String> attributes, Tag.Type type)
     {
-        TileContainerNode node = nodes.get(current);
+        AbstractContainer node = nodes.get(current);
         final String simpleTagName = tagName.substring(Brix.NS_PREFIX.length());
-        if (TileTemplateNode.CONTENT_TAG.equals(tagName))
+        if (Template.CONTENT_TAG.equals(tagName))
         {
             if (current != nodes.size() - 1)
             {
@@ -239,13 +238,13 @@ public class TilePageMarkupSource implements MarkupSource
         }
         else if ("tile".equals(simpleTagName))
         {
-            String id = attributes.get(TileContainerNode.MARKUP_TILE_ID);
+            String id = attributes.get(AbstractContainer.MARKUP_TILE_ID);
             items.add(new TileTag("div", Type.OPEN, attributes, node, id));
             items.add(new SimpleTag("div", Type.CLOSE, null));
         }
         else if ("fragment".equals(simpleTagName))
         {
-            String id = attributes.get(TileContainerNode.MARKUP_TILE_ID);
+            String id = attributes.get(AbstractContainer.MARKUP_TILE_ID);
             items.add(new FragmentTag("div", Type.OPEN, attributes, node, id));
             items.add(new SimpleTag("div", Type.CLOSE, null));
         }

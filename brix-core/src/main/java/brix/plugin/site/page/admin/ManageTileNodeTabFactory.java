@@ -13,15 +13,16 @@ import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.plugin.site.page.TilePageNodePlugin;
-import brix.plugin.site.page.TileTemplateNodePlugin;
+import brix.plugin.site.page.PageSiteNodePlugin;
+import brix.plugin.site.page.TemplateSiteNodePlugin;
+import brix.plugin.site.page.tile.admin.TilesPanel;
 
 public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 {
     public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
     {
         String type = nodeModel.getObject().getNodeType();
-        if (TilePageNodePlugin.TYPE.equals(type) || TileTemplateNodePlugin.TYPE.equals(type))
+        if (PageSiteNodePlugin.TYPE.equals(type) || TemplateSiteNodePlugin.TYPE.equals(type))
         {
             return getTabs(nodeModel);
         }
