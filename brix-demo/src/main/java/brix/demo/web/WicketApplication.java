@@ -31,7 +31,7 @@ import brix.jcr.ThreadLocalSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.node.tilepage.TilePageNode;
+import brix.plugin.site.page.TilePageNode;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.BrixNodeWebPage;

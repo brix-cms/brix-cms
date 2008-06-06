@@ -4,8 +4,8 @@ import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.node.tilepage.TilePageNodePlugin;
-import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
+import brix.plugin.site.page.TilePageNodePlugin;
+import brix.plugin.site.page.admin.TileEditorPanel;
 import brix.web.picker.node.NodeFilter;
 import brix.web.picker.node.NodePickerPanel;
 import brix.web.picker.node.NodeTypeFilter;

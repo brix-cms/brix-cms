@@ -9,7 +9,7 @@ import brix.Brix;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.wrapper.NodeWrapper;
-import brix.plugin.site.node.folder.FolderNodePlugin;
+import brix.plugin.site.folder.FolderNodePlugin;
 import brix.plugin.site.node.resource.ResourceNodePlugin;
 import brix.web.util.validators.NodeNameValidator;
 

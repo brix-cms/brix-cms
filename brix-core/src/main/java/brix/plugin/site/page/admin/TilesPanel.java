@@ -1,7 +1,7 @@
 /**
  * 
  */
-package brix.plugin.fragment;
+package brix.plugin.site.page.admin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +14,6 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.markup.repeater.util.ModelIteratorAdapter;
@@ -24,11 +23,11 @@ import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.Strings;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.page.TileContainerFacet;
-import brix.plugin.site.page.admin.NewTileFragment;
-import brix.plugin.site.page.admin.TileEditorFragment;
+import brix.plugin.site.page.TileContainerNode;
 
-class TilesPanel extends Panel<BrixNode>
+class TilesPanel extends NodeManagerPanel
 {
     String selectedTileId;
     private Component editor;
@@ -36,11 +35,10 @@ class TilesPanel extends Panel<BrixNode>
     private List<String> getTileIds()
     {
         List<String> result = new ArrayList<String>();
-
-
-        for (BrixNode tileNode : getContainer().tiles().getTileNodes())
+        List<BrixNode> nodes = getTileContainerNode().tiles().getTileNodes();
+        for (BrixNode node : nodes)
         {
-            result.add(TileContainerFacet.getTileId(tileNode));
+            result.add(TileContainerFacet.getTileId(node));
         }
         return result;
     }
@@ -125,16 +123,9 @@ class TilesPanel extends Panel<BrixNode>
 
     }
 
-
-    protected BrixNode getContainerNode()
+    private TileContainerNode getTileContainerNode()
     {
-        return getModelObject();
-    }
-
-    protected TileContainer getContainer()
-    {
-        // TODO nice cast exception
-        return (TileContainer)getModelObject();
+        return (TileContainerNode)getNode();
     }
 
     private void setupTileEditor()
@@ -150,9 +141,10 @@ class TilesPanel extends Panel<BrixNode>
                 @Override
                 protected void onAddTile(String tileId, String tileTypeName)
                 {
-                    BrixNode containerNode = getContainerNode();
+                    BrixNode containerNode = getNode();
                     containerNode.checkout();
-                    BrixNode node = getContainer().tiles().createTile(tileId, tileTypeName);
+                    BrixNode node = getTileContainerNode().tiles().createTile(tileId,
+                        tileTypeName);
                     getEditor().save(node);
                     containerNode.save();
                     containerNode.checkin();
@@ -171,11 +163,11 @@ class TilesPanel extends Panel<BrixNode>
                 @Override
                 protected void onDelete(String tileId)
                 {
-                    BrixNode tile = getContainer().tiles().getTile(selectedTileId);
-                    getContainerNode().checkout();
+                    BrixNode tile = getTileContainerNode().tiles().getTile(selectedTileId);
+                    getNode().checkout();
                     tile.remove();
-                    getContainerNode().save();
-                    getContainerNode().checkin();
+                    getNode().save();
+                    getNode().checkin();
                     selectedTileId = null;
                     setupTileEditor();
                 }

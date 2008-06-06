@@ -11,9 +11,9 @@ import org.apache.wicket.model.IModel;
 import brix.Path;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.node.tilepage.TileContainerNode;
-import brix.plugin.site.node.tilepage.admin.Tile;
-import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
+import brix.plugin.site.page.TileContainerNode;
+import brix.plugin.site.page.admin.Tile;
+import brix.plugin.site.page.admin.TileEditorPanel;
 import brix.web.nodepage.BrixPageParameters;
 
 public class PageTile implements Tile

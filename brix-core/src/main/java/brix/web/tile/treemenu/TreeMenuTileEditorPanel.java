@@ -15,7 +15,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.node.tilepage.admin.TileEditorPanel;
+import brix.plugin.site.page.admin.TileEditorPanel;
 import brix.web.picker.reference.ReferenceEditorConfiguration;
 import brix.web.picker.reference.ReferenceEditorModalWindow;
 import brix.web.picker.reference.ReferenceEditorPanel;
