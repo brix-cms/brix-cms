@@ -13,7 +13,6 @@ import org.apache.wicket.model.IModel;
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.fragment.TileContainer;
-import brix.plugin.site.node.tilepage.TileContainerNode;
 
 public abstract class TileEditorFragment extends Fragment<BrixNode>
 {
@@ -28,8 +27,9 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
 
         form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
 
+        Brix brix = nodeModel.getObject().getBrix();
         final String tileClassName = getTileContainerNode().tiles().getTileClassName(tileId);
-        final Tile tile = Tile.Helper.getTileOfType(tileClassName, Brix.get());
+        final Tile tile = Tile.Helper.getTileOfType(tileClassName, brix);
 
         final TileEditorPanel editor;
 

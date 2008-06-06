@@ -23,10 +23,11 @@ import brix.workspace.WorkspaceModel;
 
 public class MenuPlugin implements Plugin
 {
+    private final Brix brix;
 
-    public MenuPlugin()
+    public MenuPlugin(Brix brix)
     {
-
+        this.brix = brix;
     }
 
     private static final String ID = MenuPlugin.class.getName();
@@ -89,18 +90,18 @@ public class MenuPlugin implements Plugin
 
     public String getRootPath()
     {
-        return Brix.get().getRootPath() + "/" + ROOT_NODE_NAME;
+        return brix.getRootPath() + "/" + ROOT_NODE_NAME;
     }
 
     private BrixNode getRootNode(String workspaceId, boolean createIfNotExist)
     {
-        JcrSession session = Brix.get().getCurrentSession(workspaceId);
+        JcrSession session = brix.getCurrentSession(workspaceId);
 
         if (session.itemExists(getRootPath()) == false)
         {
             if (createIfNotExist)
             {
-                BrixNode parent = (BrixNode)session.getItem(Brix.get().getRootPath());
+                BrixNode parent = (BrixNode)session.getItem(brix.getRootPath());
                 parent.addNode(ROOT_NODE_NAME, "nt:unstructured");
             }
             else
@@ -121,7 +122,7 @@ public class MenuPlugin implements Plugin
             JcrNodeIterator i = root.getNodes("menu");
             while (i.hasNext())
             {
-                result.add((BrixNode) i.nextNode());
+                result.add((BrixNode)i.nextNode());
             }
             return result;
         }
@@ -140,7 +141,7 @@ public class MenuPlugin implements Plugin
         else
         {
             BrixNode root = getRootNode(workspaceId, true);
-            node = (BrixNode) root.addNode("menu");
+            node = (BrixNode)root.addNode("menu");
             menu.save(node);
         }
         node.getSession().save();

@@ -36,7 +36,7 @@ class EditTab extends NodeManagerPanel
     {
         super(id, nodeModel);
 
-        Brix brix = Brix.get();
+        Brix brix = getModelObject().getBrix();
         final boolean useCodepress = brix.getConfig().getAdminConfig().isEnableCodePress();
         final boolean useWysiwyg = brix.getConfig().getAdminConfig().isEnableWysiwyg();
 

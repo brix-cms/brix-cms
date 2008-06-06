@@ -17,23 +17,23 @@ import brix.plugin.site.auth.SiteNodeAction;
 
 public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 {
-	
-	public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
-	{
-		if (nodeModel.getObject().isFolder())
-		{
-			return getTabs(nodeModel);
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public int getPriority()
-	{		
-		return 0;
-	}
+
+    public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
+    {
+        if (nodeModel.getObject().isFolder())
+        {
+            return getTabs(nodeModel);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public int getPriority()
+    {
+        return 0;
+    }
 
     public static List<ITab> getTabs(final IModel<BrixNode> folderModel)
     {
@@ -51,7 +51,7 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
             public boolean isVisible()
             {
                 Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                        SiteNodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
+                    SiteNodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
                 return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
@@ -69,7 +69,7 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
             public boolean isVisible()
             {
                 Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                        SiteNodeAction.Type.NODE_ADD_CHILD, folderModel.getObject());
+                    SiteNodeAction.Type.NODE_ADD_CHILD, folderModel.getObject());
                 return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
             }
 
@@ -87,7 +87,7 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
             public boolean isVisible()
             {
                 Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                        SiteNodeAction.Type.NODE_EDIT, folderModel.getObject());
+                    SiteNodeAction.Type.NODE_EDIT, folderModel.getObject());
                 return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
             }
 

@@ -32,6 +32,13 @@ public class TemplatePlugin implements Plugin
 
     private static final String ID = TemplatePlugin.class.getName();
 
+    private final Brix brix;
+    
+    public TemplatePlugin(Brix brix)
+    {
+        this.brix = brix;
+    }
+
     public String getId()
     {
         return ID;
@@ -71,7 +78,7 @@ public class TemplatePlugin implements Plugin
     {
         Map<String, String> attributes = new HashMap<String, String>();
         attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-        return Brix.get().getWorkspaceManager().getWorkspacesFiltered(
+        return brix.getWorkspaceManager().getWorkspacesFiltered(
             attributes);
     }
 

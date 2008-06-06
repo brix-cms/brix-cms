@@ -148,7 +148,7 @@ public class TileContainerFacet
         for (BrixNode tileNode : tiles)
         {
             String className = TileContainerFacet.getTileClassName(tileNode);
-            Tile tile = Tile.Helper.getTileOfType(className, Brix.get());
+            Tile tile = Tile.Helper.getTileOfType(className, container.getBrix());
             IModel<BrixNode> tileNodeModel = new BrixNodeModel(tileNode);
             if (tile.requiresSSL(tileNodeModel))
                 return true;

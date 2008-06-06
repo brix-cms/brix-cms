@@ -45,7 +45,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
     {
         return nodeModel;
     }
-    
+
 
     @Override
     public int hashCode()
@@ -98,7 +98,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
     {
         return new AbstractJcrTreeNode(node);
     }
-    
+
     private List<AbstractJcrTreeNode> loadChildren()
     {
         List<AbstractJcrTreeNode> children = new ArrayList<AbstractJcrTreeNode>();
@@ -106,16 +106,15 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         List<BrixNode> entries = new ArrayList<BrixNode>((int)iterator.getSize());
         while (iterator.hasNext())
         {
-            entries.add((BrixNode) iterator.nextNode());
+            entries.add((BrixNode)iterator.nextNode());
         }
 
         for (BrixNode entry : entries)
         {
-            BrixNode brixNode = (BrixNode)entry;
             Action view = new SiteNodeAction(Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW,
-                    entry);
-            if (!brixNode.isHidden() && (displayFoldersOnly() == false || brixNode.isFolder()) &&
-                    Brix.get().getAuthorizationStrategy().isActionAuthorized(view))
+                entry);
+            if (!entry.isHidden() && (displayFoldersOnly() == false || entry.isFolder()) &&
+                entry.getBrix().getAuthorizationStrategy().isActionAuthorized(view))
             {
                 children.add(newTreeNode(entry));
             }
@@ -132,7 +131,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         if (children == null)
         {
             Action viewChildren = new SiteNodeAction(Context.ADMINISTRATION,
-                    SiteNodeAction.Type.NODE_VIEW_CHILDREN, nodeModel.getObject());
+                SiteNodeAction.Type.NODE_VIEW_CHILDREN, nodeModel.getObject());
             if (Brix.get().getAuthorizationStrategy().isActionAuthorized(viewChildren))
             {
                 children = loadChildren();
@@ -154,13 +153,13 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
     {
         return ((BrixNode)nodeModel.getObject()).isFolder() == false;
     }
-    
+
     public void detach()
     {
         children = null;
         nodeModel.detach();
-    }    
-    
+    }
+
     @Override
     public String toString()
     {

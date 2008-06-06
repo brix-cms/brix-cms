@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
@@ -19,24 +18,24 @@ import brix.plugin.site.node.tilepage.TileTemplateNodePlugin;
 
 public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 {
-	public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
-	{
-		String type = nodeModel.getObject().getNodeType();
-		if (TilePageNodePlugin.TYPE.equals(type) || TileTemplateNodePlugin.TYPE.equals(type))
-		{
-			return getTabs(nodeModel);
-		}
-		else
-		{
-			return null;
-		}
-	}
-	
-	public int getPriority()
-	{
-		return 0;
-	}
-	
+    public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
+    {
+        String type = nodeModel.getObject().getNodeType();
+        if (TilePageNodePlugin.TYPE.equals(type) || TileTemplateNodePlugin.TYPE.equals(type))
+        {
+            return getTabs(nodeModel);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public int getPriority()
+    {
+        return 0;
+    }
+
     private static List<ITab> getTabs(final IModel<BrixNode> nodeModel)
     {
         List<ITab> tabs = new ArrayList<ITab>();
@@ -113,15 +112,17 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
     private static boolean hasViewPermission(IModel<BrixNode> nodeModel)
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                SiteNodeAction.Type.NODE_VIEW, nodeModel.getObject());
-        return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+            SiteNodeAction.Type.NODE_VIEW, nodeModel.getObject());
+        return nodeModel.getObject().getBrix().getAuthorizationStrategy()
+            .isActionAuthorized(action);
     }
 
     private static boolean hasEditPermission(IModel<BrixNode> nodeModel)
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                SiteNodeAction.Type.NODE_EDIT, nodeModel.getObject());
-        return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+            SiteNodeAction.Type.NODE_EDIT, nodeModel.getObject());
+        return nodeModel.getObject().getBrix().getAuthorizationStrategy()
+            .isActionAuthorized(action);
     }
 
 }

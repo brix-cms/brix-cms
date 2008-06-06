@@ -35,7 +35,7 @@ public class BrixNodeWebPage extends WebPage<BrixNode>
         BrixNode node = getNodeModel().getObject();
         Action action = new SiteNodeAction(Action.Context.PRESENTATION,
                 SiteNodeAction.Type.NODE_VIEW, node);
-        if (!Brix.get().getAuthorizationStrategy().isActionAuthorized(action))
+        if (!node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
         {
             throw new RestartResponseException(ForbiddenPage.class);
         }

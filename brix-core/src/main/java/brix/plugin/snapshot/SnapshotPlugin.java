@@ -29,6 +29,13 @@ public class SnapshotPlugin implements Plugin
 
     private static final String ID = SnapshotPlugin.class.getName();
 
+    private final Brix brix;
+    
+    public SnapshotPlugin(Brix brix)
+    {
+        this.brix = brix;
+    }
+
     public String getId()
     {
         return ID;
@@ -109,7 +116,7 @@ public class SnapshotPlugin implements Plugin
             Map<String, String> attributes = new HashMap<String, String>();
             attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
             attributes.put(WORKSPACE_ATTRIBUTE_SITE_NAME, siteName);
-            return Brix.get().getWorkspaceManager().getWorkspacesFiltered(
+            return brix.getWorkspaceManager().getWorkspacesFiltered(
                 attributes);
         }
         else

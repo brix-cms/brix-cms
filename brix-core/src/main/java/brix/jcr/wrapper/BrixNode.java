@@ -5,9 +5,6 @@ import java.util.Date;
 
 import javax.jcr.Node;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import brix.Brix;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -38,6 +35,10 @@ public class BrixNode extends NodeWrapper
         super(delegate, session);
     }
 
+    public Brix getBrix() {
+        return Brix.get();
+    }
+    
     public String getNodeType()
     {
         return getNodeType(this);
@@ -205,5 +206,4 @@ public class BrixNode extends NodeWrapper
     	return Protocol.PRESERVE_CURRENT;
     }    
 
-    private static final Logger logger = LoggerFactory.getLogger(BrixNode.class);
 }

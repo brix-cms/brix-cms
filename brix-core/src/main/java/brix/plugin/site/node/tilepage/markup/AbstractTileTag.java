@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import brix.Brix;
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.fragment.TileContainer;
@@ -61,13 +60,13 @@ public abstract class AbstractTileTag extends SimpleTag
     /** {@inheritDoc} */
     public Component< ? > getComponent(String id, IModel<BrixNode> pageNodeModel)
     {
-        TileContainer tileContainerNode = getTileContainer();
-        BrixNode tileNode = ((TileContainer)tileContainerNode).tiles().getTile(tileName);
+        TileContainer container = getTileContainer();
+        BrixNode tileNode = container.tiles().getTile(tileName);
 
         if (tileNode != null)
         {
             Tile tile = Tile.Helper.getTileOfType(TileContainerFacet.getTileClassName(tileNode),
-                Brix.get());
+                tileNode.getBrix());
             BrixPageParameters parameters = BrixPageParameters.getCurrent();
             return tile.newViewer(id, new BrixNodeModel(tileNode), parameters);
         }
@@ -85,7 +84,7 @@ public abstract class AbstractTileTag extends SimpleTag
         if (tileNode != null)
         {
             Tile tile = Tile.Helper.getTileOfType(TileContainerFacet.getTileClassName(tileNode),
-                Brix.get());
+                tileNode.getBrix());
             if (tile instanceof VariableKeyProvider)
             {
                 return ((VariableKeyProvider)tile).getVariableKeys();

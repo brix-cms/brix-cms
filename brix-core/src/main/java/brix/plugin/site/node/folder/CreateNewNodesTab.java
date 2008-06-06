@@ -35,7 +35,7 @@ public class CreateNewNodesTab extends Panel<BrixNode>
         Form form = new Form("form");
         add(form);
         form.add(new DropDownChoice("type", new PropertyModel(this, "selectedType"),
-                new NodeTypesList(), new ChoiceRenderer("name"))
+            new NodeTypesList(), new ChoiceRenderer("name"))
         {
             @Override
             protected boolean wantOnSelectionChangedNotifications()
@@ -88,13 +88,16 @@ public class CreateNewNodesTab extends Panel<BrixNode>
         @Override
         protected Object load()
         {
-            Brix brix = Brix.get();
-            Collection<SiteNodePlugin> plugins = new ArrayList<SiteNodePlugin>(SitePlugin.get().getNodePlugins());
+
+            Brix brix = CreateNewNodesTab.this.getModelObject().getBrix();
+
+            Collection<SiteNodePlugin> plugins = new ArrayList<SiteNodePlugin>(SitePlugin.get()
+                .getNodePlugins());
             List<PluginEntry> types = new ArrayList<PluginEntry>(plugins.size());
             for (SiteNodePlugin plugin : plugins)
             {
                 Action action = new SelectNewNodeTypeAction(Action.Context.ADMINISTRATION,
-                        (JcrNode)CreateNewNodesTab.this.getModelObject(), plugin.getNodeType());
+                    (JcrNode)CreateNewNodesTab.this.getModelObject(), plugin.getNodeType());
 
                 if (brix.getAuthorizationStrategy().isActionAuthorized(action))
                 {
@@ -105,6 +108,13 @@ public class CreateNewNodesTab extends Panel<BrixNode>
                 }
             }
             return types;
+        }
+
+        @Override
+        protected void onDetach()
+        {
+            CreateNewNodesTab.this.getModel().detach();
+            super.onDetach();
         }
     }
 

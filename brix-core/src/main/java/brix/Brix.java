@@ -71,16 +71,16 @@ public abstract class Brix
 
         wrapperRegistry.registerWrapper(FolderNode.class);
         wrapperRegistry.registerWrapper(FragmentsContainerNode.class);
-        
+
         final ExtensionPointRegistry registry = config.getRegistry();
         registry.register(Plugin.POINT, new SitePlugin(this));
-        registry.register(Plugin.POINT, new MenuPlugin());
-        registry.register(Plugin.POINT, new SnapshotPlugin());
-        registry.register(Plugin.POINT, new TemplatePlugin());
+        registry.register(Plugin.POINT, new MenuPlugin(this));
+        registry.register(Plugin.POINT, new SnapshotPlugin(this));
+        registry.register(Plugin.POINT, new TemplatePlugin(this));
         registry.register(Plugin.POINT, new PublishingPlugin());
         registry.register(Plugin.POINT, new WebdavUrlPlugin());
         registry.register(Plugin.POINT, new FragmentPlugin(this));
-        
+
     }
 
     public static Brix get(Application application)
@@ -303,7 +303,7 @@ public abstract class Brix
             registerType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
 
             registerType(w, FragmentsContainerNode.TYPE, false, false);
-            
+
 
         }
         catch (Exception e)

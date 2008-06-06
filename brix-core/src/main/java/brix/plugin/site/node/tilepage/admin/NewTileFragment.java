@@ -27,7 +27,6 @@ import org.apache.wicket.validation.ValidationError;
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.fragment.TileContainer;
-import brix.plugin.site.node.tilepage.TileContainerNode;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;
 
@@ -84,7 +83,8 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
                 }
                 else
                 {
-                    final Tile tile = Tile.Helper.getTileOfType(tileTypeName, Brix.get());
+                    final Brix brix = NewTileFragment.this.getModelObject().getBrix();
+                    final Tile tile = Tile.Helper.getTileOfType(tileTypeName, brix);
                     TileEditorPanel ed = tile.newEditor(newTileEditor.getId(), nodeModel);
                     newTileEditor.replaceWith(ed);
                     newTileEditor = ed;
@@ -151,7 +151,7 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
         public Object getDisplayValue(Object object)
         {
             String type = (String)object;
-            return Tile.Helper.getTileOfType(type, Brix.get()).getDisplayName();
+            return Tile.Helper.getTileOfType(type, getModelObject().getBrix()).getDisplayName();
         }
 
         public String getIdValue(Object object, int index)

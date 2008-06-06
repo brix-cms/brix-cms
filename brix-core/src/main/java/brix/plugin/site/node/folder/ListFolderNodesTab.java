@@ -171,7 +171,7 @@ public class ListFolderNodesTab extends NavigationAwarePanel<BrixNode>
             Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
                     SiteNodeAction.Type.NODE_VIEW, node);
             if (!node.isHidden() &&
-                    Brix.get().getAuthorizationStrategy().isActionAuthorized(action))
+                    node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
             {
                 res.add(node);
             }

@@ -40,7 +40,7 @@ public class ConvertNodePanel extends NodeManagerPanel
                 Action action = new ConvertNodeAction(Action.Context.ADMINISTRATION, node,
                         plugin.getNodeType());
 
-                if (Brix.get().getAuthorizationStrategy().isActionAuthorized(action))
+                if (node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
                 {
 
                     found = true;
