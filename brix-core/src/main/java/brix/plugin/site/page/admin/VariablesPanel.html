@@ -1,0 +1,35 @@
+<wicket:panel>
+
+	<br/>
+
+	<div wicket:id="grid">
+	</div>
+	
+	<div style="padding-top: 4px">
+		<a wicket:id="deleteSelected">Delete Selected Items</a> <br/>
+	</div>
+	
+	
+	<br/>
+	
+	<form wicket:id="form">
+		<table>
+		<tr>
+			<td>
+				Key: <br/>
+				<select wicket:id="ddc"></select>
+				<input wicket:id="custom"/>
+			</td>
+			<td>
+				Value: <br/>
+				<input wicket:id="value"/>
+			</td>
+			<td>
+				&nbsp; <br/>
+				<button wicket:id="submit">Add Variable</button>
+			</td>
+		</tr>
+		</table>
+	</form>
+	<div wicket:id="feedback"></div>
+</wicket:panel>

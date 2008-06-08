@@ -5,6 +5,7 @@ import org.apache.wicket.model.IModel;
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupSource;
+import brix.markup.title.TitleTransformer;
 import brix.markup.transform.PanelTransformer;
 import brix.markup.variable.VariableTransformer;
 import brix.markup.web.BrixMarkupNodePanel;
@@ -31,6 +32,7 @@ public class PageRenderingPanel extends BrixMarkupNodePanel
         MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());
         source = new PanelTransformer(source);
         source = new VariableTransformer(source, getModelObject());
+        source = new TitleTransformer(source, (AbstractContainer) getModelObject());
         return source;
     }
 

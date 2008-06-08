@@ -22,6 +22,8 @@ public class VariableTransformer extends MarkupSourceTransformer
 		super(delegate);
 		this.pageNode = pageNode;
 	}
+	
+	int skipLevel = 0;
 
 	@Override
 	protected List<Item> transform(List<Item> originalItems)
@@ -31,9 +33,13 @@ public class VariableTransformer extends MarkupSourceTransformer
 		{
 			if (i instanceof Tag)
 			{
-				result.add(processTag((Tag) i));
+				Item item = processTag((Tag) i);
+				if (item != null)
+				{
+					result.add(item);	
+				}				
 			}
-			else
+			else if (skipLevel == 0)
 			{
 				result.add(i);
 			}
@@ -45,9 +51,22 @@ public class VariableTransformer extends MarkupSourceTransformer
 
 	private Item processTag(Tag tag)
 	{
+		if (skipLevel > 0)
+		{
+			if (tag.getType() == Tag.Type.OPEN)
+				++skipLevel;
+			else if (tag.getType() == Tag.Type.CLOSE)
+				--skipLevel;
+			return null;
+		}
+		
 		String name = tag.getName();
 		if (VAR_TAG_NAME.equals(name))
 		{
+			if (tag.getType() == Tag.Type.OPEN)
+			{
+				++skipLevel;
+			}
 			String key = tag.getAttributeMap().get("key");
 			return new VariableText(pageNode, key);
 		}

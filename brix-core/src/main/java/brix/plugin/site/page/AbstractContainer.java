@@ -63,6 +63,8 @@ public abstract class AbstractContainer extends BrixFileNode
         else
             return null;
     }
+    
+    
 
     public void setTitle(String title)
     {
@@ -161,7 +163,7 @@ public abstract class AbstractContainer extends BrixFileNode
         return (AbstractSitePagePlugin)SitePlugin.get().getNodePluginForNode(this);
     }
 
-    public String getVariableValue(String key)
+    public String getVariableValue(String key, boolean followTemplate)
     {
         if (hasNode(VARIABLES_NODE_NAME))
         {
@@ -171,12 +173,20 @@ public abstract class AbstractContainer extends BrixFileNode
                 return node.getProperty(key).getString();
             }
         }
-        Template template = getTemplate();
-        if (template != null)
+        if (followTemplate)
         {
-            return template.getVariableValue(key);
-        }
+        	Template template = getTemplate();
+            if (template != null)
+            {
+                return template.getVariableValue(key);
+            }            
+        }    
         return null;
+    }
+    
+    public String getVariableValue(String key)
+    {
+    	return getVariableValue(key, true);
     }
 
     public void setVariableValue(String key, String value)
@@ -190,8 +200,7 @@ public abstract class AbstractContainer extends BrixFileNode
         {
             node = addNode(VARIABLES_NODE_NAME, "nt:unstructured");
         }
-        node.setProperty(key, value);
-        save();
+        node.setProperty(key, value);        
     }
 
     /**
@@ -228,7 +237,12 @@ public abstract class AbstractContainer extends BrixFileNode
             JcrPropertyIterator i = node.getProperties();
             while (i.hasNext())
             {
-                result.add(i.nextProperty().getName());
+            	String name = i.nextProperty().getName();
+            	// filter out jcr: properties (or other possible brix properties)
+            	if (!name.contains(":"))
+            	{            		
+            		result.add(name);
+            	}
             }
             return result;
         }

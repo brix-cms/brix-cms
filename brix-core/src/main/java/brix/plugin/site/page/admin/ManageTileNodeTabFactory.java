@@ -90,6 +90,24 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
             }
 
         });
+        
+        tabs.add(new AbstractTab(new Model("variables"))
+        {
+
+            @Override
+            public Panel getPanel(String panelId)
+            {
+                return new VariablesPanel(panelId, nodeModel);
+            }
+
+            @Override
+            public boolean isVisible()
+            {
+                return hasEditPermission(nodeModel);
+            }
+
+        });
+        
 
         tabs.add(new AbstractTab(new Model("convert"))
         {

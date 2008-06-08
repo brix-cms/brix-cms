@@ -62,7 +62,8 @@ public class VariableTag implements Tag, VariableKeyProvider
 				}
 				else
 				{
-					result.put(e.getKey(), variableValueProvider.getVariableValue(k));
+					String value = variableValueProvider.getVariableValue(k);
+					result.put(e.getKey(), value != null ? value : e.getValue());
 				}
 			}
 			return result;

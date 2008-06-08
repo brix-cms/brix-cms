@@ -4,6 +4,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupSource;
+import brix.markup.title.TitleTransformer;
 import brix.markup.transform.HeadTransformer;
 import brix.markup.variable.VariableTransformer;
 import brix.markup.web.BrixMarkupNodeWebPage;
@@ -32,6 +33,7 @@ public class PageRenderingPage extends BrixMarkupNodeWebPage
     	MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());
     	source = new HeadTransformer(source);
     	source = new VariableTransformer(source, getModelObject());
+    	source = new TitleTransformer(source, (AbstractContainer) getModelObject());
     	return source;
     }
 }

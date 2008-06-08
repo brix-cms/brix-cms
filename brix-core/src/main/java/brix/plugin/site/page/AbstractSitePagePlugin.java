@@ -57,7 +57,7 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin
         protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
                 BrixPageParameters pageParameters)
         {
-            return new PageRenderingPanel(nodeModel, pageParameters);
+            return new PageRenderingPage(nodeModel, pageParameters);
         }
     };
 
