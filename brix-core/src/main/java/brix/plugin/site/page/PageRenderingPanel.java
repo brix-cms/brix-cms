@@ -2,34 +2,36 @@ package brix.plugin.site.page;
 
 import org.apache.wicket.model.IModel;
 
+import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupSource;
-import brix.markup.transform.HeadTransformer;
-import brix.markup.web.BrixMarkupNodeWebPage;
-import brix.web.nodepage.BrixPageParameters;
-import brix.web.nodepage.toolbar.ToolbarBehavior;
+import brix.markup.transform.PanelTransformer;
+import brix.markup.variable.VariableTransformer;
+import brix.markup.web.BrixMarkupNodePanel;
+import brix.plugin.site.auth.SiteNodeAction;
 
-public class PageRenderingPanel extends BrixMarkupNodeWebPage
+public class PageRenderingPanel extends BrixMarkupNodePanel
 {
-
-
-    public PageRenderingPanel(final IModel<BrixNode> node, BrixPageParameters pageParameters)
+    public PageRenderingPanel(String id, IModel<BrixNode> nodeModel)
     {
-        super(node, pageParameters);
-      //  add(new TilePageRenderPanel("view", node, this));
-        add(new ToolbarBehavior() {
-            @Override
-            protected String getCurrentWorkspaceId()
-            {
-                return node.getObject().getSession().getWorkspace().getName();
-            }
-        });
+        super(id, nodeModel);
+    }
+
+    @Override
+    public boolean isVisible()
+    {
+        BrixNode node = getModelObject();
+        Action action = new SiteNodeAction(Action.Context.PRESENTATION,
+            SiteNodeAction.Type.NODE_VIEW, node);
+        return node.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
     }
 
     public MarkupSource getMarkupSource()
     {
-    	MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());
-    	source = new HeadTransformer(source);
-    	return source;
+        MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());
+        source = new PanelTransformer(source);
+        source = new VariableTransformer(source, getModelObject());
+        return source;
     }
+
 }
