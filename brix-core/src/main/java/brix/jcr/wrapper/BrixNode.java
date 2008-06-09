@@ -16,6 +16,7 @@ import brix.web.util.validators.NodeNameValidator;
 public class BrixNode extends NodeWrapper
 {
 
+
     public static final String JCR_TYPE_BRIX_NODE = Brix.NS_PREFIX + "node";
 
     private static final String JCR_PROP_NODE_TYPE = Brix.NS_PREFIX + "nodeType";
@@ -35,10 +36,11 @@ public class BrixNode extends NodeWrapper
         super(delegate, session);
     }
 
-    public Brix getBrix() {
+    public Brix getBrix()
+    {
         return Brix.get();
     }
-    
+
     public String getNodeType()
     {
         return getNodeType(this);
@@ -194,16 +196,16 @@ public class BrixNode extends NodeWrapper
             return true;
         }
     }
-    
+
     public enum Protocol {
-    	HTTP,
-    	HTTPS,
-    	PRESERVE_CURRENT
+        HTTP,
+        HTTPS,
+        PRESERVE_CURRENT
     }
-    
-    public Protocol getRequiredProtocol() 
+
+    public Protocol getRequiredProtocol()
     {
-    	return Protocol.PRESERVE_CURRENT;
-    }    
+        return Protocol.PRESERVE_CURRENT;
+    }
 
 }

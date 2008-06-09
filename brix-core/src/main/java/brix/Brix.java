@@ -10,7 +10,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.Workspace;
 
-import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
@@ -24,29 +23,35 @@ import brix.auth.Action.Context;
 import brix.config.BrixConfig;
 import brix.jcr.JcrEventListener;
 import brix.jcr.JcrSessionFactory;
+import brix.jcr.NodeWrapperFactory;
+import brix.jcr.RepositoryUtil;
 import brix.jcr.SessionBehavior;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.event.EventUtil;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
-import brix.jcr.wrapper.WrapperRegistry;
 import brix.plugin.menu.MenuPlugin;
 import brix.plugin.publishing.PublishingPlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.folder.FolderNode;
 import brix.plugin.site.folder.FolderNodePlugin;
+import brix.plugin.site.page.Page;
 import brix.plugin.site.page.PageSiteNodePlugin;
+import brix.plugin.site.page.Template;
 import brix.plugin.site.page.TemplateSiteNodePlugin;
 import brix.plugin.site.page.fragment.FragmentPlugin;
 import brix.plugin.site.page.fragment.FragmentsContainerNode;
+import brix.plugin.site.page.tile.Tile;
 import brix.plugin.site.page.tile.TileContainerFacet;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.template.TemplatePlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
 import brix.registry.ExtensionPointRegistry;
-import brix.util.StringInputStream;
+import brix.registry.ExtensionPointRegistry.Callback;
 import brix.web.nodepage.PageParametersAwareEnabler;
+import brix.web.tile.menu.MenuTile;
+import brix.web.tile.pagetile.PageTile;
 import brix.workspace.WorkspaceManager;
 
 public abstract class Brix
@@ -69,10 +74,17 @@ public abstract class Brix
         this.config = config;
         this.sessionFactory = sessionFactory;
 
-        wrapperRegistry.registerWrapper(FolderNode.class);
-        wrapperRegistry.registerWrapper(FragmentsContainerNode.class);
-
         final ExtensionPointRegistry registry = config.getRegistry();
+
+        registry.register(NodeWrapperFactory.POINT, FolderNode.FACTORY);
+        registry.register(NodeWrapperFactory.POINT, FragmentsContainerNode.FACTORY);
+
+        registry.register(NodeWrapperFactory.POINT, Page.FACTORY);
+        registry.register(NodeWrapperFactory.POINT, Template.FACTORY);
+
+        registry.register(Tile.POINT, new MenuTile());
+        registry.register(Tile.POINT, new PageTile());
+        
         registry.register(Plugin.POINT, new SitePlugin(this));
         registry.register(Plugin.POINT, new MenuPlugin(this));
         registry.register(Plugin.POINT, new SnapshotPlugin(this));
@@ -119,8 +131,7 @@ public abstract class Brix
     public JcrSession getCurrentSession(String workspace)
     {
 
-        SessionBehavior behavior = new SessionBehavior();
-        behavior.setWrapperRegistry(wrapperRegistry);
+        SessionBehavior behavior = new SessionBehavior(this);
         Session session = sessionFactory.getCurrentSession(workspace);
 
         return JcrSession.Wrapper.wrap(session, behavior);
@@ -239,43 +250,12 @@ public abstract class Brix
         return "/" + ROOT_NODE_NAME;
     }
 
-    // TODO rename to registerMixinType
-    protected void registerType(Workspace workspace, String typeName, boolean referenceable,
-            boolean orderable) throws Exception
-    {
-
-        JackrabbitNodeTypeManager manager = (JackrabbitNodeTypeManager)workspace
-            .getNodeTypeManager();
-
-        if (manager.hasNodeType(typeName) == false)
-        {
-            logger.info("Registering node type: {} in workspace {}", typeName, workspace.getName());
-
-            String type = "[" + typeName + "] > nt:unstructured ";
-
-            if (referenceable)
-                type += ", mix:referenceable ";
-
-            if (orderable)
-                type += "orderable ";
-
-            type += " mixin";
-
-            manager.registerNodeTypes(new StringInputStream(type),
-                JackrabbitNodeTypeManager.TEXT_X_JCR_CND);
-        }
-        else
-        {
-            logger.info("Type: {} already registered in workspace {}", typeName, workspace
-                .getName());
-        }
-    }
 
     public void initRepository(Session session)
     {
         try
         {
-            Workspace w = session.getWorkspace();
+            final Workspace w = session.getWorkspace();
             NamespaceRegistry nr = w.getNamespaceRegistry();
 
             try
@@ -291,20 +271,24 @@ public abstract class Brix
 
             EventUtil.registerSaveEventListener(new JcrEventListener());
 
-            registerType(w, BrixNode.JCR_TYPE_BRIX_NODE, true, true);
+            RepositoryUtil.registerMixinType(w, BrixNode.JCR_TYPE_BRIX_NODE, true, true);
 
             // the following three have always brix:node mixin too
-            registerType(w, FolderNodePlugin.TYPE, false, false);
-            registerType(w, PageSiteNodePlugin.TYPE, false, false);
-            registerType(w, TemplateSiteNodePlugin.TYPE, false, false);
+            RepositoryUtil.registerMixinType(w, FolderNodePlugin.TYPE, false, false);
 
-            registerType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true);
+            RepositoryUtil.registerMixinType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true);
 
-            registerType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
+            RepositoryUtil.registerMixinType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
 
-            registerType(w, FragmentsContainerNode.TYPE, false, false);
-
-
+            config.getRegistry().lookupCollection(NodeWrapperFactory.POINT,
+                new Callback<NodeWrapperFactory>()
+                {
+                    public Status processExtension(NodeWrapperFactory extension)
+                    {
+                        extension.initializeRepository(w);
+                        return Status.CONTINUE;
+                    }
+                });
         }
         catch (Exception e)
         {
@@ -338,14 +322,6 @@ public abstract class Brix
     public final Collection<Plugin> getPlugins()
     {
         return config.getRegistry().lookupCollection(Plugin.POINT);
-    }
-
-    private final WrapperRegistry wrapperRegistry = new WrapperRegistry();
-
-    public final WrapperRegistry getWrapperRegistry()
-    {
-        // we reference this field directly, so getter has to be final
-        return wrapperRegistry;
     }
 
     public Plugin getPlugin(String id)

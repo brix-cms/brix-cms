@@ -14,13 +14,9 @@ import brix.jcr.JcrSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.AbstractSitePagePlugin;
-import brix.plugin.site.page.Page;
 import brix.plugin.site.page.PageSiteNodePlugin;
-import brix.plugin.site.page.Template;
 import brix.plugin.site.page.TemplateSiteNodePlugin;
 import brix.plugin.site.page.tile.Tile;
-import brix.web.tile.menu.MenuTile;
-import brix.web.tile.pagetile.PageTile;
 import brix.workspace.AbstractWorkspaceManager;
 import brix.workspace.WorkspaceManager;
 import brix.workspace.rmi.ClientWorkspaceManager;
@@ -42,8 +38,6 @@ public class DemoBrix extends Brix
         plugin = new TemplateSiteNodePlugin(this);
         sitePlugin.registerNodePlugin(plugin);
 
-        getWrapperRegistry().registerWrapper(Page.class);
-        getWrapperRegistry().registerWrapper(Template.class);
 
         addTiles();
     }
@@ -88,20 +82,12 @@ public class DemoBrix extends Brix
 
     private void addTile(Tile tile)
     {
-    	getConfig().getRegistry().register(Tile.POINT, tile);
+        getConfig().getRegistry().register(Tile.POINT, tile);
     }
-    
+
     private void addTiles()
     {
         addTile(new TimeTile());
-        addTile(new MenuTile());
-        addTile(new PageTile());
-
-        /*
-         * plugin.addTile(new TreeMenuTile()); plugin.addTile(new LinkTile()); plugin.addTile(new
-         * StatelessLinkTile()); plugin.addTile(new StatelessFormTile());
-         * 
-         */
     }
 
     @Override

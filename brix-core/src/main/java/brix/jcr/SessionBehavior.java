@@ -1,8 +1,11 @@
 package brix.jcr;
 
+import java.util.Collection;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import brix.Brix;
 import brix.exception.BrixException;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -10,25 +13,16 @@ import brix.jcr.api.JcrSession.Behavior;
 import brix.jcr.api.wrapper.NodeWrapper;
 import brix.jcr.event.EventUtil;
 import brix.jcr.exception.JcrException;
-import brix.jcr.wrapper.WrapperRegistry;
+import brix.jcr.wrapper.BrixNode;
+import brix.jcr.wrapper.BrixResourceNode;
 
 public class SessionBehavior implements Behavior
 {
-    WrapperRegistry wrapperRegistry;
+    private final Brix brix;
 
-    public SessionBehavior()
+    public SessionBehavior(Brix brix)
     {
-    }
-
-    public SessionBehavior(WrapperRegistry registry)
-    {
-        // TODO check not null
-        wrapperRegistry = registry;
-    }
-
-    public void setWrapperRegistry(WrapperRegistry wrapperRegistry)
-    {
-        this.wrapperRegistry = wrapperRegistry;
+        this.brix = brix;
     }
 
     public void handleException(Exception e)
@@ -51,6 +45,23 @@ public class SessionBehavior implements Behavior
     public JcrNode wrap(Node node, JcrSession session)
     {
         JcrNode n = new NodeWrapper(node, session);
-        return wrapperRegistry.wrap(n);
+
+        Collection<NodeWrapperFactory> factories = brix.getConfig().getRegistry().lookupCollection(
+            NodeWrapperFactory.POINT);
+
+        for (NodeWrapperFactory factory : factories)
+        {
+            if (factory.canWrap(n))
+            {
+                return factory.wrap(n);
+            }
+        }
+
+        if (BrixResourceNode.FACTORY.canWrap(n))
+        {
+            return BrixResourceNode.FACTORY.wrap(n);
+        }
+
+        return new BrixNode(n, session);
     }
 }

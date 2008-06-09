@@ -9,11 +9,21 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import brix.registry.ExtensionPoint.Multiplicity;
+import brix.registry.ExtensionPointRegistry.Callback.Status;
 
 public class ExtensionPointRegistry
 {
     private final Map<ExtensionPoint< ? >, Collection< ? >> registrations = new HashMap<ExtensionPoint< ? >, Collection< ? >>();
 
+    public static interface Callback<T>
+    {
+        public static enum Status {
+            CONTINUE,
+            STOP
+        }
+
+        Status processExtension(T extension);
+    }
 
     @SuppressWarnings("unchecked")
     private <T> Collection<T> get(ExtensionPoint<T> point)
@@ -72,6 +82,19 @@ public class ExtensionPointRegistry
         }
         Collection<T> extensions = lookup(point);
         return extensions;
+    }
+
+    public synchronized <T> void lookupCollection(ExtensionPoint<T> point, Callback<T> callback)
+    {
+        Collection<T> extensions = lookupCollection(point);
+        for (T extension : extensions)
+        {
+            Status status = callback.processExtension(extension);
+            if (status == Status.STOP)
+            {
+                break;
+            }
+        }
     }
 
     public synchronized <T> T lookupSingleton(ExtensionPoint<T> point)
