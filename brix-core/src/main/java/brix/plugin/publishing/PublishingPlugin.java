@@ -1,5 +1,6 @@
 package brix.plugin.publishing;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.wicket.ResourceReference;
@@ -23,6 +24,38 @@ public class PublishingPlugin implements Plugin
     public static final String STATE_DEVELOPMENT = "development";
     public static final String STATE_STAGING = "staging";
     public static final String STATE_PRODUCTION = "production";
+
+    private class StateComparator implements Comparator<String>
+    {
+
+		public int compare(String o1, String o2)
+		{
+			int i1 = Integer.MAX_VALUE;
+			if (STATE_DEVELOPMENT.equals(o1))
+				i1 = 1;
+			else if (STATE_STAGING.equals(o1))
+				i1 = 2;
+			else if (STATE_PRODUCTION.equals(o1))
+				i1 = 3;
+			
+			int i2 = Integer.MAX_VALUE;
+			if (STATE_DEVELOPMENT.equals(o2))
+				i2 = 1;
+			else if (STATE_STAGING.equals(o2))
+				i2 = 2;
+			else if (STATE_PRODUCTION.equals(o2))
+				i2 = 3;
+			
+			return i1 - i2;
+		}    	
+    };
+    
+    private StateComparator stateComparator = new StateComparator();
+    
+    public StateComparator getStateComparator()
+	{
+		return stateComparator;
+	}
     
     private final Brix brix;
     
