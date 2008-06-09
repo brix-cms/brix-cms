@@ -18,12 +18,12 @@ import brix.web.ContainerFeedbackPanel;
 import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.util.validators.NodeNameValidator;
 
-public class CreateTilePagePanel extends NodeManagerPanel
+public class CreatePageOrTemplatePanel extends NodeManagerPanel
 {
 
     private String name;
 
-    public CreateTilePagePanel(String id, IModel<BrixNode> containerNodeModel, final String type)
+    public CreatePageOrTemplatePanel(String id, IModel<BrixNode> containerNodeModel, final String type)
     {
         super(id, containerNodeModel);
 

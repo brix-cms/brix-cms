@@ -5,7 +5,7 @@ import org.apache.wicket.model.IModel;
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
-import brix.plugin.site.page.admin.CreateTilePagePanel;
+import brix.plugin.site.page.admin.CreatePageOrTemplatePanel;
 import brix.web.admin.navigation.NavigationAwarePanel;
 
 public class TemplateSiteNodePlugin extends AbstractSitePagePlugin
@@ -38,7 +38,7 @@ public class TemplateSiteNodePlugin extends AbstractSitePagePlugin
 	@Override
 	public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
 	{
-		return new CreateTilePagePanel(id, parentNode, getNodeType());
+		return new CreatePageOrTemplatePanel(id, parentNode, getNodeType());
 	}
 
 	@Override
