@@ -2,7 +2,7 @@ package brix.plugin.site.folder;
 
 import javax.jcr.Node;
 
-import brix.jcr.NodeWrapperFactory;
+import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
@@ -14,7 +14,7 @@ public class FolderNode extends BrixNode
     /**
      * NodeWrapperFactory that can create {@link FolderNode} wrappers
      */
-    public static final NodeWrapperFactory FACTORY = new NodeWrapperFactory()
+    public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
     {
 
         /** {@inheritDoc} */

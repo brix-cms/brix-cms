@@ -30,7 +30,7 @@ import brix.registry.ExtensionPoint;
  * @author igor.vaynberg
  * 
  */
-public abstract class NodeWrapperFactory
+public abstract class JcrNodeWrapperFactory
 {
     /**
      * Extension point for factory implementations
@@ -38,7 +38,7 @@ public abstract class NodeWrapperFactory
      * @author igor.vaynberg
      * 
      */
-    public static final ExtensionPoint<NodeWrapperFactory> POINT = new ExtensionPoint<NodeWrapperFactory>()
+    public static final ExtensionPoint<JcrNodeWrapperFactory> POINT = new ExtensionPoint<JcrNodeWrapperFactory>()
     {
         public Multiplicity getMultiplicity()
         {
@@ -47,7 +47,7 @@ public abstract class NodeWrapperFactory
 
         public String getUuid()
         {
-            return NodeWrapperFactory.class.getName();
+            return JcrNodeWrapperFactory.class.getName();
         }
 
     };

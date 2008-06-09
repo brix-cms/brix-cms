@@ -4,7 +4,7 @@ import javax.jcr.Node;
 import javax.jcr.Workspace;
 
 import brix.Brix;
-import brix.jcr.NodeWrapperFactory;
+import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.RepositoryUtil;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -13,7 +13,7 @@ import brix.jcr.wrapper.BrixNode;
 
 public class Template extends AbstractContainer
 {
-    public static NodeWrapperFactory FACTORY = new NodeWrapperFactory()
+    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
     {
         @Override
         public boolean canWrap(JcrNode node)

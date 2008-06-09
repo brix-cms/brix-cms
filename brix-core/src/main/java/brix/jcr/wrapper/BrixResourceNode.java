@@ -1,13 +1,13 @@
 package brix.jcr.wrapper;
 
-import brix.jcr.NodeWrapperFactory;
+import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 
 public class BrixResourceNode extends BrixFileNode
 {
 
-    public static NodeWrapperFactory FACTORY = new NodeWrapperFactory()
+    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
     {
 
         @Override

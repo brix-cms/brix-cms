@@ -23,7 +23,7 @@ import brix.auth.Action.Context;
 import brix.config.BrixConfig;
 import brix.jcr.JcrEventListener;
 import brix.jcr.JcrSessionFactory;
-import brix.jcr.NodeWrapperFactory;
+import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.RepositoryUtil;
 import brix.jcr.SessionBehavior;
 import brix.jcr.api.JcrNode;
@@ -76,11 +76,11 @@ public abstract class Brix
 
         final ExtensionPointRegistry registry = config.getRegistry();
 
-        registry.register(NodeWrapperFactory.POINT, FolderNode.FACTORY);
-        registry.register(NodeWrapperFactory.POINT, FragmentsContainerNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, FolderNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, FragmentsContainerNode.FACTORY);
 
-        registry.register(NodeWrapperFactory.POINT, Page.FACTORY);
-        registry.register(NodeWrapperFactory.POINT, Template.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, Page.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, Template.FACTORY);
 
         registry.register(Tile.POINT, new MenuTile());
         registry.register(Tile.POINT, new PageTile());
@@ -280,10 +280,10 @@ public abstract class Brix
 
             RepositoryUtil.registerMixinType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
 
-            config.getRegistry().lookupCollection(NodeWrapperFactory.POINT,
-                new Callback<NodeWrapperFactory>()
+            config.getRegistry().lookupCollection(JcrNodeWrapperFactory.POINT,
+                new Callback<JcrNodeWrapperFactory>()
                 {
-                    public Status processExtension(NodeWrapperFactory extension)
+                    public Status processExtension(JcrNodeWrapperFactory extension)
                     {
                         extension.initializeRepository(w);
                         return Status.CONTINUE;

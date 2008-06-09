@@ -4,7 +4,7 @@ import javax.jcr.Node;
 import javax.jcr.Workspace;
 
 import brix.Brix;
-import brix.jcr.NodeWrapperFactory;
+import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.RepositoryUtil;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -17,7 +17,7 @@ public class FragmentsContainerNode extends BrixNode implements TileContainer
     /**
      * NodeWrapperFactory that can create {@link FragmentsContainerNode} wrappers
      */
-    public static final NodeWrapperFactory FACTORY = new NodeWrapperFactory()
+    public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
     {
 
         /** {@inheritDoc} */
