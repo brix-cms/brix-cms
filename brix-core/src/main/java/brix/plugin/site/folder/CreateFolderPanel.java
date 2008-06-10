@@ -2,6 +2,7 @@ package brix.plugin.site.folder;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 
@@ -9,13 +10,11 @@ import brix.Path;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SiteNavigationTreeNode;
+import brix.plugin.site.SitePlugin;
 import brix.web.ContainerFeedbackPanel;
-import brix.web.admin.navigation.NavigationAwarePanel;
-import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.util.validators.NodeNameValidator;
 
-public class CreateFolderPanel extends NavigationAwarePanel<BrixNode>
+public class CreateFolderPanel extends Panel<BrixNode>
 {
     private String name;
 
@@ -59,9 +58,7 @@ public class CreateFolderPanel extends NavigationAwarePanel<BrixNode>
             FolderNode node = (FolderNode)parent.addNode(name, "nt:folder");
             parent.save();
             
-            NavigationTreeNode treeNode = new SiteNavigationTreeNode(node);            
-            getNavigation().nodeInserted(treeNode);
-            getNavigation().selectNode(treeNode);                        
+            SitePlugin.get().selectNode(this, node);                 
         }
     }
 

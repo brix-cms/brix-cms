@@ -1,11 +1,11 @@
 package brix.plugin.site;
 
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.registry.ExtensionPoint;
-import brix.web.admin.navigation.NavigationAwarePanel;
 
 public interface CreateNodePanelFactory {
 
@@ -21,6 +21,6 @@ public interface CreateNodePanelFactory {
 	
 	public boolean canHandle(String nodeType, JcrNode parent);
 	
-	NavigationAwarePanel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode);
+	Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode);
 	
 }

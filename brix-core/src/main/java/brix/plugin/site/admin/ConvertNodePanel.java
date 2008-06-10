@@ -7,14 +7,11 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.Brix;
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.ConvertNodeAction;
-import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.util.TextLink;
 
 public class ConvertNodePanel extends NodeManagerPanel
@@ -78,9 +75,7 @@ public class ConvertNodePanel extends NodeManagerPanel
         
         getModel().detach();
 
-        NavigationTreeNode treeNode = new SiteNavigationTreeNode(getNode());
-        getNavigation().selectNode(treeNode);
-
+        SitePlugin.get().selectNode(this, getNode());
     }
 
 }

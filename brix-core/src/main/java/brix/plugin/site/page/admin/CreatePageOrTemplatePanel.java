@@ -8,14 +8,13 @@ import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SiteNavigationTreeNode;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.page.AbstractContainer;
 import brix.plugin.site.page.Page;
 import brix.plugin.site.page.PageSiteNodePlugin;
 import brix.plugin.site.page.Template;
 import brix.web.ContainerFeedbackPanel;
-import brix.web.admin.navigation.NavigationTreeNode;
 import brix.web.util.validators.NodeNameValidator;
 
 public class CreatePageOrTemplatePanel extends NodeManagerPanel
@@ -77,9 +76,7 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
             
             parent.save();
 
-            NavigationTreeNode treeNode = new SiteNavigationTreeNode(node);
-            getNavigation().nodeInserted(treeNode);
-            getNavigation().selectNode(treeNode);            
+            SitePlugin.get().selectNode(this, node);         
         }
     }
 

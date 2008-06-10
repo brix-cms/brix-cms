@@ -30,11 +30,10 @@ import brix.plugin.template.auth.CreateTemplateAction;
 import brix.plugin.template.auth.DeleteTemplateAction;
 import brix.plugin.template.auth.RestoreTemplateAction;
 import brix.web.admin.AdminPanel;
-import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
-public class ManageTemplatesPanel extends NavigationAwarePanel<Workspace>
+public class ManageTemplatesPanel extends Panel<Workspace>
 {
 
 	private Brix getBrix()

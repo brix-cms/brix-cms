@@ -2,16 +2,14 @@ package brix.plugin.webdavurl;
 
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.LinkIconPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import brix.Plugin;
 import brix.jcr.api.JcrSession;
-import brix.web.admin.navigation.AbstractNavigationTreeNode;
-import brix.web.admin.navigation.NavigationAwarePanel;
-import brix.web.admin.navigation.NavigationTreeNode;
+import brix.web.tab.AbstractWorkspaceTab;
 import brix.workspace.Workspace;
 
 public class WebdavUrlPlugin implements Plugin {
@@ -33,32 +31,22 @@ public class WebdavUrlPlugin implements Plugin {
 
 	}
 	
-	private static class Node extends AbstractNavigationTreeNode
+	public ITab newTab(final Workspace workspace)
 	{
-
-		public Node(String workspaceId) {
-			super(workspaceId);
-		}
-		
-		@Override
-		public NavigationAwarePanel<?> newManagePanel(String id) {
-			return new WebdavUrlPanel(id, new Model<String>(getWorkspaceId()));
-		}
-		
-		@Override
-		public String toString() {
-			return "WebDAV";
-		}
-		
-		@Override
-		public Panel<?> newLinkPanel(String id, BaseTree tree) {
-			return new LinkIconPanel(id, new Model<Node>(this), tree);
-		}
-
-	};
-
-	public NavigationTreeNode newNavigationTreeNode(Workspace workspace) {
-		return new Node(workspace.getId());
+    	return new Tab(new Model<String>("Webdav"), workspace);
 	}
+	
+	static class Tab extends AbstractWorkspaceTab
+	{
+		public Tab(IModel<String> title, Workspace workspace)
+		{
+			super(title, workspace);
+		}
 
+		@Override
+		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		{
+			return new WebdavUrlPanel(panelId, new Model<String>(workspaceModel.getObject().getId()));
+		}
+	};
 }

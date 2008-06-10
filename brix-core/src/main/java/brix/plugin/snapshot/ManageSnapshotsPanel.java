@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.WebResponse;
@@ -29,11 +30,10 @@ import brix.plugin.snapshot.auth.CreateSnapshotAction;
 import brix.plugin.snapshot.auth.DeleteSnapshotAction;
 import brix.plugin.snapshot.auth.RestoreSnapshotAction;
 import brix.web.admin.AdminPanel;
-import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
-public class ManageSnapshotsPanel extends NavigationAwarePanel<Workspace>
+public class ManageSnapshotsPanel extends Panel<Workspace>
 {
 
 	private Brix getBrix()

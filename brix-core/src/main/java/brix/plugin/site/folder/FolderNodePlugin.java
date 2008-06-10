@@ -2,6 +2,7 @@ package brix.plugin.site.folder;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.basic.RedirectRequestTarget;
@@ -14,7 +15,6 @@ import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
-import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.nodepage.ForbiddenPage;
 import brix.web.reference.Reference;
 
@@ -56,7 +56,7 @@ public class FolderNodePlugin implements SiteNodePlugin
         }
     }
 
-    public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
+    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode)
     {
         return new CreateFolderPanel(id, parentNode);
     }

@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -17,44 +18,39 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 
-import brix.Brix;
 import brix.BrixNodeModel;
 import brix.auth.Action;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SiteNavigationTreeNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.web.admin.navigation.NavigationAwarePanel;
-import brix.web.admin.navigation.NavigationTreeNode;
 
-public class ListFolderNodesTab extends NavigationAwarePanel<BrixNode>
+public class ListFolderNodesTab extends Panel<BrixNode>
 {
     public ListFolderNodesTab(String id, IModel<BrixNode> folderModel)
     {
         super(id, folderModel);
-        add(new DataView("dir-listing", new DirListing())
+        add(new DataView<BrixNode>("dir-listing", new DirListing())
         {
 
             @Override
-            protected void populateItem(final Item item)
+            protected void populateItem(final Item<BrixNode> item)
             {
-                Link select = new Link("select", item.getModel())
+                Link<BrixNode> select = new Link<BrixNode>("select", item.getModel())
                 {
 
                     @Override
                     public void onClick()
                     {
                         BrixNode node = (BrixNode)getModelObject();
-                        NavigationTreeNode treeNode = new SiteNavigationTreeNode(node);
-                        getNavigation().selectNode(treeNode);
+                        SitePlugin.get().selectNode(this, node);
                     }
 
                 };
                 item.add(select);
-                select.add(new Label("file-name", new PropertyModel(item.getModel(), "name")));
+                select.add(new Label<String>("file-name", new PropertyModel<String>(item.getModel(), "name")));
 
                 IModel<SiteNodePlugin> pluginModel = new IModel<SiteNodePlugin>()
                 {
@@ -137,7 +133,7 @@ public class ListFolderNodesTab extends NavigationAwarePanel<BrixNode>
         return (BrixNode)getModelObject();
     }
 
-    private class DirListing implements IDataProvider
+    private class DirListing implements IDataProvider<BrixNode>
     {
 
         @SuppressWarnings("unchecked")
@@ -146,9 +142,9 @@ public class ListFolderNodesTab extends NavigationAwarePanel<BrixNode>
             return visibleNodes(getNode().getNodes());
         }
 
-        public IModel model(Object object)
+        public IModel<BrixNode> model(BrixNode object)
         {
-            return new BrixNodeModel((BrixNode)object);
+            return new BrixNodeModel(object);
         }
 
         public int size()

@@ -1,11 +1,11 @@
 package brix.plugin.site.page.fragment;
 
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.web.admin.navigation.NavigationAwarePanel;
 
-public class FragmentManagerPanel extends NavigationAwarePanel<BrixNode>
+public class FragmentManagerPanel extends Panel<BrixNode>
 {
     public FragmentManagerPanel(String id, IModel<BrixNode> fragmentsNode)
     {

@@ -1,11 +1,11 @@
 package brix.plugin.site.page.tile.admin;
 
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.web.admin.navigation.NavigationAwarePanel;
 
-public abstract class TileEditorPanel<T> extends NavigationAwarePanel<T>
+public abstract class TileEditorPanel<T> extends Panel<T>
 {
 
     public TileEditorPanel(String id)

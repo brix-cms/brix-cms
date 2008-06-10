@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.ResourceReference;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.LinkIconPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import brix.Brix;
@@ -15,11 +15,8 @@ import brix.Plugin;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
-import brix.web.admin.navigation.AbstractNavigationTreeNode;
-import brix.web.admin.navigation.NavigationAwarePanel;
-import brix.web.admin.navigation.NavigationTreeNode;
+import brix.web.tab.AbstractWorkspaceTab;
 import brix.workspace.Workspace;
-import brix.workspace.WorkspaceModel;
 
 public class MenuPlugin implements Plugin
 {
@@ -46,42 +43,25 @@ public class MenuPlugin implements Plugin
     {
         return get(Brix.get());
     }
-
-    public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
+    
+    public ITab newTab(final Workspace workspace)
     {
-        return new Node(workspace.getId());
+    	return new Tab(new Model<String>("Menus"), workspace);
     }
+    
+	static class Tab extends AbstractWorkspaceTab
+	{
+		public Tab(IModel<String> title, Workspace workspace)
+		{
+			super(title, workspace);
+		}
 
-    private static class Node extends AbstractNavigationTreeNode
-    {
-        public Node(String workspaceId)
-        {
-            super(workspaceId);
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Menus";
-        }
-
-        public Panel< ? > newLinkPanel(String id, BaseTree tree)
-        {
-            return new LinkIconPanel(id, new Model<Node>(this), tree)
-            {
-                @Override
-                protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-                {
-                    return ICON;
-                }
-            };
-        }
-
-        public NavigationAwarePanel< ? > newManagePanel(String id)
-        {
-            return new ManageMenuPanel(id, new WorkspaceModel(getWorkspaceId()));
-        }
-    };
+		@Override
+		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		{
+			return new ManageMenuPanel(panelId, workspaceModel);
+		}
+	};
 
     private static final ResourceReference ICON = new ResourceReference(MenuPlugin.class,
         "icon.png");

@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -20,20 +20,13 @@ import brix.Path;
 import brix.Plugin;
 import brix.auth.Action.Context;
 import brix.jcr.api.JcrSession;
-import brix.web.admin.navigation.Navigation;
-import brix.web.admin.navigation.NavigationContainer;
-import brix.web.admin.navigation.NavigationPanel;
-import brix.web.admin.navigation.NavigationTreeModel;
-import brix.web.admin.navigation.NavigationTreeNode;
-import brix.web.tree.TreeNode;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
-public class AdminPanel extends Panel<Void> implements NavigationContainer
+public class AdminPanel extends Panel<Void> 
 {
 
-    private Component< ? > content;
-    private NavigationPanel navigation;
+    private TabbedPanel tabbedPanel;
 
     private WorkspaceEntry currentWorkspace;
 
@@ -51,7 +44,7 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
         if (entry.equals(currentWorkspace) == false)
         {
             currentWorkspace = entry;
-            setupNavigation();
+            setupTabbedPanel();
         }
     }
 
@@ -60,64 +53,12 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
         setWorkspace(workspace, null);
     }
 
-    public Navigation getNavigation()
-    {
-        return navigation;
-    }
-
-    private void setupNavigation()
-    {
-        if (navigation != null)
-        {
-            navigation.remove();
-        }
-        navigation = new NavigationPanel("navigation", getWorkspace())
-        {
-            @Override
-            protected void onNodeSelected(NavigationTreeNode node)
-            {
-                AdminPanel.this.onNodeSelected(node);
-            }
-        };
-        add(navigation);
-
-        NavigationTreeModel model = (NavigationTreeModel)navigation.getTree().getModel()
-            .getObject();
-        TreeNode root = (TreeNode)model.getRoot();
-        NavigationTreeNode node;
-        if (!root.getChildren().isEmpty())
-        {
-            node = (NavigationTreeNode)root.getChildren().get(0);
-            navigation.selectNode(node);
-        }
-        else
-        {
-            node = null;
-            onNodeSelected(node);
-        }
-    }
     
     private Brix getBrix()
     {
     	return Brix.get();
     }
 
-    private void onNodeSelected(NavigationTreeNode node)
-    {
-        if (content != null)
-        {
-            content.remove();
-        }
-        if (node != null)
-        {
-            content = node.newManagePanel("content");
-        }
-        else
-        {
-            content = new WebMarkupContainer<Void>("content");
-        }
-        add(content);
-    }
 
     public AdminPanel(String id, String workspace, Path root)
     {
@@ -138,13 +79,39 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
             protected void onSelectionChanged(WorkspaceEntry newSelection)
             {
                 detach();
-                setupNavigation();
+                setupTabbedPanel();
             }
         };
         ws.setNullValid(false);
         add(ws);
 
 
+    }
+    
+    private void setupTabbedPanel()
+    {    	
+    	if (tabbedPanel != null)
+    	{
+    		tabbedPanel.remove();
+    	}
+    	
+    	List<ITab> tabs = new ArrayList<ITab>();
+    	if (currentWorkspace != null)
+    	{
+    		Brix brix = Brix.get();
+    		Workspace workspace = brix.getWorkspaceManager().getWorkspace(currentWorkspace.id);
+    		for (Plugin p : brix.getPlugins())
+    		{
+    			ITab tab = p.newTab(workspace);
+    			if (tab != null)
+    			{
+    				tabs.add(tab);
+    			}
+    		}
+    	}
+    	
+    	tabbedPanel = new TabbedPanel("tabbedPanel", tabs);
+    	add(tabbedPanel);
     }
 
     private boolean isCurrentWorkspaceValid()
@@ -163,11 +130,11 @@ public class AdminPanel extends Panel<Void> implements NavigationContainer
             {
                 currentWorkspace = entries.get(0);
             }
-            setupNavigation();
+            setupTabbedPanel();
         }
         else if (!hasBeenRendered())
         {
-            setupNavigation();
+        	setupTabbedPanel();
         }
         
         super.onBeforeRender();

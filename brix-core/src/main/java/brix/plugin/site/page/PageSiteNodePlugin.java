@@ -1,12 +1,12 @@
 package brix.plugin.site.page;
 
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.page.admin.CreatePageOrTemplatePanel;
-import brix.web.admin.navigation.NavigationAwarePanel;
 
 public class PageSiteNodePlugin extends AbstractSitePagePlugin
 {
@@ -36,7 +36,7 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin
     };
 
     @Override
-    public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
+    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode)
     {
         return new CreatePageOrTemplatePanel(id, parentNode, getNodeType());
     }

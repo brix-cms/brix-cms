@@ -1,12 +1,12 @@
 package brix.plugin.site;
 
 import org.apache.wicket.IRequestTarget;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.registry.ExtensionPoint;
-import brix.web.admin.navigation.NavigationAwarePanel;
 
 public interface SiteNodePlugin
 {
@@ -31,7 +31,7 @@ public interface SiteNodePlugin
 
     IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters);
 
-    NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode);
+    Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode);
 
     NodeConverter getConverterForNode(BrixNode node);
 }

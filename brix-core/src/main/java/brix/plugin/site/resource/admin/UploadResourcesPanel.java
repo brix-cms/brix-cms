@@ -19,10 +19,9 @@ import org.apache.wicket.util.io.Streams;
 import brix.Brix;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SiteNavigationTreeNode;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.web.ContainerFeedbackPanel;
-import brix.web.admin.navigation.NavigationTreeNode;
 
 public class UploadResourcesPanel extends NodeManagerPanel
 {
@@ -96,10 +95,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
         }
 
         
-        NavigationTreeNode treeNode = new SiteNavigationTreeNode(parentNode);
-        
-        getNavigation().nodeChildrenChanged(treeNode);
-        getNavigation().selectNode(treeNode);
+        SitePlugin.get().selectNode(this, parentNode);
     }
 
     @Override

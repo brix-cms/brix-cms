@@ -2,9 +2,10 @@ package brix;
 
 import java.util.List;
 
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
+
 import brix.jcr.api.JcrSession;
 import brix.registry.ExtensionPoint;
-import brix.web.admin.navigation.NavigationTreeNode;
 import brix.workspace.Workspace;
 
 public interface Plugin
@@ -26,7 +27,7 @@ public interface Plugin
 
     String getId();
 
-    NavigationTreeNode newNavigationTreeNode(Workspace workspace);
+    ITab newTab(Workspace workspace);   
 
     public void initWorkspace(Workspace workspace, JcrSession workspaceSession);
 

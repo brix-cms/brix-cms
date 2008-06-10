@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
@@ -17,10 +22,11 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupCache;
+import brix.plugin.site.admin.NodeManagerContainerPanel;
 import brix.plugin.site.fallback.FallbackNodePlugin;
 import brix.plugin.site.folder.FolderNodePlugin;
 import brix.plugin.site.resource.ResourceNodePlugin;
-import brix.web.admin.navigation.NavigationTreeNode;
+import brix.web.tab.AbstractWorkspaceTab;
 import brix.workspace.Workspace;
 
 public class SitePlugin implements Plugin
@@ -35,12 +41,25 @@ public class SitePlugin implements Plugin
 		return ID;
 	}
 
-	public NavigationTreeNode newNavigationTreeNode(Workspace workspace)
+	public ITab newTab(final Workspace workspace)
 	{
-		JcrSession session = brix.getCurrentSession(workspace.getId());
-		return new SiteNavigationTreeNode((BrixNode) session.getItem(getSiteRootPath()));
+    	return new Tab(new Model<String>("Site"), workspace);
 	}
+	
+	static class Tab extends AbstractWorkspaceTab
+	{
+		public Tab(IModel<String> title, Workspace workspace)
+		{
+			super(title, workspace);
+		}
 
+		@Override
+		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		{
+			return new NodeManagerContainerPanel(panelId, workspaceModel.getObject().getId());
+		}
+	};
+	
 	public SitePlugin(Brix brix)
 	{
 		this.brix = brix;
@@ -325,4 +344,13 @@ public class SitePlugin implements Plugin
 	}
 
 	private MarkupCache markupCache = new MarkupCache();
+	
+	public void selectNode(Component<?> component, BrixNode node)
+	{
+		NodeManagerContainerPanel panel = component.findParent(NodeManagerContainerPanel.class);
+		if (panel != null)
+		{
+			panel.selectNode(node);
+		}
+	}
 }

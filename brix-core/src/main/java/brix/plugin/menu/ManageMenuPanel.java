@@ -25,11 +25,10 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.editor.MenuEditor;
-import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.web.util.AbstractModel;
 import brix.workspace.Workspace;
 
-public class ManageMenuPanel extends NavigationAwarePanel<Workspace>
+public class ManageMenuPanel extends Panel<Workspace>
 {
     public ManageMenuPanel(String id, final IModel<Workspace> model)
     {

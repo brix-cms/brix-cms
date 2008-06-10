@@ -1,6 +1,7 @@
 package brix.plugin.site.fallback;
 
 import org.apache.wicket.IRequestTarget;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.basic.EmptyRequestTarget;
@@ -8,7 +9,6 @@ import org.apache.wicket.request.target.basic.EmptyRequestTarget;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SiteNodePlugin;
-import brix.web.admin.navigation.NavigationAwarePanel;
 
 public class FallbackNodePlugin implements SiteNodePlugin
 {
@@ -29,7 +29,7 @@ public class FallbackNodePlugin implements SiteNodePlugin
     }
 
 
-    public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
+    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode)
     {
         return new EmptyPanel(id);
     }
@@ -39,7 +39,7 @@ public class FallbackNodePlugin implements SiteNodePlugin
         return EmptyRequestTarget.getInstance();
     }
 
-    private class EmptyPanel extends NavigationAwarePanel
+    private class EmptyPanel extends Panel<Void>
     {
 
         public EmptyPanel(String id)

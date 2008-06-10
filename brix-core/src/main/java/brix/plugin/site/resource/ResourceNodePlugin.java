@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.wicket.IRequestTarget;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
@@ -18,7 +19,6 @@ import brix.plugin.site.resource.admin.ManageResourceNodeTabFactory;
 import brix.plugin.site.resource.admin.UploadResourcesPanel;
 import brix.plugin.site.resource.managers.ImageResourceManager;
 import brix.plugin.site.resource.managers.TextResourceManager;
-import brix.web.admin.navigation.NavigationAwarePanel;
 
 public class ResourceNodePlugin implements SiteNodePlugin
 {
@@ -55,7 +55,7 @@ public class ResourceNodePlugin implements SiteNodePlugin
 //    	}
     }
 
-    public NavigationAwarePanel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
     {
         return new UploadResourcesPanel(id, parentNode);
     }

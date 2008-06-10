@@ -1,6 +1,7 @@
 package brix.plugin.publishing;
 
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.Brix;
@@ -8,10 +9,9 @@ import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.plugin.publishing.auth.PublishWorkspaceAction;
 import brix.plugin.site.SitePlugin;
-import brix.web.admin.navigation.NavigationAwarePanel;
 import brix.workspace.Workspace;
 
-public class PublishingPanel extends NavigationAwarePanel<Workspace>
+public class PublishingPanel extends Panel<Workspace>
 {
     public PublishingPanel(String id, IModel<Workspace> model)
     {
