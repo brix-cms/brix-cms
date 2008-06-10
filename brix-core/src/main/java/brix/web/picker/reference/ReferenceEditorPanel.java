@@ -2,7 +2,7 @@ package brix.web.picker.reference;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
@@ -49,7 +49,7 @@ public class ReferenceEditorPanel extends FormComponentPanel
         label.setOutputMarkupId(true);
         add(label);
 
-        add(new AjaxLink("edit")
+        add(new IndicatingAjaxLink("edit")
         {
             @Override
             public void onClick(AjaxRequestTarget target)
