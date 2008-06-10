@@ -1,6 +1,7 @@
 package brix.plugin.site.page;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 import javax.jcr.Workspace;
 
 import brix.jcr.JcrNodeWrapperFactory;
@@ -28,9 +29,10 @@ public class Page extends AbstractContainer
         }
 
         @Override
-        public void initializeRepository(Workspace workspace)
+        public void initializeRepository(Session session)
         {
-            RepositoryUtil.registerMixinType(workspace, PageSiteNodePlugin.TYPE, false, false);
+            RepositoryUtil.registerMixinType(session.getWorkspace(), PageSiteNodePlugin.TYPE,
+                false, false);
         }
     };
 

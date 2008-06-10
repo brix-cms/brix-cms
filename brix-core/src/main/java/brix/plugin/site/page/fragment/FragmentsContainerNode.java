@@ -1,7 +1,7 @@
 package brix.plugin.site.page.fragment;
 
 import javax.jcr.Node;
-import javax.jcr.Workspace;
+import javax.jcr.Session;
 
 import brix.Brix;
 import brix.jcr.JcrNodeWrapperFactory;
@@ -35,9 +35,10 @@ public class FragmentsContainerNode extends BrixNode implements TileContainer
         }
 
         @Override
-        public void initializeRepository(Workspace workspace)
+        public void initializeRepository(Session session)
         {
-            RepositoryUtil.registerMixinType(workspace, FragmentsContainerNode.TYPE, false, false);
+            RepositoryUtil.registerMixinType(session.getWorkspace(), FragmentsContainerNode.TYPE,
+                false, false);
         }
 
 

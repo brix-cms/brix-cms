@@ -1,7 +1,8 @@
 package brix.jcr;
 
 import javax.jcr.Repository;
-import javax.jcr.Workspace;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -30,7 +31,7 @@ import brix.registry.ExtensionPoint;
  * @author igor.vaynberg
  * 
  */
-public abstract class JcrNodeWrapperFactory
+public abstract class JcrNodeWrapperFactory implements RepositoryInitializer
 {
     /**
      * Extension point for factory implementations
@@ -70,13 +71,16 @@ public abstract class JcrNodeWrapperFactory
     public abstract JcrNode wrap(JcrNode node);
 
     /**
+     * {@inheritDoc}
+     * 
      * Called when the repository is initialized. For example, this call can be used to register any
      * node types for nodes this factory can wrap.
      * 
-     * @param repository
+     * @param session
      */
-    public void initializeRepository(Workspace workspace)
+    public void initializeRepository(Session session) throws RepositoryException
     {
         // noop
     }
+
 }

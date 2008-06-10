@@ -5,10 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.jcr.NamespaceRegistry;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.Workspace;
 
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.wicket.Application;
@@ -21,34 +19,27 @@ import brix.auth.AuthorizationStrategy;
 import brix.auth.ViewWorkspaceAction;
 import brix.auth.Action.Context;
 import brix.config.BrixConfig;
-import brix.jcr.JcrEventListener;
-import brix.jcr.JcrSessionFactory;
 import brix.jcr.JcrNodeWrapperFactory;
-import brix.jcr.RepositoryUtil;
+import brix.jcr.JcrSessionFactory;
+import brix.jcr.RepositoryInitializer;
 import brix.jcr.SessionBehavior;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
-import brix.jcr.event.EventUtil;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.MenuPlugin;
 import brix.plugin.publishing.PublishingPlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.folder.FolderNode;
-import brix.plugin.site.folder.FolderNodePlugin;
 import brix.plugin.site.page.Page;
-import brix.plugin.site.page.PageSiteNodePlugin;
 import brix.plugin.site.page.Template;
-import brix.plugin.site.page.TemplateSiteNodePlugin;
 import brix.plugin.site.page.fragment.FragmentPlugin;
 import brix.plugin.site.page.fragment.FragmentsContainerNode;
 import brix.plugin.site.page.tile.Tile;
-import brix.plugin.site.page.tile.TileContainerFacet;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.template.TemplatePlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
 import brix.registry.ExtensionPointRegistry;
-import brix.registry.ExtensionPointRegistry.Callback;
 import brix.web.nodepage.PageParametersAwareEnabler;
 import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
@@ -76,6 +67,8 @@ public abstract class Brix
 
         final ExtensionPointRegistry registry = config.getRegistry();
 
+        registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
+
         registry.register(JcrNodeWrapperFactory.POINT, FolderNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, FragmentsContainerNode.FACTORY);
 
@@ -84,7 +77,7 @@ public abstract class Brix
 
         registry.register(Tile.POINT, new MenuTile());
         registry.register(Tile.POINT, new PageTile());
-        
+
         registry.register(Plugin.POINT, new SitePlugin(this));
         registry.register(Plugin.POINT, new MenuPlugin(this));
         registry.register(Plugin.POINT, new SnapshotPlugin(this));
@@ -253,47 +246,20 @@ public abstract class Brix
 
     public void initRepository(Session session)
     {
+        List<RepositoryInitializer> initializers = new ArrayList<RepositoryInitializer>();
+        initializers.addAll(config.getRegistry().lookupCollection(RepositoryInitializer.POINT));
+        initializers.addAll(config.getRegistry().lookupCollection(JcrNodeWrapperFactory.POINT));
+
         try
         {
-            final Workspace w = session.getWorkspace();
-            NamespaceRegistry nr = w.getNamespaceRegistry();
-
-            try
+            for (RepositoryInitializer initializer : initializers)
             {
-                logger.info("Registering Brix JCR Namespace: {}", Brix.NS);
-                nr.registerNamespace(Brix.NS, "http://brix-cms.googlecode.com");
+                initializer.initializeRepository(session);
             }
-            catch (Exception ignore)
-            {
-                // logger.warn("Error registering brix namespace, may already be registered",
-                // ignore);
-            }
-
-            EventUtil.registerSaveEventListener(new JcrEventListener());
-
-            RepositoryUtil.registerMixinType(w, BrixNode.JCR_TYPE_BRIX_NODE, true, true);
-
-            // the following three have always brix:node mixin too
-            RepositoryUtil.registerMixinType(w, FolderNodePlugin.TYPE, false, false);
-
-            RepositoryUtil.registerMixinType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true);
-
-            RepositoryUtil.registerMixinType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
-
-            config.getRegistry().lookupCollection(JcrNodeWrapperFactory.POINT,
-                new Callback<JcrNodeWrapperFactory>()
-                {
-                    public Status processExtension(JcrNodeWrapperFactory extension)
-                    {
-                        extension.initializeRepository(w);
-                        return Status.CONTINUE;
-                    }
-                });
         }
-        catch (Exception e)
+        catch (RepositoryException e)
         {
-            throw new RuntimeException("Couldn't init jackrabbit repository, make sure you"
-                + " have the jcr.repository.location config property set", e);
+            throw new RuntimeException("Couldn't init jackrabbit repository", e);
         }
     }
 
