@@ -2,10 +2,12 @@ package brix.plugin.site.page;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
+import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.page.admin.CreatePageOrTemplatePanel;
 
 public class PageSiteNodePlugin extends AbstractSitePagePlugin
@@ -36,9 +38,9 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin
     };
 
     @Override
-    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode)
+    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
     {
-        return new CreatePageOrTemplatePanel(id, parentNode, getNodeType());
+        return new CreatePageOrTemplatePanel(id, parentNode, getNodeType(), goBack);
     }
 
     @Override
@@ -50,5 +52,10 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin
     public String getName()
     {
         return "Page";
+    }
+    
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
+    {
+    	return new Model<String>("Create New Page");
     }
 }

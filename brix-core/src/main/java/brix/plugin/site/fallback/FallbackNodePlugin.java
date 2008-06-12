@@ -8,6 +8,7 @@ import org.apache.wicket.request.target.basic.EmptyRequestTarget;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
+import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SiteNodePlugin;
 
 public class FallbackNodePlugin implements SiteNodePlugin
@@ -29,7 +30,7 @@ public class FallbackNodePlugin implements SiteNodePlugin
     }
 
 
-    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode)
+    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
     {
         return new EmptyPanel(id);
     }
@@ -39,6 +40,11 @@ public class FallbackNodePlugin implements SiteNodePlugin
         return EmptyRequestTarget.getInstance();
     }
 
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
+    {
+    	return null;
+    }
+    
     private class EmptyPanel extends Panel<Void>
     {
 

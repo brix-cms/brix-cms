@@ -26,7 +26,7 @@ import brix.web.picker.node.NodePickerPanel;
 import brix.web.picker.node.NodeTypeFilter;
 
 
-class EditTab extends NodeManagerPanel
+abstract class EditTab extends NodeManagerPanel
 {
 
     private boolean codeEditorEnabled = true;
@@ -98,6 +98,7 @@ class EditTab extends NodeManagerPanel
                 node.checkin();
 
                 getSession().info(getString("status.saved"));
+                goBack();
             }
         });
 
@@ -108,8 +109,7 @@ class EditTab extends NodeManagerPanel
             public void onClick()
             {
                 getSession().info(getString("status.cancelled"));
-                EditTab me = EditTab.this;
-                me.replaceWith(new EditTab(me.getId(), me.getModel()));
+                goBack();
             }
 
         });
@@ -181,4 +181,6 @@ class EditTab extends NodeManagerPanel
         }
     }
 
+    abstract void goBack();
+    
 }

@@ -1,4 +1,21 @@
+<wicket:head>
+	<style type="text/css">
+		div.createNodesContainer a.selected {
+			font-weight: bold;
+		}
+	</style>
+</wicket:head>
+
 <wicket:panel>
+
+<div wicket:id="createNodesContainer" class="createNodesContainer">
+	 <span wicket:id="createNodes">
+	 	<a wicket:id="link">
+	 		<span wicket:id="label"></span>
+	 	</a>
+	 	<span wicket:id="separator">|</span>
+	 </span>
+</div>
 
 <table cellspacing="0" cellpadding="10" style="width:100%;">
 <tr>
@@ -11,18 +28,6 @@
 	
 	<td valign="top" style="width:100%;">
 
-		<table cellspacing="0" cellpadding="0" style="width: 100%;">
-			<tr>
-				<td>
-				<div wicket:id="path2"></div>
-				</td>
-				<td align="right">
-					<a wicket:id="rename">Rename</a>&nbsp;&nbsp; 
-					<a wicket:id="makeVersionable">Make Versionable</a> &nbsp;&nbsp; 
-					<a wicket:id="delete" onclick="return confirm('Are you sure?');">Delete</a></td>
-			</tr>
-		</table>
-	
 		<div wicket:id="sessionFeedback"></div>
 	
 		<table style="table-layout: fixed; width: 100%; padding: 0px; margin: 0px; border-collapse: collapse;">

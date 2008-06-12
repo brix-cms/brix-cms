@@ -1,6 +1,7 @@
 package brix.plugin.site.page.admin;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -8,6 +9,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.page.AbstractContainer;
@@ -22,7 +24,7 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 
     private String name;
 
-    public CreatePageOrTemplatePanel(String id, IModel<BrixNode> containerNodeModel, final String type)
+    public CreatePageOrTemplatePanel(String id, IModel<BrixNode> containerNodeModel, final String type, final SimpleCallback goBack)
     {
         super(id, containerNodeModel);
 
@@ -30,15 +32,24 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
         add(new Label("label", "Create New " + type + ":"));
 
         add(new ContainerFeedbackPanel("feedback", this));
-        Form form = new Form("form", new CompoundPropertyModel(this))
-        {
-            protected void onSubmit()
-            {
-                createPage(type);
-            };
-
-        };
+        Form form = new Form<Void>("form", new CompoundPropertyModel(this));
         add(form);
+        
+        form.add(new Button<Void>("create") {
+        	@Override
+        	public void onSubmit()
+        	{
+        		createPage(type);
+        	}
+        });
+        
+        form.add(new Button<Void>("cancel") {
+        	@Override
+        	public void onSubmit()
+        	{
+        		goBack.execute();
+        	}
+        }.setDefaultFormProcessing(false));
 
         final TextField tf;
         form.add(tf = new TextField("name"));

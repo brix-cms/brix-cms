@@ -31,7 +31,9 @@ public interface SiteNodePlugin
 
     IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters);
 
-    Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode);
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode);
+    
+    Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
 
     NodeConverter getConverterForNode(BrixNode node);
 }

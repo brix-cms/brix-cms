@@ -55,24 +55,6 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 			}
 
 		});
-		tabs.add(new AbstractTab(new Model("Create New"))
-		{
-
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new CreateNewNodesTab(panelId, folderModel);
-			}
-
-			@Override
-			public boolean isVisible()
-			{
-				Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_ADD_CHILD,
-						folderModel.getObject());
-				return folderModel.getObject().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
-			}
-
-		});
 		tabs.add(new AbstractTab(new Model("Properties"))
 		{
 

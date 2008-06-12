@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.io.Streams;
@@ -19,6 +20,7 @@ import org.apache.wicket.util.io.Streams;
 import brix.Brix;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.web.ContainerFeedbackPanel;
@@ -29,12 +31,12 @@ public class UploadResourcesPanel extends NodeManagerPanel
     private Collection<FileUpload> uploads = new ArrayList<FileUpload>();
     private boolean overwrite = false;
 
-    public UploadResourcesPanel(String id, IModel<BrixNode> model)
+    public UploadResourcesPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack)
     {
         super(id, model);
         add(new ContainerFeedbackPanel("feedback", this));
 
-        Form form = new Form("form", new CompoundPropertyModel(this))
+        Form<Void> form = new Form<Void>("form", new CompoundPropertyModel(this))
         {
             protected void onSubmit()
             {
@@ -42,6 +44,14 @@ public class UploadResourcesPanel extends NodeManagerPanel
             }
         };
         add(form);
+        
+        form.add(new Link<Void>("cancel") {
+        	@Override
+        	public void onClick()
+        	{
+        		goBack.execute();
+        	}
+        });
 
         form.add(new MultiFileUploadField("uploads"));
         form.add(new CheckBox("overwrite"));

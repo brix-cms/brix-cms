@@ -12,6 +12,7 @@ import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.NodeConverter;
+import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.admin.ManageTileNodeTabFactory;
@@ -64,7 +65,7 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin
         return urlCodingStrategy.decode(requestParameters, nodeModel);
     }
 
-    public abstract Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode);
+    public abstract Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
 
     public NodeConverter getConverterForNode(BrixNode node)
     {

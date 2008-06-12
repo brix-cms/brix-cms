@@ -8,11 +8,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.RequestParameters;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
+import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.resource.admin.ManageResourceNodeTabFactory;
@@ -55,9 +57,9 @@ public class ResourceNodePlugin implements SiteNodePlugin
 //    	}
     }
 
-    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode)
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
     {
-        return new UploadResourcesPanel(id, parentNode);
+        return new UploadResourcesPanel(id, parentNode, goBack);
     }
 
     public NodeConverter getConverterForNode(BrixNode node)
@@ -130,5 +132,9 @@ public class ResourceNodePlugin implements SiteNodePlugin
     }
 
     private final List<ResourceManager> resourceManagers = new ArrayList<ResourceManager>();
-    
+
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
+    {
+    	return new Model<String>("Upload Images & Documents");
+    }
 }
