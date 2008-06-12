@@ -9,15 +9,12 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.DefaultTreeState;
@@ -61,8 +58,6 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		add(editor);
 
 		setupDefaultEditor();
-
-		add(new SessionFeedbackPanel("sessionFeedback"));
 
 		add(tree = new Tree("tree", new TreeModel()));
 
@@ -281,7 +276,16 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		@Override
 		public String toString()
 		{
-			return getNodeModel().getObject().getName();
+			SitePlugin sp = SitePlugin.get();
+			BrixNode node = getNodeModel().getObject();
+			if (sp.getSiteRootPath().equals(node.getPath()))
+			{
+				return getString("siteRoot");
+			}
+			else
+			{
+				return node.getName();
+			}
 		}
 
 	};
@@ -319,30 +323,5 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 	}
 
 	private static final String EDITOR_ID = "editor";
-
-	private static class SessionFeedbackPanel extends FeedbackPanel
-	{
-
-		public SessionFeedbackPanel(String id)
-		{
-			super(id, new Filter());
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public boolean isVisible()
-		{
-			List messages = (List) getFeedbackMessagesModel().getObject();
-			return messages != null && !messages.isEmpty();
-		}
-
-		private static class Filter implements IFeedbackMessageFilter
-		{
-			public boolean accept(FeedbackMessage message)
-			{
-				return message.getReporter() == null;
-			}
-		};
-	};
 
 }

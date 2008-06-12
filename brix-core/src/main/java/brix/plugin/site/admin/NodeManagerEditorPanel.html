@@ -1,16 +1,19 @@
 <wicket:panel>
-		<table cellspacing="0" cellpadding="0" style="width: 100%;">
-			<tr>
-				<td>
-				<div wicket:id="path2"></div>
-				</td>
-				<td align="right">
-					<a wicket:id="rename">Rename</a>&nbsp;&nbsp; 
-					<a wicket:id="makeVersionable">Make Versionable</a> &nbsp;&nbsp; 
-					<a wicket:id="delete" onclick="return confirm('Are you sure?');">Delete</a></td>
-			</tr>
-		</table>
-		
-		<div wicket:id="tabbedPanel">
+
+	<div class="brix-site-edit-node-top">
+		<div class="brix-node-path">
+			<div wicket:id="path2"></div>
 		</div>
+		
+		<div class="brix-buttons">
+			<a wicket:id="rename"><wicket:message key="rename"/></a>
+			<a wicket:id="makeVersionable"><wicket:message key="makeVersionable"/></a> 
+			<a wicket:id="delete" onclick="return confirm('Are you sure?');"><wicket:message key="delete"/></a>
+		</div>
+	</div>
+	
+	<div wicket:id="sessionFeedback" class="brix-site-session-feedback"></div>
+		
+	<div wicket:id="tabbedPanel">
+	</div>
 </wicket:panel>

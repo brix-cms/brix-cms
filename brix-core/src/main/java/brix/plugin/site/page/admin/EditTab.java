@@ -7,6 +7,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
@@ -29,7 +30,7 @@ import brix.web.picker.node.NodeTypeFilter;
 abstract class EditTab extends NodeManagerPanel
 {
 
-    private boolean codeEditorEnabled = true;
+    private boolean codeEditorEnabled = false;
     private boolean wysiwygEditorEnabled = false;
 
     public EditTab(String id, final IModel<BrixNode> nodeModel)
@@ -40,21 +41,24 @@ abstract class EditTab extends NodeManagerPanel
         final boolean useCodepress = brix.getConfig().getAdminConfig().isEnableCodePress();
         final boolean useWysiwyg = brix.getConfig().getAdminConfig().isEnableWysiwyg();
 
-        Form form = new Form("form");
+        Form<Void> form = new Form<Void>("form");
         add(form);
 
         final ModelBuffer adapter = new ModelBuffer(nodeModel);
+        IModel<String> stringModel = adapter.forProperty("title");
 
-        form.add(new TextField("title", adapter.forProperty("title")));
+        form.add(new TextField<String>("title", stringModel));
 
         String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
         NodeFilter filter = new NodeTypeFilter(TemplateSiteNodePlugin.TYPE);
         form.add(new NodePickerPanel("templatePicker", adapter.forNodeProperty("template"),
             workspace, filter));
 
-        form.add(new CheckBox("requiresSSL", adapter.forProperty("requiresSSL")));
-
-        TextArea content = new TextArea("content", adapter.forProperty("dataAsString"));
+        IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
+        form.add(new CheckBox("requiresSSL", booleanModel));
+        
+        stringModel = adapter.forProperty("dataAsString");
+        TextArea<String> content = new TextArea<String>("content", stringModel);
         form.add(content);
 
         if (useCodepress)
@@ -62,7 +66,7 @@ abstract class EditTab extends NodeManagerPanel
             content.add(new CodePressEnabler("html", true)
             {
                 @Override
-                public boolean isEnabled(Component component)
+                public boolean isEnabled(Component<?> component)
                 {
                     return codeEditorEnabled;
                 }
@@ -73,7 +77,7 @@ abstract class EditTab extends NodeManagerPanel
             content.add(new TinyMceEnabler()
             {
                 @Override
-                public boolean isEnabled(Component component)
+                public boolean isEnabled(Component<?> component)
                 {
                     return wysiwygEditorEnabled;
                 }
@@ -86,7 +90,7 @@ abstract class EditTab extends NodeManagerPanel
         form.add(new EnableWysiwygEditorButton("enable-wysiwig-editor")
             .setVisibilityAllowed(useWysiwyg));
 
-        form.add(new Button("save")
+        form.add(new SubmitLink<Void>("save")
         {
             @Override
             public void onSubmit()
@@ -102,7 +106,7 @@ abstract class EditTab extends NodeManagerPanel
             }
         });
 
-        form.add(new Link("cancel")
+        form.add(new Link<Void>("cancel")
         {
 
             @Override
@@ -115,7 +119,7 @@ abstract class EditTab extends NodeManagerPanel
         });
     }
 
-    private class EnableCodeEditorButton extends Button
+    private class EnableCodeEditorButton extends Button<Void>
     {
         public EnableCodeEditorButton(String id)
         {
@@ -137,7 +141,7 @@ abstract class EditTab extends NodeManagerPanel
         }
     }
 
-    private class EnableWysiwygEditorButton extends Button
+    private class EnableWysiwygEditorButton extends Button<Void>
     {
         public EnableWysiwygEditorButton(String id)
         {
@@ -159,7 +163,7 @@ abstract class EditTab extends NodeManagerPanel
         }
     }
 
-    private class DisableEditorsButton extends Button
+    private class DisableEditorsButton extends Button<Void>
     {
         public DisableEditorsButton(String id)
         {

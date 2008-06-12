@@ -1,25 +1,22 @@
 package brix.web.util;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ILinkListener;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.RequestUtils;
-import org.apache.wicket.request.target.component.listener.ListenerInterfaceRequestTarget;
+import org.apache.wicket.protocol.http.WicketURLDecoder;
 import org.apache.wicket.util.value.ValueMap;
 
-import brix.Brix;
 import brix.Path;
 
-public abstract class PathLabel extends WebMarkupContainer implements ILinkListener
+public abstract class PathLabel extends WebMarkupContainer<String> implements ILinkListener
 {
 
     private final Path root;
 
-    public PathLabel(String id, IModel model, Path root)
+    public PathLabel(String id, IModel<String> model, Path root)
     {
         super(id, model);
         this.root = root;
@@ -48,16 +45,13 @@ public abstract class PathLabel extends WebMarkupContainer implements ILinkListe
         r.write("<a href=\"");
         r.write(createCallbackUrl(path));
         r.write("\"><span>");
-        boolean root = path.toString().equals(Brix.get().getRootPath());
-        r.write(root ? "root" : path.getName());
+        boolean isRoot = path.equals(root);
+        r.write(isRoot ? getRootNodeName() : path.getName());
         r.write("</span></a>");
     }
 
     private CharSequence createCallbackUrl(Path subpath)
     {
-        IRequestTarget t = new ListenerInterfaceRequestTarget(getPage(), this,
-                ILinkListener.INTERFACE);
-
         ValueMap params = new ValueMap();
         params.add("path", subpath.toString());
         return getRequestCycle().urlFor(this, ILinkListener.INTERFACE, params);
@@ -70,9 +64,14 @@ public abstract class PathLabel extends WebMarkupContainer implements ILinkListe
         {
             path = getRequestCycle().getPageParameters().getString("path");
         }
-        path = RequestUtils.decode(path);
+        path = WicketURLDecoder.QUERY_INSTANCE.decode(path);
         onPathClicked(new Path(path));
 
+    }
+    
+    protected String getRootNodeName()
+    {
+    	return "root";
     }
 
     protected abstract void onPathClicked(Path path);

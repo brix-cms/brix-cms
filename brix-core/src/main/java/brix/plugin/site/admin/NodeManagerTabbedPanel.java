@@ -12,7 +12,13 @@ public class NodeManagerTabbedPanel extends Panel<Void>
 	{
 		super(id);
 		
-		add(new TabbedPanel("tabbedPanel", tabs));
+		add(new TabbedPanel("tabbedPanel", tabs) {
+			@Override
+			protected String getTabContainerCssClass()
+			{				
+				return "brix-site-manager-tab-row";
+			}
+		});
 	}
 
 }

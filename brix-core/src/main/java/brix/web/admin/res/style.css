@@ -1,0 +1,345 @@
+/**
+ * Reset styles for Brix Admin Panel
+ */
+
+div.brix-admin div,
+div.brix-admin dl,
+div.brix-admin dt,
+div.brix-admin dd,
+div.brix-admin ul,
+div.brix-admin ol,
+div.brix-admin li,
+div.brix-admin h1,
+div.brix-admin h2,
+div.brix-admin h3,
+div.brix-admin h4,
+div.brix-admin h5,
+div.brix-admin h6,
+div.brix-admin pre,
+div.brix-admin code,
+div.brix-admin form,
+div.brix-admin fieldset,
+div.brix-admin legend,
+div.brix-admin input,
+div.brix-admin textarea,
+div.brix-admin p,
+div.brix-admin blockquote,
+div.brix-admin th,
+div.brix-admin td {margin:0;padding:0;}
+
+div.brix-admin table {border-collapse:collapse;border-spacing:0;}
+
+div.brix-admin fieldset,
+div.brix-admin img{border:0;}
+
+div.brix-admin address,
+div.brix-admin caption,
+div.brix-admin cite,
+div.brix-admin code,
+div.brix-admin dfn,
+div.brix-admin em,
+div.brix-admin strong,
+div.brix-admin th,
+div.brix-admin var {font-style:normal;font-weight:normal;}
+
+div.brix-admin li {list-style:none;}
+div.brix-admin caption, div.brix-admin th {text-align:left;}
+
+div.brix-admin h1,
+div.brix-admin h2,
+div.brix-admin h3,
+div.brix-admin h4,
+div.brix-admin h5,
+div.brix-admin h6 {font-size:100%;font-weight:normal;}
+
+div.brix-admin q:before,
+div.brix-admin q:after {content:'';}
+
+div.brix-admin abbr, div.brix-admin acronym {border:0;font-variant:normal;}
+
+/* to preserve line-height and selector appearance */
+div.brix-admin sup {vertical-align:text-top;}
+div.brix-admin sub {vertical-align:text-bottom;}
+div.brix-admin input,
+div.brix-admin textarea,
+div.brix-admin select {font-family:inherit;font-size:inherit;font-weight:inherit;}
+
+/*to enable resizing for IE*/
+div.brix-admin input,
+div.brix-admin textarea,
+div.brix-admin select {*font-size:100%;}
+
+/*because legend doesn't inherit in IE */
+div.brix-admin legend {color:#000;}
+
+div.brix-admin {
+}
+
+
+div.brix-admin a {
+	text-decoration: none;
+	color: blue;
+}
+
+div.brix-admin a:hover {
+	text-decoration: underline;
+}
+
+div.brix-admin div.brix-workspace-selector
+{
+	margin-bottom: 0.4em;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row ul {
+	overflow: hidden;
+	_height: 1%;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li {
+	float: left;
+	background-color: #445A71;
+	border-right: 3px solid white;		
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li.selected {
+	background-color: #7894BB;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li a {
+	border-top: 2px solid white;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li a:hover {
+	background-color: #63819F;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li.selected a:hover {
+	background-color: #7894BB;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li.selected a {
+	border-top: 2px solid #7894BB;
+	border-bottom: 2px solid #7894BB;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row  a {
+	padding: 0.3em 1em;
+	display: block;
+	color: white;
+}
+
+div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row {
+	border-bottom: 4px solid #7894BB;
+}
+
+div.brix-admin div.brix-site-create-nodes-container {
+	padding-top: 2px;
+	padding-bottom: 7px;
+	background-color: #7894BB;
+	padding-left: 0.5em;
+}
+
+div.brix-admin div.brix-site-create-nodes-container a {
+	margin-left: 0.1em;
+	margin-right: 0.3em;
+	color: white;
+}
+
+div.brix-admin div.brix-site-create-nodes-container a.selected {
+	font-weight: bold;
+}
+
+div.brix-admin div.brix-site-manager-container {
+	border: 1px solid #e0e0e0;
+	padding-top: 0.5em;
+	overflow: hidden;
+	_height: 0.1%;
+}
+
+div.brix-admin div.brix-site-tree-container {
+	float: left;
+	width: 16em;
+	overflow: auto;
+	border: 1px solid #e0e0e0;
+	margin-left: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+div.brix-admin div.brix-site-tree-container table.wicket-tree-content {
+	width: 100%;
+}
+
+div.brix-admin div.brix-site-tree-container table.selected {
+}
+
+div.brix-admin div.brix-site-editor-container {
+	margin-left: 17.5em;
+	margin-right: 0.5em;	
+	overflow: hidden;
+	margin-bottom: 0.5em;
+}
+
+div.brix-admin div.brix-site-edit-node-top {
+	overflow: hidden;
+	_height: 0.1%;	
+}
+
+div.brix-admin div.brix-site-edit-node-top div.brix-node-path {
+	float: left;
+	padding-bottom: 4px;
+	padding-top: 4px;
+}
+
+div.brix-admin div.brix-site-edit-node-top div.brix-buttons {
+	float: right;	
+}
+
+div.brix-admin div.brix-site-edit-node-top div.brix-buttons a {
+	margin-left: 0.3em;		
+	float: left;
+	padding: 2px 0.5em;
+	border: 1px solid #C1CAD3;
+}
+
+div.brix-admin div.brix-site-edit-node-top div.brix-buttons a:hover {
+	
+	background-color: #f0f0f0;
+}
+
+div.brix-admin div.brix-site-manager-tabbed-panel {
+	margin-top: 0.2em;	
+}
+
+div.brix-admin div.brix-site-manager-tab-row {
+	overflow: hidden;
+	_height: 0.1%;
+	border-top: 1px solid #7894BB;	
+	border-bottom: 1px solid #7894BB;
+	background-position: center;
+	background-repeat: repeat-x;
+	background-color: #E6F6FF;
+	background-image: url("bg-grad1.gif");
+}
+
+div.brix-site-manager-tab-row ul {
+	margin-left: 1em;
+}
+
+div.brix-site-manager-tab-row li {
+	float: left;
+	margin-right: 0.5em;		
+}
+
+div.brix-site-manager-tab-row li a {
+	display: block;
+	padding: 0.2em 0.5em;
+	color: black;
+}
+	
+div.brix-site-manager-tab-row li.selected a {
+	font-weight: bold;
+	border: 1px solid #7894BB;
+	border-bottom-width: 0px;
+	border-top-width: 0px;	
+	background-color: white;	
+}
+
+div.brix-admin div.brix-site-session-feedback {
+	background-color: #FFFABF;
+	padding: 0.2em 0.5em;
+}
+
+div.brix-admin a.brix-button {
+	background-image: url("bg-grad1.gif");
+	background-position: center;
+	background-repeat: repeat-x;
+	background-color: #E6F6FF;
+	display: block;
+	padding: 0.3em 1em;
+	border: 1px solid #C1CAD3;
+	color: black;
+	font-weight: bold;
+}
+
+div.brix-admin table.brix-property-display {
+	margin: 0.5em;
+	border-top: 1px solid #e9e9e9;		
+}
+
+div.brix-admin table.brix-property-display td  {
+	padding: 2px 1em;
+	border-bottom: 1px solid #e9e9e9;	
+} 
+
+div.brix-admin table.brix-property-display td.brix-property-label {
+	white-space: nowrap;
+	padding-left: 0.6em;
+	padding-right: 0em;
+}
+
+div.brix-admin table.brix-property-display td.brix-property-value {
+	padding-right: 0.6em;
+	font-weight: bold;
+}
+
+div.brix-admin table.brix-property-edit {
+	margin: 0.5em;
+	border-top: 1px dotted #e9e9e9;		
+}
+
+div.brix-admin table.brix-property-edit td  {
+	padding: 2px 1em;
+	border-bottom: 1px dotted #e9e9e9;	
+} 
+
+div.brix-admin table.brix-property-edit td.brix-property-label {
+	white-space: nowrap;
+	padding-left: 0.6em;
+	padding-right: 0em;
+	font-weight: bold;
+}
+
+
+div.brix-admin table.brix-property-edit td.brix-property-value {
+	padding-right: 0.6em;
+}
+
+div.brix-admin div.brix-site-page-editor-container {
+	margin-top: 0.4em;	
+}
+
+div.brix-admin div.brix-site-page-editor-container span {
+	font-weight: bold;
+}
+
+div.brix-admin div.brix-site-page-editor {
+	border: 1px dotted #aaa;
+	margin-top: 0.4em;
+}
+
+div.brix-admin textarea.brix-site-page-editor {
+	width: 100%;
+	border-width: 0px;
+	padding: 0px;
+	margin: 0px;
+	height: 30em;
+}
+
+div.buttons-right {
+	overflow: hidden;
+	_height: 1em;
+}
+
+div.brix-admin div.brix-site-page-buttons {
+	padding: 0.5em;
+	padding-bottom: 0em;
+}
+
+div.brix-buttons-right1 {
+	float: right;
+}
+
+div.brix-buttons-right a.brix-button {
+	float: left;
+	margin-left: 0.5em;
+}

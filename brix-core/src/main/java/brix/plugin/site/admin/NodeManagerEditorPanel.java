@@ -9,7 +9,10 @@ import java.util.List;
 import javax.jcr.ReferentialIntegrityException;
 
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -33,8 +36,8 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 	{
 		super(id, model);
 
-		Path root = new Path(SitePlugin.get().getSiteRootPath());
-		add(new PathLabel("path2", new PropertyModel(this, "node.path"), root)
+		String root = SitePlugin.get().getSiteRootPath();
+		add(new PathLabel("path2", new PropertyModel<String>(this, "node.path"), new Path(root))
 		{
 			@Override
 			protected void onPathClicked(Path path)
@@ -42,9 +45,14 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 				BrixNode node = (BrixNode) getNode().getSession().getItem(path.toString());
 				selectNode(node);
 			}
+			@Override
+			protected String getRootNodeName()
+			{
+				return NodeManagerEditorPanel.this.getString("siteRoot");
+			}
 		});
 
-		add(new Link("rename")
+		add(new Link<Void>("rename")
 		{
 			@Override
 			public void onClick()
@@ -75,7 +83,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			}
 		});
 
-		add(new Link("makeVersionable")
+		add(new Link<Void>("makeVersionable")
 		{
 			@Override
 			public void onClick()
@@ -97,7 +105,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			}
 		});
 
-		add(new Link("delete")
+		add(new Link<Void>("delete")
 		{
 
 			@Override
@@ -144,6 +152,8 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 
 		});
 
+		add(new SessionFeedbackPanel("sessionFeedback"));
+		
 		add(new NodeManagerTabbedPanel("tabbedPanel", getTabs(getModel())));
 	}
 
@@ -202,4 +212,29 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			return Collections.emptyList();
 		}
 	}
+	
+	private static class SessionFeedbackPanel extends FeedbackPanel
+	{
+
+		public SessionFeedbackPanel(String id)
+		{
+			super(id, new Filter());
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean isVisible()
+		{
+			List messages = (List) getFeedbackMessagesModel().getObject();
+			return messages != null && !messages.isEmpty();
+		}
+
+		private static class Filter implements IFeedbackMessageFilter
+		{
+			public boolean accept(FeedbackMessage message)
+			{
+				return message.getReporter() == null;
+			}
+		};
+	};
 }

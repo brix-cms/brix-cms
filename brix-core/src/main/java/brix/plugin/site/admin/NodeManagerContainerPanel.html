@@ -1,14 +1,7 @@
-<wicket:head>
-	<style type="text/css">
-		div.createNodesContainer a.selected {
-			font-weight: bold;
-		}
-	</style>
-</wicket:head>
 
 <wicket:panel>
 
-<div wicket:id="createNodesContainer" class="createNodesContainer">
+<div wicket:id="createNodesContainer" class="brix-site-create-nodes-container">
 	 <span wicket:id="createNodes">
 	 	<a wicket:id="link">
 	 		<span wicket:id="label"></span>
@@ -17,31 +10,18 @@
 	 </span>
 </div>
 
-<table cellspacing="0" cellpadding="10" style="width:100%;">
-<tr>
-	<td valign="top">
-
+<div class="brix-site-manager-container">
+	
+	<div class="brix-site-tree-container">
 		<div wicket:id="tree">
 		</div>
-
-	</td>
+	</div>
 	
-	<td valign="top" style="width:100%;">
-
-		<div wicket:id="sessionFeedback"></div>
+	<div class="brix-site-editor-container">
+		<div wicket:id="editor">
+		</div>
+	</div>
 	
-		<table style="table-layout: fixed; width: 100%; padding: 0px; margin: 0px; border-collapse: collapse;">
-			<tr>
-				<td style="width: 100%">
-				<div style="overflow: hidden">
-				<div wicket:id="editor"></div>
-				</div>
-				</td>
-			</tr>
-		</table>
-		
-	</td>
-</tr>
-</table>
+</div>
 
 </wicket:panel>

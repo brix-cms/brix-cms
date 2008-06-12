@@ -47,7 +47,8 @@ public class ModelBuffer implements Serializable
 
     private Map<String, IModel> propertyMap;
 
-    protected IModel forProperty(String propertyName, boolean isNode)
+    @SuppressWarnings("unchecked")
+	protected<T> IModel<T> forProperty(String propertyName, boolean isNode)
     {
         if (target == null)
         {
@@ -67,12 +68,12 @@ public class ModelBuffer implements Serializable
         return model;
     }
     
-    public IModel forProperty(String propertyName) 
+    public<T> IModel<T> forProperty(String propertyName) 
     {
         return forProperty(propertyName, false); 
     }
     
-    public IModel forNodeProperty(String propertyName)
+    public<T> IModel<T> forNodeProperty(String propertyName)
     {
         return forProperty(propertyName, true);
     }

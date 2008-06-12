@@ -1,21 +1,48 @@
 <wicket:panel>
-<br/>
+	
 	<form wicket:id="form">
-	title: <input wicket:id="title" type="text" size="60"/><br/>
-	template: <span wicket:id="templatePicker"></span><br/>
-	<input type="checkbox" wicket:id="requiresSSL"/> requires SSL<br/> 
-	content:<br/>
+	<fieldset>
 	
-	<div wicket:id="feedback">
+	<table class="brix-property-edit">
+		<tr>
+			<td class="brix-property-label"><wicket:message key="title"></wicket:message></td>
+			<td class="brix-property-value"><input wicket:id="title" type="text" size="60"/></td>
+		</tr>
+		<tr>
+			<td class="brix-property-label"><wicket:message key="template"></wicket:message></td>
+			<td class="brix-property-value"><span wicket:id="templatePicker"></span></td>
+		</tr>
+		<tr>
+			<td class="brix-property-label"></td>
+			<td class="brix-property-value">
+				<input type="checkbox" wicket:id="requiresSSL" id="requiresSSL"/>
+				<label for="requiresSSL"><wicket:message key="requiresSSL"/></label>				
+			</td>
+		</tr>	
+	</table>
+	
+	<div wicket:id="feedback" class="brix-feedback">
 	</div>
+
+	<div class="brix-site-page-editor-container">	 	 
+		<span><wicket:message key="content"/></span>			
+			
+		<input wicket:id="disable-editors" type="submit" value="Raw Markup Mode"/>
+		<input wicket:id="enable-code-editor" type="submit" value="Code Mode"/>
+		<input wicket:id="enable-wysiwig-editor" type="submit" value="Rich Mode"/>
 		
-	<input wicket:id="disable-editors" type="submit" value="Raw Markup Mode"/>
-	<input wicket:id="enable-code-editor" type="submit" value="Code Mode"/>
-	<input wicket:id="enable-wysiwig-editor" type="submit" value="Rich Mode"/>
+		<div class="brix-site-page-editor">		
+			<textarea wicket:id="content" class="brix-site-page-editor"></textarea>
+		</div>
+	</div>
 	
-	<textarea wicket:id="content" cols="80" rows="30" style="width:100%;"></textarea>
-	<br/>
-	<input type="submit" value="save" wicket:id="save"/>
-	<input type="button" value="cancel" wicket:id="cancel"/>
+	<div class="brix-site-page-buttons">
+		<div class="brix-buttons-right"><div class="brix-buttons-right1">
+			<a class="brix-button" wicket:id="save"><wicket:message key="save"/></a>
+			<a class="brix-button" wicket:id="cancel"><wicket:message key="cancel"/></a>	
+		</div></div>
+	</div>
+	
+	</fieldset>	
 	</form>
 </wicket:panel>

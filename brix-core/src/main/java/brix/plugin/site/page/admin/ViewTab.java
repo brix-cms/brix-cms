@@ -18,9 +18,9 @@ public class ViewTab extends Panel<BrixNode> {
 	public ViewTab(String id, IModel<BrixNode> model) {
 		super(id, model);
 
-		add(new Label("title", new PropertyModel(model, "title")));
-		add(new Label("template", new PropertyModel(model, "templatePath")));
-		add(new Label("requiresSSL", new PropertyModel(model, "requiresSSL")));
+		add(new Label<String>("title", new PropertyModel<String>(model, "title")));
+		add(new Label<String>("template", new PropertyModel<String>(model, "templatePath")));
+		add(new Label<Boolean>("requiresSSL", new PropertyModel<Boolean>(model, "requiresSSL")));
 
 		// add(new Label("content", new PropertyModel(model, "dataAsString")));
 

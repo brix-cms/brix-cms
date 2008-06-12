@@ -1,13 +1,29 @@
 <wicket:panel>
-	<br/>
-	title: <span wicket:id="title"></span> <br/>
-	template: <span wicket:id="template"></span> <br/>
-	requires SSL: <span wicket:id="requiresSSL"></span> <br/>
-	<br/>
-	Content:
+	
+	<div style="float: right; padding-top: 1em; padding-right: 1em;">
+		<a wicket:id="edit" class="brix-button"><wicket:message key="edit"/></a>
+	</div>
+	
+	<div style="margin-right: 6em">
+	<table class="brix-property-display">
+		<tr>
+			<td class="brix-property-label"><wicket:message key="title"/></td>			 
+			<td class="brix-property-value"><span wicket:id="title"></span></td>
+		</tr>
+		<tr class="brix-property-line">
+			<td class="brix-property-label"><wicket:message key="template"/></td>
+			<td class="brix-property-value"><span wicket:id="template"></span></td> 
+		</tr>
+		<tr class="brix-property-line">
+			<td class="brix-property-label"><wicket:message key="requiresSSL"/></td>
+			<td class="brix-property-value"><span wicket:id="requiresSSL"></span></td>
+		</tr>
+	</table>
+	</div>
+	
 	<div style="border: 1px dotted gray;">
-		<iframe wicket:id="preview" style="display:block; border-width: 0px; width: 100%; height: 40em">
+		<iframe wicket:id="preview" style="display:block; border-width: 0px; width: 100%; height: 40em" frameborder="0">
 		</iframe>
 	</div>
-	<a wicket:id="edit">Edit</a>
+	
 </wicket:panel>

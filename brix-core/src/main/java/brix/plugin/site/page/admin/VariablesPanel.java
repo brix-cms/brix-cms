@@ -78,6 +78,7 @@ public class VariablesPanel extends Panel<BrixNode>
 				{
 					target.addComponent(delete);
 				}
+				super.onItemSelectionChanged(item, newValue);
 			}
 		};
 		add(grid);

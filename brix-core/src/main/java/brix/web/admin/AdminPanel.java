@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.ResourceReference;
+import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -63,6 +66,8 @@ public class AdminPanel extends Panel<Void>
     public AdminPanel(String id, String workspace, Path root)
     {
         super(id);
+        
+        add(HeaderContributor.forCss(CSS));
 
         IModel<WorkspaceEntry> model = new PropertyModel<WorkspaceEntry>(this, "currentWorkspace");
         IChoiceRenderer<WorkspaceEntry> renderer = new ChoiceRenderer<WorkspaceEntry>("visibleName");
@@ -110,7 +115,14 @@ public class AdminPanel extends Panel<Void>
     		}
     	}
     	
-    	tabbedPanel = new TabbedPanel("tabbedPanel", tabs);
+    	tabbedPanel = new TabbedPanel("tabbedPanel", tabs) 
+    	{
+    		@Override
+    		protected String getTabContainerCssClass()
+    		{
+    			return "brix-plugins-tabbed-panel-row";
+    		}
+    	};
     	add(tabbedPanel);
     }
 
@@ -201,4 +213,6 @@ public class AdminPanel extends Panel<Void>
         }
         return workspaces;
     }
+    
+    private static final ResourceReference CSS = new CompressedResourceReference(AdminPanel.class, "res/style.css");
 }

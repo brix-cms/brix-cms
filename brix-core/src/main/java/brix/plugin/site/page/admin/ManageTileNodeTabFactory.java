@@ -8,6 +8,7 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
@@ -40,12 +41,14 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
     private static List<ITab> getTabs(final IModel<BrixNode> nodeModel)
     {
         List<ITab> tabs = new ArrayList<ITab>();
-
-        tabs.add(new AbstractTab(new Model("view"))
+        
+        // TODO: Externalize strings
+        
+        tabs.add(new AbstractTab(new Model<String>("View"))
         {
 
             @Override
-            public Panel getPanel(String panelId)
+            public Panel<?> getPanel(String panelId)
             {
                 return new ViewTab(panelId, nodeModel);
             }
@@ -58,11 +61,11 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 
         });
 
-        tabs.add(new AbstractTab(new Model("tiles"))
+        tabs.add(new AbstractTab(new Model<String>("Tiles"))
         {
 
             @Override
-            public Panel getPanel(String panelId)
+            public Panel<?> getPanel(String panelId)
             {
                 return new TilesPanel(panelId, nodeModel);
             }
@@ -75,11 +78,11 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 
         });
         
-        tabs.add(new AbstractTab(new Model("variables"))
+        tabs.add(new AbstractTab(new Model<String>("Variables"))
         {
 
             @Override
-            public Panel getPanel(String panelId)
+            public Panel<?> getPanel(String panelId)
             {
                 return new VariablesPanel(panelId, nodeModel);
             }
@@ -93,11 +96,11 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
         });
         
 
-        tabs.add(new AbstractTab(new Model("convert"))
+        tabs.add(new AbstractTab(new Model<String>("Convert"))
         {
 
             @Override
-            public Panel getPanel(String panelId)
+            public Panel<?> getPanel(String panelId)
             {
                 return new ConvertTab(panelId, nodeModel);
             }

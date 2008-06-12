@@ -28,7 +28,8 @@ public class PropertiesTab extends Panel<BrixNode>
         final ModelBuffer model = new ModelBuffer(nodeModel);
         Form<?> form = new Form<Void>("form");
         
-        form.add(new DropDownChoice<Protocol>("protocol", model.forProperty("requiredProtocol"), protocols).setNullValid(false));
+        IModel<Protocol> protocolModel = model.forProperty("requiredProtocol");
+        form.add(new DropDownChoice<Protocol>("protocol", protocolModel, protocols).setNullValid(false));
 
         form.add(new Button<Void>("save") {
         	@Override
