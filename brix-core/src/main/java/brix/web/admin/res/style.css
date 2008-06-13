@@ -172,11 +172,15 @@ div.brix-admin div.brix-site-tree-container table.wicket-tree-content {
 div.brix-admin div.brix-site-tree-container table.selected {
 }
 
-div.brix-admin div.brix-site-editor-container {
+div.brix-admin div.brix-site-editor-container {	
 	margin-left: 17.5em;
-	margin-right: 0.5em;	
-	overflow: hidden;
+	margin-right: 0.5em;		
 	margin-bottom: 0.5em;
+	display: block;	
+}
+
+div.brix-admin div.brix-site-editor-container1 {
+	overflow: hidden;
 }
 
 div.brix-admin div.brix-site-edit-node-top {
