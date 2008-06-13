@@ -46,16 +46,14 @@ public class ConvertNodePanel extends NodeManagerPanel
                     converters.add(item);
 
                     Model<String> typeName = new Model<String>(plugin.getNodeType());
-                    item.add(new TextLink("convert", typeName, new Model<String>(plugin.getName()))
+                    item.add(new TextLink<String>("convert", typeName, new Model<String>(plugin.getName()))
                     {
-
                         @Override
                         public void onClick()
                         {
                             final String type = (String)getModelObject();
                             convertToType(type);
                         }
-
                     });
                 }
             }

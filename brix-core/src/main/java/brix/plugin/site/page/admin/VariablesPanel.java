@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
 
 import brix.jcr.wrapper.BrixNode;
@@ -31,6 +32,7 @@ import brix.plugin.site.page.AbstractContainer;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.SizeUnit;
 import com.inmethod.grid.column.CheckBoxColumn;
 import com.inmethod.grid.column.PropertyColumn;
 import com.inmethod.grid.column.editable.EditablePropertyColumn;
@@ -47,15 +49,15 @@ public class VariablesPanel extends Panel<BrixNode>
 		
 		List<IGridColumn> columns = new ArrayList<IGridColumn>();
 		columns.add(new CheckBoxColumn("checkbox"));
-		columns.add(new PropertyColumn(new Model("key"), "key"));
-		columns.add(new EditablePropertyColumn(new Model("value"), "value") {
+		columns.add(new PropertyColumn(new ResourceModel("key"), "key"));
+		columns.add(new EditablePropertyColumn(new ResourceModel("value"), "value") {
 			@Override
 			protected void addValidators(FormComponent component)
 			{
 				component.setRequired(true);
 			}
 		});
-		columns.add(new SubmitCancelColumn("submitcancel", new Model("edit")) {
+		columns.add(new SubmitCancelColumn("submitcancel", new ResourceModel("edit")) {
 			@Override
 			protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent)
 			{
@@ -84,6 +86,7 @@ public class VariablesPanel extends Panel<BrixNode>
 		add(grid);
 		grid.setSelectToEdit(false);
 		grid.setClickRowToSelect(true);
+		grid.setContentHeight(17, SizeUnit.EM);
 
 		add(delete = new AjaxLink<Void>("deleteSelected") {
 			@Override

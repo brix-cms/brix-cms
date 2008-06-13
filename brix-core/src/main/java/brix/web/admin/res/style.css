@@ -117,6 +117,7 @@ div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li {
 
 div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li.selected {
 	background-color: #7894BB;
+	font-weight: bold;
 }
 
 div.brix-plugins-tabbed-panel div.brix-plugins-tabbed-panel-row li a {
@@ -173,10 +174,11 @@ div.brix-admin div.brix-site-manager-container {
 
 div.brix-admin div.brix-site-tree-container {
 	float: left;
-	width: 16em;
+	width: 16.3em;
 	overflow: auto;
 	border: 1px solid #e0e0e0;
 	margin-left: 0.5em;
+	_margin-left: 0.2em;
 	margin-bottom: 0.5em;
 }
 
@@ -210,6 +212,10 @@ div.brix-admin div.brix-site-edit-node-top div.brix-node-path {
 	float: left;
 	padding-bottom: 4px;
 	padding-top: 4px;
+}
+
+div.brix-admin div.brix-site-edit-node-top span.brix-node-path-last {
+	font-weight: bold;
 }
 
 div.brix-admin div.brix-site-edit-node-top div.brix-buttons {
@@ -280,8 +286,24 @@ div.brix-admin a.brix-button {
 	padding: 0.3em 1em;
 	border: 1px solid #C1CAD3;
 	color: black;
-	font-weight: bold;
+	
 }
+
+div.brix-admin span.brix-button {
+	background-image: url("bg-grad1.gif");
+	background-position: center;
+	background-repeat: repeat-x;
+	background-color: #E6F6FF;
+	display: block;
+	padding: 0.3em 1em;
+	border: 1px solid #C1CAD3;
+	color: #999;	
+}
+
+div.brix-admin span.brix-button em {
+	color: #777;
+}
+
 
 div.brix-admin table.brix-property-display {
 	margin: 0.5em;
@@ -347,9 +369,9 @@ div.brix-admin textarea.brix-site-page-editor {
 	height: 30em;
 }
 
-div.buttons-right {
+div.brox-buttons-right {
 	overflow: hidden;
-	_height: 1em;
+	_height: 0.1%;
 }
 
 
@@ -357,21 +379,21 @@ div.brix-buttons-right1 {
 	float: right;
 }
 
-div.brix-buttons-right a.brix-button {
+div.brix-buttons-right .brix-button {
 	float: left;
 	margin-left: 0.5em;
 }
 
-div.buttons-left {
+div.brix-buttons-left {
 	overflow: hidden;
-	_height: 1em;
+	_height: 0.1%;
 }
 
 div.brix-buttons-left1 {
 	float: left;
 }
 
-div.brix-buttons-left a.brix-button {
+div.brix-buttons-left .brix-button {
 	float: left;
 	margin-right: 0.5em;
 }
@@ -452,5 +474,18 @@ div.brix-admin div.brix-site-tile-editor-container {
 
 
 div.brix-admin div.brix-site-new-tile div.brix-site-tile-editor-container {
+	margin-top: 0.5em;
+}
+
+div.brix-admin div.brix-site-variable-container {
+	margin-top: 0.7em;
+}
+
+div.brix-admin div.brix-site-variable-container .imxt-grid {
+	margin-bottom: 0.5em;
+}
+
+div.brix-admin div.brix-site-add-variable {
+	border-top: 1px solid #dddddd;
 	margin-top: 0.5em;
 }

@@ -31,20 +31,26 @@ public abstract class PathLabel extends WebMarkupContainer<String> implements IL
         for (int i = root.size() + 1; i < size + 1; i++)
         {
             final Path subpath = path.subpath(i);
-            writePath(subpath, r);
+             
+            writePath(subpath, r, false);
             if (i <= size)
             {
                 r.write("&nbsp;/&nbsp;");
             }
         }
-        writePath(path, r);
+        writePath(path, r, true);
     }
 
-    private void writePath(Path path, Response r)
+    private void writePath(Path path, Response r, boolean last)
     {
         r.write("<a href=\"");
         r.write(createCallbackUrl(path));
-        r.write("\"><span>");
+        r.write("\"><span");
+        if (last)
+        {
+        	r.write(" class=\"brix-node-path-last\"");
+        }
+        r.write(">");
         boolean isRoot = path.equals(root);
         r.write(isRoot ? getRootNodeName() : path.getName());
         r.write("</span></a>");
