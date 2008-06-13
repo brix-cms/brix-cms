@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
@@ -78,7 +79,7 @@ public class ListFolderNodesTab extends Panel<BrixNode>
 		add(grid);
 	}
 	
-	private static class NameColumn extends AbstractColumn
+	private class NameColumn extends AbstractColumn
 	{
 		public NameColumn(IModel<String> headerModel)
 		{
@@ -92,7 +93,7 @@ public class ListFolderNodesTab extends Panel<BrixNode>
 		}		
 	};
 	
-	private static class NamePanel extends Panel<BrixNode>
+	private class NamePanel extends Panel<BrixNode>
 	{
 
 		public NamePanel(String id, final IModel<BrixNode> model)
@@ -118,7 +119,16 @@ public class ListFolderNodesTab extends Panel<BrixNode>
 				}
 			});
 			
-			link.add(new Label<String>("label", new PropertyModel<String>(model, "name")));
+			IModel<String> labelModel;
+			if (model.getObject().getDepth() < ListFolderNodesTab.this.getModelObject().getDepth())
+			{
+				labelModel = new Model<String>("..");
+			}
+			else
+			{
+				labelModel = new PropertyModel<String>(model, "name");
+			}
+			link.add(new Label<String>("label", labelModel));
 		}		
 	};
 

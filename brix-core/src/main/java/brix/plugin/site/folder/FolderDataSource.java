@@ -46,6 +46,16 @@ abstract class FolderDataSource implements IDataSource
 		{
 			sort(visibleNodes, PROPERTY_NAME, IGridSortState.Direction.ASC);
 		}
+		
+		if (node.getPath().equals(SitePlugin.get().getSiteRootPath()) == false)
+		{
+			BrixNode parent = (BrixNode) node.getParent();
+			if (canShowNode(parent))
+			{
+				visibleNodes.add(0, parent);
+			}
+		}
+		
 		result.setItems(visibleNodes.iterator());
 		result.setTotalCount(visibleNodes.size());
 	}
@@ -162,14 +172,26 @@ abstract class FolderDataSource implements IDataSource
 		return 0;
 	}
 
+	private boolean canShowNode(BrixNode node)
+	{
+		Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW, node);
+		if (!node.isHidden() && node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	private List<BrixNode> visibleNodes(JcrNodeIterator iterator)
 	{
 		List<BrixNode> res = new ArrayList<BrixNode>();
 		while (iterator.hasNext())
 		{
 			BrixNode node = (BrixNode) iterator.nextNode();
-			Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW, node);
-			if (!node.isHidden() && node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+			if (canShowNode(node))
 			{
 				res.add(node);
 			}
