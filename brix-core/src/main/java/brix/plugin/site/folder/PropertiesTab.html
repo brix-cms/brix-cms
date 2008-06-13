@@ -1,14 +1,29 @@
 <wicket:panel>
-<br/>
-<div wicket:id="feedback">
+
+<div class="brix-site-folder-properties-container">
+
+<div wicket:id="feedback" class="brix-feedback">
 </div>
-<form wicket:id="form">
-redirect reference: <span wicket:id="redirectReference"></span> <br/>
 
-<br>
+<form wicket:id="form"><fieldset>
 
-<input type="submit" value="SAVE"/>
+	<table class="brix-property-edit">
+		<tr>
+			<td class="brix-property-label">
+				<wicket:message key="redirectReference"/>
+			</td>
+			<td class="brix-property-value">
+				<span wicket:id="redirectReference"></span> 
+			</td>
+		</tr>
+	</table>
 
-</form>
+	<div class="brix-buttons-left"><div class="brix-button-left1">
+		<a wicket:id="submit" class="brix-button"><wicket:message key="save"/></a>
+	</div></div>
+
+</fieldset></form>
+
+</div>
 
 </wicket:panel>

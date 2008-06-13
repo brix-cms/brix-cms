@@ -1,35 +1,10 @@
-<wicket:head>
-	<style>
-		table.folder-list { width:100%; background-color:black; }
-		table.folder-list th , table.folder-list td { background-color:white; }
-		
-	</style>
-</wicket:head>
 <wicket:panel>
-<br/>
 
-<table cellspacing="1" cellpadding="3" class="folder-list">
-		<tr>
-			<th>Name</th>
-			<th>Type</th>
-			<!-- 
-			<th>Size</th>
-			<th>Revision</th>
-			 -->
-			<th>Author</th>
-			<th>Last Modified</th>
-			<th>Mime Type</th>
-		</tr>
-		<tr wicket:id="dir-listing">
-			<td><a wicket:id="select"><span wicket:id="file-name"></span></a></td> 
-			<td><span wicket:id="type"></span></td> 
-						<!--
-			<td><span wicket:id="size"></span></td>
-			<td><span wicket:id="revision"></span></td>
-			-->
-			<td><span wicket:id="author"></span></td>
-			<td><span wicket:id="modified"></span></td>
-			<td><span wicket:id="mime"></span></td>
-		</tr>
-	</table>
+	<div class="brix-site-folder-nodes-container">	
+
+	<div wicket:id="grid">
+	</div>
+	
+	</div>
+
 </wicket:panel>

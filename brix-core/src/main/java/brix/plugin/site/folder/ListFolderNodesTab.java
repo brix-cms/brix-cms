@@ -3,175 +3,213 @@ package brix.plugin.site.folder;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.Page;
+import org.apache.wicket.Response;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.convert.IConverter;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.util.string.Strings;
 
-import brix.BrixNodeModel;
-import brix.auth.Action;
-import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.auth.SiteNodeAction;
+
+import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.IRenderable;
+import com.inmethod.grid.SizeUnit;
+import com.inmethod.grid.column.AbstractColumn;
+import com.inmethod.grid.column.AbstractLightWeightColumn;
+import com.inmethod.grid.column.PropertyColumn;
+import com.inmethod.grid.datagrid.DataGrid;
 
 public class ListFolderNodesTab extends Panel<BrixNode>
 {
-    public ListFolderNodesTab(String id, IModel<BrixNode> folderModel)
-    {
-        super(id, folderModel);
-        add(new DataView<BrixNode>("dir-listing", new DirListing())
-        {
+	public ListFolderNodesTab(String id, IModel<BrixNode> folderModel)
+	{
+		super(id, folderModel);
 
-            @Override
-            protected void populateItem(final Item<BrixNode> item)
-            {
-                Link<BrixNode> select = new Link<BrixNode>("select", item.getModel())
-                {
+		List<IGridColumn> columns = new ArrayList<IGridColumn>();
+		columns.add(new NameColumn(new ResourceModel("name")).setInitialSize(180));		
+		columns.add(new TypePropertyColumn(new ResourceModel("type")).setInitialSize(80));
+		columns.add(new SizeColumn(new ResourceModel("size")).setInitialSize(100));
+		columns.add(new MimeTypeColumn(new ResourceModel("mimeType")).setInitialSize(80));
+		columns.add(new DatePropertyColumn(new ResourceModel("created"), "created", FolderDataSource.PROPERTY_CREATED).setInitialSize(120));
+		columns.add(new PropertyColumn(new ResourceModel("createdBy"), "createdBy",
+				FolderDataSource.PROPERTY_CREATED_BY).setInitialSize(90));
+		columns.add(new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified",
+				FolderDataSource.PROPERTY_LAST_MODIFIED).setInitialSize(120));
+		columns.add(new PropertyColumn(new ResourceModel("lastModifiedBy"), "lastModifiedBy",
+				FolderDataSource.PROPERTY_LAST_MODIFIED_BY).setInitialSize(110));
 
-                    @Override
-                    public void onClick()
-                    {
-                        BrixNode node = (BrixNode)getModelObject();
-                        SitePlugin.get().selectNode(this, node);
-                    }
+		FolderDataSource source = new FolderDataSource()
+		{
+			@Override
+			BrixNode getFolderNode()
+			{
+				return getNode();
+			}
+		};
+		
+		DataGrid grid = new DataGrid("grid", source, columns)
+		{
+			@Override
+			protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
+			{
+				((ServletWebRequest)getRequest()).setForceNewVersion(true);
+				
+				BrixNode node = (BrixNode) rowModel.getObject();
+				Page<?> page = getPage();
+				SitePlugin.get().selectNode(this, node);
+				getRequestCycle().setResponsePage(page);
+			}
+		};
+		grid.setContentHeight(30, SizeUnit.EM);
 
-                };
-                item.add(select);
-                select.add(new Label<String>("file-name", new PropertyModel<String>(item.getModel(), "name")));
+		add(grid);
+	}
+	
+	private static class NameColumn extends AbstractColumn
+	{
+		public NameColumn(IModel<String> headerModel)
+		{
+			super("name", headerModel, FolderDataSource.PROPERTY_NAME);
+		}
+		
+		@Override
+		public Component<?> newCell(WebMarkupContainer parent, String componentId, IModel rowModel)
+		{
+			return new NamePanel(componentId, rowModel);
+		}		
+	};
+	
+	private static class NamePanel extends Panel<BrixNode>
+	{
 
-                IModel<SiteNodePlugin> pluginModel = new IModel<SiteNodePlugin>()
-                {
-                    public void detach()
-                    {
-                    }
+		public NamePanel(String id, final IModel<BrixNode> model)
+		{
+			super(id, model);
+			
+			Link<?> link;
+			add(link = new Link<Void>("select") {
+				@Override
+				public void onClick()
+				{
+					BrixNode node = model.getObject();
+					SitePlugin.get().selectNode(this, node);
+				}				
+				@Override
+				protected void onComponentTag(ComponentTag tag)
+				{
+					if (model.getObject().isFolder())
+					{
+						tag.put("class", "brix-site-folder-node");
+					}
+					super.onComponentTag(tag);
+				}
+			});
+			
+			link.add(new Label<String>("label", new PropertyModel<String>(model, "name")));
+		}		
+	};
 
-                    public SiteNodePlugin getObject()
-                    {
-                        return SitePlugin.get().getNodePluginForNode((BrixNode)item.getModelObject());
-                    }
+	private static class TypePropertyColumn extends PropertyColumn
+	{
+		public TypePropertyColumn(IModel<String> headerModel)
+		{
+			super("type", headerModel, "name", FolderDataSource.PROPERTY_TYPE);
+		}
 
-                    public void setObject(SiteNodePlugin object)
-                    {
-                    }
-                };
+		@Override
+		protected Object getModelObject(IModel rowModel)
+		{
+			BrixNode node = (BrixNode) rowModel.getObject();
+			return SitePlugin.get().getNodePluginForNode(node);
+		}
+	};
 
-                 item.add(new Label("type", new PropertyModel(pluginModel, "name")));
+	private class MimeTypeColumn extends AbstractLightWeightColumn
+	{
 
-                // item.add(new Label("size", new PropertyModel(item.getModel(),
-                // "sizeInBytes")));
-                // item.add(new Label("revision", new PropertyModel(item
-                // .getModel(), "revision")));
+		public MimeTypeColumn(IModel<String> headerModel)
+		{
+			super("mimeType", headerModel, FolderDataSource.PROPERTY_MIME_TYPE);
+		}
 
-                item.add(new Label("author", new PropertyModel(item.getModel(), "lastModifiedBy")));
-                item.add(new Label("modified", new PropertyModel(item.getModel(), "lastModified"))
-                {
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public IConverter getConverter(Class type)
-                    {
-                        return ModifiedConverter.INSTANCE;
-                    }
-                });
+		@Override
+		public IRenderable newCell(IModel rowModel)
+		{
+			return new IRenderable()
+			{
+				public void render(IModel rowModel, Response response)
+				{
+					BrixNode node = (BrixNode) rowModel.getObject();
+					if (node instanceof BrixFileNode)
+					{
+						String mime = ((BrixFileNode)node).getMimeType(); 
+						response.write(Strings.escapeMarkup(mime));
+					}
+				}
+			};
+		}
+	};
+	
+	private class SizeColumn extends AbstractLightWeightColumn
+	{
 
-                IModel mimeTypeModel = new LoadableDetachableModel()
-                {
-                    @Override
-                    protected Object load()
-                    {
-                        BrixNode node = (BrixNode)item.getModelObject();
-                        if (node.isFolder())
-                        {
-                            return "Folder";
-                        }
-                        else if (node instanceof BrixFileNode)
-                        {
-                            return ((BrixFileNode)node).getMimeType();
-                        }
-                        else
-                        {
-                            return "Unknown";
-                        }
-                    }
-                };
-                item.add(new Label("mime", mimeTypeModel));
-            }
+		public SizeColumn(IModel<String> headerModel)
+		{
+			super("size", headerModel, FolderDataSource.PROPERTY_SIZE);
+		}
 
-        });
-    }
+		@Override
+		public IRenderable newCell(IModel rowModel)
+		{
+			return new IRenderable()
+			{
+				public void render(IModel rowModel, Response response)
+				{
+					BrixNode node = (BrixNode) rowModel.getObject();
+					if (node instanceof BrixFileNode)
+					{
+						Long size = ((BrixFileNode)node).getContentLength();
+						 
+						response.write(size.toString());
+						response.write(" bytes");
+					}
+				}
+			};
+		}
+	};
 
-    private static class ModifiedConverter implements IConverter
-    {
-        public Object convertToObject(String value, Locale locale)
-        {
-            return null;
-        }
 
-        public String convertToString(Object value, Locale locale)
-        {
-            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-            return df.format((Date)value);
-        }
+	private static class DatePropertyColumn extends PropertyColumn
+	{
+		public DatePropertyColumn(IModel<String> headerModel, String propertyExpression, String sortProperty)
+		{
+			super(headerModel, propertyExpression, sortProperty);
+		}
 
-        public static final ModifiedConverter INSTANCE = new ModifiedConverter();
-    };
+		@Override
+		protected CharSequence convertToString(Object object)
+		{
+			DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+			return df.format((Date) object);
+		}
+	};
 
-    private BrixNode getNode()
-    {
-        return (BrixNode)getModelObject();
-    }
+	private BrixNode getNode()
+	{
+		return (BrixNode) getModelObject();
+	}
 
-    private class DirListing implements IDataProvider<BrixNode>
-    {
-
-        @SuppressWarnings("unchecked")
-        public Iterator iterator(int first, int count)
-        {
-            return visibleNodes(getNode().getNodes());
-        }
-
-        public IModel<BrixNode> model(BrixNode object)
-        {
-            return new BrixNodeModel(object);
-        }
-
-        public int size()
-        {
-            return (int)getNode().getNodes().getSize();
-        }
-
-        public void detach()
-        {
-        }
-
-    }
-
-    private Iterator<BrixNode> visibleNodes(JcrNodeIterator iterator)
-    {
-        List<BrixNode> res = new ArrayList<BrixNode>();
-        while (iterator.hasNext())
-        {
-            BrixNode node = (BrixNode)iterator.nextNode();
-            Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-                    SiteNodeAction.Type.NODE_VIEW, node);
-            if (!node.isHidden() &&
-                    node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
-            {
-                res.add(node);
-            }
-        }
-        return res.iterator();
-    }
 }

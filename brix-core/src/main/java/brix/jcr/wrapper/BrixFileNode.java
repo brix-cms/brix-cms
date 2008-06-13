@@ -53,6 +53,11 @@ public class BrixFileNode extends BrixNode
     {
         getContent().setProperty("jcr:mimeType", mimeType);
     }
+    
+    public long getContentLength()
+    {
+    	return getContent().getProperty("jcr:data").getLength();
+    }
 
     public String getMimeType()
     {

@@ -1,6 +1,7 @@
 package brix.plugin.site.folder;
 
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -19,15 +20,18 @@ public class PropertiesTab extends Panel<BrixNode>
 
         final ModelBuffer buffer = new ModelBuffer(folderNodeModel);
 
-        Form form = new Form("form")
+        Form<Void> form = new Form<Void>("form");
+        
+        form.add(new SubmitLink<Void>("submit")
         {
             @Override
-            protected void onSubmit()
+            public void onSubmit()
             {
                 buffer.apply();
                 folderNodeModel.getObject().save();
+                getSession().info(PropertiesTab.this.getString("propertiesSaved"));
             }
-        };
+        });
         add(form);
 
         add(new ContainerFeedbackPanel("feedback", this));
