@@ -39,7 +39,7 @@ import com.inmethod.grid.datagrid.DataGrid;
 
 public class VariablesPanel extends Panel<BrixNode>
 {
-	private AjaxLink delete;
+	private AjaxLink<?> delete;
 	
 	public VariablesPanel(String id, IModel<BrixNode> model)
 	{
@@ -85,7 +85,7 @@ public class VariablesPanel extends Panel<BrixNode>
 		grid.setSelectToEdit(false);
 		grid.setClickRowToSelect(true);
 
-		add(delete = new AjaxLink("deleteSelected") {
+		add(delete = new AjaxLink<Void>("deleteSelected") {
 			@Override
 			public void onClick(AjaxRequestTarget target)
 			{

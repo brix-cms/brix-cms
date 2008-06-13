@@ -9,16 +9,15 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -35,13 +34,13 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 {
 	private String newTileId;
 	private String newTileTypeName;
-	private Component newTileEditor;
+	private Component<?> newTileEditor;
 
-	public TileEditorPanel getEditor()
+	public TileEditorPanel<?> getEditor()
 	{
 		if (newTileEditor instanceof TileEditorPanel)
 		{
-			return (TileEditorPanel) newTileEditor;
+			return (TileEditorPanel<?>) newTileEditor;
 		}
 		else
 		{
@@ -49,18 +48,18 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 		}
 	}
 
-	public NewTileFragment(String id, String fragmentId, MarkupContainer markupContainer,
+	public NewTileFragment(String id, String fragmentId, MarkupContainer<?> markupContainer,
 			final IModel<BrixNode> nodeModel)
 	{
 		super(id, fragmentId, markupContainer, nodeModel);
-		final Form form = new Form("form");
+		final Form<Void> form = new Form<Void>("form");
 		add(form);
 
 		form.add(new ContainerFeedbackPanel("feedback", form));
-		form.add(new TextField("tile-id", new PropertyModel(this, "newTileId")).setLabel(new Model("Tile Id"))
+		form.add(new TextField<String>("tileId", new PropertyModel<String>(this, "newTileId"))
 				.setRequired(true).add(new NewTileIdValidator()).add(NodeNameValidator.getInstance()));
 
-		form.add(new DropDownChoice("tile-type", new PropertyModel(this, "newTileTypeName"), new TileTypeNamesModel(),
+		form.add(new DropDownChoice<String>("tileType", new PropertyModel<String>(this, "newTileTypeName"), new TileTypeNamesModel(),
 				new TileTypeNameRenderer())
 		{
 			private static final long serialVersionUID = 1L;
@@ -72,9 +71,8 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 			}
 
 			@Override
-			protected void onSelectionChanged(Object newSelection)
-			{
-				final String tileTypeName = (String) newSelection;
+			protected void onSelectionChanged(String tileTypeName)
+			{;
 				if (tileTypeName == null)
 				{
 					EmptyPanel ep = new EmptyPanel(newTileEditor.getId());
@@ -85,18 +83,18 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 				{
 					final Brix brix = NewTileFragment.this.getModelObject().getBrix();
 					final Tile tile = Tile.Helper.getTileOfType(tileTypeName, brix);
-					TileEditorPanel ed = tile.newEditor(newTileEditor.getId(), nodeModel);
+					TileEditorPanel<?> ed = tile.newEditor(newTileEditor.getId(), nodeModel);
 					newTileEditor.replaceWith(ed);
 					newTileEditor = ed;
 				}
 			}
 
-		}.setLabel(new Model("Tile Type")).setRequired(true));
+		}.setRequired(true));
 
 		newTileEditor = new EmptyPanel("tile-editor");
 		form.add(newTileEditor);
 
-		form.add(new Button("add")
+		form.add(new SubmitLink<Void>("add")
 		{
 			@Override
 			public void onSubmit()
@@ -122,16 +120,16 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 			final String tileId = (String) validatable.getValue();
 			if (getTileContainer().tiles().getTile(tileId) != null)
 			{
-				validatable.error(new ValidationError().setMessage("A tile with id ${input} already exists"));
+				validatable.error(new ValidationError().addMessageKey("tileExists"));
 			}
 		}
 	}
 
-	class TileTypeNamesModel extends LoadableDetachableModel
+	class TileTypeNamesModel extends LoadableDetachableModel<List<? extends String>>
 	{
 
 		@Override
-		protected Object load()
+		protected List<? extends String> load()
 		{
 			final Collection<Tile> tiles = Tile.Helper.getTiles(NewTileFragment.this.getModelObject().getBrix());
 			List<String> choices = new ArrayList<String>(tiles.size());
@@ -144,18 +142,17 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 		}
 	}
 
-	class TileTypeNameRenderer implements IChoiceRenderer
+	class TileTypeNameRenderer implements IChoiceRenderer<String>
 	{
 
-		public Object getDisplayValue(Object object)
+		public Object getDisplayValue(String type)
 		{
-			String type = (String) object;
 			return Tile.Helper.getTileOfType(type, getModelObject().getBrix()).getDisplayName();
 		}
 
-		public String getIdValue(Object object, int index)
+		public String getIdValue(String object, int index)
 		{
-			return (String) object;
+			return object;
 		}
 
 	}

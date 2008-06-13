@@ -10,7 +10,7 @@ public class FragmentManagerPanel extends Panel<BrixNode>
     public FragmentManagerPanel(String id, IModel<BrixNode> fragmentsNode)
     {
         super(id, fragmentsNode);
-        add(new TilesPanel("tiles", fragmentsNode));
+        add(new FragmentsPanel("tiles", fragmentsNode));
 
     }
 

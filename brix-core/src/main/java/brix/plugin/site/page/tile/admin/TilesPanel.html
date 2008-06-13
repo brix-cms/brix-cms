@@ -1,15 +1,15 @@
 <wicket:panel>
 	
-	<br/>
-	<table cellspacing="0" cellpadding="0">
+	<table class="brix-site-tile-container">
 		<tr>
-			<td valign="top" class="tile-selector">
+			<td valign="top" class="brix-site-tile-selector">
 			<ul>
 				<li wicket:id="tile-selector"><a wicket:id="link"><span
 					wicket:id="name"></span></a></li>
 			</ul>
 			</td>
-			<td valign="top" class="tile-editor">
+			
+			<td valign="top" class="brix-site-tile-editor">
 
 			<div wicket:id="tile-editor"></div>
 
@@ -19,23 +19,50 @@
 	
 
 	<wicket:fragment wicket:id="editor-form-fragment">
-		<form wicket:id="form">
-		<div wicket:id="feedback"></div>
-		<div wicket:id="editor"></div>
-		<br />
-		<input wicket:id="submit" type="submit" value="SAVE" /> <input wicket:id="delete"
-			type="button" value="DELETE" /></form>
+		<div class="brix-site-edit-tile">
+			<form wicket:id="form"><fieldset>
+			<div wicket:id="feedback" class="brix-feedback"></div>
+			
+			<div class="brix-site-tile-editor-container">
+				<div wicket:id="editor"></div>
+			</div>
+			
+			<div class="brix-buttons-left"><div class="brix-buttons-left1">
+				<a class="brix-button" wicket:id="submit"><wicket:message key="save"/></a>
+				<a class="brix-button" wicket:id="delete"><wicket:message key="delete"/></a>
+			</div></div>
+						
+			</fieldset></form>
+		</div>
 	</wicket:fragment>
 
 	<wicket:fragment wicket:id="new-tile-form-fragment">
-		<form wicket:id="form">
-		<div wicket:id="feedback"></div>
-		tile id: <input wicket:id="tile-id" type="text" size="30" /><br />
-		tile type: <select wicket:id="tile-type"></select><br />
-		tile editor:
-		<div wicket:id="tile-editor"></div>
-		<input wicket:id="add" type="submit" value="ADD" /></form>
-		<br/><br/>
+		<div class="brix-site-new-tile">
+			<form wicket:id="form"><fieldset>
+			
+			<div wicket:id="feedback" class="brix-feedback"></div>
+			
+			<table class="brix-property-edit">
+				<tr>
+					<td class="brix-property-label"><wicket:message key="tileId"/> </td>
+					<td class="brix-property-value"><input wicket:id="tileId" type="text" size="30" /></td>
+				</tr>
+				<tr>
+					<td class="brix-property-label"><wicket:message key="tileType"/></td>
+					<td class="brix-property-value"><select wicket:id="tileType"></select></td>
+				</tr>		
+			</table>
+			
+			<div class="brix-site-tile-editor-container">
+				<div wicket:id="tile-editor"></div>
+			</div>
+			
+			<div class="brix-buttons-left"><div class="brix-buttons-left1">
+				<a class="brix-button" wicket:id="add"><wicket:message key="add"/></a>
+			</div></div>
+			
+			</fieldset></form>
+		</div>
 	</wicket:fragment>
 
 
