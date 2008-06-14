@@ -26,165 +26,165 @@ import brix.web.picker.node.NodeFilter;
 import brix.web.picker.node.NodePickerPanel;
 import brix.web.picker.node.NodeTypeFilter;
 
-
 abstract class EditTab extends NodeManagerPanel
 {
 
-    private boolean codeEditorEnabled = false;
-    private boolean wysiwygEditorEnabled = false;
+	private boolean codeEditorEnabled = false;
+	private boolean wysiwygEditorEnabled = false;
 
-    public EditTab(String id, final IModel<BrixNode> nodeModel)
-    {
-        super(id, nodeModel);
+	public EditTab(String id, final IModel<BrixNode> nodeModel)
+	{
+		super(id, nodeModel);
 
-        Brix brix = getModelObject().getBrix();
-        final boolean useCodepress = brix.getConfig().getAdminConfig().isEnableCodePress();
-        final boolean useWysiwyg = brix.getConfig().getAdminConfig().isEnableWysiwyg();
+		Brix brix = getModelObject().getBrix();
+		final boolean useCodepress = brix.getConfig().getAdminConfig().isEnableCodePress();
+		final boolean useWysiwyg = brix.getConfig().getAdminConfig().isEnableWysiwyg();
 
-        Form<Void> form = new Form<Void>("form");
-        add(form);
+		Form<Void> form = new Form<Void>("form");
+		add(form);
 
-        final ModelBuffer adapter = new ModelBuffer(nodeModel);
-        IModel<String> stringModel = adapter.forProperty("title");
+		final ModelBuffer adapter = new ModelBuffer(nodeModel);
+		IModel<String> stringModel = adapter.forProperty("title");
 
-        form.add(new TextField<String>("title", stringModel));
+		form.add(new TextField<String>("title", stringModel));
 
-        String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
-        NodeFilter filter = new NodeTypeFilter(TemplateSiteNodePlugin.TYPE);
-        form.add(new NodePickerPanel("templatePicker", adapter.forNodeProperty("template"),
-            workspace, filter));
+		String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
+		NodeFilter filter = new NodeTypeFilter(TemplateSiteNodePlugin.TYPE);
 
-        IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
-        form.add(new CheckBox("requiresSSL", booleanModel));
-        
-        stringModel = adapter.forProperty("dataAsString");
-        TextArea<String> content = new TextArea<String>("content", stringModel);
-        form.add(content);
+		IModel<BrixNode> model = adapter.forNodeProperty("template");
 
-        if (useCodepress)
-        {
-            content.add(new CodePressEnabler("html", true)
-            {
-                @Override
-                public boolean isEnabled(Component<?> component)
-                {
-                    return codeEditorEnabled;
-                }
-            });
-        }
-        if (useWysiwyg)
-        {
-            content.add(new TinyMceEnabler()
-            {
-                @Override
-                public boolean isEnabled(Component<?> component)
-                {
-                    return wysiwygEditorEnabled;
-                }
-            });
-        }
-        form.add(new ContainerFeedbackPanel("feedback", this));
+		form.add(new NodePickerPanel("templatePicker", model, workspace, filter));
 
-        form.add(new DisableEditorsButton("disable-editors"));
-        form.add(new EnableCodeEditorButton("enable-code-editor").setVisible(useCodepress));
-        form.add(new EnableWysiwygEditorButton("enable-wysiwig-editor")
-            .setVisibilityAllowed(useWysiwyg));
+		IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
+		form.add(new CheckBox("requiresSSL", booleanModel));
 
-        form.add(new SubmitLink<Void>("save")
-        {
-            @Override
-            public void onSubmit()
-            {
-                JcrNode node = nodeModel.getObject();
-                node.checkout();
-                adapter.apply();
-                node.save();
-                node.checkin();
+		stringModel = adapter.forProperty("dataAsString");
+		TextArea<String> content = new TextArea<String>("content", stringModel);
+		form.add(content);
 
-                getSession().info(getString("status.saved"));
-                goBack();
-            }
-        });
+		if (useCodepress)
+		{
+			content.add(new CodePressEnabler("html", true)
+			{
+				@Override
+				public boolean isEnabled(Component<?> component)
+				{
+					return codeEditorEnabled;
+				}
+			});
+		}
+		if (useWysiwyg)
+		{
+			content.add(new TinyMceEnabler()
+			{
+				@Override
+				public boolean isEnabled(Component<?> component)
+				{
+					return wysiwygEditorEnabled;
+				}
+			});
+		}
+		form.add(new ContainerFeedbackPanel("feedback", this));
 
-        form.add(new Link<Void>("cancel")
-        {
+		form.add(new DisableEditorsButton("disable-editors"));
+		form.add(new EnableCodeEditorButton("enable-code-editor").setVisible(useCodepress));
+		form.add(new EnableWysiwygEditorButton("enable-wysiwig-editor").setVisibilityAllowed(useWysiwyg));
 
-            @Override
-            public void onClick()
-            {
-                getSession().info(getString("status.cancelled"));
-                goBack();
-            }
+		form.add(new SubmitLink<Void>("save")
+		{
+			@Override
+			public void onSubmit()
+			{
+				JcrNode node = nodeModel.getObject();
+				node.checkout();
+				adapter.apply();
+				node.save();
+				node.checkin();
 
-        });
-    }
+				getSession().info(getString("status.saved"));
+				goBack();
+			}
+		});
 
-    private class EnableCodeEditorButton extends Button<Void>
-    {
-        public EnableCodeEditorButton(String id)
-        {
-            super(id);
-            setDefaultFormProcessing(false);
-        }
+		form.add(new Link<Void>("cancel")
+		{
 
-        @Override
-        public void onSubmit()
-        {
-            codeEditorEnabled = true;
-            wysiwygEditorEnabled = false;
-        }
+			@Override
+			public void onClick()
+			{
+				getSession().info(getString("status.cancelled"));
+				goBack();
+			}
 
-        @Override
-        public boolean isEnabled()
-        {
-            return codeEditorEnabled == false;
-        }
-    }
+		});
+	}
 
-    private class EnableWysiwygEditorButton extends Button<Void>
-    {
-        public EnableWysiwygEditorButton(String id)
-        {
-            super(id);
-            setDefaultFormProcessing(false);
-        }
+	private class EnableCodeEditorButton extends Button<Void>
+	{
+		public EnableCodeEditorButton(String id)
+		{
+			super(id);
+			setDefaultFormProcessing(false);
+		}
 
-        @Override
-        public void onSubmit()
-        {
-            codeEditorEnabled = false;
-            wysiwygEditorEnabled = true;
-        }
+		@Override
+		public void onSubmit()
+		{
+			codeEditorEnabled = true;
+			wysiwygEditorEnabled = false;
+		}
 
-        @Override
-        public boolean isEnabled()
-        {
-            return wysiwygEditorEnabled == false;
-        }
-    }
+		@Override
+		public boolean isEnabled()
+		{
+			return codeEditorEnabled == false;
+		}
+	}
 
-    private class DisableEditorsButton extends Button<Void>
-    {
-        public DisableEditorsButton(String id)
-        {
-            super(id);
-            setDefaultFormProcessing(false);
-        }
+	private class EnableWysiwygEditorButton extends Button<Void>
+	{
+		public EnableWysiwygEditorButton(String id)
+		{
+			super(id);
+			setDefaultFormProcessing(false);
+		}
 
-        @Override
-        public void onSubmit()
-        {
-            codeEditorEnabled = false;
-            wysiwygEditorEnabled = false;
-        }
+		@Override
+		public void onSubmit()
+		{
+			codeEditorEnabled = false;
+			wysiwygEditorEnabled = true;
+		}
 
-        @Override
-        public boolean isEnabled()
-        {
-            return wysiwygEditorEnabled == true || codeEditorEnabled == true;
-        }
-    }
+		@Override
+		public boolean isEnabled()
+		{
+			return wysiwygEditorEnabled == false;
+		}
+	}
 
-    abstract void goBack();
-    
+	private class DisableEditorsButton extends Button<Void>
+	{
+		public DisableEditorsButton(String id)
+		{
+			super(id);
+			setDefaultFormProcessing(false);
+		}
+
+		@Override
+		public void onSubmit()
+		{
+			codeEditorEnabled = false;
+			wysiwygEditorEnabled = false;
+		}
+
+		@Override
+		public boolean isEnabled()
+		{
+			return wysiwygEditorEnabled == true || codeEditorEnabled == true;
+		}
+	}
+
+	abstract void goBack();
+
 }

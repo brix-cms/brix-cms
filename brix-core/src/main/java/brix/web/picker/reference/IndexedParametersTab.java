@@ -33,9 +33,10 @@ import com.inmethod.grid.column.editable.EditablePropertyColumn;
 import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 
-public abstract class IndexedParametersTab extends Panel
+public abstract class IndexedParametersTab extends Panel<Void>
 {
-
+	private AjaxLink<?> removeSelected;
+	
     public IndexedParametersTab(String id)
     {
         super(id);
@@ -46,15 +47,15 @@ public abstract class IndexedParametersTab extends Panel
         feedback.setOutputMarkupId(true);
         add(feedback);
 
-        Form newForm = new Form("newForm", new CompoundPropertyModel(new PropertyModel(this,
+        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(this,
                 "newEntry")));
         add(newForm);
 
-        newForm.add(new TextField("value").setRequired(true));
-        newForm.add(new AjaxButton("add")
+        newForm.add(new TextField<String>("value").setRequired(true));
+        newForm.add(new AjaxButton<Void>("add")
         {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form form)
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form)
             {
                 dataSource.addEntry(newEntry);
                 dataSource.storeToPageParameters();
@@ -117,14 +118,27 @@ public abstract class IndexedParametersTab extends Panel
             }
         }.setInitialSize(5).setSizeUnit(SizeUnit.EM).setResizable(false));
 
-        final DataGrid grid = new DataGrid("grid", dataSource, columns);
+        final DataGrid grid = new DataGrid("grid", dataSource, columns)
+        {
+        	@Override
+        	public void onItemSelectionChanged(IModel item, boolean newValue)
+        	{
+        		AjaxRequestTarget target = AjaxRequestTarget.get();
+        		if (target != null)
+        		{
+        			target.addComponent(removeSelected);
+        		}
+        		super.onItemSelectionChanged(item, newValue);
+        	}
+        };
+        
         grid.setRowsPerPage(Integer.MAX_VALUE);
         grid.setAllowSelectMultiple(true);
         grid.setContentHeight(14, SizeUnit.EM);
         grid.setSelectToEdit(false);
         add(grid);
 
-        add(new AjaxLink("removeSelected")
+        add(removeSelected = new AjaxLink<Void>("removeSelected")
         {
             @Override
             public void onClick(AjaxRequestTarget target)
@@ -147,16 +161,21 @@ public abstract class IndexedParametersTab extends Panel
                     target.appendJavascript("alert('" + getString("noItemsSelected") + "');");
                 }
             }
+            @Override
+            public boolean isEnabled()
+            {
+            	return !grid.getSelectedItems().isEmpty();
+            }
         });
     }
 
-    private abstract class MovePanel extends Panel
+    private abstract class MovePanel extends Panel<Entry>
     {
-        public MovePanel(String id, IModel model)
+        public MovePanel(String id, IModel<Entry> model)
         {
             super(id, model);
 
-            add(new AjaxLink("up")
+            add(new AjaxLink<Void>("up")
             {
                 @Override
                 public boolean isEnabled()
@@ -173,7 +192,7 @@ public abstract class IndexedParametersTab extends Panel
                 }
             });
 
-            add(new AjaxLink("down")
+            add(new AjaxLink<Void>("down")
             {
                 @Override
                 public boolean isEnabled()
@@ -193,7 +212,7 @@ public abstract class IndexedParametersTab extends Panel
 
         private Entry getEntry()
         {
-            return (Entry)getModelObject();
+            return getModelObject();
         }
 
         protected abstract DataGrid getGrid();
@@ -214,7 +233,7 @@ public abstract class IndexedParametersTab extends Panel
         public IModel model(Object object)
         {
             // FIXME: Code duplication
-            return new Model((Serializable)object)
+            return new Model<Serializable>((Serializable)object)
             {
                 @Override
                 public boolean equals(Object obj)

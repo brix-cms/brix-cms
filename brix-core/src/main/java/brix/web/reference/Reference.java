@@ -231,6 +231,18 @@ public class Reference implements Serializable, IDetachable
         }
     }
 
+    public void makeEmpty()
+    {
+    	if (type == Type.URL)
+    	{
+    		setUrl(null);
+    	}
+    	else if (type == Type.NODE)
+        {
+    		getNodeModel().setObject(null);
+        }
+    }
+    
     public boolean isEmpty()
     {
         if (type == Type.URL)

@@ -45,7 +45,7 @@ public class NodePickerWithButtons extends Panel<BrixNode>
             }
         });
 
-        add(new AjaxLink("ok")
+        add(new AjaxLink<Void>("ok")
         {
             @Override
             public void onClick(AjaxRequestTarget target)
@@ -54,7 +54,7 @@ public class NodePickerWithButtons extends Panel<BrixNode>
             }
         });
 
-        add(new AjaxLink("cancel")
+        add(new AjaxLink<Void>("cancel")
         {
             @Override
             public void onClick(AjaxRequestTarget target)

@@ -5,13 +5,15 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
-public class NodePickerModalWindow extends ModalWindow
+import brix.jcr.wrapper.BrixNode;
+
+public class NodePickerModalWindow extends ModalWindow<BrixNode>
 {
 
     private final String workspaceName;
     private final NodeFilter nodeFilter;
 
-    public NodePickerModalWindow(String id, IModel /* <Reference> */model, String workspaceName,
+    public NodePickerModalWindow(String id, IModel<BrixNode> model, String workspaceName,
             NodeFilter nodeFilter)
     {
         super(id);
@@ -24,7 +26,7 @@ public class NodePickerModalWindow extends ModalWindow
         setInitialWidth(64);
         setUseInitialHeight(false);
         setResizable(false);
-        setTitle(new ResourceModel("title"));
+        setTitle(new ResourceModel("node-picker-title"));
     }
 
     private void initContent()

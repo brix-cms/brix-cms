@@ -1,7 +1,5 @@
 package brix.web.picker.node;
 
-import java.io.Serializable;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -15,7 +13,7 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 
-public class NodePickerPanel extends FormComponentPanel
+public class NodePickerPanel extends FormComponentPanel<BrixNode>
 {
 
     public NodePickerPanel(String id, String workspaceName, NodeFilter nodeFilter)
@@ -25,7 +23,7 @@ public class NodePickerPanel extends FormComponentPanel
         this.nodeFilter = nodeFilter;
     }
 
-    public NodePickerPanel(String id, IModel model, String workspaceName, NodeFilter nodeFilter)
+    public NodePickerPanel(String id, IModel<BrixNode> model, String workspaceName, NodeFilter nodeFilter)
     {
         super(id, model);
         this.workspaceName = workspaceName;
@@ -66,11 +64,18 @@ public class NodePickerPanel extends FormComponentPanel
     private void init()
     {
         add(newModalWindow(MODAL_WINDOW_ID));
-        final Label label = new Label("label", newLabelModel());
-        label.setOutputMarkupId(true);
+        final Label<?> label = new Label<String>("label", newLabelModel())
+        {
+        	@Override
+        	public boolean isVisible()
+        	{
+        		return NodePickerPanel.this.getModelObject() != null;
+        	}
+        };
+        setOutputMarkupId(true);
         add(label);
 
-        add(new AjaxLink("edit")
+        add(new AjaxLink<Void>("edit")
         {
             @Override
             public void onClick(AjaxRequestTarget target)
@@ -80,12 +85,26 @@ public class NodePickerPanel extends FormComponentPanel
                 {
                     public void onClose(AjaxRequestTarget target)
                     {
-                        target.addComponent(label);
+                        target.addComponent(NodePickerPanel.this);
                         NodePickerPanel.this.onClose(target);
                     }
                 });
                 getModalWindow().show(target);
             }
+        });
+        
+        add(new AjaxLink<Void>("clear") {
+        	@Override
+        	public void onClick(AjaxRequestTarget target)
+        	{
+        		NodePickerPanel.this.setModelObject(null);
+        		target.addComponent(NodePickerPanel.this);
+        	}
+        	@Override
+        	public boolean isEnabled()
+        	{
+        		return NodePickerPanel.this.getModelObject() != null;
+        	}
         });
     }
 
@@ -99,14 +118,14 @@ public class NodePickerPanel extends FormComponentPanel
         return (NodePickerModalWindow)get(MODAL_WINDOW_ID);
     }
 
-    protected IModel newLabelModel()
+    protected IModel<String> newLabelModel()
     {
-        return new Model()
+        return new Model<String>()
         {
             @Override
-            public Serializable getObject()
+            public String getObject()
             {
-                IModel model = NodePickerPanel.this.getModel();
+                IModel<BrixNode> model = NodePickerPanel.this.getModel();
                 BrixNode node = (BrixNode)model.getObject();
                 return node != null ? SitePlugin.get().pathForNode(node) : "";
             }
@@ -114,7 +133,7 @@ public class NodePickerPanel extends FormComponentPanel
     }
 
     
-    protected Component newModalWindow(String id)
+    protected Component<?> newModalWindow(String id)
     {
         return new NodePickerModalWindow(id, getModel(), getWorkspaceName(), getNodeFilter()) {
             @Override

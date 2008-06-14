@@ -1,7 +1,11 @@
 <wicket:panel>
-	<strong wicket:id="label"></strong>
-	<a wicket:id="edit">edit</a>
+	<span class="brix-reference-editor-panel">
+		<span class="brix-reference-editor-panel-label" wicket:id="label"></span>
+		<a wicket:id="edit" class="brix-button-thin"><wicket:message key="edit"/></a>
+		<a wicket:id="clear" class="brix-button-thin"><wicket:message key="clear"/></a>
+	</span>
 	
 	<div wicket:id="modalWindow" style="display: inline">
 	</div>
+	
 </wicket:panel>

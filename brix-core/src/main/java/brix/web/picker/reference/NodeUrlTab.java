@@ -6,78 +6,91 @@ import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.web.picker.node.NodePicker;
 import brix.web.reference.Reference;
+import brix.web.reference.Reference.Type;
 
-public abstract class NodeUrlTab extends Panel
+public abstract class NodeUrlTab extends Panel<Reference>
 {
 
-    public NodeUrlTab(String id, IModel /* Reference */model)
-    {
-        super(id, model);
+	public NodeUrlTab(String id, IModel<Reference> model)
+	{
+		super(id, model);
 
-        setOutputMarkupId(true);
+		setOutputMarkupId(true);
 
-        List<Reference.Type> choices = Arrays.asList(Reference.Type.values());
-        DropDownChoice choice;
-        add(choice = new DropDownChoice("type", new PropertyModel(this.getModel(), "type"), choices)
-        {
-            @Override
-            public boolean isVisible()
-            {
-                return getConfiguration().isAllowNodePicker() &&
-                        getConfiguration().isAllowURLEdit();
-            }
-        });
+		List<Reference.Type> choices = Arrays.asList(Reference.Type.values());
+		DropDownChoice<Reference.Type> choice;
 
-        choice.add(new AjaxFormComponentUpdatingBehavior("onchange")
-        {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target)
-            {
-                target.addComponent(NodeUrlTab.this);
-            }
-        });
+		IChoiceRenderer<Reference.Type> renderer = new IChoiceRenderer<Reference.Type>()
+		{
+			public Object getDisplayValue(Type object)
+			{
+				return getString(object.toString());
+			}
 
-        add(new NodePicker("nodePicker", getReference().getNodeModel(), getConfiguration()
-                .getWorkspaceName(), getConfiguration().getNodeFilter())
-        {
-            @Override
-            public boolean isDisplayFiles()
-            {
-                return getConfiguration().isDisplayFiles();
-            }
+			public String getIdValue(Type object, int index)
+			{
+				return object.toString();
+			}
+		};
 
-            @Override
-            public boolean isVisible()
-            {
-                return getConfiguration().isAllowNodePicker() &&
-                        getReference().getType() == Reference.Type.NODE;
-            }
-        });
+		add(choice = new DropDownChoice<Reference.Type>("type", new PropertyModel<Reference.Type>(this.getModel(),
+				"type"), choices, renderer)
+		{
+			@Override
+			public boolean isVisible()
+			{
+				return getConfiguration().isAllowNodePicker() && getConfiguration().isAllowURLEdit();
+			}
+		});
 
-        add(new UrlPanel("urlPanel", new PropertyModel(getModel(), "url"))
-        {
-            @Override
-            public boolean isVisible()
-            {
-                return getConfiguration().isAllowURLEdit() &&
-                        getReference().getType() == Reference.Type.URL;
-            }
-        });
+		choice.add(new AjaxFormComponentUpdatingBehavior("onchange")
+		{
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				target.addComponent(NodeUrlTab.this);
+			}
+		});
 
+		add(new NodePicker("nodePicker", getReference().getNodeModel(), getConfiguration().getWorkspaceName(),
+				getConfiguration().getNodeFilter())
+		{
+			@Override
+			public boolean isDisplayFiles()
+			{
+				return getConfiguration().isDisplayFiles();
+			}
 
-    }
+			@Override
+			public boolean isVisible()
+			{
+				return getConfiguration().isAllowNodePicker() && getReference().getType() == Reference.Type.NODE;
+			}
+		});
 
-    private Reference getReference()
-    {
-        return (Reference)getModelObject();
-    }
+		add(new UrlPanel("urlPanel", new PropertyModel<String>(getModel(), "url"))
+		{
+			@Override
+			public boolean isVisible()
+			{
+				return getConfiguration().isAllowURLEdit() && getReference().getType() == Reference.Type.URL;
+			}
+		});
 
-    protected abstract ReferenceEditorConfiguration getConfiguration();
+	}
+
+	private Reference getReference()
+	{
+		return (Reference) getModelObject();
+	}
+
+	protected abstract ReferenceEditorConfiguration getConfiguration();
 
 }

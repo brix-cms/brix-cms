@@ -114,7 +114,7 @@ public class NodePicker extends Panel
             }
         };
         grid.getTree().setRootLess(true);
-        grid.setContentHeight(14, SizeUnit.EM);
+        grid.setContentHeight(18, SizeUnit.EM);
 
         add(grid);
     };
