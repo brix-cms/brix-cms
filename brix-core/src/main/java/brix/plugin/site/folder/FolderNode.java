@@ -26,9 +26,9 @@ public class FolderNode extends BrixNode
 
         /** {@inheritDoc} */
         @Override
-        public JcrNode wrap(JcrNode node)
+        public JcrNode wrap(Node node, JcrSession session)
         {
-            return new FolderNode(node, node.getSession());
+            return new FolderNode(node, session);
         }
 
     };

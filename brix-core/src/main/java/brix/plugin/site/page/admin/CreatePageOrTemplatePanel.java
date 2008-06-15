@@ -87,7 +87,8 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
             
             parent.save();
 
-            SitePlugin.get().selectNode(this, node);         
+            SitePlugin.get().selectNode(this, node);
+            SitePlugin.get().refreshNavigationTree(this);
         }
     }
 

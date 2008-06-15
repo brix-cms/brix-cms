@@ -22,9 +22,9 @@ public class Template extends AbstractContainer
         }
 
         @Override
-        public JcrNode wrap(JcrNode node)
+        public JcrNode wrap(Node node, JcrSession session)
         {
-            return new Template(node, node.getSession());
+            return new Template(node, session);
         }
 
         @Override

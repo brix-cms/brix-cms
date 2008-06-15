@@ -1,5 +1,7 @@
 package brix.jcr.wrapper;
 
+import javax.jcr.Node;
+
 import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -17,14 +19,14 @@ public class BrixResourceNode extends BrixFileNode
         }
 
         @Override
-        public JcrNode wrap(JcrNode node)
+        public JcrNode wrap(Node node, JcrSession session)
         {
-            return new BrixResourceNode(node, node.getSession());
+            return new BrixResourceNode(node, session);
         }
     };
 
 
-    public BrixResourceNode(JcrNode delegate, JcrSession session)
+    public BrixResourceNode(Node delegate, JcrSession session)
     {
         super(delegate, session);
     }

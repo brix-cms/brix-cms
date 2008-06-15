@@ -44,6 +44,11 @@ public class SessionBehavior implements Behavior
 
     public JcrNode wrap(Node node, JcrSession session)
     {
+    	if (node instanceof JcrNode)
+    	{
+    		return (JcrNode) node;
+    	}
+    	
         JcrNode n = new NodeWrapper(node, session);
 
         Collection<JcrNodeWrapperFactory> factories = brix.getConfig().getRegistry().lookupCollection(
@@ -53,13 +58,13 @@ public class SessionBehavior implements Behavior
         {
             if (factory.canWrap(n))
             {
-                return factory.wrap(n);
+                return factory.wrap(node, session);
             }
         }
 
         if (BrixResourceNode.FACTORY.canWrap(n))
         {
-            return BrixResourceNode.FACTORY.wrap(n);
+            return BrixResourceNode.FACTORY.wrap(node, session);
         }
 
         return new BrixNode(n, session);

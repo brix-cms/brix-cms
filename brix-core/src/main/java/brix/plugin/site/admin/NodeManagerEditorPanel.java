@@ -43,7 +43,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			protected void onPathClicked(Path path)
 			{
 				BrixNode node = (BrixNode) getNode().getSession().getItem(path.toString());
-				selectNode(node);
+				selectNode(node, false);
 			}
 			@Override
 			protected String getRootNodeName()
@@ -64,6 +64,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 					protected void onLeave()
 					{
 						replaceWith(NodeManagerEditorPanel.this);
+						SitePlugin.get().refreshNavigationTree(this);
 					}
 				};
 				NodeManagerEditorPanel.this.replaceWith(renamePanel);
@@ -113,14 +114,12 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			{
 				BrixNode node = getNode();
 				BrixNode parent = (BrixNode) node.getParent();
-
-				selectNode(parent);
-
+				
 				node.remove();
-
 				try
 				{
 					parent.save();
+					selectNode(parent, true);
 				}
 				catch (JcrException e)
 				{
@@ -129,8 +128,8 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 						parent.getSession().refresh(false);
 						NodeManagerEditorPanel.this.getModel().detach();
 						// parent.refresh(false);
-						getSession().error("Couldn't delete node. Other nodes contain references to this node.");
-						selectNode(getNode());
+						selectNode(NodeManagerEditorPanel.this.getModelObject(), true);
+						getSession().error(NodeManagerEditorPanel.this.getString("referenceIntegrityError"));	
 					}
 					else
 					{
@@ -162,9 +161,9 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 		return getModelObject();
 	}
 
-	private void selectNode(BrixNode node)
+	private void selectNode(BrixNode node, boolean refresh)
 	{
-		SitePlugin.get().selectNode(this, node);
+		SitePlugin.get().selectNode(this, node, refresh);
 	}
 
 	private List<ITab> getTabs(IModel<BrixNode> nodeModel)

@@ -345,12 +345,47 @@ public class SitePlugin implements Plugin
 
 	private MarkupCache markupCache = new MarkupCache();
 	
+	private NodeManagerContainerPanel findContainer(Component<?> component)
+	{
+		if (component instanceof NodeManagerContainerPanel)
+		{
+			return (NodeManagerContainerPanel) component;
+		}
+		else
+		{
+			return component.findParent(NodeManagerContainerPanel.class);
+		}
+	}
+	
 	public void selectNode(Component<?> component, BrixNode node)
 	{
-		NodeManagerContainerPanel panel = component.findParent(NodeManagerContainerPanel.class);
+		selectNode(component, node, false);
+	}
+	
+	public void selectNode(Component<?> component, BrixNode node, boolean refreshTree)
+	{
+		NodeManagerContainerPanel panel = findContainer(component);
 		if (panel != null)
 		{
 			panel.selectNode(node);
+			panel.updateTree();
+		}
+		else
+		{
+			throw new IllegalStateException("Can't call selectNode with component outside of the hierarchy.");
+		}
+	}
+	
+	public void refreshNavigationTree(Component<?> component)
+	{
+		NodeManagerContainerPanel panel = findContainer(component);
+		if (panel != null)
+		{
+			panel.updateTree();
+		}
+		else
+		{
+			throw new IllegalStateException("Can't call refreshNaviagtionTree with component outside of the hierarchy.");
 		}
 	}
 }

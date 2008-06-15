@@ -104,8 +104,8 @@ public class UploadResourcesPanel extends NodeManagerPanel
             }
         }
 
-        
-        SitePlugin.get().selectNode(this, parentNode);
+                
+        SitePlugin.get().selectNode(this, parentNode, true);
     }
 
     @Override

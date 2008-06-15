@@ -29,9 +29,9 @@ public class FragmentsContainerNode extends BrixNode implements TileContainer
 
         /** {@inheritDoc} */
         @Override
-        public JcrNode wrap(JcrNode node)
+        public JcrNode wrap(Node node, JcrSession session)
         {
-            return new FragmentsContainerNode(node, node.getSession());
+            return new FragmentsContainerNode(node, session);
         }
 
         @Override

@@ -2,7 +2,6 @@ package brix.plugin.site.page;
 
 import javax.jcr.Node;
 import javax.jcr.Session;
-import javax.jcr.Workspace;
 
 import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.RepositoryUtil;
@@ -23,9 +22,9 @@ public class Page extends AbstractContainer
         }
 
         @Override
-        public JcrNode wrap(JcrNode node)
+        public JcrNode wrap(Node node, JcrSession session)
         {
-            return new Page(node, node.getSession());
+            return new Page(node, session);
         }
 
         @Override
