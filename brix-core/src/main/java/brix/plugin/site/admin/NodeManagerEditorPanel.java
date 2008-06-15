@@ -63,8 +63,8 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 					@Override
 					protected void onLeave()
 					{
-						replaceWith(NodeManagerEditorPanel.this);
 						SitePlugin.get().refreshNavigationTree(this);
+						replaceWith(NodeManagerEditorPanel.this);						
 					}
 				};
 				NodeManagerEditorPanel.this.replaceWith(renamePanel);
