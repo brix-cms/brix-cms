@@ -1,7 +1,5 @@
 package brix.plugin.site.resource;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,8 +17,8 @@ import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.resource.admin.ManageResourceNodeTabFactory;
 import brix.plugin.site.resource.admin.UploadResourcesPanel;
-import brix.plugin.site.resource.managers.ImageResourceManager;
-import brix.plugin.site.resource.managers.TextResourceManager;
+import brix.plugin.site.resource.managers.image.ImageNodeTabFactory;
+import brix.plugin.site.resource.managers.text.TextNodeTabFactory;
 
 public class ResourceNodePlugin implements SiteNodePlugin
 {
@@ -29,9 +27,10 @@ public class ResourceNodePlugin implements SiteNodePlugin
 
     public ResourceNodePlugin(SitePlugin sp)
     {
-        registerBuiltInManagers();
         registerDefaultMimeTypes();
         sp.registerManageNodeTabFactory(new ManageResourceNodeTabFactory());
+        sp.registerManageNodeTabFactory(new ImageNodeTabFactory());
+        sp.registerManageNodeTabFactory(new TextNodeTabFactory());
     }
 
     public String getNodeType()
@@ -57,7 +56,7 @@ public class ResourceNodePlugin implements SiteNodePlugin
 //    	}
     }
 
-    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
+    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
     {
         return new UploadResourcesPanel(id, parentNode, goBack);
     }
@@ -104,34 +103,6 @@ public class ResourceNodePlugin implements SiteNodePlugin
         registerMimeType("image/png", "png");
         registerMimeType("image/gif", "gif");
     }
-
-    private void registerBuiltInManagers()
-    {
-        registerResourceManager(new ImageResourceManager());
-        registerResourceManager(new TextResourceManager());
-    }
-
-    public ResourceManager getResourceManagerForMimeType(String mimeType)
-    {
-        if (mimeType != null)
-        {
-            for (ResourceManager manager : resourceManagers)
-            {
-                if (manager.handles(mimeType))
-                {
-                    return manager;
-                }
-            }
-        }
-        return null;
-    }
-
-    public void registerResourceManager(ResourceManager type)
-    {
-        resourceManagers.add(0, type);
-    }
-
-    private final List<ResourceManager> resourceManagers = new ArrayList<ResourceManager>();
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
     {

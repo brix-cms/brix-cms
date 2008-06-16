@@ -1,10 +1,9 @@
-package brix.plugin.site.page.admin;
+package brix.plugin.site.admin.convert;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.admin.ConvertNodePanel;
 
 public class ConvertTab extends Panel<BrixNode>
 {

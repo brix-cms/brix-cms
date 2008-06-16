@@ -1,4 +1,4 @@
-package brix.plugin.site.admin;
+package brix.plugin.site.admin.convert;
 
 import java.util.Collection;
 
@@ -11,6 +11,7 @@ import brix.auth.Action;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.auth.ConvertNodeAction;
 import brix.web.util.TextLink;
 
@@ -53,6 +54,7 @@ public class ConvertNodePanel extends NodeManagerPanel
                         {
                             final String type = (String)getModelObject();
                             convertToType(type);
+                            getSession().info(getString("nodeConverted"));
                         }
                     });
                 }

@@ -93,23 +93,6 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
             }
 
         });
-        
-
-        tabs.add(new AbstractTab(new Model<String>("Convert"))
-        {
-
-            @Override
-            public Panel<?> getPanel(String panelId)
-            {
-                return new ConvertTab(panelId, nodeModel);
-            }
-
-            @Override
-            public boolean isVisible()
-            {
-                return hasEditPermission(nodeModel);
-            }
-        });
 
         return tabs;
     }

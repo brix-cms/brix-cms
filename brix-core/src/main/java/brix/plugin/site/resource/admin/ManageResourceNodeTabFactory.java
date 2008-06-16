@@ -10,25 +10,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import brix.auth.Action;
-import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
-import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SiteNodeAction;
-import brix.plugin.site.resource.ResourceManager;
 import brix.plugin.site.resource.ResourceNodePlugin;
 
 public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
 {
-
-    private static ResourceManager getManager(IModel<BrixNode> nodeModel)
-    {
-        BrixFileNode node = (BrixFileNode)nodeModel.getObject();
-
-        ResourceNodePlugin plugin = (ResourceNodePlugin)SitePlugin.get().getNodePluginForNode(node);
-
-        return plugin.getResourceManagerForMimeType(node.getMimeType());
-    }
 
     public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
     {
@@ -51,60 +39,12 @@ public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
     {
         List<ITab> tabs = new ArrayList<ITab>();
 
-        tabs.add(new AbstractTab(new Model("View"))
+        tabs.add(new AbstractTab(new Model<String>("Properties"))
         {
             @Override
-            public Panel getPanel(String panelId)
+            public Panel<?> getPanel(String panelId)
             {
-                return getManager(nodeModel).newViewer(panelId, nodeModel);
-            }
-
-            @Override
-            public boolean isVisible()
-            {
-                ResourceManager manager = getManager(nodeModel);
-                return manager != null && manager.hasViewer() && hasViewPermission(nodeModel);
-            }
-
-        });
-
-        tabs.add(new AbstractTab(new Model("Edit"))
-        {
-            @Override
-            public Panel getPanel(String panelId)
-            {
-                return getManager(nodeModel).newEditor(panelId, nodeModel);
-            }
-
-            @Override
-            public boolean isVisible()
-            {
-                ResourceManager manager = getManager(nodeModel);
-                return manager != null && manager.hasEditor() && hasEditPermission(nodeModel);
-            }
-        });
-
-        tabs.add(new AbstractTab(new Model("Properties"))
-        {
-            @Override
-            public Panel getPanel(String panelId)
-            {
-                return new PropertiesTab(panelId, nodeModel);
-            }
-
-            @Override
-            public boolean isVisible()
-            {
-                return hasEditPermission(nodeModel);
-            }
-        });
-
-        tabs.add(new AbstractTab(new Model("Download"))
-        {
-            @Override
-            public Panel getPanel(String panelId)
-            {
-                return new DownloadTab(panelId, nodeModel);
+                return new ViewPropertiesTab(panelId, nodeModel);
             }
 
             @Override
@@ -121,13 +61,6 @@ public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
     {
         Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
             SiteNodeAction.Type.NODE_VIEW, model.getObject());
-        return model.getObject().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
-    }
-
-    private static boolean hasEditPermission(IModel<BrixNode> model)
-    {
-        Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-            SiteNodeAction.Type.NODE_EDIT, model.getObject());
         return model.getObject().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
     }
 

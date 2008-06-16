@@ -69,14 +69,17 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin
 
     public NodeConverter getConverterForNode(BrixNode node)
     {
-        BrixFileNode fileNode = (BrixFileNode)node;
-        if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType()))
-        {
-            String mimeType = fileNode.getMimeType();
-            if (mimeType != null &&
-                (mimeType.startsWith("text/") || mimeType.equals("application/xml")))
-                return new FromResourceConverter(getNodeType());
-        }
+    	if (node instanceof BrixFileNode)
+    	{
+    		BrixFileNode fileNode = (BrixFileNode)node;
+    		if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType()))
+    		{
+    			String mimeType = fileNode.getMimeType();
+    			if (mimeType != null &&
+    					(mimeType.startsWith("text/") || mimeType.equals("application/xml")))
+    				return new FromResourceConverter(getNodeType());
+    		}
+    	}
 
         return null;
     }

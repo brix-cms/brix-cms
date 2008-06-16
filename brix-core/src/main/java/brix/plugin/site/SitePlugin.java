@@ -23,6 +23,8 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupCache;
 import brix.plugin.site.admin.NodeManagerContainerPanel;
+import brix.plugin.site.admin.convert.ConvertNodePanel;
+import brix.plugin.site.admin.convert.ConvertNodeTabFactory;
 import brix.plugin.site.fallback.FallbackNodePlugin;
 import brix.plugin.site.folder.FolderNodePlugin;
 import brix.plugin.site.resource.ResourceNodePlugin;
@@ -65,6 +67,7 @@ public class SitePlugin implements Plugin
 		this.brix = brix;
 		registerNodePlugin(new FolderNodePlugin(this));
 		registerNodePlugin(new ResourceNodePlugin(this));
+		registerManageNodeTabFactory(new ConvertNodeTabFactory());
 	}
 
 	public void registerManageNodeTabFactory(ManageNodeTabFactory factory)
