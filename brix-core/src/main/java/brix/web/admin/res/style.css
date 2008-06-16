@@ -875,8 +875,8 @@ div.brix-site-view-resource-properties-buttons {
 	float: right;
 }
 
-div.brix-site-view-resource-properties-buttons div.brix-button {
-	margin-left: 0.5em;
+div.brix-site-view-resource-properties-buttons a.brix-button {
+	margin-left: 0.2em;
 }
 
 div.brix-admin div.brix-site-edit-resource-properties {
@@ -884,6 +884,6 @@ div.brix-admin div.brix-site-edit-resource-properties {
 }
 
 div.brix-admin div.brix-site-edit-resource-properties div.brix-buttons-right {
-	margin-top: 0.5em;
-	width: 22em;
+
+
 }
