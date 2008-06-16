@@ -37,11 +37,11 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 	public static List<ITab> getTabs(final IModel<BrixNode> folderModel)
 	{
 		List<ITab> tabs = new ArrayList<ITab>(2);
-		tabs.add(new AbstractTab(new Model("Listing"))
+		tabs.add(new AbstractTab(new Model<String>("Listing"))
 		{
 
 			@Override
-			public Panel getPanel(String panelId)
+			public Panel<?> getPanel(String panelId)
 			{
 				return new ListFolderNodesTab(panelId, folderModel);
 			}
@@ -55,11 +55,11 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 			}
 
 		});
-		tabs.add(new AbstractTab(new Model("Properties"))
+		tabs.add(new AbstractTab(new Model<String>("Properties"))
 		{
 
 			@Override
-			public Panel getPanel(String panelId)
+			public Panel<?> getPanel(String panelId)
 			{
 				return new PropertiesTab(panelId, folderModel);
 			}

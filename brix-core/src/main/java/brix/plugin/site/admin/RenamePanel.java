@@ -1,8 +1,9 @@
 package brix.plugin.site.admin;
 
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -21,7 +22,7 @@ public abstract class RenamePanel extends Panel<BrixNode>
     {
         super(id, model);
 
-        Form< ? > form = new Form<Object>("form");
+        Form< ? > form = new Form<Void>("form");
 
         newName = model.getObject().getName();
         
@@ -31,7 +32,7 @@ public abstract class RenamePanel extends Panel<BrixNode>
         newName.add(new NewNameValidator());
         form.add(newName);
 
-        form.add(new Button<Object>("rename")
+        form.add(new SubmitLink<Void>("rename")
         {
             @Override
             public void onSubmit()
@@ -48,14 +49,14 @@ public abstract class RenamePanel extends Panel<BrixNode>
             }
         });
 
-        form.add(new Button<Object>("cancel")
+        form.add(new Link<Void>("cancel")
         {
             @Override
-            public void onSubmit()
+            public void onClick()
             {
                 onLeave();
             }
-        }.setDefaultFormProcessing(false));
+        });
 
         form.add(new FeedbackPanel("feedback"));
 

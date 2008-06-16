@@ -4,17 +4,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.io.Streams;
 
 import brix.Brix;
@@ -33,17 +36,20 @@ public class UploadResourcesPanel extends NodeManagerPanel
 
     public UploadResourcesPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack)
     {
-        super(id, model);
-        add(new ContainerFeedbackPanel("feedback", this));
+        super(id, model);        
 
-        Form<Void> form = new Form<Void>("form", new CompoundPropertyModel(this))
-        {
-            protected void onSubmit()
-            {
-                processUploads();
-            }
-        };
+        Form<?> form = new Form<UploadResourcesPanel>("form", new CompoundPropertyModel<UploadResourcesPanel>(this));
         add(form);
+        
+        form.add(new ContainerFeedbackPanel("feedback", this));
+        
+        form.add(new SubmitLink<Void>("upload") {
+        	@Override
+        	public void onSubmit()
+        	{
+        		processUploads();
+        	}
+        });
         
         form.add(new Link<Void>("cancel") {
         	@Override
@@ -61,9 +67,8 @@ public class UploadResourcesPanel extends NodeManagerPanel
     {
         final BrixNode parentNode = getNode();
 
-        for (FileUpload upload : uploads)
+        for (final FileUpload upload : uploads)
         {
-
             final String fileName = upload.getClientFileName();
 
             if (parentNode.hasNode(fileName))
@@ -74,7 +79,12 @@ public class UploadResourcesPanel extends NodeManagerPanel
                 }
                 else
                 {
-                    getSession().error("File " + upload.getClientFileName() + " already exists");
+                	class ModelObject implements Serializable {
+                		@SuppressWarnings("unused")
+						private String fileName = upload.getClientFileName(); 
+                	}
+                	
+                    getSession().error(getString("fileExists", new Model<ModelObject>(new ModelObject())));                    
                     continue;
                 }
             }

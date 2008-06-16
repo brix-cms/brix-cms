@@ -887,3 +887,57 @@ div.brix-admin div.brix-site-edit-resource-properties div.brix-buttons-right {
 
 
 }
+
+div.brix-admin div.brix-site-simple-panel {
+	oveflow: hidden;
+	_height: 0.1%;
+}
+
+div.brix-admin div.brix-site-simple-panel1 {
+	border: 1px solid #ddd;
+	border-top: 1px solid #7894BB;
+	float: left;	
+}
+
+div.brix-admin div.brix-site-simple-panel-caption {
+	font-weight: bold;
+	padding: 0.5em;		
+	border-bottom: 1px solid #7894BB;
+	background-color: #F4F4F4;
+	margin-bottom: 0.5em;
+}
+
+div.brix-admin div.brix-site-simple-panel div.brix-feedback {
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+
+div.brix-admin div.brix-site-simple-panel div.brix-buttons-right {
+	margin: 0.5em;	
+}
+
+div.brix-admin div.brix-site-upload-resources {
+	background-color: #f4f4f4;
+	border:1px solid #aaa;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	padding: 0.5em;
+}
+
+div.brix-admin div.brix-site-upload-resources .wicket-mfu-container {
+	padding-top: 0.5em;
+}
+
+div.brix-admin div.brix-site-upload-resources .wicket-mfu-container div.wicket-mfu-caption {
+	border-top-width: 0px;
+}
+
+div.brix-admin div.brix-site-upload-resources .wicket-mfu-container div {
+	border-top: 1px dotted #aaa;
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+}
+
+div.brix-admin div.brix-site-upload-resources .wicket-mfu-container div input {
+	margin-left: 0.5em;
+}

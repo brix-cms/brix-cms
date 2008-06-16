@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -88,11 +87,17 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 					{
 						SiteNodePlugin plugin = item.getModelObject().getPlugin();
 						final Component<?> currentEditor = getEditor();
+						
+						// remember the last editor that is not a create node panel
+						if (lastEditor == null || currentEditor.getMetaData(EDITOR_NODE_TYPE) == null)
+						{
+							lastEditor = currentEditor;
+						}
 						SimpleCallback goBack = new SimpleCallback()
 						{
 							public void execute()
 							{
-								setupEditor(currentEditor);
+								setupEditor(lastEditor);
 							}
 						};
 						Panel<?> panel = plugin.newCreateNodePanel(EDITOR_ID, getNewNodeParent(), goBack);
@@ -135,6 +140,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 
 		}.setReuseItems(false));
 	}
+	
+	private Component<?> lastEditor;
 	
 	private static MetaDataKey<String> EDITOR_NODE_TYPE = new MetaDataKey<String>()
 	{
