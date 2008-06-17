@@ -82,8 +82,7 @@ public class CreateFolderPanel extends Panel<BrixNode>
 			FolderNode node = (FolderNode) parent.addNode(name, "nt:folder");
 			parent.save();
 
-			SitePlugin.get().selectNode(this, node);
-			SitePlugin.get().refreshNavigationTree(this);
+			SitePlugin.get().selectNode(this, node, true);
 		}
 	}
 
