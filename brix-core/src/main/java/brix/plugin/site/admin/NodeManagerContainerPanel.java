@@ -26,6 +26,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import brix.Brix;
 import brix.BrixNodeModel;
 import brix.auth.Action;
+import brix.jcr.JcrUtil;
+import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SiteNodePlugin;
@@ -34,25 +36,80 @@ import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.folder.FolderNode;
 import brix.web.tree.AbstractJcrTreeNode;
 import brix.web.tree.AbstractTreeModel;
+import brix.workspace.Workspace;
 
 public class NodeManagerContainerPanel extends NodeManagerPanel
 {
 
 	private Component<?> editor;
-	private final String workspaceName;
-	private final BaseTree tree;
 
-	private static BrixNode getRootNode(String workspaceName)
+	private final BaseTree tree;
+	private IModel<Workspace> workspaceModel;
+
+	// used to detect whether workspace was changed between the requests (node
+	// needs to be updated)
+	// or node has been changed (workspace needs to be updated)
+	private String oldWorkspaceId;
+
+	private static BrixNode getRootNode(IModel<Workspace> workspaceModel)
 	{
-		BrixNode root = (BrixNode) Brix.get().getCurrentSession(workspaceName).getItem(
+		BrixNode root = (BrixNode) Brix.get().getCurrentSession(workspaceModel.getObject().getId()).getItem(
 				SitePlugin.get().getSiteRootPath());
 		return root;
 	}
 
-	public NodeManagerContainerPanel(String id, String workspaceName)
+	@Override
+	protected void onBeforeRender()
 	{
-		super(id, new BrixNodeModel(getRootNode(workspaceName)));
-		this.workspaceName = workspaceName;
+		Workspace workspace = workspaceModel.getObject();
+		BrixNode node = getModelObject();
+
+		String nodeWorkspaceName = node.getSession().getWorkspace().getName();
+		if (!nodeWorkspaceName.equals(workspace.getId()))
+		{
+			// we have to either update node or workspace
+			if (oldWorkspaceId != null && workspace.getId().equals(oldWorkspaceId))
+			{
+				// the node changed, need to update the workspace
+				Workspace newWorkspace = node.getBrix().getWorkspaceManager().getWorkspace(nodeWorkspaceName);
+				workspaceModel.setObject(newWorkspace);
+			}
+			else
+			{
+				// the workspace has changed, update the node
+				// 1 try to get node with same UUID, 2 try to get node with same
+				// path, 3 get root node
+				JcrSession newSession = node.getBrix().getCurrentSession(workspace.getId());
+				String uuid = node.getUUID();
+				BrixNode newNode = JcrUtil.getNodeByUUID(newSession, uuid);
+				if (newNode == null)
+				{
+					String path = node.getPath();
+					if (newSession.getRootNode().hasNode(path.substring(1)))
+					{
+						newNode = (BrixNode)newSession.getItem(path);
+					}
+				}
+				if (newNode == null)
+				{
+					newNode = getRootNode(workspaceModel);
+				}
+				selectNode(newNode);
+				tree.invalidateAll();
+				tree.getTreeState().expandNode(((TreeModel)tree.getModelObject()).getRoot());
+			}
+		}
+		;
+
+		super.onBeforeRender();
+
+		oldWorkspaceId = workspace.getId();
+	}
+
+	public NodeManagerContainerPanel(String id, IModel<Workspace> workspaceModel)
+	{
+		super(id, new BrixNodeModel(getRootNode(workspaceModel)));
+		this.workspaceModel = workspaceModel;
 
 		editor = new WebMarkupContainer<Void>(EDITOR_ID);
 		add(editor);
@@ -87,8 +144,9 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 					{
 						SiteNodePlugin plugin = item.getModelObject().getPlugin();
 						final Component<?> currentEditor = getEditor();
-						
-						// remember the last editor that is not a create node panel
+
+						// remember the last editor that is not a create node
+						// panel
 						if (lastEditor == null || currentEditor.getMetaData(EDITOR_NODE_TYPE) == null)
 						{
 							lastEditor = currentEditor;
@@ -104,6 +162,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 						panel.setMetaData(EDITOR_NODE_TYPE, plugin.getNodeType());
 						setupEditor(panel);
 					}
+
 					@Override
 					protected void onComponentTag(ComponentTag tag)
 					{
@@ -140,9 +199,9 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 
 		}.setReuseItems(false));
 	}
-	
+
 	private Component<?> lastEditor;
-	
+
 	private static MetaDataKey<String> EDITOR_NODE_TYPE = new MetaDataKey<String>()
 	{
 	};
@@ -303,7 +362,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 
 		public Object getRoot()
 		{
-			BrixNode root = getRootNode(workspaceName);
+			BrixNode root = getRootNode(workspaceModel);
 			return new SiteTreeNode(root);
 		}
 
@@ -313,7 +372,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 	{
 		tree.getTreeState().selectNode(new SiteTreeNode(node), true);
 	}
-	
+
 	public void updateTree()
 	{
 		tree.invalidateAll();

@@ -7,28 +7,27 @@ import brix.Brix;
 public class WorkspaceModel implements IModel<Workspace>
 {
     public WorkspaceModel(String workspaceId)
-    {
-        if (workspaceId == null)
-        {
-            throw new IllegalArgumentException("Argument 'workspaceId' can not be null.");
-        }
+    {        
         this.workspaceId = workspaceId;
     }
     
     public WorkspaceModel(Workspace workspace)
     {
-        if (workspace == null)
+        if (workspace != null)
         {
-            throw new IllegalArgumentException("Argument 'workspace' can not be null.");
-        }
-        setObject(workspace);
+        	setObject(workspace);   
+        }        
     }
     
     public void setObject(Workspace workspace)
     {
-        if (workspace == null)
+        if (workspace != null)
         {
-            throw new IllegalArgumentException("Argument 'workspace' can not be null.");
+        	this.workspaceId = workspace.getId();    
+        }
+        else
+        {
+        	this.workspaceId = null;
         }
         this.workspaceId = workspace.getId();
         this.workspace = workspace;
@@ -36,7 +35,7 @@ public class WorkspaceModel implements IModel<Workspace>
     
     public Workspace getObject()
     {
-        if (workspace == null)
+        if (workspace == null && workspaceId != null)
         {
             workspace = Brix.get().getWorkspaceManager().getWorkspace(workspaceId);
         }

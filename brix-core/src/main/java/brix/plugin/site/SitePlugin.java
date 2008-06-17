@@ -1,6 +1,7 @@
 package brix.plugin.site;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,7 +24,6 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupCache;
 import brix.plugin.site.admin.NodeManagerContainerPanel;
-import brix.plugin.site.admin.convert.ConvertNodePanel;
 import brix.plugin.site.admin.convert.ConvertNodeTabFactory;
 import brix.plugin.site.fallback.FallbackNodePlugin;
 import brix.plugin.site.folder.FolderNodePlugin;
@@ -43,24 +43,27 @@ public class SitePlugin implements Plugin
 		return ID;
 	}
 
-	public ITab newTab(final Workspace workspace)
+	public List<ITab> newTabs(final IModel<Workspace> workspaceModel)
 	{
-    	return new Tab(new Model<String>("Site"), workspace);
+		ITab tabs[] = new ITab[] {
+			new Tab(new Model<String>("Site"), workspaceModel)
+		};
+		return Arrays.asList(tabs);
 	}
 	
 	static class Tab extends AbstractWorkspaceTab
 	{
-		public Tab(IModel<String> title, Workspace workspace)
+		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
-			super(title, workspace);
+			super(title, workspaceModel);
 		}
 
 		@Override
 		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
-			return new NodeManagerContainerPanel(panelId, workspaceModel.getObject().getId());
+			return new NodeManagerContainerPanel(panelId, workspaceModel);
 		}
-	};
+	};	
 	
 	public SitePlugin(Brix brix)
 	{
@@ -157,6 +160,11 @@ public class SitePlugin implements Plugin
 	public boolean isSiteWorkspace(Workspace workspace)
 	{
 		return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
+	}
+	
+	public boolean isPluginWorkspace(Workspace workspace)
+	{
+		return isSiteWorkspace(workspace);
 	}
 
 	private static final String WORKSPACE_TYPE = "brix:site";

@@ -1,8 +1,8 @@
 package brix.plugin.site.page.fragment;
 
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -14,7 +14,6 @@ import brix.Plugin;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.admin.NodeManagerContainerPanel;
 import brix.web.tab.AbstractWorkspaceTab;
 import brix.workspace.Workspace;
 
@@ -70,17 +69,22 @@ public class FragmentPlugin implements Plugin
 
 	}
 
-	public ITab newTab(final Workspace workspace)
+	public boolean isPluginWorkspace(Workspace workspace)
 	{
-
-		return new Tab(new Model<String>("Fragments"), workspace);
+		return false;
 	}
-	
+
+	public List<ITab> newTabs(final IModel<Workspace> workspaceModel)
+	{
+		ITab tabs[] = new ITab[] { new Tab(new Model<String>("Fragments"), workspaceModel) };
+		return Arrays.asList(tabs);
+	}
+
 	static class Tab extends AbstractWorkspaceTab
 	{
-		public Tab(IModel<String> title, Workspace workspace)
+		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
-			super(title, workspace);
+			super(title, workspaceModel);
 		}
 
 		@Override

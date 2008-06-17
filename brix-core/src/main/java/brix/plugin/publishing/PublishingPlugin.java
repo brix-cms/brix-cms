@@ -1,5 +1,6 @@
 package brix.plugin.publishing;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -121,21 +122,27 @@ public class PublishingPlugin implements Plugin
 	{
 		return null;
 	}
+	
+	public boolean isPluginWorkspace(Workspace workspace)
+	{
+		return false;
+	}
 
 	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
 	{
 	}
 
-	public ITab newTab(final Workspace workspace)
+	public List<ITab> newTabs(IModel<Workspace> workspaceModel)
 	{
-		return new Tab(new Model<String>("Publishing"), workspace);
+		ITab tabs[] = new ITab[] { new Tab(new Model<String>("Publishing"), workspaceModel) };
+		return Arrays.asList(tabs);
 	}
 	
 	static class Tab extends AbstractWorkspaceTab
 	{
-		public Tab(IModel<String> title, Workspace workspace)
+		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
-			super(title, workspace);
+			super(title, workspaceModel);
 		}
 
 		@Override

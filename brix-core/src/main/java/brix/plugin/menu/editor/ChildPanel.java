@@ -10,9 +10,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import brix.plugin.menu.ManageMenuPanel;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.web.ContainerFeedbackPanel;
-import brix.web.admin.AdminPanel;
 import brix.web.picker.reference.ReferenceEditorConfiguration;
 import brix.web.picker.reference.ReferenceEditorPanel;
 import brix.web.reference.Reference;
@@ -49,9 +49,8 @@ public class ChildPanel extends Panel<ChildEntry>
 
         ReferenceEditorConfiguration conf = new ReferenceEditorConfiguration();
 
-        // TODO, this is not a nice hack
-        AdminPanel panel = findParent(AdminPanel.class);
-        conf.setWorkspaceName(panel.getWorkspace());
+        ManageMenuPanel panel = findParent(ManageMenuPanel.class);
+        conf.setWorkspaceName(panel.getModelObject().getId());
 
         form.add(new ReferenceEditorPanel("referenceEditor", new PropertyModel<Reference>(this,
             "reference")).setConfiguration(conf));

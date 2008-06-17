@@ -1,5 +1,6 @@
 package brix.plugin.template;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -112,16 +113,17 @@ public class TemplatePlugin implements Plugin
 		destSession.save();
 	}
 
-	public ITab newTab(final Workspace workspace)
+	public List<ITab> newTabs(IModel<Workspace> workspaceModel)
 	{
-		return new Tab(new Model<String>("Templates"), workspace);
+		ITab tabs[] = new ITab[] { new Tab(new Model<String>("Templates"), workspaceModel) };
+		return Arrays.asList(tabs);
 	}
-	
+		
 	static class Tab extends AbstractWorkspaceTab
 	{
-		public Tab(IModel<String> title, Workspace workspace)
+		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
-			super(title, workspace);
+			super(title, workspaceModel);
 		}
 
 		@Override
@@ -202,6 +204,11 @@ public class TemplatePlugin implements Plugin
 	public String getUserVisibleName(Workspace workspace, boolean isFrontend)
 	{
 		return "Template " + getTemplateName(workspace);
+	}
+	
+	public boolean isPluginWorkspace(Workspace workspace)
+	{
+		return isTemplateWorkspace(workspace);
 	}
 
 	public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)

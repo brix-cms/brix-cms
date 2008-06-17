@@ -1,6 +1,7 @@
 package brix.plugin.menu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,16 +45,19 @@ public class MenuPlugin implements Plugin
         return get(Brix.get());
     }
     
-    public ITab newTab(final Workspace workspace)
+    public List<ITab> newTabs(final IModel<Workspace> workspaceModel)
     {
-    	return new Tab(new Model<String>("Menus"), workspace);
+    	ITab tabs[] = new ITab[] {
+    			new Tab(new Model<String>("Menus"), workspaceModel)
+    	};
+    	return Arrays.asList(tabs);
     }
     
 	static class Tab extends AbstractWorkspaceTab
 	{
-		public Tab(IModel<String> title, Workspace workspace)
+		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
-			super(title, workspace);
+			super(title, workspaceModel);
 		}
 
 		@Override
@@ -133,6 +137,11 @@ public class MenuPlugin implements Plugin
 
     }
 
+    public boolean isPluginWorkspace(Workspace workspace)
+    {
+    	return false;
+    }
+    
     public String getUserVisibleName(Workspace workspace, boolean isFrontend)
     {
         return null;

@@ -1,5 +1,6 @@
 package brix.plugin.webdavurl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -31,16 +32,22 @@ public class WebdavUrlPlugin implements Plugin {
 
 	}
 	
-	public ITab newTab(final Workspace workspace)
-	{
-    	return new Tab(new Model<String>("Webdav"), workspace);
+	public boolean isPluginWorkspace(Workspace workspace)
+	{		
+		return false;
 	}
 	
+	public List<ITab> newTabs(IModel<Workspace> workspaceModel)
+	{
+		ITab tabs[] = new ITab[] { new Tab(new Model<String>("Webdav"), workspaceModel) };
+		return Arrays.asList(tabs);
+	}
+		
 	static class Tab extends AbstractWorkspaceTab
 	{
-		public Tab(IModel<String> title, Workspace workspace)
+		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
-			super(title, workspace);
+			super(title, workspaceModel);
 		}
 
 		@Override

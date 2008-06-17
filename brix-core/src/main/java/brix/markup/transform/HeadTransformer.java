@@ -8,7 +8,6 @@ import java.util.Map;
 import brix.markup.MarkupSource;
 import brix.markup.tag.Item;
 import brix.markup.tag.Tag;
-import brix.markup.tag.Tag.Type;
 import brix.markup.tag.simple.SimpleTag;
 
 /**

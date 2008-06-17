@@ -29,7 +29,6 @@ import brix.auth.Action.Context;
 import brix.plugin.template.auth.CreateTemplateAction;
 import brix.plugin.template.auth.DeleteTemplateAction;
 import brix.plugin.template.auth.RestoreTemplateAction;
-import brix.web.admin.AdminPanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
@@ -42,7 +41,7 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 		return Brix.get();
 	}
 	
-	public ManageTemplatesPanel(String id, IModel<Workspace> model)
+	public ManageTemplatesPanel(String id, final IModel<Workspace> model)
 	{
 		super(id, model);
 		setOutputMarkupId(true);
@@ -60,7 +59,7 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 		Form<Void> modalWindowForm = new Form<Void>("modalWindowForm");
 		add(modalWindowForm);
 
-		final ModalWindow modalWindow = new ModalWindow("modalWindow");
+		final ModalWindow<?> modalWindow = new ModalWindow<Void>("modalWindow");
 		modalWindow.setInitialWidth(64);
 		modalWindow.setWidthUnit("em");
 		modalWindow.setUseInitialHeight(false);
@@ -88,8 +87,7 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 					@Override
 					public void onClick()
 					{
-						AdminPanel panel = findParent(AdminPanel.class);
-						panel.setWorkspace(item.getModelObject().getId(), name);
+						model.setObject(item.getModelObject());
 					}
 				});
 

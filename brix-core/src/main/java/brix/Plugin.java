@@ -3,6 +3,7 @@ package brix;
 import java.util.List;
 
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrSession;
 import brix.registry.ExtensionPoint;
@@ -26,12 +27,22 @@ public interface Plugin
     };
 
     String getId();
-
-    ITab newTab(Workspace workspace);   
+    
+    List<ITab> newTabs(IModel<Workspace> workspaceModel);   
 
     public void initWorkspace(Workspace workspace, JcrSession workspaceSession);
 
     List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend);
 
+    /**
+     * Returns <code>true</code> if the plugin is responsible for the given workspace. 
+     * workspace. E.g. for snapshot workspaces the SnapshotPlugin should return
+     * <code>true</code>, all other plugins should return <code>false</code>. 
+     * 
+     * @param workspace
+     * @return
+     */
+    public boolean isPluginWorkspace(Workspace workspace);
+    
     public String getUserVisibleName(Workspace workspace, boolean isFrontend);
 }

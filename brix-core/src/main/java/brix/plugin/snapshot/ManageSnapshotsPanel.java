@@ -29,7 +29,6 @@ import brix.jcr.api.JcrSession;
 import brix.plugin.snapshot.auth.CreateSnapshotAction;
 import brix.plugin.snapshot.auth.DeleteSnapshotAction;
 import brix.plugin.snapshot.auth.RestoreSnapshotAction;
-import brix.web.admin.AdminPanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
@@ -42,7 +41,7 @@ public class ManageSnapshotsPanel extends Panel<Workspace>
 		return Brix.get();
 	}
 	
-    public ManageSnapshotsPanel(String id, IModel<Workspace> model)
+    public ManageSnapshotsPanel(String id, final IModel<Workspace> model)
     {
         super(id, model);
 
@@ -80,8 +79,7 @@ public class ManageSnapshotsPanel extends Panel<Workspace>
                     public void onClick()
                     {
                         Workspace workspace = item.getModelObject();
-                        AdminPanel adminPanel = findParent(AdminPanel.class);
-                        adminPanel.setWorkspace(workspace.getId(), name);
+                        model.setObject(workspace);
                     }
                 };
                 item.add(link);
