@@ -107,4 +107,35 @@ class ClientWorkspace implements Workspace
 		}
 
 	}
+	
+	@Override
+	public int hashCode() 
+	{
+		return id != null ? id.hashCode() : 0;
+	}
+	
+	@Override
+	public boolean equals(Object obj) 
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		if (obj instanceof ClientWorkspace == false)
+		{
+			return false;
+		}
+		ClientWorkspace that = (ClientWorkspace) obj;
+		if (id == that.id)
+		{
+			return true;
+		}
+		if (id == null || that.id == null)
+		{
+			return false;
+		}
+		return id.equals(that.id);
+	}
+	
+	
 }

@@ -265,6 +265,36 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 		{
 			AbstractWorkspaceManager.this.setAttribute(getId(), attributeKey, attributeValue);
 		}
+		
+		@Override
+		public boolean equals(Object obj) 
+		{
+			if (this == obj)
+			{
+				return true;
+			}
+			if (obj instanceof WorkspaceImpl == false)
+			{
+				return false;
+			}
+			WorkspaceImpl that = (WorkspaceImpl) obj;
+			
+			if (id == that.id)
+			{
+				return true;
+			}
+			else if (id == null || that.id == null)
+			{
+				return false;
+			}
+			return id.equals(that.id);
+		}
+		
+		@Override
+		public int hashCode() 
+		{
+			return id != null ? id.hashCode() : 0;
+		}
 
 		public void delete()
 		{
