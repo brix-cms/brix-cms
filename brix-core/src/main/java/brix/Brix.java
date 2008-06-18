@@ -142,9 +142,9 @@ public abstract class Brix
             throw new IllegalArgumentException("Application cannot be null");
         }
         /*
-         * XXX we are coupling to nodepage plugin here instead of using the usual register mechanism -
-         * we either need to make plugins application aware so they can install their own listeners
-         * or have some brix-level registery
+         * XXX we are coupling to nodepage plugin here instead of using the usual register mechanism
+         * - we either need to make plugins application aware so they can install their own
+         * listeners or have some brix-level registery
          */
         application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
 
@@ -213,9 +213,9 @@ public abstract class Brix
      * public void publish(String workspace, String targetState, SessionProvider sessionProvider) {
      * String dest = getWorkspaceNameForState(workspace, targetState);
      * 
-     * if (workspace.equals(dest) == false) { List<String> workspaces = getAvailableWorkspaces();
-     * if (workspaces.contains(dest) == false) {
-     * createWorkspace(sessionProvider.getJcrSession(null), dest); }
+     * if (workspace.equals(dest) == false) { List<String> workspaces = getAvailableWorkspaces(); if
+     * (workspaces.contains(dest) == false) { createWorkspace(sessionProvider.getJcrSession(null),
+     * dest); }
      * 
      * cleanWorkspace(BrixRequestCycle.Locator.getSession(dest));
      * 

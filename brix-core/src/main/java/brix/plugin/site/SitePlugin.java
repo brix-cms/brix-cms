@@ -171,7 +171,7 @@ public class SitePlugin implements Plugin
 
 	private static final String WORKSPACE_ATTRIBUTE_NAME = "brix:site-name";
 
-	private static final String WORKSPACE_ATTRIBUTE_STATE = "brix:site-state";
+	public static final String WORKSPACE_ATTRIBUTE_STATE = "brix:site-state";
 
 	public Workspace createSite(String name, String state)
 	{
