@@ -67,6 +67,6 @@ public class SessionBehavior implements Behavior
             return BrixResourceNode.FACTORY.wrap(node, session);
         }
 
-        return new BrixNode(n, session);
+        return new BrixNode(node, session);
     }
 }
