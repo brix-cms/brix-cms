@@ -1,9 +1,9 @@
 <wicket:head>
 	<style type="text/css">
-		table.templates td {
+		table.prototypes td {
 			vertical-align: top;			
 		}
-		div.template {
+		div.prototype {
 			width: 32em;
 			border-top: 1px dotted #aaa;
 			padding: 0.2em;
@@ -22,14 +22,14 @@
 
 <wicket:panel>
 	
-	<table class="templates"><tr>
+	<table class="prototypes"><tr>
 	<td>
 		Available Templates:
-		<div wicket:id="templates" class="template">
+		<div wicket:id="prototypes" class="prorotype">
 			<span wicket:id="label"></span> <br/>
 			<a wicket:id="browse">browse</a>&nbsp;
 			<a wicket:id="restoreItems">restore selected items</a>&nbsp;
-			<a wicket:id="delete" onclick="return confirm('Are you sure you want to delete the template?');">delete</a>
+			<a wicket:id="delete" onclick="return confirm('Are you sure you want to delete the prototype?');">delete</a>
 		</div>
 			
 	</td>
@@ -38,8 +38,8 @@
 		
 		<div class="action">
 			<form wicket:id="form">
-				Create new template <br/> 
-				Name: <input wicket:id="templateName"/> <input wicket:id="submit" type="submit" value="Create"/>
+				Create new prototype <br/> 
+				Name: <input wicket:id="prototypeName"/> <input wicket:id="submit" type="submit" value="Create"/>
 			</form>
 		</div>
 	</td>

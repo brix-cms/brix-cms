@@ -1,4 +1,4 @@
-package brix.plugin.template;
+package brix.plugin.prototype;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,14 +25,14 @@ import brix.jcr.api.JcrSession;
 import brix.web.tab.AbstractWorkspaceTab;
 import brix.workspace.Workspace;
 
-public class TemplatePlugin implements Plugin
+public class PrototypePlugin implements Plugin
 {
 
-	private static final String ID = TemplatePlugin.class.getName();
+	private static final String ID = PrototypePlugin.class.getName();
 
 	private final Brix brix;
 
-	public TemplatePlugin(Brix brix)
+	public PrototypePlugin(Brix brix)
 	{
 		this.brix = brix;
 	}
@@ -42,62 +42,62 @@ public class TemplatePlugin implements Plugin
 		return ID;
 	}
 
-	public static TemplatePlugin get(Brix brix)
+	public static PrototypePlugin get(Brix brix)
 	{
-		return (TemplatePlugin) brix.getPlugin(ID);
+		return (PrototypePlugin) brix.getPlugin(ID);
 	}
 
-	public static TemplatePlugin get()
+	public static PrototypePlugin get()
 	{
 		return get(Brix.get());
 	}
 
-	private static final String WORKSPACE_TYPE = "brix:template";
+	private static final String WORKSPACE_TYPE = "brix:prototype";
 
-	private static final String WORKSPACE_ATTRIBUTE_TEMPLATE_NAME = "brix:template-name";
+	private static final String WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME = "brix:prototype-name";
 
-	public boolean isTemplateWorkspace(Workspace workspace)
+	public boolean isPrototypeWorkspace(Workspace workspace)
 	{
 		return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
 	}
 
-	public void setTemplateName(Workspace workspace, String name)
+	public void setPrototypeName(Workspace workspace, String name)
 	{
-		workspace.setAttribute(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME, name);
+		workspace.setAttribute(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME, name);
 	}
 
-	public String getTemplateName(Workspace workspace)
+	public String getPrototypeName(Workspace workspace)
 	{
-		return workspace.getAttribute(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME);
+		return workspace.getAttribute(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME);
 	}
 
-	public List<Workspace> getTemplates()
+	public List<Workspace> getPrototypes()
 	{
 		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
 		return brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
 	}
 
-	public boolean templateExists(String templateName)
+	public boolean prototypeExists(String protypeName)
 	{
 		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-		attributes.put(WORKSPACE_ATTRIBUTE_TEMPLATE_NAME, templateName);
+		attributes.put(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME, protypeName);
 		return !brix.getWorkspaceManager().getWorkspacesFiltered(attributes).isEmpty();
 	}
 
-	public void createTemplate(Workspace originalWorkspace, String templateName)
+	public void createPrototype(Workspace originalWorkspace, String prototypeName)
 	{
 		Workspace workspace = brix.getWorkspaceManager().createWorkspace();
 		workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-		setTemplateName(workspace, templateName);
+		setPrototypeName(workspace, prototypeName);
 
 		JcrSession originalSession = brix.getCurrentSession(originalWorkspace.getId());
 		JcrSession destSession = brix.getCurrentSession(workspace.getId());
 		brix.clone(originalSession, destSession);
 	}
 
-	public void createTemplate(List<JcrNode> nodes, String templateName)
+	public void createPrototype(List<JcrNode> nodes, String prototypeName)
 	{
 		if (nodes.isEmpty())
 		{
@@ -105,7 +105,7 @@ public class TemplatePlugin implements Plugin
 		}
 		Workspace workspace = brix.getWorkspaceManager().createWorkspace();
 		workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-		setTemplateName(workspace, templateName);
+		setPrototypeName(workspace, prototypeName);
 
 		JcrSession destSession = brix.getCurrentSession(workspace.getId());
 
@@ -115,7 +115,7 @@ public class TemplatePlugin implements Plugin
 
 	public List<ITab> newTabs(IModel<Workspace> workspaceModel)
 	{
-		ITab tabs[] = new ITab[] { new Tab(new Model<String>("Templates"), workspaceModel) };
+		ITab tabs[] = new ITab[] { new Tab(new Model<String>("Prototypes"), workspaceModel) };
 		return Arrays.asList(tabs);
 	}
 		
@@ -129,7 +129,7 @@ public class TemplatePlugin implements Plugin
 		@Override
 		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
-			return new ManageTemplatesPanel(panelId, workspaceModel);
+			return new ManagePrototypesPanel(panelId, workspaceModel);
 		}
 	};
 
@@ -203,12 +203,12 @@ public class TemplatePlugin implements Plugin
 
 	public String getUserVisibleName(Workspace workspace, boolean isFrontend)
 	{
-		return "Template " + getTemplateName(workspace);
+		return "Prototype " + getPrototypeName(workspace);
 	}
 	
 	public boolean isPluginWorkspace(Workspace workspace)
 	{
-		return isTemplateWorkspace(workspace);
+		return isPrototypeWorkspace(workspace);
 	}
 
 	public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
@@ -225,5 +225,5 @@ public class TemplatePlugin implements Plugin
 		}
 	}
 
-	private static final ResourceReference ICON = new ResourceReference(TemplatePlugin.class, "layers.png");
+	private static final ResourceReference ICON = new ResourceReference(PrototypePlugin.class, "layers.png");
 }

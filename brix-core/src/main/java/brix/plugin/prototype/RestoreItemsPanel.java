@@ -1,4 +1,4 @@
-package brix.plugin.template;
+package brix.plugin.prototype;
 
 import java.util.List;
 import java.util.Map;
@@ -8,25 +8,41 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import brix.Brix;
+import brix.BrixNodeModel;
 import brix.jcr.JcrUtil;
 import brix.jcr.api.JcrNode;
+import brix.jcr.api.JcrWorkspace;
+import brix.jcr.wrapper.BrixNode;
+import brix.web.picker.node.NodePickerPanel;
 
-
-public class CreateTemplatePanel extends SelectItemsPanel<Void>
+public class RestoreItemsPanel extends SelectItemsPanel<Void>
 {
+    private IModel<BrixNode> targetNode = new BrixNodeModel();
 
-    public CreateTemplatePanel(String id, String workspaceId, final String targetTemplateName)
+    public RestoreItemsPanel(String id, String prototypeWorkspaceId, final String targetWorkspaceId)
     {
-        super(id, workspaceId);
+        super(id, prototypeWorkspaceId);
 
         final Component<String> message = new MultiLineLabel<String>("message", new Model<String>(
             ""));
         message.setOutputMarkupId(true);
         add(message);
 
-        add(new AjaxLink<Void>("create")
+
+        add(new NodePickerPanel("picker", targetNode, targetWorkspaceId, null)
+        {
+            @Override
+            public boolean isDisplayFiles()
+            {
+                return false;
+            }
+        });
+
+        add(new AjaxLink<Void>("restore")
         {
             @Override
             public void onClick(AjaxRequestTarget target)
@@ -34,15 +50,22 @@ public class CreateTemplatePanel extends SelectItemsPanel<Void>
                 List<JcrNode> nodes = getSelectedNodes();
                 if (!nodes.isEmpty())
                 {
+                	Brix brix = ((BrixNode)nodes.iterator().next()).getBrix();
+                    JcrWorkspace targetWorkspace = brix.getCurrentSession(targetWorkspaceId).getWorkspace();
                     Map<JcrNode, List<JcrNode>> dependencies = JcrUtil.getUnsatisfiedDependencies(
-                        nodes, null);
+                        nodes, targetWorkspace);;
                     if (!dependencies.isEmpty())
-                    {
+                    {                        
                         message.setModelObject(getDependenciesMessage(dependencies));                        
                     }
                     else
                     {
-                        TemplatePlugin.get().createTemplate(nodes, targetTemplateName);
+                        JcrNode rootNode = targetNode.getObject();
+                        if (rootNode == null)
+                        {
+                            rootNode = targetWorkspace.getSession().getRootNode();
+                        }
+                        PrototypePlugin.get().restoreNodes(nodes, rootNode);
                         findParent(ModalWindow.class).close(target);
                     }                    
                 }
@@ -54,5 +77,6 @@ public class CreateTemplatePanel extends SelectItemsPanel<Void>
             }
         });
     }
-    
+
+
 }

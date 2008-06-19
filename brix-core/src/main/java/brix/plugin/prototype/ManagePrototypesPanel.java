@@ -1,4 +1,4 @@
-package brix.plugin.template;
+package brix.plugin.prototype;
 
 import java.util.List;
 
@@ -26,13 +26,13 @@ import org.apache.wicket.validation.ValidationError;
 import brix.Brix;
 import brix.auth.Action;
 import brix.auth.Action.Context;
-import brix.plugin.template.auth.CreateTemplateAction;
-import brix.plugin.template.auth.DeleteTemplateAction;
-import brix.plugin.template.auth.RestoreTemplateAction;
+import brix.plugin.prototype.auth.CreatePrototypeAction;
+import brix.plugin.prototype.auth.DeletePrototypeAction;
+import brix.plugin.prototype.auth.RestorePrototypeAction;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
-public class ManageTemplatesPanel extends Panel<Workspace>
+public class ManagePrototypesPanel extends Panel<Workspace>
 {
 
 	private Brix getBrix()
@@ -41,17 +41,17 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 		return Brix.get();
 	}
 	
-	public ManageTemplatesPanel(String id, final IModel<Workspace> model)
+	public ManagePrototypesPanel(String id, final IModel<Workspace> model)
 	{
 		super(id, model);
 		setOutputMarkupId(true);
 
-		IModel<List<Workspace>> templatesModel = new LoadableDetachableModel<List<Workspace>>()
+		IModel<List<Workspace>> prototypesModel = new LoadableDetachableModel<List<Workspace>>()
 		{
 			@Override
 			protected List<Workspace> load()
 			{
-				List<Workspace> list = TemplatePlugin.get().getTemplates();
+				List<Workspace> list = PrototypePlugin.get().getPrototypes();
 				return getBrix().filterVisibleWorkspaces(list, Context.ADMINISTRATION);
 			}
 		};
@@ -67,7 +67,7 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 		modalWindow.setTitle(new ResourceModel("selectItems"));
 		modalWindowForm.add(modalWindow);
 
-		add(new ListView<Workspace>("templates", templatesModel)
+		add(new ListView<Workspace>("prototypes", prototypesModel)
 		{
 			@Override
 			protected IModel<Workspace> getListItemModel(IModel<List<Workspace>> listViewModel, int index)
@@ -78,7 +78,7 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 			@Override
 			protected void populateItem(final ListItem<Workspace> item)
 			{
-				TemplatePlugin plugin = TemplatePlugin.get();
+				PrototypePlugin plugin = PrototypePlugin.get();
 				final String name = plugin.getUserVisibleName(item.getModelObject(), false);
 
 				item.add(new Label<String>("label", name));
@@ -96,9 +96,9 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 					@Override
 					public void onClick(AjaxRequestTarget target)
 					{
-						String templateId = item.getModelObject().getId();
-						String targetId = ManageTemplatesPanel.this.getModelObject().getId();
-						Panel<Void> panel = new RestoreItemsPanel(modalWindow.getContentId(), templateId, targetId);
+						String prototypeId = item.getModelObject().getId();
+						String targetId = ManagePrototypesPanel.this.getModelObject().getId();
+						Panel<Void> panel = new RestoreItemsPanel(modalWindow.getContentId(), prototypeId, targetId);
 						modalWindow.setContent(panel);
 						modalWindow.show(target);
 					}
@@ -106,8 +106,8 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 					@Override
 					public boolean isVisible()
 					{
-						Workspace target = ManageTemplatesPanel.this.getModelObject();
-						Action action = new RestoreTemplateAction(Context.ADMINISTRATION, item.getModelObject(), target);
+						Workspace target = ManagePrototypesPanel.this.getModelObject();
+						Action action = new RestorePrototypeAction(Context.ADMINISTRATION, item.getModelObject(), target);
 						return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
 					}
 				});
@@ -117,14 +117,14 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 					@Override
 					public void onClick()
 					{
-						Workspace template = item.getModelObject();
-						template.delete();
+						Workspace prototype = item.getModelObject();
+						prototype.delete();
 					}
 
 					@Override
 					public boolean isVisible()
 					{
-						Action action = new DeleteTemplateAction(Context.ADMINISTRATION, item.getModelObject());
+						Action action = new DeletePrototypeAction(Context.ADMINISTRATION, item.getModelObject());
 						return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
 					}
 				});
@@ -136,18 +136,18 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 			@Override
 			public boolean isVisible()
 			{
-				Workspace current = ManageTemplatesPanel.this.getModelObject();
-				Action action = new CreateTemplateAction(Context.ADMINISTRATION, current);
+				Workspace current = ManagePrototypesPanel.this.getModelObject();
+				Action action = new CreatePrototypeAction(Context.ADMINISTRATION, current);
 				return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
 			}
 		};
 
-		TextField<String> templateName = new TextField<String>("templateName", new PropertyModel<String>(this,
-				"templateName"));
-		form.add(templateName);
+		TextField<String> prototypeName = new TextField<String>("prototypeName", new PropertyModel<String>(this,
+				"prototypeName"));
+		form.add(prototypeName);
 
-		templateName.setRequired(true);
-		templateName.add(new UniqueTemplateNameValidator());
+		prototypeName.setRequired(true);
+		prototypeName.add(new UniquePrototypeNameValidator());
 
 		final FeedbackPanel feedback;
 
@@ -159,15 +159,15 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form)
 			{
-				String workspaceId = ManageTemplatesPanel.this.getModelObject().getId();
-				CreateTemplatePanel panel = new CreateTemplatePanel(modalWindow.getContentId(), workspaceId,
-						ManageTemplatesPanel.this.templateName);
+				String workspaceId = ManagePrototypesPanel.this.getModelObject().getId();
+				CreatePrototypePanel panel = new CreatePrototypePanel(modalWindow.getContentId(), workspaceId,
+						ManagePrototypesPanel.this.prototypeName);
 				modalWindow.setContent(panel);
 				modalWindow.setWindowClosedCallback(new WindowClosedCallback()
 				{
 					public void onClose(AjaxRequestTarget target)
 					{
-						target.addComponent(ManageTemplatesPanel.this);
+						target.addComponent(ManagePrototypesPanel.this);
 					}
 				});
 				modalWindow.show(target);
@@ -184,16 +184,16 @@ public class ManageTemplatesPanel extends Panel<Workspace>
 
 	}
 
-	private String templateName;
+	private String prototypeName;
 
-	private class UniqueTemplateNameValidator implements IValidator
+	private class UniquePrototypeNameValidator implements IValidator
 	{
 		public void validate(IValidatable validatable)
 		{
 			String name = (String) validatable.getValue();
-			if (TemplatePlugin.get().templateExists(name))
+			if (PrototypePlugin.get().prototypeExists(name))
 			{
-				validatable.error(new ValidationError().addMessageKey("UniqueTemplateNameValidator"));
+				validatable.error(new ValidationError().addMessageKey("UniquePrototypeNameValidator"));
 			}
 		}
 	}

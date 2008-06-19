@@ -1,4 +1,4 @@
-package brix.plugin.template;
+package brix.plugin.prototype;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
 import brix.jcr.api.JcrNode;
+import brix.plugin.prototype.SelectItemsTreeModel.SelectItemsTreeNode;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.template.SelectItemsTreeModel.SelectItemsTreeNode;
 
 import com.inmethod.grid.IGridColumn;
 import com.inmethod.grid.SizeUnit;

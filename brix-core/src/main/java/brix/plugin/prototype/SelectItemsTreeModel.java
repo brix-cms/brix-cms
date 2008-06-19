@@ -1,4 +1,4 @@
-package brix.plugin.template;
+package brix.plugin.prototype;
 
 import brix.Brix;
 import brix.jcr.api.JcrSession;
