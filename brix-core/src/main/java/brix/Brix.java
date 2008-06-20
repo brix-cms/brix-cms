@@ -11,8 +11,6 @@ import javax.jcr.Session;
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import brix.auth.Action;
 import brix.auth.AuthorizationStrategy;
@@ -47,8 +45,6 @@ import brix.workspace.WorkspaceManager;
 
 public abstract class Brix
 {
-    private static final Logger logger = LoggerFactory.getLogger(Brix.class);
-
     public static final String NS = "brix";
     public static final String NS_PREFIX = NS + ":";
 
@@ -332,6 +328,4 @@ public abstract class Brix
             return result;
         }
     }
-
-    private static final Logger log = LoggerFactory.getLogger(Brix.class);
 }
