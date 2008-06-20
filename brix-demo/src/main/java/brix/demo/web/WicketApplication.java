@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
@@ -193,12 +194,10 @@ public class WicketApplication extends WebApplication
                 Workspace w = sp.createSite(wn, defaultState);
                 JcrSession session = brix.getCurrentSession(w.getId());
 
-                brix.initWorkspace(w, session);
+                session.importXML("/", getClass().getResourceAsStream(
+                "workspace.xml"),
+                ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
-                BrixNode siteRoot = (BrixNode)session.getItem(sp.getSiteRootPath());
-                BrixNode index = (BrixNode)siteRoot.addNode("index.html", "nt:file");
-                Page node = Page.initialize(index);
-                node.setData("<html><head></head><body>Hello, world!</body></html>");
                 session.save();
             }
 
