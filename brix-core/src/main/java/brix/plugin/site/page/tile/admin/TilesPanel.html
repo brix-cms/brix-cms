@@ -45,7 +45,10 @@
 			<table class="brix-property-edit">
 				<tr>
 					<td class="brix-property-label"><wicket:message key="tileId"/> </td>
-					<td class="brix-property-value"><input wicket:id="tileId" type="text" size="30" /></td>
+					<td class="brix-property-value">
+						<input wicket:id="tileId" type="text" size="30" />
+						<select wicket:id="idSuggestion"></select>
+					</td>
 				</tr>
 				<tr>
 					<td class="brix-property-label"><wicket:message key="tileType"/></td>

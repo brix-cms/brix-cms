@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -27,6 +29,11 @@ import brix.plugin.site.admin.NodeManagerContainerPanel;
 import brix.plugin.site.admin.convert.ConvertNodeTabFactory;
 import brix.plugin.site.fallback.FallbackNodePlugin;
 import brix.plugin.site.folder.FolderNodePlugin;
+import brix.plugin.site.page.AbstractContainer;
+import brix.plugin.site.page.global.GlobalContainerNode;
+import brix.plugin.site.page.global.GlobalTilesPanel;
+import brix.plugin.site.page.global.GlobalVariablesPanel;
+import brix.plugin.site.page.tile.TileContainerFacet;
 import brix.plugin.site.resource.ResourceNodePlugin;
 import brix.web.tab.AbstractWorkspaceTab;
 import brix.workspace.Workspace;
@@ -45,15 +52,15 @@ public class SitePlugin implements Plugin
 
 	public List<ITab> newTabs(final IModel<Workspace> workspaceModel)
 	{
-		ITab tabs[] = new ITab[] {
-			new Tab(new Model<String>("Site"), workspaceModel)
-		};
+		ITab tabs[] = new ITab[] { new SiteTab(new Model<String>("Site"), workspaceModel),
+				new GlobalTilesTab(new Model<String>("Tiles"), workspaceModel),
+				new GlobalVariablesTab(new Model<String>("Variables"), workspaceModel) };
 		return Arrays.asList(tabs);
 	}
-	
-	static class Tab extends AbstractWorkspaceTab
+
+	static class SiteTab extends AbstractWorkspaceTab
 	{
-		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
+		public SiteTab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
 			super(title, workspaceModel);
 		}
@@ -63,8 +70,36 @@ public class SitePlugin implements Plugin
 		{
 			return new NodeManagerContainerPanel(panelId, workspaceModel);
 		}
-	};	
-	
+	};
+
+	static class GlobalTilesTab extends AbstractWorkspaceTab
+	{
+		public GlobalTilesTab(IModel<String> title, IModel<Workspace> workspaceModel)
+		{
+			super(title, workspaceModel);
+		}
+
+		@Override
+		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		{
+			return new GlobalTilesPanel(panelId, workspaceModel);
+		}
+	};
+
+	static class GlobalVariablesTab extends AbstractWorkspaceTab
+	{
+		public GlobalVariablesTab(IModel<String> title, IModel<Workspace> workspaceModel)
+		{
+			super(title, workspaceModel);
+		}
+
+		@Override
+		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		{
+			return new GlobalVariablesPanel(panelId, workspaceModel);
+		}
+	};
+
 	public SitePlugin(Brix brix)
 	{
 		this.brix = brix;
@@ -161,7 +196,7 @@ public class SitePlugin implements Plugin
 	{
 		return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
 	}
-	
+
 	public boolean isPluginWorkspace(Workspace workspace)
 	{
 		return isSiteWorkspace(workspace);
@@ -252,6 +287,13 @@ public class SitePlugin implements Plugin
 
 	public static final String WEB_NODE_NAME = Brix.NS_PREFIX + "web";
 
+	public static final String GLOBAL_CONTAINER_NODE_NAME = Brix.NS_PREFIX + "globalContainer";
+
+	private String getGlobalContainerPath()
+	{
+		return getSiteRootPath() + "/" + GLOBAL_CONTAINER_NODE_NAME;
+	}
+
 	public String getSiteRootPath()
 	{
 		return brix.getRootPath() + "/" + WEB_NODE_NAME;
@@ -260,18 +302,26 @@ public class SitePlugin implements Plugin
 	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
 	{
 		JcrNode root = (JcrNode) workspaceSession.getItem(brix.getRootPath());
-		JcrNode web;
+		JcrNode web = null;
 		if (root.hasNode(WEB_NODE_NAME))
 		{
 			web = root.getNode(WEB_NODE_NAME);
 		}
-		else
+		else if (isSiteWorkspace(workspace))
 		{
 			web = root.addNode(WEB_NODE_NAME, "nt:folder");
 		}
-		if (!web.isNodeType(BrixNode.JCR_TYPE_BRIX_NODE))
+
+		if (web != null)
 		{
-			web.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
+			if (!web.isNodeType(BrixNode.JCR_TYPE_BRIX_NODE))
+			{
+				web.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
+			}
+			if (!web.hasNode(GLOBAL_CONTAINER_NODE_NAME))
+			{
+				GlobalContainerNode.initialize(web.addNode(GLOBAL_CONTAINER_NODE_NAME, "nt:file"));
+			}
 		}
 	}
 
@@ -355,7 +405,7 @@ public class SitePlugin implements Plugin
 	}
 
 	private MarkupCache markupCache = new MarkupCache();
-	
+
 	private NodeManagerContainerPanel findContainer(Component<?> component)
 	{
 		if (component instanceof NodeManagerContainerPanel)
@@ -367,12 +417,12 @@ public class SitePlugin implements Plugin
 			return component.findParent(NodeManagerContainerPanel.class);
 		}
 	}
-	
+
 	public void selectNode(Component<?> component, BrixNode node)
 	{
 		selectNode(component, node, false);
 	}
-	
+
 	public void selectNode(Component<?> component, BrixNode node, boolean refreshTree)
 	{
 		NodeManagerContainerPanel panel = findContainer(component);
@@ -386,7 +436,7 @@ public class SitePlugin implements Plugin
 			throw new IllegalStateException("Can't call selectNode with component outside of the hierarchy.");
 		}
 	}
-	
+
 	public void refreshNavigationTree(Component<?> component)
 	{
 		NodeManagerContainerPanel panel = findContainer(component);
@@ -398,5 +448,68 @@ public class SitePlugin implements Plugin
 		{
 			throw new IllegalStateException("Can't call refreshNaviagtionTree with component outside of the hierarchy.");
 		}
+	}
+
+	public AbstractContainer getGloblContainer(JcrSession session)
+	{
+		if (session.itemExists(getGlobalContainerPath()))
+		{
+			return (AbstractContainer) session.getItem(getGlobalContainerPath());
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public Collection<String> getGlobalVariableKeys(JcrSession session)
+	{
+		AbstractContainer globalContainer = getGloblContainer(session);
+		Collection<String> result;
+		if (globalContainer != null)
+		{
+			result = globalContainer.getSavedVariableKeys();
+		}
+		else
+		{
+			result = Collections.emptyList();
+		}
+		return result;
+	}
+
+	public String getGlobalVariableValue(JcrSession session, String variableKey)
+	{
+		AbstractContainer globalContainer = getGloblContainer(session);
+		if (globalContainer != null)
+		{
+			return globalContainer.getVariableValue(variableKey, false);
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public Collection<String> getGlobalTileIDs(JcrSession session)
+	{
+		AbstractContainer globalContainer = getGloblContainer(session);
+		Set<String> result;
+		if (globalContainer != null)
+		{
+			result = new HashSet<String>();
+			for (BrixNode n : globalContainer.tiles().getTileNodes())
+			{
+				String id = TileContainerFacet.getTileId(n);
+				if (!Strings.isEmpty(id))
+				{
+					result.add(id);
+				}
+			}
+		}
+		else
+		{
+			result = Collections.emptySet();
+		}
+		return result;
 	}
 }

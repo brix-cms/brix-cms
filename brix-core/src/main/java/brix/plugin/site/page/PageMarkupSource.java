@@ -25,7 +25,6 @@ import brix.markup.tag.Tag.Type;
 import brix.markup.tag.simple.SimpleComment;
 import brix.markup.tag.simple.SimpleTag;
 import brix.markup.tag.simple.SimpleText;
-import brix.plugin.site.page.fragment.FragmentTag;
 import brix.plugin.site.page.tile.TileTag;
 
 /**
@@ -240,12 +239,6 @@ public class PageMarkupSource implements MarkupSource
         {
             String id = attributes.get(AbstractContainer.MARKUP_TILE_ID);
             items.add(new TileTag("div", Type.OPEN, attributes, node, id));
-            items.add(new SimpleTag("div", Type.CLOSE, null));
-        }
-        else if ("fragment".equals(simpleTagName))
-        {
-            String id = attributes.get(AbstractContainer.MARKUP_TILE_ID);
-            items.add(new FragmentTag("div", Type.OPEN, attributes, node, id));
             items.add(new SimpleTag("div", Type.CLOSE, null));
         }
     }

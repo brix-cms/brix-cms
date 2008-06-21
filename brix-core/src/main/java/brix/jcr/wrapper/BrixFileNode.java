@@ -121,6 +121,7 @@ public class BrixFileNode extends BrixNode
         BrixFileNode wrapped = new BrixFileNode(node.getDelegate(), node.getSession());
         wrapped.setMimeType(mimeType);
         wrapped.getContent().setProperty("jcr:lastModified", Calendar.getInstance());
+        wrapped.getContent().setProperty("jcr:data", "");
         return wrapped;
     }
 

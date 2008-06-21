@@ -32,8 +32,7 @@ import brix.plugin.site.SitePlugin;
 import brix.plugin.site.folder.FolderNode;
 import brix.plugin.site.page.Page;
 import brix.plugin.site.page.Template;
-import brix.plugin.site.page.fragment.FragmentPlugin;
-import brix.plugin.site.page.fragment.FragmentsContainerNode;
+import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.tile.Tile;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
@@ -41,6 +40,7 @@ import brix.registry.ExtensionPointRegistry;
 import brix.web.nodepage.PageParametersAwareEnabler;
 import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
+import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
 public abstract class Brix
@@ -66,7 +66,7 @@ public abstract class Brix
         registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
 
         registry.register(JcrNodeWrapperFactory.POINT, FolderNode.FACTORY);
-        registry.register(JcrNodeWrapperFactory.POINT, FragmentsContainerNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, GlobalContainerNode.FACTORY);
 
         registry.register(JcrNodeWrapperFactory.POINT, Page.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, Template.FACTORY);
@@ -80,8 +80,6 @@ public abstract class Brix
         registry.register(Plugin.POINT, new PrototypePlugin(this));
         registry.register(Plugin.POINT, new PublishingPlugin(this));
         registry.register(Plugin.POINT, new WebdavUrlPlugin());
-        registry.register(Plugin.POINT, new FragmentPlugin(this));
-
     }
 
     public static Brix get(Application application)
@@ -118,12 +116,15 @@ public abstract class Brix
     }
 
     public JcrSession getCurrentSession(String workspace)
-    {
-
-        SessionBehavior behavior = new SessionBehavior(this);
+    {        
         Session session = sessionFactory.getCurrentSession(workspace);
-
-        return JcrSession.Wrapper.wrap(session, behavior);
+        return wrapSession(session);        
+    }
+    
+    public JcrSession wrapSession(Session session)
+    {
+    	SessionBehavior behavior = new SessionBehavior(this);
+    	return JcrSession.Wrapper.wrap(session, behavior);
     }
 
     /**
@@ -257,6 +258,13 @@ public abstract class Brix
         {
             throw new RuntimeException("Couldn't init jackrabbit repository", e);
         }
+        
+        for (Workspace w : getWorkspaceManager().getWorkspaces())
+        {
+        	JcrSession s = getCurrentSession(w.getId());
+        	initWorkspace(w, s);
+        	s.logout();
+        }
     }
 
     public void initWorkspace(brix.workspace.Workspace workspace, JcrSession session)
@@ -279,6 +287,7 @@ public abstract class Brix
         {
             p.initWorkspace(workspace, session);
         }
+        session.save();
     }
 
     public final Collection<Plugin> getPlugins()

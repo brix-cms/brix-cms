@@ -24,7 +24,7 @@ import org.apache.wicket.util.string.Strings;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
-import brix.plugin.site.page.fragment.TileContainer;
+import brix.plugin.site.page.AbstractContainer;
 import brix.plugin.site.page.tile.TileContainerFacet;
 
 public class TilesPanel extends NodeManagerPanel
@@ -117,9 +117,9 @@ public class TilesPanel extends NodeManagerPanel
 
 	}
 
-	private TileContainer getTileContainerNode()
+	private AbstractContainer getTileContainerNode()
 	{
-		return (TileContainer) getNode();
+		return (AbstractContainer) getNode();
 	}
 
 	private void setupTileEditor()

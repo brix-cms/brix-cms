@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -17,7 +15,6 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -26,9 +23,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.ValidationError;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.AbstractContainer;
+import brix.plugin.site.page.global.GlobalContainerNode;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
@@ -221,35 +222,32 @@ public class VariablesPanel extends Panel<BrixNode>
 				}
 			};
 
-			final DropDownChoice<String> ddc;
-			add(ddc = new DropDownChoice<String>("ddc", new PropertyModel<String>(this, "selected"), choicesModel));
-			ddc.setNullValid(true);
-
 			final TextField<String> tf;
-			add(tf = new TextField<String>("custom", new PropertyModel<String>(this, "custom"))
-			{
+			add(tf = new TextField<String>("key", new PropertyModel<String>(this, "key")));
+			tf.setRequired(true);
+			tf.setOutputMarkupId(true);
+			
+			final DropDownChoice<String> keySuggestions;
+			add(keySuggestions = new DropDownChoice<String>("keySuggestions", new Model<String>(), choicesModel) {
 				@Override
 				public boolean isVisible()
 				{
-					return selected == null;
-				}
-
-				@Override
-				public boolean isRequired()
-				{
-					return selected == null;
+					return VariablesPanel.this.getModelObject() instanceof GlobalContainerNode == false;
 				}
 			});
-			tf.setOutputMarkupPlaceholderTag(true);
-
-			ddc.add(new AjaxFormComponentUpdatingBehavior("onchange")
+			keySuggestions.setNullValid(true);
+			
+			keySuggestions.add(new AjaxFormComponentUpdatingBehavior("onchange")
 			{
 				@Override
 				protected void onUpdate(AjaxRequestTarget target)
 				{
+					tf.setModelObject(keySuggestions.getModelObject());
+					keySuggestions.setModelObject(null);
 					target.addComponent(tf);
+					target.addComponent(keySuggestions);
+					target.focusComponent(tf);
 				}
-
 			});
 
 			add(new TextField<String>("value", new PropertyModel<String>(this, "value")).setRequired(true));
@@ -258,16 +256,13 @@ public class VariablesPanel extends Panel<BrixNode>
 			{
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-				{
-					String key = selected != null ? selected : custom;
+				{					
 					AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
 					node.setVariableValue(key, value);
 					node.save();
 					onItemAdded();
-					selected = null;
-					custom = null;
+					key = null;
 					value = null;
-					form.modelChanged();
 					target.addComponent(form);
 					target.addChildren(findParent(VariablesPanel.class), FeedbackPanel.class);
 				}
@@ -278,42 +273,32 @@ public class VariablesPanel extends Panel<BrixNode>
 					target.addChildren(findParent(VariablesPanel.class), FeedbackPanel.class);
 				}
 			});
-
-			add(new AbstractFormValidator()
+			
+			tf.add(new IValidator()
 			{
-				public FormComponent<?>[] getDependentFormComponents()
+				public void validate(IValidatable validatable)
 				{
-					if (selected != null)
-						return new FormComponent<?>[] { ddc };
-					else
-						return new FormComponent<?>[] { ddc, tf };
-				}
-
-				private void report(String messageKey, String key)
-				{
-					Map<String, Object> attr = new HashMap<String, Object>();
-					attr.put("key", key);
-					error(ddc, messageKey, attr);
-				}
-
-				public void validate(Form<?> form)
-				{
-					String key = selected != null ? selected : tf.getConvertedInput();
+					String key = (String) validatable.getValue();
+					
 					AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
+					
 					if (key.contains("/") || key.contains(":"))
 					{
-						report("keyValidator.invalidKey", key);
+						report(validatable, "keyValidator.invalidKey", key);
 					}
 					else if (node.getVariableValue(key, false) != null)
 					{
-						report("keyValidator.duplicateKey", key);
+						report(validatable, "keyValidator.duplicateKey", key);
 					}
+				}
+				private void report(IValidatable validatable, String messageKey, String key)
+				{					
+					validatable.error(new ValidationError().addMessageKey(messageKey).setVariable("key", key));
 				}
 			});
 		}
 
-		private String selected;
-		private String custom;
+		private String key;
 		private String value;
 
 		abstract protected void onItemAdded();

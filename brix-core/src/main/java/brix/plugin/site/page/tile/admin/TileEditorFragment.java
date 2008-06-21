@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.fragment.TileContainer;
+import brix.plugin.site.page.AbstractContainer;
 import brix.plugin.site.page.tile.Tile;
 
 public abstract class TileEditorFragment extends Fragment<BrixNode>
@@ -75,9 +75,9 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
 
 	protected abstract void onDelete(String tileId);
 
-	private TileContainer getTileContainerNode()
+	private AbstractContainer getTileContainerNode()
 	{
-		return (TileContainer) getModelObject();
+		return (AbstractContainer) getModelObject();
 	}
 
 }

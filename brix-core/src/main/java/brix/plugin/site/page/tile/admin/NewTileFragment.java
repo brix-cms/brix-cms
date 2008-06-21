@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -18,6 +20,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -25,7 +28,8 @@ import org.apache.wicket.validation.ValidationError;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.fragment.TileContainer;
+import brix.plugin.site.page.AbstractContainer;
+import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.tile.Tile;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;
@@ -56,11 +60,51 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 		add(form);
 
 		form.add(new ContainerFeedbackPanel("feedback", form));
-		form.add(new TextField<String>("tileId", new PropertyModel<String>(this, "newTileId"))
-				.setRequired(true).add(new NewTileIdValidator()).add(NodeNameValidator.getInstance()));
 
-		form.add(new DropDownChoice<String>("tileType", new PropertyModel<String>(this, "newTileTypeName"), new TileTypeNamesModel(),
-				new TileTypeNameRenderer())
+		final Component<String> tileId;
+
+		form.add(tileId = new TextField<String>("tileId", new PropertyModel<String>(this, "newTileId")).setRequired(
+				true).add(new NewTileIdValidator()).add(NodeNameValidator.getInstance()));
+		tileId.setOutputMarkupId(true);
+
+		IModel<List<? extends String>> idSuggestionModel = new LoadableDetachableModel<List<? extends String>>()
+		{
+			@Override
+			protected List<? extends String> load()
+			{
+				List<String> res = new ArrayList<String>();
+				Collection<String> ids = ((AbstractContainer) NewTileFragment.this.getModelObject()).getTileIDs();
+				res.addAll(ids);
+				return res;
+			}
+		};
+
+		final DropDownChoice<String> idSuggestion;
+		form.add(idSuggestion = new DropDownChoice<String>("idSuggestion", new Model<String>(), idSuggestionModel)
+		{
+			@Override
+			public boolean isVisible()
+			{
+				return NewTileFragment.this.getModelObject() instanceof GlobalContainerNode == false;
+			}
+		});
+
+		idSuggestion.add(new AjaxFormComponentUpdatingBehavior("onchange")
+		{
+			@Override
+			protected void onUpdate(AjaxRequestTarget target)
+			{
+				tileId.setModelObject(idSuggestion.getModelObject());
+				idSuggestion.setModelObject(null);
+				target.addComponent(tileId);
+				target.addComponent(idSuggestion);
+				target.focusComponent(tileId);
+			}
+		});
+		idSuggestion.setNullValid(true);
+
+		form.add(new DropDownChoice<String>("tileType", new PropertyModel<String>(this, "newTileTypeName"),
+				new TileTypeNamesModel(), new TileTypeNameRenderer())
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -72,7 +116,8 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 
 			@Override
 			protected void onSelectionChanged(String tileTypeName)
-			{;
+			{
+				;
 				if (tileTypeName == null)
 				{
 					EmptyPanel ep = new EmptyPanel(newTileEditor.getId());
@@ -105,9 +150,9 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 		});
 	}
 
-	private TileContainer getTileContainer()
+	private AbstractContainer getTileContainer()
 	{
-		return (TileContainer) getModelObject();
+		return (AbstractContainer) getModelObject();
 	}
 
 	protected abstract void onAddTile(String tileId, String ntileTypeName);

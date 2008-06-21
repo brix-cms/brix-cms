@@ -21,12 +21,11 @@ import brix.markup.variable.VariableKeyProvider;
 import brix.markup.variable.VariableTransformer;
 import brix.markup.variable.VariableValueProvider;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.page.fragment.TileContainer;
+import brix.plugin.site.page.tile.TileTag;
 import brix.plugin.site.page.tile.TileContainerFacet;
 
 public abstract class AbstractContainer extends BrixFileNode
         implements
-            TileContainer,
             VariableValueProvider,
             VariableKeyProvider
 {
@@ -62,8 +61,7 @@ public abstract class AbstractContainer extends BrixFileNode
             return getProperty(Properties.TITLE).getString();
         else
             return null;
-    }
-    
+    }    
     
 
     public void setTitle(String title)
@@ -179,7 +177,11 @@ public abstract class AbstractContainer extends BrixFileNode
             if (template != null)
             {
                 return template.getVariableValue(key);
-            }            
+            }
+            else
+            {
+            	return SitePlugin.get().getGlobalVariableValue(getSession(), key);
+            }
         }    
         return null;
     }
@@ -224,6 +226,9 @@ public abstract class AbstractContainer extends BrixFileNode
             }
             i = transfomer.nextMarkupItem();
         }
+        
+        keys.addAll(SitePlugin.get().getGlobalVariableKeys(getSession()));
+        
         return keys;
     }
 
@@ -252,4 +257,42 @@ public abstract class AbstractContainer extends BrixFileNode
         }
     }
 
+    public BrixNode getTileNode(String id)
+    {
+    	BrixNode node = null;
+    	AbstractContainer container = this;
+    	while (node == null && container != null)
+    	{
+    		node = container.tiles().getTile(id);
+    		container = container.getTemplate();
+    	}
+    	if (node == null)
+    	{
+    		container =  SitePlugin.get().getGloblContainer(getSession());
+    		if (container != null)
+    		{
+    			node = container.tiles().getTile(id);
+    		}
+    	}
+    	return null;
+    }
+    
+    public Collection<String> getTileIDs()
+    {
+    	 Set<String> keys = new HashSet<String>();
+         PageMarkupSource source = new PageMarkupSource(this);         
+         Item i = source.nextMarkupItem();
+         while (i != null)
+         {
+        	 if (i instanceof TileTag)
+        	 {
+        		 keys.add(((TileTag)i).getTileName());
+        	 }
+        	 i = source.nextMarkupItem();
+         }
+         
+         keys.addAll(SitePlugin.get().getGlobalTileIDs(getSession()));
+        
+         return keys;
+    }
 }
