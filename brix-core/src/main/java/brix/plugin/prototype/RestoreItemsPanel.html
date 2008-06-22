@@ -16,14 +16,16 @@
 	</style>
 </wicket:head>
 <wicket:panel>
+<div class="brix-admin"><div style="padding: 0.5em">
 	<div wicket:id="grid">
 	</div>
-	<div style="text-align: right; padding: 8px 10px;">
+	<div style="text-align: right; padding-top: 0.5em; padding-bottom: 0.5em;">
 		<span style="float: left">
-			Target location: <span wicket:id="picker"></span>
+			<wicket:message key="targetLocation"/> <span wicket:id="picker"></span>
 		</span>
-		<button wicket:id="restore">Restore Selected Items</button>
+		<a class="brix-button" wicket:id="restore"><wicket:message key="restoreSelectedItems"/></a>
 	</div>
 	<div wicket:id="message" class="message">
 	</div>
+</div></div>
 </wicket:panel>

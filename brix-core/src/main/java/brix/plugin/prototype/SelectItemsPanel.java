@@ -114,7 +114,7 @@ public class SelectItemsPanel<T> extends Panel<T>
     {
         StringBuilder b = new StringBuilder();
         
-        b.append("The following dependencies are not satisfied:\n");
+        b.append(getString("followingDependenciesAreNotSatisfied") + "\n");
         
         for (Entry<JcrNode, List<JcrNode>> entry : dependencies.entrySet())
         {

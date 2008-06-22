@@ -1,27 +1,9 @@
-<wicket:head>
-	<style type="text/css">
-		div.menu-list {
-			width: 12em;
-		}
-		div.menu-list a {
-			color: blue;
-		}
-		div.menu-list em {
-			background-color: #ddd;
-		}
-		
-		div.menu-list a,
-		div.menu-list em {
-			display: block;
-			padding: 2px;
-		}
-	</style>
-</wicket:head>
 <wicket:panel>
 
 <table><tr><td style="vertical-align: top">
-	Available Menus:
-	<div class="menu-list">
+	<wicket:message key="availableMenus"/>
+	
+	<div class="brix-menu-tile-menu-list">
 		<div wicket:id="listView">
 			<a wicket:id="select"><span wicket:id="label"></span></a>
 		</div>
@@ -31,10 +13,24 @@
 <td>
 
 	<form wicket:id="form">
-		Item CSS Class <input wicket:id="itemStyleClass"/><br/>
-		Selected Item CSS Class  <input wicket:id="selectedItemStyleClass"/><br/>
-		Outer Container CSS class (ul)  <input wicket:id="outerContainerStyleClass"/><br/>
-		Inner Container CSS class (ul)  <input wicket:id="innerContainerStyleClass"/> (for nested menus)<br/>
+		<table class="brix-property-edit">
+			<tr>
+				<td class="brix-property-label"><wicket:message key="itemCSSClass"/></td>
+				<td class="brix-property-value"><input wicket:id="itemStyleClass"/></td>
+			</tr>
+			<tr>
+				<td class="brix-property-label"><wicket:message key="selectedItemCSSClass"/></td>
+				<td class="brix-property-value"><input wicket:id="selectedItemStyleClass"/></td>
+			</tr>
+			<tr>
+				<td class="brix-property-label"><wicket:message key="outerContainerCSSClass"/></td>
+				<td class="brix-property-value"><input wicket:id="outerContainerStyleClass"/></td>
+			</tr>
+		  	<tr>
+		  		<td class="brix-property-label"><wicket:message key="innerContainerCSSClass"/></td>
+		  		<td class="brix-property-value"><input wicket:id="innerContainerStyleClass"/> <wicket:message key="forNestedMenus"/></td>
+		  	</tr>
+		</table>
 	</form>
 
 </td></tr></table>

@@ -99,6 +99,7 @@ public class ManagePrototypesPanel extends Panel<Workspace>
 						String prototypeId = item.getModelObject().getId();
 						String targetId = ManagePrototypesPanel.this.getModelObject().getId();
 						Panel<Void> panel = new RestoreItemsPanel(modalWindow.getContentId(), prototypeId, targetId);
+						modalWindow.setTitle(new ResourceModel("selectItems"));
 						modalWindow.setContent(panel);
 						modalWindow.show(target);
 					}
@@ -163,6 +164,7 @@ public class ManagePrototypesPanel extends Panel<Workspace>
 				CreatePrototypePanel panel = new CreatePrototypePanel(modalWindow.getContentId(), workspaceId,
 						ManagePrototypesPanel.this.prototypeName);
 				modalWindow.setContent(panel);
+				modalWindow.setTitle(new ResourceModel("selectItemsToCreate"));
 				modalWindow.setWindowClosedCallback(new WindowClosedCallback()
 				{
 					public void onClose(AjaxRequestTarget target)

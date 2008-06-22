@@ -1,18 +1,19 @@
 <wicket:panel>
 	
-	<table><tr><td>
+	<table class="brix-menu-editor"><tr><td class="brix-menu-editor-tree">
 	
-		<div wicket:id="tree" class="tree"></div>
+		<div wicket:id="tree" class="brix-menu-editor-tree">
+		</div>
+		
 		<div wicket:id="links" class="links">
-			<a wicket:id="add">Add</a>
-			<a wicket:id="remove">Remove</a>
-			<a wicket:id="moveUp">Move Up</a>
-			<a wicket:id="moveDown">Move Down</a>
+			<a wicket:id="add" class="brix-button-thin"><wicket:message key="add"/></a>
+			<a wicket:id="remove" class="brix-button-thin"><wicket:message key="remove"/></a>
+			<a wicket:id="moveUp" class="brix-button-thin"><wicket:message key="moveUp"/></a>
+			<a wicket:id="moveDown" class="brix-button-thin"><wicket:message key="moveDown"/></a>
 		</div>
 	
-	</td>
-	
-	<td>
+	</td>	
+	<td class="brix-menu-editor-form">
 		<div wicket:id="editor" class="editor-form"></div>
 	</td></tr></table>
 	

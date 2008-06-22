@@ -1,51 +1,41 @@
-<wicket:head>
-	<style type="text/css">
-		table.snapshots td {
-			vertical-align: top;			
-		}
-		div.snapshot {
-			width: 30em;
-			border-top: 1px dotted #ddd;
-			padding: 0.2em;
-		}
-		td.actions {
-			border-top: 1px dotted #ddd;
-			border-left: 1px solid #ddd;
-			border-right: 1px solid #ddd;			
-		}
-		div.action {
-			border-bottom: 1px dotted #ddd;
-			padding: 0.4em;
-		}
-	</style>
-</wicket:head>
 <wicket:panel>
-	<table class="snapshots"><tr>
+	
+<div class="brix-snapshots-container">
+<div class="brix-snapshots-container1">
+	<table>
+	<tr>
 	<td>
-		Available Snapshots:
-		<div wicket:id="snapshots" class="snapshot">
-			<span wicket:id="label"></span> <br/>
-			<a wicket:id="browse">browse</a>&nbsp;
-			<a wicket:id="restore" onclick="return confirm('Are you sure you want to restore the snapshot?')">restore</a>&nbsp;
-			<a wicket:id="delete" onclick="return confirm('Are you sure you want to delete the snapshot?');">delete</a>
+		<div class="brix-snapshots-caption">
+			<wicket:message key="availableSnapshots"/>
+		</div>
+		<div wicket:id="snapshots" class="brix-snapshots-item">
+			<span wicket:id="label"></span>
+			<div class="brix-buttons-left"><div class="brix-buttons-left1">
+				<a class="brix-button-thin" wicket:id="browse"><wicket:message key="browse"/></a>
+				<a class="brix-button-thin" wicket:id="restore" wicket:message="onclick:restoreOnClick"><wicket:message key="restore"/></a>
+				<a class="brix-button-thin" wicket:id="delete" wicket:message="onclick:deleteOnClick"><wicket:message key="delete"/></a>
+			</div></div>
 		</div>
 			
 	</td>
 	
-	<td class="actions">
-		<div class="action">
-			<a wicket:id="createSnapshot">Create Snapshot</a> <br/>
+	<td class="brix-snapshots-actions">
+		<div class="brix-snapshots-action">
+			<a wicket:id="createSnapshot" class="brix-button"><wicket:message key="createSnapshot"/></a>
 		</div>
-		<div class="action">
-			<a wicket:id="downloadWorkspace">Download Workspace as XML</a> <br/>
+		<div class="brix-snapshots-action">
+			<a wicket:id="downloadWorkspace" class="brix-button"><wicket:message key="downloadWorkspace"/></a>
 		</div>
-		<div class="action">
+		<div class="brix-snapshots-action">
 			<form wicket:id="uploadForm">
-				Restore Workspace from XML <br/> 
-				<input wicket:id="upload" type="file"/> <input wicket:id="submit" type="submit" value="Submit"/>
+				<wicket:message key="restoreWorkspace"/> <br/> 
+				<input wicket:id="upload" type="file"/> <br/> 
+				<a wicket:id="submit" class="brix-button"><wicket:message key="submit"/></a>
 			</form>
 		</div>
-	</td>
-	
-	</tr></table>
+	</td>	
+	</tr>
+	</table>
+</div></div>
+
 </wicket:panel>

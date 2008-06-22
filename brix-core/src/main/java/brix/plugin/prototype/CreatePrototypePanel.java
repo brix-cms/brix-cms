@@ -48,7 +48,7 @@ public class CreatePrototypePanel extends SelectItemsPanel<Void>
                 }
                 else
                 {
-                    message.setModelObject("You have to select at least one node.");
+                    message.setModelObject(getString("youHaveToSelectAtLeastOneNode"));
                 }
                 target.addComponent(message);
             }

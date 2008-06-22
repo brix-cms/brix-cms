@@ -9,8 +9,8 @@ import javax.jcr.ImportUUIDBehavior;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
@@ -187,7 +187,7 @@ public class ManageSnapshotsPanel extends Panel<Workspace>
         final FileUploadField upload = new FileUploadField("upload");
         uploadForm.add(upload);
 
-        uploadForm.add(new Button<Object>("submit")
+        uploadForm.add(new SubmitLink<Object>("submit")
         {
             @Override
             public void onSubmit()

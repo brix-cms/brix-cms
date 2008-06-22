@@ -1,10 +1,20 @@
 <wicket:panel>
 	<form wicket:id="form">
-		Title: <input wicket:id="title" type="text"/> <br/>
-		Reference: <span wicket:id="referenceEditor"></span><br/>
-		Css Class: <input wicket:id="cssClass" type="text"/><br/>
-		<br/>
-		<a wicket:id="update" href="#">Update</a>
+		<table class="brix-property-edit">
+			<tr>
+				<td class="brix-property-label"><wicket:message key="title"/></td>
+				<td class="brix-property-value"><input wicket:id="title" type="text"/></td>
+			</tr>
+			<tr>
+				<td class="brix-property-label"><wicket:message key="reference"/></td>
+				<td class="brix-property-value"><span wicket:id="referenceEditor"></span></td>
+			</tr>
+			<tr>
+				<td class="brix-property-label"><wicket:message key="cssClass"/></td>
+				<td class="brix-property-value"><input wicket:id="cssClass" type="text"/></td>
+			</tr>
+		</table>
+		<a wicket:id="update" href="#" class="brix-button"><wicket:message key="update"/></a>
 	</form>
 	<div wicket:id="feedback"></div>
 </wicket:panel>
