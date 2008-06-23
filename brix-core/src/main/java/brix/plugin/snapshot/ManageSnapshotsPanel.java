@@ -205,7 +205,6 @@ public class ManageSnapshotsPanel extends Panel<Workspace>
                         if (session.itemExists(brix.getRootPath()))
                         {
                             session.getItem(brix.getRootPath()).remove();
-                            session.save();
                         }
                         session.importXML("/", s,
                             ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
