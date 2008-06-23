@@ -295,6 +295,7 @@ div.brix-admin div.brix-site-tree-container table.wicket-tree-content {
 	width: 100%;
 }
 
+
 div.brix-admin div.brix-site-tree-container table.selected {
 }
 
@@ -948,8 +949,7 @@ div.brix-admin table.brix-menu-container {
 	margin-top: 0.8em;		
 }
 
-div.brix-admin td.brix-menu-selector {
-	padding-top: 1em;		
+div.brix-admin td.brix-menu-selector {		
 	border-right: 1px solid #7894BB;
 	white-space: nowrap;
 	vertical-align: top;
@@ -957,13 +957,17 @@ div.brix-admin td.brix-menu-selector {
 
 div.brix-admin td.brix-menu-selector ul {
 	border-top: 1px solid #e0e0e0;
+	margin-top: 1em;
+}
+
+div.brix-admin td.brix-menu-selector li {
+	border-bottom: 1px solid #e0e0e0;
 }
 
 div.brix-admin td.brix-menu-selector li a {
 	display: block;
 	padding: 4px;
-	padding-right: 1em;
-	border-bottom: 1px solid #e0e0e0;
+	padding-right: 1em;	
 	border-left: 1px solid #e0e0e0;
 }
 
@@ -971,19 +975,19 @@ div.brix-admin td.brix-menu-selector li > a:hover {
 	background-color: #eee;	
 }
 
-div.brix-admin td.brix-menu-selector li span
-{
+div.brix-admin td.brix-menu-selector li span {
 	display: block;
+	_height: 0.1em; /* Give element layout (IE6 padding bug workaround) */
 }
 
 div.brix-admin td.brix-menu-selector li span em {
-	background-color: #7894BB;
-	border-bottom: 1px solid #e0e0e0;
+	background-color: #7894BB;	
 	border-left: 1px solid #e0e0e0;
 	padding: 4px;
 	padding-right: 1em;
 	color: white;
 	display: block;
+	
 }
 
 div.brix-admin td.brix-menu-editor {
@@ -991,7 +995,7 @@ div.brix-admin td.brix-menu-editor {
 	border-bottom: 1px solid #7894BB;
 	border-right: 1px solid #7894BB;
 	padding: 0.7em;
-	width: 100%;	
+	width: 100%; 	
 }
 
 div.brix-admin div.brix-menu-editor-buttons {
@@ -1004,6 +1008,7 @@ div.brix-admin div.brix-menu-editor-panel {
 
 div.brix-admin table.brix-menu-editor {
 	width: 100%;
+	*width: auto; /* IE table layout bug */
 	table-layout: fixed;
 }
 

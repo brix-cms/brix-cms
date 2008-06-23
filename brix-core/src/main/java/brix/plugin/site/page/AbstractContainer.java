@@ -268,13 +268,13 @@ public abstract class AbstractContainer extends BrixFileNode
     	}
     	if (node == null)
     	{
-    		container =  SitePlugin.get().getGloblContainer(getSession());
+    		container =  SitePlugin.get().getGlobalContainer(getSession());
     		if (container != null)
     		{
     			node = container.tiles().getTile(id);
     		}
     	}
-    	return null;
+    	return node;
     }
     
     public Collection<String> getTileIDs()

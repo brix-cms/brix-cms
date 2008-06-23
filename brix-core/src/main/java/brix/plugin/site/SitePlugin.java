@@ -450,7 +450,7 @@ public class SitePlugin implements Plugin
 		}
 	}
 
-	public AbstractContainer getGloblContainer(JcrSession session)
+	public AbstractContainer getGlobalContainer(JcrSession session)
 	{
 		if (session.itemExists(getGlobalContainerPath()))
 		{
@@ -464,7 +464,7 @@ public class SitePlugin implements Plugin
 
 	public Collection<String> getGlobalVariableKeys(JcrSession session)
 	{
-		AbstractContainer globalContainer = getGloblContainer(session);
+		AbstractContainer globalContainer = getGlobalContainer(session);
 		Collection<String> result;
 		if (globalContainer != null)
 		{
@@ -479,7 +479,7 @@ public class SitePlugin implements Plugin
 
 	public String getGlobalVariableValue(JcrSession session, String variableKey)
 	{
-		AbstractContainer globalContainer = getGloblContainer(session);
+		AbstractContainer globalContainer = getGlobalContainer(session);
 		if (globalContainer != null)
 		{
 			return globalContainer.getVariableValue(variableKey, false);
@@ -492,7 +492,7 @@ public class SitePlugin implements Plugin
 
 	public Collection<String> getGlobalTileIDs(JcrSession session)
 	{
-		AbstractContainer globalContainer = getGloblContainer(session);
+		AbstractContainer globalContainer = getGlobalContainer(session);
 		Set<String> result;
 		if (globalContainer != null)
 		{

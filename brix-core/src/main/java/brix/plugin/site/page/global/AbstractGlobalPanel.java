@@ -17,7 +17,7 @@ public abstract class AbstractGlobalPanel extends Panel<BrixNode>
 	private static BrixNode getContainerNode(Workspace workspace)
 	{
 		JcrSession session = Brix.get().getCurrentSession(workspace.getId());
-		return SitePlugin.get().getGloblContainer(session);
+		return SitePlugin.get().getGlobalContainer(session);
 	}
 	
 	public AbstractGlobalPanel(String id, IModel<Workspace> workspaceModel)
