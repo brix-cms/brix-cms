@@ -13,12 +13,8 @@ import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
 import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
 import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.Response;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 import org.apache.wicket.util.file.File;
@@ -34,7 +30,6 @@ import brix.jcr.ThreadLocalSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.page.Page;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.BrixNodeWebPage;
@@ -71,13 +66,8 @@ public class WicketApplication extends WebApplication
      */
     public Class getHomePage()
     {
-        return HomePage.class;
-    }
-
-    @Override
-    public RequestCycle newRequestCycle(Request request, Response response)
-    {
-        return new WicketRequestCycle(this, (WebRequest)request, response);
+        // brix takes over the homepage, so no need to return one
+        return null;
     }
 
     @Override
@@ -136,7 +126,7 @@ public class WicketApplication extends WebApplication
         properties = new ApplicationProperties();
         createRepository();
         sessionFactory = new ThreadLocalSessionFactory(repository, properties
-                .buildSimpleCredentials());
+            .buildSimpleCredentials());
 
         try
         {
@@ -172,7 +162,7 @@ public class WicketApplication extends WebApplication
                     int trailingSlashesCount, boolean redirect)
             {
                 return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-                        .get(), null, trailingSlashesCount, redirect);
+                    .get(), null, trailingSlashesCount, redirect);
             }
         });
 
@@ -194,9 +184,8 @@ public class WicketApplication extends WebApplication
                 Workspace w = sp.createSite(wn, defaultState);
                 JcrSession session = brix.getCurrentSession(w.getId());
 
-                session.importXML("/", getClass().getResourceAsStream(
-                "workspace.xml"),
-                ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                session.importXML("/", getClass().getResourceAsStream("workspace.xml"),
+                    ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
                 session.save();
             }
@@ -230,7 +219,7 @@ public class WicketApplication extends WebApplication
             {
 
                 ClientRepositoryFactory factory = new ClientRepositoryFactory(
-                        new JackrabbitClientAdapterFactory());
+                    new JackrabbitClientAdapterFactory());
                 repository = factory.getRepository("rmi://localhost:1099/jackrabbit");
             }
             else
@@ -242,14 +231,16 @@ public class WicketApplication extends WebApplication
                     if (!home.mkdirs())
                     {
                         throw new RuntimeException("Could not create repository home directory: " +
-                                home.getAbsolutePath());
+                            home.getAbsolutePath());
                     }
                 }
 
                 File configFile = new File(home, "repository.xml");
-                if (!configFile.exists()) {
-                    FileOutputStream fos=new FileOutputStream(configFile);
-                    InputStream in=getClass().getClassLoader().getResourceAsStream("brix/demo/repository.xml");
+                if (!configFile.exists())
+                {
+                    FileOutputStream fos = new FileOutputStream(configFile);
+                    InputStream in = getClass().getClassLoader().getResourceAsStream(
+                        "brix/demo/repository.xml");
                     Streams.copy(in, fos);
                     fos.close();
                     in.close();
@@ -268,7 +259,7 @@ public class WicketApplication extends WebApplication
         catch (Exception e)
         {
             throw new RuntimeException("Couldn't create jackrabbit repository, make sure you"
-                    + " have the jcr.repository.location config property set", e);
+                + " have the jcr.repository.location config property set", e);
         }
     }
 
