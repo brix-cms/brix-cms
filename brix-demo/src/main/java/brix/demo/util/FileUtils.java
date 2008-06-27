@@ -41,7 +41,7 @@ public class FileUtils
 
     public static void copyClassResourceToFile(String source, File destination)
     {
-        final InputStream in = FileUtils.class.getClassLoader().getResourceAsStream("source");
+        final InputStream in = FileUtils.class.getResourceAsStream(source);
         if (in == null)
         {
             throw new RuntimeException("Class resource: " + source + " does not exist");
@@ -57,7 +57,7 @@ public class FileUtils
         catch (IOException e)
         {
             throw new RuntimeException("Could not copy class resource: " + source +
-                " to destination: " + destination.getAbsolutePath());
+                    " to destination: " + destination.getAbsolutePath());
         }
     }
 }

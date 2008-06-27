@@ -47,7 +47,7 @@ public class JcrUtils
             File cfg = new File(home, "repository.xml");
             if (!cfg.exists())
             {
-                FileUtils.copyClassResourceToFile("brix/demo/repository.xml", cfg);
+                FileUtils.copyClassResourceToFile("/brix/demo/repository.xml", cfg);
             }
 
             InputStream configStream = new FileInputStream(cfg);
