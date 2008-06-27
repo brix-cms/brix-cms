@@ -27,9 +27,9 @@ public class DemoBrix extends Brix
 
     private static Logger logger = LoggerFactory.getLogger(DemoBrix.class);
 
-    public DemoBrix(JcrSessionFactory sf)
+    public DemoBrix(BrixConfig config, JcrSessionFactory sf)
     {
-        super(new BrixConfig(), sf);
+        super(config, sf);
         AbstractSitePagePlugin plugin = new PageSiteNodePlugin(this);
 
         SitePlugin sitePlugin = SitePlugin.get(this);
@@ -65,7 +65,7 @@ public class DemoBrix extends Brix
                 protected List<String> getAccessibleWorkspaceNames()
                 {
                     return Arrays.asList(getSession(null).getWorkspace()
-                        .getAccessibleWorkspaceNames());
+                            .getAccessibleWorkspaceNames());
                 }
 
                 @Override

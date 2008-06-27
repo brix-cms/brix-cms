@@ -20,6 +20,9 @@ public class ApplicationProperties
     private String jcrPassword;
     private String jcrDefaultWorkspace;
 
+    private int httpPort;
+    private int httpsPort;
+
     public ApplicationProperties()
     {
         try
@@ -77,6 +80,14 @@ public class ApplicationProperties
         {
             jcrDefaultWorkspace = properties.getProperty("jcr.defaultWorkspace");
         }
+        if (properties.containsKey("http.port"))
+        {
+            httpPort = Integer.parseInt(properties.getProperty("http.port"));
+        }
+        if (properties.containsKey("https.port"))
+        {
+            httpsPort = Integer.parseInt(properties.getProperty("https.port"));
+        }
 
     }
 
@@ -103,6 +114,17 @@ public class ApplicationProperties
     public Credentials buildSimpleCredentials()
     {
         return new SimpleCredentials(getJcrLogin(), getJcrPassword().toString().toCharArray());
-
     }
+
+    public int getHttpPort()
+    {
+        return httpPort;
+    }
+
+    public int getHttpsPort()
+    {
+        return httpsPort;
+    }
+
+
 }

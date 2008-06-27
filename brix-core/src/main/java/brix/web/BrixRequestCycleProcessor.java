@@ -21,6 +21,8 @@ import org.apache.wicket.util.string.Strings;
 import brix.Brix;
 import brix.BrixNodeModel;
 import brix.Path;
+import brix.config.BrixConfig;
+import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
@@ -37,13 +39,68 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
         this.brix = brix;
     }
 
-    public abstract BrixNode getNodeForUriPath(Path path);
+    /**
+     * Resolves uri path to a {@link BrixNode}. By default this method uses
+     * {@link BrixConfig#getUriMapper()} to map the uri to a node path.
+     * 
+     * @param uriPath
+     *            uri path
+     * @return node that maps to the <code>uriPath</code> or <code>null</code> if none
+     */
+    protected BrixNode getNodeForUriPath(final Path uriPath)
+    {
+        BrixNode node = null;
 
-    public abstract Path getUriPathForNode(BrixNode node);
+        // create desired nodepath
+        final Path nodePath = brix.getConfig().getUriMapper().getNodePathForUriPath(
+            uriPath.toAbsolute(), brix);
 
-    public abstract int getHttpPort();
+        if (nodePath != null)
+        {
+            // allow site plugin to translate the node path into an actual jcr path
+            final String jcrPath = SitePlugin.get().toRealWebNodePath(nodePath.toString());
 
-    public abstract int getHttpsPort();
+            // retrieve jcr session
+            final String workspace = getWorkspace();
+            final JcrSession session = brix.getCurrentSession(workspace);
+
+            if (session.itemExists(jcrPath))
+            {
+                // node exists, return it
+                node = (BrixNode)session.getItem(jcrPath);
+            }
+        }
+
+        return node;
+    }
+
+    /**
+     * Creates a uri path for the specified <code>node</code> By default this method uses
+     * {@link BrixConfig#getUriMapper()} to map node path to a uri path.
+     * 
+     * @param node
+     *            node to create uri path for
+     * @return uri path that represents the node
+     */
+    public Path getUriPathForNode(final BrixNode node)
+    {
+        // allow site plugin to translate jcr path into node path
+        final String jcrPath = SitePlugin.get().fromRealWebNodePath(node.getPath());
+        final Path nodePath = new Path(jcrPath);
+
+        // use urimapper to create the uri
+        return brix.getConfig().getUriMapper().getUriPathForNode(nodePath, brix);
+    }
+
+    public final int getHttpPort()
+    {
+        return brix.getConfig().getHttpPort();
+    }
+
+    public final int getHttpsPort()
+    {
+        return brix.getConfig().getHttpsPort();
+    }
 
     public BrixRequestCycleProcessor setHandleHomePage(boolean handleHomePage)
     {

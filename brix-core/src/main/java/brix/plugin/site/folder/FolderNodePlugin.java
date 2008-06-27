@@ -35,10 +35,10 @@ public class FolderNodePlugin implements SiteNodePlugin
 
         BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor)RequestCycle.get()
                 .getProcessor();
-        Path nodePath = processor.getUriPathForNode(node);
+        Path uriPath = processor.getUriPathForNode(node);
 
         // check if the exact request path matches the node path
-        if (new Path(path).equals(nodePath) == false)
+        if (new Path(path).equals(uriPath) == false)
         {
             return null;
         }

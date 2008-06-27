@@ -338,6 +338,18 @@ public final class Path implements Iterable<String>, Serializable
         }
     }
 
+    public Path toAbsolute()
+    {
+        if (!isAbsolute())
+        {
+            return ROOT.append(this);
+        }
+        else
+        {
+            return this;
+        }
+    }
+
     public Path toRelative(Path ancestor)
     {
         if (isRoot())

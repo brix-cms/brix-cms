@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import brix.Brix;
 import brix.Path;
+import brix.config.BrixConfig;
+import brix.config.PrefixUriMapper;
 import brix.demo.ApplicationProperties;
 import brix.demo.util.JcrUtils;
 import brix.demo.web.admin.AdminPage;
@@ -69,41 +71,10 @@ public class WicketApplication extends WebApplication
         {
 
             @Override
-            public BrixNode getNodeForUriPath(Path path)
-            {
-                String nodePath = SitePlugin.get().toRealWebNodePath(path.toString());
-
-                String workspace = getWorkspace();
-                JcrSession session = brix.getCurrentSession(workspace);
-                if (session.itemExists(nodePath))
-                    return (BrixNode)session.getItem(nodePath);
-                else
-                    return null;
-            }
-
-            @Override
             protected String getDefaultWorkspaceName()
             {
                 String name = properties.getJcrDefaultWorkspace();
                 return SitePlugin.get().getSiteWorkspace(name, "").getId();
-            }
-
-            @Override
-            public Path getUriPathForNode(BrixNode node)
-            {
-                return new Path(SitePlugin.get().fromRealWebNodePath(node.getPath()));
-            }
-
-            @Override
-            public int getHttpPort()
-            {
-                return Integer.getInteger("jetty.port", 8080);
-            }
-
-            @Override
-            public int getHttpsPort()
-            {
-                return Integer.getInteger("jetty.sslport", 8443);
             }
 
         };
@@ -122,11 +93,15 @@ public class WicketApplication extends WebApplication
 
 
         sessionFactory = new ThreadLocalSessionFactory(repository, properties
-            .buildSimpleCredentials());
+                .buildSimpleCredentials());
 
         try
         {
-            brix = new DemoBrix(sessionFactory);
+            BrixConfig config = new BrixConfig();
+            config.setUriMapper(new PrefixUriMapper(new Path("/docs/cms")));
+            config.setHttpPort(properties.getHttpPort());
+            config.setHttpsPort(properties.getHttpsPort());
+            brix = new DemoBrix(config, sessionFactory);
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
@@ -158,7 +133,7 @@ public class WicketApplication extends WebApplication
                     int trailingSlashesCount, boolean redirect)
             {
                 return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-                    .get(), null, trailingSlashesCount, redirect);
+                        .get(), null, trailingSlashesCount, redirect);
             }
         });
 
@@ -181,7 +156,7 @@ public class WicketApplication extends WebApplication
                 JcrSession session = brix.getCurrentSession(w.getId());
 
                 session.importXML("/", getClass().getResourceAsStream("workspace.xml"),
-                    ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                        ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
                 session.save();
             }
