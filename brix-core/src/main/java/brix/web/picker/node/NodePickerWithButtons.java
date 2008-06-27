@@ -7,21 +7,22 @@ import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
+import brix.web.tree.JcrTreeNode;
+import brix.web.tree.NodeFilter;
 
 public class NodePickerWithButtons extends Panel<BrixNode>
 {
 
-    public NodePickerWithButtons(String id, String workspaceName, NodeFilter nodeFilter)
+    public NodePickerWithButtons(String id, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter)
     {
         super(id);
-        init(workspaceName, nodeFilter);
+        init(rootNode, visibleFilter, enabledFilter);
     }
 
-    public NodePickerWithButtons(String id, IModel<BrixNode> model, String workspaceName,
-            NodeFilter nodeFilter)
+    public NodePickerWithButtons(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter)
     {
         super(id, model);
-        init(workspaceName, nodeFilter);
+        init(rootNode, visibleFilter, enabledFilter);
     }
 
     private IModel<BrixNode> nodeModel;
@@ -31,19 +32,11 @@ public class NodePickerWithButtons extends Panel<BrixNode>
         return true;
     }
     
-    private void init(String workspaceName, NodeFilter nodeFilter)
+    private void init(JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter)
     {
-        BrixNode initial = getModelObject();
-        nodeModel = new BrixNodeModel(initial);
-
-        add(new NodePicker("picker", this.nodeModel, workspaceName, nodeFilter)
-        {
-            @Override
-            public boolean isDisplayFiles()
-            {
-                return NodePickerWithButtons.this.isDisplayFiles();
-            }
-        });
+    	nodeModel = new BrixNodeModel(getModel().getObject());
+    	
+        add(new NodePicker("picker", this.nodeModel, rootNode, visibleFilter, enabledFilter));
 
         add(new AjaxLink<Void>("ok")
         {

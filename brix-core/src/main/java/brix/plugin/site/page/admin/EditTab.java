@@ -19,12 +19,12 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.page.TemplateSiteNodePlugin;
+import brix.plugin.site.picker.node.SiteNodePickerPanel;
 import brix.tinymce.TinyMceEnabler;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.model.ModelBuffer;
-import brix.web.picker.node.NodeFilter;
-import brix.web.picker.node.NodePickerPanel;
 import brix.web.picker.node.NodeTypeFilter;
+import brix.web.tree.NodeFilter;
 
 abstract class EditTab extends NodeManagerPanel
 {
@@ -53,7 +53,7 @@ abstract class EditTab extends NodeManagerPanel
 
 		IModel<BrixNode> model = adapter.forNodeProperty("template");
 
-		form.add(new NodePickerPanel("templatePicker", model, workspace, filter));
+		form.add(new SiteNodePickerPanel("templatePicker", model, workspace, filter));
 
 		IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
 		form.add(new CheckBox("requiresSSL", booleanModel));

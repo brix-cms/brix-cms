@@ -65,7 +65,8 @@ public class JcrUtil
 	 * @param targetRootNode
 	 * @return
 	 */
-	private static JcrNode ensureParentExists(JcrNode originalNode, JcrNode targetRootNode, ParentLimiter parentLimiter)
+	private static JcrNode ensureParentExists(JcrNode originalNode, JcrNode targetRootNode,
+			ParentLimiter parentLimiter, String xmlns, Map<String, String> uuidMap)
 	{
 		List<JcrNode> originalParents = getParents(originalNode, parentLimiter);
 		for (JcrNode node : originalParents)
@@ -77,7 +78,7 @@ public class JcrUtil
 			}
 			else
 			{
-				targetRootNode = targetRootNode.addNode(name, node.getPrimaryNodeType().getName());
+				targetRootNode = cloneNode(node, targetRootNode, xmlns, uuidMap);
 			}
 		}
 		return targetRootNode;
@@ -119,18 +120,22 @@ public class JcrUtil
 
 	/**
 	 * Creates a node that is child of parentNode having same name (and possibly
-	 * uuid - depending on the value of uuidBehavior parameter) as originalNode.
+	 * uuid) as originalNode.
+	 * 
+	 * What happens if there is node with same UUID in target workspace depends
+	 * on the location of the node. If the node with same uuid is a direct child
+	 * of {@link parentNode}, it gets replaced. Otherwise node with new UUID is
+	 * created and the original one is preserved.
 	 * 
 	 * @see ImportUUIDBehavior
 	 * 
 	 * @param originalNode
 	 * @param parentNode
 	 * @param xmlns
-	 * @param uuidBehavior
 	 * @param uuidMap
 	 * @return
 	 */
-	private static JcrNode createNodeWithUUID(JcrNode originalNode, JcrNode parentNode, String xmlns, int uuidBehavior,
+	private static JcrNode createNodeWithUUID(JcrNode originalNode, JcrNode parentNode, String xmlns,
 			Map<String, String> uuidMap)
 	{
 		// construct the import xml snippet
@@ -163,6 +168,30 @@ public class JcrUtil
 			// retarded
 		}
 
+		JcrNode existing = null;
+		try
+		{
+			// there doesn't seem to be a way in JCR to check if there is
+			// such node in workspace
+			// except trying to get it and then catching the exception
+			existing = session.getNodeByUUID(uuid);
+		}
+		catch (JcrException e)
+		{
+
+		}
+
+		int uuidBehavior;
+
+		if (existing != null && existing.getParent().equals(parentNode))
+		{
+			uuidBehavior = ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING;
+		}
+		else
+		{
+			uuidBehavior = ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW;
+		}
+
 		if (uuidBehavior != ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW)
 		{
 			// simpler alternative - if we replace node or throw error on UUID
@@ -176,19 +205,8 @@ public class JcrUtil
 			// and all
 			// cloned references should use the new one
 
-			boolean exists = false;
-			try
-			{
-				// there doesn't seem to be a way in JCR to check if there is
-				// such node in workspace
-				// except trying to get it and then catching the exception
-				session.getNodeByUUID(uuid);
-				exists = true;
-			}
-			catch (JcrException e)
-			{
+			boolean exists = existing != null;
 
-			}
 			session.importXML(parentNode.getPath(), stream, uuidBehavior);
 			if (exists == false)
 			{
@@ -198,7 +216,6 @@ public class JcrUtil
 			else
 			{
 				// otherwise get the latest child with such name
-
 				JcrNodeIterator iterator = parentNode.getNodes(name);
 				iterator.skip(iterator.getSize() - 1);
 				JcrNode newNode = iterator.nextNode();
@@ -240,34 +257,15 @@ public class JcrUtil
 		return value;
 	}
 
-	/**
-	 * Creates copy (without setting the properties) of originalNode and it's
-	 * children.
-	 * 
-	 * @param originalNode
-	 *            node being cloned
-	 * @param targetParent
-	 *            parent of the clone
-	 * @param xmlns
-	 *            string containing the xmlns attributes of sv:node element
-	 * @param uuidBehavior
-	 * @param uuidMap
-	 *            map that is used to track mapping from old uuid to new one (in
-	 *            case uuidBehavior is
-	 *            {@link ImportUUIDBehavior#IMPORT_UUID_CREATE_NEW}.
-	 * @param nodes
-	 *            list of pair <originalNode, targetNode). used to track added
-	 *            nodes so that the properties can be set after all nodes are
-	 *            created.
-	 */
-	private static void createNodeAndChildren(JcrNode originalNode, JcrNode targetParent, String xmlns,
-			int uuidBehavior, Map<String, String> uuidMap, List<NodePair> nodes)
+	private static JcrNode cloneNode(JcrNode originalNode, JcrNode targetParent, String xmlns,
+			Map<String, String> uuidMap)
 	{
+
 		// create node
 		JcrNode targetNode;
 		if (originalNode.isNodeType("mix:referenceable"))
 		{
-			targetNode = createNodeWithUUID(originalNode, targetParent, xmlns, uuidBehavior, uuidMap);
+			targetNode = createNodeWithUUID(originalNode, targetParent, xmlns, uuidMap);
 		}
 		else
 		{
@@ -283,6 +281,31 @@ public class JcrUtil
 				targetNode.addMixin(type.getName());
 			}
 		}
+		return targetNode;
+	}
+
+	/**
+	 * Creates copy (without setting the properties) of originalNode and it's
+	 * children.
+	 * 
+	 * @param originalNode
+	 *            node being cloned
+	 * @param targetParent
+	 *            parent of the clone
+	 * @param xmlns
+	 *            string containing the xmlns attributes of sv:node element
+	 * @param uuidMap
+	 *            map that is used to track mapping from old uuid to new one (in
+	 *            case new UUIDs have been created.
+	 * @param nodes
+	 *            list of pair <originalNode, targetNode). used to track added
+	 *            nodes so that the properties can be set after all nodes are
+	 *            created.
+	 */
+	private static void createNodeAndChildren(JcrNode originalNode, JcrNode targetParent, String xmlns,
+			Map<String, String> uuidMap, List<NodePair> nodes)
+	{
+		JcrNode targetNode = cloneNode(originalNode, targetParent, xmlns, uuidMap);
 
 		// add to nodes list so that we can set properties later
 		NodePair pair = new NodePair();
@@ -294,7 +317,7 @@ public class JcrUtil
 		JcrNodeIterator nodeIterator = originalNode.getNodes();
 		while (nodeIterator.hasNext())
 		{
-			createNodeAndChildren(nodeIterator.nextNode(), targetNode, xmlns, uuidBehavior, uuidMap, nodes);
+			createNodeAndChildren(nodeIterator.nextNode(), targetNode, xmlns, uuidMap, nodes);
 		}
 	}
 
@@ -355,17 +378,16 @@ public class JcrUtil
 	 * @param originalNode
 	 * @param targetRootNode
 	 * @param xmlns
-	 * @param uuidBehavior
 	 * @param uuidMap
 	 * @param nodes
 	 * @param parentLimiter
 	 */
-	private static void createNode(JcrNode originalNode, JcrNode targetRootNode, String xmlns, int uuidBehavior,
+	private static void createNode(JcrNode originalNode, JcrNode targetRootNode, String xmlns,
 			Map<String, String> uuidMap, List<NodePair> nodes, ParentLimiter parentLimiter)
 	{
-		JcrNode targetParent = ensureParentExists(originalNode, targetRootNode, parentLimiter);
+		JcrNode targetParent = ensureParentExists(originalNode, targetRootNode, parentLimiter, xmlns, uuidMap);
 
-		createNodeAndChildren(originalNode, targetParent, xmlns, uuidBehavior, uuidMap, nodes);
+		createNodeAndChildren(originalNode, targetParent, xmlns, uuidMap, nodes);
 	}
 
 	/**
@@ -399,19 +421,22 @@ public class JcrUtil
 	/**
 	 * Clones the given list of nodes. The clones will be located relative to
 	 * targetRootNode.
-	 * 
-	 * @see ImportUUIDBehavior
+	 * <p>
+	 * If a node being cloned is referenceable and there is already node with
+	 * same UUID in the target workspace, the location of the node in target
+	 * workspace determines the result. If node being cloned would become child
+	 * of the same parent as the existing node in target workspace, the existing
+	 * node will be replaced. Otherwise the node being cloned will get a new
+	 * UUID.
 	 * 
 	 * @param nodes
 	 *            list of nodes to clone
 	 * @param targetRootNode
 	 *            parent for clones
-	 * @param uuidBehavior
-	 *            determines behavior on UUID clashes
 	 */
-	public static void cloneNodes(List<JcrNode> nodes, JcrNode targetRootNode, int uuidBehavior)
+	public static void cloneNodes(List<JcrNode> nodes, JcrNode targetRootNode)
 	{
-		cloneNodes(nodes, targetRootNode, uuidBehavior, null);
+		cloneNodes(nodes, targetRootNode, null);
 	}
 
 	/**
@@ -425,37 +450,88 @@ public class JcrUtil
 	};
 
 	/**
+	 * Interface for dynamically providing target root nodes for individual
+	 * cloned nodes.
+	 * 
+	 * @author Matej Knopp
+	 */
+	public static interface TargetRootNodeProvider
+	{
+		public JcrNode getTargetRootNode(JcrNode node);
+	};
+
+	/**
 	 * Clones the given list of nodes. The clones will be located relative to
 	 * targetRootNode.
+	 * <p>
+	 * If a node being cloned is referenceable and there is already node with
+	 * same UUID in the target workspace, the location of the node in target
+	 * workspace determines the result. If node being cloned would become child
+	 * of the same parent as the existing node in target workspace, the existing
+	 * node will be replaced. Otherwise the node being cloned will get a new
+	 * UUID.
 	 * 
-	 * @see ImportUUIDBehavior
+	 * @param nodes
+	 *            list of nodes to clone
+	 * @param targetRootNodeProvider
+	 *            provider for parents for clones
+	 * @param parentLimiter
+	 *            (non mandatory) allows to skip certain nodes when creating
+	 *            parent hierarchy for cloned nodes
+	 */
+	public static void cloneNodes(List<JcrNode> nodes, TargetRootNodeProvider targetRootNodeProvider,
+			ParentLimiter parentLimiter)
+	{
+		if (nodes != null && !nodes.isEmpty())
+		{
+			JcrNode firstTargetRoot = targetRootNodeProvider.getTargetRootNode(nodes.iterator().next());
+			String xmlns = createXMLNS(firstTargetRoot.getSession());
+			Map<String, String> uuidMap = new HashMap<String, String>();
+
+			nodes = filterRedundantNodes(nodes);
+
+			List<NodePair> processedNodes = new ArrayList<NodePair>();
+
+			for (JcrNode node : nodes)
+			{
+				JcrNode targetRoot = targetRootNodeProvider.getTargetRootNode(node);
+				createNode(node, targetRoot, xmlns, uuidMap, processedNodes, parentLimiter);
+			}
+
+			assignProperties(processedNodes, uuidMap);
+		}
+	}
+
+	/**
+	 * Clones the given list of nodes. The clones will be located relative to
+	 * targetRootNode.
+	 * <p>
+	 * If a node being cloned is referenceable and there is already node with
+	 * same UUID in the target workspace, the location of the node in target
+	 * workspace determines the result. If node being cloned would become child
+	 * of the same parent as the existing node in target workspace, the existing
+	 * node will be replaced. Otherwise the node being cloned will get a new
+	 * UUID.
 	 * 
 	 * @param nodes
 	 *            list of nodes to clone
 	 * @param targetRootNode
 	 *            parent for clones
-	 * @param uuidBehavior
-	 *            determines behavior on UUID clashes
 	 * @param parentLimiter
 	 *            (non mandatory) allows to skip certain nodes when creating
 	 *            parent hierarchy for cloned nodes
 	 */
-	public static void cloneNodes(List<JcrNode> nodes, JcrNode targetRootNode, int uuidBehavior,
-			ParentLimiter parentLimiter)
+	public static void cloneNodes(List<JcrNode> nodes, final JcrNode targetRootNode, ParentLimiter parentLimiter)
 	{
-		String xmlns = createXMLNS(targetRootNode.getSession());
-		Map<String, String> uuidMap = new HashMap<String, String>();
-
-		nodes = filterRedundantNodes(nodes);
-
-		List<NodePair> processedNodes = new ArrayList<NodePair>();
-
-		for (JcrNode node : nodes)
+		TargetRootNodeProvider provider = new TargetRootNodeProvider()
 		{
-			createNode(node, targetRootNode, xmlns, uuidBehavior, uuidMap, processedNodes, parentLimiter);
-		}
+			public JcrNode getTargetRootNode(JcrNode arg0)
+			{
+				return targetRootNode;
+			}
+		};
 
-		assignProperties(processedNodes, uuidMap);
+		cloneNodes(nodes, provider, parentLimiter);
 	}
 
 	/**

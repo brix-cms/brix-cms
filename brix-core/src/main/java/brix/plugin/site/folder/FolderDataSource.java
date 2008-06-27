@@ -17,6 +17,8 @@ import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.tree.SiteNodeFilter;
+import brix.web.tree.NodeFilter;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridSortState;
@@ -46,7 +48,7 @@ abstract class FolderDataSource implements IDataSource
 		{
 			sort(visibleNodes, PROPERTY_NAME, IGridSortState.Direction.ASC);
 		}
-		
+
 		if (node.getPath().equals(SitePlugin.get().getSiteRootPath()) == false)
 		{
 			BrixNode parent = (BrixNode) node.getParent();
@@ -55,7 +57,7 @@ abstract class FolderDataSource implements IDataSource
 				visibleNodes.add(0, parent);
 			}
 		}
-		
+
 		result.setItems(visibleNodes.iterator());
 		result.setTotalCount(visibleNodes.size());
 	}
@@ -175,7 +177,7 @@ abstract class FolderDataSource implements IDataSource
 	private boolean canShowNode(BrixNode node)
 	{
 		Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW, node);
-		if (!node.isHidden() && node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+		if (!node.isHidden() && SITE_FILTER.isNodeAllowed(node) && node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
 		{
 			return true;
 		}
@@ -184,7 +186,9 @@ abstract class FolderDataSource implements IDataSource
 			return false;
 		}
 	}
-	
+
+	private static final NodeFilter SITE_FILTER = new SiteNodeFilter(false, null);
+
 	private List<BrixNode> visibleNodes(JcrNodeIterator iterator)
 	{
 		List<BrixNode> res = new ArrayList<BrixNode>();

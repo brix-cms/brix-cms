@@ -14,7 +14,7 @@ import brix.jcr.api.wrapper.NodeWrapper;
 import brix.jcr.event.EventUtil;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
-import brix.jcr.wrapper.BrixResourceNode;
+import brix.jcr.wrapper.ResourceNode;
 
 public class SessionBehavior implements Behavior
 {
@@ -56,15 +56,15 @@ public class SessionBehavior implements Behavior
 
         for (JcrNodeWrapperFactory factory : factories)
         {
-            if (factory.canWrap(n))
+            if (factory.canWrap(brix, n))
             {
-                return factory.wrap(node, session);
+                return factory.wrap(brix, node, session);
             }
         }
 
-        if (BrixResourceNode.FACTORY.canWrap(n))
+        if (ResourceNode.FACTORY.canWrap(brix, n))
         {
-            return BrixResourceNode.FACTORY.wrap(node, session);
+            return ResourceNode.FACTORY.wrap(brix, node, session);
         }
 
         return new BrixNode(node, session);

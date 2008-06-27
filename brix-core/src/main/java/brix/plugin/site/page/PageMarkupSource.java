@@ -159,7 +159,7 @@ public class PageMarkupSource implements MarkupSource
             return false;
         }
         String simpleTagName = tagName.substring(Brix.NS_PREFIX.length());
-        return Template.CONTENT_TAG.equals(tagName) || "tile".equals(simpleTagName) ||
+        return TemplateNode.CONTENT_TAG.equals(tagName) || "tile".equals(simpleTagName) ||
             "fragment".equals(simpleTagName);
     }
 
@@ -228,7 +228,7 @@ public class PageMarkupSource implements MarkupSource
     {
         AbstractContainer node = nodes.get(current);
         final String simpleTagName = tagName.substring(Brix.NS_PREFIX.length());
-        if (Template.CONTENT_TAG.equals(tagName))
+        if (TemplateNode.CONTENT_TAG.equals(tagName))
         {
             if (current != nodes.size() - 1)
             {

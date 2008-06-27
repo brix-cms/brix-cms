@@ -17,7 +17,7 @@ import brix.jcr.JcrUtil;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrWorkspace;
 import brix.jcr.wrapper.BrixNode;
-import brix.web.picker.node.NodePickerPanel;
+import brix.plugin.site.picker.node.SiteNodePickerPanel;
 
 public class RestoreItemsPanel extends SelectItemsPanel<Void>
 {
@@ -33,14 +33,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
         add(message);
 
 
-        add(new NodePickerPanel("picker", targetNode, targetWorkspaceId, null)
-        {
-            @Override
-            public boolean isDisplayFiles()
-            {
-                return false;
-            }
-        });
+        add(new SiteNodePickerPanel("picker", targetNode, targetWorkspaceId, true, null));
 
         add(new AjaxLink<Void>("restore")
         {

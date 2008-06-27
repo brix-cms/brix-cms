@@ -9,7 +9,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.web.picker.node.NodeFilter;
+import brix.web.tree.NodeFilter;
 
 public class ReferenceEditorConfiguration implements Serializable
 {

@@ -34,8 +34,12 @@ import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.folder.FolderNode;
-import brix.web.tree.AbstractJcrTreeNode;
+import brix.plugin.site.tree.SiteNodeFilter;
+import brix.web.picker.common.TreeAwareNode;
 import brix.web.tree.AbstractTreeModel;
+import brix.web.tree.JcrTreeNode;
+import brix.web.tree.TreeNode;
+import brix.web.util.AbstractModel;
 import brix.workspace.Workspace;
 
 public class NodeManagerContainerPanel extends NodeManagerPanel
@@ -272,7 +276,22 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 			setLinkType(old);
 			return c;
 		}
-
+		
+		@Override
+		protected IModel getNodeTextModel(final IModel nodeModel)
+		{
+			return new AbstractModel<String>()
+			{
+				@Override
+				public String getObject()
+				{
+					JcrTreeNode node = (JcrTreeNode) nodeModel.getObject();
+					BrixNode n = node.getNodeModel().getObject();
+					return n.getUserVisibleName();
+				}
+			};
+		}
+		
 		@Override
 		protected ITreeState newTreeState()
 		{
@@ -287,7 +306,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		{
 			if (selected)
 			{
-				SiteTreeNode n = (SiteTreeNode) node;
+				JcrTreeNode n = (JcrTreeNode) node;
 				NodeManagerContainerPanel.this.setModel(n.getNodeModel());
 				setupDefaultEditor();
 				expandParents(n.getNodeModel().getObject());
@@ -299,7 +318,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 			BrixNode parent = (BrixNode) node.getParent();
 			while (parent.getDepth() > 0)
 			{
-				expandNode(new SiteTreeNode(parent));
+				expandNode(getTreeNode(parent));
 				parent = (BrixNode) parent.getParent();
 			}
 		}
@@ -307,7 +326,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		@Override
 		public boolean isNodeSelected(Object node)
 		{
-			SiteTreeNode n = (SiteTreeNode) node;
+			JcrTreeNode n = (JcrTreeNode) node;
 			IModel<BrixNode> model = n.getNodeModel();
 			return model != null && model.equals(NodeManagerContainerPanel.this.getModel());
 		}
@@ -315,62 +334,29 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		@Override
 		public Collection<Object> getSelectedNodes()
 		{
-			SiteTreeNode node = new SiteTreeNode(getModelObject());
+			JcrTreeNode node = getTreeNode(getModelObject());
 			return Arrays.asList(new Object[] { node });
 		}
 	};
 
-	private class SiteTreeNode extends AbstractJcrTreeNode
-	{
-
-		public SiteTreeNode(BrixNode node)
-		{
-			super(node);
-		}
-
-		@Override
-		protected boolean displayFoldersOnly()
-		{
-			return false;
-		}
-
-		@Override
-		protected AbstractJcrTreeNode newTreeNode(BrixNode node)
-		{
-			return new SiteTreeNode(node);
-		}
-
-		@Override
-		public String toString()
-		{
-			SitePlugin sp = SitePlugin.get();
-			BrixNode node = getNodeModel().getObject();
-			if (sp.getSiteRootPath().equals(node.getPath()))
-			{
-				return getString("siteRoot");
-			}
-			else
-			{
-				return node.getName();
-			}
-		}
-
-	};
-
 	private class TreeModel extends AbstractTreeModel
 	{
-
-		public Object getRoot()
-		{
-			BrixNode root = getRootNode(workspaceModel);
-			return new SiteTreeNode(root);
+		public TreeNode getRoot()
+		{			
+			return getTreeNode(SitePlugin.get().getSiteRootNode(workspaceModel.getObject().getId())); 
 		}
-
 	};
+	
+	private static final SiteNodeFilter NODE_FILTER = new SiteNodeFilter(false, null); 
 
+	private JcrTreeNode getTreeNode(BrixNode node)
+	{
+		return TreeAwareNode.Util.getTreeNode(node, NODE_FILTER);
+	}
+	
 	public void selectNode(BrixNode node)
 	{
-		tree.getTreeState().selectNode(new SiteTreeNode(node), true);
+		tree.getTreeState().selectNode(getTreeNode(node), true);
 	}
 
 	public void updateTree()

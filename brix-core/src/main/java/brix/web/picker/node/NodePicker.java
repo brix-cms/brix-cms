@@ -1,202 +1,100 @@
 package brix.web.picker.node;
 
-import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AbstractBehavior;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SitePlugin;
-import brix.web.picker.node.NodePickerTreeModel.NodePickerTreeNode;
+import brix.web.picker.common.NodePickerTreeGridPanel;
+import brix.web.picker.common.TreeAwareNode;
+import brix.web.tree.JcrTreeNode;
+import brix.web.tree.NodeFilter;
 
-import com.inmethod.grid.IGridColumn;
-import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.PropertyColumn;
-import com.inmethod.grid.column.tree.PropertyTreeColumn;
 import com.inmethod.grid.treegrid.TreeGrid;
 
-public class NodePicker extends Panel
+public class NodePicker extends Panel<BrixNode>
 {
+	private final JcrTreeNode rootNode;
+	private final NodePickerTreeGridPanel<?> grid;
 
-    public NodePicker(String id, IModel<BrixNode> model, String workspaceName, NodeFilter filter)
-    {
-        super(id, model);
+	public NodePicker(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
+	{
+		super(id, model);
 
-        this.filter = filter;
-        this.workspaceName = workspaceName;
-    }
+		this.rootNode = rootNode;
 
-    @Override
-    protected void onBeforeRender()
-    {
-        if (!hasBeenRendered())
-        {
-            this.treeModel = newTreeModel(workspaceName);
-            initComponents();
-            selectInitial();
-        }
-        super.onBeforeRender();
-    }
+		add(grid = new NodePickerTreeGridPanel<Void>("grid", visibilityFilter, enabledFilter)
+		{
+			@Override
+			protected JcrTreeNode getRootNode()
+			{
+				return NodePicker.this.rootNode;
+			}
 
-    protected void selectInitial()
-    {
-        BrixNode node = (BrixNode)getModelObject();
-        if (node != null)
-        {
-            NodePickerTreeNode treeNode = treeModel.treeNodeFor(node);
-            grid.selectItem(new Model(treeNode), true);
-            
-            NodePickerTreeNode parent = getParent(treeNode);
-            
-            while (parent != null)
-            {
-                grid.getTreeState().expandNode(parent);
-                parent = getParent(parent);
-            }
-        }
-    }
-    
-    private NodePickerTreeNode getParent(NodePickerTreeNode node)
-    {
-        return (NodePickerTreeNode)grid.getTree().getParentNode(node);
-    }
+			@Override
+			protected void configureGrid(TreeGrid grid)
+			{
+				super.configureGrid(grid);
+				grid.setAllowSelectMultiple(false);
+				updateSelection();
+				NodePicker.this.configureGrid(grid);
+			}
 
-    protected void initComponents()
-    {
-        grid = new TreeGrid("grid", treeModel, newGridColumns())
-        {
-            @Override
-            protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
-            {
-                BrixNode node = ((NodePickerTreeNode)rowModel.getObject()).getNode();
-                if (filter == null || filter.isNodeAllowed(node))
-                {
-                    if (isItemSelected(rowModel) == false)
-                    {
-                        selectItem(rowModel, true);
-                        onNodeSelected(node);
-                    }
-                    else
-                    {
-                        selectItem(rowModel, false);
-                        onNodeSelected(null);
-                    }
-                    update();
-                }
-            }
+			@Override
+			protected void onNodeSelected(BrixNode node)
+			{
+				NodePicker.this.setModelObject(node);
+			}
 
-            @Override
-            protected void onRowPopulated(WebMarkupContainer rowComponent)
-            {
-                super.onRowPopulated(rowComponent);
-                rowComponent.add(new AbstractBehavior()
-                {
-                    @Override
-                    public void onComponentTag(Component component, ComponentTag tag)
-                    {
-                        BrixNode node = ((NodePickerTreeNode)component.getModelObject()).getNode();
-                        if (filter != null && filter.isNodeAllowed(node) == false)
-                        {
-                            tag.put("class", "disabled");
-                        }
-                    }
-                });
-            }
-        };
-        grid.getTree().setRootLess(true);
-        grid.setContentHeight(18, SizeUnit.EM);
+			@Override
+			protected void onNodeDeselected(BrixNode node)
+			{
+				NodePicker.this.setModelObject(null);
+			}
+		});
+	}
 
-        add(grid);
-    };
+	@Override
+	protected void onBeforeRender()
+	{
+		// First time updateSelection has been rendered from within
+		// NodePickerTreePanel#configureGrid
 
-    protected void onNodeSelected(BrixNode node)
-    {
-        setModelObject(node);
-    }
+		// In all subsequent renders it's called from here. It must be called
+		// before super.onBeforeRender so that the expanded tree items get
+		// chance to render
+		if (hasBeenRendered())
+		{
+			updateSelection();
+		}
 
-    protected List<IGridColumn> newGridColumns()
-    {
-        IGridColumn columns[] = {
-                new PropertyTreeColumn(new ResourceModel("name"), "node.name").setInitialSize(300),
-                new PropertyColumn(new ResourceModel("type"), "name") {
-                    @Override
-                    protected Object getModelObject(IModel rowModel)
-                    {
-                        NodePickerTreeNode n = (NodePickerTreeNode) rowModel.getObject();
-                        return SitePlugin.get().getNodePluginForNode(n.getNode());
-                    }
-                },
-                new DatePropertyColumn(new ResourceModel("lastModified"), "node.lastModified"),
-                new PropertyColumn(new ResourceModel("lastModifiedBy"), "node.lastModifiedBy") };
-        return Arrays.asList(columns);
-    };
+		super.onBeforeRender();
 
-    protected NodePickerTreeModel newTreeModel(final String workspaceName)
-    {
-        return new NodePickerTreeModel(workspaceName)
-        {            
-            @Override
-            protected boolean displayFoldersOnly()
-            {
-                return !isDisplayFiles();
-            }
-        };
-    }
+	}
 
+	private void updateSelection()
+	{
+		BrixNode current = getModelObject();
+		if (current == null)
+		{
+			grid.getGrid().resetSelectedItems();
+		}
+		else
+		{
+			JcrTreeNode node = TreeAwareNode.Util.getTreeNode(getModelObject(), grid.getVisibilityFilter());
+			if (node == null)
+			{
+				grid.getGrid().resetSelectedItems();
+			}
+			else
+			{
+				grid.getGrid().selectItem(new Model<JcrTreeNode>(node), true);
+			}
+		}
+	}
 
-    protected class DatePropertyColumn extends PropertyColumn
-    {
+	protected void configureGrid(TreeGrid grid)
+	{
 
-        public DatePropertyColumn(IModel headerModel, String propertyExpression)
-        {
-            super(headerModel, propertyExpression);
-        }
-
-        @Override
-        protected CharSequence convertToString(Object object)
-        {
-            if (object instanceof Date)
-            {
-                Date date = (Date)object;
-                return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(
-                        date);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-    };
-
-    public void setDisplayFiles(boolean displayFiles)
-    {
-        this.displayFiles = displayFiles;
-    }
-
-    public boolean isDisplayFiles()
-    {
-        return displayFiles;
-    }
-
-    protected TreeGrid getGrid()
-    {
-        return grid;
-    }
-
-    private boolean displayFiles = true;
-    private final String workspaceName;
-    private final NodeFilter filter;
-    private NodePickerTreeModel treeModel;
-    private TreeGrid grid;
+	}
 }

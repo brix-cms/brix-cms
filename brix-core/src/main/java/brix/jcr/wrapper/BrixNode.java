@@ -197,6 +197,16 @@ public class BrixNode extends NodeWrapper
         }
     }
 
+    public String getUserVisibleName()
+    {
+    	return getName();
+    }
+    
+    public String getUserVisibleType()
+    {
+    	return "";
+    }
+    
     public enum Protocol {
         HTTP,
         HTTPS,

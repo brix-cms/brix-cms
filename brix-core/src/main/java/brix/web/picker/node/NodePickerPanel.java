@@ -12,161 +12,157 @@ import org.apache.wicket.model.Model;
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
+import brix.web.tree.JcrTreeNode;
+import brix.web.tree.NodeFilter;
 
 public class NodePickerPanel extends FormComponentPanel<BrixNode>
 {
+	private final JcrTreeNode rootNode;
+	private final NodeFilter enabledFilter;
+	private final NodeFilter visibilityFilter;
 
-    public NodePickerPanel(String id, String workspaceName, NodeFilter nodeFilter)
-    {
-        super(id);
-        this.workspaceName = workspaceName;
-        this.nodeFilter = nodeFilter;
-    }
+	public NodePickerPanel(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter,
+			NodeFilter enabledFilter)
+	{
+		super(id);
 
-    public NodePickerPanel(String id, IModel<BrixNode> model, String workspaceName, NodeFilter nodeFilter)
-    {
-        super(id, model);
-        this.workspaceName = workspaceName;
-        this.nodeFilter = nodeFilter;
-    }
-    
-    private final String workspaceName;
-    private final NodeFilter nodeFilter;
+		this.rootNode = rootNode;
+		this.enabledFilter = enabledFilter;
+		this.visibilityFilter = visibilityFilter;
+	}
 
-    public String getWorkspaceName()
-    {
-        return workspaceName;
-    }
-    
-    public NodeFilter getNodeFilter()
-    {
-        return nodeFilter;
-    }
-    
-    @Override
-    protected void onBeforeRender()
-    {
-        super.onBeforeRender();
-        if (!hasBeenRendered())
-        {
-            init();
-        }
-    }
+	public NodePickerPanel(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
+	{
+		super(id, model);
 
-    protected static final String MODAL_WINDOW_ID = "modalWindow";
+		this.rootNode = rootNode;
+		this.enabledFilter = enabledFilter;
+		this.visibilityFilter = visibilityFilter;
+	}
 
-    @Override
-    public void updateModel()
-    {
-        // don't you dare!
-    }
+	public JcrTreeNode getRootNode()
+	{
+		return rootNode;
+	}
 
-    private void init()
-    {
-        add(newModalWindow(MODAL_WINDOW_ID));
-        final Label<?> label = new Label<String>("label", newLabelModel())
-        {
-        	@Override
-        	public boolean isVisible()
-        	{
-        		return NodePickerPanel.this.getModelObject() != null;
-        	}
-        };
-        setOutputMarkupId(true);
-        add(label);
+	public NodeFilter getEnabledFilter()
+	{
+		return enabledFilter;
+	}
 
-        add(new AjaxLink<Void>("edit")
-        {
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-                getModalWindow().setModel(NodePickerPanel.this.getModel());
-                getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback()
-                {
-                    public void onClose(AjaxRequestTarget target)
-                    {
-                        target.addComponent(NodePickerPanel.this);
-                        NodePickerPanel.this.onClose(target);
-                    }
-                });
-                getModalWindow().show(target);
-            }
-        });
-        
-        add(new AjaxLink<Void>("clear") {
-        	@Override
-        	public void onClick(AjaxRequestTarget target)
-        	{
-        		NodePickerPanel.this.setModelObject(null);
-        		target.addComponent(NodePickerPanel.this);
-        	}
-        	@Override
-        	public boolean isEnabled()
-        	{
-        		return NodePickerPanel.this.getModelObject() != null;
-        	}
-        });
-    }
+	@Override
+	protected void onBeforeRender()
+	{
+		super.onBeforeRender();
+		if (!hasBeenRendered())
+		{
+			init();
+		}
+	}
 
-    protected void onClose(AjaxRequestTarget target)
-    {
+	protected static final String MODAL_WINDOW_ID = "modalWindow";
 
-    }
+	@Override
+	public void updateModel()
+	{
+		// don't you dare!
+	}
 
-    protected NodePickerModalWindow getModalWindow()
-    {
-        return (NodePickerModalWindow)get(MODAL_WINDOW_ID);
-    }
+	private void init()
+	{
+		add(newModalWindow(MODAL_WINDOW_ID));
+		final Label<?> label = new Label<String>("label", newLabelModel())
+		{
+			@Override
+			public boolean isVisible()
+			{
+				return NodePickerPanel.this.getModelObject() != null;
+			}
+		};
+		setOutputMarkupId(true);
+		add(label);
 
-    protected IModel<String> newLabelModel()
-    {
-        return new Model<String>()
-        {
-            @Override
-            public String getObject()
-            {
-                IModel<BrixNode> model = NodePickerPanel.this.getModel();
-                BrixNode node = (BrixNode)model.getObject();
-                return node != null ? SitePlugin.get().pathForNode(node) : "";
-            }
-        };
-    }
+		add(new AjaxLink<Void>("edit")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				getModalWindow().setModel(NodePickerPanel.this.getModel());
+				getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback()
+				{
+					public void onClose(AjaxRequestTarget target)
+					{
+						target.addComponent(NodePickerPanel.this);
+						NodePickerPanel.this.onClose(target);
+					}
+				});
+				getModalWindow().show(target);
+			}
+		});
 
-    
-    protected Component<?> newModalWindow(String id)
-    {
-        return new NodePickerModalWindow(id, getModel(), getWorkspaceName(), getNodeFilter()) {
-            @Override
-            public boolean isDisplayFiles()
-            {
-                return NodePickerPanel.this.isDisplayFiles();
-            }
-        };
-    }
+		add(new AjaxLink<Void>("clear")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				NodePickerPanel.this.setModelObject(null);
+				target.addComponent(NodePickerPanel.this);
+			}
 
-    public boolean isDisplayFiles()
-    {
-        return true;
-    }
-    
-    
-    @Override
-    public boolean checkRequired()
-    {
-        if (isRequired())
-        {
-            JcrNode node = (JcrNode) getModelObject();
-            if (node == null)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+			@Override
+			public boolean isEnabled()
+			{
+				return NodePickerPanel.this.getModelObject() != null;
+			}
+		});
+	}
 
-    @Override
-    public boolean isInputNullable()
-    {
-        return false;
-    }
+	protected void onClose(AjaxRequestTarget target)
+	{
+
+	}
+
+	protected NodePickerModalWindow getModalWindow()
+	{
+		return (NodePickerModalWindow) get(MODAL_WINDOW_ID);
+	}
+
+	protected IModel<String> newLabelModel()
+	{
+		return new Model<String>()
+		{
+			@Override
+			public String getObject()
+			{
+				IModel<BrixNode> model = NodePickerPanel.this.getModel();
+				BrixNode node = (BrixNode) model.getObject();
+				return node != null ? SitePlugin.get().pathForNode(node) : "";
+			}
+		};
+	}
+
+	protected Component<?> newModalWindow(String id)
+	{
+		return new NodePickerModalWindow(id, getModel(), rootNode, visibilityFilter, enabledFilter);
+	}
+
+	@Override
+	public boolean checkRequired()
+	{
+		if (isRequired())
+		{
+			JcrNode node = (JcrNode) getModelObject();
+			if (node == null)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean isInputNullable()
+	{
+		return false;
+	}
 }

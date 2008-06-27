@@ -13,6 +13,7 @@ import org.apache.wicket.model.Model;
 
 import brix.Brix;
 import brix.Plugin;
+import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
@@ -26,6 +27,9 @@ public class MenuPlugin implements Plugin
     public MenuPlugin(Brix brix)
     {
         this.brix = brix;
+        
+        brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenusNode.FACTORY);
+        brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenuNode.FACTORY);
     }
 
     private static final String ID = MenuPlugin.class.getName();

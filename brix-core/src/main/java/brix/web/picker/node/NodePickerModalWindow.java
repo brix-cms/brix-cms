@@ -6,23 +6,40 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.web.tree.JcrTreeNode;
+import brix.web.tree.NodeFilter;
 
 public class NodePickerModalWindow extends ModalWindow<BrixNode>
 {
+    private final JcrTreeNode rootNode;
+    private final NodeFilter enabledFilter;
+    private final NodeFilter visibilityFilter;
 
-    private final String workspaceName;
-    private final NodeFilter nodeFilter;
-
-    public NodePickerModalWindow(String id, IModel<BrixNode> model, String workspaceName,
-            NodeFilter nodeFilter)
+    public NodePickerModalWindow(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
+    {
+        super(id, model);
+        
+        this.rootNode = rootNode; 
+        this.enabledFilter = enabledFilter;
+        this.visibilityFilter = visibilityFilter;
+        
+        init();     
+    }
+    
+    public NodePickerModalWindow(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
     {
         super(id);
-        setModel(model);
-
-        this.workspaceName = workspaceName;
-        this.nodeFilter = nodeFilter;
-
-        setWidthUnit("em");
+        
+        this.rootNode = rootNode; 
+        this.enabledFilter = enabledFilter;
+        this.visibilityFilter = visibilityFilter;
+        
+        init();     
+    }
+    
+    private void init()
+    {
+    	setWidthUnit("em");
         setInitialWidth(64);
         setUseInitialHeight(false);
         setResizable(false);
@@ -31,7 +48,7 @@ public class NodePickerModalWindow extends ModalWindow<BrixNode>
 
     private void initContent()
     {
-        setContent(new NodePickerWithButtons(getContentId(), getModel(), workspaceName, nodeFilter)
+        setContent(new NodePickerWithButtons(getContentId(), getModel(), rootNode, visibilityFilter, enabledFilter)
         {
             @Override
             protected void onCancel(AjaxRequestTarget target)

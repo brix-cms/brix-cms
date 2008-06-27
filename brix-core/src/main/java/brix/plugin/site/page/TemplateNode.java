@@ -11,24 +11,24 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 
-public class Template extends AbstractContainer
+public class TemplateNode extends AbstractContainer
 {
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
     {
         @Override
-        public boolean canWrap(JcrNode node)
+        public boolean canWrap(Brix brix, JcrNode node)
         {
             return TemplateSiteNodePlugin.TYPE.equals(getNodeType(node));
         }
 
         @Override
-        public JcrNode wrap(Node node, JcrSession session)
+        public JcrNode wrap(Brix brix, Node node, JcrSession session)
         {
-            return new Template(node, session);
+            return new TemplateNode(node, session);
         }
 
         @Override
-        public void initializeRepository(Session session)
+        public void initializeRepository(Brix brix, Session session)
         {
             RepositoryUtil.registerMixinType(session.getWorkspace(), TemplateSiteNodePlugin.TYPE, false, false);
         }
@@ -37,7 +37,7 @@ public class Template extends AbstractContainer
 
     public static final String CONTENT_TAG = Brix.NS_PREFIX + "content";
 
-    public Template(Node delegate, JcrSession session)
+    public TemplateNode(Node delegate, JcrSession session)
     {
         super(delegate, session);
     }
@@ -47,12 +47,18 @@ public class Template extends AbstractContainer
         return TemplateSiteNodePlugin.TYPE.equals(getNodeType(node));
     }
 
-    public static Template initialize(JcrNode node)
+    public static TemplateNode initialize(JcrNode node)
     {
         BrixNode brixNode = (BrixNode)node;
         BrixFileNode.initialize(node, "text/html");
         brixNode.setNodeType(TemplateSiteNodePlugin.TYPE);
 
-        return new Template(node.getDelegate(), node.getSession());
+        return new TemplateNode(node.getDelegate(), node.getSession());
+    }
+    
+    @Override
+    public String getUserVisibleType()
+    {
+    	return "Template";
     }
 }

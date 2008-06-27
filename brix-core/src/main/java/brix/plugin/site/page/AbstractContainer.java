@@ -70,11 +70,11 @@ public abstract class AbstractContainer extends BrixFileNode
     }
 
 
-    public Template getTemplate()
+    public TemplateNode getTemplate()
     {
         if (hasProperty(Properties.TEMPLATE))
         {
-            return (Template)getProperty(Properties.TEMPLATE).getNode();
+            return (TemplateNode)getProperty(Properties.TEMPLATE).getNode();
         }
         else
         {
@@ -173,7 +173,7 @@ public abstract class AbstractContainer extends BrixFileNode
         }
         if (followTemplate)
         {
-        	Template template = getTemplate();
+        	TemplateNode template = getTemplate();
             if (template != null)
             {
                 return template.getVariableValue(key);

@@ -7,59 +7,67 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ILinkListener;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
+import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.value.ValueMap;
 
 import brix.Path;
+import brix.jcr.wrapper.BrixNode;
 
-public abstract class PathLabel extends WebMarkupContainer<String> implements ILinkListener
+public abstract class PathLabel extends WebMarkupContainer<BrixNode> implements ILinkListener
 {
 
-    private final Path root;
+    private final String rootPath;
 
-    public PathLabel(String id, IModel<String> model, Path root)
+    public PathLabel(String id, IModel<BrixNode> model, String rootPath)
     {
         super(id, model);
-        this.root = root;
+        this.rootPath = rootPath;
     }
 
     @Override
     protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
     {
+    	PrependingStringBuffer b = new PrependingStringBuffer();
+    	BrixNode current = getModelObject();
+    	
+    	while(true)
+    	{
+	    	StringBuilder builder = new StringBuilder();
+	    	writePath(current, builder, current.equals(getModelObject()));
+	    	if (b.length() > 0)
+	    	{
+	    		b.prepend("&nbsp;/&nbsp;");	    		
+	    	}
+	    	b.prepend(builder.toString());
+	    	if (current.getDepth() == 0 || current.getPath().equals(rootPath))
+	    	{
+	    		break;
+	    	}
+	    	current = (BrixNode) current.getParent();
+    	}
+    	
         final Response r = getResponse();
-        final Path path = new Path(getModelObject().toString());
-        final int size = path.size();
-        for (int i = root.size() + 1; i < size + 1; i++)
-        {
-            final Path subpath = path.subpath(i);
-             
-            writePath(subpath, r, false);
-            if (i <= size)
-            {
-                r.write("&nbsp;/&nbsp;");
-            }
-        }
-        writePath(path, r, true);
+        r.write(b.toString());
     }
 
-    private void writePath(Path path, Response r, boolean last)
+    private void writePath(BrixNode node, StringBuilder builder, boolean last)
     {
-        r.write("<a href=\"");
-        r.write(createCallbackUrl(path));
-        r.write("\"><span");
+        builder.append("<a href=\"");
+        builder.append(createCallbackUrl(node.getPath()));
+        builder.append("\"><span");
         if (last)
         {
-        	r.write(" class=\"brix-node-path-last\"");
+        	builder.append(" class=\"brix-node-path-last\"");
         }
-        r.write(">");
-        boolean isRoot = path.equals(root);
-        r.write(isRoot ? getRootNodeName() : path.getName());
-        r.write("</span></a>");
+        builder.append(">");        
+        builder.append(node.getUserVisibleName());
+        builder.append("</span></a>");
     }
 
-    private CharSequence createCallbackUrl(Path subpath)
+    private CharSequence createCallbackUrl(String subpath)
     {
         ValueMap params = new ValueMap();
-        params.add("path", subpath.toString());
+        params.add("path", subpath);
         return getRequestCycle().urlFor(this, ILinkListener.INTERFACE, params);
     }
 
@@ -73,12 +81,7 @@ public abstract class PathLabel extends WebMarkupContainer<String> implements IL
         path = WicketURLDecoder.QUERY_INSTANCE.decode(path);
         onPathClicked(new Path(path));
 
-    }
-    
-    protected String getRootNodeName()
-    {
-    	return "root";
-    }
+    }    
 
     protected abstract void onPathClicked(Path path);
 

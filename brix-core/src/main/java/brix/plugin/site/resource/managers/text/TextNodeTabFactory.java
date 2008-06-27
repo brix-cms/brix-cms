@@ -11,7 +11,7 @@ import org.apache.wicket.model.Model;
 import brix.auth.Action;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
-import brix.jcr.wrapper.BrixResourceNode;
+import brix.jcr.wrapper.ResourceNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.web.tab.CachingAbstractTab;
@@ -23,7 +23,7 @@ public class TextNodeTabFactory implements ManageNodeTabFactory
 		List<ITab> result = new ArrayList<ITab>();
 
 		BrixNode node = nodeModel.getObject();
-		if (node instanceof BrixResourceNode && hasViewPermission(nodeModel)) 
+		if (node instanceof ResourceNode && hasViewPermission(nodeModel)) 
 		{
 			String mime = ((BrixFileNode) node).getMimeType();
 			if (canHandleMimeType(mime))

@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 import brix.Brix;
 import brix.Path;
@@ -37,18 +36,13 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 		super(id, model);
 
 		String root = SitePlugin.get().getSiteRootPath();
-		add(new PathLabel("path2", new PropertyModel<String>(this, "node.path"), new Path(root))
+		add(new PathLabel("path2", model, root)
 		{
 			@Override
 			protected void onPathClicked(Path path)
 			{
 				BrixNode node = (BrixNode) getNode().getSession().getItem(path.toString());
 				selectNode(node, false);
-			}
-			@Override
-			protected String getRootNodeName()
-			{
-				return NodeManagerEditorPanel.this.getString("siteRoot");
 			}
 		});
 
@@ -64,7 +58,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 					protected void onLeave()
 					{
 						SitePlugin.get().refreshNavigationTree(this);
-						replaceWith(NodeManagerEditorPanel.this);						
+						replaceWith(NodeManagerEditorPanel.this);
 					}
 				};
 				NodeManagerEditorPanel.this.replaceWith(renamePanel);
@@ -100,6 +94,11 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			@Override
 			public boolean isVisible()
 			{
+				if (true)
+				{
+					// TODO: Implement proper versioning support!
+					return false;
+				}
 				Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_EDIT, getNode());
 				return getNode() != null && getNode().isNodeType("nt:file") && !getNode().isNodeType("mix:versionable")
 						&& getNode().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
@@ -114,7 +113,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			{
 				BrixNode node = getNode();
 				BrixNode parent = (BrixNode) node.getParent();
-				
+
 				node.remove();
 				try
 				{
@@ -129,7 +128,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 						NodeManagerEditorPanel.this.getModel().detach();
 						// parent.refresh(false);
 						selectNode(NodeManagerEditorPanel.this.getModelObject(), true);
-						getSession().error(NodeManagerEditorPanel.this.getString("referenceIntegrityError"));	
+						getSession().error(NodeManagerEditorPanel.this.getString("referenceIntegrityError"));
 					}
 					else
 					{
@@ -152,7 +151,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 		});
 
 		add(new SessionFeedbackPanel("sessionFeedback"));
-		
+
 		add(new NodeManagerTabbedPanel("tabbedPanel", getTabs(getModel())));
 	}
 
@@ -211,7 +210,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			return Collections.emptyList();
 		}
 	}
-	
+
 	private static class SessionFeedbackPanel extends FeedbackPanel
 	{
 

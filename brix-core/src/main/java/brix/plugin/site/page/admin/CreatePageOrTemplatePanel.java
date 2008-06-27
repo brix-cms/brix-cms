@@ -15,9 +15,9 @@ import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.plugin.site.page.AbstractContainer;
-import brix.plugin.site.page.Page;
+import brix.plugin.site.page.PageNode;
 import brix.plugin.site.page.PageSiteNodePlugin;
-import brix.plugin.site.page.Template;
+import brix.plugin.site.page.TemplateNode;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.util.validators.NodeNameValidator;
 
@@ -83,11 +83,11 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 
 			if (type.equals(PageSiteNodePlugin.TYPE))
 			{
-				node = Page.initialize(page);
+				node = PageNode.initialize(page);
 			}
 			else
 			{
-				node = Template.initialize(page);
+				node = TemplateNode.initialize(page);
 			}
 
 			node.setData("");

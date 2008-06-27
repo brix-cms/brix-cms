@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import brix.web.picker.node.NodePicker;
+import brix.plugin.site.picker.node.SiteNodePicker;
 import brix.web.reference.Reference;
 import brix.web.reference.Reference.Type;
 
@@ -59,15 +59,9 @@ public abstract class NodeUrlTab extends Panel<Reference>
 			}
 		});
 
-		add(new NodePicker("nodePicker", getReference().getNodeModel(), getConfiguration().getWorkspaceName(),
+		add(new SiteNodePicker("nodePicker", getReference().getNodeModel(), getConfiguration().getWorkspaceName(),
 				getConfiguration().getNodeFilter())
 		{
-			@Override
-			public boolean isDisplayFiles()
-			{
-				return getConfiguration().isDisplayFiles();
-			}
-
 			@Override
 			public boolean isVisible()
 			{

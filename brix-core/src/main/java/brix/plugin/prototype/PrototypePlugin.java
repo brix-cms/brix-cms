@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.ImportUUIDBehavior;
-
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -20,8 +18,11 @@ import brix.Path;
 import brix.Plugin;
 import brix.jcr.JcrUtil;
 import brix.jcr.JcrUtil.ParentLimiter;
+import brix.jcr.JcrUtil.TargetRootNodeProvider;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
+import brix.plugin.site.SitePlugin;
+import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.web.tab.AbstractWorkspaceTab;
 import brix.workspace.Workspace;
 
@@ -109,7 +110,7 @@ public class PrototypePlugin implements Plugin
 
 		JcrSession destSession = brix.getCurrentSession(workspace.getId());
 
-		JcrUtil.cloneNodes(nodes, destSession.getRootNode(), ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
+		JcrUtil.cloneNodes(nodes, destSession.getRootNode());
 		destSession.save();
 	}
 
@@ -118,7 +119,7 @@ public class PrototypePlugin implements Plugin
 		ITab tabs[] = new ITab[] { new Tab(new Model<String>("Prototypes"), workspaceModel) };
 		return Arrays.asList(tabs);
 	}
-		
+
 	static class Tab extends AbstractWorkspaceTab
 	{
 		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
@@ -136,42 +137,51 @@ public class PrototypePlugin implements Plugin
 	private String getCommonParentPath(List<JcrNode> nodes)
 	{
 		Path current = null;
+		String sitePath = SitePlugin.get().getSiteRootPath();
 		for (JcrNode node : nodes)
 		{
-			if (current == null)
+			if (node.getPath().startsWith(sitePath) && node instanceof GlobalContainerNode == false)
 			{
-				current = new Path(node.getPath()).parent();
-			}
-			else
-			{
-				Path another = new Path(node.getPath()).parent();
-
-				Path common = Path.ROOT;
-
-				Iterator<String> i1 = current.iterator();
-				Iterator<String> i2 = another.iterator();
-				while (i1.hasNext() && i2.hasNext())
+				if (current == null)
 				{
-					String s1 = i1.next();
-					String s2 = i2.next();
-					if (Objects.equal(s1, s2))
-					{
-						common = common.append(new Path(s1));
-					}
-					else
-					{
-						break;
-					}
+					current = new Path(node.getPath()).parent();
 				}
+				else
+				{
+					Path another = new Path(node.getPath()).parent();
 
-				current = common;
+					Path common = Path.ROOT;
+
+					Iterator<String> i1 = current.iterator();
+					Iterator<String> i2 = another.iterator();
+					while (i1.hasNext() && i2.hasNext())
+					{
+						String s1 = i1.next();
+						String s2 = i2.next();
+						if (Objects.equal(s1, s2))
+						{
+							common = common.append(new Path(s1));
+						}
+						else
+						{
+							break;
+						}
+					}
+
+					current = common;
+				}
 			}
+		}
+
+		if (current == null)
+		{
+			current = Path.ROOT;
 		}
 
 		return current.toString();
 	}
 
-	public void restoreNodes(List<JcrNode> nodes, JcrNode targetRootNode)
+	public void restoreNodes(List<JcrNode> nodes, final JcrNode targetRootNode)
 	{
 		if (nodes.isEmpty())
 		{
@@ -180,20 +190,47 @@ public class PrototypePlugin implements Plugin
 
 		ParentLimiter limiter = null;
 
+		// targetRootNode is only applicable for regular Site nodes (not even
+		// global container)
+
+		final String siteRoot = SitePlugin.get().getSiteRootPath();
+
 		if (targetRootNode.getDepth() > 0)
 		{
 			final String commonParent = getCommonParentPath(nodes);
 			limiter = new ParentLimiter()
 			{
 				public boolean isFinalParent(JcrNode node, JcrNode parent)
-				{
-					return parent.getPath().equals(commonParent);
+				{					
+					if (node.getPath().startsWith(siteRoot) && node instanceof GlobalContainerNode == false)
+					{
+						return parent.getPath().equals(commonParent);
+					}
+					else
+					{
+						return parent.getDepth() == 0;
+					}
 				}
 			};
 		}
 
-		JcrUtil.cloneNodes(nodes, targetRootNode, ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW, limiter);
-		targetRootNode.save();
+		TargetRootNodeProvider provider = new TargetRootNodeProvider()
+		{
+			public JcrNode getTargetRootNode(JcrNode node)
+			{
+				if (node.getPath().startsWith(siteRoot) && node instanceof GlobalContainerNode == false)
+				{
+					return targetRootNode;
+				}
+				else
+				{
+					return targetRootNode.getSession().getRootNode();
+				}
+			}
+		};
+
+		JcrUtil.cloneNodes(nodes, provider, limiter);
+		targetRootNode.getSession().save();
 	}
 
 	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
@@ -205,7 +242,7 @@ public class PrototypePlugin implements Plugin
 	{
 		return "Prototype " + getPrototypeName(workspace);
 	}
-	
+
 	public boolean isPluginWorkspace(Workspace workspace)
 	{
 		return isPrototypeWorkspace(workspace);

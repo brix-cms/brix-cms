@@ -298,6 +298,13 @@ public class SitePlugin implements Plugin
 	{
 		return brix.getRootPath() + "/" + WEB_NODE_NAME;
 	}
+	
+	public BrixNode getSiteRootNode(String workspaceId)
+	{
+		JcrSession workspaceSession = brix.getCurrentSession(workspaceId);
+		BrixNode root = (BrixNode) workspaceSession.getItem(getSiteRootPath());
+		return root;
+	}
 
 	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
 	{

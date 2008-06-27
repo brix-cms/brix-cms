@@ -3,6 +3,7 @@ package brix.jcr;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import brix.Brix;
 import brix.registry.ExtensionPoint;
 
 /**
@@ -38,5 +39,5 @@ public interface RepositoryInitializer
      * @param session
      *            session into the default repository workspace
      */
-    public void initializeRepository(Session session) throws RepositoryException;
+    public void initializeRepository(Brix brix, Session session) throws RepositoryException;
 }

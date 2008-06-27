@@ -28,10 +28,11 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.MenuPlugin;
 import brix.plugin.prototype.PrototypePlugin;
 import brix.plugin.publishing.PublishingPlugin;
+import brix.plugin.site.SiteNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.folder.FolderNode;
-import brix.plugin.site.page.Page;
-import brix.plugin.site.page.Template;
+import brix.plugin.site.page.PageNode;
+import brix.plugin.site.page.TemplateNode;
 import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.tile.Tile;
 import brix.plugin.snapshot.SnapshotPlugin;
@@ -65,11 +66,12 @@ public abstract class Brix
 
         registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
 
+        registry.register(JcrNodeWrapperFactory.POINT, SiteNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, FolderNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, GlobalContainerNode.FACTORY);
 
-        registry.register(JcrNodeWrapperFactory.POINT, Page.FACTORY);
-        registry.register(JcrNodeWrapperFactory.POINT, Template.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, PageNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, TemplateNode.FACTORY);
 
         registry.register(Tile.POINT, new MenuTile());
         registry.register(Tile.POINT, new PageTile());
@@ -251,7 +253,7 @@ public abstract class Brix
         {
             for (RepositoryInitializer initializer : initializers)
             {
-                initializer.initializeRepository(session);
+                initializer.initializeRepository(this, session);
             }
         }
         catch (RepositoryException e)

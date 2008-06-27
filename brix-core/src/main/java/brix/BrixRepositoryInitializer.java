@@ -26,8 +26,13 @@ public class BrixRepositoryInitializer implements RepositoryInitializer
 {
     private static final Logger logger = LoggerFactory.getLogger(BrixRepositoryInitializer.class);
 
+    public BrixRepositoryInitializer()
+	{
+
+	}
+    
     /** {@inheritDoc} */
-    public void initializeRepository(Session session) throws RepositoryException
+    public void initializeRepository(Brix brix, Session session) throws RepositoryException
     {
         final Workspace w = session.getWorkspace();
         NamespaceRegistry nr = w.getNamespaceRegistry();

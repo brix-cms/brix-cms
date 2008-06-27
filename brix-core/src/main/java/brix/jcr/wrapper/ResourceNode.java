@@ -2,31 +2,32 @@ package brix.jcr.wrapper;
 
 import javax.jcr.Node;
 
+import brix.Brix;
 import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 
-public class BrixResourceNode extends BrixFileNode
+public class ResourceNode extends BrixFileNode
 {
 
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
     {
 
         @Override
-        public boolean canWrap(JcrNode node)
+        public boolean canWrap(Brix brix, JcrNode node)
         {
             return isFileNode(node);
         }
 
         @Override
-        public JcrNode wrap(Node node, JcrSession session)
+        public JcrNode wrap(Brix brix, Node node, JcrSession session)
         {
-            return new BrixResourceNode(node, session);
+            return new ResourceNode(node, session);
         }
     };
 
 
-    public BrixResourceNode(Node delegate, JcrSession session)
+    public ResourceNode(Node delegate, JcrSession session)
     {
         super(delegate, session);
     }
@@ -56,4 +57,9 @@ public class BrixResourceNode extends BrixFileNode
     }
 
 
+    @Override
+    public String getUserVisibleType()
+    {
+    	return "Resource";
+    }
 }

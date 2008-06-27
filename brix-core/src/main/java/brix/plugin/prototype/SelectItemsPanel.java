@@ -1,26 +1,19 @@
 package brix.plugin.prototype;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.ResourceModel;
 
 import brix.jcr.api.JcrNode;
-import brix.plugin.prototype.SelectItemsTreeModel.SelectItemsTreeNode;
-import brix.plugin.site.SitePlugin;
+import brix.jcr.wrapper.BrixNode;
+import brix.web.picker.common.NodePickerTreeGridPanel;
+import brix.web.picker.common.RootTreeNode;
+import brix.web.tree.JcrTreeNode;
 
-import com.inmethod.grid.IGridColumn;
-import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.CheckBoxColumn;
-import com.inmethod.grid.column.PropertyColumn;
-import com.inmethod.grid.column.tree.PropertyTreeColumn;
 import com.inmethod.grid.treegrid.TreeGrid;
 
 public class SelectItemsPanel<T> extends Panel<T>
@@ -38,76 +31,54 @@ public class SelectItemsPanel<T> extends Panel<T>
         init(workspaceName);
     }
     
-    protected List<IGridColumn> newGridColumns()
-    {
-        IGridColumn columns[] = { new CheckBoxColumn("checkbox"),
-            new PropertyTreeColumn(new ResourceModel("name"), "node.name").setInitialSize(300),
-            new PropertyColumn(new ResourceModel("type"), "name")
-            {
-                @Override
-                protected Object getModelObject(IModel rowModel)
-                {
-                    SelectItemsTreeNode n = (SelectItemsTreeNode)rowModel.getObject();
-                    return SitePlugin.get().getNodePluginForNode(n.getNode());
-                }
-            }, new DatePropertyColumn(new ResourceModel("lastModified"), "node.lastModified"),
-            new PropertyColumn(new ResourceModel("lastModifiedBy"), "node.lastModifiedBy") };
-        return Arrays.asList(columns);
-    };
-
-    protected class DatePropertyColumn extends PropertyColumn
-    {
-
-        public DatePropertyColumn(IModel headerModel, String propertyExpression)
-        {
-            super(headerModel, propertyExpression);
-        }
-
-        @Override
-        protected CharSequence convertToString(Object object)
-        {
-            if (object instanceof Date)
-            {
-                Date date = (Date)object;
-                return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(
-                    date);
-            }
-            else
-            {
-                return null;
-            }
-        }
-    };
-
-    private TreeGrid treeGrid;
     
-    private void init(String workspaceName)
+    private NodePickerTreeGridPanel<Void> treeGrid;
+    
+    private void init(final String workspaceId)
     {
-        treeGrid = new TreeGrid("grid", new SelectItemsTreeModel(workspaceName), newGridColumns());
-        treeGrid.setContentHeight(15, SizeUnit.EM);
-        treeGrid.setClickRowToSelect(true);
-        treeGrid.setAllowSelectMultiple(true);
-        treeGrid.getTree().setRootLess(true);
-
+    	treeGrid = new NodePickerTreeGridPanel<Void>("grid", null, null)
+    	{
+    		@Override
+    		protected JcrTreeNode getRootNode()
+    		{
+    			return new RootTreeNode(workspaceId);
+    		}
+    		@Override
+    		protected void configureGrid(TreeGrid grid)
+    		{
+    			super.configureGrid(grid);
+    			grid.setAllowSelectMultiple(true);
+    	        grid.getTree().setRootLess(true);
+    		}
+    	};
+               
         add(treeGrid);
     }
 
     public TreeGrid getTreeGrid()
     {
-        return treeGrid;
+        return treeGrid.getGrid();
     }
     
-    private String getNodePath(JcrNode node)
+    private String getNodePath(BrixNode node)
     {
-        String path = node.getPath();
-        if (path.startsWith(SitePlugin.get().getSiteRootPath()))
-        {
-            return SitePlugin.get().pathForNode(node);           
-        }
-        else
-        {
-            return path;
-        }
+    	List<BrixNode> path = new ArrayList<BrixNode>();
+    	while (node.getDepth() > 1)
+    	{
+    		path.add(0, node);
+    		node = (BrixNode) node.getParent();
+    	}
+    	StringBuilder res = new StringBuilder();
+    	for (BrixNode n : path)
+    	{
+   			res.append("/");   		
+    		res.append(n.getUserVisibleName());
+    		if (!n.isFolder())
+    		{
+    			break;
+    		}
+    	}
+        return res.toString();
     }
     
     protected String getDependenciesMessage(Map<JcrNode, List<JcrNode>> dependencies)
@@ -118,12 +89,12 @@ public class SelectItemsPanel<T> extends Panel<T>
         
         for (Entry<JcrNode, List<JcrNode>> entry : dependencies.entrySet())
         {
-            b.append(getNodePath(entry.getKey()));
+            b.append(getNodePath((BrixNode) entry.getKey()));
             b.append(" -> ");
             
             if (entry.getValue().size() == 1)
             {
-                b.append(getNodePath(entry.getValue().iterator().next()));
+                b.append(getNodePath((BrixNode) entry.getValue().iterator().next()));
             }
             else
             {
@@ -140,7 +111,7 @@ public class SelectItemsPanel<T> extends Panel<T>
                     {
                         b.append(", ");
                     }
-                    b.append(getNodePath(node));
+                    b.append(getNodePath((BrixNode) node));
                 }
                 
                 b.append(")");
@@ -157,8 +128,10 @@ public class SelectItemsPanel<T> extends Panel<T>
         List<JcrNode> nodes = new ArrayList<JcrNode>();
         for (IModel model : getTreeGrid().getSelectedItems())
         {
-            SelectItemsTreeNode node = (SelectItemsTreeNode)model.getObject();
-            nodes.add(node.getNode());
+            JcrTreeNode treeNode = (JcrTreeNode)model.getObject();
+            JcrNode node = treeNode.getNodeModel() != null ? treeNode.getNodeModel().getObject() : null;
+            if (node != null)
+            	nodes.add(node);
         }
 
         return nodes;

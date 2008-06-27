@@ -2,6 +2,7 @@ package brix.plugin.site.folder;
 
 import javax.jcr.Node;
 
+import brix.Brix;
 import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
@@ -19,14 +20,14 @@ public class FolderNode extends BrixNode
 
         /** {@inheritDoc} */
         @Override
-        public boolean canWrap(JcrNode node)
+        public boolean canWrap(Brix brix, JcrNode node)
         {
             return node.isNodeType("nt:folder");
         }
 
         /** {@inheritDoc} */
         @Override
-        public JcrNode wrap(Node node, JcrSession session)
+        public JcrNode wrap(Brix brix, Node node, JcrSession session)
         {
             return new FolderNode(node, session);
         }
@@ -55,7 +56,7 @@ public class FolderNode extends BrixNode
     {
         return Reference.load(this, REDIRECT_REFERENCE);
     }
-
+    
     private void ensureType()
     {
         if (!isNodeType(FolderNodePlugin.TYPE))
@@ -64,4 +65,9 @@ public class FolderNode extends BrixNode
         }
     }
 
+    @Override
+    public String getUserVisibleType()
+    {
+    	return "Folder";
+    }
 }

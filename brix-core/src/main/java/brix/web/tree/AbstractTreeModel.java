@@ -14,7 +14,8 @@ import org.apache.wicket.markup.html.tree.AbstractTree;
 
 public abstract class AbstractTreeModel implements Serializable, TreeModel
 {
-
+	public abstract TreeNode getRoot();
+	
     private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>(0);
 
     public void removeTreeModelListener(TreeModelListener l)

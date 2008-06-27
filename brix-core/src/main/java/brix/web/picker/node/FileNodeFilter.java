@@ -1,15 +1,15 @@
 package brix.web.picker.node;
 
-import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.web.tree.NodeFilter;
 
 public class FileNodeFilter implements NodeFilter
 {
 
-    public boolean isNodeAllowed(JcrNode node)
-    {
-        return !((BrixNode)node).isFolder();
-    }
-
     public static final FileNodeFilter INSTANCE = new FileNodeFilter();
+
+	public boolean isNodeAllowed(BrixNode node)
+	{		
+		return node != null && !node.isFolder();
+	}
 }

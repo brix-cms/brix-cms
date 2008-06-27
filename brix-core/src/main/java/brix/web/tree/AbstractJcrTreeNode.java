@@ -91,7 +91,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
 
     protected boolean displayFoldersOnly()
     {
-        return true;
+        return false;
     }
 
     protected AbstractJcrTreeNode newTreeNode(BrixNode node)
@@ -164,7 +164,8 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
     @Override
     public String toString()
     {
-        return nodeModel.getObject().toString();
+    	BrixNode node = nodeModel.getObject();
+        return node != null ? node.toString() : "null";
     }
 
 }

@@ -6,6 +6,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.tree.AbstractJcrTreeNode;
 import brix.web.tree.AbstractTreeModel;
+import brix.web.tree.TreeNode;
 
 public abstract class NodePickerTreeModel extends AbstractTreeModel
 {
@@ -51,7 +52,7 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel
         root = new NodePickerTreeNode((BrixNode)session.getItem(SitePlugin.get().getSiteRootPath()));
     }
 
-    public Object getRoot()
+    public TreeNode getRoot()
     {
         return root;
     }

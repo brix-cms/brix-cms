@@ -5,6 +5,7 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import brix.Brix;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.registry.ExtensionPoint;
@@ -62,7 +63,7 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer
 	 * @param node
 	 * @return true if this factory can wrap the node
 	 */
-	public abstract boolean canWrap(JcrNode node);
+	public abstract boolean canWrap(Brix brix, JcrNode node);
 
 	/**
 	 * Wraps the node with a subclass. 
@@ -77,7 +78,7 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer
 	 * @param session
 	 * @return wrapper
 	 */
-	public abstract JcrNode wrap(Node node, JcrSession session);
+	public abstract JcrNode wrap(Brix brix, Node node, JcrSession session);
 
 	/**
 	 * {@inheritDoc}
@@ -87,7 +88,7 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer
 	 * 
 	 * @param session
 	 */
-	public void initializeRepository(Session session) throws RepositoryException
+	public void initializeRepository(Brix brix, Session session) throws RepositoryException
 	{
 		// noop
 	}

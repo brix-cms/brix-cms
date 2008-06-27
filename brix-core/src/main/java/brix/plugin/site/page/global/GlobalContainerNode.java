@@ -19,23 +19,23 @@ public class GlobalContainerNode extends AbstractContainer
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
     {
         @Override
-        public boolean canWrap(JcrNode node)
+        public boolean canWrap(Brix brix, JcrNode node)
         {
             return TYPE.equals(getNodeType(node));
         }
 
         @Override
-        public JcrNode wrap(Node node, JcrSession session)
+        public JcrNode wrap(Brix brix, Node node, JcrSession session)
         {
             return new GlobalContainerNode(node, session);
         }
 
         @Override
-        public void initializeRepository(Session session)
+        public void initializeRepository(Brix brix, Session session)
         {
             RepositoryUtil.registerMixinType(session.getWorkspace(), TYPE,
                 false, false);
-        }
+        }		
     };
 
     public GlobalContainerNode(Node delegate, JcrSession session)
@@ -48,8 +48,13 @@ public class GlobalContainerNode extends AbstractContainer
         BrixNode brixNode = (BrixNode)node;
         BrixFileNode.initialize(node, "text/html");
         brixNode.setNodeType(TYPE);
-        brixNode.setHidden(true);
 
         return new GlobalContainerNode(node.getDelegate(), node.getSession());
+    }
+    
+    @Override
+    public String getUserVisibleName()
+    {
+    	return "Global Tiles and Variables";
     }
 }
