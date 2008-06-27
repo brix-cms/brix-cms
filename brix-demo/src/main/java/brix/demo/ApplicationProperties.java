@@ -80,7 +80,7 @@ public class ApplicationProperties
 
     }
 
-    public String getJcrRepositoryLocation()
+    public String getJcrRepositoryUrl()
     {
         return jcrRepositoryLocation;
     }

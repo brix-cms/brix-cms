@@ -1,30 +1,21 @@
 package brix.demo.web;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
-import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.jackrabbit.core.config.RepositoryConfig;
-import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
-import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
-import org.apache.wicket.util.file.File;
-import org.apache.wicket.util.io.Streams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brix.Brix;
 import brix.Path;
 import brix.demo.ApplicationProperties;
+import brix.demo.util.JcrUtils;
 import brix.demo.web.admin.AdminPage;
 import brix.jcr.ThreadLocalSessionFactory;
 import brix.jcr.api.JcrSession;
@@ -123,8 +114,13 @@ public class WicketApplication extends WebApplication
     {
         super.init();
 
+        // read application properties
         properties = new ApplicationProperties();
-        createRepository();
+
+        // create jcr repository
+        repository = JcrUtils.createRepository(properties.getJcrRepositoryUrl());
+
+
         sessionFactory = new ThreadLocalSessionFactory(repository, properties
             .buildSimpleCredentials());
 
@@ -211,57 +207,6 @@ public class WicketApplication extends WebApplication
         }
     }
 
-    private void createRepository()
-    {
-        try
-        {
-            if (USE_RMI)
-            {
-
-                ClientRepositoryFactory factory = new ClientRepositoryFactory(
-                    new JackrabbitClientAdapterFactory());
-                repository = factory.getRepository("rmi://localhost:1099/jackrabbit");
-            }
-            else
-            {
-                File home = new File(properties.getJcrRepositoryLocation());
-
-                if (!home.exists())
-                {
-                    if (!home.mkdirs())
-                    {
-                        throw new RuntimeException("Could not create repository home directory: " +
-                            home.getAbsolutePath());
-                    }
-                }
-
-                File configFile = new File(home, "repository.xml");
-                if (!configFile.exists())
-                {
-                    FileOutputStream fos = new FileOutputStream(configFile);
-                    InputStream in = getClass().getClassLoader().getResourceAsStream(
-                        "brix/demo/repository.xml");
-                    Streams.copy(in, fos);
-                    fos.close();
-                    in.close();
-                }
-
-                logger.info("Jackrabbit repository home: " + home.getAbsolutePath());
-                logger.info("Jackrabbit repository.xml: " + home.getAbsolutePath());
-
-                InputStream configStream = new FileInputStream(new File(home, "repository.xml"));
-                RepositoryConfig config = RepositoryConfig.create(configStream, home.toString());
-                configStream.close();
-                repository = RepositoryImpl.create(config);
-
-            }
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Couldn't create jackrabbit repository, make sure you"
-                + " have the jcr.repository.location config property set", e);
-        }
-    }
 
     public ApplicationProperties getProperties()
     {
