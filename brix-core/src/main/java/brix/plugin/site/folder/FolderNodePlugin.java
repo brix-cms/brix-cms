@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.RequestParameters;
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
 import org.apache.wicket.request.target.component.PageRequestTarget;
 
 import brix.Brix;
@@ -23,67 +22,77 @@ import brix.web.reference.Reference;
 public class FolderNodePlugin implements SiteNodePlugin
 {
 
-    public static final String TYPE = Brix.NS_PREFIX + "folder";
+	public static final String TYPE = Brix.NS_PREFIX + "folder";
 
-    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
-    {
-        BrixNode node = nodeModel.getObject();
+	public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
+	{
+		BrixNode node = nodeModel.getObject();
 
-        String path = requestParameters.getPath();
-        if (!path.startsWith("/"))
-            path = "/" + path;
+		String path = requestParameters.getPath();
+		if (!path.startsWith("/"))
+			path = "/" + path;
 
-        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor)RequestCycle.get()
-                .getProcessor();
-        Path uriPath = processor.getUriPathForNode(node);
+		BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get().getProcessor();
+		Path uriPath = processor.getUriPathForNode(node);
 
-        // check if the exact request path matches the node path
-        if (new Path(path).equals(uriPath) == false)
-        {
-            return null;
-        }
+		// check if the exact request path matches the node path
+		if (new Path(path).equals(uriPath) == false)
+		{
+			return null;
+		}
 
-        FolderNode folder = (FolderNode)node;
-        Reference redirect = folder.getRedirectReference();
+		FolderNode folder = (FolderNode) node;
+		Reference redirect = folder.getRedirectReference();
 
-        if (redirect != null && !redirect.isEmpty())
-        {
-            IRequestTarget target = redirect.getRequestTarget();
-            CharSequence url = RequestCycle.get().urlFor(target);
-            return new RedirectRequestTarget(url.toString());
-        }
-        else
-        {
-            return new PageRequestTarget(new ForbiddenPage(path));
-        }
-    }
+		if (redirect != null && !redirect.isEmpty())
+		{
+			IRequestTarget target = redirect.getRequestTarget();
+			final CharSequence url = RequestCycle.get().urlFor(target);
+			return new IRequestTarget()
+			{
+				public void detach(RequestCycle requestCycle)
+				{
+				
+				}
 
-    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
-    {
-        return new CreateFolderPanel(id, parentNode, goBack);
-    }
+				public void respond(RequestCycle requestCycle)
+				{
+					requestCycle.getResponse().redirect(url.toString());
+				}
+			};
+		}
+		else
+		{
+			return new PageRequestTarget(new ForbiddenPage(path));
+		}
+	}
 
-    public NodeConverter getConverterForNode(BrixNode node)
-    {
-        return null;
-    }
+	public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
+	{
+		return new CreateFolderPanel(id, parentNode, goBack);
+	}
 
-    public String getNodeType()
-    {
-        return TYPE;
-    }
+	public NodeConverter getConverterForNode(BrixNode node)
+	{
+		return null;
+	}
 
-    public String getName()
-    {
-        return "Folder";
-    }
+	public String getNodeType()
+	{
+		return TYPE;
+	}
 
-    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
-    {
-    	return new Model<String>("Create New Folder");
-    }
-    
-    public FolderNodePlugin(SitePlugin sp)
+	public String getName()
+	{
+		return "Folder";
+	}
+
+	public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
+	{
+		return new Model<String>("Create New Folder");
+	}
+
+	public FolderNodePlugin(SitePlugin sp)
 	{
 		sp.registerManageNodeTabFactory(new ManageFolderNodeTabFactory());
 	}
