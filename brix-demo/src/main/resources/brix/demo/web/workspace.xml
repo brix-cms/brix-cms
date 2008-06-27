@@ -1017,7 +1017,6 @@
 			</sv:property>
 			<sv:property sv:name="jcr:mixinTypes" sv:type="Name">
 				<sv:value>brix:node</sv:value>
-				<sv:value>brix:hidden</sv:value>
 			</sv:property>
 			<sv:property sv:name="jcr:uuid" sv:type="String">
 				<sv:value>9aa3c3ef-0926-41b8-bd27-5afdd5770526</sv:value>
