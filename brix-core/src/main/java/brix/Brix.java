@@ -11,6 +11,7 @@ import javax.jcr.Session;
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.protocol.http.WebApplication;
 
 import brix.auth.Action;
 import brix.auth.AuthorizationStrategy;
@@ -38,6 +39,7 @@ import brix.plugin.site.page.tile.Tile;
 import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
 import brix.registry.ExtensionPointRegistry;
+import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.PageParametersAwareEnabler;
 import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
@@ -118,28 +120,32 @@ public abstract class Brix
     }
 
     public JcrSession getCurrentSession(String workspace)
-    {        
+    {
         Session session = sessionFactory.getCurrentSession(workspace);
-        return wrapSession(session);        
+        return wrapSession(session);
     }
-    
+
     public JcrSession wrapSession(Session session)
     {
-    	SessionBehavior behavior = new SessionBehavior(this);
-    	return JcrSession.Wrapper.wrap(session, behavior);
+        SessionBehavior behavior = new SessionBehavior(this);
+        return JcrSession.Wrapper.wrap(session, behavior);
     }
 
     /**
-     * Performs any {@link Application} specific initialization
+     * Performs any {@link WebApplication} specific initialization
      * 
      * @param application
      */
-    public void attachTo(Application application)
+    public void attachTo(WebApplication application)
     {
         if (application == null)
         {
             throw new IllegalArgumentException("Application cannot be null");
         }
+
+        // store brix instance in applicaton's metadata so it can be retrieved easily later
+        application.setMetaData(APP_KEY, this);
+        
         /*
          * XXX we are coupling to nodepage plugin here instead of using the usual register mechanism
          * - we either need to make plugins application aware so they can install their own
@@ -147,7 +153,10 @@ public abstract class Brix
          */
         application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
 
-        application.setMetaData(APP_KEY, this);
+
+        // allow brix to handle any url that wicket cant
+        application.mount(new BrixNodePageUrlCodingStrategy());
+
     }
 
     /**
@@ -260,12 +269,12 @@ public abstract class Brix
         {
             throw new RuntimeException("Couldn't init jackrabbit repository", e);
         }
-        
+
         for (Workspace w : getWorkspaceManager().getWorkspaces())
         {
-        	JcrSession s = getCurrentSession(w.getId());
-        	initWorkspace(w, s);
-        	s.logout();
+            JcrSession s = getCurrentSession(w.getId());
+            initWorkspace(w, s);
+            s.logout();
         }
     }
 

@@ -98,7 +98,6 @@ public class WicketApplication extends WebApplication
         try
         {
             BrixConfig config = new BrixConfig();
-            config.setUriMapper(new PrefixUriMapper(new Path("/docs/cms")));
             config.setHttpPort(properties.getHttpPort());
             config.setHttpsPort(properties.getHttpsPort());
             brix = new DemoBrix(config, sessionFactory);
@@ -111,16 +110,6 @@ public class WicketApplication extends WebApplication
             sessionFactory.cleanupLocalSessions();
         }
 
-        // allow brix to handle any url that wicket cant
-        mount(new BrixNodePageUrlCodingStrategy()
-        {
-            @Override
-            protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
-                    BrixPageParameters pageParameters)
-            {
-                throw new UnsupportedOperationException();
-            }
-        });
 
         getMarkupSettings().setStripWicketTags(true);
 

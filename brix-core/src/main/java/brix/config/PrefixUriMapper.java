@@ -31,6 +31,7 @@ public class PrefixUriMapper implements UriMapper
         this.prefix = prefix;
     }
 
+    /** {@inheritDoc} */
     public Path getNodePathForUriPath(Path uriPath, Brix brix)
     {
         if (prefix.isAncestorOf(uriPath))
@@ -49,6 +50,7 @@ public class PrefixUriMapper implements UriMapper
         }
     }
 
+    /** {@inheritDoc} */
     public Path getUriPathForNode(Path nodePath, Brix brix)
     {
         Path uriPath = prefix;
@@ -56,7 +58,7 @@ public class PrefixUriMapper implements UriMapper
         if (!nodePath.isRoot())
         {
             // nodePath is not root, we have to append it to prefix
-            uriPath=prefix.append(nodePath.toRelative(Path.ROOT));
+            uriPath = prefix.append(nodePath.toRelative(Path.ROOT));
         }
 
         return uriPath;

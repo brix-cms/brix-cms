@@ -35,7 +35,7 @@ import brix.web.nodepage.NodePageRenderRequestTarget.PageFactory;
  * 
  * @author Matej Knopp
  */
-public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
+public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
 {
 
     public IRequestTarget decode(RequestParameters requestParameters)
@@ -102,7 +102,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
             requestPathString = "/" + requestPathString;
 
         BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor)RequestCycle.get()
-                .getProcessor();
+            .getProcessor();
         Path nodePath = processor.getUriPathForNode(nodeModel.getObject());
         Path requestPath = new Path(requestPathString, false);
 
@@ -118,23 +118,27 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         }
     }
 
-    protected abstract BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
-            BrixPageParameters pageParameters);
+
+    protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
+            BrixPageParameters pageParameters)
+    {
+        throw new UnsupportedOperationException();
+    }
 
     private Page getPage(PageInfo info)
     {
         Page page;
 
         if (Strings.isEmpty(info.getPageMapName()) && Application.exists() &&
-                Application.get().getSessionSettings().isPageIdUniquePerSession())
+            Application.get().getSessionSettings().isPageIdUniquePerSession())
         {
             page = Session.get().getPage(info.getPageId().intValue(),
-                    info.getVersionNumber() != null ? info.getVersionNumber().intValue() : 0);
+                info.getVersionNumber() != null ? info.getVersionNumber().intValue() : 0);
         }
         else
         {
             page = Session.get().getPage(info.getPageMapName(), "" + info.getPageId(),
-                    info.getVersionNumber() != null ? info.getVersionNumber().intValue() : 0);
+                info.getVersionNumber() != null ? info.getVersionNumber().intValue() : 0);
         }
 
         if (page != null && isBrixPage(page))
@@ -147,7 +151,8 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         }
     }
 
-    public IRequestTarget decode(RequestParameters requestParameters, final IModel<BrixNode> nodeModel)
+    public IRequestTarget decode(RequestParameters requestParameters,
+            final IModel<BrixNode> nodeModel)
     {
         PageInfo pageInfo = null;
         String query = requestParameters.getQueryString();
@@ -228,7 +233,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
             String iface)
     {
         BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor)RequestCycle.get()
-                .getProcessor();
+            .getProcessor();
         return encode(processor.getUriPathForNode(node).toString(), parameters, info, iface);
     }
 
@@ -310,7 +315,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
     {
         BrixNode node = (BrixNode)page.getModelObject();
         PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
-                .getPageMapName());
+            .getPageMapName());
         return encode(node, page.getBrixPageParameters(), info, null);
     }
 
@@ -324,7 +329,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
             if (page != null && !page.isPageStateless())
             {
                 info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
-                        .getPageMapName());
+                    .getPageMapName());
             }
             String nodeURL = target.getNodeURL();
             return encode(nodeURL, target.getParameters(), info, null);
@@ -341,7 +346,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
             BrixNodeWebPage page = (BrixNodeWebPage)target.getPage();
             BrixNode node = page.getNodeModel().getObject();
             PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
-                    .getPageMapName());
+                .getPageMapName());
             String componentPath = target.getComponentPath();
 
             // remove the page id from component path, we don't really need it
@@ -377,7 +382,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         {
             ListenerInterfaceRequestTarget target = (ListenerInterfaceRequestTarget)requestTarget;
             return isBrixPage(target.getPage()) &&
-                    target.getRequestListenerInterface().equals(IRedirectListener.INTERFACE);
+                target.getRequestListenerInterface().equals(IRedirectListener.INTERFACE);
         }
         else if (requestTarget instanceof BookmarkableListenerInterfaceRequestTarget)
         {
@@ -425,10 +430,10 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         public PageInfo(Integer pageId, Integer versionNumber, String pageMapName)
         {
             if ((pageId == null && (versionNumber != null || pageMapName == null)) ||
-                    (versionNumber == null && (pageId != null || pageMapName == null)))
+                (versionNumber == null && (pageId != null || pageMapName == null)))
             {
                 throw new IllegalArgumentException(
-                        "Either both pageId and versionNumber must be null or none of them.");
+                    "Either both pageId and versionNumber must be null or none of them.");
             }
             this.pageId = pageId;
             this.versionNumber = versionNumber;
@@ -481,7 +486,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
             // we don't need to encode the pageMapName when the pageId is unique
             // per session
             if (pageMapName != null && pageId != null && Application.exists() &&
-                    Application.get().getSessionSettings().isPageIdUniquePerSession())
+                Application.get().getSessionSettings().isPageIdUniquePerSession())
             {
                 pageMapName = null;
             }
@@ -606,7 +611,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
             {
                 // pageId:pageVersion
                 return new PageInfo(Integer.valueOf(segments[0]), Integer.valueOf(segments[1]),
-                        null);
+                    null);
             }
             else if (segments.length == 1 && !isNumber(segments[0]))
             {
@@ -636,7 +641,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
                 {
                     // pageMapName.pageId.pageVersion
                     return new PageInfo(Integer.valueOf(segments[1]), Integer.valueOf(segments[2]),
-                            segments[0]);
+                        segments[0]);
                 }
             }
 
@@ -655,7 +660,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         try
         {
             value = URLDecoder.decode(value, Application.get().getRequestCycleSettings()
-                    .getResponseRequestEncoding());
+                .getResponseRequestEncoding());
         }
         catch (UnsupportedEncodingException ex)
         {
@@ -676,7 +681,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         try
         {
             return URLEncoder.encode(string, Application.get().getRequestCycleSettings()
-                    .getResponseRequestEncoding());
+                .getResponseRequestEncoding());
         }
         catch (UnsupportedEncodingException e)
         {
@@ -685,6 +690,7 @@ public abstract class BrixNodePageUrlCodingStrategy implements IRequestTargetUrl
         }
 
     }
+
 
     private static final Logger log = LoggerFactory.getLogger(BrixNodePageUrlCodingStrategy.class);
 }
