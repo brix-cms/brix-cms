@@ -16,7 +16,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -26,7 +25,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import brix.rmiserver.Role;
 import brix.rmiserver.UserService.UserDto;
 
-public abstract class UserDtoEditor extends Panel<UserDto>
+public abstract class UserDtoEditor extends GenericPanel<UserDto>
 {
     private static final long serialVersionUID = 1L;
 
@@ -68,7 +67,7 @@ public abstract class UserDtoEditor extends Panel<UserDto>
         password2.setVisible(mode == Mode.CREATE || mode == Mode.CHANGE_PASSWORD);
         form.add(new EqualPasswordInputValidator(password1, password2));
 
-        form.add(new Button<Void>("ok")
+        form.add(new Button("ok")
         {
             private static final long serialVersionUID = 1L;
 

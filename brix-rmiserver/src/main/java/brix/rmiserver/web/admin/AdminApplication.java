@@ -1,9 +1,9 @@
 package brix.rmiserver.web.admin;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
@@ -25,7 +25,7 @@ public class AdminApplication extends WebApplication
     /**
      * @see wicket.Application#getHomePage()
      */
-    public Class< ? extends WebPage< ? >> getHomePage()
+    public Class< ? extends Page> getHomePage()
     {
         return HomePage.class;
     }

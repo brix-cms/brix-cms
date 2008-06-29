@@ -28,11 +28,10 @@ public class TimeTile implements Tile
 
         public TimeLabel(String id, IModel<BrixNode> nodeModel)
         {
-            super(id);
-            setModel(new TimeStringModel(nodeModel));
+            super(id, new TimeStringModel(nodeModel));
         }
 
-        private class TimeStringModel extends AbstractReadOnlyModel
+        private static class TimeStringModel extends AbstractReadOnlyModel
         {
             private final IModel<BrixNode> tileNode;
 

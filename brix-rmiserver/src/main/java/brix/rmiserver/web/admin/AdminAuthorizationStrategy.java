@@ -22,12 +22,12 @@ import brix.rmiserver.Role;
 public class AdminAuthorizationStrategy implements IAuthorizationStrategy
 {
 
-    public boolean isActionAuthorized(Component< ? > component, Action action)
+    public boolean isActionAuthorized(Component component, Action action)
     {
         return true;
     }
 
-    public <T extends Component< ? >> boolean isInstantiationAuthorized(Class<T> componentClass)
+    public <T extends Component> boolean isInstantiationAuthorized(Class<T> componentClass)
        {
         boolean authorized = false;
         if (Page.class.isAssignableFrom(componentClass))

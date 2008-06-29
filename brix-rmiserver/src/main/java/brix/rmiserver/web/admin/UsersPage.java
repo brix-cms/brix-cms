@@ -8,7 +8,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -28,7 +27,7 @@ import brix.rmiserver.web.admin.UserDtoEditor.Mode;
  * Homepage
  */
 @AllowedRoles(Role.ADMIN)
-public class UsersPage extends WebPage<Void>
+public class UsersPage extends WebPage
 {
 
     private static final long serialVersionUID = 1L;
@@ -52,9 +51,9 @@ public class UsersPage extends WebPage<Void>
             @Override
             protected void populateItem(Item<User> item)
             {
-                item.add(new Label<String>("login", new PropertyModel<String>(item.getModel(),
+                item.add(new Label("login", new PropertyModel<String>(item.getModel(),
                         "login")));
-                item.add(new Label<String>("roles", new UserRolesModel(item.getModel())));
+                item.add(new Label("roles", new UserRolesModel(item.getModel())));
 
                 final User user = item.getModelObject();
                 if (user.isLocked())
@@ -69,7 +68,7 @@ public class UsersPage extends WebPage<Void>
         });
         add(new PagingNavigator("pager", list));
 
-        add(new WebMarkupContainer<Void>("editor"));
+        add(new WebMarkupContainer("editor"));
 
         add(new Link<Void>("create")
         {
@@ -158,10 +157,8 @@ public class UsersPage extends WebPage<Void>
 
     private void removeEditor()
     {
-        replace(new WebMarkupContainer<Void>("editor"));
-
+        replace(new WebMarkupContainer("editor"));
     }
-
 
     private class UsersDataProvider implements IDataProvider<User>
     {
@@ -223,7 +220,7 @@ public class UsersPage extends WebPage<Void>
         }
     }
 
-    private class LockedFragment extends Fragment<User>
+    private class LockedFragment extends GenericFragment<User>
     {
 
         public LockedFragment(String id, IModel<User> model)
@@ -231,7 +228,7 @@ public class UsersPage extends WebPage<Void>
             super(id, "locked", UsersPage.this, model);
         }
     }
-    private class ActionsFragment extends Fragment<User>
+    private class ActionsFragment extends GenericFragment<User>
     {
 
         public ActionsFragment(String id, IModel<User> model)
