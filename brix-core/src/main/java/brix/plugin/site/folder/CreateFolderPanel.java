@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -18,9 +17,10 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SitePlugin;
 import brix.web.ContainerFeedbackPanel;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.util.validators.NodeNameValidator;
 
-public class CreateFolderPanel extends Panel<BrixNode>
+public class CreateFolderPanel extends BrixGenericPanel<BrixNode>
 {
 	private String name;
 
@@ -33,7 +33,7 @@ public class CreateFolderPanel extends Panel<BrixNode>
 
 		form.add(new ContainerFeedbackPanel("feedback", this));
 
-		form.add(new SubmitLink<Void>("create")
+		form.add(new SubmitLink("create")
 		{
 			@Override
 			public void onSubmit()

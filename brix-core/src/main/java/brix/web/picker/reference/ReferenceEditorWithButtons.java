@@ -2,13 +2,13 @@ package brix.web.picker.reference;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import brix.web.generic.BrixGenericPanel;
 import brix.web.reference.Reference;
 
-public class ReferenceEditorWithButtons extends Panel
+public class ReferenceEditorWithButtons extends BrixGenericPanel<Reference>
 {
 
     public ReferenceEditorWithButtons(String id, ReferenceEditorConfiguration configuration)
@@ -17,7 +17,7 @@ public class ReferenceEditorWithButtons extends Panel
         init(configuration);
     }
 
-    public ReferenceEditorWithButtons(String id, IModel model,
+    public ReferenceEditorWithButtons(String id, IModel<Reference> model,
             ReferenceEditorConfiguration configuration)
     {
         super(id, model);
@@ -28,13 +28,13 @@ public class ReferenceEditorWithButtons extends Panel
 
     private void init(ReferenceEditorConfiguration configuration)
     {
-        Reference old = ((Reference)getModelObject());
+        Reference old = getModelObject();
 
         reference = old != null ? new Reference(old) : new Reference();
 
-        add(new ReferenceEditor("editor", new PropertyModel(this, "reference"), configuration));
+        add(new ReferenceEditor("editor", new PropertyModel<Reference>(this, "reference"), configuration));
 
-        add(new AjaxLink("ok")
+        add(new AjaxLink<Void>("ok")
         {
             @Override
             public void onClick(AjaxRequestTarget target)
@@ -43,7 +43,7 @@ public class ReferenceEditorWithButtons extends Panel
             }
         });
 
-        add(new AjaxLink("cancel")
+        add(new AjaxLink<Void>("cancel")
         {
             @Override
             public void onClick(AjaxRequestTarget target)

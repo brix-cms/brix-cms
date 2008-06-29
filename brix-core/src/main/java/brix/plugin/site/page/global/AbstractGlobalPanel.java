@@ -8,9 +8,10 @@ import brix.BrixNodeModel;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
+import brix.web.generic.BrixGenericPanel;
 import brix.workspace.Workspace;
 
-public abstract class AbstractGlobalPanel extends Panel<BrixNode>
+public abstract class AbstractGlobalPanel extends BrixGenericPanel<BrixNode> 
 {
 	IModel<Workspace> workspaceModel;
 
@@ -27,10 +28,10 @@ public abstract class AbstractGlobalPanel extends Panel<BrixNode>
 		this.workspaceModel = workspaceModel;
 	}
 	
-	protected abstract Panel<?> newManagePanel(String id, IModel<BrixNode> containerNodeModel);
+	protected abstract Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel);
 	
 	private static final String PANEL_ID = "managePanel";
-	
+
 	@Override
 	protected void onBeforeRender()
 	{

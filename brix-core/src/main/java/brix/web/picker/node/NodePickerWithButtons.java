@@ -2,15 +2,15 @@ package brix.web.picker.node;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.tree.JcrTreeNode;
 import brix.web.tree.NodeFilter;
 
-public class NodePickerWithButtons extends Panel<BrixNode>
+public class NodePickerWithButtons extends BrixGenericPanel<BrixNode>
 {
 
     public NodePickerWithButtons(String id, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter)

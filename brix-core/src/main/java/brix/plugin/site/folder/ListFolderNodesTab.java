@@ -13,7 +13,6 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -24,6 +23,7 @@ import org.apache.wicket.util.string.Strings;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
+import brix.web.generic.BrixGenericPanel;
 
 import com.inmethod.grid.IGridColumn;
 import com.inmethod.grid.IRenderable;
@@ -33,7 +33,7 @@ import com.inmethod.grid.column.AbstractLightWeightColumn;
 import com.inmethod.grid.column.PropertyColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 
-public class ListFolderNodesTab extends Panel<BrixNode>
+public class ListFolderNodesTab extends BrixGenericPanel<BrixNode>
 {
 	public ListFolderNodesTab(String id, IModel<BrixNode> folderModel)
 	{
@@ -70,7 +70,7 @@ public class ListFolderNodesTab extends Panel<BrixNode>
 				((ServletWebRequest) getRequest()).setForceNewVersion(true);
 
 				BrixNode node = (BrixNode) rowModel.getObject();
-				Page<?> page = getPage();
+				Page page = getPage();
 				SitePlugin.get().selectNode(this, node);
 				getRequestCycle().setResponsePage(page);
 			}
@@ -88,13 +88,13 @@ public class ListFolderNodesTab extends Panel<BrixNode>
 		}
 
 		@Override
-		public Component<?> newCell(WebMarkupContainer parent, String componentId, IModel rowModel)
+		public Component newCell(WebMarkupContainer parent, String componentId, IModel rowModel)
 		{
 			return new NamePanel(componentId, rowModel);
 		}
 	};
 
-	private class NamePanel extends Panel<BrixNode>
+	private class NamePanel extends BrixGenericPanel<BrixNode>
 	{
 
 		public NamePanel(String id, final IModel<BrixNode> model)
@@ -131,7 +131,7 @@ public class ListFolderNodesTab extends Panel<BrixNode>
 			{
 				labelModel = new PropertyModel<String>(model, "userVisibleName");
 			}
-			link.add(new Label<String>("label", labelModel));
+			link.add(new Label("label", labelModel));
 		}
 	};
 

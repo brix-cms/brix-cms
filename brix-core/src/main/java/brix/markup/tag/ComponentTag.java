@@ -36,5 +36,5 @@ public interface ComponentTag extends Tag
 	 * 			  model to JcrNode that represents the target page            
 	 * @return
 	 */
-	public Component<?> getComponent(String id, IModel<BrixNode> pageNodeModel);
+	public Component getComponent(String id, IModel<BrixNode> pageNodeModel);
 }

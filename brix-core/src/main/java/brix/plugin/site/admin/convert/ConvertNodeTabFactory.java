@@ -37,7 +37,7 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory
 		return new CachingAbstractTab(new Model<String>("Convert"))
 		{
 			@Override
-			public Panel<?> newPanel(String panelId)
+			public Panel newPanel(String panelId)
 			{
 				return new ConvertTab(panelId, nodeModel);
 			}

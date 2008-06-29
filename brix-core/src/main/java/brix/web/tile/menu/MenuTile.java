@@ -22,12 +22,12 @@ public class MenuTile implements Tile
         return TYPE_NAME;
     }
 
-    public TileEditorPanel< ? > newEditor(String id, IModel<BrixNode> tileContainerNode)
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
     {
         return new MenuTileEditor(id, tileContainerNode);
     }
 
-    public Component< ? > newViewer(String id, IModel<BrixNode> tileNode,
+    public Component newViewer(String id, IModel<BrixNode> tileNode,
             BrixPageParameters tilePageParameters)
     {
         return new MenuRenderer(id, tileNode);
@@ -35,7 +35,6 @@ public class MenuTile implements Tile
 
     public boolean requiresSSL(IModel<BrixNode> tileNode)
     {
-        // TODO Auto-generated method stub
         return false;
     }
 

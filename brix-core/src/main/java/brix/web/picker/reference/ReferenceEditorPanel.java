@@ -45,7 +45,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference>
 	private void init()
 	{
 		add(newModalWindow(MODAL_WINDOW_ID));
-		final Label<?> label = new Label<String>("label", newLabelModel())
+		final Label label = new Label("label", newLabelModel())
 		{
 			@Override
 			public boolean isVisible()
@@ -125,7 +125,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference>
 		return configuration;
 	}
 
-	protected Component<?> newModalWindow(String id)
+	protected Component newModalWindow(String id)
 	{
 		return new ReferenceEditorModalWindow(id, getModel(), getConfiguration());
 	}

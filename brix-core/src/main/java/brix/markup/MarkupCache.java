@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.wicket.MarkupContainer;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.IGenericComponent;
 
 /**
  * Contains {@link GeneratedMarkup} instances associated with
@@ -24,7 +25,7 @@ public class MarkupCache
 	 * @param container
 	 * @return
 	 */
-	private String getKey(MarkupContainer<BrixNode> container)
+	private String getKey(IGenericComponent<BrixNode> container)
 	{
 		BrixNode node = container.getModelObject();
 		String nodeId = "";
@@ -52,7 +53,7 @@ public class MarkupCache
 	 * @param container
 	 * @return
 	 */
-	public GeneratedMarkup getMarkup(MarkupContainer<BrixNode> container)
+	public GeneratedMarkup getMarkup(IGenericComponent<BrixNode> container)
 	{
 		if (!(container instanceof MarkupSourceProvider))
 		{

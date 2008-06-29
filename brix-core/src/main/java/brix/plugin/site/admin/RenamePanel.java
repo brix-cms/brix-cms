@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
@@ -14,8 +13,9 @@ import org.apache.wicket.validation.ValidationError;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.BrixGenericPanel;
 
-public abstract class RenamePanel extends Panel<BrixNode>
+public abstract class RenamePanel extends BrixGenericPanel<BrixNode>
 {
 
     public RenamePanel(String id, IModel<BrixNode> model)
@@ -32,7 +32,7 @@ public abstract class RenamePanel extends Panel<BrixNode>
         newName.add(new NewNameValidator());
         form.add(newName);
 
-        form.add(new SubmitLink<Void>("rename")
+        form.add(new SubmitLink("rename")
         {
             @Override
             public void onSubmit()

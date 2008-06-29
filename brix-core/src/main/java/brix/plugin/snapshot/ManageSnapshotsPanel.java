@@ -16,7 +16,6 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.WebResponse;
@@ -29,10 +28,11 @@ import brix.jcr.api.JcrSession;
 import brix.plugin.snapshot.auth.CreateSnapshotAction;
 import brix.plugin.snapshot.auth.DeleteSnapshotAction;
 import brix.plugin.snapshot.auth.RestoreSnapshotAction;
+import brix.web.generic.BrixGenericPanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
-public class ManageSnapshotsPanel extends Panel<Workspace>
+public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
 {
 
 	private Brix getBrix()
@@ -123,7 +123,7 @@ public class ManageSnapshotsPanel extends Panel<Workspace>
                     }
                 });
 
-                item.add(new Label<String>("label", name));
+                item.add(new Label("label", name));
             }
         });
 
@@ -187,7 +187,7 @@ public class ManageSnapshotsPanel extends Panel<Workspace>
         final FileUploadField upload = new FileUploadField("upload");
         uploadForm.add(upload);
 
-        uploadForm.add(new SubmitLink<Object>("submit")
+        uploadForm.add(new SubmitLink("submit")
         {
             @Override
             public void onSubmit()

@@ -30,7 +30,7 @@ public class FallbackNodePlugin implements SiteNodePlugin
     }
 
 
-    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
     {
         return new EmptyPanel(id);
     }
@@ -45,7 +45,7 @@ public class FallbackNodePlugin implements SiteNodePlugin
     	return null;
     }
     
-    private class EmptyPanel extends Panel<Void>
+    private class EmptyPanel extends Panel
     {
 
         public EmptyPanel(String id)

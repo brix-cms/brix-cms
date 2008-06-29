@@ -344,7 +344,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
         {
             BookmarkableListenerInterfaceRequestTarget target = (BookmarkableListenerInterfaceRequestTarget)requestTarget;
             BrixNodeWebPage page = (BrixNodeWebPage)target.getPage();
-            BrixNode node = page.getNodeModel().getObject();
+            BrixNode node = page.getModelObject();
             PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
                 .getPageMapName());
             String componentPath = target.getComponentPath();

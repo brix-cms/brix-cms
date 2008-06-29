@@ -66,7 +66,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     protected abstract String getCurrentWorkspaceId();
 
     @Override
-    public boolean getStatelessHint(Component< ? > component)
+    public boolean getStatelessHint(Component component)
     {
         return true;
     }
@@ -123,7 +123,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     };
 
     @Override
-    public boolean isEnabled(Component< ? > component)
+    public boolean isEnabled(Component component)
     {
     	RequestCycle requestCycle = RequestCycle.get();
     	if (requestCycle.getRequest().getParameter(BrixRequestCycleProcessor.WORKSPACE_PARAM) != null)
@@ -139,7 +139,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     }
 
     @Override
-    public void detach(Component< ? > component)
+    public void detach(Component component)
     {
         super.detach(component);
         workspaces = null;

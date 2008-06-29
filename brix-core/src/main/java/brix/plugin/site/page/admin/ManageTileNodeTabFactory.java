@@ -47,7 +47,7 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
         {
 
             @Override
-            public Panel<?> getPanel(String panelId)
+            public Panel getPanel(String panelId)
             {
                 return new ViewTab(panelId, nodeModel);
             }
@@ -64,7 +64,7 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
         {
 
             @Override
-            public Panel<?> getPanel(String panelId)
+            public Panel getPanel(String panelId)
             {
                 return new TilesPanel(panelId, nodeModel);
             }
@@ -81,7 +81,7 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
         {
 
             @Override
-            public Panel<?> getPanel(String panelId)
+            public Panel getPanel(String panelId)
             {
                 return new VariablesPanel(panelId, nodeModel);
             }

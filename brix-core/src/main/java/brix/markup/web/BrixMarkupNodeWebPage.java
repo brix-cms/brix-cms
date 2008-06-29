@@ -34,7 +34,7 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
 		super(nodeModel, pageParameters);
 	}
 
-	public String getCacheKey(MarkupContainer<?> container, Class<?> containerClass)
+	public String getCacheKey(MarkupContainer container, Class<?> containerClass)
 	{
 		return null;
 	}	
@@ -55,7 +55,7 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
 		markupHelper = null;
 	}
 	
-	public IResourceStream getMarkupResourceStream(MarkupContainer<?> container, Class<?> containerClass)
+	public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass)
 	{
 		return new StringResourceStream(markupHelper.getMarkup(), "text/html");
 	}

@@ -3,7 +3,6 @@ package brix.web.util;
 import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ILinkListener;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WicketURLDecoder;
@@ -12,8 +11,9 @@ import org.apache.wicket.util.value.ValueMap;
 
 import brix.Path;
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.BrixGenericWebMarkupContainer;
 
-public abstract class PathLabel extends WebMarkupContainer<BrixNode> implements ILinkListener
+public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> implements ILinkListener
 {
 
     private final String rootPath;
@@ -83,6 +83,5 @@ public abstract class PathLabel extends WebMarkupContainer<BrixNode> implements 
 
     }    
 
-    protected abstract void onPathClicked(Path path);
-
+    protected abstract void onPathClicked(Path path);    
 }

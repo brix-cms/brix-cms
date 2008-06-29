@@ -8,24 +8,24 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.tile.admin.TileEditorPanel;
+import brix.plugin.site.page.tile.admin.GenericTileEditorPanel;
+import brix.web.generic.BrixGenericFragment;
 import brix.web.picker.reference.ReferenceEditorConfiguration;
 import brix.web.picker.reference.ReferenceEditorModalWindow;
 import brix.web.picker.reference.ReferenceEditorPanel;
+import brix.web.reference.Reference;
 import brix.web.tile.treemenu.TreeMenuTile.Item;
 import brix.web.tile.treemenu.TreeMenuTile.RootItem;
 
-public class TreeMenuTileEditorPanel extends TileEditorPanel<BrixNode>
+public class TreeMenuTileEditorPanel extends GenericTileEditorPanel<BrixNode>
 {
 
-    private static final String VERSION = "1.0";
     private final RootItem root = new RootItem();
 
     private ReferenceEditorModalWindow referenceEditor;
@@ -44,7 +44,7 @@ public class TreeMenuTileEditorPanel extends TileEditorPanel<BrixNode>
         referenceEditor = new ReferenceEditorModalWindow("referenceEditor", null, conf);
         add(referenceEditor);
 
-        add(new Button<Void>("add-root-child")
+        add(new Button("add-root-child")
         {
             @Override
             public void onSubmit()
@@ -81,7 +81,7 @@ public class TreeMenuTileEditorPanel extends TileEditorPanel<BrixNode>
         }.setReuseItems(true));
     }
 
-    private abstract class ItemViewer extends Fragment<Item>
+    private abstract class ItemViewer extends BrixGenericFragment<Item>
     {
         public ItemViewer(String id, final IModel<Item> model)
         {
@@ -93,7 +93,7 @@ public class TreeMenuTileEditorPanel extends TileEditorPanel<BrixNode>
             add(new TextField<String>("containerCssId").setLabel(new Model<String>("Container Css Id")));
             add(new TextField<String>("itemCssId").setLabel(new Model<String>("Item Css Id")));
 
-            add(new ReferenceEditorPanel("reference", new PropertyModel(model, "reference"))
+            add(new ReferenceEditorPanel("reference", new PropertyModel<Reference>(model, "reference"))
             {
                 @Override
                 protected Component newModalWindow(String id)
@@ -128,11 +128,11 @@ public class TreeMenuTileEditorPanel extends TileEditorPanel<BrixNode>
 
             }.setDefaultFormProcessing(false));
 
-            add(new ListView("children")
+            add(new ListView<Item>("children")
             {
 
                 @Override
-                protected void populateItem(ListItem item)
+                protected void populateItem(ListItem<Item> item)
                 {
                     item.add(new ItemViewer("viewer", item.getModel())
                     {

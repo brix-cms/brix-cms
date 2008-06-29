@@ -13,15 +13,16 @@ import org.apache.wicket.model.IModel;
 
 import brix.Brix;
 import brix.Plugin;
+import brix.web.generic.BrixGenericPanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
-public class AdminPanel extends Panel<Workspace> 
+public class AdminPanel extends BrixGenericPanel<Workspace> 
 {
 
     private TabbedPanel tabbedPanel;
 
-        protected Panel<?> newWorkspaceSwitcher(String id, IModel<Workspace> workspaceModel)
+        protected Panel newWorkspaceSwitcher(String id, IModel<Workspace> workspaceModel)
     {
     	return new WorkspaceSwitcher(id, workspaceModel);
     }

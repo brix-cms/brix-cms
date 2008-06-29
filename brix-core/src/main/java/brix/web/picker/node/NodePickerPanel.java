@@ -71,7 +71,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode>
 	private void init()
 	{
 		add(newModalWindow(MODAL_WINDOW_ID));
-		final Label<?> label = new Label<String>("label", newLabelModel())
+		final Label label = new Label("label", newLabelModel())
 		{
 			@Override
 			public boolean isVisible()
@@ -141,7 +141,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode>
 		};
 	}
 
-	protected Component<?> newModalWindow(String id)
+	protected Component newModalWindow(String id)
 	{
 		return new NodePickerModalWindow(id, getModel(), rootNode, visibilityFilter, enabledFilter);
 	}

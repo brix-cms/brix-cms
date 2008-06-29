@@ -41,7 +41,7 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 		{
 
 			@Override
-			public Panel<?> getPanel(String panelId)
+			public Panel getPanel(String panelId)
 			{
 				return new ListFolderNodesTab(panelId, folderModel);
 			}
@@ -59,7 +59,7 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 		{
 
 			@Override
-			public Panel<?> getPanel(String panelId)
+			public Panel getPanel(String panelId)
 			{
 				return new PropertiesTab(panelId, folderModel);
 			}

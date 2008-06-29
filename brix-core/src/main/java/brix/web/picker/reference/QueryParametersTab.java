@@ -34,7 +34,7 @@ import com.inmethod.grid.column.editable.EditablePropertyColumn;
 import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 
-public abstract class QueryParametersTab extends Panel<Void>
+public abstract class QueryParametersTab extends Panel
 {
 
 	AjaxLink<?> removeSelected;
@@ -54,7 +54,7 @@ public abstract class QueryParametersTab extends Panel<Void>
 
 		newForm.add(new TextField<String>("key").setRequired(true));
 		newForm.add(new TextField<String>("value").setRequired(true));
-		newForm.add(new AjaxButton<Void>("add")
+		newForm.add(new AjaxButton("add")
 		{
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form)

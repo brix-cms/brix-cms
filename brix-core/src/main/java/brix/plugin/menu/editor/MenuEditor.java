@@ -4,7 +4,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.DefaultTreeState;
 import org.apache.wicket.markup.html.tree.ITreeState;
@@ -14,8 +13,9 @@ import org.apache.wicket.model.Model;
 
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.Menu.ChildEntry;
+import brix.web.generic.BrixGenericPanel;
 
-public class MenuEditor extends Panel<Menu>
+public class MenuEditor extends BrixGenericPanel<Menu>
 {
 
     public MenuEditor(String id, IModel<Menu> model)
@@ -187,14 +187,14 @@ public class MenuEditor extends Panel<Menu>
         return node.getParent().getIndex(node);
     }
 
-    private WebMarkupContainer< ? > links;
-    private Component< ? > editor;
+    private WebMarkupContainer links;
+    private Component editor;
 
     private static final String EDITOR_ID = "editor";
 
     private void selectionChanged(AjaxRequestTarget target)
     {
-        Component< ? > c;
+        Component c;
         if (getSelected().getEntry() instanceof ChildEntry)
         {
             c = new ChildPanel(EDITOR_ID, new Model<ChildEntry>()

@@ -2,7 +2,6 @@ package brix.plugin.site.resource.managers.text;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -10,8 +9,9 @@ import brix.auth.Action;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.auth.SiteNodeAction;
+import brix.web.generic.BrixGenericPanel;
 
-public class ViewTextPanel extends Panel<BrixNode>
+public class ViewTextPanel extends BrixGenericPanel<BrixNode>
 {
 
 	public ViewTextPanel(String id, IModel<BrixNode> model)
@@ -28,7 +28,7 @@ public class ViewTextPanel extends Panel<BrixNode>
 			}
 		};
 
-		add(new Label<String>("label", labelModel));
+		add(new Label("label", labelModel));
 
 		add(new Link<Void>("edit")
 		{

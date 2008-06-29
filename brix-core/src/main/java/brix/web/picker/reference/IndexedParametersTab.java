@@ -22,6 +22,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
 
+import brix.web.generic.BrixGenericPanel;
 import brix.web.nodepage.BrixPageParameters;
 
 import com.inmethod.grid.IDataSource;
@@ -33,7 +34,7 @@ import com.inmethod.grid.column.editable.EditablePropertyColumn;
 import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 
-public abstract class IndexedParametersTab extends Panel<Void>
+public abstract class IndexedParametersTab extends Panel
 {
 	private AjaxLink<?> removeSelected;
 	
@@ -52,7 +53,7 @@ public abstract class IndexedParametersTab extends Panel<Void>
         add(newForm);
 
         newForm.add(new TextField<String>("value").setRequired(true));
-        newForm.add(new AjaxButton<Void>("add")
+        newForm.add(new AjaxButton("add")
         {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form)
@@ -169,7 +170,7 @@ public abstract class IndexedParametersTab extends Panel<Void>
         });
     }
 
-    private abstract class MovePanel extends Panel<Entry>
+    private abstract class MovePanel extends BrixGenericPanel<Entry>
     {
         public MovePanel(String id, IModel<Entry> model)
         {

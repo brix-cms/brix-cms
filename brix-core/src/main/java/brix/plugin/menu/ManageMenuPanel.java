@@ -24,10 +24,11 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.editor.MenuEditor;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.util.AbstractModel;
 import brix.workspace.Workspace;
 
-public class ManageMenuPanel extends Panel<Workspace>
+public class ManageMenuPanel extends BrixGenericPanel<Workspace>
 {
 	public ManageMenuPanel(String id, final IModel<Workspace> model)
 	{
@@ -113,7 +114,7 @@ public class ManageMenuPanel extends Panel<Workspace>
 					return menu.getName();
 				}
 			};
-			select.add(new Label<String>("label", labelModel));
+			select.add(new Label("label", labelModel));
 			item.add(select);
 		}
 
@@ -135,7 +136,7 @@ public class ManageMenuPanel extends Panel<Workspace>
 
 	private void setupEditor()
 	{
-		Component<Menu> editor = new EditorPanel("editor", new PropertyModel<Menu>(this, "currentMenu"));
+		Component editor = new EditorPanel("editor", new PropertyModel<Menu>(this, "currentMenu"));
 		if (this.editor == null)
 		{
 			add(editor);
@@ -147,7 +148,7 @@ public class ManageMenuPanel extends Panel<Workspace>
 		this.editor = editor;
 	}
 
-	private class EditorPanel extends Panel<Menu>
+	private class EditorPanel extends BrixGenericPanel<Menu>
 	{
 
 		public EditorPanel(String id, final IModel<Menu> model)
@@ -161,7 +162,7 @@ public class ManageMenuPanel extends Panel<Workspace>
 
 			form.add(new MenuEditor("editor", model));
 
-			form.add(new SubmitLink<Object>("save")
+			form.add(new SubmitLink("save")
 			{
 				@Override
 				public void onSubmit()
@@ -173,7 +174,7 @@ public class ManageMenuPanel extends Panel<Workspace>
 				}
 			});
 
-			form.add(new SubmitLink<Object>("delete")
+			form.add(new SubmitLink("delete")
 			{
 				@Override
 				public void onSubmit()
@@ -212,7 +213,7 @@ public class ManageMenuPanel extends Panel<Workspace>
 
 	};
 
-	private Component<Menu> editor;
+	private Component editor;
 
 	private IModel<BrixNode> currentNode = new BrixNodeModel();
 	private Menu currentMenu = new Menu();

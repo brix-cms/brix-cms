@@ -17,10 +17,10 @@ import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.MenuPlugin;
-import brix.plugin.site.page.tile.admin.TileEditorPanel;
+import brix.plugin.site.page.tile.admin.GenericTileEditorPanel;
 import brix.web.util.AbstractModel;
 
-public class MenuTileEditor extends TileEditorPanel<BrixNode>
+public class MenuTileEditor extends GenericTileEditorPanel<BrixNode>
 {
 
     public MenuTileEditor(String id, IModel<BrixNode> containerNode)
@@ -101,7 +101,7 @@ public class MenuTileEditor extends TileEditorPanel<BrixNode>
                     return menu.getName();
                 }
             };
-            select.add(new Label<String>("label", labelModel));
+            select.add(new Label("label", labelModel));
             item.add(select);
         }
 

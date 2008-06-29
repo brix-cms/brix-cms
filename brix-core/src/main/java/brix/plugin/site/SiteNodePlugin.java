@@ -33,7 +33,7 @@ public interface SiteNodePlugin
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode);
     
-    Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
+    Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
 
     NodeConverter getConverterForNode(BrixNode node);
 }

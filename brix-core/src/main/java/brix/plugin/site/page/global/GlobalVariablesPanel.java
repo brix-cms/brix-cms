@@ -15,7 +15,7 @@ public class GlobalVariablesPanel extends AbstractGlobalPanel
 	}
 
 	@Override
-	protected Panel<?> newManagePanel(String id, IModel<BrixNode> containerNodeModel)
+	protected Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel)
 	{
 		return new VariablesPanel(id, containerNodeModel);
 	}

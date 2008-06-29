@@ -2,7 +2,6 @@ package brix.plugin.site.resource.admin;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -12,15 +11,16 @@ import brix.jcr.wrapper.BrixNode;
 import brix.jcr.wrapper.BrixNode.Protocol;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.resource.ResourceRequestTarget;
+import brix.web.generic.BrixGenericPanel;
 
-public class ViewPropertiesTab extends Panel<BrixNode>
+public class ViewPropertiesTab extends BrixGenericPanel<BrixNode>
 {
 
 	public ViewPropertiesTab(String id, final IModel<BrixNode> nodeModel)
 	{
 		super(id, nodeModel);
 
-		add(new Label<String>("mimeType", new Model<String>()
+		add(new Label("mimeType", new Model<String>()
 		{
 			@Override
 			public String getObject()
@@ -30,7 +30,7 @@ public class ViewPropertiesTab extends Panel<BrixNode>
 			}
 		}));
 
-		add(new Label<String>("size", new Model<String>()
+		add(new Label("size", new Model<String>()
 		{
 			@Override
 			public String getObject()
@@ -40,7 +40,7 @@ public class ViewPropertiesTab extends Panel<BrixNode>
 			}
 		}));
 
-		add(new Label<String>("requiredProtocol", new Model<String>()
+		add(new Label("requiredProtocol", new Model<String>()
 		{
 			@Override
 			public String getObject()

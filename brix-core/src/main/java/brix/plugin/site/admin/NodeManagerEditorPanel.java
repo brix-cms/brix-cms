@@ -26,9 +26,10 @@ import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.auth.SiteNodeAction.Type;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.util.PathLabel;
 
-public class NodeManagerEditorPanel extends Panel<BrixNode>
+public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 {
 
 	public NodeManagerEditorPanel(String id, IModel<BrixNode> model)
@@ -52,7 +53,7 @@ public class NodeManagerEditorPanel extends Panel<BrixNode>
 			public void onClick()
 			{
 				String id = NodeManagerEditorPanel.this.getId();
-				Panel<BrixNode> renamePanel = new RenamePanel(id, NodeManagerEditorPanel.this.getModel())
+				Panel renamePanel = new RenamePanel(id, NodeManagerEditorPanel.this.getModel())
 				{
 					@Override
 					protected void onLeave()

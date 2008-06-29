@@ -27,7 +27,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
     {
         super(id, prototypeWorkspaceId);
 
-        final Component<String> message = new MultiLineLabel<String>("message", new Model<String>(
+        final Component message = new MultiLineLabel("message", new Model<String>(
             ""));
         message.setOutputMarkupId(true);
         add(message);
@@ -49,7 +49,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
                         nodes, targetWorkspace);;
                     if (!dependencies.isEmpty())
                     {                        
-                        message.setModelObject(getDependenciesMessage(dependencies));                        
+                        message.setDefaultModelObject(getDependenciesMessage(dependencies));                        
                     }
                     else
                     {
@@ -64,7 +64,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void>
                 }
                 else
                 {
-                    message.setModelObject("You have to select at least one node.");
+                    message.setDefaultModelObject("You have to select at least one node.");
                 }
                 target.addComponent(message);
             }

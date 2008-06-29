@@ -5,7 +5,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
 
-public abstract class TileEditorPanel<T> extends Panel<T>
+public abstract class TileEditorPanel extends Panel
 {
 
     public TileEditorPanel(String id)
@@ -13,7 +13,7 @@ public abstract class TileEditorPanel<T> extends Panel<T>
         super(id);
     }
 
-    public TileEditorPanel(String id, IModel<T> model)
+    public TileEditorPanel(String id, IModel<?> model)
     {
         super(id, model);
     }

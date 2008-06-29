@@ -6,10 +6,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.IGenericComponent;
 import brix.web.tree.JcrTreeNode;
 import brix.web.tree.NodeFilter;
 
-public class NodePickerModalWindow extends ModalWindow<BrixNode>
+public class NodePickerModalWindow extends ModalWindow implements IGenericComponent<BrixNode>
 {
     private final JcrTreeNode rootNode;
     private final NodeFilter enabledFilter;
@@ -45,7 +46,7 @@ public class NodePickerModalWindow extends ModalWindow<BrixNode>
         setResizable(false);
         setTitle(new ResourceModel("node-picker-title"));
     }
-
+    
     private void initContent()
     {
         setContent(new NodePickerWithButtons(getContentId(), getModel(), rootNode, visibilityFilter, enabledFilter)
@@ -96,5 +97,26 @@ public class NodePickerModalWindow extends ModalWindow<BrixNode>
     {
         close(target);
     }
+
+	@SuppressWarnings("unchecked")
+	public IModel<BrixNode> getModel()
+	{
+		return (IModel<BrixNode>) getDefaultModel();
+	}
+
+	public BrixNode getModelObject()
+	{
+		return (BrixNode) getDefaultModelObject();
+	}
+
+	public void setModel(IModel<BrixNode> model)
+	{
+		setDefaultModel(model);
+	}
+
+	public void setModelObject(BrixNode object)
+	{
+		setDefaultModelObject(object);
+	}
 
 }

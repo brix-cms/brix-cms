@@ -56,7 +56,7 @@ public class ResourceNodePlugin implements SiteNodePlugin
 //    	}
     }
 
-    public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
     {
         return new UploadResourcesPanel(id, parentNode, goBack);
     }

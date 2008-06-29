@@ -14,11 +14,12 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.plugin.menu.Menu.Entry;
+import brix.web.generic.IGenericComponent;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.reference.Reference;
 import brix.web.reference.Reference.Type;
 
-public class MenuRenderer extends WebComponent<BrixNode>
+public class MenuRenderer extends WebComponent implements IGenericComponent<BrixNode>
 {
 
     public MenuRenderer(String id, IModel<BrixNode> model)
@@ -133,7 +134,7 @@ public class MenuRenderer extends WebComponent<BrixNode>
 
         if (reference.getType() == Type.NODE)
         {
-            eq = page.getNodeModel().equals(reference.getNodeModel()) &&
+            eq = page.getModelObject().equals(reference.getNodeModel()) &&
                 page.getBrixPageParameters().equals(reference.getParameters());
         }
         else
@@ -185,5 +186,26 @@ public class MenuRenderer extends WebComponent<BrixNode>
 
         return result;
     }
+
+	@SuppressWarnings("unchecked")
+	public IModel<BrixNode> getModel()
+	{
+		return (IModel<BrixNode>) getDefaultModel();
+	}
+
+	public BrixNode getModelObject()
+	{
+		return (BrixNode) getDefaultModelObject();
+	}
+
+	public void setModel(IModel<BrixNode> model)
+	{
+		setDefaultModel(model);
+	}
+
+	public void setModelObject(BrixNode object)
+	{
+		setDefaultModelObject(object);
+	}
 
 }

@@ -45,7 +45,7 @@ import brix.workspace.Workspace;
 public class NodeManagerContainerPanel extends NodeManagerPanel
 {
 
-	private Component<?> editor;
+	private Component editor;
 
 	private final BaseTree tree;
 	private IModel<Workspace> workspaceModel;
@@ -100,7 +100,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 				}
 				selectNode(newNode);
 				tree.invalidateAll();
-				tree.getTreeState().expandNode(((TreeModel)tree.getModelObject()).getRoot());
+				tree.getTreeState().expandNode(((TreeModel)tree.getDefaultModelObject()).getRoot());
 			}
 		}
 		;
@@ -115,14 +115,14 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		super(id, new BrixNodeModel(getRootNode(workspaceModel)));
 		this.workspaceModel = workspaceModel;
 
-		editor = new WebMarkupContainer<Void>(EDITOR_ID);
+		editor = new WebMarkupContainer(EDITOR_ID);
 		add(editor);
 
 		setupDefaultEditor();
 
 		add(tree = new Tree("tree", new TreeModel()));
 
-		WebMarkupContainer<Void> createNodesContainer = new WebMarkupContainer<Void>("createNodesContainer")
+		WebMarkupContainer createNodesContainer = new WebMarkupContainer("createNodesContainer")
 		{
 			@Override
 			public boolean isVisible()
@@ -147,7 +147,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 					public void onClick()
 					{
 						SiteNodePlugin plugin = item.getModelObject().getPlugin();
-						final Component<?> currentEditor = getEditor();
+						final Component currentEditor = getEditor();
 
 						// remember the last editor that is not a create node
 						// panel
@@ -162,7 +162,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 								setupEditor(lastEditor);
 							}
 						};
-						Panel<?> panel = plugin.newCreateNodePanel(EDITOR_ID, getNewNodeParent(), goBack);
+						Panel panel = plugin.newCreateNodePanel(EDITOR_ID, getNewNodeParent(), goBack);
 						panel.setMetaData(EDITOR_NODE_TYPE, plugin.getNodeType());
 						setupEditor(panel);
 					}
@@ -188,7 +188,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 						}
 					}
 				});
-				item.add(new WebMarkupContainer<Void>("separator")
+				item.add(new WebMarkupContainer("separator")
 				{
 					@Override
 					public boolean isVisible()
@@ -198,13 +198,13 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 				});
 				IModel<BrixNode> parent = getNewNodeParent();
 				SiteNodePlugin plugin = item.getModelObject().getPlugin();
-				link.add(new Label<String>("label", plugin.newCreateNodeCaptionModel(parent)));
+				link.add(new Label("label", plugin.newCreateNodeCaptionModel(parent)));
 			}
 
 		}.setReuseItems(false));
 	}
 
-	private Component<?> lastEditor;
+	private Component lastEditor;
 
 	private static MetaDataKey<String> EDITOR_NODE_TYPE = new MetaDataKey<String>()
 	{
@@ -268,11 +268,11 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		}
 
 		@Override
-		protected Component<?> newJunctionLink(MarkupContainer parent, String id, Object node)
+		protected Component newJunctionLink(MarkupContainer parent, String id, Object node)
 		{
 			LinkType old = getLinkType();
 			setLinkType(LinkType.AJAX);
-			Component<?> c = super.newJunctionLink(parent, id, node);
+			Component c = super.newJunctionLink(parent, id, node);
 			setLinkType(old);
 			return c;
 		}
@@ -365,12 +365,12 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 		tree.updateTree();
 	}
 
-	private Component<?> getEditor()
+	private Component getEditor()
 	{
 		return get(EDITOR_ID);
 	};
 
-	private void setupEditor(Component<?> newEditor)
+	private void setupEditor(Component newEditor)
 	{
 		editor.replaceWith(newEditor);
 		editor = newEditor;

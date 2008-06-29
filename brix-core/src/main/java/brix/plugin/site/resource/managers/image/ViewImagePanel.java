@@ -4,13 +4,13 @@ import org.apache.wicket.behavior.AbstractBehavior;
 import org.apache.wicket.behavior.IBehaviorListener;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.resource.ResourceRequestTarget;
+import brix.web.generic.BrixGenericPanel;
 
-public class ViewImagePanel extends Panel<BrixNode>
+public class ViewImagePanel extends BrixGenericPanel<BrixNode>
 {
 
 	public ViewImagePanel(String id, IModel<BrixNode> model)
@@ -27,7 +27,7 @@ public class ViewImagePanel extends Panel<BrixNode>
             }
         };
 
-        add(new WebMarkupContainer<Void>("image")
+        add(new WebMarkupContainer("image")
         {
             @Override
             protected void onComponentTag(ComponentTag tag)

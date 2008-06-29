@@ -5,18 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.picker.common.NodePickerTreeGridPanel;
 import brix.web.picker.common.RootTreeNode;
 import brix.web.tree.JcrTreeNode;
 
 import com.inmethod.grid.treegrid.TreeGrid;
 
-public class SelectItemsPanel<T> extends Panel<T>
+public class SelectItemsPanel<T> extends BrixGenericPanel<T>
 {
 
     public SelectItemsPanel(String id, IModel<T> model, String workspaceId)
@@ -32,11 +32,11 @@ public class SelectItemsPanel<T> extends Panel<T>
     }
     
     
-    private NodePickerTreeGridPanel<Void> treeGrid;
+    private NodePickerTreeGridPanel treeGrid;
     
     private void init(final String workspaceId)
     {
-    	treeGrid = new NodePickerTreeGridPanel<Void>("grid", null, null)
+    	treeGrid = new NodePickerTreeGridPanel("grid", null, null)
     	{
     		@Override
     		protected JcrTreeNode getRootNode()

@@ -18,12 +18,12 @@ public abstract class CachingAbstractTab extends AbstractTab
         return true;
     }
 
-    public abstract Panel<?> newPanel(String panelId);
+    public abstract Panel newPanel(String panelId);
 
-    private Panel<?> panel = null;
+    private Panel panel = null;
 
     @Override
-    public Panel<?> getPanel(String panelId)
+    public Panel getPanel(String panelId)
     {
         if (panel == null)
         {

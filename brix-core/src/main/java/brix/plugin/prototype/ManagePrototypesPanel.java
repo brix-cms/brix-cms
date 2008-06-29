@@ -29,10 +29,11 @@ import brix.auth.Action.Context;
 import brix.plugin.prototype.auth.CreatePrototypeAction;
 import brix.plugin.prototype.auth.DeletePrototypeAction;
 import brix.plugin.prototype.auth.RestorePrototypeAction;
+import brix.web.generic.BrixGenericPanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
-public class ManagePrototypesPanel extends Panel<Workspace>
+public class ManagePrototypesPanel extends BrixGenericPanel<Workspace>
 {
 
 	private Brix getBrix()
@@ -59,7 +60,7 @@ public class ManagePrototypesPanel extends Panel<Workspace>
 		Form<Void> modalWindowForm = new Form<Void>("modalWindowForm");
 		add(modalWindowForm);
 
-		final ModalWindow<?> modalWindow = new ModalWindow<Void>("modalWindow");
+		final ModalWindow modalWindow = new ModalWindow("modalWindow");
 		modalWindow.setInitialWidth(64);
 		modalWindow.setWidthUnit("em");
 		modalWindow.setUseInitialHeight(false);
@@ -81,7 +82,7 @@ public class ManagePrototypesPanel extends Panel<Workspace>
 				PrototypePlugin plugin = PrototypePlugin.get();
 				final String name = plugin.getUserVisibleName(item.getModelObject(), false);
 
-				item.add(new Label<String>("label", name));
+				item.add(new Label("label", name));
 				item.add(new Link<Void>("browse")
 				{
 					@Override
@@ -98,7 +99,7 @@ public class ManagePrototypesPanel extends Panel<Workspace>
 					{
 						String prototypeId = item.getModelObject().getId();
 						String targetId = ManagePrototypesPanel.this.getModelObject().getId();
-						Panel<Void> panel = new RestoreItemsPanel(modalWindow.getContentId(), prototypeId, targetId);
+						Panel panel = new RestoreItemsPanel(modalWindow.getContentId(), prototypeId, targetId);
 						modalWindow.setTitle(new ResourceModel("selectItems"));
 						modalWindow.setContent(panel);
 						modalWindow.show(target);
@@ -155,7 +156,7 @@ public class ManagePrototypesPanel extends Panel<Workspace>
 		add(feedback = new FeedbackPanel("feedback"));
 		feedback.setOutputMarkupId(true);
 
-		form.add(new AjaxButton<Void>("submit")
+		form.add(new AjaxButton("submit")
 		{
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form)

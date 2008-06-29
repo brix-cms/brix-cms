@@ -14,11 +14,12 @@ import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.AbstractContainer;
 import brix.plugin.site.page.tile.Tile;
+import brix.web.generic.IGenericComponent;
 
-public abstract class TileEditorFragment extends Fragment<BrixNode>
+public abstract class TileEditorFragment extends Fragment implements IGenericComponent<BrixNode>
 {
 
-	public TileEditorFragment(String id, String markupId, MarkupContainer<?> markupProvider,
+	public TileEditorFragment(String id, String markupId, MarkupContainer markupProvider,
 			final IModel<BrixNode> nodeModel, final String tileId)
 	{
 		super(id, markupId, markupProvider, nodeModel);
@@ -32,13 +33,13 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
 		final String tileClassName = getTileContainerNode().tiles().getTileClassName(tileId);
 		final Tile tile = Tile.Helper.getTileOfType(tileClassName, brix);
 
-		final TileEditorPanel<?> editor;
+		final TileEditorPanel editor;
 
 		form.add(editor = tile.newEditor("editor", nodeModel));
 
 		editor.load(getTileContainerNode().tiles().getTile(tileId));
 
-		form.add(new SubmitLink<Void>("submit")
+		form.add(new SubmitLink("submit")
 		{
 			@Override
 			public void onSubmit()
@@ -80,4 +81,24 @@ public abstract class TileEditorFragment extends Fragment<BrixNode>
 		return (AbstractContainer) getModelObject();
 	}
 
+	@SuppressWarnings("unchecked")
+	public IModel<BrixNode> getModel()
+	{
+		return (IModel<BrixNode>) getDefaultModel();
+	}
+
+	public BrixNode getModelObject()
+	{
+		return (BrixNode) getDefaultModelObject();
+	}
+
+	public void setModel(IModel<BrixNode> model)
+	{
+		setDefaultModel(model);
+	}
+
+	public void setModelObject(BrixNode object)
+	{
+		setDefaultModelObject(object);
+	}
 }

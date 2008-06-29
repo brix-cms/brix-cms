@@ -7,17 +7,17 @@ import java.util.Map;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import brix.Brix;
 import brix.Plugin;
 import brix.auth.Action.Context;
+import brix.web.generic.BrixGenericPanel;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
-public class WorkspaceSwitcher extends Panel<Workspace>
+public class WorkspaceSwitcher extends BrixGenericPanel<Workspace>
 {
 
 	public WorkspaceSwitcher(String id, IModel<Workspace> model)

@@ -9,11 +9,12 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 
+import brix.web.generic.BrixGenericPanel;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.reference.Reference;
 import brix.web.tab.CachingAbstractTab;
 
-public class ReferenceEditor extends Panel<Reference>
+public class ReferenceEditor extends BrixGenericPanel<Reference>
 {
 
     public ReferenceEditor(String id, ReferenceEditorConfiguration configuration)
@@ -41,7 +42,7 @@ public class ReferenceEditor extends Panel<Reference>
         tabs.add(new CachingAbstractTab(new ResourceModel("reference"))
         {
             @Override
-            public Panel<?> newPanel(String panelId)
+            public Panel newPanel(String panelId)
             {
                 return new NodeUrlTab(panelId, getModel())
                 {
@@ -62,7 +63,7 @@ public class ReferenceEditor extends Panel<Reference>
         tabs.add(new CachingAbstractTab(new ResourceModel("queryParameters"))
         {
             @Override
-            public Panel<?> newPanel(String panelId)
+            public Panel newPanel(String panelId)
             {
                 return new QueryParametersTab(panelId)
                 {
@@ -83,7 +84,7 @@ public class ReferenceEditor extends Panel<Reference>
         tabs.add(new CachingAbstractTab(new ResourceModel("indexedParameters"))
         {
             @Override
-            public Panel<?> newPanel(String panelId)
+            public Panel newPanel(String panelId)
             {
                 return new IndexedParametersTab(panelId)
                 {

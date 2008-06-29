@@ -30,7 +30,7 @@ import brix.plugin.site.page.tile.TileContainerFacet;
 public class TilesPanel extends NodeManagerPanel
 {
 	String selectedTileId;
-	private Component<?> editor;
+	private Component editor;
 
 	private List<String> getTileIds()
 	{
@@ -75,13 +75,13 @@ public class TilesPanel extends NodeManagerPanel
 					private Item<?> item;
 
 					@Override
-					public void bind(Component<?> component)
+					public void bind(Component component)
 					{
 						item = (Item<?>) component;
 					}
 
 					@Override
-					public void onComponentTag(Component<?> component, ComponentTag tag)
+					public void onComponentTag(Component component, ComponentTag tag)
 					{
 						final boolean selected = Objects.equal(selectedTileId, item.getModel().getObject());
 						if (selected)
@@ -103,13 +103,13 @@ public class TilesPanel extends NodeManagerPanel
 				};
 				item.add(link);
 
-				link.add(new Label<String>("name", (item.getModelObject() == null) ? TilesPanel.this
+				link.add(new Label("name", (item.getModelObject() == null) ? TilesPanel.this
 						.getString("createNew") : (String) item.getModel().getObject()));
 			}
 
 		});
 
-		editor = new WebComponent<Void>("tile-editor");
+		editor = new WebComponent("tile-editor");
 		add(editor);
 
 		// init first editor
@@ -119,12 +119,12 @@ public class TilesPanel extends NodeManagerPanel
 
 	private AbstractContainer getTileContainerNode()
 	{
-		return (AbstractContainer) getNode();
+		return (AbstractContainer) getModelObject();
 	}
 
 	private void setupTileEditor()
 	{
-		Fragment<?> newEditor = null;
+		Fragment newEditor = null;
 
 		if (Strings.isEmpty(selectedTileId))
 		{
@@ -134,7 +134,7 @@ public class TilesPanel extends NodeManagerPanel
 				@Override
 				protected void onAddTile(String tileId, String tileTypeName)
 				{
-					BrixNode containerNode = getNode();
+					BrixNode containerNode = getTileContainerNode();
 					containerNode.checkout();
 					BrixNode node = getTileContainerNode().tiles().createTile(tileId, tileTypeName);
 					getEditor().save(node);
@@ -155,10 +155,10 @@ public class TilesPanel extends NodeManagerPanel
 				protected void onDelete(String tileId)
 				{
 					BrixNode tile = getTileContainerNode().tiles().getTile(selectedTileId);
-					getNode().checkout();
+					getTileContainerNode().checkout();
 					tile.remove();
-					getNode().save();
-					getNode().checkin();
+					getTileContainerNode().save();
+					getTileContainerNode().checkin();
 					selectedTileId = null;
 					setupTileEditor();
 				}

@@ -65,14 +65,11 @@ public class MenuPlugin implements Plugin
 		}
 
 		@Override
-		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
 			return new ManageMenuPanel(panelId, workspaceModel);
 		}
 	};
-
-    private static final ResourceReference ICON = new ResourceReference(MenuPlugin.class,
-        "icon.png");
 
     private static String ROOT_NODE_NAME = Brix.NS_PREFIX + "menu";
 

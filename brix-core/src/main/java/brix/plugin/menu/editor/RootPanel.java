@@ -1,10 +1,9 @@
 package brix.plugin.menu.editor;
 
-import org.apache.wicket.markup.html.panel.Panel;
-
 import brix.plugin.menu.Menu.Entry;
+import brix.web.generic.BrixGenericPanel;
 
-public class RootPanel extends Panel<Entry>
+public class RootPanel extends BrixGenericPanel<Entry>
 {
 
     public RootPanel(String id)

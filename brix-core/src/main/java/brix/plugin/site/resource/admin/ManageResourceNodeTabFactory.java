@@ -42,7 +42,7 @@ public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
         tabs.add(new AbstractTab(new Model<String>("Properties"))
         {
             @Override
-            public Panel<?> getPanel(String panelId)
+            public Panel getPanel(String panelId)
             {
                 return new ViewPropertiesTab(panelId, nodeModel);
             }

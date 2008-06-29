@@ -35,11 +35,11 @@ public abstract class AbstractWorkspaceTab extends CachingAbstractTab implements
     }
 
     @Override
-    public Panel< ? > newPanel(String panelId)
+    public Panel newPanel(String panelId)
     {
         return newPanel(panelId, workspaceModel);
     }
 
-    public abstract Panel< ? > newPanel(String panelId, IModel<Workspace> workspaceModel);
+    public abstract Panel newPanel(String panelId, IModel<Workspace> workspaceModel);
 
 }

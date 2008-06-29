@@ -13,11 +13,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -32,19 +32,20 @@ import brix.plugin.site.page.AbstractContainer;
 import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.tile.Tile;
 import brix.web.ContainerFeedbackPanel;
+import brix.web.generic.BrixGenericFragment;
 import brix.web.util.validators.NodeNameValidator;
 
-public abstract class NewTileFragment extends Fragment<BrixNode>
+public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> 
 {
 	private String newTileId;
 	private String newTileTypeName;
-	private Component<?> newTileEditor;
+	private Component newTileEditor;
 
-	public TileEditorPanel<?> getEditor()
+	public TileEditorPanel getEditor()
 	{
 		if (newTileEditor instanceof TileEditorPanel)
 		{
-			return (TileEditorPanel<?>) newTileEditor;
+			return (TileEditorPanel) newTileEditor;
 		}
 		else
 		{
@@ -52,7 +53,7 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 		}
 	}
 
-	public NewTileFragment(String id, String fragmentId, MarkupContainer<?> markupContainer,
+	public NewTileFragment(String id, String fragmentId, MarkupContainer markupContainer,
 			final IModel<BrixNode> nodeModel)
 	{
 		super(id, fragmentId, markupContainer, nodeModel);
@@ -61,11 +62,10 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 
 		form.add(new ContainerFeedbackPanel("feedback", form));
 
-		final Component<String> tileId;
+		final FormComponent<String> tileId;
 
-		form.add(tileId = new TextField<String>("tileId", new PropertyModel<String>(this, "newTileId")).setRequired(
-				true).add(new NewTileIdValidator()).add(NodeNameValidator.getInstance()));
-		tileId.setOutputMarkupId(true);
+		form.add(tileId = new TextField<String>("tileId", new PropertyModel<String>(this, "newTileId")));
+		tileId.setRequired(true).add(new NewTileIdValidator()).add(NodeNameValidator.getInstance()).setOutputMarkupId(true);
 
 		IModel<List<? extends String>> idSuggestionModel = new LoadableDetachableModel<List<? extends String>>()
 		{
@@ -128,7 +128,7 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 				{
 					final Brix brix = NewTileFragment.this.getModelObject().getBrix();
 					final Tile tile = Tile.Helper.getTileOfType(tileTypeName, brix);
-					TileEditorPanel<?> ed = tile.newEditor(newTileEditor.getId(), nodeModel);
+					TileEditorPanel ed = tile.newEditor(newTileEditor.getId(), nodeModel);
 					newTileEditor.replaceWith(ed);
 					newTileEditor = ed;
 				}
@@ -139,7 +139,7 @@ public abstract class NewTileFragment extends Fragment<BrixNode>
 		newTileEditor = new EmptyPanel("tile-editor");
 		form.add(newTileEditor);
 
-		form.add(new SubmitLink<Void>("add")
+		form.add(new SubmitLink("add")
 		{
 			@Override
 			public void onSubmit()

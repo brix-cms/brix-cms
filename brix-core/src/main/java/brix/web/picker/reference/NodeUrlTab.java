@@ -7,15 +7,15 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.plugin.site.picker.node.SiteNodePicker;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.reference.Reference;
 import brix.web.reference.Reference.Type;
 
-public abstract class NodeUrlTab extends Panel<Reference>
+public abstract class NodeUrlTab extends BrixGenericPanel<Reference>
 {
 
 	public NodeUrlTab(String id, IModel<Reference> model)

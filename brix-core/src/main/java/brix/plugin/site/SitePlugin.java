@@ -66,7 +66,7 @@ public class SitePlugin implements Plugin
 		}
 
 		@Override
-		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
 			return new NodeManagerContainerPanel(panelId, workspaceModel);
 		}
@@ -80,7 +80,7 @@ public class SitePlugin implements Plugin
 		}
 
 		@Override
-		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
 			return new GlobalTilesPanel(panelId, workspaceModel);
 		}
@@ -94,7 +94,7 @@ public class SitePlugin implements Plugin
 		}
 
 		@Override
-		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
 			return new GlobalVariablesPanel(panelId, workspaceModel);
 		}
@@ -413,7 +413,7 @@ public class SitePlugin implements Plugin
 
 	private MarkupCache markupCache = new MarkupCache();
 
-	private NodeManagerContainerPanel findContainer(Component<?> component)
+	private NodeManagerContainerPanel findContainer(Component component)
 	{
 		if (component instanceof NodeManagerContainerPanel)
 		{
@@ -425,12 +425,12 @@ public class SitePlugin implements Plugin
 		}
 	}
 
-	public void selectNode(Component<?> component, BrixNode node)
+	public void selectNode(Component component, BrixNode node)
 	{
 		selectNode(component, node, false);
 	}
 
-	public void selectNode(Component<?> component, BrixNode node, boolean refreshTree)
+	public void selectNode(Component component, BrixNode node, boolean refreshTree)
 	{
 		NodeManagerContainerPanel panel = findContainer(component);
 		if (panel != null)
@@ -444,7 +444,7 @@ public class SitePlugin implements Plugin
 		}
 	}
 
-	public void refreshNavigationTree(Component<?> component)
+	public void refreshNavigationTree(Component component)
 	{
 		NodeManagerContainerPanel panel = findContainer(component);
 		if (panel != null)

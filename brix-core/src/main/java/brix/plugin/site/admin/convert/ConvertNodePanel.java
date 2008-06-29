@@ -22,10 +22,10 @@ public class ConvertNodePanel extends NodeManagerPanel
     {
         super(id, nodeModel);
 
-        RepeatingView<?> converters = new RepeatingView<Void>("converters");
+        RepeatingView converters = new RepeatingView("converters");
         add(converters);
 
-        BrixNode node = getNode();
+        BrixNode node = getModelObject();
         Collection<SiteNodePlugin> plugins = SitePlugin.get().getNodePlugins();
 
         boolean found = false;
@@ -43,7 +43,7 @@ public class ConvertNodePanel extends NodeManagerPanel
 
                     found = true;
 
-                    WebMarkupContainer<?> item = new WebMarkupContainer<Void>(converters.newChildId());
+                    WebMarkupContainer item = new WebMarkupContainer(converters.newChildId());
                     converters.add(item);
 
                     Model<String> typeName = new Model<String>(plugin.getNodeType());
@@ -66,16 +66,16 @@ public class ConvertNodePanel extends NodeManagerPanel
 
     private void convertToType(String type)
     {
-        final BrixNode node = getNode();
+        final BrixNode node = getModelObject();
 
         node.checkout();
-        SitePlugin.get().getNodePluginForType(type).getConverterForNode(getNode()).convert(node);
+        SitePlugin.get().getNodePluginForType(type).getConverterForNode(getModelObject()).convert(node);
         node.save();
         node.checkin();
         
         getModel().detach();
 
-        SitePlugin.get().selectNode(this, getNode());
+        SitePlugin.get().selectNode(this, getModelObject());
     }
 
 }

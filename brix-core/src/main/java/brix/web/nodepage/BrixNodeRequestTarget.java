@@ -50,7 +50,7 @@ public class BrixNodeRequestTarget implements IPageRequestTarget
         }
 
         this.page = page;
-        this.nodeModel = page.getNodeModel();
+        this.nodeModel = page.getModel();
         this.parameters = parameters;
     }
 

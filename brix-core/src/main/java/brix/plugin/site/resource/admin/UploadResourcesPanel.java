@@ -43,7 +43,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
         
         form.add(new ContainerFeedbackPanel("feedback", this));
         
-        form.add(new SubmitLink<Void>("upload") {
+        form.add(new SubmitLink("upload") {
         	@Override
         	public void onSubmit()
         	{
@@ -65,7 +65,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
 
     private void processUploads()
     {
-        final BrixNode parentNode = getNode();
+        final BrixNode parentNode = getModelObject();
 
         for (final FileUpload upload : uploads)
         {

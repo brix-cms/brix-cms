@@ -3,10 +3,11 @@ package brix.web.picker.reference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-public class UrlPanel extends Panel<String>
+import brix.web.generic.BrixGenericPanel;
+
+public class UrlPanel extends BrixGenericPanel<String>
 {
 
     public UrlPanel(String id, IModel<String> urlModel)

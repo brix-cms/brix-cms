@@ -13,6 +13,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.markup.tag.ComponentTag;
 import brix.markup.tag.Tag;
 import brix.plugin.site.SitePlugin;
+import brix.web.generic.IGenericComponent;
 
 /**
  * Helper class for components with custom node markup. This class takes care of
@@ -22,14 +23,14 @@ import brix.plugin.site.SitePlugin;
  */
 public class MarkupHelper implements Serializable
 {
-	public MarkupHelper(MarkupContainer<BrixNode> component)
+	public MarkupHelper(IGenericComponent<BrixNode> component)
 	{
 		this.component = component;
 		initMarkup();
 	}
 
-	private final MarkupContainer<BrixNode> component;
-
+	private final IGenericComponent<BrixNode> component;
+	
 	/**
 	 * Each tag component idis prefixed by this.
 	 */
@@ -60,10 +61,10 @@ public class MarkupHelper implements Serializable
 	private Set<String> getExistingComponents()
 	{
 		Set<String> result = new HashSet<String>();
-		Iterator<Component<?>> i = component.iterator();
+		Iterator<? extends Component> i = ((MarkupContainer)component).iterator();
 		while (i.hasNext())
 		{
-			Component<?> c = i.next();
+			Component c = i.next();
 			if (c.getId().startsWith(COMPONENT_PREFIX))
 			{
 				result.add(c.getId());
@@ -104,12 +105,12 @@ public class MarkupHelper implements Serializable
 					else
 					{
 						// otherwise we need to create the component instance
-						Component<?> c = componentTag.getComponent(id, component.getModel());
+						Component c = componentTag.getComponent(id, component.getModel());
 						if (c != null)
 						{
 							attributes.put("wicket:id", id);
 							components.add(id);
-							component.add(c);
+							((MarkupContainer)component).add(c);
 						}
 					}
 				}
@@ -123,7 +124,7 @@ public class MarkupHelper implements Serializable
 		{
 			if (!components.contains(s))
 			{
-				component.get(s).remove();
+				((MarkupContainer)component).get(s).remove();
 			}
 		}
 	}

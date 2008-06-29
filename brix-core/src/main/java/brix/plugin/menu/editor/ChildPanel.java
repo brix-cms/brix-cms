@@ -5,7 +5,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -13,11 +12,12 @@ import org.apache.wicket.model.PropertyModel;
 import brix.plugin.menu.ManageMenuPanel;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.web.ContainerFeedbackPanel;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.picker.reference.ReferenceEditorConfiguration;
 import brix.web.picker.reference.ReferenceEditorPanel;
 import brix.web.reference.Reference;
 
-public class ChildPanel extends Panel<ChildEntry>
+public class ChildPanel extends BrixGenericPanel<ChildEntry>
 {
 
     public ChildPanel(String id, IModel<ChildEntry> model)
@@ -57,12 +57,12 @@ public class ChildPanel extends Panel<ChildEntry>
 
         form.add(new TextField<String>("cssClass"));
 
-        final Component< ? > feedback;
+        final Component feedback;
 
         add(feedback = new ContainerFeedbackPanel("feedback", form));
         feedback.setOutputMarkupId(true);
 
-        form.add(new IndicatingAjaxButton<Object>("update")
+        form.add(new IndicatingAjaxButton("update")
         {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form< ? > form)

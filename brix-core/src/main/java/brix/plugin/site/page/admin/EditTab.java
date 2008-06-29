@@ -67,7 +67,7 @@ abstract class EditTab extends NodeManagerPanel
 			content.add(new CodePressEnabler("html", true)
 			{
 				@Override
-				public boolean isEnabled(Component<?> component)
+				public boolean isEnabled(Component component)
 				{
 					return codeEditorEnabled;
 				}
@@ -78,7 +78,7 @@ abstract class EditTab extends NodeManagerPanel
 			content.add(new TinyMceEnabler()
 			{
 				@Override
-				public boolean isEnabled(Component<?> component)
+				public boolean isEnabled(Component component)
 				{
 					return wysiwygEditorEnabled;
 				}
@@ -90,7 +90,7 @@ abstract class EditTab extends NodeManagerPanel
 		form.add(new EnableCodeEditorButton("enable-code-editor").setVisible(useCodepress));
 		form.add(new EnableWysiwygEditorButton("enable-wysiwig-editor").setVisibilityAllowed(useWysiwyg));
 
-		form.add(new SubmitLink<Void>("save")
+		form.add(new SubmitLink("save")
 		{
 			@Override
 			public void onSubmit()
@@ -119,7 +119,7 @@ abstract class EditTab extends NodeManagerPanel
 		});
 	}
 
-	private class EnableCodeEditorButton extends Button<Void>
+	private class EnableCodeEditorButton extends Button
 	{
 		public EnableCodeEditorButton(String id)
 		{
@@ -141,7 +141,7 @@ abstract class EditTab extends NodeManagerPanel
 		}
 	}
 
-	private class EnableWysiwygEditorButton extends Button<Void>
+	private class EnableWysiwygEditorButton extends Button
 	{
 		public EnableWysiwygEditorButton(String id)
 		{
@@ -163,7 +163,7 @@ abstract class EditTab extends NodeManagerPanel
 		}
 	}
 
-	private class DisableEditorsButton extends Button<Void>
+	private class DisableEditorsButton extends Button
 	{
 		public DisableEditorsButton(String id)
 		{

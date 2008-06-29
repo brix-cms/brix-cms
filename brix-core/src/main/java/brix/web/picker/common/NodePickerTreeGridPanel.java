@@ -31,10 +31,10 @@ import com.inmethod.grid.column.PropertyColumn;
 import com.inmethod.grid.column.tree.AbstractTreeColumn;
 import com.inmethod.grid.treegrid.TreeGrid;
 
-public abstract class NodePickerTreeGridPanel<T> extends Panel<T>
+public abstract class NodePickerTreeGridPanel extends Panel
 {
 
-	public NodePickerTreeGridPanel(String id, IModel<T> model, NodeFilter visibilityFilter, NodeFilter enabledFilter)
+	public NodePickerTreeGridPanel(String id, IModel<?> model, NodeFilter visibilityFilter, NodeFilter enabledFilter)
 	{
 		super(id, model);
 		this.visibilityFilter = visibilityFilter;		
@@ -129,8 +129,8 @@ public abstract class NodePickerTreeGridPanel<T> extends Panel<T>
 					@Override
 					public void onComponentTag(Component component, ComponentTag tag)
 					{
-						BrixNode node = getNode(component.getModel());
-						if (!isNodeEnabled((JcrTreeNode) component.getModelObject()) || node == null)
+						BrixNode node = getNode(component.getDefaultModel());
+						if (!isNodeEnabled((JcrTreeNode) component.getDefaultModelObject()) || node == null)
 						{
 							tag.put("class", "disabled");
 						}
@@ -238,7 +238,7 @@ public abstract class NodePickerTreeGridPanel<T> extends Panel<T>
 					}
 				}
 			};
-			return new Label<String>(id, labelModel);
+			return new Label(id, labelModel);
 		}
 		
 		@Override

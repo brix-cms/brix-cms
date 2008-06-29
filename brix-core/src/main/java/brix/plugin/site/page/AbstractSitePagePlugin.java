@@ -65,7 +65,7 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin
         return urlCodingStrategy.decode(requestParameters, nodeModel);
     }
 
-    public abstract Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
+    public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
 
     public NodeConverter getConverterForNode(BrixNode node)
     {

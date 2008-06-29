@@ -32,7 +32,7 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 		super(id, containerNodeModel);
 
 		String typeName = SitePlugin.get().getNodePluginForType(type).getName();
-		add(new Label<String>("typeName", typeName));
+		add(new Label("typeName", typeName));
 	
 		Form<?> form = new Form<CreatePageOrTemplatePanel>("form",
 				new CompoundPropertyModel<CreatePageOrTemplatePanel>(this));
@@ -40,7 +40,7 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 
 		form.add(new ContainerFeedbackPanel("feedback", this));
 		
-		form.add(new SubmitLink<Void>("create")
+		form.add(new SubmitLink("create")
 		{
 			@Override
 			public void onSubmit()
@@ -67,7 +67,7 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 
 	private void createPage(String type)
 	{
-		final JcrNode parent = getNode();
+		final JcrNode parent = getModelObject();
 
 		if (parent.hasNode(name))
 		{

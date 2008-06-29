@@ -8,14 +8,14 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.jcr.wrapper.BrixNode.Protocol;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.model.ModelBuffer;
 
-public abstract class EditPropertiesPanel extends Panel<BrixNode>
+public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode>
 {
 	public EditPropertiesPanel(String id, final IModel<BrixNode> nodeModel)
 	{
@@ -42,7 +42,7 @@ public abstract class EditPropertiesPanel extends Panel<BrixNode>
 		form.add(new DropDownChoice<Protocol>("requiredProtocol", protocolModel, protocols, renderer)
 				.setNullValid(false));
 
-		form.add(new SubmitLink<Void>("save")
+		form.add(new SubmitLink("save")
 		{
 			@Override
 			public void onSubmit()

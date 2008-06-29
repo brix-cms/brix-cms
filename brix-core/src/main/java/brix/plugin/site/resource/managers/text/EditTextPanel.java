@@ -4,14 +4,14 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.BrixGenericPanel;
 
-public abstract class EditTextPanel extends Panel<BrixNode>
+public abstract class EditTextPanel extends BrixGenericPanel<BrixNode>
 {
 
 	public EditTextPanel(String id, IModel<BrixNode> model)
@@ -25,7 +25,7 @@ public abstract class EditTextPanel extends Panel<BrixNode>
 
 		form.add(new TextArea<String>("text", new PropertyModel<String>(this, "content")));
 
-		form.add(new SubmitLink<Void>("save")
+		form.add(new SubmitLink("save")
 		{
 			@Override
 			public void onSubmit()

@@ -4,11 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebRequest;
 
-public class WebdavUrlPanel extends Panel<String>
+import brix.web.generic.BrixGenericPanel;
+
+public class WebdavUrlPanel extends BrixGenericPanel<String>
 {
 
 	private static final long serialVersionUID = 1L;
@@ -17,7 +18,7 @@ public class WebdavUrlPanel extends Panel<String>
 	{
 		super(id, model);
 
-		add(new WebMarkupContainer<Void>("webdav")
+		add(new WebMarkupContainer("webdav")
 		{
 			@Override
 			protected void onComponentTag(ComponentTag tag)
@@ -26,7 +27,7 @@ public class WebdavUrlPanel extends Panel<String>
 			}
 		});
 
-		add(new WebMarkupContainer<Void>("jcrwebdav")
+		add(new WebMarkupContainer("jcrwebdav")
 		{
 			@Override
 			protected void onComponentTag(ComponentTag tag)

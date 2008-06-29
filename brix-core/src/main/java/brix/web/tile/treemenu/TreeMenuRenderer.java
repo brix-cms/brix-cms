@@ -10,13 +10,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.IGenericComponent;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.reference.Reference;
 import brix.web.reference.Reference.Type;
 import brix.web.tile.treemenu.TreeMenuTile.Item;
 import brix.web.tile.treemenu.TreeMenuTile.RootItem;
 
-public class TreeMenuRenderer extends WebComponent<BrixNode>
+public class TreeMenuRenderer extends WebComponent implements IGenericComponent<BrixNode>
 {
 
     public TreeMenuRenderer(String id, IModel<BrixNode> tileNode)
@@ -106,7 +107,7 @@ public class TreeMenuRenderer extends WebComponent<BrixNode>
 
             if (reference.getType() == Type.NODE)
             {
-                eq = page.getNodeModel().equals(reference.getNodeModel()) &&
+                eq = page.getModelObject().equals(reference.getNodeModel()) &&
                         page.getBrixPageParameters().equals(reference.getParameters());
             }
             else
@@ -152,4 +153,25 @@ public class TreeMenuRenderer extends WebComponent<BrixNode>
             return false;
         }
     }
+    
+	@SuppressWarnings("unchecked")
+	public IModel<BrixNode> getModel()
+	{
+		return (IModel<BrixNode>) getDefaultModel();
+	}
+
+	public BrixNode getModelObject()
+	{
+		return (BrixNode) getDefaultModelObject();
+	}
+
+	public void setModel(IModel<BrixNode> model)
+	{
+		setDefaultModel(model);
+	}
+
+	public void setModelObject(BrixNode object)
+	{
+		setDefaultModelObject(object);
+	}
 }

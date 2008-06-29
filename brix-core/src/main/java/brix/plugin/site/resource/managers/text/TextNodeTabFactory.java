@@ -45,7 +45,7 @@ public class TextNodeTabFactory implements ManageNodeTabFactory
 		return new CachingAbstractTab(new Model<String>("View"))
 		{
 			@Override
-			public Panel<?> newPanel(String panelId)
+			public Panel newPanel(String panelId)
 			{
 				return new ViewTextPanel(panelId, nodeModel);
 			}

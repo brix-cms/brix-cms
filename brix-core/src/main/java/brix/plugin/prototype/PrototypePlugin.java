@@ -128,7 +128,7 @@ public class PrototypePlugin implements Plugin
 		}
 
 		@Override
-		public Panel<?> newPanel(String panelId, IModel<Workspace> workspaceModel)
+		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
 			return new ManagePrototypesPanel(panelId, workspaceModel);
 		}

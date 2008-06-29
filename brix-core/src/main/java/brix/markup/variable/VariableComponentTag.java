@@ -20,7 +20,7 @@ public class VariableComponentTag extends VariableTag implements ComponentTag
 		return (ComponentTag) super.getDelegate();
 	}
 
-	public Component<?> getComponent(String id, IModel<BrixNode> pageNodeModel)
+	public Component getComponent(String id, IModel<BrixNode> pageNodeModel)
 	{
 		return getDelegate().getComponent(id, pageNodeModel);
 	}

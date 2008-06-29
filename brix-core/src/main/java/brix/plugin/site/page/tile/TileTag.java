@@ -65,7 +65,7 @@ public class TileTag extends SimpleTag
     }
 
     /** {@inheritDoc} */
-    public Component< ? > getComponent(String id, IModel<BrixNode> pageNodeModel)
+    public Component getComponent(String id, IModel<BrixNode> pageNodeModel)
     {
         AbstractContainer container = getTileContainer();
         BrixNode tileNode = container.getTileNode(tileName);

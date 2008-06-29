@@ -67,7 +67,7 @@ public class FolderNodePlugin implements SiteNodePlugin
 		}
 	}
 
-	public Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
+	public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
 	{
 		return new CreateFolderPanel(id, parentNode, goBack);
 	}

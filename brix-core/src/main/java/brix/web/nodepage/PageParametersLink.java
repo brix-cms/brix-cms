@@ -6,14 +6,14 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
 
-public class PageParametersLink<T> extends WebMarkupContainer<T>
+public class PageParametersLink extends WebMarkupContainer
 {
     public PageParametersLink(String id)
     {
         super(id);
     }
 
-    public PageParametersLink(String id, IModel<T> model)
+    public PageParametersLink(String id, IModel<?> model)
     {
         super(id, model);
     }
@@ -21,7 +21,7 @@ public class PageParametersLink<T> extends WebMarkupContainer<T>
     protected String buildUrl()
     {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
-        getPage().visitChildren(PageParametersAware.class, new IVisitor()
+        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component>()
         {
             public Object component(Component component)
             {

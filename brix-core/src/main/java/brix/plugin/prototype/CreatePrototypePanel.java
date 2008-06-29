@@ -21,7 +21,7 @@ public class CreatePrototypePanel extends SelectItemsPanel<Void>
     {
         super(id, workspaceId);
 
-        final Component<String> message = new MultiLineLabel<String>("message", new Model<String>(
+        final Component message = new MultiLineLabel("message", new Model<String>(
             ""));
         message.setOutputMarkupId(true);
         add(message);
@@ -38,7 +38,7 @@ public class CreatePrototypePanel extends SelectItemsPanel<Void>
                         nodes, null);
                     if (!dependencies.isEmpty())
                     {
-                        message.setModelObject(getDependenciesMessage(dependencies));                        
+                        message.setDefaultModelObject(getDependenciesMessage(dependencies));                        
                     }
                     else
                     {
@@ -48,7 +48,7 @@ public class CreatePrototypePanel extends SelectItemsPanel<Void>
                 }
                 else
                 {
-                    message.setModelObject(getString("youHaveToSelectAtLeastOneNode"));
+                    message.setDefaultModelObject(getString("youHaveToSelectAtLeastOneNode"));
                 }
                 target.addComponent(message);
             }

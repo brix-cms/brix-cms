@@ -1,10 +1,10 @@
 package brix.web.picker.node;
 
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.web.generic.BrixGenericPanel;
 import brix.web.picker.common.NodePickerTreeGridPanel;
 import brix.web.picker.common.TreeAwareNode;
 import brix.web.tree.JcrTreeNode;
@@ -12,10 +12,10 @@ import brix.web.tree.NodeFilter;
 
 import com.inmethod.grid.treegrid.TreeGrid;
 
-public class NodePicker extends Panel<BrixNode>
+public class NodePicker extends BrixGenericPanel<BrixNode>
 {
 	private final JcrTreeNode rootNode;
-	private final NodePickerTreeGridPanel<?> grid;
+	private final NodePickerTreeGridPanel grid;
 
 	public NodePicker(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
 	{
@@ -23,7 +23,7 @@ public class NodePicker extends Panel<BrixNode>
 
 		this.rootNode = rootNode;
 
-		add(grid = new NodePickerTreeGridPanel<Void>("grid", visibilityFilter, enabledFilter)
+		add(grid = new NodePickerTreeGridPanel("grid", visibilityFilter, enabledFilter)
 		{
 			@Override
 			protected JcrTreeNode getRootNode()

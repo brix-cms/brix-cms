@@ -57,7 +57,7 @@ public class WebdavUrlPlugin implements Plugin
         }
 
         @Override
-        public Panel< ? > newPanel(String panelId, IModel<Workspace> workspaceModel)
+        public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
         {
             return new WebdavUrlPanel(panelId,
                 new Model<String>(workspaceModel.getObject().getId()));

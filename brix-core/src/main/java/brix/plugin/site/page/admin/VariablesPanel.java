@@ -16,7 +16,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -30,6 +29,7 @@ import org.apache.wicket.validation.ValidationError;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.AbstractContainer;
 import brix.plugin.site.page.global.GlobalContainerNode;
+import brix.web.generic.BrixGenericPanel;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
@@ -40,7 +40,7 @@ import com.inmethod.grid.column.editable.EditablePropertyColumn;
 import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 
-public class VariablesPanel extends Panel<BrixNode>
+public class VariablesPanel extends BrixGenericPanel<BrixNode>
 {
 	private AjaxLink<?> delete;
 	
@@ -252,7 +252,7 @@ public class VariablesPanel extends Panel<BrixNode>
 
 			add(new TextField<String>("value", new PropertyModel<String>(this, "value")).setRequired(true));
 
-			add(new AjaxButton<Void>("submit")
+			add(new AjaxButton("submit")
 			{
 				@Override
 				protected void onSubmit(AjaxRequestTarget target, Form<?> form)

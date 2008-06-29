@@ -47,7 +47,7 @@ public class ImageNodeTabFactory implements ManageNodeTabFactory
 		return new CachingAbstractTab(new Model<String>("View"))
 		{
 			@Override
-			public Panel<?> newPanel(String panelId)
+			public Panel newPanel(String panelId)
 			{
 				return new ViewImagePanel(panelId, nodeModel);
 			}

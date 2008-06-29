@@ -21,6 +21,6 @@ public interface CreateNodePanelFactory {
 	
 	public boolean canHandle(String nodeType, JcrNode parent);
 	
-	Panel<?> newCreateNodePanel(String id, IModel<BrixNode> parentNode);
+	Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode);
 	
 }
