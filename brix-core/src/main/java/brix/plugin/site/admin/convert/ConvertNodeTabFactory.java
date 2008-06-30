@@ -9,12 +9,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.auth.SiteNodeAction;
 import brix.web.tab.CachingAbstractTab;
 
 public class ConvertNodeTabFactory implements ManageNodeTabFactory
@@ -60,9 +59,7 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory
 
 	private static boolean hasEditPermission(IModel<BrixNode> nodeModel)
 	{
-		Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_EDIT, nodeModel
-				.getObject());
-		return nodeModel.getObject().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+		return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);
 	}
 
 	public int getPriority()

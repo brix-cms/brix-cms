@@ -4,9 +4,9 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 
-import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.SitePlugin;
 import brix.web.generic.IGenericComponent;
 
 public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNode>
@@ -33,9 +33,7 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
     protected void checkAccess()
     {
         BrixNode node = getModelObject();
-        Action action = new SiteNodeAction(Action.Context.PRESENTATION,
-                SiteNodeAction.Type.NODE_VIEW, node);
-        if (!node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+        if (!SitePlugin.get().canViewNode(node, Context.PRESENTATION))
         {
             throw new RestartResponseException(ForbiddenPage.class);
         }

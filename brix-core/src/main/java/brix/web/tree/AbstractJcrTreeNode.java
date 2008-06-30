@@ -10,13 +10,11 @@ import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Objects;
 
-import brix.Brix;
 import brix.BrixNodeModel;
-import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.SitePlugin;
 
 
 public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
@@ -110,11 +108,9 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
         }
 
         for (BrixNode entry : entries)
-        {
-            Action view = new SiteNodeAction(Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW,
-                entry);
+        {        	            
             if (!entry.isHidden() && (displayFoldersOnly() == false || entry.isFolder()) &&
-                entry.getBrix().getAuthorizationStrategy().isActionAuthorized(view))
+                SitePlugin.get().canViewNodeChildren(entry, Context.ADMINISTRATION))
             {
                 children.add(newTreeNode(entry));
             }
@@ -130,10 +126,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable
     {
         if (children == null)
         {
-            Action viewChildren = new SiteNodeAction(Context.ADMINISTRATION,
-                SiteNodeAction.Type.NODE_VIEW_CHILDREN, nodeModel.getObject());
-            Brix brix = getNodeModel().getObject().getBrix();
-            if (brix.getAuthorizationStrategy().isActionAuthorized(viewChildren))
+            if (SitePlugin.get().canViewNodeChildren(nodeModel.getObject(), Context.ADMINISTRATION))
             {
                 children = loadChildren();
             }

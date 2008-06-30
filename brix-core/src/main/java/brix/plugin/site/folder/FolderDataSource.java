@@ -11,12 +11,11 @@ import java.util.List;
 import org.apache.wicket.model.IModel;
 
 import brix.BrixNodeModel;
-import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.tree.SiteNodeFilter;
 import brix.web.tree.NodeFilter;
 
@@ -176,8 +175,9 @@ abstract class FolderDataSource implements IDataSource
 
 	private boolean canShowNode(BrixNode node)
 	{
-		Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_VIEW, node);
-		if (!node.isHidden() && SITE_FILTER.isNodeAllowed(node) && node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
+
+		if (!node.isHidden() && SITE_FILTER.isNodeAllowed(node)
+				&& SitePlugin.get().canViewNode(node, Context.ADMINISTRATION))
 		{
 			return true;
 		}

@@ -25,14 +25,13 @@ import org.apache.wicket.model.LoadableDetachableModel;
 
 import brix.Brix;
 import brix.BrixNodeModel;
-import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.JcrUtil;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.folder.FolderNode;
 import brix.plugin.site.tree.SiteNodeFilter;
 import brix.web.picker.common.TreeAwareNode;
@@ -128,9 +127,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 			public boolean isVisible()
 			{
 				BrixNode folderNode = getNewNodeParent().getObject();
-				Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_ADD_CHILD,
-						folderNode);
-				return folderNode.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+				return SitePlugin.get().canAddNodeChild(folderNode, Context.ADMINISTRATION);				
 			}
 		};
 		add(createNodesContainer);

@@ -136,6 +136,8 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode>
 			{
 				IModel<BrixNode> model = NodePickerPanel.this.getModel();
 				BrixNode node = (BrixNode) model.getObject();
+				// TODO: Don't use pathForNode here as it creates dependency on site plugin
+				// rather than that format the path as /Site/[path], etc.
 				return node != null ? SitePlugin.get().pathForNode(node) : "";
 			}
 		};

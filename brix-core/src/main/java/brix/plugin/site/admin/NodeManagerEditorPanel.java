@@ -18,14 +18,11 @@ import org.apache.wicket.model.IModel;
 
 import brix.Brix;
 import brix.Path;
-import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.auth.SiteNodeAction;
-import brix.plugin.site.auth.SiteNodeAction.Type;
 import brix.web.generic.BrixGenericPanel;
 import brix.web.util.PathLabel;
 
@@ -67,14 +64,12 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 
 			@Override
 			public boolean isVisible()
-			{
-				Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_RENAME, getNode());
-
+			{				
 				BrixNode node = NodeManagerEditorPanel.this.getModelObject();
 				String path = node.getPath();
 				String web = SitePlugin.get().getSiteRootPath();
 				Brix brix = node.getBrix();
-				return brix.getAuthorizationStrategy().isActionAuthorized(action) && path.length() > web.length()
+				return SitePlugin.get().canRenameNode(node, Context.ADMINISTRATION) && path.length() > web.length()
 						&& path.startsWith(web);
 			}
 		});
@@ -99,10 +94,10 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 				{
 					// TODO: Implement proper versioning support!
 					return false;
-				}
-				Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_EDIT, getNode());
+				}				
+
 				return getNode() != null && getNode().isNodeType("nt:file") && !getNode().isNodeType("mix:versionable")
-						&& getNode().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+						&& SitePlugin.get().canEditNode(getNode(), Context.ADMINISTRATION);
 			}
 		});
 
@@ -141,12 +136,7 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 			@Override
 			public boolean isVisible()
 			{
-				Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_DELETE, getNode());
-				Brix brix = getNode().getBrix();
-				String path = getNode().getPath();
-				return path.startsWith(SitePlugin.get().getSiteRootPath())
-						&& path.length() > SitePlugin.get().getSiteRootPath().length()
-						&& brix.getAuthorizationStrategy().isActionAuthorized(action);
+				return SitePlugin.get().canDeleteNode(getNode(), Context.ADMINISTRATION);
 			}
 
 		});

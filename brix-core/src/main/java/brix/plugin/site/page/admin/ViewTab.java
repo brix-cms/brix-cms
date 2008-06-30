@@ -5,12 +5,10 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.PreviewNodeIFrame;
-import brix.plugin.site.auth.SiteNodeAction;
-import brix.plugin.site.auth.SiteNodeAction.Type;
 import brix.web.generic.BrixGenericPanel;
 
 public class ViewTab extends BrixGenericPanel<BrixNode> {
@@ -44,8 +42,7 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
 			public boolean isVisible()
 			{
 				BrixNode node = ViewTab.this.getModelObject();
-				Action action = new SiteNodeAction(Context.ADMINISTRATION, Type.NODE_EDIT, node);
-				return node.getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+				return SitePlugin.get().canEditNode(node, Context.ADMINISTRATION);
 			}
 		});
 	}

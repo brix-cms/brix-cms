@@ -9,10 +9,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
-import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.resource.ResourceNodePlugin;
 
 public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
@@ -59,9 +59,7 @@ public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
 
     private static boolean hasViewPermission(IModel<BrixNode> model)
     {
-        Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-            SiteNodeAction.Type.NODE_VIEW, model.getObject());
-        return model.getObject().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+    	return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
     }
 
 }

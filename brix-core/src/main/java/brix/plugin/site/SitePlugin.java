@@ -21,12 +21,16 @@ import org.apache.wicket.util.string.Strings;
 import brix.Brix;
 import brix.Path;
 import brix.Plugin;
+import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupCache;
 import brix.plugin.site.admin.NodeManagerContainerPanel;
 import brix.plugin.site.admin.convert.ConvertNodeTabFactory;
+import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.auth.SiteNodeAction.Type;
 import brix.plugin.site.fallback.FallbackNodePlugin;
 import brix.plugin.site.folder.FolderNodePlugin;
 import brix.plugin.site.page.AbstractContainer;
@@ -298,7 +302,7 @@ public class SitePlugin implements Plugin
 	{
 		return brix.getRootPath() + "/" + WEB_NODE_NAME;
 	}
-	
+
 	public BrixNode getSiteRootNode(String workspaceId)
 	{
 		JcrSession workspaceSession = brix.getCurrentSession(workspaceId);
@@ -519,4 +523,72 @@ public class SitePlugin implements Plugin
 		}
 		return result;
 	}
+
+	public boolean canViewNode(BrixNode node, Context context)
+	{
+		Action action = new SiteNodeAction(context, Type.NODE_VIEW, node);
+		return brix.getAuthorizationStrategy().isActionAuthorized(action);
+	}
+	
+	public boolean canViewNodeChildren(BrixNode node, Context context)
+	{
+		Action action = new SiteNodeAction(context, Type.NODE_VIEW_CHILDREN, node);
+		return brix.getAuthorizationStrategy().isActionAuthorized(action);
+	}
+	
+	
+	
+	private boolean isNodeEditable(BrixNode node)
+	{
+		if (node.isNodeType("mix:versionable") && !node.isCheckedOut())
+		{
+			return false;
+		}
+		if (node.isLocked() && node.getLock().getLockToken() == null)
+		{
+			return false;
+		}		
+		return true;
+	}
+
+	public boolean canEditNode(BrixNode node, Context context)
+	{
+		if (!isNodeEditable(node))
+		{
+			return false;
+		}
+		Action action = new SiteNodeAction(context, Type.NODE_EDIT, node);
+		return brix.getAuthorizationStrategy().isActionAuthorized(action);
+	}
+
+	public boolean canAddNodeChild(BrixNode node, Context context)
+	{
+		if (!isNodeEditable(node))
+		{
+			return false;
+		}
+		Action action = new SiteNodeAction(context, Type.NODE_ADD_CHILD, node);
+		return brix.getAuthorizationStrategy().isActionAuthorized(action);
+	}
+
+	public boolean canDeleteNode(BrixNode node, Context context)
+	{
+		if (!isNodeEditable(node))
+		{
+			return false;
+		}
+		Action action = new SiteNodeAction(context, Type.NODE_DELETE, node);
+		return brix.getAuthorizationStrategy().isActionAuthorized(action);
+	}
+
+	public boolean canRenameNode(BrixNode node, Context context)
+	{
+		if (!isNodeEditable(node))
+		{
+			return false;
+		}
+		Action action = new SiteNodeAction(context, Type.NODE_DELETE, node);
+		return brix.getAuthorizationStrategy().isActionAuthorized(action);
+	}
+	
 }

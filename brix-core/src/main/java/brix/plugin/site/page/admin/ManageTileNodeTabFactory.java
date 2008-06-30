@@ -9,10 +9,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
-import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.PageSiteNodePlugin;
 import brix.plugin.site.page.TemplateSiteNodePlugin;
 import brix.plugin.site.page.tile.admin.TilesPanel;
@@ -99,18 +99,12 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 
     private static boolean hasViewPermission(IModel<BrixNode> nodeModel)
     {
-        Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-            SiteNodeAction.Type.NODE_VIEW, nodeModel.getObject());
-        return nodeModel.getObject().getBrix().getAuthorizationStrategy()
-            .isActionAuthorized(action);
+    	return SitePlugin.get().canViewNode(nodeModel.getObject(), Context.ADMINISTRATION);        
     }
 
     private static boolean hasEditPermission(IModel<BrixNode> nodeModel)
     {
-        Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-            SiteNodeAction.Type.NODE_EDIT, nodeModel.getObject());
-        return nodeModel.getObject().getBrix().getAuthorizationStrategy()
-            .isActionAuthorized(action);
+    	return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);
     }
 
 }

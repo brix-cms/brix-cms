@@ -9,10 +9,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
-import brix.plugin.site.auth.SiteNodeAction;
+import brix.plugin.site.SitePlugin;
 
 public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 {
@@ -49,9 +49,7 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 			@Override
 			public boolean isVisible()
 			{
-				Action action = new SiteNodeAction(Action.Context.ADMINISTRATION,
-						SiteNodeAction.Type.NODE_VIEW_CHILDREN, folderModel.getObject());
-				return folderModel.getObject().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+				return SitePlugin.get().canViewNodeChildren(folderModel.getObject(), Context.ADMINISTRATION);
 			}
 
 		});
@@ -67,9 +65,7 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 			@Override
 			public boolean isVisible()
 			{
-				Action action = new SiteNodeAction(Action.Context.ADMINISTRATION, SiteNodeAction.Type.NODE_EDIT,
-						folderModel.getObject());
-				return folderModel.getObject().getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+				return SitePlugin.get().canEditNode(folderModel.getObject(), Context.ADMINISTRATION);
 			}
 
 		});
