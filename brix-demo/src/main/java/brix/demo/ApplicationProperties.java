@@ -1,129 +1,98 @@
 package brix.demo;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Properties;
 
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import brix.demo.util.PropertyUtils;
+import brix.demo.util.PropertyUtils.MergeMode;
 
+/**
+ * Application-wide configuration settings for Brix Demo Application
+ * 
+ * @author igor.vaynberg
+ * 
+ */
 public class ApplicationProperties
 {
-    private static final Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
-    private static final String FILE_PREFIX = "brix/demo/application.";
 
-    private String jcrRepositoryLocation;
-    private String jcrLogin;
-    private String jcrPassword;
-    private String jcrDefaultWorkspace;
-
-    private int httpPort;
-    private int httpsPort;
+    private final Properties properties;
 
     public ApplicationProperties()
     {
-        try
-        {
-            set(FILE_PREFIX + "properties");
+        // load base properties
+        String baseProperties = "brix/demo/application.properties";
+        Properties base = PropertyUtils.loadFromClassPath(baseProperties, false);
 
-            String uname = System.getProperty("user.name");
-            if (uname != null)
-            {
-                set(FILE_PREFIX + uname + ".properties");
-            }
-            String profile = System.getProperty("dexter.profile");
-            if (profile != null)
-            {
-                set(FILE_PREFIX + profile + ".properties");
-            }
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Could not load application properties", e);
-        }
+        // load user-specific property overrides
+        String username = System.getProperty("user.name");
+        String userProperties = "brix/demo/application." + username + ".properties";
+        Properties user = PropertyUtils.loadFromClassPath(userProperties, false);
 
+        // load system properties
+        Properties system = System.getProperties();
+
+        // merge properties
+        properties = PropertyUtils.merge(MergeMode.OVERRIDE_ONLY, base, user, system);
     }
 
-    private void set(String path) throws IOException
-    {
-
-        URL url = getClass().getClassLoader().getResource(path);
-        if (url != null)
-        {
-            logger.info("Loading application properties: " + path);
-            Properties props = new Properties();
-            props.load(url.openStream());
-            set(props);
-        }
-
-    }
-
-    private void set(Properties properties)
-    {
-        if (properties.containsKey("jcr.repository.location"))
-        {
-            jcrRepositoryLocation = properties.getProperty("jcr.repository.location");
-        }
-
-        if (properties.containsKey("jcr.login"))
-        {
-            jcrLogin = properties.getProperty("jcr.login");
-        }
-        if (properties.containsKey("jcr.login"))
-        {
-            jcrPassword = properties.getProperty("jcr.password");
-        }
-        if (properties.containsKey("jcr.defaultWorkspace"))
-        {
-            jcrDefaultWorkspace = properties.getProperty("jcr.defaultWorkspace");
-        }
-        if (properties.containsKey("http.port"))
-        {
-            httpPort = Integer.parseInt(properties.getProperty("http.port"));
-        }
-        if (properties.containsKey("https.port"))
-        {
-            httpsPort = Integer.parseInt(properties.getProperty("https.port"));
-        }
-
-    }
-
+    /**
+     * @return jcr repository url
+     */
     public String getJcrRepositoryUrl()
     {
-        return jcrRepositoryLocation;
+        return properties.getProperty("brixdemo.jcr.url");
     }
 
+    /**
+     * @return jcr login name
+     */
     public String getJcrLogin()
     {
-        return jcrLogin;
+        return properties.getProperty("brixdemo.jcr.login");
     }
 
+    /**
+     * @return jcr login password
+     */
     public String getJcrPassword()
     {
-        return jcrPassword;
+        return properties.getProperty("brixdemo.jcr.password");
     }
+
+    /**
+     * @return jcr default workspace
+     */
 
     public String getJcrDefaultWorkspace()
     {
-        return jcrDefaultWorkspace;
+        return properties.getProperty("brixdemo.jcr.defaultWorkspace");
     }
+
+    /**
+     * @return jcr {@link Credentials} built from username and password
+     */
 
     public Credentials buildSimpleCredentials()
     {
         return new SimpleCredentials(getJcrLogin(), getJcrPassword().toString().toCharArray());
     }
 
+    /**
+     * @return http port the server is using
+     */
     public int getHttpPort()
     {
-        return httpPort;
+        return Integer.parseInt(properties.getProperty("brixdemo.httpPort"));
     }
 
+    /**
+     * @return https port the server is using
+     */
     public int getHttpsPort()
     {
-        return httpsPort;
+        return Integer.parseInt(properties.getProperty("brixdemo.httpsPort"));
     }
 
 
