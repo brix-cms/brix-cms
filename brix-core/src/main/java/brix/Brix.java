@@ -19,7 +19,6 @@ import brix.auth.ViewWorkspaceAction;
 import brix.auth.Action.Context;
 import brix.config.BrixConfig;
 import brix.jcr.JcrNodeWrapperFactory;
-import brix.jcr.JcrSessionFactory;
 import brix.jcr.RepositoryInitializer;
 import brix.jcr.SessionBehavior;
 import brix.jcr.api.JcrNode;
@@ -51,19 +50,16 @@ public abstract class Brix
     public static final String NS = "brix";
     public static final String NS_PREFIX = NS + ":";
 
-    private final JcrSessionFactory sessionFactory;
-
     private final BrixConfig config;
 
     private static MetaDataKey<Brix> APP_KEY = new MetaDataKey<Brix>()
     {
     };
 
-    public Brix(BrixConfig config, JcrSessionFactory sessionFactory)
+    public Brix(BrixConfig config)
     {
         this.config = config;
-        this.sessionFactory = sessionFactory;
-
+        
         final ExtensionPointRegistry registry = config.getRegistry();
 
         registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
@@ -121,7 +117,7 @@ public abstract class Brix
 
     public JcrSession getCurrentSession(String workspace)
     {
-        Session session = sessionFactory.getCurrentSession(workspace);
+        Session session = config.getSessionFactory().getCurrentSession(workspace);
         return wrapSession(session);
     }
 
@@ -145,7 +141,7 @@ public abstract class Brix
 
         // store brix instance in applicaton's metadata so it can be retrieved easily later
         application.setMetaData(APP_KEY, this);
-        
+
         /*
          * XXX we are coupling to nodepage plugin here instead of using the usual register mechanism
          * - we either need to make plugins application aware so they can install their own
@@ -204,15 +200,9 @@ public abstract class Brix
 
     private WorkspaceManager workspaceManager;
 
-    protected abstract WorkspaceManager newWorkspaceManager();
-
-    public WorkspaceManager getWorkspaceManager()
+    public final WorkspaceManager getWorkspaceManager()
     {
-        if (workspaceManager == null)
-        {
-            workspaceManager = newWorkspaceManager();
-        }
-        return workspaceManager;
+        return config.getWorkspaceManager();
     }
 
     public static final String WORKSPACE_ATTRIBUTE_TYPE = "brix:workspace-type";

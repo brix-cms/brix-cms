@@ -1,7 +1,9 @@
 package brix.config;
 
 import brix.Path;
+import brix.jcr.JcrSessionFactory;
 import brix.registry.ExtensionPointRegistry;
+import brix.workspace.WorkspaceManager;
 
 public class BrixConfig
 {
@@ -13,6 +15,27 @@ public class BrixConfig
 
     private int httpPort = 80;
     private int httpsPort = 443;
+
+    private final WorkspaceManager workspaceManager;
+    private final JcrSessionFactory sessionFactory;
+
+    public BrixConfig(JcrSessionFactory sessionFactory, WorkspaceManager workspaceManager)
+    {
+        this.sessionFactory = sessionFactory;
+        this.workspaceManager = workspaceManager;
+    }
+
+
+    public JcrSessionFactory getSessionFactory()
+    {
+        return sessionFactory;
+    }
+
+
+    public WorkspaceManager getWorkspaceManager()
+    {
+        return workspaceManager;
+    }
 
 
     public AdminConfig getAdminConfig()

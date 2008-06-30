@@ -132,7 +132,7 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 
 	private static final String DELETED_PROPERTY = "deleted";
 
-	public void initialize()
+	public AbstractWorkspaceManager initialize()
 	{
 		try
 		{
@@ -174,6 +174,7 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 					}
 				}
 			}
+			return this;
 		}
 		catch (RepositoryException e)
 		{
@@ -265,9 +266,9 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 		{
 			AbstractWorkspaceManager.this.setAttribute(getId(), attributeKey, attributeValue);
 		}
-		
+
 		@Override
-		public boolean equals(Object obj) 
+		public boolean equals(Object obj)
 		{
 			if (this == obj)
 			{
@@ -278,7 +279,7 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 				return false;
 			}
 			WorkspaceImpl that = (WorkspaceImpl) obj;
-			
+
 			if (id == that.id)
 			{
 				return true;
@@ -289,9 +290,9 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 			}
 			return id.equals(that.id);
 		}
-		
+
 		@Override
-		public int hashCode() 
+		public int hashCode()
 		{
 			return id != null ? id.hashCode() : 0;
 		}
@@ -379,7 +380,7 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 
 	private void delete(String workspaceId) throws RepositoryException
 	{
-		synchronized(this)
+		synchronized (this)
 		{
 			if (!availableWorkspaceNames.contains(workspaceId))
 			{
@@ -519,7 +520,7 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 	{
 		return availableWorkspaceNames.contains(id);
 	}
-	
+
 	abstract protected List<String> getAccessibleWorkspaceNames();
 
 	abstract protected Session getSession(String workspaceName);

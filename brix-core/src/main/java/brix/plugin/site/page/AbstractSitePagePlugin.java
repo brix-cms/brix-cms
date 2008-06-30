@@ -7,7 +7,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 
-import brix.Brix;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
@@ -23,14 +22,14 @@ import brix.web.nodepage.BrixPageParameters;
 
 public abstract class AbstractSitePagePlugin implements SiteNodePlugin
 {
-    public AbstractSitePagePlugin(Brix brix)
+    public AbstractSitePagePlugin(SitePlugin sitePlugin)
     {
-        registerManageNodeTabFactory(brix);
+        registerManageNodeTabFactory(sitePlugin);
     }
 
-    private void registerManageNodeTabFactory(Brix brix)
+    private void registerManageNodeTabFactory(SitePlugin sitePlugin)
     {
-        Collection<ManageNodeTabFactory> factories = brix.getConfig().getRegistry()
+        Collection<ManageNodeTabFactory> factories = sitePlugin.getBrix().getConfig().getRegistry()
             .lookupCollection(ManageNodeTabFactory.POINT);
         boolean found = false;
         for (ManageNodeTabFactory f : factories)
@@ -43,8 +42,7 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin
         }
         if (!found)
         {
-            SitePlugin sp = SitePlugin.get(brix);
-            sp.registerManageNodeTabFactory(new ManageTileNodeTabFactory());
+            sitePlugin.registerManageNodeTabFactory(new ManageTileNodeTabFactory());
         }
     }
 
@@ -65,21 +63,22 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin
         return urlCodingStrategy.decode(requestParameters, nodeModel);
     }
 
-    public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
+    public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode,
+            SimpleCallback goBack);
 
     public NodeConverter getConverterForNode(BrixNode node)
     {
-    	if (node instanceof BrixFileNode)
-    	{
-    		BrixFileNode fileNode = (BrixFileNode)node;
-    		if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType()))
-    		{
-    			String mimeType = fileNode.getMimeType();
-    			if (mimeType != null &&
-    					(mimeType.startsWith("text/") || mimeType.equals("application/xml")))
-    				return new FromResourceConverter(getNodeType());
-    		}
-    	}
+        if (node instanceof BrixFileNode)
+        {
+            BrixFileNode fileNode = (BrixFileNode)node;
+            if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType()))
+            {
+                String mimeType = fileNode.getMimeType();
+                if (mimeType != null &&
+                    (mimeType.startsWith("text/") || mimeType.equals("application/xml")))
+                    return new FromResourceConverter(getNodeType());
+            }
+        }
 
         return null;
     }
@@ -106,7 +105,6 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin
             ((BrixNode)node).setNodeType(type);
         }
     }
-
 
 
 }

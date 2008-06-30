@@ -39,6 +39,14 @@ public class FileUtils
         }
     }
 
+    /**
+     * Copies a resource from classpath to a {@link File}
+     * 
+     * @param source
+     *            classpath to resource
+     * @param destination
+     *            destination file
+     */
     public static void copyClassResourceToFile(String source, File destination)
     {
         final InputStream in = FileUtils.class.getResourceAsStream(source);
@@ -57,7 +65,7 @@ public class FileUtils
         catch (IOException e)
         {
             throw new RuntimeException("Could not copy class resource: " + source +
-                    " to destination: " + destination.getAbsolutePath());
+                " to destination: " + destination.getAbsolutePath());
         }
     }
 }

@@ -5,7 +5,6 @@ import javax.jcr.Repository;
 import javax.jcr.Session;
 
 import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
@@ -13,23 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brix.Brix;
-import brix.Path;
 import brix.config.BrixConfig;
-import brix.config.PrefixUriMapper;
 import brix.demo.ApplicationProperties;
 import brix.demo.util.JcrUtils;
 import brix.demo.web.admin.AdminPage;
 import brix.jcr.ThreadLocalSessionFactory;
 import brix.jcr.api.JcrSession;
-import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
-import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
-import brix.web.nodepage.BrixNodeWebPage;
-import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.ForbiddenPage;
 import brix.web.nodepage.ResourceNotFoundPage;
 import brix.workspace.Workspace;
+import brix.workspace.WorkspaceManager;
 
 /**
  * Application object for your web application. If you want to run this application without
@@ -40,7 +34,6 @@ import brix.workspace.Workspace;
 public class WicketApplication extends WebApplication
 {
     private static final Logger logger = LoggerFactory.getLogger(WicketApplication.class);
-    public static final boolean USE_RMI = false;
 
     private ApplicationProperties properties;
     private Brix brix;
@@ -53,6 +46,7 @@ public class WicketApplication extends WebApplication
     public WicketApplication()
     {
     }
+
 
     /**
      * @see wicket.Application#getHomePage()
@@ -91,16 +85,21 @@ public class WicketApplication extends WebApplication
         // create jcr repository
         repository = JcrUtils.createRepository(properties.getJcrRepositoryUrl());
 
-
+        // create session factory that will be used to feed brix jcr sessions
         sessionFactory = new ThreadLocalSessionFactory(repository, properties
-                .buildSimpleCredentials());
+            .buildSimpleCredentials());
+
+        // create workspace manager brix will use to access workspace-related functionality
+        final WorkspaceManager workspaceManager = JcrUtils.createWorkspaceManager(properties
+            .getWorkspaceManagerUrl(), sessionFactory);
 
         try
         {
-            BrixConfig config = new BrixConfig();
+
+            BrixConfig config = new BrixConfig(sessionFactory, workspaceManager);
             config.setHttpPort(properties.getHttpPort());
             config.setHttpsPort(properties.getHttpsPort());
-            brix = new DemoBrix(config, sessionFactory);
+            brix = new DemoBrix(config);
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
@@ -122,7 +121,7 @@ public class WicketApplication extends WebApplication
                     int trailingSlashesCount, boolean redirect)
             {
                 return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-                        .get(), null, trailingSlashesCount, redirect);
+                    .get(), null, trailingSlashesCount, redirect);
             }
         });
 
@@ -145,7 +144,7 @@ public class WicketApplication extends WebApplication
                 JcrSession session = brix.getCurrentSession(w.getId());
 
                 session.importXML("/", getClass().getResourceAsStream("workspace.xml"),
-                        ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                    ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
                 session.save();
             }

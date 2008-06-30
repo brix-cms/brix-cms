@@ -52,11 +52,26 @@ public class PropertyUtils
         }
     }
 
+    /**
+     * Merge mode
+     * 
+     * @author igor.vaynberg
+     * 
+     */
     public static enum MergeMode {
         OVERRIDE_ONLY,
         MERGE
     }
 
+    /**
+     * Merges multiple {@link Properties} instances into one
+     * 
+     * @param mode
+     *            merge mode
+     * @param sources
+     *            properties to merge
+     * @return new instance of {@link Properties} containing merged values
+     */
     public static Properties merge(MergeMode mode, Properties... sources)
     {
         Properties props = new Properties();
@@ -86,11 +101,5 @@ public class PropertyUtils
         return props;
     }
 
-    public static void merge(Properties p1, Properties p2)
-    {
-        for (Entry<Object, Object> p : p2.entrySet())
-        {
-            p1.put(p.getKey(), p.getValue());
-        }
-    }
+
 }

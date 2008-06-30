@@ -8,6 +8,7 @@ import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SimpleCallback;
+import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.admin.CreatePageOrTemplatePanel;
 
 public class PageSiteNodePlugin extends AbstractSitePagePlugin
@@ -15,9 +16,9 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin
 
     public static final String TYPE = Brix.NS_PREFIX + "tilePage";
 
-    public PageSiteNodePlugin(Brix brix)
+    public PageSiteNodePlugin(SitePlugin plugin)
     {
-        super(brix);
+        super(plugin);
     }
 
     @Override
@@ -53,9 +54,9 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin
     {
         return "Page";
     }
-    
+
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
     {
-    	return new Model<String>("Create New Page");
+        return new Model<String>("Create New Page");
     }
 }

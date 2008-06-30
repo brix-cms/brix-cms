@@ -46,6 +46,15 @@ public class ApplicationProperties
     }
 
     /**
+     * @return workspace manager url
+     */
+    public String getWorkspaceManagerUrl()
+    {
+        return properties.getProperty("brixdemo.workspaceManagerUrl");
+    }
+
+
+    /**
      * @return jcr login name
      */
     public String getJcrLogin()
