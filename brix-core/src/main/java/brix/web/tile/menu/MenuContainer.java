@@ -39,8 +39,6 @@ public class MenuContainer implements IDetachable
     
     private String selectedItemStyleClass;
     
-    private String itemStyleClass;
-    
     public String getOuterContainerStyleClass()
     {
         return outerContainerStyleClass;
@@ -71,22 +69,10 @@ public class MenuContainer implements IDetachable
         this.selectedItemStyleClass = selectedItemStyleClass;
     }
 
-    public String getItemStyleClass()
-    {
-        return itemStyleClass;
-    }
-
-    public void setItemStyleClass(String itemStyleClass)
-    {
-        this.itemStyleClass = itemStyleClass;
-    }
-
     private static final String PROP_OUTER_CONTAINER_STYLE_CLASS = "outerContainerStyleClass";
     
     private static final String PROP_INNER_CONTAINER_STYLE_CLASS = "innerContainerStyleClass";
-    
-    private static final String PROP_ITEM_STYLE_CLASS = "itemStyleClass";
-    
+        
     private static final String PROP_SELECTED_ITEM_STYLE_CLASS = "selectedItemStyleClass";
     
     private static final String PROP_MENU = "menu";
@@ -95,7 +81,6 @@ public class MenuContainer implements IDetachable
     {
         node.setProperty(PROP_INNER_CONTAINER_STYLE_CLASS, getInnerContainerStyleClass());
         node.setProperty(PROP_OUTER_CONTAINER_STYLE_CLASS, getOuterContainerStyleClass());
-        node.setProperty(PROP_ITEM_STYLE_CLASS, getInnerContainerStyleClass());
         node.setProperty(PROP_SELECTED_ITEM_STYLE_CLASS, getSelectedItemStyleClass());
         node.setProperty(PROP_MENU, getMenuNode());
     }
@@ -109,10 +94,6 @@ public class MenuContainer implements IDetachable
         if (node.hasProperty(PROP_OUTER_CONTAINER_STYLE_CLASS))
         {
             setOuterContainerStyleClass(node.getProperty(PROP_OUTER_CONTAINER_STYLE_CLASS).getString());
-        }
-        if (node.hasProperty(PROP_ITEM_STYLE_CLASS))
-        {
-            setItemStyleClass(node.getProperty(PROP_ITEM_STYLE_CLASS).getString());
         }
         if (node.hasProperty(PROP_SELECTED_ITEM_STYLE_CLASS))
         {

@@ -45,7 +45,6 @@ public class MenuTileEditor extends GenericTileEditorPanel<BrixNode>
 
         form.add(new TextField<String>("outerContainerStyleClass"));
         form.add(new TextField<String>("innerContainerStyleClass"));
-        form.add(new TextField<String>("itemStyleClass"));
         form.add(new TextField<String>("selectedItemStyleClass"));
     }
 

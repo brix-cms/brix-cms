@@ -79,11 +79,6 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
         {
             klass = container.getSelectedItemStyleClass();
         }
-        else if (!selected && !Strings.isEmpty(container.getItemStyleClass()))
-        {
-            klass = container.getItemStyleClass();
-        }
-
 
         if (!Strings.isEmpty(entry.getCssClass()))
         {
