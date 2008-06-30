@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import org.apache.wicket.util.io.Streams;
 
@@ -21,6 +22,22 @@ public class FileUtils
     private FileUtils()
     {
 
+    }
+
+    /**
+     * Generates a temporary file name inside tmp directory
+     * 
+     * @return
+     */
+    public static String getTemporaryFileName()
+    {
+        String fileName = System.getProperty("java.io.tmpdir");
+        if (!fileName.endsWith(File.separator))
+        {
+            fileName += File.separator;
+        }
+        fileName += UUID.randomUUID().toString();
+        return fileName;
     }
 
     /**

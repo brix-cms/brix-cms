@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import javax.jcr.Repository;
-import javax.jcr.Session;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
@@ -12,7 +11,7 @@ import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
 import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
 import org.apache.wicket.util.file.File;
 
-import brix.jcr.AbstractJackrabbitWorkspaceManager;
+import brix.jcr.JackrabbitWorkspaceManager;
 import brix.jcr.JcrSessionFactory;
 import brix.workspace.WorkspaceManager;
 import brix.workspace.rmi.ClientWorkspaceManager;
@@ -48,15 +47,7 @@ public class JcrUtils
         if (url == null || url.trim().length() == 0)
         {
             // create workspace manager for a file system repository
-            return new AbstractJackrabbitWorkspaceManager()
-            {
-
-                @Override
-                protected Session getSession(String workspaceName)
-                {
-                    return sessionFactory.getCurrentSession(workspaceName);
-                }
-            }.initialize();
+            return new JackrabbitWorkspaceManager(sessionFactory).initialize();
         }
         else if (url.startsWith("rmi://"))
         {

@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
+import brix.demo.util.FileUtils;
 import brix.demo.util.PropertyUtils;
 import brix.demo.util.PropertyUtils.MergeMode;
 
@@ -42,7 +43,14 @@ public class ApplicationProperties
      */
     public String getJcrRepositoryUrl()
     {
-        return properties.getProperty("brixdemo.jcr.url");
+        String url = properties.getProperty("brixdemo.jcr.url");
+        if (url == null || url.trim().length() == 0)
+        {
+            // if no url was specified generate a unique temporary one
+            url = "file://" + FileUtils.getTemporaryFileName();
+            properties.setProperty("brixdemo.jcr.url", url);
+        }
+        return url;
     }
 
     /**

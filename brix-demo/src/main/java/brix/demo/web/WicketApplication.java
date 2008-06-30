@@ -82,6 +82,8 @@ public class WicketApplication extends WebApplication
         // read application properties
         properties = new ApplicationProperties();
 
+        logger.info("Using JCR repository url: " + properties.getJcrRepositoryUrl());
+
         // create jcr repository
         repository = JcrUtils.createRepository(properties.getJcrRepositoryUrl());
 
