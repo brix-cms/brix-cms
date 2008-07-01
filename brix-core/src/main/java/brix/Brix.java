@@ -41,6 +41,15 @@ import brix.web.tile.pagetile.PageTile;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
+/**
+ * TODO doc
+ * 
+ * Before brix can be used {@link #initRepository()} method should be called.
+ * 
+ * 
+ * @author igor.vaynberg
+ * 
+ */
 public abstract class Brix
 {
     public static final String NS = "brix";

@@ -2,7 +2,6 @@ package brix.demo.web;
 
 import javax.jcr.ImportUUIDBehavior;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
@@ -17,8 +16,6 @@ import brix.jcr.JcrSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
-import brix.web.nodepage.ForbiddenPage;
-import brix.web.nodepage.ResourceNotFoundPage;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
@@ -88,20 +85,11 @@ public final class WicketApplication extends AbstractWicketApplication
         }
 
         // mount admin page
-        mount(new HybridUrlCodingStrategy("/admin", AdminPage.class)
-        {
-            @SuppressWarnings("unchecked")
-            @Override
-            protected IRequestTarget handleExpiredPage(String pageMapName, Class pageClass,
-                    int trailingSlashesCount, boolean redirect)
-            {
-                return new HybridBookmarkablePageRequestTarget(pageMapName, (Class)pageClassRef
-                    .get(), null, trailingSlashesCount, redirect);
-            }
-        });
+        mount(new HybridUrlCodingStrategy("/admin", AdminPage.class));
 
-        mountBookmarkablePage("/NotFound", ResourceNotFoundPage.class);
-        mountBookmarkablePage("/Forbiden", ForbiddenPage.class);
+        // FIXME matej: do we need this?
+        // mountBookmarkablePage("/NotFound", ResourceNotFoundPage.class);
+        // mountBookmarkablePage("/Forbiden", ForbiddenPage.class);
     }
 
     private void initDefaultWorkspace()
