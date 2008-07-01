@@ -84,8 +84,8 @@ public class MenuEditor extends BrixGenericPanel<Menu>
                 ChildEntry entry = new ChildEntry(getSelected().getEntry());
                 entry.setTitle(getString("newEntry"));
                 getSelected().getEntry().getChildren().add(entry);
-                MenuTreeNode node = getSelected().nodeForEntry(entry);
-                treeModel.nodeInserted(node);
+                MenuTreeNode node = new MenuTreeNode(entry);                 	
+                treeModel.nodeInserted(tree, getSelected(), node);
                 tree.getTreeState().selectNode(node, true);
                 tree.updateTree();
                 selectionChanged(target);
@@ -98,22 +98,23 @@ public class MenuEditor extends BrixGenericPanel<Menu>
             public void onClick(AjaxRequestTarget target)
             {
                 MenuTreeNode selected = getSelected();
-                MenuTreeNode parent = (MenuTreeNode)selected.getParent();
-                int index = parent.getIndex(selected);
+                MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(selected); 
+                	
+                int index = parent.getChildren().indexOf(selected);
+                treeModel.nodeDeleted(tree, selected);
                 parent.getEntry().getChildren().remove(selected.getEntry());
 
-                if (index > parent.getChildCount() - 1)
+                if (index > parent.getChildren().size() - 1)
                 {
                     --index;
                 }
 
                 MenuTreeNode newSelected = (MenuTreeNode)((index >= 0)
-                    ? parent.getChildAt(index)
+                    ? parent.getChildren().get(index)
                     : parent);
 
                 tree.getTreeState().selectNode(newSelected, true);
-                selectionChanged(target);
-                treeModel.nodeDeleted(selected);
+                selectionChanged(target);                
                 tree.updateTree();
             }
 
@@ -133,11 +134,11 @@ public class MenuEditor extends BrixGenericPanel<Menu>
                 int index = getIndex(selected);
                 if (index > 0)
                 {
-                    treeModel.nodeDeleted(selected);
-                    MenuTreeNode parent = (MenuTreeNode)selected.getParent();
+                	MenuTreeNode parent = (MenuTreeNode)tree.getParentNode(selected);
+                    treeModel.nodeDeleted(tree, selected);                    
                     parent.getEntry().getChildren().remove(selected.getEntry());
                     parent.getEntry().getChildren().add(index - 1, (ChildEntry)selected.getEntry());
-                    treeModel.nodeInserted(selected);
+                    treeModel.nodeInserted(tree, parent, selected);
                     tree.updateTree();
                 }
                 target.addComponent(links);
@@ -146,7 +147,7 @@ public class MenuEditor extends BrixGenericPanel<Menu>
             @Override
             public boolean isEnabled()
             {
-                return getSelected().getParent() != null && getIndex(getSelected()) > 0;
+                return getIndex(getSelected()) > 0;
             }
         });
 
@@ -156,14 +157,14 @@ public class MenuEditor extends BrixGenericPanel<Menu>
             public void onClick(AjaxRequestTarget target)
             {
                 MenuTreeNode selected = getSelected();
-                MenuTreeNode parent = (MenuTreeNode)selected.getParent();
+                MenuTreeNode parent = (MenuTreeNode)tree.getParentNode(selected);
                 int index = getIndex(selected);
-                if (index < parent.getChildCount() - 1)
+                if (index < parent.getChildren().size() - 1)
                 {
-                    treeModel.nodeDeleted(selected);
+                    treeModel.nodeDeleted(tree, selected);
                     parent.getEntry().getChildren().remove(selected.getEntry());
                     parent.getEntry().getChildren().add(index + 1, (ChildEntry)selected.getEntry());
-                    treeModel.nodeInserted(selected);
+                    treeModel.nodeInserted(tree, parent, selected);
                     tree.updateTree();
                 }
                 target.addComponent(links);
@@ -172,8 +173,9 @@ public class MenuEditor extends BrixGenericPanel<Menu>
             @Override
             public boolean isEnabled()
             {
-                return getSelected().getParent() != null &&
-                    getIndex(getSelected()) < getSelected().getParent().getChildCount() - 1;
+            	int index = getIndex(getSelected());
+            	MenuTreeNode parent = (MenuTreeNode)tree.getParentNode(getSelected());
+            	return parent != null && index < parent.getChildren().size() - 1;
             }
         });
 
@@ -184,7 +186,15 @@ public class MenuEditor extends BrixGenericPanel<Menu>
 
     private int getIndex(MenuTreeNode node)
     {
-        return node.getParent().getIndex(node);
+    	MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(node);
+    	if (parent == null)
+    	{
+    		return -1;
+    	}
+    	else
+    	{
+    		return parent.getChildren().indexOf(node);
+    	}        
     }
 
     private WebMarkupContainer links;
@@ -215,7 +225,7 @@ public class MenuEditor extends BrixGenericPanel<Menu>
                 @Override
                 protected void onUpdate()
                 {
-                    treeModel.nodeChanged(getSelected());
+                    treeModel.nodeChanged(tree, getSelected());
                     tree.updateTree();
                 }
             };

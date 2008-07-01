@@ -1,114 +1,73 @@
 package brix.plugin.menu.editor;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.tree.TreeNode;
-
-import org.apache.wicket.model.IDetachable;
+import org.apache.wicket.util.lang.Objects;
 
 import brix.plugin.menu.Menu.Entry;
+import brix.web.tree.TreeNode;
 
-public class MenuTreeNode implements TreeNode, IDetachable
+public class MenuTreeNode implements TreeNode
 {
-    private final Entry entry;
-    private final MenuTreeNode parent;
+	private final Entry entry;
 
-    public Entry getEntry()
-    {
-        return entry;
-    }
+	public Entry getEntry()
+	{
+		return entry;
+	}
 
-    public MenuTreeNode(Entry entry)
-    {
-        this(entry, null);
-    }
+	public MenuTreeNode(Entry entry)
+	{
+		if (entry == null)
+		{
+			throw new IllegalArgumentException("Argument 'entry' may not be null.");
+		}
+		this.entry = entry;
+	}
 
-    public MenuTreeNode(Entry entry, MenuTreeNode parent)
-    {
-        if (entry == null)
-        {
-            throw new IllegalArgumentException("Argument 'entry' may not be null.");
-        }
-        this.entry = entry;
-        this.parent = parent;
-    }
+	public void detach()
+	{
+	}
 
-    private Map<Entry, MenuTreeNode> entryCache = new HashMap<Entry, MenuTreeNode>();
+	public List<? extends TreeNode> getChildren()
+	{
+		List<MenuTreeNode> children = new ArrayList<MenuTreeNode>();
+		for (Entry e : entry.getChildren())
+		{
+			children.add(new MenuTreeNode(e));
+		}
+		return children;
+	}
 
-    public MenuTreeNode nodeForEntry(Entry e) {
-        MenuTreeNode res = entryCache.get(e);
-        if (res == null)
-        {
-            res = new MenuTreeNode(e, this);
-            entryCache.put(e, res);
-        }
-        return res;
-    }
-    
-    public void detach()
-    {
-        List<Entry> list = new ArrayList<Entry>(entryCache.keySet());
-        for (Entry e : list)
-        {
-            if (entry.getChildren().contains(e) == false) 
-            {
-                entryCache.remove(e);
-            }
-        }
-    }
+	public boolean isLeaf()
+	{
+		return entry.getChildren().isEmpty();
+	}
 
-    public Enumeration< ? > children()
-    {
-        List<MenuTreeNode> entries = new ArrayList<MenuTreeNode>();
+	@Override
+	public String toString()
+	{
+		return entry.toString();
+	}
 
-        for (Entry e : entry.getChildren())
-        {
-            entries.add(nodeForEntry(e));
-        }
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+		{
+			return true;
+		}
+		else if (obj instanceof MenuTreeNode == false)
+		{
+			return false;
+		}
+		return Objects.equal(entry, ((MenuTreeNode) obj).entry);
+	}
 
-        return Collections.enumeration(entries);
-    }
-
-    public boolean getAllowsChildren()
-    {
-        return true;
-    }
-
-    public TreeNode getChildAt(int childIndex)
-    {
-        return nodeForEntry(entry.getChildren().get(childIndex));
-    }
-
-    public int getChildCount()
-    {
-        return entry.getChildren().size();
-    }
-
-    public int getIndex(TreeNode node)
-    {
-        Entry that = ((MenuTreeNode)node).getEntry();
-        return entry.getChildren().indexOf(that);
-    }
-
-    public TreeNode getParent()
-    {
-        return parent;
-    }
-
-    public boolean isLeaf()
-    {
-        return entry.getChildren().isEmpty();
-    }
-    
-    @Override
-    public String toString()
-    {
-        return entry.toString();
-    }
-
+	@Override
+	public int hashCode()
+	{
+		return entry.hashCode();
+	}
 }

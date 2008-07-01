@@ -32,12 +32,10 @@ public class SiteNode extends FolderNode implements TreeAwareNode
 
 	private static class SiteTreeNode extends AbstractJcrTreeNode
 	{
-
 		public SiteTreeNode(BrixNode node)
 		{
 			super(node);
 		}
-
 	};
 
 	@Override
