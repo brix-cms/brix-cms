@@ -12,19 +12,24 @@ import brix.web.picker.common.TreeAwareNode;
 import brix.web.tree.AbstractJcrTreeNode;
 import brix.web.tree.JcrTreeNode;
 
+/**
+ * Node that can wrap the brix:root/brix:site node
+ * 
+ * @author Matej Knopp
+ */
 public class SiteNode extends FolderNode implements TreeAwareNode
 {
-
+	
 	public SiteNode(Node delegate, JcrSession session)
 	{
 		super(delegate, session);
 	}
-	
+
 	public JcrTreeNode getTreeNode(BrixNode node)
 	{
 		return new SiteTreeNode(node);
 	}
-	
+
 	private static class SiteTreeNode extends AbstractJcrTreeNode
 	{
 
@@ -32,7 +37,7 @@ public class SiteNode extends FolderNode implements TreeAwareNode
 		{
 			super(node);
 		}
-		
+
 	};
 
 	@Override
@@ -40,20 +45,20 @@ public class SiteNode extends FolderNode implements TreeAwareNode
 	{
 		return "Site";
 	}
-	
+
 	public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-    {
+	{
 
-        @Override
-        public boolean canWrap(Brix brix, JcrNode node)
-        {
-            return node.getPath().equals(SitePlugin.get(brix).getSiteRootPath());
-        }
+		@Override
+		public boolean canWrap(Brix brix, JcrNode node)
+		{
+			return node.getPath().equals(SitePlugin.get(brix).getSiteRootPath());
+		}
 
-        @Override
-        public JcrNode wrap(Brix brix, Node node, JcrSession session)
-        {
-            return new SiteNode(node, session);
-        }
-    };
+		@Override
+		public JcrNode wrap(Brix brix, Node node, JcrSession session)
+		{
+			return new SiteNode(node, session);
+		}
+	};
 }

@@ -136,11 +136,11 @@ abstract class FolderDataSource implements IDataSource
 
 		if (PROPERTY_NAME.equals(property))
 		{
-			return compare(n1.getName(), n2.getName());
+			return compare(n1.getUserVisibleName(), n2.getUserVisibleName());
 		}
 		else if (PROPERTY_TYPE.equals(property))
 		{
-			return compare(sp.getNodePluginForNode(n1).getName(), sp.getNodePluginForNode(n2).getName());
+			return compare(n1.getUserVisibleType(), n2.getUserVisibleType());
 		}
 		else if (PROPERTY_CREATED.equals(property))
 		{

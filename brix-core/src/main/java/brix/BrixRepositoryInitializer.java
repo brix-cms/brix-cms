@@ -58,8 +58,6 @@ public class BrixRepositoryInitializer implements RepositoryInitializer
         RepositoryUtil.registerMixinType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true);
 
         RepositoryUtil.registerMixinType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
-
-
     }
 
 }
