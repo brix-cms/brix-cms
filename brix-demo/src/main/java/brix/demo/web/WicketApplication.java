@@ -4,18 +4,24 @@ import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Session;
 
 import org.apache.wicket.IRequestTarget;
+import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 
 import brix.Brix;
+import brix.Path;
 import brix.config.BrixConfig;
+import brix.config.PrefixUriMapper;
+import brix.config.UriMapper;
 import brix.demo.web.admin.AdminPage;
+import brix.jcr.JcrSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.ForbiddenPage;
 import brix.web.nodepage.ResourceNotFoundPage;
 import brix.workspace.Workspace;
+import brix.workspace.WorkspaceManager;
 
 /**
  * Application object for your web application. If you want to run this application without
@@ -29,37 +35,48 @@ public final class WicketApplication extends AbstractWicketApplication
     /** brix instance */
     private Brix brix;
 
+    /** {@inheritDoc} */
     @Override
     protected IRequestCycleProcessor newRequestCycleProcessor()
     {
-
-        return new BrixRequestCycleProcessor(brix)
-        {
-
-            @Override
-            protected String getDefaultWorkspaceName()
-            {
-                String name = getProperties().getJcrDefaultWorkspace();
-                return SitePlugin.get().getSiteWorkspace(name, "").getId();
-            }
-
-        };
+        /*
+         * install brix request cycle processor
+         * 
+         * this will allow brix to take over part of wicket's url space and handle requests
+         */
+        return new BrixRequestCycleProcessor(brix);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void init()
     {
         super.init();
 
+        final JcrSessionFactory sf = getJcrSessionFactory();
+        final WorkspaceManager wm = getWorkspaceManager();
+
         try
         {
+            // create uri mapper for the cms
+            // we are mounting the cms on the root, and getting the workspace name from the
+            // application properties
+            UriMapper mapper = new PrefixUriMapper(Path.ROOT)
+            {
+                public Workspace getWorkspaceForRequest(WebRequestCycle requestCycle, Brix brix)
+                {
+                    final String name = getProperties().getJcrDefaultWorkspace();
+                    SitePlugin sitePlugin = SitePlugin.get(brix);
+                    return sitePlugin.getSiteWorkspace(name, "");
+                }
+            };
 
             // create brix configuration
-            BrixConfig config = new BrixConfig(getJcrSessionFactory(), getWorkspaceManager());
+            BrixConfig config = new BrixConfig(sf, wm, mapper);
             config.setHttpPort(getProperties().getHttpPort());
             config.setHttpsPort(getProperties().getHttpsPort());
 
-            // create brix instance
+            // create brix instance and attach it to this application
             brix = new DemoBrix(config);
             brix.attachTo(this);
             initializeRepository();

@@ -11,7 +11,7 @@ import brix.Path;
  * @author ivaynberg
  * 
  */
-public class PrefixUriMapper implements UriMapper
+public abstract class PrefixUriMapper implements UriMapper
 {
     private final Path prefix;
 

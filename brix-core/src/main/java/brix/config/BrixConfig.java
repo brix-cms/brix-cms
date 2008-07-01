@@ -1,6 +1,5 @@
 package brix.config;
 
-import brix.Path;
 import brix.jcr.JcrSessionFactory;
 import brix.registry.ExtensionPointRegistry;
 import brix.workspace.WorkspaceManager;
@@ -11,7 +10,7 @@ public class BrixConfig
 
     private AdminConfig adminConfig = new AdminConfig();
 
-    private UriMapper uriMapper = new PrefixUriMapper(Path.ROOT);
+    private final UriMapper mapper;
 
     private int httpPort = 80;
     private int httpsPort = 443;
@@ -19,10 +18,12 @@ public class BrixConfig
     private final WorkspaceManager workspaceManager;
     private final JcrSessionFactory sessionFactory;
 
-    public BrixConfig(JcrSessionFactory sessionFactory, WorkspaceManager workspaceManager)
+    public BrixConfig(JcrSessionFactory sessionFactory, WorkspaceManager workspaceManager,
+            UriMapper mapper)
     {
         this.sessionFactory = sessionFactory;
         this.workspaceManager = workspaceManager;
+        this.mapper = mapper;
     }
 
 
@@ -68,15 +69,12 @@ public class BrixConfig
         this.httpsPort = httpsPort;
     }
 
-    public UriMapper getUriMapper()
+    public UriMapper getMapper()
     {
-        return uriMapper;
+        return mapper;
     }
 
-    public void setUriMapper(UriMapper uriMapper)
-    {
-        this.uriMapper = uriMapper;
-    }
+  
 
 
 }

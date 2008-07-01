@@ -1,7 +1,10 @@
 package brix.config;
 
+import org.apache.wicket.protocol.http.WebRequestCycle;
+
 import brix.Brix;
 import brix.Path;
+import brix.workspace.Workspace;
 
 /**
  * Used to translate between the web's URI space and jcr's node space
@@ -33,4 +36,12 @@ public interface UriMapper
      * @return uri path that represents node path
      */
     public Path getUriPathForNode(Path nodePath, Brix brix);
+
+    /**
+     * Resolves JCR workspace to be used for the specified request.
+     * 
+     * @param requestCycle
+     * @return JCR workspace or <code>null</code> if no suitable one is found
+     */
+    public Workspace getWorkspaceForRequest(WebRequestCycle requestCycle, Brix brix);
 }

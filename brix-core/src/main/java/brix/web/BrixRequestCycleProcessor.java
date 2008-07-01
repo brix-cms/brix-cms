@@ -10,6 +10,7 @@ import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.WebRequestCycleProcessor;
 import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.protocol.http.request.WebRequestCodingStrategy;
@@ -26,8 +27,9 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
+import brix.workspace.Workspace;
 
-public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
+public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 {
     private final Brix brix;
     private final BrixUrlCodingStrategy urlCodingStrategy;
@@ -41,7 +43,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
     /**
      * Resolves uri path to a {@link BrixNode}. By default this method uses
-     * {@link BrixConfig#getUriMapper()} to map the uri to a node path.
+     * {@link BrixConfig#getMapper()} to map the uri to a node path.
      * 
      * @param uriPath
      *            uri path
@@ -52,7 +54,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
         BrixNode node = null;
 
         // create desired nodepath
-        final Path nodePath = brix.getConfig().getUriMapper().getNodePathForUriPath(
+        final Path nodePath = brix.getConfig().getMapper().getNodePathForUriPath(
             uriPath.toAbsolute(), brix);
 
         if (nodePath != null)
@@ -76,7 +78,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
     /**
      * Creates a uri path for the specified <code>node</code> By default this method uses
-     * {@link BrixConfig#getUriMapper()} to map node path to a uri path.
+     * {@link BrixConfig#getMapper()} to map node path to a uri path.
      * 
      * @param node
      *            node to create uri path for
@@ -89,7 +91,7 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
         final Path nodePath = new Path(jcrPath);
 
         // use urimapper to create the uri
-        return brix.getConfig().getUriMapper().getUriPathForNode(nodePath, brix);
+        return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
     }
 
     public final int getHttpPort()
@@ -215,7 +217,12 @@ public abstract class BrixRequestCycleProcessor extends WebRequestCycleProcessor
         return workspace;
     }
 
-    protected abstract String getDefaultWorkspaceName();
+    private String getDefaultWorkspaceName()
+    {
+        final WebRequestCycle rc = (WebRequestCycle)RequestCycle.get();
+        final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(rc, brix);
+        return (workspace != null) ? workspace.getId() : null;
+    }
 
     @Override
     protected IRequestCodingStrategy newRequestCodingStrategy()
