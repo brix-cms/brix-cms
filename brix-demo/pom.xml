@@ -10,8 +10,7 @@
 	<artifactId>brix-demo</artifactId>
 	<packaging>war</packaging>
 	<name>Brix Demo WebApp</name>
-	<description>Provides a simple WebApp that integrates Brix to
-		provide CMS functionality</description>
+	<description>A simple demo WebApp that demonstrates Brix features and how to integrate it into a Wicket Web Application</description>
 	<version>1.0-SNAPSHOT</version>
 	<licenses>
 		<license>
@@ -22,7 +21,8 @@
 		</license>
 	</licenses>
 	<build>
-		<resources>
+        <finalName>brixdemo</finalName>
+    	<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
