@@ -1,7 +1,6 @@
 package brix.demo.web;
 
 import javax.jcr.ImportUUIDBehavior;
-import javax.jcr.Session;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.protocol.http.WebRequestCycle;
@@ -84,6 +83,7 @@ public final class WicketApplication extends AbstractWicketApplication
         }
         finally
         {
+            // since we accessed session factory we also have to perform cleanup
             cleanupSessionFactory();
         }
 
@@ -131,17 +131,19 @@ public final class WicketApplication extends AbstractWicketApplication
         }
     }
 
+    /**
+     * Allow Brix to perform repository initialization
+     */
     private void initializeRepository()
     {
         try
         {
-            Session session = brix.getCurrentSession(null);
-            brix.initRepository(session);
-            session.save();
+            brix.initRepository();
         }
-        catch (Exception e)
+        finally
         {
-            throw new RuntimeException("Couldn't initialize jackrabbit repository", e);
+            // cleanup any sessions we might have created
+            cleanupSessionFactory();
         }
     }
 

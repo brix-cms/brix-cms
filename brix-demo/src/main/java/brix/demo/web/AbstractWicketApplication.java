@@ -97,7 +97,7 @@ public class AbstractWicketApplication extends WebApplication
      */
     public final void cleanupSessionFactory()
     {
-        sessionFactory.cleanupLocalSessions();
+        sessionFactory.cleanup();
     }
 
     /**

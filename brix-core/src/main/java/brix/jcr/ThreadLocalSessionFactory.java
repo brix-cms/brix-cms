@@ -68,7 +68,7 @@ public class ThreadLocalSessionFactory implements JcrSessionFactory
         return session;
     }
 
-    public void cleanupLocalSessions()
+    public void cleanup()
     {
         for (Session session : container.get().values())
         {

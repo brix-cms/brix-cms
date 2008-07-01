@@ -25,9 +25,6 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.menu.MenuPlugin;
-import brix.plugin.prototype.PrototypePlugin;
-import brix.plugin.publishing.PublishingPlugin;
 import brix.plugin.site.SiteNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.folder.FolderNode;
@@ -35,7 +32,6 @@ import brix.plugin.site.page.PageNode;
 import brix.plugin.site.page.TemplateNode;
 import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.tile.Tile;
-import brix.plugin.snapshot.SnapshotPlugin;
 import brix.plugin.webdavurl.WebdavUrlPlugin;
 import brix.registry.ExtensionPointRegistry;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
@@ -59,7 +55,7 @@ public abstract class Brix
     public Brix(BrixConfig config)
     {
         this.config = config;
-        
+
         final ExtensionPointRegistry registry = config.getRegistry();
 
         registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
@@ -75,11 +71,13 @@ public abstract class Brix
         registry.register(Tile.POINT, new PageTile());
 
         registry.register(Plugin.POINT, new SitePlugin(this));
-        registry.register(Plugin.POINT, new MenuPlugin(this));
-        registry.register(Plugin.POINT, new SnapshotPlugin(this));
-        registry.register(Plugin.POINT, new PrototypePlugin(this));
-        registry.register(Plugin.POINT, new PublishingPlugin(this));
+// registry.register(Plugin.POINT, new MenuPlugin(this));
+// registry.register(Plugin.POINT, new SnapshotPlugin(this));
+        // registry.register(Plugin.POINT, new PrototypePlugin(this));
+        // registry.register(Plugin.POINT, new PublishingPlugin(this));
         registry.register(Plugin.POINT, new WebdavUrlPlugin());
+
+
     }
 
     public static Brix get(Application application)
@@ -242,7 +240,7 @@ public abstract class Brix
     }
 
 
-    public void initRepository(Session session)
+    public void initRepository()
     {
         List<RepositoryInitializer> initializers = new ArrayList<RepositoryInitializer>();
         initializers.addAll(config.getRegistry().lookupCollection(RepositoryInitializer.POINT));
@@ -250,10 +248,13 @@ public abstract class Brix
 
         try
         {
+            JcrSession s = getCurrentSession(null);
             for (RepositoryInitializer initializer : initializers)
             {
-                initializer.initializeRepository(this, session);
+                initializer.initializeRepository(this, s);
             }
+            s.save();
+            s.logout();
         }
         catch (RepositoryException e)
         {
