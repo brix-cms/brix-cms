@@ -4,7 +4,9 @@ import brix.Brix;
 import brix.Plugin;
 import brix.auth.AuthorizationStrategy;
 import brix.config.BrixConfig;
-import brix.demo.web.tile.TimeTile;
+import brix.demo.web.tile.stockquote.stateful.StatefulStockQuoteTile;
+import brix.demo.web.tile.stockquote.stateless.StatelessStockQuoteTile;
+import brix.demo.web.tile.time.TimeTile;
 import brix.plugin.menu.MenuPlugin;
 import brix.plugin.prototype.PrototypePlugin;
 import brix.plugin.site.page.tile.Tile;
@@ -34,6 +36,8 @@ public class DemoBrix extends Brix
 
         // register tiles
         getConfig().getRegistry().register(Tile.POINT, new TimeTile());
+        getConfig().getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
+        getConfig().getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
     }
 
     /** {@inheritDoc} */

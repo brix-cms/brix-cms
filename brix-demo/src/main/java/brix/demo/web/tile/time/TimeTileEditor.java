@@ -1,4 +1,4 @@
-package brix.demo.web.tile;
+package brix.demo.web.tile.time;
 
 import java.text.SimpleDateFormat;
 
