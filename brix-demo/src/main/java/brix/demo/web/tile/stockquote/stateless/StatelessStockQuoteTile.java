@@ -45,8 +45,7 @@ public class StatelessStockQuoteTile implements Tile
     }
 
     /** {@inheritDoc} */
-    public Component newViewer(String id, IModel<BrixNode> tileNode,
-            BrixPageParameters tilePageParameters)
+    public Component newViewer(String id, IModel<BrixNode> tileNode)
     {
         // create and return panel that will render the tile
         return new StatelessStockQuotePanel(id);

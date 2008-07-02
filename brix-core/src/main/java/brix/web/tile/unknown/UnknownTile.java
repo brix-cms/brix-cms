@@ -7,7 +7,6 @@ import org.apache.wicket.model.IModel;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.tile.Tile;
 import brix.plugin.site.page.tile.admin.TileEditorPanel;
-import brix.web.nodepage.BrixPageParameters;
 
 public class UnknownTile implements Tile
 {
@@ -47,7 +46,7 @@ public class UnknownTile implements Tile
         return new Editor(id);
     }
 
-    public Component newViewer(String id, IModel<BrixNode> tileNode, BrixPageParameters tilePageParameters)
+    public Component newViewer(String id, IModel<BrixNode> tileNode)
     {
         return new Label(id, "Unknown Tile");
     }

@@ -12,7 +12,6 @@ import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.tile.Tile;
 import brix.plugin.site.page.tile.admin.TileEditorPanel;
-import brix.web.nodepage.BrixPageParameters;
 import brix.web.reference.Reference;
 
 public class TreeMenuTile implements Tile
@@ -28,7 +27,7 @@ public class TreeMenuTile implements Tile
         return "Tree Menu";
     }
 
-    public Component newViewer(String id, IModel<BrixNode> tileNode, BrixPageParameters pageParameters)
+    public Component newViewer(String id, IModel<BrixNode> tileNode)
     {
         return new TreeMenuRenderer(id, tileNode);
     }

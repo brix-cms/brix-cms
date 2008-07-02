@@ -10,7 +10,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.tile.admin.TileEditorPanel;
 import brix.registry.ExtensionPoint;
 import brix.registry.ExtensionPointRegistry;
-import brix.web.nodepage.BrixPageParameters;
+import brix.web.nodepage.PageParametersAware;
 import brix.web.tile.unknown.UnknownTile;
 
 public interface Tile
@@ -51,9 +51,13 @@ public interface Tile
     }
 
 
-    // TODO remove tilePageParameters param in favor of PageParametersAware
-    Component newViewer(String id, IModel<BrixNode> tileNode,
-            BrixPageParameters tilePageParameters);
+    /**
+     * @see PageParametersAware
+     * @param id
+     * @param tileNode
+     * @return
+     */
+    Component newViewer(String id, IModel<BrixNode> tileNode);
 
     TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode);
 

@@ -38,7 +38,7 @@ public class PageParametersForm extends StatelessForm
     protected IRequestTarget getRequestTarget()
     {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
-        getPage().visitChildren(PageParametersAware.class, new IVisitor()
+        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component>()
         {
             public Object component(Component component)
             {

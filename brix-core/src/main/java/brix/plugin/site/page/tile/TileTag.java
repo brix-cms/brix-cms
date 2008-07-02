@@ -13,7 +13,6 @@ import brix.markup.tag.ComponentTag;
 import brix.markup.tag.simple.SimpleTag;
 import brix.markup.variable.VariableKeyProvider;
 import brix.plugin.site.page.AbstractContainer;
-import brix.web.nodepage.BrixPageParameters;
 
 /**
  * Base class for tags that represent {@link Tile}s
@@ -73,9 +72,8 @@ public class TileTag extends SimpleTag
         if (tileNode != null)
         {
             Tile tile = Tile.Helper.getTileOfType(TileContainerFacet.getTileClassName(tileNode),
-                tileNode.getBrix());
-            BrixPageParameters parameters = BrixPageParameters.getCurrent();
-            return tile.newViewer(id, new BrixNodeModel(tileNode), parameters);
+                tileNode.getBrix());            
+            return tile.newViewer(id, new BrixNodeModel(tileNode));
         }
         else
         {

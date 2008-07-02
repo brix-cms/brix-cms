@@ -14,7 +14,6 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.AbstractContainer;
 import brix.plugin.site.page.tile.Tile;
 import brix.plugin.site.page.tile.admin.TileEditorPanel;
-import brix.web.nodepage.BrixPageParameters;
 
 public class PageTile implements Tile
 {
@@ -39,8 +38,7 @@ public class PageTile implements Tile
         return new PageTileEditorPanel(id, containerNode);
     }
 
-    public Component newViewer(String id, IModel<BrixNode> tileNode,
-            BrixPageParameters pageParameters)
+    public Component newViewer(String id, IModel<BrixNode> tileNode)
     {
         return new PageTileViewerPanel(id, tileNode);
     }
