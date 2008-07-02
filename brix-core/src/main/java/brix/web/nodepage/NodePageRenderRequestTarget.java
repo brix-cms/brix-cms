@@ -55,7 +55,7 @@ class NodePageRenderRequestTarget
                     page = pageFactory.newPage();
                 }
                 String componentPath = iface.substring(0, separator);
-                page.beforeRender();
+                page.prepareForRender(false);
                 Component component = page.get(componentPath);
                 if (component == null)
                 {                    
@@ -146,6 +146,10 @@ class NodePageRenderRequestTarget
         if (RequestCycle.get().getRequestTarget() == this) 
         {
         	getPage().renderPage();
+        }
+        else
+        {
+        //	getPage().afterRender();
         }
     }
 
