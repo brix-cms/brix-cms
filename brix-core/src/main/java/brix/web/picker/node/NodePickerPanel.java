@@ -167,4 +167,12 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode>
 	{
 		return false;
 	}
+	
+	@Override
+	protected void onDetach()
+	{
+		if (rootNode != null)
+			rootNode.detach();
+		super.onDetach();
+	}
 }
