@@ -167,6 +167,22 @@ public class MenuEditor extends BrixGenericPanel<Menu>
 		links = new WebMarkupContainer("links");
 		links.setOutputMarkupId(true);
 
+		links.add(new AjaxLink("addTopLevel")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				MenuTreeNode parent = (MenuTreeNode) treeModel.getRoot();
+				ChildEntry entry = new ChildEntry(parent.getEntry());
+				entry.setTitle(getString("newEntry"));
+				parent.getEntry().getChildren().add(entry);
+				MenuTreeNode node = new MenuTreeNode(entry);
+				treeModel.nodeInserted(tree, parent, node);
+				tree.getTreeState().selectNode(node, true);
+				tree.updateTree();
+			}
+		});
+		
 		links.add(new AjaxLink("add")
 		{
 			@Override
@@ -179,6 +195,11 @@ public class MenuEditor extends BrixGenericPanel<Menu>
 				treeModel.nodeInserted(tree, getSelected(), node);
 				tree.getTreeState().selectNode(node, true);
 				tree.updateTree();
+			}
+			@Override
+			public boolean isEnabled()
+			{
+				return !getSelected().equals(treeModel.getRoot());
 			}
 		});
 
