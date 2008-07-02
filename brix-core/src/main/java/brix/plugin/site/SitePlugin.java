@@ -24,6 +24,7 @@ import brix.Plugin;
 import brix.auth.Action;
 import brix.auth.Action.Context;
 import brix.jcr.api.JcrNode;
+import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.markup.MarkupCache;
@@ -299,18 +300,25 @@ public class SitePlugin implements Plugin
         return workspaces;
     }
 
-    public static final String WEB_NODE_NAME = Brix.NS_PREFIX + "web";
+    private static final String WEB_NODE_NAME = Brix.NS_PREFIX + "web";
+    
+    private static final String SITE_NODE_NAME = Brix.NS_PREFIX + "site"; 
 
-    public static final String GLOBAL_CONTAINER_NODE_NAME = Brix.NS_PREFIX + "globalContainer";
+    private static final String GLOBAL_CONTAINER_NODE_NAME = Brix.NS_PREFIX + "globalContainer";
 
     private String getGlobalContainerPath()
     {
-        return getSiteRootPath() + "/" + GLOBAL_CONTAINER_NODE_NAME;
+        return getWebRootPath() + "/" + GLOBAL_CONTAINER_NODE_NAME;
+    }
+
+    public String getWebRootPath()
+    {
+    	return brix.getRootPath() + "/" + WEB_NODE_NAME;	
     }
 
     public String getSiteRootPath()
     {
-        return brix.getRootPath() + "/" + WEB_NODE_NAME;
+        return getWebRootPath() + "/" + SITE_NODE_NAME;
     }
 
     public BrixNode getSiteRootNode(String workspaceId)
@@ -318,6 +326,26 @@ public class SitePlugin implements Plugin
         JcrSession workspaceSession = brix.getCurrentSession(workspaceId);
         BrixNode root = (BrixNode)workspaceSession.getItem(getSiteRootPath());
         return root;
+    }
+    
+    private void checkForSiteRoot(JcrNode webNode)
+    {
+    	if (!webNode.hasNode(SITE_NODE_NAME))
+    	{
+    		JcrNode site = webNode.addNode(SITE_NODE_NAME, "nt:folder");
+    		site.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
+    		
+    		JcrNodeIterator nodes = webNode.getNodes();
+    		while (nodes.hasNext())
+    		{
+    			BrixNode node = (BrixNode) nodes.nextNode();
+    			if (node.equals(site) == false && node instanceof GlobalContainerNode == false)
+    			{
+    				JcrSession session = webNode.getSession();
+    				session.move(node.getPath(), site.getPath() + "/" + node.getName());
+    			}
+    		}
+    	}
     }
 
     public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
@@ -339,6 +367,9 @@ public class SitePlugin implements Plugin
             {
                 web.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
             }
+            
+            checkForSiteRoot(web);
+            
             if (!web.hasNode(GLOBAL_CONTAINER_NODE_NAME))
             {
                 GlobalContainerNode.initialize(web.addNode(GLOBAL_CONTAINER_NODE_NAME, "nt:file"));
@@ -603,3 +634,4 @@ public class SitePlugin implements Plugin
     }
 
 }
+

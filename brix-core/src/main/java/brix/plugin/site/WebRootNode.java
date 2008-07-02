@@ -17,10 +17,10 @@ import brix.web.tree.JcrTreeNode;
  * 
  * @author Matej Knopp
  */
-public class SiteNode extends FolderNode implements TreeAwareNode
+public class WebRootNode extends FolderNode implements TreeAwareNode
 {
 	
-	public SiteNode(Node delegate, JcrSession session)
+	public WebRootNode(Node delegate, JcrSession session)
 	{
 		super(delegate, session);
 	}
@@ -41,7 +41,7 @@ public class SiteNode extends FolderNode implements TreeAwareNode
 	@Override
 	public String getUserVisibleName()
 	{
-		return "Site";
+		return "Web";
 	}
 
 	public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
@@ -50,13 +50,13 @@ public class SiteNode extends FolderNode implements TreeAwareNode
 		@Override
 		public boolean canWrap(Brix brix, JcrNode node)
 		{
-			return node.getPath().equals(SitePlugin.get(brix).getSiteRootPath());
+			return node.getPath().equals(SitePlugin.get(brix).getWebRootPath());
 		}
 
 		@Override
 		public JcrNode wrap(Brix brix, Node node, JcrSession session)
 		{
-			return new SiteNode(node, session);
+			return new WebRootNode(node, session);
 		}
 	};
 }

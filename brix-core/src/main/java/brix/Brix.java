@@ -25,8 +25,9 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SiteNode;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.SiteRootNode;
+import brix.plugin.site.WebRootNode;
 import brix.plugin.site.folder.FolderNode;
 import brix.plugin.site.page.PageNode;
 import brix.plugin.site.page.TemplateNode;
@@ -69,7 +70,8 @@ public abstract class Brix
 
         registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
 
-        registry.register(JcrNodeWrapperFactory.POINT, SiteNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, SiteRootNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, WebRootNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, FolderNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, GlobalContainerNode.FACTORY);
 

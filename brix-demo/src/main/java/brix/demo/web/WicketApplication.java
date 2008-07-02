@@ -109,6 +109,8 @@ public final class WicketApplication extends AbstractWicketApplication
                 session.importXML("/", getClass().getResourceAsStream("workspace.xml"),
                     ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
+                brix.initWorkspace(w, session);
+                
                 session.save();
             }
 

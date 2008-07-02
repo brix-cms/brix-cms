@@ -97,4 +97,11 @@ public class NodePicker extends BrixGenericPanel<BrixNode>
 	{
 
 	}
+	
+	@Override
+	protected void onDetach()
+	{
+		this.rootNode.detach();
+		super.onDetach();
+	}
 }

@@ -16,7 +16,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-import brix.Brix;
 import brix.Path;
 import brix.auth.Action.Context;
 import brix.jcr.exception.JcrException;
@@ -64,11 +63,10 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 
 			@Override
 			public boolean isVisible()
-			{				
+			{
 				BrixNode node = NodeManagerEditorPanel.this.getModelObject();
 				String path = node.getPath();
 				String web = SitePlugin.get().getSiteRootPath();
-				Brix brix = node.getBrix();
 				return SitePlugin.get().canRenameNode(node, Context.ADMINISTRATION) && path.length() > web.length()
 						&& path.startsWith(web);
 			}
@@ -94,7 +92,7 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 				{
 					// TODO: Implement proper versioning support!
 					return false;
-				}				
+				}
 
 				return getNode() != null && getNode().isNodeType("nt:file") && !getNode().isNodeType("mix:versionable")
 						&& SitePlugin.get().canEditNode(getNode(), Context.ADMINISTRATION);
@@ -136,7 +134,12 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 			@Override
 			public boolean isVisible()
 			{
-				return SitePlugin.get().canDeleteNode(getNode(), Context.ADMINISTRATION);
+				BrixNode node = NodeManagerEditorPanel.this.getModelObject();
+				String path = node.getPath();
+				String web = SitePlugin.get().getSiteRootPath();
+
+				return SitePlugin.get().canDeleteNode(getNode(), Context.ADMINISTRATION)
+						&& path.length() > web.length() && path.startsWith(web);
 			}
 
 		});
