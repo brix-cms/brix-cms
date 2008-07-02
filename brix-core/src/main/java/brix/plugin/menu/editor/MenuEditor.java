@@ -1,256 +1,313 @@
 package brix.plugin.menu.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.DefaultTreeState;
-import org.apache.wicket.markup.html.tree.ITreeState;
-import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.markup.html.tree.AbstractTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 
+import brix.plugin.menu.ManageMenuPanel;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.web.generic.BrixGenericPanel;
+import brix.web.picker.reference.ReferenceEditorConfiguration;
+import brix.web.reference.Reference;
+
+import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.SizeUnit;
+import com.inmethod.grid.column.AbstractColumn;
+import com.inmethod.grid.column.editable.EditablePropertyColumn;
+import com.inmethod.grid.column.editable.EditablePropertyTreeColumn;
+import com.inmethod.grid.column.editable.SubmitCancelColumn;
+import com.inmethod.grid.treegrid.TreeGrid;
 
 public class MenuEditor extends BrixGenericPanel<Menu>
 {
 
-    public MenuEditor(String id, IModel<Menu> model)
-    {
-        super(id, model);
-        init();
-    }
+	public MenuEditor(String id, IModel<Menu> model)
+	{
+		super(id, model);
+	}
 
-    public MenuEditor(String id)
-    {
-        super(id);
-        init();
-    }
+	public MenuEditor(String id)
+	{
+		super(id);
+	}
 
-    private MenuTreeModel treeModel;
-    private LinkTree tree;
+	@Override
+	protected void onBeforeRender()
+	{
+		if (!hasBeenRendered())
+		{
+			init();
+		}
+		super.onBeforeRender();
+	}
 
-    private MenuTreeNode getSelected()
-    {
-        MenuTreeNode node = (MenuTreeNode)tree.getTreeState().getSelectedNodes().iterator().next();
-        return node;
-    }
+	private MenuTreeModel treeModel;
+	private AbstractTree tree;
 
-    @SuppressWarnings("unchecked")
-    private void init()
-    {
-        treeModel = new MenuTreeModel(getModelObject().getRoot());
+	private MenuTreeNode getSelected()
+	{
+		if (!tree.getTreeState().getSelectedNodes().isEmpty())
+		{
+			MenuTreeNode node = (MenuTreeNode) tree.getTreeState().getSelectedNodes().iterator().next();
+			return node;
+		}
+		else
+		{
+			return (MenuTreeNode) treeModel.getRoot();
+		}
+	}
 
-        add(tree = new LinkTree("tree", treeModel)
-        {
-            @Override
-            protected void onNodeLinkClicked(Object node, BaseTree tree, AjaxRequestTarget target)
-            {
-                super.onNodeLinkClicked(node, tree, target);
-                selectionChanged(target);
-            }
+	private List<IGridColumn> newColumns()
+	{
+		List<IGridColumn> columns = new ArrayList<IGridColumn>();
 
+		final ReferenceEditorConfiguration conf = new ReferenceEditorConfiguration();
+		ManageMenuPanel panel = findParent(ManageMenuPanel.class);
+		conf.setWorkspaceName(panel.getModelObject().getId());
 
-            @Override
-            protected ITreeState newTreeState()
-            {
-                return new DefaultTreeState()
-                {
-                    @Override
-                    public void selectNode(Object node, boolean selected)
-                    {
-                        if (selected)
-                            super.selectNode(node, selected);
-                    }
-                };
-            }
-        });
+		columns.add(new SubmitCancelColumn("submitCancel1", new ResourceModel("edit")));
+		columns.add(new EditablePropertyTreeColumn(new ResourceModel("title"), "entry.title")
+		{
+			@Override
+			protected boolean isClickToEdit()
+			{
+				return false;
+			}
+		}.setInitialSize(300));
+		columns.add(new EditablePropertyColumn(new ResourceModel("cssClass"), "entry.cssClass")
+		{
+			@Override
+			protected boolean isClickToEdit()
+			{
+				return false;
+			}
+		}.setInitialSize(200));
+		columns.add(new AbstractColumn("referenceEditor", new ResourceModel("reference"))
+		{
+			@Override
+			public Component newCell(WebMarkupContainer parent, String componentId, final IModel rowModel)
+			{
+				IModel<Reference> model = new PropertyModel<Reference>(rowModel, "entry.reference");
 
-        tree.getTreeState().expandAll();
-        tree.getTreeState().setAllowSelectMultiple(false);
-        tree.getTreeState().selectNode(treeModel.getRoot(), true);
+				return new ReferenceColumnPanel(componentId, model)
+				{
+					@Override
+					public ReferenceEditorConfiguration getConfiguration()
+					{
+						return conf;
+					}
 
-        links = new WebMarkupContainer("links");
-        links.setOutputMarkupId(true);
+					@Override
+					protected boolean isEditing()
+					{
+						return getGrid().isItemEdited(rowModel);
+					}
+				};
+			}
+		}.setInitialSize(300));
+		columns.add(new SubmitCancelColumn("submitCancel2", new ResourceModel("edit")));
 
-        links.add(new AjaxLink("add")
-        {
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-                ChildEntry entry = new ChildEntry(getSelected().getEntry());
-                entry.setTitle(getString("newEntry"));
-                getSelected().getEntry().getChildren().add(entry);
-                MenuTreeNode node = new MenuTreeNode(entry);                 	
-                treeModel.nodeInserted(tree, getSelected(), node);
-                tree.getTreeState().selectNode(node, true);
-                tree.updateTree();
-                selectionChanged(target);
-            }
-        });
+		return columns;
+	};
 
-        links.add(new AjaxLink("remove")
-        {
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-                MenuTreeNode selected = getSelected();
-                MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(selected); 
-                	
-                int index = parent.getChildren().indexOf(selected);
-                treeModel.nodeDeleted(tree, selected);
-                parent.getEntry().getChildren().remove(selected.getEntry());
+	@SuppressWarnings("unchecked")
+	private void init()
+	{
+		treeModel = new MenuTreeModel(getModelObject().getRoot());
 
-                if (index > parent.getChildren().size() - 1)
-                {
-                    --index;
-                }
+		final TreeGrid tg;
+		add(tg = new TreeGrid("treeGrid", treeModel, newColumns())
+		{
+			@Override
+			protected void onItemSelectionChanged(IModel item, boolean newValue)
+			{
+				super.onItemSelectionChanged(item, newValue);
+				
+				//if (newValue == false)
+					setItemEdit(item, newValue);
+				
+				selectionChanged(AjaxRequestTarget.get());
+				// update();
+			}
+			
+			@Override
+			public void setItemEdit(IModel rowModel, boolean edit)
+			{
+				if (edit == true)
+				{
+					selectItem(rowModel, true);
+				}
 
-                MenuTreeNode newSelected = (MenuTreeNode)((index >= 0)
-                    ? parent.getChildren().get(index)
-                    : parent);
+				super.setItemEdit(rowModel, edit);
+			}
+			
+		});
 
-                tree.getTreeState().selectNode(newSelected, true);
-                selectionChanged(target);                
-                tree.updateTree();
-            }
+		tree = tg.getTree();
+		tg.setClickRowToSelect(true);
+		tg.setClickRowToDeselect(true);
+		tg.setSelectToEdit(false);
+		tree.setRootLess(true);
+		tg.setContentHeight(20, SizeUnit.EM);
 
-            @Override
-            public boolean isEnabled()
-            {
-                return getSelected() != treeModel.getRoot();
-            }
-        });
+		tree.getTreeState().expandAll();
+		tree.getTreeState().setAllowSelectMultiple(false);
+		// tree.getTreeState().selectNode(treeModel.getRoot(), true);
 
-        links.add(new AjaxLink("moveUp")
-        {
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-                MenuTreeNode selected = getSelected();
-                int index = getIndex(selected);
-                if (index > 0)
-                {
-                	MenuTreeNode parent = (MenuTreeNode)tree.getParentNode(selected);
-                    treeModel.nodeDeleted(tree, selected);                    
-                    parent.getEntry().getChildren().remove(selected.getEntry());
-                    parent.getEntry().getChildren().add(index - 1, (ChildEntry)selected.getEntry());
-                    treeModel.nodeInserted(tree, parent, selected);
-                    tree.updateTree();
-                }
-                target.addComponent(links);
-            }
+		links = new WebMarkupContainer("links");
+		links.setOutputMarkupId(true);
 
-            @Override
-            public boolean isEnabled()
-            {
-                return getIndex(getSelected()) > 0;
-            }
-        });
+		links.add(new AjaxLink("add")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				ChildEntry entry = new ChildEntry(getSelected().getEntry());
+				entry.setTitle(getString("newEntry"));
+				getSelected().getEntry().getChildren().add(entry);
+				MenuTreeNode node = new MenuTreeNode(entry);
+				treeModel.nodeInserted(tree, getSelected(), node);
+				tree.getTreeState().selectNode(node, true);
+				tree.updateTree();
+			}
+		});
 
-        links.add(new AjaxLink("moveDown")
-        {
-            @Override
-            public void onClick(AjaxRequestTarget target)
-            {
-                MenuTreeNode selected = getSelected();
-                MenuTreeNode parent = (MenuTreeNode)tree.getParentNode(selected);
-                int index = getIndex(selected);
-                if (index < parent.getChildren().size() - 1)
-                {
-                    treeModel.nodeDeleted(tree, selected);
-                    parent.getEntry().getChildren().remove(selected.getEntry());
-                    parent.getEntry().getChildren().add(index + 1, (ChildEntry)selected.getEntry());
-                    treeModel.nodeInserted(tree, parent, selected);
-                    tree.updateTree();
-                }
-                target.addComponent(links);
-            }
+		links.add(new AjaxLink("remove")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				MenuTreeNode selected = getSelected();
+				MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(selected);
 
-            @Override
-            public boolean isEnabled()
-            {
-            	int index = getIndex(getSelected());
-            	MenuTreeNode parent = (MenuTreeNode)tree.getParentNode(getSelected());
-            	return parent != null && index < parent.getChildren().size() - 1;
-            }
-        });
+				boolean editing = tg.isItemEdited(new Model<MenuTreeNode>(selected));
+				int index = parent.getChildren().indexOf(selected);
+				treeModel.nodeDeleted(tree, selected);
+				parent.getEntry().getChildren().remove(selected.getEntry());
 
-        add(links);
+				if (index > parent.getChildren().size() - 1)
+				{
+					--index;
+				}
 
-        selectionChanged(null);
-    }
+				MenuTreeNode newSelected = (MenuTreeNode) ((index >= 0) ? parent.getChildren().get(index) : parent);
+				if (newSelected.equals(treeModel.getRoot()) == false)
+				{
+					tree.getTreeState().selectNode(newSelected, true);
+					tg.setItemEdit(new Model<MenuTreeNode>(newSelected), editing);
+				}				
+				tree.updateTree();
+			}
 
-    private int getIndex(MenuTreeNode node)
-    {
-    	MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(node);
-    	if (parent == null)
-    	{
-    		return -1;
-    	}
-    	else
-    	{
-    		return parent.getChildren().indexOf(node);
-    	}        
-    }
+			@Override
+			public boolean isEnabled()
+			{
+				return getSelected() != treeModel.getRoot();
+			}
+		});
 
-    private WebMarkupContainer links;
-    private Component editor;
+		links.add(new AjaxLink("moveUp")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				MenuTreeNode selected = getSelected();
+				int index = getIndex(selected);
+				if (index > 0)
+				{
+					boolean editing = tg.isItemEdited(new Model<MenuTreeNode>(selected));
+					
+					MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(selected);
+					treeModel.nodeDeleted(tree, selected);
+					parent.getEntry().getChildren().remove(selected.getEntry());
+					parent.getEntry().getChildren().add(index - 1, (ChildEntry) selected.getEntry());
+					treeModel.nodeInserted(tree, parent, selected);
+					
+					
+					tree.getTreeState().selectNode(selected, true);
+					tg.setItemEdit(new Model<MenuTreeNode>(selected), editing);
+					
+					tree.updateTree();
+				}
+				target.addComponent(links);
+			}
 
-    private static final String EDITOR_ID = "editor";
+			@Override
+			public boolean isEnabled()
+			{
+				return getIndex(getSelected()) > 0;
+			}
+		});
 
-    private void selectionChanged(AjaxRequestTarget target)
-    {
-        Component c;
-        if (getSelected().getEntry() instanceof ChildEntry)
-        {
-            c = new ChildPanel(EDITOR_ID, new Model<ChildEntry>()
-            {
-                @Override
-                public ChildEntry getObject()
-                {
-                    return (ChildEntry)MenuEditor.this.getSelected().getEntry();
-                }
+		links.add(new AjaxLink("moveDown")
+		{
+			@Override
+			public void onClick(AjaxRequestTarget target)
+			{
+				MenuTreeNode selected = getSelected();
+				MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(selected);
+				int index = getIndex(selected);
+				if (index < parent.getChildren().size() - 1)
+				{
+					boolean editing = tg.isItemEdited(new Model<MenuTreeNode>(selected));
+					treeModel.nodeDeleted(tree, selected);
+					parent.getEntry().getChildren().remove(selected.getEntry());
+					parent.getEntry().getChildren().add(index + 1, (ChildEntry) selected.getEntry());
+					treeModel.nodeInserted(tree, parent, selected);
+					
+					tree.getTreeState().selectNode(selected, true);
+					tg.setItemEdit(new Model<MenuTreeNode>(selected), editing);
+					
+					tree.updateTree();
+				}
+				target.addComponent(links);
+			}
 
-                @Override
-                public void detach()
-                {
-                    MenuEditor.this.getSelected().getEntry().detach();
-                }
-            })
-            {
-                @Override
-                protected void onUpdate()
-                {
-                    treeModel.nodeChanged(tree, getSelected());
-                    tree.updateTree();
-                }
-            };
-        }
-        else
-        {
-            c = new RootPanel(EDITOR_ID);
-        }
-        c.setOutputMarkupId(true);
+			@Override
+			public boolean isEnabled()
+			{
+				int index = getIndex(getSelected());
+				MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(getSelected());
+				return parent != null && index < parent.getChildren().size() - 1;
+			}
+		});
 
-        if (editor != null)
-        {
-            editor.replaceWith(c);
-        }
-        else
-        {
-            add(c);
-        }
-        editor = c;
+		add(links);
 
-        if (target != null)
-        {
-            target.addComponent(links);
-            target.addComponent(c);
-        }
-    }
+		selectionChanged(null);
+	}
+
+	private int getIndex(MenuTreeNode node)
+	{
+		MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(node);
+		if (parent == null)
+		{
+			return -1;
+		}
+		else
+		{
+			return parent.getChildren().indexOf(node);
+		}
+	}
+
+	private WebMarkupContainer links;
+
+	private void selectionChanged(AjaxRequestTarget target)
+	{
+		if (target != null)
+		{
+			target.addComponent(links);
+		}
+	}
 
 }

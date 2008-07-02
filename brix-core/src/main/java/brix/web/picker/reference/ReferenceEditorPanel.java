@@ -68,7 +68,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference>
 					public void onClose(AjaxRequestTarget target)
 					{
 						target.addComponent(ReferenceEditorPanel.this);
-						ReferenceEditorPanel.this.onClose(target);
+						ReferenceEditorPanel.this.onUpdate(target);
 					}
 				});
 				getModalWindow().show(target);
@@ -86,6 +86,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference>
 				// model is buffered)
 				ReferenceEditorPanel.this.setModelObject(ref);
 				target.addComponent(ReferenceEditorPanel.this);
+				ReferenceEditorPanel.this.onUpdate(target);
 			}
 
 			@Override
@@ -97,7 +98,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference>
 		});
 	}
 
-	protected void onClose(AjaxRequestTarget target)
+	protected void onUpdate(AjaxRequestTarget target)
 	{
 
 	}
@@ -127,6 +128,11 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference>
 
 	protected Component newModalWindow(String id)
 	{
+		ReferenceEditorConfiguration conf = getConfiguration();
+		if (conf == null)
+		{
+			throw new IllegalStateException("ReferenceEditorPanel must have configuration.");
+		}
 		return new ReferenceEditorModalWindow(id, getModel(), getConfiguration());
 	}
 

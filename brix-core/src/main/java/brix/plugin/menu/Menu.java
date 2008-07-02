@@ -54,6 +54,21 @@ public class Menu implements IDetachable
         {
             return "Menu Root";
         }
+        
+        public String getTitle()
+        {
+        	return "Menu Root";
+        }
+        
+        public Reference getReference()
+        {
+        	return null;
+        }
+        
+        public String getCssClass()
+        {
+        	return null;
+        }
     };
 
     public static class ChildEntry extends Entry
