@@ -117,6 +117,10 @@ div.brix-admin th.imxt-select div.imxt-a {
 	padding-left: 0.2em !important;
 }
 
+div.brix-admin div.imxt-body-container1 {
+	overflow-x: scroll !important;
+}
+
 /**
  * Reset styles from biggie tab row
  */
@@ -409,7 +413,11 @@ div.brix-admin a.brix-button-thin {
 }
 
 div.brix-admin a.brix-button-thin {
-	padding:0.1em 0.7em;
+	padding: 0.1em 0.7em;
+}
+
+div.brix-admin div.imxt-grid a.brix-button-thin {
+	padding: 0em 0.4em;
 }
 
 div.brix-admin span.brix-button,
@@ -426,6 +434,10 @@ div.brix-admin span.brix-button-thin {
 
 div.brix-admin span.brix-button-thin {
 	padding:0.1em 0.7em;
+}
+
+div.brix-admin div.imxt-grid span.brix-button-thin {
+	padding:0em 0.4em;
 }
 
 div.brix-admin span.brix-button em {
@@ -693,6 +705,7 @@ div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li a {
 	display: block;
 	padding: 0.2em 0.5em;
 	color: black;
+	background: none;
 }
 	
 div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li.selected a {
@@ -701,6 +714,10 @@ div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li.selected a {
 	border-bottom-width: 0px;
 	border-top-width: 0px;	
 	background-color: white;	
+}
+
+div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li a span {
+	color: black !important;
 }
 
 /*
@@ -1188,3 +1205,4 @@ div.brix-admin div.brix-prototypes-action form a.brix-button {
 div.brix-admin div.brix-publishing-container {
 	margin-top: 0.7em;
 }
+
