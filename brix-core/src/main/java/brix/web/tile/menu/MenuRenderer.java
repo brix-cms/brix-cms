@@ -127,16 +127,28 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 		if (reference.getType() == Type.NODE)
 		{
 			eq = page.getModel().equals(reference.getNodeModel())
-					&& BrixPageParameters.equals(page.getBrixPageParameters(), reference.getParameters());
+					&& comparePageParameters(page.getBrixPageParameters(), reference.getParameters());
 
 		}
 		else
 		{
 			eq = url.equals(reference.getUrl())
-					&& BrixPageParameters.equals(page.getBrixPageParameters(), reference.getParameters());
+					&& comparePageParameters(page.getBrixPageParameters(), reference.getParameters());
 		}
 
 		return eq;
+	}
+	
+	private boolean comparePageParameters(BrixPageParameters page, BrixPageParameters fromReference)
+	{
+		if (fromReference == null || (fromReference.getIndexedParamsCount() == 0 && fromReference.getQueryParamKeys().isEmpty()))
+		{
+			return true;
+		}
+		else
+		{
+			return BrixPageParameters.equals(page, fromReference);
+		}
 	}
 
 	private boolean isSelected(ChildEntry entry)
