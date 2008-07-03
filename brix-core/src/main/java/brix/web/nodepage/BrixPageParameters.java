@@ -321,4 +321,20 @@ public class BrixPageParameters implements Serializable
         return RequestCycle.get().urlFor(target).toString();
     }
 
+    public static boolean equals(BrixPageParameters p1, BrixPageParameters p2)
+    {
+    	if (Objects.equal(p1, p2))
+    	{
+    		return true;
+    	}
+    	if (p1 == null && p2.getIndexedParamsCount() == 0 && p2.getQueryParamKeys().isEmpty())
+    	{
+    		return true;
+    	}
+    	if (p2 == null && p1.getIndexedParamsCount() == 0 && p1.getQueryParamKeys().isEmpty())
+    	{
+    		return true;
+    	}
+    	return false;
+    }
 }
