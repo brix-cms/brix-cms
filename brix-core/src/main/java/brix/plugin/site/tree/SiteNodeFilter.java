@@ -1,7 +1,6 @@
 package brix.plugin.site.tree;
 
 import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.web.tree.NodeFilter;
 
 public class SiteNodeFilter implements NodeFilter
@@ -30,10 +29,7 @@ public class SiteNodeFilter implements NodeFilter
 		{
 			return false;
 		}
-		else
-		{
-			return node instanceof GlobalContainerNode == false;
-		}
+		return true;
 	}
 	
 }
