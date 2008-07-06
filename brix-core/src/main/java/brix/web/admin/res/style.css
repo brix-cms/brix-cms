@@ -300,6 +300,11 @@ div.brix-admin div.brix-site-tree-container table.wicket-tree-content {
 	white-space: nowrap;
 }
 
+div.brix-admin div.brix-site-tree-container table.selected * {
+	font-weight: normal;
+	color: black;	
+}  
+
 
 div.brix-admin div.brix-site-tree-container table.selected {
 }
