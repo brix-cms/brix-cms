@@ -50,6 +50,7 @@ public abstract class TileEditorFragment extends Fragment implements IGenericCom
 				editor.save(tile);
 				node.save();
 				node.checkin();
+				getSession().info(getString("tileSuccessfullySaved"));
 			}
 		});
 

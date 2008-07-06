@@ -127,8 +127,8 @@ public abstract class AbstractContainer extends BrixFileNode
     private static final String VARIABLES_NODE_NAME = Brix.NS_PREFIX + "variables";
 
     public boolean requiresSSL()
-    {
-        return isRequiresSSL() || tileManager.anyTileRequiresSSL();
+    {    	
+        return isRequiresSSL() || tileManager.anyTileRequiresSSL() || (getTemplate() != null && getTemplate().requiresSSL());
     }
 
     public boolean isRequiresSSL()

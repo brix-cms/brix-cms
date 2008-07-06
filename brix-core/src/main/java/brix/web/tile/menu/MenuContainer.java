@@ -39,6 +39,10 @@ public class MenuContainer implements IDetachable
     
     private String selectedItemStyleClass;
     
+    private Integer startAtLevel;
+    
+    private Integer renderLevels;
+    
     public String getOuterContainerStyleClass()
     {
         return outerContainerStyleClass;
@@ -69,6 +73,26 @@ public class MenuContainer implements IDetachable
         this.selectedItemStyleClass = selectedItemStyleClass;
     }
 
+	public Integer getStartAtLevel()
+	{
+		return startAtLevel;
+	}
+
+	public void setStartAtLevel(Integer startAtLevel)
+	{
+		this.startAtLevel = startAtLevel;
+	}
+
+	public Integer getRenderLevels()
+	{
+		return renderLevels;
+	}
+
+	public void setRenderLevels(Integer renderLevels)
+	{
+		this.renderLevels = renderLevels;
+	}
+    
     private static final String PROP_OUTER_CONTAINER_STYLE_CLASS = "outerContainerStyleClass";
     
     private static final String PROP_INNER_CONTAINER_STYLE_CLASS = "innerContainerStyleClass";
@@ -77,12 +101,34 @@ public class MenuContainer implements IDetachable
     
     private static final String PROP_MENU = "menu";
     
+    private static final String PROP_START_AT_LEVEL = "startAtLevel";
+    
+    private static final String PROP_RENDER_LEVELS = "renderLevels";
+    
     public void save(BrixNode node)
     {
         node.setProperty(PROP_INNER_CONTAINER_STYLE_CLASS, getInnerContainerStyleClass());
         node.setProperty(PROP_OUTER_CONTAINER_STYLE_CLASS, getOuterContainerStyleClass());
         node.setProperty(PROP_SELECTED_ITEM_STYLE_CLASS, getSelectedItemStyleClass());
         node.setProperty(PROP_MENU, getMenuNode());
+        
+        if (getStartAtLevel() == null)
+        {
+        	node.setProperty(PROP_START_AT_LEVEL, (String)null);
+        }
+        else
+        {
+        	node.setProperty(PROP_START_AT_LEVEL, getStartAtLevel());
+        }
+        
+        if (getRenderLevels() == null)
+        {
+        	node.setProperty(PROP_RENDER_LEVELS, (String)null);
+        }
+        else
+        {
+        	node.setProperty(PROP_RENDER_LEVELS, getRenderLevels());	
+        }        
     }
     
     public void load(BrixNode node)
@@ -103,6 +149,14 @@ public class MenuContainer implements IDetachable
         {
             setMenuNode((BrixNode) node.getProperty(PROP_MENU).getNode());
         }
+        if (node.hasProperty(PROP_START_AT_LEVEL))
+        {
+        	setStartAtLevel((int) node.getProperty(PROP_START_AT_LEVEL).getLong());
+        }
+        if (node.hasProperty(PROP_RENDER_LEVELS))
+        {
+        	setRenderLevels((int)node.getProperty(PROP_RENDER_LEVELS).getLong());
+        }
     }
     
     public void detach()
@@ -110,4 +164,5 @@ public class MenuContainer implements IDetachable
         menuNodeModel.detach();
         cachedMenu = null;
     }
+
 }

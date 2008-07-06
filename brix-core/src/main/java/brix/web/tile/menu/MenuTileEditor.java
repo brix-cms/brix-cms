@@ -8,6 +8,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -46,6 +47,8 @@ public class MenuTileEditor extends GenericTileEditorPanel<BrixNode>
         form.add(new TextField<String>("outerContainerStyleClass"));
         form.add(new TextField<String>("innerContainerStyleClass"));
         form.add(new TextField<String>("selectedItemStyleClass"));
+        form.add(new TextField<Integer>("startAtLevel"));
+        form.add(new TextField<Integer>("renderLevels"));
     }
 
     @Override
