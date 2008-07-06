@@ -165,13 +165,13 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 	
 			response.write("<a href='");
 			response.write(url);
-			response.write("'>");
+			response.write("'><span>");
 	
 			// TODO. escape or not (probably a property would be nice?
 	
 			response.write(entry.getTitle());
 	
-			response.write("</a>");
+			response.write("</span></a>");
 		}
 
 		// only decrement skip levels for child if current is begger than 0
