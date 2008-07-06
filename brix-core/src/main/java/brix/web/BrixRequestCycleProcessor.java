@@ -49,7 +49,7 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
      *            uri path
      * @return node that maps to the <code>uriPath</code> or <code>null</code> if none
      */
-    protected BrixNode getNodeForUriPath(final Path uriPath)
+    public BrixNode getNodeForUriPath(final Path uriPath)
     {
         BrixNode node = null;
 

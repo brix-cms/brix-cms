@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import brix.demo.ApplicationProperties;
 import brix.demo.util.JcrUtils;
 import brix.jcr.ThreadLocalSessionFactory;
+import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.workspace.WorkspaceManager;
 
 /**
@@ -47,8 +48,10 @@ public class AbstractWicketApplication extends WebApplication
     @Override
     public Class< ? extends Page> getHomePage()
     {
-        // we mount brix on root, so it takes over the homepage - no need to have one
-        return null;
+    	// use special class so that the URL coding strategy knows we want to go home
+    	// it is not possible to just return null here because some pages (e.g. expired page)
+    	// rely on knowing the home page
+    	return BrixNodePageUrlCodingStrategy.HomePage.class;
     }
 
     /** {@inheritDoc} */

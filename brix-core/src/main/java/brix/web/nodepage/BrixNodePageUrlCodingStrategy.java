@@ -15,10 +15,12 @@ import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Session;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 import org.apache.wicket.request.target.component.BookmarkableListenerInterfaceRequestTarget;
+import org.apache.wicket.request.target.component.IBookmarkablePageRequestTarget;
 import org.apache.wicket.request.target.component.listener.ListenerInterfaceRequestTarget;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.util.string.StringValue;
@@ -27,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brix.Brix;
+import brix.BrixNodeModel;
 import brix.Path;
 import brix.jcr.wrapper.BrixNode;
 import brix.web.BrixRequestCycleProcessor;
@@ -355,11 +358,21 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 			String iface = componentPath + ":" + target.getInterfaceName();
 			return encode(node, page.getBrixPageParameters(), info, iface);
 		}
+		else if (requestTarget instanceof IBookmarkablePageRequestTarget && ((IBookmarkablePageRequestTarget)requestTarget).getPageClass().equals(HomePage.class))
+		{			
+			BrixNode node = ((BrixRequestCycleProcessor)RequestCycle.get().getProcessor()).getNodeForUriPath(Path.ROOT);
+			return encode(new BrixNodeRequestTarget(new BrixNodeModel(node)));
+		}
 		else
 		{
 			return null;
 		}
 	}
+	
+	public static final class HomePage extends WebPage
+	{
+		
+	};
 
 	private String getInterfaceParameter()
 	{
