@@ -238,7 +238,9 @@ public class PageMarkupSource implements MarkupSource
         else if ("tile".equals(simpleTagName))
         {
             String id = attributes.get(AbstractContainer.MARKUP_TILE_ID);
-            items.add(new TileTag("div", Type.OPEN, attributes, node, id));
+            Map<String, String> newAttributes = new HashMap<String, String>(attributes);
+            newAttributes.remove("id");
+            items.add(new TileTag("div", Type.OPEN, newAttributes, node, id));
             items.add(new SimpleTag("div", Type.CLOSE, null));
         }
     }
