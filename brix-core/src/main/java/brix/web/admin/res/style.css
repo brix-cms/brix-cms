@@ -297,6 +297,7 @@ div.brix-admin div.brix-site-tree-container {
 
 div.brix-admin div.brix-site-tree-container table.wicket-tree-content {
 	width: 100%;
+	white-space: nowrap;
 }
 
 
