@@ -15,10 +15,10 @@ import org.apache.wicket.model.PropertyModel;
 
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.tile.admin.GenericTileEditorPanel;
+import brix.plugin.site.picker.reference.ReferenceEditorConfiguration;
+import brix.plugin.site.picker.reference.ReferenceEditorModalWindow;
+import brix.plugin.site.picker.reference.ReferenceEditorPanel;
 import brix.web.generic.BrixGenericFragment;
-import brix.web.picker.reference.ReferenceEditorConfiguration;
-import brix.web.picker.reference.ReferenceEditorModalWindow;
-import brix.web.picker.reference.ReferenceEditorPanel;
 import brix.web.reference.Reference;
 import brix.web.tile.treemenu.TreeMenuTile.Item;
 import brix.web.tile.treemenu.TreeMenuTile.RootItem;
