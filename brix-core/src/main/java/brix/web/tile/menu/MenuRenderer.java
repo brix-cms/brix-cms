@@ -76,7 +76,7 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 		for (ChildEntry e : entry.getChildren())
 		{
 			BrixNode node = getNode(e);
-			if (SitePlugin.get().canViewNode(node, Context.PRESENTATION))
+			if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION))
 			{
 				renderChild(container, e, response, selected, skipLevels, renderLevels);	
 			}			
@@ -132,6 +132,8 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 	{	
 		boolean selected = selectedSet.contains(entry);
 
+		boolean anyChildren = selected && anyChildren(entry);
+		
 		if (skipLevels <= 0)
 		{		
 			String klass = "";
@@ -139,6 +141,11 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 			if (selected && !Strings.isEmpty(container.getSelectedItemStyleClass()))
 			{
 				klass = container.getSelectedItemStyleClass();
+			}
+			
+			if (anyChildren && selected && !Strings.isEmpty(container.getSelectedItemWithChildrenStyleClass()))
+			{
+				klass = container.getSelectedItemWithChildrenStyleClass();
 			}
 	
 			if (!Strings.isEmpty(entry.getCssClass()))
@@ -180,7 +187,7 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 		// only decrement render levels when we are already rendering
 		int childRenderLevels = skipLevels <= 0 ? renderLevels - 1 : renderLevels;
 		
-		if (selected && !entry.getChildren().isEmpty())
+		if (anyChildren)
 		{
 			renderEntry(container, entry, response, selectedSet, childSkipLevels, childRenderLevels);
 		}
@@ -189,6 +196,22 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 		{
 			response.write("</li>\n");
 		}
+	}
+	
+	private boolean anyChildren(ChildEntry entry)
+	{
+		if (entry.getChildren() != null)
+		{
+			for (ChildEntry e : entry.getChildren())
+			{
+				BrixNode node = getNode(e);
+				if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private boolean isSelected(Reference reference, String url)

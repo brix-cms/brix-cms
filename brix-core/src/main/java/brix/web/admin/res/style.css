@@ -1140,6 +1140,16 @@ div.brix-admin div.brix-menu-tile-menu-list em {
 	padding: 2px;
 }
 
+div.brix-admin div.brix-menu-tile-editor td.brix-property-label {
+	font-weight: normal;
+}
+
+div.brix-admin div.brix-menu-tile-editor span.menu-tile-editor-hint {
+	font-size: 85%;
+	white-space: nowrap;
+	color: #666;
+}
+
 /**
  * Snapshots
  */

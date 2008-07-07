@@ -134,7 +134,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     	{
     		List<WorkspaceEntry> workspaces = getWorkspaces();
     		return workspaces.size() > 1 ||
-    		(workspaces.size() == 1 && workspaces.get(0).id.equals(getCurrentWorkspaceId()));
+    		(workspaces.size() == 1 && !workspaces.get(0).id.equals(getCurrentWorkspaceId()));
     	}
     }
 
