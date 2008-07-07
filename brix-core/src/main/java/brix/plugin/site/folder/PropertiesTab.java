@@ -5,11 +5,11 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.IModel;
 
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.picker.reference.ReferenceEditorConfiguration;
+import brix.plugin.site.picker.reference.ReferenceEditorPanel;
 import brix.web.ContainerFeedbackPanel;
 import brix.web.generic.BrixGenericPanel;
 import brix.web.model.ModelBuffer;
-import brix.web.picker.reference.ReferenceEditorConfiguration;
-import brix.web.picker.reference.ReferenceEditorPanel;
 import brix.web.reference.Reference;
 
 public class PropertiesTab extends BrixGenericPanel<BrixNode>

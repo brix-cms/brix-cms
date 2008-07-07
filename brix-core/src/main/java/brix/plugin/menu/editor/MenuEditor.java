@@ -16,8 +16,8 @@ import org.apache.wicket.model.ResourceModel;
 import brix.plugin.menu.ManageMenuPanel;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.Menu.ChildEntry;
+import brix.plugin.site.picker.reference.ReferenceEditorConfiguration;
 import brix.web.generic.BrixGenericPanel;
-import brix.web.picker.reference.ReferenceEditorConfiguration;
 import brix.web.reference.Reference;
 
 import com.inmethod.grid.IGridColumn;

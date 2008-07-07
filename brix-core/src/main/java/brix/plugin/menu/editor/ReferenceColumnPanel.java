@@ -4,9 +4,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
+import brix.plugin.site.picker.reference.ReferenceEditorConfiguration;
+import brix.plugin.site.picker.reference.ReferenceEditorPanel;
 import brix.web.generic.BrixGenericPanel;
-import brix.web.picker.reference.ReferenceEditorConfiguration;
-import brix.web.picker.reference.ReferenceEditorPanel;
 import brix.web.reference.Reference;
 import brix.web.util.AbstractModel;
 
