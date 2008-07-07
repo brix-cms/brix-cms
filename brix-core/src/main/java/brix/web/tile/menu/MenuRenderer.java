@@ -38,24 +38,25 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 		container.load(getModelObject());
 
 		Set<ChildEntry> selected = getSelectedItems(container.getMenu());
-		
-		// how many levels to skip to start rendering 
+
+		// how many levels to skip to start rendering
 		int skipLevels = container.getStartAtLevel() != null ? container.getStartAtLevel() : 0;
-		
+
 		// how many levels should be rendered
 		int renderLevels = container.getRenderLevels() != null ? container.getRenderLevels() : Integer.MAX_VALUE;
-		
+
 		Response response = getResponse();
 		renderEntry(container, container.getMenu().getRoot(), response, selected, skipLevels, renderLevels);
-	}	
+	}
 
-	private void renderEntry(MenuContainer container, Entry entry, Response response, Set<ChildEntry> selected, int skipLevels, int renderLevels)
+	private void renderEntry(MenuContainer container, Entry entry, Response response, Set<ChildEntry> selected,
+			int skipLevels, int renderLevels)
 	{
 		if (renderLevels <= 0)
 		{
 			return;
 		}
-		
+
 		if (skipLevels <= 0)
 		{
 			boolean outer = skipLevels == 0;
@@ -78,19 +79,20 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 			BrixNode node = getNode(e);
 			if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION))
 			{
-				renderChild(container, e, response, selected, skipLevels, renderLevels);	
-			}			
+				renderChild(container, e, response, selected, skipLevels, renderLevels);
+			}
 		}
 
 		if (skipLevels <= 0)
 		{
 			response.write("</ul>\n");
-		}		
+		}
 	}
-	
+
 	private BrixNode getNode(ChildEntry entry)
 	{
-		if (entry.getReference() != null && !entry.getReference().isEmpty() && entry.getReference().getType() == Type.NODE)
+		if (entry.getReference() != null && !entry.getReference().isEmpty()
+				&& entry.getReference().getType() == Type.NODE)
 		{
 			return entry.getReference().getNodeModel().getObject();
 		}
@@ -107,14 +109,14 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 			}
 		}
 	}
-	
+
 	private String getUrl(ChildEntry entry)
 	{
 		if (entry.getReference() != null && !entry.getReference().isEmpty())
 		{
 			return entry.getReference().generateUrl();
 		}
-		else 
+		else
 		{
 			List<ChildEntry> children = entry.getChildren();
 			if (children != null && !children.isEmpty())
@@ -124,30 +126,47 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 			else
 			{
 				return "#";
-			}	
-		}		
+			}
+		}
 	}
 
-	private void renderChild(MenuContainer container, ChildEntry entry, Response response, Set<ChildEntry> selectedSet, int skipLevels, int renderLevels)
-	{	
+	private boolean anyChildSelected(ChildEntry entry, Set<ChildEntry> selectedSet)
+	{
+		if (entry.getChildren() != null)
+		{
+			for (ChildEntry e : entry.getChildren())
+			{
+				if (selectedSet.contains(e))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private void renderChild(MenuContainer container, ChildEntry entry, Response response, Set<ChildEntry> selectedSet,
+			int skipLevels, int renderLevels)
+	{
 		boolean selected = selectedSet.contains(entry);
 
 		boolean anyChildren = selected && anyChildren(entry);
-		
+
 		if (skipLevels <= 0)
-		{		
+		{
 			String klass = "";
-	
+
 			if (selected && !Strings.isEmpty(container.getSelectedItemStyleClass()))
 			{
 				klass = container.getSelectedItemStyleClass();
 			}
-			
-			if (anyChildren && selected && !Strings.isEmpty(container.getSelectedItemWithChildrenStyleClass()))
+
+			if (anyChildren && selected && anyChildSelected(entry, selectedSet)
+					&& !Strings.isEmpty(container.getItemWithSelectedChildStyleClass()))
 			{
-				klass = container.getSelectedItemWithChildrenStyleClass();
+				klass = container.getItemWithSelectedChildStyleClass();
 			}
-	
+
 			if (!Strings.isEmpty(entry.getCssClass()))
 			{
 				if (!Strings.isEmpty(klass))
@@ -156,37 +175,37 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 				}
 				klass += entry.getCssClass();
 			}
-	
+
 			response.write("\n<li");
-	
+
 			if (!Strings.isEmpty(klass))
 			{
 				response.write(" class=\"");
 				response.write(klass);
 				response.write("\"");
 			}
-	
+
 			response.write(">");
-	
+
 			final String url = getUrl(entry);
-	
+
 			response.write("<a href='");
 			response.write(url);
 			response.write("'><span>");
-	
+
 			// TODO. escape or not (probably a property would be nice?
-	
+
 			response.write(entry.getTitle());
-	
+
 			response.write("</span></a>");
 		}
 
 		// only decrement skip levels for child if current is begger than 0
 		int childSkipLevels = skipLevels - 1;
-		
+
 		// only decrement render levels when we are already rendering
 		int childRenderLevels = skipLevels <= 0 ? renderLevels - 1 : renderLevels;
-		
+
 		if (anyChildren)
 		{
 			renderEntry(container, entry, response, selectedSet, childSkipLevels, childRenderLevels);
@@ -197,7 +216,7 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 			response.write("</li>\n");
 		}
 	}
-	
+
 	private boolean anyChildren(ChildEntry entry)
 	{
 		if (entry.getChildren() != null)
@@ -234,10 +253,11 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 
 		return eq;
 	}
-	
+
 	private boolean comparePageParameters(BrixPageParameters page, BrixPageParameters fromReference)
 	{
-		if (fromReference == null || (fromReference.getIndexedParamsCount() == 0 && fromReference.getQueryParamKeys().isEmpty()))
+		if (fromReference == null
+				|| (fromReference.getIndexedParamsCount() == 0 && fromReference.getQueryParamKeys().isEmpty()))
 		{
 			return true;
 		}

@@ -39,7 +39,7 @@ public class MenuContainer implements IDetachable
 
 	private String selectedItemStyleClass;
 
-	private String selectedItemWithChildrenStyleClass;
+	private String itemWithSelectedChildStyleClass;
 
 	private Integer startAtLevel;
 
@@ -75,14 +75,14 @@ public class MenuContainer implements IDetachable
 		this.selectedItemStyleClass = selectedItemStyleClass;
 	}
 
-	public void setSelectedItemWithChildrenStyleClass(String selectedItemWithChildrenStyleClass)
+	public void setItemWithSelectedChildStyleClass(String itemWithSelecteChildStyleClass)
 	{
-		this.selectedItemWithChildrenStyleClass = selectedItemWithChildrenStyleClass;
+		this.itemWithSelectedChildStyleClass = itemWithSelecteChildStyleClass;
 	}
 
-	public String getSelectedItemWithChildrenStyleClass()
+	public String getItemWithSelectedChildStyleClass()
 	{
-		return selectedItemWithChildrenStyleClass;
+		return itemWithSelectedChildStyleClass;
 	}
 
 	public Integer getStartAtLevel()
@@ -111,7 +111,7 @@ public class MenuContainer implements IDetachable
 
 	private static final String PROP_SELECTED_ITEM_STYLE_CLASS = "selectedItemStyleClass";
 
-	private static final String PROP_SELECTED_ITEM_WITH_CHILDREN_STYLE_CLASS = "selectedItemWithChildrenStyleClass";
+	private static final String PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS = "itemWithSelectedChildStyleClass";
 
 	private static final String PROP_MENU = "menu";
 
@@ -124,7 +124,7 @@ public class MenuContainer implements IDetachable
 		node.setProperty(PROP_INNER_CONTAINER_STYLE_CLASS, getInnerContainerStyleClass());
 		node.setProperty(PROP_OUTER_CONTAINER_STYLE_CLASS, getOuterContainerStyleClass());
 		node.setProperty(PROP_SELECTED_ITEM_STYLE_CLASS, getSelectedItemStyleClass());
-		node.setProperty(PROP_SELECTED_ITEM_WITH_CHILDREN_STYLE_CLASS, getSelectedItemWithChildrenStyleClass());
+		node.setProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS, getItemWithSelectedChildStyleClass());
 		node.setProperty(PROP_MENU, getMenuNode());
 
 		if (getStartAtLevel() == null)
@@ -160,9 +160,9 @@ public class MenuContainer implements IDetachable
 		{
 			setSelectedItemStyleClass(node.getProperty(PROP_SELECTED_ITEM_STYLE_CLASS).getString());
 		}
-		if (node.hasProperty(PROP_SELECTED_ITEM_WITH_CHILDREN_STYLE_CLASS))
+		if (node.hasProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS))
 		{
-			setSelectedItemWithChildrenStyleClass(node.getProperty(PROP_SELECTED_ITEM_WITH_CHILDREN_STYLE_CLASS)
+			setItemWithSelectedChildStyleClass(node.getProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS)
 					.getString());
 		}
 		if (node.hasProperty(PROP_MENU))
