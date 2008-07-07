@@ -158,7 +158,7 @@ public class MenuEditor extends BrixGenericPanel<Menu>
 		tg.setClickRowToDeselect(true);
 		tg.setSelectToEdit(false);
 		tree.setRootLess(true);
-		tg.setContentHeight(20, SizeUnit.EM);
+		tg.setContentHeight(34, SizeUnit.EM);
 
 		tree.getTreeState().expandAll();
 		tree.getTreeState().setAllowSelectMultiple(false);
