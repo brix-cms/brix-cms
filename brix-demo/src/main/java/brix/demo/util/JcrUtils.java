@@ -47,7 +47,9 @@ public class JcrUtils
         if (url == null || url.trim().length() == 0)
         {
             // create workspace manager for a file system repository
-            return new JackrabbitWorkspaceManager(sessionFactory).initialize();
+            JackrabbitWorkspaceManager mgr = new JackrabbitWorkspaceManager(sessionFactory);
+            mgr.initialize();
+            return mgr;
         }
         else if (url.startsWith("rmi://"))
         {
@@ -83,7 +85,7 @@ public class JcrUtils
         else
         {
             throw new RuntimeException(
-                "Unsupported repository location url. Only prefix rmi:// and file:// are supported");
+                    "Unsupported repository location url. Only prefix rmi:// and file:// are supported");
         }
     }
 
@@ -137,7 +139,7 @@ public class JcrUtils
         try
         {
             ClientRepositoryFactory factory = new ClientRepositoryFactory(
-                new JackrabbitClientAdapterFactory());
+                    new JackrabbitClientAdapterFactory());
             Repository repository = factory.getRepository(url);
             return repository;
         }

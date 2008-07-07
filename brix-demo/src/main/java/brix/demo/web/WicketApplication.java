@@ -2,6 +2,7 @@ package brix.demo.web;
 
 import javax.jcr.ImportUUIDBehavior;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
@@ -16,6 +17,7 @@ import brix.jcr.JcrSessionFactory;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
+import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 
@@ -43,6 +45,16 @@ public final class WicketApplication extends AbstractWicketApplication
         return new BrixRequestCycleProcessor(brix);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Class< ? extends Page> getHomePage()
+    {
+        // use special class so that the URL coding strategy knows we want to go home
+        // it is not possible to just return null here because some pages (e.g. expired page)
+        // rely on knowing the home page
+        return BrixNodePageUrlCodingStrategy.HomePage.class;
+    }
+    
     /** {@inheritDoc} */
     @Override
     protected void init()

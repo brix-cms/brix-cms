@@ -25,7 +25,7 @@ import brix.workspace.WorkspaceManager;
  * @author igor.vaynberg
  * 
  */
-public class AbstractWicketApplication extends WebApplication
+public abstract class AbstractWicketApplication extends WebApplication
 {
     /** logger */
     private static final Logger logger = LoggerFactory.getLogger(AbstractWicketApplication.class);
@@ -46,22 +46,11 @@ public class AbstractWicketApplication extends WebApplication
 
     /** {@inheritDoc} */
     @Override
-    public Class< ? extends Page> getHomePage()
-    {
-    	// use special class so that the URL coding strategy knows we want to go home
-    	// it is not possible to just return null here because some pages (e.g. expired page)
-    	// rely on knowing the home page
-    	return BrixNodePageUrlCodingStrategy.HomePage.class;
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public final RequestCycle newRequestCycle(Request request, Response response)
     {
         // install request cycle that will cleanup #sessionFactory at the end of request
         return new WicketRequestCycle(this, (WebRequest)request, response);
     }
-
 
     @Override
     protected void init()
