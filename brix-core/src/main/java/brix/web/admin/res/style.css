@@ -289,6 +289,7 @@ div.brix-admin div.brix-site-tree-container {
 	float: left;
 	width: 16.3em;
 	overflow: auto;
+	*overflow-x: scroll;
 	border: 1px solid #e0e0e0;
 	margin-left: 0.5em;
 	_margin-left: 0.2em;
@@ -297,6 +298,10 @@ div.brix-admin div.brix-site-tree-container {
 
 div.brix-admin div.brix-site-tree-container table.wicket-tree-content {
 	width: 100%;
+	
+}
+
+div.brix-admin div.brix-site-tree-container table.wicket-tree-content * {
 	white-space: nowrap;
 }
 
@@ -626,10 +631,10 @@ div.brix-admin div.brix-site-new-tile div.brix-site-tile-editor-container {
  */
 
 div.brix-admin div.brix-feedback {
-	*height: 0.1%; /* needs layout in IE, helps some redrawing problems on ajax refresh */ 
+	z-index: 10000;
 }
 
-div.brix-admin div.brix-feedback ul {	
+div.brix-admin div.brix-feedback ul {
 	background-color: #FFFABF;
 	padding: 0.4em 0.5em;
 	margin: 0.2em;
@@ -1082,13 +1087,8 @@ div.brix-admin div.brix-menu-editor-panel {
 div.brix-admin table.brix-menu-editor {
 	width: 100%;
 	*width: auto; /* IE table layout bug */
-	table-layout: fixed;
+	table-layout: fixed;	
 }
-
-div.brix-admin table.brix-menu-editor td.brix-menu-editor-tree {
-	width: 50%;	
-}
-
 
 div.brix-admin div.brix-menu-editor-tree {
 	border: 1px solid #ccc;
