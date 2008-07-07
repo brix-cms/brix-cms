@@ -6,18 +6,22 @@ import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
+import brix.demo.ApplicationProperties;
+
 public class StartBrixDemo
 {
 
     public static void main(String[] args) throws Exception
     {
+        ApplicationProperties properties = new ApplicationProperties();
+
         Server server = new Server();
         SocketConnector connector = new SocketConnector();
         // Set some timeout options to make debugging easier.
         connector.setMaxIdleTime(1000 * 60 * 60);
         connector.setSoLingerTime(-1);
 
-        int port = Integer.getInteger("jetty.port", 80);
+        int port = Integer.getInteger("jetty.port", properties.getHttpPort());
         connector.setPort(port);
 
 
@@ -28,7 +32,7 @@ public class StartBrixDemo
         sslConnector.setPassword("password");
         sslConnector.setKeystore("src/test/java/brix/keystore");
 
-        port = Integer.getInteger("jetty.sslport", 443);
+        port = Integer.getInteger("jetty.sslport", properties.getHttpsPort());
         sslConnector.setPort(port);
 
 
