@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -15,13 +14,14 @@ import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
 import brix.web.tab.CachingAbstractTab;
+import brix.web.tab.IBrixTab;
 
 public class ConvertNodeTabFactory implements ManageNodeTabFactory
 {
 
-	public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
+	public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
 	{
-		List<ITab> result = new ArrayList<ITab>();
+		List<IBrixTab> result = new ArrayList<IBrixTab>();
 
 		if (hasEditPermission(nodeModel) && hasConverterForNode(nodeModel))
 		{
@@ -31,9 +31,9 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory
 		return result;
 	}
 
-	private static ITab newTab(final IModel<BrixNode> nodeModel)
+	private static IBrixTab newTab(final IModel<BrixNode> nodeModel)
 	{
-		return new CachingAbstractTab(new Model<String>("Convert"))
+		return new CachingAbstractTab(new Model<String>("Convert"), -1)
 		{
 			@Override
 			public Panel newPanel(String panelId)
@@ -61,10 +61,4 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory
 	{
 		return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);
 	}
-
-	public int getPriority()
-	{
-		return -1;
-	}
-
 }

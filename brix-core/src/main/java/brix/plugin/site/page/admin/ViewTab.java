@@ -1,15 +1,25 @@
 package brix.plugin.site.page.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.auth.Action.Context;
+import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.PreviewNodeIFrame;
 import brix.web.generic.BrixGenericPanel;
+import brix.web.tab.BrixTabbedPanel;
+import brix.web.tab.CachingAbstractTab;
+import brix.web.tab.IBrixTab;
 
 public class ViewTab extends BrixGenericPanel<BrixNode> {
 
@@ -22,7 +32,24 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
 
 		// add(new Label("content", new PropertyModel(model, "dataAsString")));
 
-		add(new PreviewNodeIFrame("preview", model));
+		List<IBrixTab> tabs = new ArrayList<IBrixTab>();
+		tabs.add(new CachingAbstractTab(new ResourceModel("textPreview")) {
+			@Override
+			public Panel newPanel(String panelId)
+			{
+				return new TextPreviewPanel(panelId);
+			}
+		});
+		
+		tabs.add(new CachingAbstractTab(new ResourceModel("pagePreview")) {
+			@Override
+			public Panel newPanel(String panelId)
+			{
+				return new IframePreviewPanel(panelId);
+			}
+		});
+		
+		add(new BrixTabbedPanel("previewTabbedPanel", tabs));
 		
 		add(new Link<Void>("edit") {
 			@Override
@@ -46,4 +73,36 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
 			}
 		});
 	}
+	
+	private class TextPreviewPanel extends Panel
+	{
+
+		public TextPreviewPanel(String id)
+		{
+			super(id);
+
+			IModel<String> labelModel = new Model<String>()
+			{
+				@Override
+				public String getObject()
+				{
+					BrixFileNode node = (BrixFileNode) ViewTab.this.getModel().getObject();
+					return node.getDataAsString();
+				}
+			};
+
+			add(new Label("label", labelModel));
+		}
+	}
+	
+	private class IframePreviewPanel extends Panel
+	{
+		public IframePreviewPanel(String id)
+		{
+			super(id);
+			add(new PreviewNodeIFrame("preview", ViewTab.this.getModel()));
+		}		
+	};
+	
+	
 }

@@ -3,7 +3,6 @@ package brix.plugin.webdavurl;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -13,6 +12,7 @@ import brix.Plugin;
 import brix.auth.Action;
 import brix.jcr.api.JcrSession;
 import brix.web.tab.AbstractWorkspaceTab;
+import brix.web.tab.IBrixTab;
 import brix.workspace.Workspace;
 
 public class WebdavUrlPlugin implements Plugin
@@ -43,9 +43,9 @@ public class WebdavUrlPlugin implements Plugin
         return false;
     }
 
-    public List<ITab> newTabs(IModel<Workspace> workspaceModel)
+    public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)
     {
-        ITab tabs[] = new ITab[] { new Tab(new Model<String>("Webdav"), workspaceModel) };
+        IBrixTab tabs[] = new IBrixTab[] { new Tab(new Model<String>("Webdav"), workspaceModel) };
         return Arrays.asList(tabs);
     }
 
@@ -53,7 +53,7 @@ public class WebdavUrlPlugin implements Plugin
     {
         public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
         {
-            super(title, workspaceModel);
+            super(title, workspaceModel, 10);
         }
 
         @Override

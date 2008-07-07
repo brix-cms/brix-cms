@@ -3,12 +3,10 @@ package brix.plugin.site.admin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.jcr.ReferentialIntegrityException;
 
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.link.Link;
@@ -23,6 +21,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SitePlugin;
 import brix.web.generic.BrixGenericPanel;
+import brix.web.tab.IBrixTab;
 import brix.web.util.PathLabel;
 
 public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
@@ -159,43 +158,19 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 		SitePlugin.get().selectNode(this, node, refresh);
 	}
 
-	private List<ITab> getTabs(IModel<BrixNode> nodeModel)
+	private List<IBrixTab> getTabs(IModel<BrixNode> nodeModel)
 	{
 		Collection<ManageNodeTabFactory> factories = nodeModel.getObject().getBrix().getConfig().getRegistry()
 				.lookupCollection(ManageNodeTabFactory.POINT);
+		
 		if (factories != null && !factories.isEmpty())
 		{
-			int tabCount = 0;
-			class Entry
-			{
-				ManageNodeTabFactory factory;
-				List<ITab> tabs;
-			}
-			;
-			List<Entry> list = new ArrayList<Entry>();
+			List<IBrixTab> result = new ArrayList<IBrixTab>();
 			for (ManageNodeTabFactory f : factories)
 			{
-				List<ITab> tabs = f.getManageNodeTabs(nodeModel);
-				if (tabs != null && !tabs.isEmpty())
-				{
-					Entry e = new Entry();
-					e.factory = f;
-					e.tabs = tabs;
-					tabCount += tabs.size();
-					list.add(e);
-				}
-			}
-			Collections.sort(list, new Comparator<Entry>()
-			{
-				public int compare(Entry o1, Entry o2)
-				{
-					return o2.factory.getPriority() - o1.factory.getPriority();
-				}
-			});
-			List<ITab> result = new ArrayList<ITab>(tabCount);
-			for (Entry e : list)
-			{
-				result.addAll(e.tabs);
+				List<IBrixTab> tabs = f.getManageNodeTabs(nodeModel);
+				if (tabs != null)
+					result.addAll(tabs);
 			}
 			return result;
 		}

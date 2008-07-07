@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.wicket.ResourceReference;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -18,6 +16,7 @@ import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.web.tab.AbstractWorkspaceTab;
+import brix.web.tab.IBrixTab;
 import brix.workspace.Workspace;
 
 public class MenuPlugin implements Plugin
@@ -49,9 +48,9 @@ public class MenuPlugin implements Plugin
         return get(Brix.get());
     }
     
-    public List<ITab> newTabs(final IModel<Workspace> workspaceModel)
+    public List<IBrixTab> newTabs(final IModel<Workspace> workspaceModel)
     {
-    	ITab tabs[] = new ITab[] {
+    	IBrixTab tabs[] = new IBrixTab[] {
     			new Tab(new Model<String>("Menus"), workspaceModel)
     	};
     	return Arrays.asList(tabs);
@@ -61,7 +60,7 @@ public class MenuPlugin implements Plugin
 	{
 		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
 		{
-			super(title, workspaceModel);
+			super(title, workspaceModel, 100);
 		}
 
 		@Override

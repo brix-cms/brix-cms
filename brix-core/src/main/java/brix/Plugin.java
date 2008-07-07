@@ -7,6 +7,7 @@ import org.apache.wicket.model.IModel;
 
 import brix.jcr.api.JcrSession;
 import brix.registry.ExtensionPoint;
+import brix.web.tab.IBrixTab;
 import brix.workspace.Workspace;
 
 /**
@@ -59,7 +60,7 @@ public interface Plugin
 	 * @return list of {@link ITab} instances or null if this plugin doesn't
 	 *         contribute any tabs
 	 */
-	List<ITab> newTabs(IModel<Workspace> workspaceModel);
+	List<IBrixTab> newTabs(IModel<Workspace> workspaceModel);
 
 	/**
 	 * Initializes the given workspace. If this plugin can handle the workspace

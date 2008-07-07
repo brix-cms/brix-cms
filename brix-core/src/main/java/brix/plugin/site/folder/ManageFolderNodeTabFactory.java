@@ -3,8 +3,6 @@ package brix.plugin.site.folder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -13,11 +11,13 @@ import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.ManageNodeTabFactory;
 import brix.plugin.site.SitePlugin;
+import brix.web.tab.CachingAbstractTab;
+import brix.web.tab.IBrixTab;
 
 public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 {
 
-	public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
+	public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
 	{
 		if (nodeModel.getObject().isFolder())
 		{
@@ -29,19 +29,15 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 		}
 	}
 
-	public int getPriority()
-	{
-		return 0;
-	}
 
-	public static List<ITab> getTabs(final IModel<BrixNode> folderModel)
+	public static List<IBrixTab> getTabs(final IModel<BrixNode> folderModel)
 	{
-		List<ITab> tabs = new ArrayList<ITab>(2);
-		tabs.add(new AbstractTab(new Model<String>("Listing"))
+		List<IBrixTab> tabs = new ArrayList<IBrixTab>(2);
+		tabs.add(new CachingAbstractTab(new Model<String>("Listing"), 100)
 		{
 
 			@Override
-			public Panel getPanel(String panelId)
+			public Panel newPanel(String panelId)
 			{
 				return new ListFolderNodesTab(panelId, folderModel);
 			}
@@ -53,11 +49,11 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
 			}
 
 		});
-		tabs.add(new AbstractTab(new Model<String>("Properties"))
+		tabs.add(new CachingAbstractTab(new Model<String>("Properties"))
 		{
 
 			@Override
-			public Panel getPanel(String panelId)
+			public Panel newPanel(String panelId)
 			{
 				return new PropertiesTab(panelId, folderModel);
 			}

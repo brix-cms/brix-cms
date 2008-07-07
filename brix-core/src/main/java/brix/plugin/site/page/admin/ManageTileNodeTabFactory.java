@@ -3,8 +3,6 @@ package brix.plugin.site.page.admin;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -16,10 +14,12 @@ import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.PageSiteNodePlugin;
 import brix.plugin.site.page.TemplateSiteNodePlugin;
 import brix.plugin.site.page.tile.admin.TilesPanel;
+import brix.web.tab.CachingAbstractTab;
+import brix.web.tab.IBrixTab;
 
 public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 {
-    public List<ITab> getManageNodeTabs(IModel<BrixNode> nodeModel)
+    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
     {
         String type = nodeModel.getObject().getNodeType();
         if (PageSiteNodePlugin.TYPE.equals(type) || TemplateSiteNodePlugin.TYPE.equals(type))
@@ -32,22 +32,17 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
         }
     }
 
-    public int getPriority()
+    private static List<IBrixTab> getTabs(final IModel<BrixNode> nodeModel)
     {
-        return 0;
-    }
-
-    private static List<ITab> getTabs(final IModel<BrixNode> nodeModel)
-    {
-        List<ITab> tabs = new ArrayList<ITab>();
+        List<IBrixTab> tabs = new ArrayList<IBrixTab>();
         
         // TODO: Externalize strings
         
-        tabs.add(new AbstractTab(new Model<String>("View"))
+        tabs.add(new CachingAbstractTab(new Model<String>("View"))
         {
 
             @Override
-            public Panel getPanel(String panelId)
+            public Panel newPanel(String panelId)
             {
                 return new ViewTab(panelId, nodeModel);
             }
@@ -60,11 +55,11 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 
         });
 
-        tabs.add(new AbstractTab(new Model<String>("Tiles"))
+        tabs.add(new CachingAbstractTab(new Model<String>("Tiles"))
         {
 
             @Override
-            public Panel getPanel(String panelId)
+            public Panel newPanel(String panelId)
             {
                 return new TilesPanel(panelId, nodeModel);
             }
@@ -77,11 +72,11 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 
         });
         
-        tabs.add(new AbstractTab(new Model<String>("Variables"))
+        tabs.add(new CachingAbstractTab(new Model<String>("Variables"))
         {
 
             @Override
-            public Panel getPanel(String panelId)
+            public Panel newPanel(String panelId)
             {
                 return new VariablesPanel(panelId, nodeModel);
             }

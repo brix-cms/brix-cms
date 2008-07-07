@@ -3,8 +3,6 @@ package brix.web.picker.reference;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -12,7 +10,9 @@ import org.apache.wicket.model.ResourceModel;
 import brix.web.generic.BrixGenericPanel;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.reference.Reference;
+import brix.web.tab.BrixAjaxTabbedPanel;
 import brix.web.tab.CachingAbstractTab;
+import brix.web.tab.IBrixTab;
 
 public class ReferenceEditor extends BrixGenericPanel<Reference>
 {
@@ -38,7 +38,7 @@ public class ReferenceEditor extends BrixGenericPanel<Reference>
 
     private void init()
     {
-        List<ITab> tabs = new ArrayList<ITab>();
+        List<IBrixTab> tabs = new ArrayList<IBrixTab>();
         tabs.add(new CachingAbstractTab(new ResourceModel("reference"))
         {
             @Override
@@ -103,7 +103,7 @@ public class ReferenceEditor extends BrixGenericPanel<Reference>
             }
         });
 
-        add(new AjaxTabbedPanel("tabbedPanel", tabs));
+        add(new BrixAjaxTabbedPanel("tabbedPanel", tabs));
     }
 
     private final ReferenceEditorConfiguration configuration;

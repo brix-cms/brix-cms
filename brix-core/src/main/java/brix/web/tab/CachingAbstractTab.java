@@ -1,10 +1,9 @@
 package brix.web.tab;
 
-import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-public abstract class CachingAbstractTab extends AbstractTab 
+public abstract class CachingAbstractTab extends AbstractBrixTab 
 {
 
     public CachingAbstractTab(IModel<String> title)
@@ -12,6 +11,10 @@ public abstract class CachingAbstractTab extends AbstractTab
         super(title);
     }
 
+    public CachingAbstractTab(IModel<String> title, int priority)
+    {
+        super(title, priority);
+    }
 
     public boolean isVisible()
     {

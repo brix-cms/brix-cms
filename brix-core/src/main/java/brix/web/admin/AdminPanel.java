@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.behavior.HeaderContributor;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
@@ -14,6 +13,8 @@ import org.apache.wicket.model.IModel;
 import brix.Brix;
 import brix.Plugin;
 import brix.web.generic.BrixGenericPanel;
+import brix.web.tab.BrixTabbedPanel;
+import brix.web.tab.IBrixTab;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 
@@ -43,19 +44,19 @@ public class AdminPanel extends BrixGenericPanel<Workspace>
     		tabbedPanel.remove();
     	}
     	
-    	List<ITab> tabs = new ArrayList<ITab>();
+    	List<IBrixTab> tabs = new ArrayList<IBrixTab>();
     	
     	Brix brix = Brix.get();
     	for (Plugin p : brix.getPlugins())
     	{
-    		List<ITab> pluginTabs = p.newTabs(getModel());
+    		List<IBrixTab> pluginTabs = p.newTabs(getModel());
     		if (tabs != null)
     		{
     			tabs.addAll(pluginTabs);
     		}    		
     	};
     	
-    	tabbedPanel = new TabbedPanel("tabbedPanel", tabs) 
+    	tabbedPanel = new BrixTabbedPanel("tabbedPanel", tabs) 
     	{
     		@Override
     		protected String getTabContainerCssClass()

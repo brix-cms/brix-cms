@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -43,6 +42,7 @@ import brix.plugin.site.page.global.GlobalVariablesPanel;
 import brix.plugin.site.page.tile.TileContainerFacet;
 import brix.plugin.site.resource.ResourceNodePlugin;
 import brix.web.tab.AbstractWorkspaceTab;
+import brix.web.tab.IBrixTab;
 import brix.workspace.Workspace;
 
 public class SitePlugin implements Plugin
@@ -57,9 +57,9 @@ public class SitePlugin implements Plugin
         return ID;
     }
 
-    public List<ITab> newTabs(final IModel<Workspace> workspaceModel)
+    public List<IBrixTab> newTabs(final IModel<Workspace> workspaceModel)
     {
-        ITab tabs[] = new ITab[] { new SiteTab(new Model<String>("Site"), workspaceModel),
+        IBrixTab tabs[] = new IBrixTab[] { new SiteTab(new Model<String>("Site"), workspaceModel),
             new GlobalTilesTab(new Model<String>("Tiles"), workspaceModel),
             new GlobalVariablesTab(new Model<String>("Variables"), workspaceModel) };
         return Arrays.asList(tabs);
@@ -69,7 +69,7 @@ public class SitePlugin implements Plugin
     {
         public SiteTab(IModel<String> title, IModel<Workspace> workspaceModel)
         {
-            super(title, workspaceModel);
+            super(title, workspaceModel, 1000);
         }
 
         @Override
@@ -83,7 +83,7 @@ public class SitePlugin implements Plugin
     {
         public GlobalTilesTab(IModel<String> title, IModel<Workspace> workspaceModel)
         {
-            super(title, workspaceModel);
+            super(title, workspaceModel, 999);
         }
 
         @Override
@@ -97,7 +97,7 @@ public class SitePlugin implements Plugin
     {
         public GlobalVariablesTab(IModel<String> title, IModel<Workspace> workspaceModel)
         {
-            super(title, workspaceModel);
+            super(title, workspaceModel, 998);
         }
 
         @Override

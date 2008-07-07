@@ -124,7 +124,7 @@ div.brix-admin div.imxt-body-container1 {
 /**
  * Reset styles from biggie tab row
  */
-div.brix-admin div.tab-row {
+div.brix-admin div.brix-tab-row {
 	width: auto;
 	height: auto;
 	float: none;
@@ -133,7 +133,7 @@ div.brix-admin div.tab-row {
 	padding: 0px;
 }
 
-div.brix-admin div.tab-row ul {
+div.brix-admin div.brix-tab-row ul {
 	width: auto;
 	height: auto;
 	border-bottom-width: 0px;
@@ -143,14 +143,14 @@ div.brix-admin div.tab-row ul {
 	float: none;
 }
 
-div.brix-admin div.tab-row ul li {
+div.brix-admin div.brix-tab-row ul li {
 	margin: 0px;
 	padding: 0px;
 	display: block;	
 }
 
 	
-div.brix-admin div.tab-row ul li a {
+div.brix-admin div.brix-tab-row ul li a {
 	color: inherit;
 	background: inherit;
 	padding: 0px;
@@ -159,12 +159,12 @@ div.brix-admin div.tab-row ul li a {
 	font-weight: normal;
 }
 	
-div.brix-admin div.tab-row ul li.selected a {
+div.brix-admin div.brix-tab-row ul li.selected a {
 	background: inherit;
 	padding: 0px;
 }
 
-div.brix-admin div.tab-row ul li a span {
+div.brix-admin div.brix-tab-row ul li a span {
 	color: inherit;
 }
 
@@ -687,7 +687,7 @@ div.brix-admin div.brix-tabbed-panel1 {
 	
 }
  
-div.brix-admin div.brix-tabbed-panel1 div.tab-row {	
+div.brix-admin div.brix-tabbed-panel1 div.brix-tab-row {	
 	overflow: hidden;
 	_height: 0.1%;
 	border-top: 1px solid #7894BB;	
@@ -698,23 +698,23 @@ div.brix-admin div.brix-tabbed-panel1 div.tab-row {
 	background-image: url("bg-grad1.gif");
 }
 
-div.brix-admin div.brix-tabbed-panel1 div.tab-row ul {
+div.brix-admin div.brix-tabbed-panel1 div.brix-tab-row ul {
 	margin-left: 1em;
 }
 
-div.brix-admin div.brix-tabbed-panel1 div.tab-row li {
+div.brix-admin div.brix-tabbed-panel1 div.brix-tab-row li {
 	float: left;
 	margin-right: 0.5em;		
 }
 
-div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li a {
+div.brix-admin div.brix-tabbed-panel1 div.brix-tab-row ul li a {
 	display: block;
 	padding: 0.2em 0.5em;
 	color: black;
 	background: none;
 }
 	
-div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li.selected a {
+div.brix-admin div.brix-tabbed-panel1 div.brix-tab-row ul li.selected a {
 	font-weight: bold;
 	border: 1px solid #7894BB;
 	border-bottom-width: 0px;
@@ -722,9 +722,59 @@ div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li.selected a {
 	background-color: white;	
 }
 
-div.brix-admin div.brix-tabbed-panel1 div.tab-row ul li a span {
+div.brix-admin div.brix-tabbed-panel1 div.brix-tab-row ul li a span {
 	color: black !important;
 }
+
+
+/*
+ * Tabbed Panel 2
+ */
+
+div.brix-admin div.brix-tabbed-panel2 {
+	
+}
+ 
+div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row {	
+	overflow: hidden;
+	_height: 0.1%;
+	border-bottom: 1px solid #7894BB;	
+}
+
+div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row ul {
+	margin-left: 1em;
+}
+
+div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row li {
+	float: left;
+	margin-right: 0.5em;		
+}
+
+div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row ul li a {
+	display: block;
+	padding: 0.2em 0.5em;
+	padding-bottom: 0.3em;
+	background: none;	
+	border: 1px solid #ddd;
+	border-bottom-width: 0px;
+	color: blue;
+}
+
+div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row ul li a:hover {
+	text-decoration: underline;
+}
+
+
+div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row ul li.selected a {	
+	border: 1px solid #7894BB;
+	border-bottom-width: 0px;
+	color: black;
+	background-position: center;
+	background-repeat: repeat-x;
+	background-color: #E6F6FF;
+	background-image: url("bg-grad1.gif");	
+}
+
 
 /*
  * Node Picker, Reference editor
@@ -841,23 +891,22 @@ div.brix-admin div.brix-site-view-text-panel {
 	width: 100%;
 }
 
-div.brix-admin div.brix-site-view-text-panel div.brix-site-view-text-container
+div.brix-admin  div.brix-site-view-text-container
 {
 	padding-bottom: 2px; 
 	border: 1px dotted #aaa;	
-	margin-top: 0.5em;
+	margin-top: 0.5em;	
 }
 
-div.brix-admin div.brix-site-view-text-panel div.brix-site-view-text-container div {	
+div.brix-admin div.brix-site-view-text-container div {	
 	overflow: auto; 
 	width: 100%;
-	max-height: 35em;
-	_height: 35em;
+	height: 35em;
 }
 
-div.brix-admin div.brix-site-view-text-panel div.brix-site-view-text-container pre {
+div.brix-admin  div.brix-site-view-text-container pre {
 	display:block; 	
-	padding: 1px;
+	padding: 1px;	
 }
 
 div.brix-admin div.brix-site-view-text-top {

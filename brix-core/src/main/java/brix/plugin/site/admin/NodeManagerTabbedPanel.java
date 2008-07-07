@@ -2,17 +2,18 @@ package brix.plugin.site.admin;
 
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import brix.web.tab.BrixTabbedPanel;
+import brix.web.tab.IBrixTab;
 
 public class NodeManagerTabbedPanel extends Panel
 {
-	public NodeManagerTabbedPanel(String id, List<ITab> tabs)
+	public NodeManagerTabbedPanel(String id, List<IBrixTab> tabs)
 	{
 		super(id);
 		
-		add(new TabbedPanel("tabbedPanel", tabs) {
+		add(new BrixTabbedPanel("tabbedPanel", tabs) {
 			@Override
 			protected String getTabContainerCssClass()
 			{				

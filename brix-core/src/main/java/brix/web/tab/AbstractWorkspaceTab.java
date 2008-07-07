@@ -17,17 +17,27 @@ public abstract class AbstractWorkspaceTab extends CachingAbstractTab implements
         workspaceModel.detach();
     }
 
+    public AbstractWorkspaceTab(IModel<String> title, Workspace workspace, int priority)
+    {
+        this(title, new WorkspaceModel(workspace), priority);
+    }
+
+    public AbstractWorkspaceTab(IModel<String> title, IModel<Workspace> workspaceModel, int priority)
+    {
+        super(title, priority);
+        this.workspaceModel = workspaceModel;
+    }
+
     public AbstractWorkspaceTab(IModel<String> title, Workspace workspace)
     {
-        this(title, new WorkspaceModel(workspace));
+        this(title, new WorkspaceModel(workspace), 0);
     }
 
     public AbstractWorkspaceTab(IModel<String> title, IModel<Workspace> workspaceModel)
     {
-        super(title);
+        super(title, 0);
         this.workspaceModel = workspaceModel;
     }
-
 
     public IModel<Workspace> getWorkspaceModel()
     {
