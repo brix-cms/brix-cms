@@ -752,10 +752,11 @@ div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row li {
 
 div.brix-admin div.brix-tabbed-panel2 div.brix-tab-row ul li a {
 	display: block;
-	padding: 0.2em 0.5em;
-	padding-bottom: 0.3em;
+	padding: 0.1em 0.5em;
+	padding-bottom: 0.2em;
 	background: none;	
 	border: 1px solid #ddd;
+	background-color: #f9f9f9;
 	border-bottom-width: 0px;
 	color: blue;
 }
