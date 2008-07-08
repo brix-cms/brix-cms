@@ -33,11 +33,9 @@ import brix.plugin.site.page.PageNode;
 import brix.plugin.site.page.TemplateNode;
 import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.tile.Tile;
-import brix.plugin.webdavurl.WebdavUrlPlugin;
 import brix.registry.ExtensionPointRegistry;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.PageParametersAwareEnabler;
-import brix.web.tile.menu.MenuTile;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
@@ -78,7 +76,6 @@ public abstract class Brix
         registry.register(JcrNodeWrapperFactory.POINT, PageNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, TemplateNode.FACTORY);
 
-        registry.register(Tile.POINT, new MenuTile());
         registry.register(Tile.POINT, new PageTile());
 
         registry.register(Plugin.POINT, new SitePlugin(this));
@@ -86,7 +83,6 @@ public abstract class Brix
 // registry.register(Plugin.POINT, new SnapshotPlugin(this));
         // registry.register(Plugin.POINT, new PrototypePlugin(this));
         // registry.register(Plugin.POINT, new PublishingPlugin(this));
-        registry.register(Plugin.POINT, new WebdavUrlPlugin());
 
 
     }

@@ -8,9 +8,10 @@ import brix.demo.web.tile.stockquote.stateful.StatefulStockQuoteTile;
 import brix.demo.web.tile.stockquote.stateless.StatelessStockQuoteTile;
 import brix.demo.web.tile.time.TimeTile;
 import brix.plugin.menu.MenuPlugin;
-import brix.plugin.prototype.PrototypePlugin;
+import brix.plugin.menu.tile.MenuTile;
 import brix.plugin.site.page.tile.Tile;
 import brix.plugin.snapshot.SnapshotPlugin;
+import brix.plugin.webdavurl.WebdavUrlPlugin;
 
 /**
  * Subclass of {@link Brix} that configures demo-specific settings such as plugins, tiles, etc.
@@ -32,12 +33,13 @@ public class DemoBrix extends Brix
         // register plugins
         config.getRegistry().register(Plugin.POINT, new MenuPlugin(this));
         config.getRegistry().register(Plugin.POINT, new SnapshotPlugin(this));
-        config.getRegistry().register(Plugin.POINT, new PrototypePlugin(this));
+        config.getRegistry().register(Plugin.POINT, new WebdavUrlPlugin());
+        config.getRegistry().register(Tile.POINT, new MenuTile());
 
         // register tiles
-        getConfig().getRegistry().register(Tile.POINT, new TimeTile());
-        getConfig().getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
-        getConfig().getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
+        config.getRegistry().register(Tile.POINT, new TimeTile());
+        config.getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
+        config.getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
     }
 
     /** {@inheritDoc} */
