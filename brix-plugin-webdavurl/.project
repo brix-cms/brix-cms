@@ -1,20 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>brix-plugin-webdavurl</name>
-  <comment>Brix CMS aims to provide a fully featured CMS that is
+	<name>brix-plugin-webdavurl</name>
+	<comment>Brix CMS aims to provide a fully featured CMS that is
 		easily embeddable into any Wicket-based [1] web application [1] http://wicket.apache.org/</comment>
-  <projects>
-    <project>brix-codepress</project>
-    <project>brix-core</project>
-    <project>brix-tinymce</project>
-    <project>brix-workspace</project>
-    <project>brix-wrapper</project>
-  </projects>
-  <buildSpec>
-    <buildCommand>
-      <name>org.eclipse.jdt.core.javabuilder</name>
-    </buildCommand>
-  </buildSpec>
-  <natures>
-    <nature>org.eclipse.jdt.core.javanature</nature>
-  </natures>
+	<projects>
+		<project>brix-codepress</project>
+		<project>brix-core</project>
+		<project>brix-tinymce</project>
+		<project>brix-workspace</project>
+		<project>brix-wrapper</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
 </projectDescription>
