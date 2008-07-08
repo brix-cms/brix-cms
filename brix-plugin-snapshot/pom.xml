@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>brix</groupId>
   <artifactId>brix-plugin-snapshot</artifactId>
-  <name>brix-plugin-snapshot</name>
+  <name>Brix Site Snapshot/Backup Plugin</name>
   <version>1.0-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <dependencies>
