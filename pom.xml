@@ -11,8 +11,8 @@
 	<url>http://brix-cms.googlecode.com</url>
 	<modules>
 		<module>brix-core</module>
-		<module>brix-codepress</module>
-		<module>brix-tinymce</module>
+		<module>brix-markupeditor-codepress</module>
+		<module>brix-markupeditor-tinymce</module>
 		<module>brix-wrapper</module>
 		<module>brix-demo</module>
 		<module>brix-rmiserver</module>
@@ -48,12 +48,12 @@
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
-				<artifactId>brix-codepress</artifactId>
+				<artifactId>brix-markupeditor-codepress</artifactId>
 				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
-				<artifactId>brix-tinymce</artifactId>
+				<artifactId>brix-markupeditor-tinymce</artifactId>
 				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>

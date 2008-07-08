@@ -6,7 +6,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>brix-tinymce</artifactId>
+	<artifactId>brix-markupeditor-tinymce</artifactId>
 	<name>Brix TinyMCE Integration</name>
 	<description>Makes TinyMCE[1] available as a Wicket component for
 		integration into admin panel [1] http://tinymce.moxiecode.com/</description>
