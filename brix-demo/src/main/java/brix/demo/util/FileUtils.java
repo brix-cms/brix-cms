@@ -29,14 +29,14 @@ public class FileUtils
      * 
      * @return
      */
-    public static String getTemporaryFileName()
+    public static String getDefaultRepositoryFileName()
     {
         String fileName = System.getProperty("java.io.tmpdir");
         if (!fileName.endsWith(File.separator))
         {
             fileName += File.separator;
         }
-        fileName += UUID.randomUUID().toString();
+        fileName += "brix-default-repository";
         return fileName;
     }
 
