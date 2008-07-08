@@ -34,9 +34,10 @@ public class DemoBrix extends Brix
         config.getRegistry().register(Plugin.POINT, new MenuPlugin(this));
         config.getRegistry().register(Plugin.POINT, new SnapshotPlugin(this));
         config.getRegistry().register(Plugin.POINT, new WebdavUrlPlugin());
-        config.getRegistry().register(Tile.POINT, new MenuTile());
+        
 
         // register tiles
+        config.getRegistry().register(Tile.POINT, new MenuTile());
         config.getRegistry().register(Tile.POINT, new TimeTile());
         config.getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
         config.getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
