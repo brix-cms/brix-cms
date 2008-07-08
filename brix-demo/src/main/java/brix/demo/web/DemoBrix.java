@@ -37,7 +37,6 @@ public class DemoBrix extends Brix
         
 
         // register tiles
-        config.getRegistry().register(Tile.POINT, new MenuTile());
         config.getRegistry().register(Tile.POINT, new TimeTile());
         config.getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
         config.getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
