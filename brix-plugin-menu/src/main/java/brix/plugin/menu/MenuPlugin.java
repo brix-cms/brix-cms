@@ -15,6 +15,8 @@ import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.menu.tile.MenuTile;
+import brix.plugin.site.page.tile.Tile;
 import brix.web.tab.AbstractWorkspaceTab;
 import brix.web.tab.IBrixTab;
 import brix.workspace.Workspace;
@@ -29,6 +31,7 @@ public class MenuPlugin implements Plugin
         
         brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenusNode.FACTORY);
         brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenuNode.FACTORY);
+        brix.getConfig().getRegistry().register(Tile.POINT, new MenuTile());
     }
 
     private static final String ID = MenuPlugin.class.getName();
