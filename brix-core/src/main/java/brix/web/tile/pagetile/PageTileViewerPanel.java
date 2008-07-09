@@ -16,7 +16,6 @@ public class PageTileViewerPanel extends BrixGenericPanel<BrixNode>
 	public PageTileViewerPanel(String id, IModel<BrixNode> tileNode)
 	{
 		super(id, tileNode);
-		setRenderBodyOnly(true);
 	}
 
 	@Override
