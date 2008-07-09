@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import javax.jcr.ItemNotFoundException;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
@@ -28,6 +30,7 @@ import brix.BrixNodeModel;
 import brix.auth.Action.Context;
 import brix.jcr.JcrUtil;
 import brix.jcr.api.JcrSession;
+import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SiteNodePlugin;
@@ -65,7 +68,27 @@ public class NodeManagerContainerPanel extends NodeManagerPanel
 	protected void onBeforeRender()
 	{
 		Workspace workspace = workspaceModel.getObject();
-		BrixNode node = getModelObject();
+		
+		BrixNode node;
+		try 
+		{
+			node = getModelObject();
+		} 
+		catch (JcrException e) 
+		{
+			if (e.getCause() instanceof ItemNotFoundException)
+			{
+				node = SitePlugin.get().getSiteRootNode(workspace.getId());
+				getModel().setObject(null);
+				selectNode(node);
+				setupDefaultEditor();
+				tree.invalidateAll();
+			}
+			else
+			{
+				throw(e);
+			}
+		};
 
 		String nodeWorkspaceName = node.getSession().getWorkspace().getName();
 		if (!nodeWorkspaceName.equals(workspace.getId()))
