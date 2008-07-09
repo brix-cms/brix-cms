@@ -1,3 +1,18 @@
 <wicket:panel>
 I am a guestbook tile
+
+<table>
+<tr wicket:id="entries">
+	<td><span wicket:id="timestamp"></span></td>
+	<td><span wicket:id="name"></span></td>
+	<td><span wicket:id="message"></span></td>
+</tr>
+</table>
+
+<form wicket:id="form">
+author: <input wicket:id="name"/><br/>
+message: <textarea wicket:id="message" cols="30" rows="3"></textarea><br/>
+<input type="submit"/>
+</form>
+
 </wicket:panel>
