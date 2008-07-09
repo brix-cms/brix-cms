@@ -132,5 +132,12 @@ public interface JcrSession extends Session
     public void save();
 
     public void setNamespacePrefix(final String prefix, final String uri);
+    
+    // Caching related methods
+    
+    /**
+     * Each wrapped node should call this method when the remove() method is invoked on it.
+     */
+	public void nodeRemoved(JcrNode node);
 
 }
