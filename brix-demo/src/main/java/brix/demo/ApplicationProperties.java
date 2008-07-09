@@ -47,7 +47,7 @@ public class ApplicationProperties
         if (url == null || url.trim().length() == 0)
         {
             // if no url was specified generate a unique temporary one
-            url = "file://" + FileUtils.getTemporaryFileName();
+            url = "file://" + FileUtils.getDefaultRepositoryFileName();
             properties.setProperty("brixdemo.jcr.url", url);
         }
         return url;
