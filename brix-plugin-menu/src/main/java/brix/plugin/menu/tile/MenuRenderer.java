@@ -210,7 +210,7 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
             response.write("<a");
             if (!Strings.isEmpty(anchorCssClass))
             {
-                response.write("class=\"");
+                response.write(" class=\"");
                 response.write(anchorCssClass);
                 response.write("\"");
             }
