@@ -226,9 +226,17 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
         }
     }
 
-    protected void closeSession(Session session, boolean saveSession)
+    /**
+     * Closes a session
+     * 
+     * @param session
+     *            session to close
+     * @param saveSession
+     *            whether or not session.save() should be called before the session is closed
+     */
+    protected final void closeSession(Session session, boolean saveSession)
     {
-        if (session != null)
+        if (session != null && session.isLive())
         {
             try
             {
@@ -249,7 +257,6 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
                 session.logout();
             }
         }
-
     }
 
     protected synchronized Iterator<String> getAtributeKeys(String workspaceId)
