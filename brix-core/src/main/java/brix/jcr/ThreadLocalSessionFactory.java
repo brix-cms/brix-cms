@@ -54,7 +54,7 @@ public class ThreadLocalSessionFactory implements JcrSessionFactory
         {
             try
             {
-                logger.debug("Opening jcr session to workspace: {} with credentials: {}",
+                logger.debug("Opening managed jcr session to workspace: {} with credentials: {}",
                     workspace, credentials);
                 session = repository.login(credentials, workspace);
             }
@@ -76,6 +76,20 @@ public class ThreadLocalSessionFactory implements JcrSessionFactory
             {
                 session.logout();
             }
+        }
+    }
+
+    public Session createSession(String workspace) throws CannotOpenJcrSessionException
+    {
+        try
+        {
+            logger.debug("Opening unmanaged jcr session to workspace: {} with credentials: {}",
+                workspace, credentials);
+            return repository.login(credentials, workspace);
+        }
+        catch (Exception e)
+        {
+            throw new CannotOpenJcrSessionException(workspace, e);
         }
     }
 

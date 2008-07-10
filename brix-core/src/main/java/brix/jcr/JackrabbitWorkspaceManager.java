@@ -40,14 +40,19 @@ public class JackrabbitWorkspaceManager extends AbstractWorkspaceManager
     @Override
     protected void createWorkspace(String workspaceName)
     {
-        WorkspaceImpl workspace = (WorkspaceImpl)getSession(null).getWorkspace();
+        Session session = createSession(null);
         try
         {
+            WorkspaceImpl workspace = (WorkspaceImpl)session.getWorkspace();
             workspace.createWorkspace(workspaceName);
         }
         catch (RepositoryException e)
         {
             throw new JcrException(e);
+        }
+        finally
+        {
+            closeSession(session, false);
         }
     }
 
@@ -55,21 +60,26 @@ public class JackrabbitWorkspaceManager extends AbstractWorkspaceManager
     @Override
     protected List<String> getAccessibleWorkspaceNames()
     {
+        Session session = createSession(null);
         try
         {
-            return Arrays.asList(getSession(null).getWorkspace().getAccessibleWorkspaceNames());
+            return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
         }
         catch (RepositoryException e)
         {
             throw new JcrException(e);
         }
+        finally
+        {
+            closeSession(session, false);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    protected Session getSession(String workspaceName)
+    protected Session createSession(String workspaceName)
     {
-        return sf.getCurrentSession(workspaceName);
+        return sf.createSession(workspaceName);
     }
 
 }

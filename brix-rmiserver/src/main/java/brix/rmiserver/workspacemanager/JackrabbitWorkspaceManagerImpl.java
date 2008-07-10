@@ -40,8 +40,48 @@ public class JackrabbitWorkspaceManagerImpl extends AbstractWorkspaceManager
         this.credentials = credentials;
     }
 
+
     /** {@inheritDoc} */
-    protected Session getSession(String workspaceName)
+    @Override
+    protected void createWorkspace(String workspaceName)
+    {
+        Session session = createSession(null);
+        try
+        {
+            WorkspaceImpl workspace = (WorkspaceImpl)session.getWorkspace();
+            workspace.createWorkspace(workspaceName);
+        }
+        catch (RepositoryException e)
+        {
+            throw new JcrException(e);
+        }
+        finally
+        {
+            closeSession(session, false);
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected List<String> getAccessibleWorkspaceNames()
+    {
+        Session session = createSession(null);
+        try
+        {
+            return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
+        }
+        catch (RepositoryException e)
+        {
+            throw new JcrException(e);
+        }
+        finally
+        {
+            closeSession(session, false);
+        }
+    }
+
+    @Override
+    protected Session createSession(String workspaceName)
     {
         try
         {
@@ -50,35 +90,6 @@ public class JackrabbitWorkspaceManagerImpl extends AbstractWorkspaceManager
         catch (Exception e)
         {
             throw new RuntimeException("Could not login into repository", e);
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected void createWorkspace(String workspaceName)
-    {
-        WorkspaceImpl workspace = (WorkspaceImpl)getSession(null).getWorkspace();
-        try
-        {
-            workspace.createWorkspace(workspaceName);
-        }
-        catch (RepositoryException e)
-        {
-            throw new JcrException(e);
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected List<String> getAccessibleWorkspaceNames()
-    {
-        try
-        {
-            return Arrays.asList(getSession(null).getWorkspace().getAccessibleWorkspaceNames());
-        }
-        catch (RepositoryException e)
-        {
-            throw new JcrException(e);
         }
     }
 
