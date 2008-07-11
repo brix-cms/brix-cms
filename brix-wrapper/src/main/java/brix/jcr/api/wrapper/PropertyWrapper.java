@@ -3,6 +3,7 @@ package brix.jcr.api.wrapper;
 import java.io.InputStream;
 import java.util.Calendar;
 
+import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Value;
@@ -295,4 +296,16 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty
             }
         });
     }
+    
+	public void accept(final ItemVisitor visitor)
+	{
+		executeCallback(new VoidCallback()
+		{
+			public void execute() throws Exception
+			{
+				visitor.visit(PropertyWrapper.this);
+			}
+		});
+	}
+
 }

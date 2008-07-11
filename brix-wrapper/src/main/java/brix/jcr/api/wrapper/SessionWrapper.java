@@ -16,6 +16,10 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrValueFactory;
 import brix.jcr.api.JcrWorkspace;
+import brix.jcr.base.BrixSession;
+import brix.jcr.base.action.AbstractActionHandler;
+import brix.jcr.base.event.EventsListener;
+import brix.jcr.base.wrapper.WrapperAccessor;
 
 /**
  * 
@@ -26,7 +30,7 @@ class SessionWrapper extends AbstractWrapper implements JcrSession
 
 	protected SessionWrapper(Session delegate, Behavior behavior)
 	{
-		super(delegate, null);
+		super(WrapperAccessor.wrap(delegate), null);
 		this.behavior = behavior;
 	}
 
@@ -56,9 +60,9 @@ class SessionWrapper extends AbstractWrapper implements JcrSession
 	}
 
 	@Override
-	public Session getDelegate()
+	public BrixSession getDelegate()
 	{
-		return (Session) super.getDelegate();
+		return (BrixSession) super.getDelegate();
 	}
 
 	public void addLockToken(final String lt)
@@ -420,4 +424,19 @@ class SessionWrapper extends AbstractWrapper implements JcrSession
 			}
 		});
 	}
+	
+	public void addActionHandler(AbstractActionHandler handler)
+	{
+		getDelegate().addActionHandler(handler);
+	}
+	
+	public void addEventsListener(EventsListener listener)
+	{
+		getDelegate().addEventsListener(listener);
+	}
+	
+	public Map<String, Object> getAttributesMap()
+	{
+		return getDelegate().getAttributesMap();
+	}	
 }

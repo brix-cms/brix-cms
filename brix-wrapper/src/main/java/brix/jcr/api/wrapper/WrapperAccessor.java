@@ -197,5 +197,5 @@ public class WrapperAccessor
 		{
 			return NamespaceRegistryWrapper.wrap(delegate, session);
 		}
-	}
+	}		
 }

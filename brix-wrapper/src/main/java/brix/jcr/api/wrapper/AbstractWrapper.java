@@ -117,7 +117,7 @@ abstract class AbstractWrapper
         }
         AbstractWrapper that = (AbstractWrapper)obj;
 
-        return delegate.equals(that.delegate);
+        return delegate == that.delegate || delegate.equals(that.delegate);
     }
 
     @SuppressWarnings("unchecked")

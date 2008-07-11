@@ -11,24 +11,25 @@ import javax.jcr.Session;
 import org.xml.sax.ContentHandler;
 
 import brix.jcr.api.wrapper.WrapperAccessor;
+import brix.jcr.base.BrixSession;
 
 /**
  * 
  * @author Matej Knopp
  */
-public interface JcrSession extends Session
+public interface JcrSession extends BrixSession
 {
 
     public static class Wrapper
     {
         public static JcrSession wrap(Session delegate, Behavior behavior)
-        {
+        {        	        
             return WrapperAccessor.JcrSessionWrapper.wrap(delegate, behavior);
         }
 
         public static JcrSession wrap(Session delegate)
         {
-            return WrapperAccessor.JcrSessionWrapper.wrap(delegate, null);
+            return wrap(delegate, null);
         }
     };
 

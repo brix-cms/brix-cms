@@ -4,9 +4,10 @@
 package brix.jcr.api.wrapper;
 
 import javax.jcr.Item;
-import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
 import javax.jcr.Property;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionHistory;
 
 import brix.jcr.api.JcrItem;
 import brix.jcr.api.JcrNode;
@@ -16,7 +17,7 @@ import brix.jcr.api.JcrSession;
  * 
  * @author Matej Knopp
  */
-class ItemWrapper extends AbstractWrapper implements JcrItem
+abstract class ItemWrapper extends AbstractWrapper implements JcrItem
 {
 
     public Item getDelegate()
@@ -30,6 +31,14 @@ class ItemWrapper extends AbstractWrapper implements JcrItem
         {
             return null;
         }
+        else if (delegate instanceof Version)
+        {
+        	return VersionWrapper.wrap((Version)delegate, session);
+        }
+        else if (delegate instanceof VersionHistory)
+        {
+        	return VersionHistoryWrapper.wrap((VersionHistory)delegate, session);
+        }
         else if (delegate instanceof Node)
         {
             return NodeWrapper.wrap((Node)delegate, session);
@@ -40,24 +49,13 @@ class ItemWrapper extends AbstractWrapper implements JcrItem
         }
         else
         {
-            return new ItemWrapper(delegate, session);
+            throw new IllegalStateException("Uknown Item subclass.");
         }
     }
 
     protected ItemWrapper(Item delegate, JcrSession session)
     {
         super(delegate, session);
-    }
-
-    public void accept(final ItemVisitor visitor)
-    {
-        executeCallback(new VoidCallback()
-        {
-            public void execute() throws Exception
-            {
-                getDelegate().accept(visitor);
-            }
-        });
     }
 
     public JcrItem getAncestor(final int depth)

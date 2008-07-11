@@ -9,7 +9,7 @@ import brix.jcr.api.wrapper.WrapperAccessor;
  * 
  * @author Matej Knopp
  */
-public interface JcrVersionHistory extends VersionHistory
+public interface JcrVersionHistory extends VersionHistory, JcrNode
 {
 
     public static class Wrapper
