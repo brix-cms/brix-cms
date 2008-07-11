@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.jackrabbit.server.CredentialsProvider;
 import org.apache.jackrabbit.server.SessionProvider;
+import org.apache.jackrabbit.webdav.DavLocatorFactory;
+import org.apache.jackrabbit.webdav.DavResourceLocator;
+import org.apache.jackrabbit.webdav.simple.LocatorFactoryImplEx;
 import org.apache.jackrabbit.webdav.simple.SimpleWebdavServlet;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
