@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import brix.jcr.JcrEventListener;
 import brix.jcr.RepositoryInitializer;
 import brix.jcr.RepositoryUtil;
-import brix.jcr.event.EventUtil;
+import brix.jcr.base.EventUtil;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.folder.FolderNodePlugin;
 import brix.plugin.site.page.tile.TileContainerFacet;

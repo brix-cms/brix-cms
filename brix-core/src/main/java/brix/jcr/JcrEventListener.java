@@ -6,8 +6,8 @@ import javax.jcr.observation.EventIterator;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrProperty;
-import brix.jcr.event.SaveEvent;
-import brix.jcr.event.SaveEventListener;
+import brix.jcr.base.SaveEvent;
+import brix.jcr.base.SaveEventListener;
 import brix.jcr.wrapper.BrixNode;
 
 public class JcrEventListener implements SaveEventListener

@@ -11,7 +11,7 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrSession.Behavior;
 import brix.jcr.api.wrapper.NodeWrapper;
-import brix.jcr.event.EventUtil;
+import brix.jcr.base.EventUtil;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.jcr.wrapper.ResourceNode;
