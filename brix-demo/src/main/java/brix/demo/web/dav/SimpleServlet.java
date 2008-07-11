@@ -13,18 +13,17 @@ import org.apache.wicket.Application;
 
 import brix.Brix;
 import brix.demo.web.WicketApplication;
-import brix.jcr.event.EventUtil;
-
+import brix.jcr.base.EventUtil;
 
 public class SimpleServlet extends SimpleWebdavServlet
 {
 
-    public SimpleServlet()
-    {
+	public SimpleServlet()
+	{
 
-    }
+	}
 
-    @Override
+	@Override
     public synchronized SessionProvider getSessionProvider()
     {
         final SessionProvider original = super.getSessionProvider();
@@ -40,7 +39,7 @@ public class SimpleServlet extends SimpleWebdavServlet
                 if (s == null)
                 {
                     s = EventUtil.wrapSession(original.getSession(request, rep, workspace));
-                    request.setAttribute(key, s);
+                    request.setAttribute(key, s);                    
                 }
                 return s;
             }
@@ -52,11 +51,11 @@ public class SimpleServlet extends SimpleWebdavServlet
         };
     }
 
-    @Override
-    public Repository getRepository()
-    {
-        WicketApplication app = (WicketApplication)Application.get("wicket.brix-demo");
-        return app.getRepository();
-    }
+	@Override
+	public Repository getRepository()
+	{
+		WicketApplication app = (WicketApplication) Application.get("wicket.brix-demo");
+		return app.getRepository();
+	}
 
 }

@@ -153,7 +153,7 @@
     <filter>
         <!-- class element defines the resource filter to be used. The specified class
              must implement the ItemFilter interface -->
-        <class name="org.apache.jackrabbit.webdav.simple.DefaultItemFilter" />
+        <class name="brix.demo.web.dav.ItemFilter" />
         <!--
          Nodetype names to be used to filter child nodes.
          A child node can be filtered if the declaring nodetype of its definition
