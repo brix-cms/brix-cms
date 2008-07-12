@@ -3,7 +3,7 @@ package brix.jcr.base.event;
 import javax.jcr.RepositoryException;
 
 /**
- * Base event class. All events have to be subclasses ov Event.
+ * Base event class. All events have to be subclasses of Event.
  * 
  * @author Matej Knopp
  */
