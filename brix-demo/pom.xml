@@ -90,6 +90,10 @@
     </dependency>
     <dependency>
       <groupId>brix</groupId>
+      <artifactId>brix-plugin-prototype</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>brix</groupId>
       <artifactId>brix-plugin-webdavurl</artifactId>
     </dependency>
     <dependency>
