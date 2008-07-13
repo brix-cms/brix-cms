@@ -7,9 +7,7 @@ import java.util.List;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.jackrabbit.core.WorkspaceImpl;
-
-import brix.workspace.AbstractWorkspaceManager;
+import brix.workspace.AbstractSimpleWorkspaceManager;
 import brix.workspace.JcrException;
 import brix.workspace.WorkspaceManager;
 
@@ -19,7 +17,7 @@ import brix.workspace.WorkspaceManager;
  * @author igor.vaynberg
  * 
  */
-public class JackrabbitWorkspaceManager extends AbstractWorkspaceManager
+public class JackrabbitWorkspaceManager extends AbstractSimpleWorkspaceManager
 {
 
     private final JcrSessionFactory sf;
@@ -43,7 +41,8 @@ public class JackrabbitWorkspaceManager extends AbstractWorkspaceManager
         Session session = createSession(null);
         try
         {
-            WorkspaceImpl workspace = (WorkspaceImpl)session.getWorkspace();
+        	org.apache.jackrabbit.core.WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl) session
+					.getWorkspace();
             workspace.createWorkspace(workspaceName);
         }
         catch (RepositoryException e)
