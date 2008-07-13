@@ -115,7 +115,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 	{
 		try
 		{
-			List<String> accessibleWorkspaces = getAccessibleWorkspaceIds();
+			List<String> accessibleWorkspaces = new ArrayList<String>(getAccessibleWorkspaceIds());
 
 			// loop until all workspaces are processed or there were 20 attempts
 			for (int i = 0; i < 20 && !accessibleWorkspaces.isEmpty(); ++i)
