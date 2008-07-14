@@ -339,7 +339,7 @@ public class SitePlugin implements Plugin
     		while (nodes.hasNext())
     		{
     			BrixNode node = (BrixNode) nodes.nextNode();
-    			if (node.equals(site) == false && node instanceof GlobalContainerNode == false)
+    			if (node.isSame(site) == false && node instanceof GlobalContainerNode == false)
     			{
     				JcrSession session = webNode.getSession();
     				session.move(node.getPath(), site.getPath() + "/" + node.getName());
