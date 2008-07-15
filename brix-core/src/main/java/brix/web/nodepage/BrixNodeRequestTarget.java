@@ -13,7 +13,7 @@ public class BrixNodeRequestTarget implements IPageRequestTarget
     private final IModel<BrixNode> nodeModel;
     private final BrixNodeWebPage page;
     private BrixPageParameters parameters;
-    
+
     public BrixNodeRequestTarget(IModel<BrixNode> nodeModel, BrixPageParameters parameters)
     {
 
@@ -56,8 +56,17 @@ public class BrixNodeRequestTarget implements IPageRequestTarget
 
     public String getNodeURL()
     {
-        return ((BrixRequestCycleProcessor)RequestCycle.get().getProcessor()).getUriPathForNode(
+        try
+        {
+            return ((BrixRequestCycleProcessor)RequestCycle.get().getProcessor())
+                .getUriPathForNode(
+
                 nodeModel.getObject()).toString();
+        }
+        finally
+        {
+            nodeModel.detach();
+        }
     }
 
     public BrixNodeWebPage getPage()
