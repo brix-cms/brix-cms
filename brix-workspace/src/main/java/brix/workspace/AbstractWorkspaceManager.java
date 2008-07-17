@@ -229,11 +229,14 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 		return result;
 	}
 
-	protected final String WORKSPACE_PREFIX = "brix-workspace-";
+	// for compatibility with existing workspaces
+	protected final String WORKSPACE_PREFIX_LONG = "brix-workspace-";
+	
+	protected final String WORKSPACE_PREFIX = "brix_ws_";
 
 	protected String getWorkspaceId(String uuid)
 	{
-		return WORKSPACE_PREFIX + uuid;
+		return WORKSPACE_PREFIX + uuid.replace('-', '_');
 	}
 
 	protected boolean isBrixWorkspace(String id)
@@ -241,7 +244,7 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 		// we could check is the prefix is followed by real uuid here, but
 		// that's probably an
 		// overkill.
-		return id.startsWith(WORKSPACE_PREFIX);
+		return id.startsWith(WORKSPACE_PREFIX) || id.startsWith(WORKSPACE_PREFIX_LONG);
 	}
 
 	protected static final String NODE_NAME = "brix:workspace";
