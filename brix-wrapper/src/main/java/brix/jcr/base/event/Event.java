@@ -26,7 +26,7 @@ public abstract class Event
 	 * @param event
 	 * @param queueCallback
 	 *            allows to block adding the other event to the queue
-	 * 
+	 *  
 	 * @return Event that this event should be replaced with (or
 	 *         <code>this</code>) if it shouldn't be replaced by other
 	 *         event. <code>null</code> if this event should be removed

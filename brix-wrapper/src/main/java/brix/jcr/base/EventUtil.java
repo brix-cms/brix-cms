@@ -59,7 +59,7 @@ public class EventUtil
      * @param session
      * @return
      */
-    public static Session wrapSession(Session session)
+    public static BrixSession wrapSession(Session session)
     {
         return WrapperAccessor.wrap(session);
     }

@@ -12,7 +12,10 @@ import org.apache.jackrabbit.webdav.simple.SimpleWebdavServlet;
 import org.apache.wicket.Application;
 
 import brix.Brix;
+import brix.Plugin;
+import brix.SessionAwarePlugin;
 import brix.demo.web.WicketApplication;
+import brix.jcr.base.BrixSession;
 import brix.jcr.base.EventUtil;
 
 public class SimpleServlet extends SimpleWebdavServlet
@@ -35,12 +38,19 @@ public class SimpleServlet extends SimpleWebdavServlet
             {
 
                 final String key = Brix.NS_PREFIX + "jcr-session";
-                Session s = (Session)request.getAttribute(key);
+                BrixSession s = (BrixSession)request.getAttribute(key);
                 if (s == null)
                 {
                     s = EventUtil.wrapSession(original.getSession(request, rep, workspace));
+                    for (Plugin p : getBrix().getPlugins())
+                    {
+                    	if (p instanceof SessionAwarePlugin)
+                    	{
+                    		((SessionAwarePlugin) p).onWebDavSession(s);
+                    	}
+                    }
                     request.setAttribute(key, s);                    
-                }
+                }                
                 return s;
             }
 
@@ -49,8 +59,14 @@ public class SimpleServlet extends SimpleWebdavServlet
                 original.releaseSession(EventUtil.unwrapSession(session));
             }
         };
-    }
-
+    }	
+	
+	private Brix getBrix()
+	{
+		WicketApplication app = (WicketApplication) Application.get("wicket.brix-demo");
+		return app.getBrix();
+	}
+	
 	@Override
 	public Repository getRepository()
 	{

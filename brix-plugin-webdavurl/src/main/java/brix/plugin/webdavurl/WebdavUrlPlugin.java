@@ -46,7 +46,7 @@ public class WebdavUrlPlugin implements Plugin
 
 	public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)
 	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new Model<String>("Webdav"), workspaceModel) };
+		IBrixTab tabs[] = new IBrixTab[] { new Tab(new Model<String>("WebDAV"), workspaceModel) };
 		return Arrays.asList(tabs);
 	}
 
