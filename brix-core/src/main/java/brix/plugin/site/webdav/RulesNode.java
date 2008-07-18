@@ -48,7 +48,15 @@ public class RulesNode extends BrixNode
 				Collections.sort(result, new Comparator<Rule>() {
 					public int compare(Rule o1, Rule o2)
 					{
-						return o2.getPriority() - o1.getPriority();
+						int i = o2.getPriority() - o1.getPriority();
+						if (i != 0)
+						{
+							return i;
+						}
+						else
+						{
+							return o1.getName().compareToIgnoreCase(o2.getName());
+						}
 					}
 				});
 			}

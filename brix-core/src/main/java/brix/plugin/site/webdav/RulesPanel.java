@@ -7,18 +7,13 @@ import java.util.UUID;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-import org.apache.wicket.validation.ValidationError;
 
 import brix.Brix;
 import brix.jcr.api.JcrSession;
@@ -31,7 +26,6 @@ import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
 import com.inmethod.grid.SizeUnit;
 import com.inmethod.grid.column.CheckBoxColumn;
-import com.inmethod.grid.column.PropertyColumn;
 import com.inmethod.grid.column.editable.EditableCellPanel;
 import com.inmethod.grid.column.editable.EditablePropertyColumn;
 import com.inmethod.grid.column.editable.SubmitCancelColumn;
@@ -70,7 +64,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode>
 
 		public void query(IQuery query, IQueryResult result)
 		{
-			List<Rule> rules = RulesPanel.this.getModelObject().getRules(false);
+			List<Rule> rules = RulesPanel.this.getModelObject().getRules(true);
 			result.setTotalCount(rules.size());
 			result.setItems(rules.iterator());
 		}
@@ -95,6 +89,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode>
 			target.addComponent(feedback);
 			Rule rule = (Rule) rowModel.getObject();
 			RulesPanel.this.getModelObject().saveRule(rule);
+			dataGrid.markAllItemsDirty();
 			super.onSubmitted(target, rowModel, rowComponent);
 		}
 	}
