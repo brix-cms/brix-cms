@@ -9,17 +9,13 @@ import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 
 import brix.Brix;
 import brix.Path;
-import brix.Plugin;
 import brix.config.BrixConfig;
 import brix.config.PrefixUriMapper;
 import brix.config.UriMapper;
 import brix.demo.web.admin.AdminPage;
 import brix.jcr.JcrSessionFactory;
 import brix.jcr.api.JcrSession;
-import brix.plugin.menu.tile.MenuTile;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.page.tile.Tile;
-import brix.plugin.webdavurl.WebdavUrlPlugin;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.workspace.Workspace;
@@ -36,6 +32,11 @@ public final class WicketApplication extends AbstractWicketApplication
 
     /** brix instance */
     private Brix brix;
+    
+    public Brix getBrix()
+	{
+		return brix;
+	}
 
     /** {@inheritDoc} */
     @Override
