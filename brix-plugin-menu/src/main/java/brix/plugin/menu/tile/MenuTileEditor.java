@@ -90,7 +90,7 @@ public class MenuTileEditor extends GenericTileEditorPanel<BrixNode>
                 public boolean isEnabled()
                 {
                     BrixNode current = currentEntry.getMenuNode();
-                    return current == null || !item.getModelObject().equals(current);
+                    return current == null || !item.getModelObject().isSame(current);
                 }
             };
             IModel<String> labelModel = new AbstractModel<String>()
