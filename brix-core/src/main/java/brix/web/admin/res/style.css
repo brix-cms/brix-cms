@@ -101,6 +101,11 @@ div.brix-admin td.imxt-cell {
 	padding-left: 0.4em !important;
 }
 
+div.brix-admin td.imxt-edited-cell {
+	padding-left: 0.1em !important;
+}
+
+
 div.brix-admin td.imxt-select {
 	padding-left: 0.2em !important;
 }
