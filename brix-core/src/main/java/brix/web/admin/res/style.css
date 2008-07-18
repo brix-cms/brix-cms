@@ -1281,16 +1281,17 @@ div.brix-admin div.brix-publishing-container {
 /**
  * WebDAV rules
  */
-div.brix-admin form.brix-webdav-rules {
+div.brix-admin div.brix-webdav-rules {
 	margin-top: 0.7em;
 }
 
-div.brix-admin div.brix-webdav-rules-remove-selected {
+div.brix-admin div.brix-webdav-rules div.brix-buttons-left {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }
 
 div.brix-admin div.brix-webdav-rules-priority-hint {
+	margin-top: 0.5em;
 	color: #555;
 	font-size: 90%;
 	background-color: #f9f9f9;
