@@ -36,9 +36,6 @@ public class TinyMceEnabler extends AbstractBehavior
         response.renderJavascriptReference(new ResourceReference(TinyMceEnabler.class,
             "tiny_mce/tiny_mce.js"));
 
-        response.renderJavascriptReference(new ResourceReference(TinyMceEnabler.class,
-        "brix_plugin.js"));
-
         StringBuilder idlist = new StringBuilder();
         Iterator<Component> it = components.iterator();
         while (it.hasNext())
