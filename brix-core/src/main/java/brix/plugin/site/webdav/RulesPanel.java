@@ -2,6 +2,7 @@ package brix.plugin.site.webdav;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -10,12 +11,10 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -167,21 +166,18 @@ public class RulesPanel extends BrixGenericPanel<RulesNode>
 
 	private Component feedback;
 	private DataGrid dataGrid;
-	private AjaxLink removeSelected;
+	private AjaxLink<?> removeSelected;
 
 	public RulesPanel(String id, IModel<Workspace> workspaceModel)
 	{
 		super(id, new RulesNodeModel(workspaceModel));
 
-		Form<?> form = new Form<Void>("form");
-		add(form);
 
-		form.add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
+		add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
 
 		List<IGridColumn> columns = new ArrayList<IGridColumn>();
 
 		columns.add(new CheckBoxColumn("checkbox"));
-		columns.add(new PropertyColumn(new ResourceModel("name"), "name"));
 		columns.add(new PriorityColumn(new ResourceModel("priority"), "priority").setInitialSize(60));
 		columns.add(new EditablePropertyColumn(new ResourceModel("pathPrefix"), "pathPrefix"));
 		columns.add(new EditablePropertyColumn(new ResourceModel("extensions"), "extensions").setInitialSize(100));
@@ -200,11 +196,11 @@ public class RulesPanel extends BrixGenericPanel<RulesNode>
 					AjaxRequestTarget.get().addComponent(removeSelected);
 			}
 		};
-		form.add(dataGrid);
+		add(dataGrid);
 		dataGrid.setContentHeight(30, SizeUnit.EM);
 		dataGrid.setClickRowToSelect(true);
 
-		form.add(removeSelected = new AjaxLink<Void>("removeSelected")
+		add(removeSelected = new AjaxLink<Void>("removeSelected")
 		{
 			@Override
 			public boolean isEnabled()
@@ -227,43 +223,18 @@ public class RulesPanel extends BrixGenericPanel<RulesNode>
 		});
 		removeSelected.setOutputMarkupId(true);
 
-		form.add(new TextField<String>("newRuleName", new PropertyModel<String>(this, "newRuleName")).add(
-				uniqueNameValidator).setRequired(true));
-
-		form.add(new AjaxSubmitLink("submit")
+		add(new AjaxLink<Void>("add") 
 		{
 			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
+			public void onClick(AjaxRequestTarget target)
 			{
-				target.addComponent(feedback);
-				Rule rule = new Rule(newRuleName);
+				String name = "rule-" + UUID.randomUUID().toString();
+				Rule rule = new Rule(name);
 				rule.setType(Type.PAGE);
 				RulesPanel.this.getModelObject().saveRule(rule);
 				dataGrid.markAllItemsDirty();
 				dataGrid.update();
 			}
-
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.addComponent(feedback);
-			}
 		});
-		;
 	}
-
-	private IValidator uniqueNameValidator = new IValidator()
-	{
-		public void validate(IValidatable validatable)
-		{
-			String name = (String) validatable.getValue();
-			if (RulesPanel.this.getModelObject().getRule(name) != null)
-			{
-				validatable.error(new ValidationError().addMessageKey("ruleExists"));
-			}
-		}
-	};
-
-	private String newRuleName;
-
 }
