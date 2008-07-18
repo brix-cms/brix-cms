@@ -80,7 +80,7 @@ public class SitePlugin implements SessionAwarePlugin
 		IBrixTab tabs[] = new IBrixTab[] { new SiteTab(new Model<String>("Site"), workspaceModel),
 				new GlobalTilesTab(new Model<String>("Tiles"), workspaceModel),
 				new GlobalVariablesTab(new Model<String>("Variables"), workspaceModel),
-				new WebDAVRulesTab(new Model<String>("WebDAV rules"), workspaceModel) };
+				new WebDAVRulesTab(new Model<String>("WebDAV Rules"), workspaceModel) };
 		return Arrays.asList(tabs);
 	}
 
