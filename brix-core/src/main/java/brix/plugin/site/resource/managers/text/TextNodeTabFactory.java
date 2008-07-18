@@ -37,7 +37,7 @@ public class TextNodeTabFactory implements ManageNodeTabFactory
 
 	private static boolean canHandleMimeType(String mimeType)
 	{
-		return mimeType.startsWith("text/") || mimeType.equals("application/xml");
+		return mimeType != null && (mimeType.startsWith("text/") || mimeType.equals("application/xml"));
 	}
 
 	private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel)

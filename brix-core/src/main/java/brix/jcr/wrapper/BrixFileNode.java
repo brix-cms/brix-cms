@@ -211,6 +211,10 @@ public class BrixFileNode extends BrixNode
 		if (node.isNodeType("nt:file") == false)
 		{
 			throw new IllegalStateException("Argument 'node' must have JCR type nt:file.");
+		} 
+		else if (node instanceof BrixFileNode)
+		{
+			return (BrixFileNode) node;
 		}
 		node.addNode("jcr:content", "nt:resource");
 		BrixFileNode wrapped = new BrixFileNode(node.getDelegate(), node.getSession());

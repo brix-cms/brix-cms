@@ -33,6 +33,7 @@ import brix.plugin.site.page.PageNode;
 import brix.plugin.site.page.TemplateNode;
 import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.tile.Tile;
+import brix.plugin.site.webdav.RulesNode;
 import brix.registry.ExtensionPointRegistry;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.PageParametersAwareEnabler;
@@ -75,6 +76,8 @@ public abstract class Brix
 
         registry.register(JcrNodeWrapperFactory.POINT, PageNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, TemplateNode.FACTORY);
+        
+        registry.register(JcrNodeWrapperFactory.POINT, RulesNode.FACTORY);
 
         registry.register(Tile.POINT, new PageTile());
 

@@ -1,0 +1,29 @@
+<wicket:panel>
+	
+	<form wicket:id="form" class="brix-webdav-rules">
+	
+	<fieldset>
+		<div wicket:id="feedback" class="brix-feedback">
+		</div>
+		<div wicket:id="grid">
+		</div>	
+
+		<div class="brix-webdav-rules-remove-selected">
+			<a wicket:id="removeSelected" class="brix-button"><wicket:message key="removeSelectedItems"></wicket:message></a>
+		</div>
+		
+		<div class="brix-webdav-rules-priority-hint">
+			<wicket:message key="priorityHint"/>
+		</div>
+		
+			
+		<table class="brix-property-edit">
+			<td class="brix-property-label"><wicket:message key="newRuleName"/></td>
+			<td class="brix-property-value"><input wicket:id="newRuleName"/></td>
+			<td><a wicket:id="submit" class="brix-button"><wicket:message key="add"/></a></td>	
+		</table>			
+				
+	</fieldset>
+	</form>	
+	
+</wicket:panel>
