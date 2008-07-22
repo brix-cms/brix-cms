@@ -144,6 +144,7 @@ public class SnapshotPlugin implements Plugin
 		JcrSession sourceSession = brix.getCurrentSession(snapshotWorkspace.getId());
 		JcrSession targetSession = brix.getCurrentSession(targetWorkspace.getId());
 		brix.clone(sourceSession, targetSession);
+		brix.initWorkspace(targetWorkspace, brix.getCurrentSession(targetWorkspace.getId()));
 	}
 
 	public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)

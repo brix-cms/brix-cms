@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.protocol.http.WebResponse;
@@ -44,6 +45,8 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
     public ManageSnapshotsPanel(String id, final IModel<Workspace> model)
     {
         super(id, model);
+        
+        add(new FeedbackPanel("feedback"));
 
         IModel<List<Workspace>> snapshotsModel = new LoadableDetachableModel<List<Workspace>>()
         {
@@ -91,6 +94,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
                     {
                         Workspace target = ManageSnapshotsPanel.this.getModelObject();
                         SnapshotPlugin.get().restoreSnapshot(item.getModelObject(), target);
+                        getSession().info(ManageSnapshotsPanel.this.getString("restoreSuccessful"));
                     }
 
                     @Override
@@ -209,6 +213,10 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
                         session.importXML("/", s,
                             ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
                         session.save();
+                        
+                        brix.initWorkspace(ManageSnapshotsPanel.this.getModelObject(), session);
+                        
+                        getSession().info(ManageSnapshotsPanel.this.getString("restoreSuccessful"));
                     }
                     catch (IOException e)
                     {
