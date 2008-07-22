@@ -30,6 +30,13 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	
+	<scm>
+		<connection>scm:svn:http://brix-cms.googlecode.com/svn/trunk</connection>
+		<developerConnection>scm:svn:https://brix-cms.googlecode.com/svn/trunk</developerConnection>
+		<url>http://brix-cms.googlecode.com/svn/trunk</url>
+	</scm>
+	
 	<dependencyManagement>
 		<dependencies>
 
@@ -228,11 +235,7 @@
               <version>${jetty.version}</version>
               <scope>provided</scope>
             </dependency>
-      
-      
-      
-
-			<!--+
+      <!--+
 			    | UNIT TESTING
 			    +-->
 			<dependency>
@@ -253,6 +256,11 @@
 				<version>2.2.2</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+      <groupId>com.inmethod</groupId>
+      <artifactId>grid</artifactId>
+      <version>${inmethod.grid.version}</version>
+    </dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -320,14 +328,15 @@
 		</plugins>
 	</build>
 	<properties>
-		<wicket.version>1.4-SNAPSHOT</wicket.version>
+		<wicket.version>1.4-m3</wicket.version>
 		<jetty.version>6.1.9</jetty.version>
+		<inmethod.grid.version>1.0.0-b3</inmethod.grid.version>
 	</properties>
 	<repositories>
     <repository>
 			<id>Brix</id>
 			<name>Brix Local Repository</name>
-			<url>file://repository</url>
+			<url>http://brix-cms.googlecode.com/svn/maven2/</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -341,4 +350,12 @@
 			</snapshots>
 		</repository>
 	</repositories>
+	<pluginRepositories>
+        <pluginRepository>
+            <!-- one jar plugin -->
+            <id>dstovall.org</id>
+            <url>http://dstovall.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>

@@ -36,7 +36,23 @@ public class FileUtils
         {
             fileName += File.separator;
         }
-        fileName += "brix-default-repository";
+        fileName += "brix.demo.repository";
+        return fileName;
+    }
+    
+    /**
+     * Generates a temporary file name inside tmp directory for use as a webapp staging area
+     * 
+     * @return
+     */
+    public static String getDefaultWebAppFileName()
+    {
+        String fileName = System.getProperty("java.io.tmpdir");
+        if (!fileName.endsWith(File.separator))
+        {
+            fileName += File.separator;
+        }
+        fileName += "brix.demo.webapp";
         return fileName;
     }
 

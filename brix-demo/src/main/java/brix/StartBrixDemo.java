@@ -1,19 +1,40 @@
 package brix;
 
+import java.io.File;
+
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import brix.demo.ApplicationProperties;
+import brix.demo.util.FileUtils;
 
 public class StartBrixDemo
 {
+    private static final Logger logger = LoggerFactory.getLogger(StartBrixDemo.class);
 
     public static void main(String[] args) throws Exception
     {
         ApplicationProperties properties = new ApplicationProperties();
+
+        // setup temorary webapp folder
+        File webapp = new File(FileUtils.getDefaultWebAppFileName());
+        if (!webapp.exists())
+        {
+            logger.info("Initializing webapp directory in: {}", webapp.getAbsolutePath());
+            File webinf = new File(webapp + "/WEB-INF");
+            FileUtils.mkdirs(webinf);
+            FileUtils.copyClassResourceToFile("/brix/demo/webapp/webinf/web.xml", new File(webinf,
+                "web.xml"));
+            FileUtils.copyClassResourceToFile("/brix/demo/webapp/webinf/config.xml", new File(
+                webinf, "config.xml"));
+            FileUtils.copyClassResourceToFile("/brix/demo/webapp/webinf/keystore", new File(webinf, "keystore"));
+        }
+
 
         Server server = new Server();
         SocketConnector connector = new SocketConnector();
@@ -30,7 +51,7 @@ public class StartBrixDemo
         sslConnector.setSoLingerTime(-1);
         sslConnector.setKeyPassword("password");
         sslConnector.setPassword("password");
-        sslConnector.setKeystore("src/test/java/brix/keystore");
+        sslConnector.setKeystore(new File(webapp, "WEB-INF/keystore").getAbsolutePath());
 
         port = Integer.getInteger("jetty.sslport", properties.getHttpsPort());
         sslConnector.setPort(port);
@@ -41,7 +62,7 @@ public class StartBrixDemo
         WebAppContext bb = new WebAppContext();
         bb.setServer(server);
         bb.setContextPath("/");
-        bb.setWar("src/main/webapp");
+        bb.setWar(webapp.getAbsolutePath());
 
 
         // START JMX SERVER
