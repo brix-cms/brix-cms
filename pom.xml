@@ -3,7 +3,7 @@
 	<groupId>brix</groupId>
 	<artifactId>brix</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0-beta1</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>Brix CMS</name>
 	<description>Brix CMS aims to provide a fully featured CMS that is
 		easily embeddable into any Wicket-based [1] web application [1] http://wicket.apache.org/</description>
@@ -31,9 +31,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://brix-cms.googlecode.com/svn/tags/brix-1.0-beta1</connection>
-		<developerConnection>scm:svn:https://brix-cms.googlecode.com/svn/tags/brix-1.0-beta1</developerConnection>
-		<url>http://brix-cms.googlecode.com/svn/tags/brix-1.0-beta1</url>
+		<connection>scm:svn:http://brix-cms.googlecode.com/svn/tags/brix-1.0-SNAPSHOT</connection>
+		<developerConnection>scm:svn:https://brix-cms.googlecode.com/svn/trunk</developerConnection>
+		<url>http://brix-cms.googlecode.com/svn/trunk</url>
 	</scm>
 	
 	<dependencyManagement>
@@ -45,57 +45,57 @@
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-wrapper</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-core</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-markupeditor-codepress</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-markupeditor-tinymce</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-rmiserver</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-workspace</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-plugin-snapshot</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-plugin-prototype</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-plugin-menu</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-plugin-webdavurl</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
   			<dependency>
 				<groupId>brix</groupId>
 				<artifactId>brix-plugin-publish</artifactId>
-				<version>1.0-beta1</version>
+				<version>1.0-SNAPSHOT</version>
 			</dependency>
 
 			<!--+
@@ -327,9 +327,9 @@
 		</plugins>
 	</build>
 	<properties>
-		<wicket.version>1.4-m3</wicket.version>
+		<wicket.version>1.4-SNAPSHOT</wicket.version>
 		<jetty.version>6.1.9</jetty.version>
-		<inmethod.grid.version>1.0.0-b3</inmethod.grid.version>
+		<inmethod.grid.version>1.0.0-SNAPSHOT</inmethod.grid.version>
 		<htmllexer.version>2.0-beta1</htmllexer.version>
 	</properties>
 	<repositories>
