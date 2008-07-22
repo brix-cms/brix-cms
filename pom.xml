@@ -152,7 +152,7 @@
 			<dependency>
 				<groupId>org.htmlparser</groupId>
 				<artifactId>htmllexer</artifactId>
-				<version>2.0-SNAPSHOT</version>
+				<version>${htmllexer.version}</version>
 			</dependency>
 
 
@@ -331,6 +331,7 @@
 		<wicket.version>1.4-m3</wicket.version>
 		<jetty.version>6.1.9</jetty.version>
 		<inmethod.grid.version>1.0.0-b3</inmethod.grid.version>
+		<htmllexer.version>2.0-beta1</htmllexer.version>
 	</properties>
 	<repositories>
     <repository>
