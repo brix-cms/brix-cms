@@ -262,7 +262,17 @@
     </dependency>
 		</dependencies>
 	</dependencyManagement>
-	<build>
+		<build>
+  <pluginManagement>
+  	    <plugins>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>${jetty.version}</version>
+      </plugin>
+      </plugins>
+</pluginManagement>
+
 		<resources>
 			<resource>
 				<filtering>false</filtering>
