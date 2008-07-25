@@ -75,7 +75,7 @@ public class Reference implements Serializable, IDetachable
         this.nodeModel = nodeModel;
     }
 
-    public String getUrl()
+    public final String getUrl()
     {
         return url;
     }
@@ -128,7 +128,7 @@ public class Reference implements Serializable, IDetachable
         }
         if (isEmpty() == false || hasParameters())
         {
-            BrixNode child = (BrixNode) parent.addNode(property, "nt:unstructured");
+            BrixNode child = (BrixNode)parent.addNode(property, "nt:unstructured");
             save(child);
         }
     }
@@ -159,7 +159,7 @@ public class Reference implements Serializable, IDetachable
             {
                 for (String s : parameters.getQueryParamKeys())
                 {
-                    BrixNode param = (BrixNode) node.addNode("parameter", "nt:unstructured");
+                    BrixNode param = (BrixNode)node.addNode("parameter", "nt:unstructured");
                     param.setProperty("key", s);
                     List<StringValue> values = parameters.getQueryParams(s);
                     String valuesArray[] = new String[values.size()];
@@ -178,7 +178,7 @@ public class Reference implements Serializable, IDetachable
         Reference ref = new Reference();
         if (node.hasNode(property))
         {
-            ref.load((BrixNode) node.getNode(property));
+            ref.load((BrixNode)node.getNode(property));
         }
         return ref;
     }
@@ -188,7 +188,7 @@ public class Reference implements Serializable, IDetachable
         setType(Type.valueOf(node.getProperty("type").getString()));
         if (node.hasProperty("node"))
         {
-            setNodeModel(new BrixNodeModel((BrixNode) node.getProperty("node").getNode()));
+            setNodeModel(new BrixNodeModel((BrixNode)node.getProperty("node").getNode()));
         }
         if (node.hasProperty("url"))
         {
@@ -209,7 +209,7 @@ public class Reference implements Serializable, IDetachable
             JcrNodeIterator i = node.getNodes("parameter");
             while (i.hasNext())
             {
-                BrixNode n = (BrixNode) i.nextNode();
+                BrixNode n = (BrixNode)i.nextNode();
                 if (n.hasProperty("key") && n.hasProperty("values"))
                 {
                     String key = n.getProperty("key").getString();
@@ -233,16 +233,16 @@ public class Reference implements Serializable, IDetachable
 
     public void makeEmpty()
     {
-    	if (type == Type.URL)
-    	{
-    		setUrl(null);
-    	}
-    	else if (type == Type.NODE)
+        if (type == Type.URL)
         {
-    		getNodeModel().setObject(null);
+            setUrl(null);
+        }
+        else if (type == Type.NODE)
+        {
+            getNodeModel().setObject(null);
         }
     }
-    
+
     public boolean isEmpty()
     {
         if (type == Type.URL)
@@ -272,6 +272,11 @@ public class Reference implements Serializable, IDetachable
         }
     }
 
+    /**
+     * Generates a url that points to the resource this reference is holding.
+     * 
+     * @return url to referenced resource
+     */
     public String generateUrl()
     {
         if (isEmpty())
@@ -280,8 +285,35 @@ public class Reference implements Serializable, IDetachable
         }
         else
         {
-            String url = RequestCycle.get().urlFor(getRequestTarget()).toString();
-            return url;
+            if (Type.URL == type && hasProtocol())
+            {
+                // referenced resource is an absolute url, return as is
+                return url;
+            }
+            else
+            {
+                // generate url to referenced resource
+                String url = RequestCycle.get().urlFor(getRequestTarget()).toString();
+                return url;
+            }
+        }
+    }
+
+    /**
+     * Checks if the url this reference points to includes a protocol. Should only be called if
+     * reference type is {@value Type#URL}
+     * 
+     * @return true if the url contains a protocol
+     */
+    private boolean hasProtocol()
+    {
+        if (Strings.isEmpty(url))
+        {
+            return false;
+        }
+        else
+        {
+            return url.indexOf("://") > 0;
         }
     }
 }
