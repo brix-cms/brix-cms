@@ -54,6 +54,9 @@
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
+        <configuration>
+        	<contextPath>/brixdemo</contextPath>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>
