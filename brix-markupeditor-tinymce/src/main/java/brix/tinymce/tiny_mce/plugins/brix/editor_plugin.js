@@ -69,8 +69,8 @@
 			};
 
 			s = tinymce.trim(s);
-			rep(/<div.*?class="brixcontent".*?<\/div>/gi,"<brix:content/>");
-			rep(/<div.*?id="(.*?)".*?class="brixtile".*?<\/div>/gi,"<brix:tile id=\"$1\"/>");
+			rep(/<div\s*?class="brixcontent".*?<\/div>/gi,"<brix:content/>");
+			rep(/<div\s*?id="(.*?)".*?class="brixtile".*?<\/div>/gi,"<brix:tile id=\"$1\"/>");
 			return s;
 		},	
 		
