@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PropertyListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -28,7 +29,7 @@ public class GuestBookPanel extends Panel
     public GuestBookPanel(String id, IModel<BrixNode> model)
     {
         super(id, model);
-
+        add(new FeedbackPanel("feedback"));
         add(new MessageForm("form"));
         add(new PropertyListView<Entry>("entries", new EntriesModel())
         {
@@ -54,8 +55,10 @@ public class GuestBookPanel extends Panel
         public MessageForm(String id)
         {
             super(id);
-            add(new TextField<String>("name", new PropertyModel<String>(this, "entry.name")));
-            add(new TextArea<String>("message", new PropertyModel<String>(this, "entry.message")));
+            add(new TextField<String>("name", new PropertyModel<String>(this, "entry.name"))
+                    .setRequired(true));
+            add(new TextArea<String>("message", new PropertyModel<String>(this, "entry.message"))
+                    .setRequired(true));
         }
 
         @Override
