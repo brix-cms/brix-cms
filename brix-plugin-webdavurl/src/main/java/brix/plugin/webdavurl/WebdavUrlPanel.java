@@ -49,6 +49,7 @@ public class WebdavUrlPanel extends BrixGenericPanel<String>
 			url.append(":");
 			url.append(request.getServerPort());
 		}
+		url.append(request.getContextPath());
 		url.append("/");
 		url.append(type);
 		url.append("/");
