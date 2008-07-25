@@ -69,7 +69,7 @@
 			};
 
 			s = tinymce.trim(s);
-			rep(/<div class="brixcontent"\/>/gi,"<brix:content/>");
+			rep(/<div.*?class="brixcontent".*?<\/div>/gi,"<brix:content/>");
 			rep(/<div.*?id="(.*?)".*?class="brixtile".*?<\/div>/gi,"<brix:tile id=\"$1\"/>");
 			return s;
 		},	
@@ -80,7 +80,7 @@
 				content = content.replace(re, str);
 			};
 		
-		rep(/<brix:content\/>/gi,"<div class=\"brixcontent\" style=\""+contentStyle+"\">Brix Content Block</div>");
+		rep(/<brix:content.*?\/>/gi,"<div class=\"brixcontent\" style=\""+contentStyle+"\">Brix Content Block</div>");
 		rep(/<brix:tile.*?id=\"(.*?)\".*?\/>/gi,"<div class=\"brixtile\" id=\"$1\" style=\""+tileStyle+"\">Brix Tile: $1</div>");
 		return content;
 		
