@@ -65,7 +65,7 @@ public class HtmlTextExtractor extends AbstractTextExtractor
                 {
                     // text nodes are the ones containing text
                     final String text = ((Text)node).getText().trim();
-                    if (!text.isEmpty())
+                    if (text.length() > 0)
                     {
                         // if text has non-whitespace chars append them
                         textBuffer.append(((Text)node).getText()).append(" ");
