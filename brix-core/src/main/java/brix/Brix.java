@@ -10,14 +10,19 @@ import javax.jcr.Session;
 
 import org.apache.jackrabbit.core.WorkspaceImpl;
 import org.apache.wicket.Application;
+import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.Page;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.target.component.IPageRequestTarget;
 
 import brix.auth.Action;
 import brix.auth.AuthorizationStrategy;
 import brix.auth.ViewWorkspaceAction;
 import brix.auth.Action.Context;
 import brix.config.BrixConfig;
+import brix.exception.BrixException;
 import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.RepositoryInitializer;
 import brix.jcr.SessionBehavior;
@@ -36,6 +41,9 @@ import brix.plugin.site.page.tile.Tile;
 import brix.plugin.site.webdav.RulesNode;
 import brix.registry.ExtensionPointRegistry;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
+import brix.web.nodepage.BrixNodeRequestTarget;
+import brix.web.nodepage.BrixNodeWebPage;
+import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.PageParametersAwareEnabler;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.Workspace;
@@ -76,7 +84,7 @@ public abstract class Brix
 
         registry.register(JcrNodeWrapperFactory.POINT, PageNode.FACTORY);
         registry.register(JcrNodeWrapperFactory.POINT, TemplateNode.FACTORY);
-        
+
         registry.register(JcrNodeWrapperFactory.POINT, RulesNode.FACTORY);
 
         registry.register(Tile.POINT, new PageTile());
@@ -205,8 +213,6 @@ public abstract class Brix
         String root = getRootPath();
         destSession.getWorkspace().clone(srcSession.getWorkspace().getName(), root, root, true);
     }
-
-    private WorkspaceManager workspaceManager;
 
     public final WorkspaceManager getWorkspaceManager()
     {
@@ -348,5 +354,69 @@ public abstract class Brix
 
             return result;
         }
+    }
+
+    /**
+     * Constructs a URL to the current page. This method can only be called within an active wicket
+     * request because it relies on the {@link RequestCycle} threadlocal.
+     * 
+     * @throws BrixException
+     *             if the current request was not for a brix page
+     * 
+     * @return url to the current brix page
+     */
+    public static String urlForCurrentPage()
+    {
+        return urlForCurrentPage(new BrixPageParameters());
+    }
+
+
+    /**
+     * Constructs a URL to the current page. This method can only be called within an active wicket
+     * request because it relies on the {@link RequestCycle} threadlocal.
+     * 
+     * @param params
+     *            parameters to be encoded into the url
+     * 
+     * @throws BrixException
+     *             if the current request was not for a brix page
+     * 
+     * @return url to the current brix page
+     */
+    public static String urlForCurrentPage(BrixPageParameters params)
+    {
+        IRequestTarget target = new BrixNodeRequestTarget(getCurrentPage(), params);
+        String url = RequestCycle.get().urlFor(target).toString();
+        target.detach(RequestCycle.get());
+        return url;
+    }
+
+    /**
+     * Returns current brix page being processed. Must only be called within a wicket request.
+     * 
+     * @throws BrixException
+     *             if current request was not to a brix page
+     * 
+     * @return brix page
+     */
+    private static BrixNodeWebPage getCurrentPage()
+    {
+        IRequestTarget target = RequestCycle.get().getRequestTarget();
+        BrixNodeWebPage page = null;
+        if (target != null && target instanceof IPageRequestTarget)
+        {
+            Page p = ((IPageRequestTarget)target).getPage();
+            if (p instanceof BrixNodeWebPage)
+            {
+                page = (BrixNodeWebPage)p;
+            }
+        }
+        if (page == null)
+        {
+            throw new BrixException(
+                "Couldn't obtain the BrixNodeWebPage instance from RequestTarget.");
+        }
+        return page;
+
     }
 }
