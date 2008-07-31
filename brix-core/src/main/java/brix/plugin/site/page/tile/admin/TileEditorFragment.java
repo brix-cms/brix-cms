@@ -20,14 +20,14 @@ public abstract class TileEditorFragment extends Fragment implements IGenericCom
 {
 
 	public TileEditorFragment(String id, String markupId, MarkupContainer markupProvider,
-			final IModel<BrixNode> nodeModel, final String tileId)
+			final IModel<BrixNode> nodeModel, final String tileId, boolean filterFeedback)
 	{
 		super(id, markupId, markupProvider, nodeModel);
 
 		final Form<Void> form = new Form<Void>("form");
 		add(form);
 
-		form.add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(form)));
+		form.add(new FeedbackPanel("feedback", filterFeedback ? new ContainerFeedbackMessageFilter(form) : null));
 
 		Brix brix = nodeModel.getObject().getBrix();
 		final String tileClassName = getTileContainerNode().tiles().getTileClassName(tileId);

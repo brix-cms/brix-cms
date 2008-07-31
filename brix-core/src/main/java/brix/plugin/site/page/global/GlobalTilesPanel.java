@@ -18,7 +18,14 @@ public class GlobalTilesPanel extends AbstractGlobalPanel
 	@Override
 	protected Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel)
 	{
-		return new TilesPanel(id, containerNodeModel);
+		return new TilesPanel(id, containerNodeModel) 
+		{
+			@Override
+			protected boolean filterFeedback()
+			{
+				return false;
+			}
+		};
 	}
 
 }

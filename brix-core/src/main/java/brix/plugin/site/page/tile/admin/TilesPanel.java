@@ -103,8 +103,8 @@ public class TilesPanel extends NodeManagerPanel
 				};
 				item.add(link);
 
-				link.add(new Label("name", (item.getModelObject() == null) ? TilesPanel.this
-						.getString("createNew") : (String) item.getModel().getObject()));
+				link.add(new Label("name", (item.getModelObject() == null) ? TilesPanel.this.getString("createNew")
+						: (String) item.getModel().getObject()));
 			}
 
 		});
@@ -120,6 +120,11 @@ public class TilesPanel extends NodeManagerPanel
 	private AbstractContainer getTileContainerNode()
 	{
 		return (AbstractContainer) getModelObject();
+	}
+
+	protected boolean filterFeedback()
+	{
+		return true;
 	}
 
 	private void setupTileEditor()
@@ -148,7 +153,8 @@ public class TilesPanel extends NodeManagerPanel
 		}
 		else
 		{
-			newEditor = new TileEditorFragment(editor.getId(), "editor-form-fragment", this, getModel(), selectedTileId)
+			newEditor = new TileEditorFragment(editor.getId(), "editor-form-fragment", this, getModel(),
+					selectedTileId, filterFeedback())
 			{
 
 				@Override
