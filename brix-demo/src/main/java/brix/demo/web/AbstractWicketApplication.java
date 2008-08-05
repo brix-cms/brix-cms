@@ -2,7 +2,7 @@ package brix.demo.web;
 
 import javax.jcr.Repository;
 
-import org.apache.wicket.Page;
+import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Response;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import brix.demo.ApplicationProperties;
 import brix.demo.util.JcrUtils;
 import brix.jcr.ThreadLocalSessionFactory;
-import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.workspace.WorkspaceManager;
 
 /**
@@ -82,6 +81,19 @@ public abstract class AbstractWicketApplication extends WebApplication
         }
 
         getMarkupSettings().setStripWicketTags(true);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected void onDestroy()
+    {
+        // shutdown the repository cleanly
+        if (repository instanceof RepositoryImpl)
+        {
+            logger.info("Shutting down JackRabbit repository...");
+            ((RepositoryImpl)repository).shutdown();
+        }
+        super.onDestroy();
     }
 
     /**
