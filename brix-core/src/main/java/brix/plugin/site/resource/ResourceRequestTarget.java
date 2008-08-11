@@ -6,6 +6,7 @@ package brix.plugin.site.resource;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.RequestCycle;
@@ -76,7 +77,7 @@ public class ResourceRequestTarget implements IRequestTarget
         		// the weird toString comparison is to prevent comparing milliseconds
         		if (d.after(lastModified) || d.toString().equals(lastModified.toString()))
         		{        	
-        			response.getHttpServletResponse().setStatus(304);        			
+        			response.getHttpServletResponse().setStatus(HttpServletResponse.SC_NOT_MODIFIED);        			
         			return;
         				
         		}        		
