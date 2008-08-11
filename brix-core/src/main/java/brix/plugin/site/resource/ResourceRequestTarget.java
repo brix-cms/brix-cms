@@ -61,7 +61,9 @@ public class ResourceRequestTarget implements IRequestTarget
             response.setAttachmentHeader(node.getName());
         }
         
-        response.setLastModifiedTime(Time.valueOf(node.getLastModified()));        
+        Date lastModified = node.getLastModified();
+        
+        response.setLastModifiedTime(Time.valueOf(lastModified));        
         
         try
         {   
@@ -69,11 +71,10 @@ public class ResourceRequestTarget implements IRequestTarget
         	String since = r.getHeader("If-Modified-Since");
         	if (!save && since != null) 
         	{
-        		Date d = new Date(r.getDateHeader("If-Modified-Since"));        	
-        		Date m = node.getLastModified();
+        		Date d = new Date(r.getDateHeader("If-Modified-Since"));        	        		
         		        	
         		// the weird toString comparison is to prevent comparing milliseconds
-        		if (d.after(m) || d.toString().equals(m.toString()))
+        		if (d.after(lastModified) || d.toString().equals(lastModified.toString()))
         		{        	
         			response.getHttpServletResponse().setStatus(304);        			
         			return;
