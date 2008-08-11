@@ -3,13 +3,17 @@
  */
 package brix.plugin.site.resource;
 
-import java.io.IOException;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.util.time.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,21 +51,38 @@ public class ResourceRequestTarget implements IRequestTarget
                 .getParameter(SAVE_PARAMETER));
 
         BrixFileNode node = (BrixFileNode)this.node.getObject();
-
+        
         WebResponse response = (WebResponse)requestCycle.getResponse();
 
         response.setContentType(node.getMimeType());
 
         if (save)
-        {
+        {        	
             response.setAttachmentHeader(node.getName());
         }
-
+        
+        response.setLastModifiedTime(Time.valueOf(node.getLastModified()));        
+        
         try
-        {
+        {   
+        	HttpServletRequest r = ((WebRequest)requestCycle.getRequest()).getHttpServletRequest();
+        	String since = r.getHeader("If-Modified-Since");
+        	if (!save && since != null) 
+        	{
+        		Date d = new Date(r.getDateHeader("If-Modified-Since"));        	
+        		Date m = node.getLastModified();
+        		        	
+        		// the weird toString comparison is to prevent comparing milliseconds
+        		if (d.after(m) || d.toString().equals(m.toString()))
+        		{        	
+        			response.getHttpServletResponse().setStatus(304);        			
+        			return;
+        				
+        		}        		
+        	}
             node.writeData(requestCycle.getResponse().getOutputStream());
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             log.error("Error writing resource data to content", e);
         }
