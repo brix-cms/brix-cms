@@ -37,7 +37,7 @@ public class NodeNameValidator implements IValidator
                 forbiddenStr = forbiddenStr.substring(1, forbiddenStr.length() - 1);
                 ValidationError error = new ValidationError();
                 error
-                        .setMessage("Field ${name} may not contain any of the forbidden characters (${forbidden}).");
+                        .setMessage("Field ${label} may not contain any of the forbidden characters (${forbidden}).");
                 error.addMessageKey("NodeNameValidator");
                 error.getVariables().put("forbidden", forbiddenStr);
                 validatable.error(error);
