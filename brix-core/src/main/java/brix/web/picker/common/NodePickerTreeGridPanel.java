@@ -37,26 +37,26 @@ public abstract class NodePickerTreeGridPanel extends Panel
 	public NodePickerTreeGridPanel(String id, IModel<?> model, NodeFilter visibilityFilter, NodeFilter enabledFilter)
 	{
 		super(id, model);
-		this.visibilityFilter = visibilityFilter;		
+		this.visibilityFilter = visibilityFilter;
 		this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
 	}
 
 	public NodePickerTreeGridPanel(String id, NodeFilter visibilityFilter, NodeFilter enabledFilter)
 	{
 		super(id);
-		
-		this.visibilityFilter = visibilityFilter;		
+
+		this.visibilityFilter = visibilityFilter;
 		this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
 	}
-	
-	private final static NodeFilter ALLOW_ALL_FILTER = new NodeFilter() 
+
+	private final static NodeFilter ALLOW_ALL_FILTER = new NodeFilter()
 	{
 		public boolean isNodeAllowed(BrixNode node)
 		{
 			return true;
 		}
 	};
-	
+
 	public NodeFilter getVisibilityFilter()
 	{
 		return visibilityFilter;
@@ -86,7 +86,7 @@ public abstract class NodePickerTreeGridPanel extends Panel
 			return null;
 		}
 	}
-	
+
 	private final NodeFilter visibilityFilter;
 	private final NodeFilter enabledFilter;
 
@@ -95,28 +95,37 @@ public abstract class NodePickerTreeGridPanel extends Panel
 		BrixNode n = node.getNodeModel() != null ? node.getNodeModel().getObject() : null;
 		return enabledFilter.isNodeAllowed(n);
 	}
-	
+
 	protected void initComponents()
 	{
 		grid = new TreeGrid("grid", newTreeModel(), newGridColumns())
 		{
 			@Override
-			protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
-			{
+			protected void onItemSelectionChanged(IModel rowModel, boolean newValue)
+			{							
 				BrixNode node = getNode(rowModel);
 				if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null)
-				{
-					if (isItemSelected(rowModel) == false)
+				{										
+					if (isItemSelected(rowModel) == true)
 					{
-						selectItem(rowModel, true);
 						onNodeSelected(node);
 					}
 					else
 					{
-						selectItem(rowModel, false);
 						onNodeDeselected(node);
 					}
 					update();
+				}	
+				super.onItemSelectionChanged(rowModel, newValue);
+			}
+			
+			@Override
+			protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
+			{
+				BrixNode node = getNode(rowModel);
+				if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null)
+				{	
+					super.onRowClicked(target, rowModel);
 				}
 			}
 
@@ -139,7 +148,7 @@ public abstract class NodePickerTreeGridPanel extends Panel
 			}
 		};
 
-		configureGrid(grid);		
+		configureGrid(grid);
 		add(grid);
 	};
 
@@ -157,10 +166,10 @@ public abstract class NodePickerTreeGridPanel extends Panel
 			{
 				first = false;
 			}
-			
+
 			if (n.getDepth() > 0)
 			{
-				node = TreeAwareNode.Util.getTreeNode((BrixNode) n.getParent(), visibilityFilter);	
+				node = TreeAwareNode.Util.getTreeNode((BrixNode) n.getParent(), visibilityFilter);
 			}
 			else
 			{
@@ -202,8 +211,7 @@ public abstract class NodePickerTreeGridPanel extends Panel
 
 	protected List<IGridColumn> newGridColumns()
 	{
-		IGridColumn columns[] = {
-				new NodePickerCheckBoxColumn("checkbox"),
+		IGridColumn columns[] = { new NodePickerCheckBoxColumn("checkbox"),
 				new TreeColumn("name", new ResourceModel("name")).setInitialSize(300),
 				new NodePropertyColumn(new ResourceModel("type"), "userVisibleType"),
 				new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified"),
@@ -240,7 +248,7 @@ public abstract class NodePickerTreeGridPanel extends Panel
 			};
 			return new Label(id, labelModel);
 		}
-		
+
 		@Override
 		public int getColSpan(IModel rowModel)
 		{
@@ -248,7 +256,7 @@ public abstract class NodePickerTreeGridPanel extends Panel
 			return node != null ? 1 : 4;
 		}
 	};
-	
+
 	private class NodePropertyColumn extends PropertyColumn
 	{
 
@@ -256,14 +264,14 @@ public abstract class NodePickerTreeGridPanel extends Panel
 		{
 			super(headerModel, propertyExpression);
 		}
-		
+
 		@Override
 		protected Object getModelObject(IModel rowModel)
 		{
 			return getNode(rowModel);
 		}
 	};
-	
+
 	protected TreeModel newTreeModel()
 	{
 		return new AbstractTreeModel()
