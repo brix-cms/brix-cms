@@ -1,7 +1,13 @@
 package brix.plugin.publishing;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import brix.Brix;
 import brix.auth.Action;
@@ -16,6 +22,8 @@ public class PublishingPanel extends BrixGenericPanel<Workspace>
     public PublishingPanel(String id, IModel<Workspace> model)
     {
         super(id, model);
+        
+        add(new FeedbackPanel("feedback"));
         
         add(new PublishLink("toStaging", PublishingPlugin.STATE_DEVELOPMENT, PublishingPlugin.STATE_STAGING));
         add(new PublishLink("toProduction", PublishingPlugin.STATE_STAGING, PublishingPlugin.STATE_PRODUCTION));
@@ -38,6 +46,9 @@ public class PublishingPanel extends BrixGenericPanel<Workspace>
         {
             Workspace workspace = PublishingPanel.this.getModelObject();
             PublishingPlugin.get().publish(workspace, targetState);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("targetState", targetState);
+            getSession().info(getString("published", new Model<Serializable>((Serializable) map)));
         }
 
         @Override
