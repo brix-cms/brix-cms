@@ -89,6 +89,8 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 			{
 				node = TemplateNode.initialize(page);
 			}
+			
+			node.setTitle(name);
 
 			node.setData("");
 			name = null;
