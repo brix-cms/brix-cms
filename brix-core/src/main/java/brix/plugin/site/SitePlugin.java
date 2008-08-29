@@ -110,6 +110,14 @@ public class SitePlugin implements SessionAwarePlugin
 		{
 			return new GlobalTilesPanel(panelId, workspaceModel);
 		}
+		
+		@Override
+		public boolean isVisible()
+		{
+			JcrSession session = Brix.get().getCurrentSession(getWorkspaceModel().getObject().getId());
+			SitePlugin sp = SitePlugin.get();
+			return sp.canEditNode(sp.getGlobalContainer(session), Context.ADMINISTRATION);
+		}
 	};
 
 	static class GlobalVariablesTab extends AbstractWorkspaceTab
@@ -123,6 +131,14 @@ public class SitePlugin implements SessionAwarePlugin
 		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
 		{
 			return new GlobalVariablesPanel(panelId, workspaceModel);
+		}
+		
+		@Override
+		public boolean isVisible()
+		{
+			JcrSession session = Brix.get().getCurrentSession(getWorkspaceModel().getObject().getId());
+			SitePlugin sp = SitePlugin.get();
+			return sp.canEditNode(sp.getGlobalContainer(session), Context.ADMINISTRATION);
 		}
 	};
 
