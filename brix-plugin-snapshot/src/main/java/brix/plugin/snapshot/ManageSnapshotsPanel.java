@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.WebResponse;
 
 import brix.Brix;
@@ -35,19 +36,16 @@ import brix.workspace.WorkspaceModel;
 
 public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
 {
-    /** receives file upload from the upload component */
-    private transient FileUpload upload;
-    
-	private Brix getBrix()
-	{
-		// TODO: We don't really have a node here
-		return Brix.get();
-	}
-	
+    private Brix getBrix()
+    {
+        // TODO: We don't really have a node here
+        return Brix.get();
+    }
+
     public ManageSnapshotsPanel(String id, final IModel<Workspace> model)
     {
         super(id, model);
-        
+
         add(new FeedbackPanel("feedback"));
 
         IModel<List<Workspace>> snapshotsModel = new LoadableDetachableModel<List<Workspace>>()
@@ -56,9 +54,8 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
             protected List<Workspace> load()
             {
                 List<Workspace> list = SnapshotPlugin.get().getSnapshotsForWorkspace(
-                    getModelObject());
-                return getBrix().filterVisibleWorkspaces(list,
-                    Context.ADMINISTRATION);
+                        getModelObject());
+                return getBrix().filterVisibleWorkspaces(list, Context.ADMINISTRATION);
             }
 
         };
@@ -104,9 +101,8 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
                     {
                         Workspace target = ManageSnapshotsPanel.this.getModelObject();
                         Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, item
-                            .getModelObject(), target);
-                        return getBrix().getAuthorizationStrategy()
-                            .isActionAuthorized(action);
+                                .getModelObject(), target);
+                        return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
                     }
                 });
 
@@ -123,9 +119,8 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
                     public boolean isVisible()
                     {
                         Action action = new DeleteSnapshotAction(Context.ADMINISTRATION, item
-                            .getModelObject());
-                        return getBrix().getAuthorizationStrategy()
-                            .isActionAuthorized(action);
+                                .getModelObject());
+                        return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
                     }
                 });
 
@@ -146,8 +141,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
             {
                 Workspace current = ManageSnapshotsPanel.this.getModelObject();
                 Action action = new CreateSnapshotAction(Context.ADMINISTRATION, current);
-                return getBrix().getAuthorizationStrategy()
-                    .isActionAuthorized(action);
+                return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
         });
 
@@ -169,9 +163,9 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
                         resp.setAttachmentHeader("workspace.xml");
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
                         Brix brix = getBrix();
-                        JcrSession session = brix.getCurrentSession(id);                        
+                        JcrSession session = brix.getCurrentSession(id);
                         session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
-                            false);
+                                false);
                     }
 
                 });
@@ -185,12 +179,11 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
             {
                 Workspace target = ManageSnapshotsPanel.this.getModelObject();
                 Action action = new RestoreSnapshotAction(Context.ADMINISTRATION, target);
-                return getBrix().getAuthorizationStrategy()
-                    .isActionAuthorized(action);
+                return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
             }
         };
 
-        FileUploadField upload = new FileUploadField("upload");
+        final FileUploadField upload = new FileUploadField("upload", new Model<FileUpload>());
         uploadForm.add(upload);
 
         uploadForm.add(new SubmitLink("submit")
@@ -198,7 +191,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
             @Override
             public void onSubmit()
             {
-                FileUpload u = ManageSnapshotsPanel.this.upload;
+                FileUpload u = upload.getModelObject();
                 if (u != null)
                 {
                     try
@@ -207,17 +200,17 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
                         Brix brix = getBrix();
                         JcrSession session = brix.getCurrentSession(id);
-                        
+
                         if (session.itemExists(brix.getRootPath()))
                         {
                             session.getItem(brix.getRootPath()).remove();
                         }
                         session.importXML("/", s,
-                            ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                                ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
                         session.save();
-                        
+
                         brix.initWorkspace(ManageSnapshotsPanel.this.getModelObject(), session);
-                        
+
                         getSession().info(ManageSnapshotsPanel.this.getString("restoreSuccessful"));
                     }
                     catch (IOException e)
