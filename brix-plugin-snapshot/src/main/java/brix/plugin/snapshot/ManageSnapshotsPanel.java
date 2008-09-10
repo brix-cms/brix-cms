@@ -35,7 +35,9 @@ import brix.workspace.WorkspaceModel;
 
 public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
 {
-
+    /** receives file upload from the upload component */
+    private transient FileUpload upload;
+    
 	private Brix getBrix()
 	{
 		// TODO: We don't really have a node here
@@ -188,7 +190,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
             }
         };
 
-        final FileUploadField upload = new FileUploadField("upload");
+        FileUploadField upload = new FileUploadField("upload");
         uploadForm.add(upload);
 
         uploadForm.add(new SubmitLink("submit")
@@ -196,7 +198,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace>
             @Override
             public void onSubmit()
             {
-                FileUpload u = upload.getFileUpload();
+                FileUpload u = ManageSnapshotsPanel.this.upload;
                 if (u != null)
                 {
                     try
