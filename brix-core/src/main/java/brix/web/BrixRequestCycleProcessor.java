@@ -208,8 +208,10 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
                 throw new IllegalStateException(
                     "Could not resolve jcr workspace to use for this request");
             }
+            Cookie c = new Cookie(COOKIE_NAME, workspace);
+            c.setPath("/");
             if (workspace.toString().equals(getDefaultWorkspaceName()) == false)
-                resp.addCookie(new Cookie(COOKIE_NAME, workspace));
+                resp.addCookie(c);
             else if (cookie != null)
                 resp.clearCookie(cookie);
             rc.setMetaData(WORKSPACE_METADATA, workspace);

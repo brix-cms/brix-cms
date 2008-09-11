@@ -202,7 +202,7 @@
 		set: function(name, value, expiredays) {
 			var exdate = new Date();
 			exdate.setDate(exdate.getDate() + expiredays);
-			document.cookie = name + "=" + escape(value) + ((expiredays==null) ? "" : ";expires="+exdate);
+			document.cookie = name + "=" + escape(value) + ";path=/"+ ((expiredays==null) ? "" : ";expires="+exdate);
 		}
 	};
 
