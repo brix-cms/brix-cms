@@ -12,7 +12,7 @@ import java.util.Properties;
  */
 public class BrixBuild
 {
-    private static final String NUMBER = "build.number";
+    private static final String NUMBER = "brix-build.number";
     private static final String FILE = "META-INF/brix-build.properties";
 
     /** build number */
