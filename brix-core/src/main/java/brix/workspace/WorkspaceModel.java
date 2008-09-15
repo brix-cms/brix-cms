@@ -29,7 +29,6 @@ public class WorkspaceModel implements IModel<Workspace>
         {
         	this.workspaceId = null;
         }
-        this.workspaceId = workspace.getId();
         this.workspace = workspace;
     }
     
