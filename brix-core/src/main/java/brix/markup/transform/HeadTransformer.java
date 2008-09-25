@@ -114,6 +114,10 @@ public class HeadTransformer extends MarkupSourceTransformer
 						result.add(tag);
 					}
 					wasHead = true;
+					if (isHead(tag) && (tag.getType() == Tag.Type.OPEN))
+					{
+						++headDepth;
+					}
 					continue;
 				}
 
