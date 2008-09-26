@@ -32,11 +32,11 @@ public final class WicketApplication extends AbstractWicketApplication
 
     /** brix instance */
     private Brix brix;
-    
+
     public Brix getBrix()
-	{
-		return brix;
-	}
+    {
+        return brix;
+    }
 
     /** {@inheritDoc} */
     @Override

@@ -1,6 +1,7 @@
 package brix.config;
 
 import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.request.IRequestCodingStrategy;
 
 import brix.Brix;
 import brix.Path;
@@ -44,4 +45,17 @@ public interface UriMapper
      * @return JCR workspace or <code>null</code> if no suitable one is found
      */
     public Workspace getWorkspaceForRequest(WebRequestCycle requestCycle, Brix brix);
+
+    /**
+     * Rewrites relative urls found in static markup to be context-relative.
+     * 
+     * @see IRequestCodingStrategy#rewriteStaticRelativeUrl(String)
+     * 
+     * @param url
+     *            relative url to rewrite
+     * @param contxtPrefix
+     *            prefix that will make url context-relative, eg <code>../../</code>
+     * @return rewritten url
+     */
+    public String rewriteStaticRelativeUrl(String url, String contextPrefix);
 }

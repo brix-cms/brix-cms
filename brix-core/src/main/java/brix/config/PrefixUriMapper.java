@@ -65,4 +65,15 @@ public abstract class PrefixUriMapper implements UriMapper
 
     }
 
+    public String rewriteStaticRelativeUrl(String url, String contextPrefix)
+    {
+        if (prefix.isRoot())
+        {
+            return contextPrefix + url;
+        }
+        else
+        {
+            return contextPrefix + prefix.toRelative(Path.ROOT) + "/" + url;
+        }
+    }
 }

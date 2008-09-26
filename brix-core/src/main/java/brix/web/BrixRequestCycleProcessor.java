@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
@@ -17,7 +18,9 @@ import org.apache.wicket.protocol.http.request.WebRequestCodingStrategy;
 import org.apache.wicket.request.IRequestCodingStrategy;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
+import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.util.string.UrlUtils;
 
 import brix.Brix;
 import brix.BrixNodeModel;
@@ -27,6 +30,7 @@ import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
+import brix.web.nodepage.BrixNodeWebPage;
 import brix.workspace.Workspace;
 
 public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
@@ -259,6 +263,34 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
                 target = urlCodingStrategy;
             }
             return target;
+        }
+
+        @Override
+        public String rewriteStaticRelativeUrl(String url)
+        {
+            boolean insideBrixPage = false;
+            IRequestTarget target = RequestCycle.get().getRequestTarget();
+            if (target instanceof IPageRequestTarget)
+            {
+                IPageRequestTarget pageTarget = (IPageRequestTarget)target;
+                Page page = pageTarget.getPage();
+                if (page instanceof BrixNodeWebPage)
+                {
+                    insideBrixPage = true;
+                }
+            }
+
+            if (insideBrixPage && UrlUtils.isRelative(url))
+            {
+                final String prefix = RequestCycle.get().getRequest()
+                    .getRelativePathPrefixToContextRoot();
+
+                return brix.getConfig().getMapper().rewriteStaticRelativeUrl(url, prefix);
+            }
+            else
+            {
+                return super.rewriteStaticRelativeUrl(url);
+            }
         }
     }
 
