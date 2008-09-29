@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
 import org.apache.wicket.util.lang.Objects;
+import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
 import brix.Plugin;
@@ -33,6 +34,14 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     private static final JavascriptResourceReference javascriptReference = new JavascriptResourceReference(
         ToolbarBehavior.class, "toolbar.js");
 
+    private String escape(String s)
+    {
+    	String res = Strings.escapeMarkup(s).toString();
+    	res.replace("\\", "\\\\");
+    	res.replace("'", "\\'");
+    	return res;
+    }
+    
     @Override
     public void renderHead(IHeaderResponse response)
     {
@@ -46,8 +55,8 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
         String workspaceArray[] = new String[workspaces.size()];
         for (int i = 0; i < workspaces.size(); ++i)
         {
-            WorkspaceEntry e = workspaces.get(i);
-            workspaceArray[i] = "{ name: '" + e.visibleName + "', value: '" + e.id + "' }";
+            WorkspaceEntry e = workspaces.get(i);           
+            workspaceArray[i] = "{ name: '" + escape(e.visibleName) + "', value: '" + e.id + "' }";
         }
 
         if (defaultWorkspace == null)
