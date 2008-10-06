@@ -6563,7 +6563,7 @@ var tinyMCE = window.tinyMCE = tinymce.EditorManager;
 				submit_patch : 1,
 				add_unload_trigger : 1,
 				convert_urls : 1,
-				relative_urls : 1,
+				relative_urls : 0,
 				remove_script_host : 1,
 				table_inline_editing : 0,
 				object_resizing : 1,
