@@ -11,11 +11,13 @@ import java.util.TreeSet;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.StringValue;
 
 import brix.exception.BrixException;
+import brix.jcr.wrapper.BrixNode;
 
 public class BrixPageParameters implements Serializable
 {
@@ -280,7 +282,7 @@ public class BrixPageParameters implements Serializable
         return true;
     }
 
-    private static BrixNodeWebPage getCurrentPage()
+    static BrixNodeWebPage getCurrentPage()
     {
         IRequestTarget target = RequestCycle.get().getRequestTarget();
         BrixNodeWebPage page = null;
@@ -304,7 +306,7 @@ public class BrixPageParameters implements Serializable
     {
         IRequestTarget target = RequestCycle.get().getRequestTarget();
         // this is required for getting current page parameters from page constructor
-        // (the actual page instance is not constructed yet. 
+        // (the actual page instance is not constructed yet.
         if (target instanceof PageParametersRequestTarget)
         {
             return ((PageParametersRequestTarget)target).getPageParameters();
@@ -315,26 +317,49 @@ public class BrixPageParameters implements Serializable
         }
     }
 
+    /**
+     * Constructs a url to the specified page appending these page parameters
+     * 
+     * @param page
+     * @return url
+     */
+    public String urlFor(IModel<BrixNode> node)
+    {
+        IRequestTarget target = new BrixNodeRequestTarget(node, this);
+        return RequestCycle.get().urlFor(target).toString();
+    }
+
+    /**
+     * Constructs a url to the specified page appending these page parameters
+     * 
+     * @param page
+     * @return url
+     */
+    public String urlFor(BrixNodeWebPage page)
+    {
+        IRequestTarget target = new BrixNodeRequestTarget(page, this);
+        return RequestCycle.get().urlFor(target).toString();
+    }
+
     public String toCallbackURL()
     {
-        IRequestTarget target = new BrixNodeRequestTarget(getCurrentPage(), this);
-        return RequestCycle.get().urlFor(target).toString();
+        return urlFor(getCurrentPage());
     }
 
     public static boolean equals(BrixPageParameters p1, BrixPageParameters p2)
     {
-    	if (Objects.equal(p1, p2))
-    	{
-    		return true;
-    	}
-    	if (p1 == null && p2.getIndexedParamsCount() == 0 && p2.getQueryParamKeys().isEmpty())
-    	{
-    		return true;
-    	}
-    	if (p2 == null && p1.getIndexedParamsCount() == 0 && p1.getQueryParamKeys().isEmpty())
-    	{
-    		return true;
-    	}
-    	return false;
+        if (Objects.equal(p1, p2))
+        {
+            return true;
+        }
+        if (p1 == null && p2.getIndexedParamsCount() == 0 && p2.getQueryParamKeys().isEmpty())
+        {
+            return true;
+        }
+        if (p2 == null && p1.getIndexedParamsCount() == 0 && p1.getQueryParamKeys().isEmpty())
+        {
+            return true;
+        }
+        return false;
     }
 }
