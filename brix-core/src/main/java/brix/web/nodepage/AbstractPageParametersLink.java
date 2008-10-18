@@ -33,7 +33,7 @@ public abstract class AbstractPageParametersLink extends AbstractLink
             }
         });
         contributeToPageParameters(parameters);
-        return parameters.toCallbackURL();
+        return constructUrl(parameters);
     }
 
     /**
