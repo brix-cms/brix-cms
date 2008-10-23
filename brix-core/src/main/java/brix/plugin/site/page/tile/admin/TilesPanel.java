@@ -161,10 +161,13 @@ public class TilesPanel extends NodeManagerPanel
 				protected void onDelete(String tileId)
 				{
 					BrixNode tile = getTileContainerNode().tiles().getTile(selectedTileId);
-					getTileContainerNode().checkout();
-					tile.remove();
-					getTileContainerNode().save();
-					getTileContainerNode().checkin();
+					if (tile != null)
+					{
+						getTileContainerNode().checkout();
+						tile.remove();
+						getTileContainerNode().save();
+						getTileContainerNode().checkin();
+					}
 					selectedTileId = null;
 					setupTileEditor();
 				}
