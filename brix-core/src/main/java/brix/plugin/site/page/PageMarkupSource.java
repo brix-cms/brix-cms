@@ -122,13 +122,14 @@ public class PageMarkupSource implements MarkupSource
         final String content = node.getDataAsString();
         final Lexer lexer = new Lexer(content);
         Node cursor = null;
+        
         try
         {
             while ((cursor = lexer.nextNode()) != null)
             {
                 if (cursor instanceof Remark)
                 {
-                    items.add(new SimpleComment(cursor.toHtml()));
+                    items.add(new SimpleComment(cursor.getText()));
                 }
                 else if (cursor instanceof Text)
                 {
