@@ -2,19 +2,19 @@
   <parent>
     <artifactId>brix</artifactId>
     <groupId>brix</groupId>
-    <version>1.0-beta2</version>
+    <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>brix</groupId>
   <artifactId>brix-plugin-publish</artifactId>
   <name>Brix Site Publishing Workflow Plugin</name>
-  <version>1.0-beta2</version>
+  <version>1.0-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
       <groupId>brix</groupId>
       <artifactId>brix-core</artifactId>
-      <version>1.0-beta2</version>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
