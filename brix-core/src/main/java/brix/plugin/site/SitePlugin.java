@@ -401,6 +401,16 @@ public class SitePlugin implements SessionAwarePlugin
 				}
 			}
 		}
+		else
+		{
+			// make reference for brix:site to brix:web to prevent creating prototypes
+			// without selecting brix:web
+			JcrNode site = webNode.getNode(SITE_NODE_NAME);
+			if (!site.hasProperty(Brix.NS_PREFIX + "web"))
+			{
+				site.setProperty(Brix.NS_PREFIX + "web", webNode);
+			}
+		}
 	}
 
 	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
@@ -435,6 +445,7 @@ public class SitePlugin implements SessionAwarePlugin
 				RulesNode.initialize((BrixNode) web.addNode(WEBDAV_RULES_NODE_NAME, "nt:unstructured"));
 			}
 		}
+		
 	}
 
 	public String fromRealWebNodePath(String nodePath)
