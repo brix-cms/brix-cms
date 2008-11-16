@@ -55,6 +55,7 @@ public class ResourceRequestTarget implements IRequestTarget
         
         WebResponse response = (WebResponse)requestCycle.getResponse();
 
+        response.setContentLength(node.getContentLength());
         response.setContentType(node.getMimeType());
 
         if (save)
