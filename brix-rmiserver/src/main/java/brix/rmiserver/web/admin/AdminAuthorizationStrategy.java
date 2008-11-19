@@ -1,7 +1,5 @@
 package brix.rmiserver.web.admin;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,8 +12,8 @@ import org.apache.wicket.RequestCycle;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authorization.IAuthorizationStrategy;
 import org.apache.wicket.protocol.http.WebRequestCycle;
+import org.apache.wicket.util.crypt.Base64;
 
-import sun.misc.BASE64Decoder;
 import brix.rmiserver.AuthenticationException;
 import brix.rmiserver.Role;
 
@@ -28,7 +26,7 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy
     }
 
     public <T extends Component> boolean isInstantiationAuthorized(Class<T> componentClass)
-       {
+    {
         boolean authorized = false;
         if (Page.class.isAssignableFrom(componentClass))
         {
@@ -122,26 +120,18 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy
 
     private String[] parseAuthHeader(String auth)
     {
-        try
+        if (auth != null && auth.toLowerCase().startsWith("basic "))
         {
-            if (auth != null && auth.toLowerCase().startsWith("basic "))
+            auth = auth.substring(6);
+            auth = new String(Base64.decodeBase64(auth.getBytes()));
+            String tokens[] = auth.split(":");
+            if (tokens.length == 2)
             {
-                auth = auth.substring(6);
-                auth = new String(new BASE64Decoder().decodeBuffer(auth));
-                String tokens[] = auth.split(":");
-                if (tokens.length == 2)
-                {
-                    return tokens;
-                }
+                return tokens;
             }
-            return null;
         }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Could not base64 decode header string", e);
-        }
+        return null;
     }
 
- 
 
 }
