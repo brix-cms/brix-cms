@@ -30,18 +30,18 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     }
 
     private static final CompressedResourceReference cssReference = new CompressedResourceReference(
-        ToolbarBehavior.class, "toolbar.css");
+            ToolbarBehavior.class, "toolbar.css");
     private static final JavascriptResourceReference javascriptReference = new JavascriptResourceReference(
-        ToolbarBehavior.class, "toolbar.js");
+            ToolbarBehavior.class, "toolbar.js");
 
     private String escape(String s)
     {
-    	String res = Strings.escapeMarkup(s).toString();
-    	res.replace("\\", "\\\\");
-    	res.replace("'", "\\'");
-    	return res;
+        String res = Strings.escapeMarkup(s).toString();
+        res.replace("\\", "\\\\");
+        res.replace("'", "\\'");
+        return res;
     }
-    
+
     @Override
     public void renderHead(IHeaderResponse response)
     {
@@ -55,7 +55,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
         String workspaceArray[] = new String[workspaces.size()];
         for (int i = 0; i < workspaces.size(); ++i)
         {
-            WorkspaceEntry e = workspaces.get(i);           
+            WorkspaceEntry e = workspaces.get(i);
             workspaceArray[i] = "{ name: '" + escape(e.visibleName) + "', value: '" + e.id + "' }";
         }
 
@@ -69,7 +69,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
         }
 
         response.renderJavascript("BrixToolbarInit(" + Arrays.toString(workspaceArray) + ", " +
-            defaultWorkspace + ");", "brix-toolbar-init");
+                defaultWorkspace + ");", "brix-toolbar-init");
     }
 
     protected abstract String getCurrentWorkspaceId();
@@ -87,12 +87,12 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
         Brix brix = Brix.get();
         List<WorkspaceEntry> workspaces = new ArrayList<WorkspaceEntry>();
         Workspace currentWorkspace = getCurrentWorkspaceId() != null ? brix.getWorkspaceManager()
-            .getWorkspace(getCurrentWorkspaceId()) : null;
+                .getWorkspace(getCurrentWorkspaceId()) : null;
 
         for (Plugin p : brix.getPlugins())
         {
             List<Workspace> filtered = brix.filterVisibleWorkspaces(p.getWorkspaces(
-                currentWorkspace, true), Context.PRESENTATION);
+                    currentWorkspace, true), Context.PRESENTATION);
             for (Workspace w : filtered)
             {
                 WorkspaceEntry we = new WorkspaceEntry();
@@ -134,17 +134,24 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior
     @Override
     public boolean isEnabled(Component component)
     {
-    	RequestCycle requestCycle = RequestCycle.get();
-    	if (requestCycle.getRequest().getParameter(BrixRequestCycleProcessor.WORKSPACE_PARAM) != null)
-    	{
-    		return false;
-    	}
-    	else
-    	{
-    		List<WorkspaceEntry> workspaces = getWorkspaces();
-    		return workspaces.size() > 1 ||
-    		(workspaces.size() == 1 && !workspaces.get(0).id.equals(getCurrentWorkspaceId()));
-    	}
+        if (!Brix.get().getAuthorizationStrategy().isActionAuthorized(
+                new AccessWorkspaceSwitcherToolbarAction()))
+        {
+            return false;
+        }
+
+        RequestCycle requestCycle = RequestCycle.get();
+        if (requestCycle.getRequest().getParameter(BrixRequestCycleProcessor.WORKSPACE_PARAM) != null)
+        {
+            return false;
+        }
+        else
+        {
+            List<WorkspaceEntry> workspaces = getWorkspaces();
+            return workspaces.size() > 1 ||
+                    (workspaces.size() == 1 && !workspaces.get(0).id
+                            .equals(getCurrentWorkspaceId()));
+        }
     }
 
     @Override
