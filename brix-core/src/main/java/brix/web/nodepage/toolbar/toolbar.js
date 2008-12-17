@@ -263,7 +263,7 @@
 	}
 	
 	var html = "<div class='brix-toolbar' style='left:10px; top: 10px'><div class='brix-toolbar1'>" +
-	           " Switch to verson <select size='1'></select> " +
+	           " Switch to version <select size='1'></select> " +
 	           "</div></div>"
 	
 
