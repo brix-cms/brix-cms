@@ -59,7 +59,7 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
         // create desired nodepath
         final Path nodePath = brix.getConfig().getMapper().getNodePathForUriPath(
-            uriPath.toAbsolute(), brix);
+                uriPath.toAbsolute(), brix);
 
         if (nodePath != null)
         {
@@ -162,7 +162,7 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
     private String getWorkspaceFromUrl()
     {
         HttpServletRequest request = ((WebRequest)RequestCycle.get().getRequest())
-            .getHttpServletRequest();
+                .getHttpServletRequest();
 
         if (request.getParameter(WORKSPACE_PARAM) != null)
         {
@@ -210,7 +210,7 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
             if (workspace == null)
             {
                 throw new IllegalStateException(
-                    "Could not resolve jcr workspace to use for this request");
+                        "Could not resolve jcr workspace to use for this request");
             }
             Cookie c = new Cookie(COOKIE_NAME, workspace);
             c.setPath("/");
@@ -283,7 +283,7 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
             if (insideBrixPage && UrlUtils.isRelative(url))
             {
                 final String prefix = RequestCycle.get().getRequest()
-                    .getRelativePathPrefixToContextRoot();
+                        .getRelativePathPrefixToContextRoot();
 
                 return brix.getConfig().getMapper().rewriteStaticRelativeUrl(url, prefix);
             }
@@ -325,7 +325,7 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
             if (node instanceof BrixNode)
             {
                 return SwitchProtocolRequestTarget.requireProtocol(((BrixNode)node)
-                    .getRequiredProtocol());
+                        .getRequiredProtocol());
             }
             else
             {
@@ -359,7 +359,7 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
                     if (target == null)
                     {
                         target = SitePlugin.get().getNodePluginForNode(node).respond(
-                            new BrixNodeModel(node), requestParameters);
+                                new BrixNodeModel(node), requestParameters);
                     }
                 }
                 if (path.isRoot() || path.toString().equals("."))
@@ -411,10 +411,11 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
             throw new UnsupportedOperationException();
         }
 
-        public boolean matches(String path)
+        public boolean matches(String path, boolean caseSensitive)
         {
             throw new UnsupportedOperationException();
         }
+
     }
 
 }

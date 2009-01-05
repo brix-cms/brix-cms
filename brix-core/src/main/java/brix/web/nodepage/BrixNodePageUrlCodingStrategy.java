@@ -410,7 +410,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 		return false;
 	}
 
-	public boolean matches(String path)
+	public boolean matches(String path, boolean caseSensitive)
 	{
 		return false;
 	}
