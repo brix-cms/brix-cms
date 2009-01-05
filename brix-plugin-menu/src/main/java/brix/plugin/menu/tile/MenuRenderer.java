@@ -58,12 +58,12 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
 
         // how many levels should be rendered
         int renderLevels = container.getRenderLevels() != null
-            ? container.getRenderLevels()
-            : Integer.MAX_VALUE;
+                ? container.getRenderLevels()
+                : Integer.MAX_VALUE;
 
         Response response = getResponse();
         renderEntry(container, container.getMenu().getRoot(), response, selected, skipLevels,
-            renderLevels);
+                renderLevels);
     }
 
     private void renderEntry(MenuContainer container, Entry entry, Response response,
@@ -109,7 +109,7 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
     private BrixNode getNode(ChildEntry entry)
     {
         if (entry.getReference() != null && !entry.getReference().isEmpty() &&
-            entry.getReference().getType() == Type.NODE)
+                entry.getReference().getType() == Type.NODE)
         {
             return entry.getReference().getNodeModel().getObject();
         }
@@ -180,7 +180,7 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
             }
 
             if (anyChildren && selected && anyChildSelected(entry, selectedSet) &&
-                !Strings.isEmpty(container.getItemWithSelectedChildStyleClass()))
+                    !Strings.isEmpty(container.getItemWithSelectedChildStyleClass()))
             {
                 listItemCssClass = container.getItemWithSelectedChildStyleClass();
             }
@@ -261,29 +261,34 @@ public class MenuRenderer extends WebComponent implements IGenericComponent<Brix
     private boolean isSelected(Reference reference, String url)
     {
         boolean eq = false;
-
-        BrixNodeWebPage page = (BrixNodeWebPage)getPage();
-
-        if (reference.getType() == Type.NODE)
+        
+        if (getPage() instanceof BrixNodeWebPage)
         {
-            eq = page.getModel().equals(reference.getNodeModel()) &&
-                comparePageParameters(page.getBrixPageParameters(), reference.getParameters());
 
-        }
-        else
-        {
-            eq = url.equals(reference.getUrl()) &&
-                comparePageParameters(page.getBrixPageParameters(), reference.getParameters());
-        }
+            BrixNodeWebPage page = (BrixNodeWebPage)getPage();
 
+            if (reference.getType() == Type.NODE)
+            {
+                eq = page.getModel().equals(reference.getNodeModel()) &&
+                        comparePageParameters(page.getBrixPageParameters(), reference
+                                .getParameters());
+
+            }
+            else
+            {
+                eq = url.equals(reference.getUrl()) &&
+                        comparePageParameters(page.getBrixPageParameters(), reference
+                                .getParameters());
+            }
+        }
         return eq;
     }
 
     private boolean comparePageParameters(BrixPageParameters page, BrixPageParameters fromReference)
     {
         if (fromReference == null ||
-            (fromReference.getIndexedParamsCount() == 0 && fromReference.getQueryParamKeys()
-                .isEmpty()))
+                (fromReference.getIndexedParamsCount() == 0 && fromReference.getQueryParamKeys()
+                        .isEmpty()))
         {
             return true;
         }
