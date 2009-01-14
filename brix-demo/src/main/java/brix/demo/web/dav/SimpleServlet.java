@@ -8,6 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.jackrabbit.server.SessionProvider;
+import org.apache.jackrabbit.webdav.AbstractLocatorFactory;
+import org.apache.jackrabbit.webdav.DavLocatorFactory;
+import org.apache.jackrabbit.webdav.server.AbstractWebdavServlet;
 import org.apache.jackrabbit.webdav.simple.SimpleWebdavServlet;
 import org.apache.wicket.Application;
 
@@ -21,12 +24,38 @@ import brix.jcr.base.EventUtil;
 public class SimpleServlet extends SimpleWebdavServlet
 {
 
-	public SimpleServlet()
-	{
+    /**
+     * Constructor
+     */
+    public SimpleServlet()
+    {
 
-	}
+    }
 
-	@Override
+    private AbstractLocatorFactory locatorFactory;
+
+    // XXX NOTE only include leading /
+    static final String WORKSPACE_ROOT_PATH = "/brix:root/brix:web/brix:site";
+
+
+    /**
+     * Returns the <code>DavLocatorFactory</code>. If no locator factory has been set or created a
+     * new instance of {@link org.apache.jackrabbit.webdav.simple.LocatorFactoryImpl} is returned.
+     * 
+     * @return the locator factory
+     * @see AbstractWebdavServlet#getLocatorFactory()
+     */
+    public DavLocatorFactory getLocatorFactory()
+    {
+        if (locatorFactory == null)
+        {
+            locatorFactory = new SiteRootLocatorFactory(this, getPathPrefix());
+        }
+        return locatorFactory;
+
+    }
+
+    @Override
     public synchronized SessionProvider getSessionProvider()
     {
         final SessionProvider original = super.getSessionProvider();
@@ -44,13 +73,13 @@ public class SimpleServlet extends SimpleWebdavServlet
                     s = EventUtil.wrapSession(original.getSession(request, rep, workspace));
                     for (Plugin p : getBrix().getPlugins())
                     {
-                    	if (p instanceof SessionAwarePlugin)
-                    	{
-                    		((SessionAwarePlugin) p).onWebDavSession(s);
-                    	}
+                        if (p instanceof SessionAwarePlugin)
+                        {
+                            ((SessionAwarePlugin)p).onWebDavSession(s);
+                        }
                     }
-                    request.setAttribute(key, s);                    
-                }                
+                    request.setAttribute(key, s);
+                }
                 return s;
             }
 
@@ -59,19 +88,19 @@ public class SimpleServlet extends SimpleWebdavServlet
                 original.releaseSession(EventUtil.unwrapSession(session));
             }
         };
-    }	
-	
-	private Brix getBrix()
-	{
-		WicketApplication app = (WicketApplication) Application.get("wicket.brix-demo");
-		return app.getBrix();
-	}
-	
-	@Override
-	public Repository getRepository()
-	{
-		WicketApplication app = (WicketApplication) Application.get("wicket.brix-demo");
-		return app.getRepository();
-	}
+    }
+
+    private Brix getBrix()
+    {
+        WicketApplication app = (WicketApplication)Application.get("wicket.brix-demo");
+        return app.getBrix();
+    }
+
+    @Override
+    public Repository getRepository()
+    {
+        WicketApplication app = (WicketApplication)Application.get("wicket.brix-demo");
+        return app.getRepository();
+    }
 
 }
