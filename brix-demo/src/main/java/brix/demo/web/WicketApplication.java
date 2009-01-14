@@ -5,7 +5,6 @@ import javax.jcr.ImportUUIDBehavior;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.IRequestCycleProcessor;
-import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 
 import brix.Brix;
 import brix.Path;
@@ -102,7 +101,7 @@ public final class WicketApplication extends AbstractWicketApplication
         }
 
         // mount admin page
-        mount(new HybridUrlCodingStrategy("/admin", AdminPage.class));
+        mount(new QueryStringHybridUrlCodingStrategy("/admin", AdminPage.class));
 
         // FIXME matej: do we need this?
         // mountBookmarkablePage("/NotFound", ResourceNotFoundPage.class);
@@ -124,7 +123,7 @@ public final class WicketApplication extends AbstractWicketApplication
                 JcrSession session = brix.getCurrentSession(w.getId());
 
                 session.importXML("/", getClass().getResourceAsStream("workspace.xml"),
-                    ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                        ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
                 brix.initWorkspace(w, session);
 
