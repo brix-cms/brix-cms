@@ -3,19 +3,20 @@ package brix.rmiserver.jackrabbit;
 
 import java.util.Collection;
 
+import javax.jcr.RepositoryException;
 import javax.security.auth.spi.LoginModule;
 
 import org.apache.jackrabbit.core.config.AccessManagerConfig;
 import org.apache.jackrabbit.core.config.ClusterConfig;
 import org.apache.jackrabbit.core.config.ConfigurationException;
-import org.apache.jackrabbit.core.config.DataStoreConfig;
-import org.apache.jackrabbit.core.config.FileSystemConfig;
 import org.apache.jackrabbit.core.config.LoginModuleConfig;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.jackrabbit.core.config.SearchConfig;
 import org.apache.jackrabbit.core.config.SecurityConfig;
 import org.apache.jackrabbit.core.config.VersioningConfig;
 import org.apache.jackrabbit.core.config.WorkspaceConfig;
+import org.apache.jackrabbit.core.data.DataStore;
+import org.apache.jackrabbit.core.fs.FileSystem;
 import org.xml.sax.InputSource;
 
 /**
@@ -52,87 +53,105 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig
         };
     }
 
+    @Override
     public WorkspaceConfig createWorkspaceConfig(String name, InputSource template)
             throws ConfigurationException
     {
         return delegate.createWorkspaceConfig(name, template);
     }
 
-    public WorkspaceConfig createWorkspaceConfig(String name) throws ConfigurationException
+    @Override
+    public WorkspaceConfig createWorkspaceConfig(String name, StringBuffer configContent)
+            throws ConfigurationException
     {
-        return delegate.createWorkspaceConfig(name);
+        return delegate.createWorkspaceConfig(name, configContent);
     }
+
 
     public boolean equals(Object obj)
     {
         return delegate.equals(obj);
     }
 
+    @Override
     public AccessManagerConfig getAccessManagerConfig()
     {
         return delegate.getAccessManagerConfig();
     }
 
+    @Override
     public String getAppName()
     {
         return delegate.getAppName();
     }
 
+    @Override
     public ClusterConfig getClusterConfig()
     {
         return delegate.getClusterConfig();
     }
 
-    public DataStoreConfig getDataStoreConfig()
-    {
-        return delegate.getDataStoreConfig();
-    }
-
+    @Override
     public String getDefaultWorkspaceName()
     {
         return delegate.getDefaultWorkspaceName();
     }
 
-    public FileSystemConfig getFileSystemConfig()
+    @Override
+    public DataStore getDataStore() throws RepositoryException
     {
-        return delegate.getFileSystemConfig();
+        return delegate.getDataStore();
     }
 
+    @Override
+    public FileSystem getFileSystem() throws RepositoryException
+    {
+        return delegate.getFileSystem();
+    }
+
+    @Override
     public String getHomeDir()
     {
         return delegate.getHomeDir();
     }
 
+    @Override
     public SearchConfig getSearchConfig()
     {
         return delegate.getSearchConfig();
     }
 
+    @Override
     public SecurityConfig getSecurityConfig()
     {
         return delegate.getSecurityConfig();
     }
 
+    @Override
     public VersioningConfig getVersioningConfig()
     {
         return delegate.getVersioningConfig();
     }
 
+    @Override
     public WorkspaceConfig getWorkspaceConfig(String name)
     {
         return delegate.getWorkspaceConfig(name);
     }
 
+    @Override
     public Collection getWorkspaceConfigs()
     {
         return delegate.getWorkspaceConfigs();
     }
 
+    @Override
     public int getWorkspaceMaxIdleTime()
     {
         return delegate.getWorkspaceMaxIdleTime();
     }
 
+    @Override
     public String getWorkspacesConfigRootDir()
     {
         return delegate.getWorkspacesConfigRootDir();
