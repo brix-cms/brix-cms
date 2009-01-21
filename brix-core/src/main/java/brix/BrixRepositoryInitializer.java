@@ -50,14 +50,14 @@ public class BrixRepositoryInitializer implements RepositoryInitializer
 
         EventUtil.registerSaveEventListener(new JcrEventListener());
 
-        RepositoryUtil.registerMixinType(w, BrixNode.JCR_TYPE_BRIX_NODE, true, true);
+        RepositoryUtil.registerNodeType(w, BrixNode.JCR_TYPE_BRIX_NODE, true, true, true);
 
         // the following three have always brix:node mixin too
-        RepositoryUtil.registerMixinType(w, FolderNodePlugin.TYPE, false, false);
+        RepositoryUtil.registerNodeType(w, FolderNodePlugin.TYPE, false, false, true);
 
-        RepositoryUtil.registerMixinType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true);
+        RepositoryUtil.registerNodeType(w, TileContainerFacet.JCR_TYPE_BRIX_TILE, false, true, false);
 
-        RepositoryUtil.registerMixinType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false);
+        RepositoryUtil.registerNodeType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false, true);
     }
 
 }

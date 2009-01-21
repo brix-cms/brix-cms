@@ -31,8 +31,8 @@ public class PageNode extends AbstractContainer
         @Override
         public void initializeRepository(Brix brix, Session session)
         {
-            RepositoryUtil.registerMixinType(session.getWorkspace(), PageSiteNodePlugin.TYPE,
-                false, false);
+            RepositoryUtil.registerNodeType(session.getWorkspace(), PageSiteNodePlugin.TYPE,
+                false, false, true);
         }
     };
 

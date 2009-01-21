@@ -18,8 +18,8 @@ public class RepositoryUtil
 {
     private static final Logger logger = LoggerFactory.getLogger(Brix.class);
 
-    public static void registerMixinType(Workspace workspace, String typeName,
-            boolean referenceable, boolean orderable)
+    public static void registerNodeType(Workspace workspace, String typeName,
+            boolean referenceable, boolean orderable, boolean mixin)
     {
         try
         {
@@ -39,8 +39,9 @@ public class RepositoryUtil
                 if (orderable)
                     type += "orderable ";
 
-                type += " mixin";
-
+                if (mixin)
+                	type += " mixin";
+ 
                 manager.registerNodeTypes(new StringInputStream(type),
                     JackrabbitNodeTypeManager.TEXT_X_JCR_CND);
             }

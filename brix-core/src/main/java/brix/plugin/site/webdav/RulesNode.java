@@ -154,7 +154,7 @@ public class RulesNode extends BrixNode
 		@Override
 		public void initializeRepository(Brix brix, Session session)
 		{
-			RepositoryUtil.registerMixinType(session.getWorkspace(), TYPE, false, false);
+			RepositoryUtil.registerNodeType(session.getWorkspace(), TYPE, false, false, true);
 		}
 	};
 

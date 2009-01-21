@@ -30,7 +30,7 @@ public class TemplateNode extends AbstractContainer
         @Override
         public void initializeRepository(Brix brix, Session session)
         {
-            RepositoryUtil.registerMixinType(session.getWorkspace(), TemplateSiteNodePlugin.TYPE, false, false);
+            RepositoryUtil.registerNodeType(session.getWorkspace(), TemplateSiteNodePlugin.TYPE, false, false, true);
         }
     };
 
