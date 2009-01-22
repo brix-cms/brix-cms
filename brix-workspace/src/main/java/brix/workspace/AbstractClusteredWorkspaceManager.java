@@ -33,7 +33,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 	}
 
 	/**
-	 * Iterates over the list of workspace gathering information about each
+	 * Iterates over the list of workspaces gathering information about each
 	 * workspace. Every processed workspace is removed from the list. Workspaces
 	 * left in list could not have been locked properly.
 	 * 
@@ -140,7 +140,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 
 			if (!accessibleWorkspaces.isEmpty())
 			{
-				log.info("Some workspaces couldn't be during initialization read (they were locked).");
+				log.info("Some workspaces couldn't be read during initialization (they were locked).");
 			}
 
 			return this;

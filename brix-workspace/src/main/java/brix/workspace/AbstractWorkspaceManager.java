@@ -241,9 +241,8 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
 
 	protected boolean isBrixWorkspace(String id)
 	{
-		// we could check is the prefix is followed by real uuid here, but
-		// that's probably an
-		// overkill.
+		// we could check if the prefix is followed by real uuid here, but
+		// that's probably an overkill.
 		return id.startsWith(WORKSPACE_PREFIX) || id.startsWith(WORKSPACE_PREFIX_LONG);
 	}
 
