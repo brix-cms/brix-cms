@@ -90,8 +90,8 @@ public abstract class Brix
         registry.register(Tile.POINT, new PageTile());
 
         registry.register(Plugin.POINT, new SitePlugin(this));
-// registry.register(Plugin.POINT, new MenuPlugin(this));
-// registry.register(Plugin.POINT, new SnapshotPlugin(this));
+        // registry.register(Plugin.POINT, new MenuPlugin(this));
+        // registry.register(Plugin.POINT, new SnapshotPlugin(this));
         // registry.register(Plugin.POINT, new PrototypePlugin(this));
         // registry.register(Plugin.POINT, new PublishingPlugin(this));
 

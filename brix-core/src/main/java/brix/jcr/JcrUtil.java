@@ -552,7 +552,7 @@ public class JcrUtil
 		JcrNode target = node.getSession().getNodeByUUID(value.getString());
 		String path = target.getPath();
 
-		// check if the node is child of node form paths
+		// check if the node is child of node from paths
 		boolean found = false;
 		for (String p : paths)
 		{
@@ -671,7 +671,7 @@ public class JcrUtil
 	}
 
 	/**
-	 * Returns node with give UUID from the session or <code>null</code> if
+	 * Returns node with given UUID from the session or <code>null</code> if
 	 * there is no node with such UUID.
 	 * 
 	 * @param session

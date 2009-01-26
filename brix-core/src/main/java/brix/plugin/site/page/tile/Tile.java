@@ -17,11 +17,11 @@ import brix.web.nodepage.PageParametersAware;
 import brix.web.tile.unknown.UnknownTile;
 
 /**
- * Tiles allow to put Wicket components on Brix pages and templates. Tile (class
- * that implements Tile interface) is a singleton that acts like factory for
- * tile editor and viewer panel.
+ * Tiles allow the placement of Wicket components on Brix pages and templates.
+ * Tile (the class that implements Tile interface) is a singleton that acts like
+ * a factory for a tile editor and viewer panel.
  * <p>
- * When user adds tile to page or template a new node is created that can
+ * When a user adds a tile to a page or a template, a new node is created that can
  * contain the tile instance configuration options. The node is passed to the
  * {@link #newViewer(String, IModel)} method. The editor can the node passed as
  * argument of the {@link TileEditorPanel#save(BrixNode)} method.

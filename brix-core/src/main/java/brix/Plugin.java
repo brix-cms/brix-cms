@@ -14,10 +14,10 @@ import brix.workspace.Workspace;
  * Plugin is a top-level component in Brix. Plugins can
  * <ul>
  * <li>contribute tabs to the main tabbed panel
- * <li>contribute workspaces their are responsible for to the workspace
+ * <li>contribute workspaces they are responsible for to the workspace
  * switcher
  * </ul>
- * When plugin creates a workspace it is responsible for it. For such workspace
+ * When plugin creates a workspace it is responsible for it. For such workspaces
  * {@link #isPluginWorkspace(Workspace)} must return true.
  * <p>
  * TODO: Make it possible for plugins to intercept HTTP requests to serve
@@ -56,7 +56,7 @@ public interface Plugin
 	 * panel in tab is responsible for updating itself when workspace changed.
 	 * 
 	 * @param workspaceModel
-	 *            model providing currently selcted workspace
+	 *            model providing currently selected workspace
 	 * @return list of {@link ITab} instances or null if this plugin doesn't
 	 *         contribute any tabs
 	 */
@@ -68,7 +68,7 @@ public interface Plugin
 	 * workspace contains all required nodes.
 	 * <p>
 	 * This method is called on Brix startup for every plugin and workspace. It
-	 * is also when new wokspace is created.
+	 * is also when new workspace is created.
 	 * 
 	 * @param workspace
 	 * @param workspaceSession
@@ -92,7 +92,7 @@ public interface Plugin
 
 	/**
 	 * Returns <code>true</code> if the plugin is responsible for the given
-	 * workspace. workspace. E.g. for snapshot workspaces the SnapshotPlugin
+	 * workspace. E.g. for snapshot workspaces the SnapshotPlugin
 	 * should return <code>true</code>, all other plugins should return
 	 * <code>false</code>.
 	 * <p>
@@ -108,7 +108,7 @@ public interface Plugin
 
 	/**
 	 * Returns user visible name for given workspace. The name will be shown in
-	 * workspace selector. This method ill only be called for workspaces
+	 * workspace selector. This method will only be called for workspaces
 	 * returned from {@link #getWorkspaces(Workspace, boolean)} or for
 	 * workspaces for which {@link #isPluginWorkspace(Workspace)} returns true.
 	 * 

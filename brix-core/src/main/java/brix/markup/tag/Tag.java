@@ -3,7 +3,7 @@ package brix.markup.tag;
 import java.util.Map;
 
 /**
- * Represents a HTML tag.
+ * Represents an HTML tag.
  * @author Matej Knopp
  * 
  * @see ComponentTag

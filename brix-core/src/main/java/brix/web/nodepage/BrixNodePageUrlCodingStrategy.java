@@ -601,7 +601,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 				return null;
 			}
 
-			// go trhough the segments to determine if they don't contains
+			// go through the segments to determine if they don't contain
 			// invalid characters
 			for (int i = 0; i < segments.length; ++i)
 			{

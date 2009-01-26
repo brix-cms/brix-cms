@@ -1,7 +1,7 @@
 package brix.markup.tag;
 
 /**
- * Represents a HTML comment.
+ * Represents an HTML comment.
  * 
  * @author Matej Knopp
  */

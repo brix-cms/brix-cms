@@ -79,7 +79,7 @@ public interface SiteNodePlugin
 	Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
 
 	/**
-	 * This method returns converter that is capable to convert the given node
+	 * This method returns a converter that is capable of converting the given node
 	 * to a node this plugin can handle, or <code>null</code> if such
 	 * converter does not exist.
 	 * 

@@ -26,7 +26,7 @@ public class BrixFileNode extends BrixNode
 {
 
 	/**
-	 * Wrapes the given delegate node using provided {@link JcrSession}.
+	 * Wraps the given delegate node using provided {@link JcrSession}.
 	 * 
 	 * @param delegate
 	 * @param session

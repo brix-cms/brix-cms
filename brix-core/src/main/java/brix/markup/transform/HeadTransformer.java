@@ -12,7 +12,7 @@ import brix.markup.tag.simple.SimpleTag;
 
 /**
  * Transformer that gathers content from all &lt;head&gt; and
- * &lt;wicket:head&gt; sections in markup. It groups the head content and insert
+ * &lt;wicket:head&gt; sections in markup. It groups the head content and inserts
  * it all into the first &lt;head&gt; section removing all other head sections.
  * 
  * Also if there are nested &lt;body&gt; sections it removes the inner

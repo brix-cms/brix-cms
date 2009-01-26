@@ -53,7 +53,7 @@ public interface UriMapper
      * 
      * @param url
      *            relative url to rewrite
-     * @param contxtPrefix
+     * @param contextPrefix
      *            prefix that will make url context-relative, eg <code>../../</code>
      * @return rewritten url
      */

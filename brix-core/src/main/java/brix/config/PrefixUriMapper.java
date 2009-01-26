@@ -4,7 +4,7 @@ import brix.Brix;
 import brix.Path;
 
 /**
- * Uri mapper that mounts cms urls on a certai prefix. Eg
+ * Uri mapper that mounts cms urls on a certain prefix. Eg
  * <code>new PrefixUriMapper(new Path("/docs/cms"))</code> will mount all cms urls under the
  * <code>/docs/cms/*</code> url space.
  * 

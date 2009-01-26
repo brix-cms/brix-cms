@@ -224,7 +224,7 @@ public class BrixNode extends NodeWrapper
 	 * actual state {@link #touch()} must be invoked every time node is being
 	 * saved. This happens automatically when {@link Node#save()} is invoked,
 	 * however, if only session is saved {@link #touch()} must be called
-	 * explicitely.
+	 * explicitly.
 	 */
 	public void touch()
 	{
@@ -308,7 +308,7 @@ public class BrixNode extends NodeWrapper
 
 	/**
 	 * Returns the user visible node name. In most cases, this would be the same
-	 * as node name, but it can be overriden by the wrapper.
+	 * as node name, but it can be overridden by the wrapper.
 	 * 
 	 * @return user visible node name
 	 */
@@ -319,7 +319,7 @@ public class BrixNode extends NodeWrapper
 
 	/**
 	 * Returns the user visible node type. By default returns empty string, can
-	 * be overriden by the wrapper.
+	 * be overridden by the wrapper.
 	 * 
 	 * @return user visible node type
 	 */

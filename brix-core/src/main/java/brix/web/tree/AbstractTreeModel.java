@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.tree.AbstractTree;
 public abstract class AbstractTreeModel implements Serializable, TreeModel
 {
 	/**
-	 * Returns the root node if this tree. This is the only mandatory method to
+	 * Returns the root node of this tree. This is the only mandatory method to
 	 * be implemented for custom tree models.
 	 */
 	public abstract TreeNode getRoot();
