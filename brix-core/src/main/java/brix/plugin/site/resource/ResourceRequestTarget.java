@@ -2,7 +2,7 @@
  * 
  */
 package brix.plugin.site.resource;
-
+import java.io.InputStream;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,17 +54,10 @@ public class ResourceRequestTarget implements IRequestTarget
         BrixFileNode node = (BrixFileNode)this.node.getObject();
         
         WebResponse response = (WebResponse)requestCycle.getResponse();
-
-        response.setContentLength(node.getContentLength());
+        
         response.setContentType(node.getMimeType());
-
-        if (save)
-        {        	
-            response.setAttachmentHeader(node.getName());
-        }
-        
-        Date lastModified = node.getLastModified();
-        
+    
+        Date lastModified = node.getLastModified();        
         response.setLastModifiedTime(Time.valueOf(lastModified));        
         
         try
@@ -78,12 +71,19 @@ public class ResourceRequestTarget implements IRequestTarget
         		// the weird toString comparison is to prevent comparing milliseconds
         		if (d.after(lastModified) || d.toString().equals(lastModified.toString()))
         		{        	
+        			response.setContentLength(node.getContentLength());
         			response.getHttpServletResponse().setStatus(HttpServletResponse.SC_NOT_MODIFIED);        			
         			return;
         				
         		}        		
         	}
-            node.writeData(requestCycle.getResponse().getOutputStream());
+        	String fileName = node.getName();
+        	long length = node.getContentLength();
+        	HttpServletRequest httpServletRequest = ((WebRequest)requestCycle.getRequest()).getHttpServletRequest();
+        	HttpServletResponse httpServletResponse = response.getHttpServletResponse();
+        	InputStream stream = node.getDataAsStream(); 
+        	
+            new Streamer(length, stream, fileName, save, httpServletRequest, httpServletResponse).stream();
         }
         catch (Exception e)
         {
