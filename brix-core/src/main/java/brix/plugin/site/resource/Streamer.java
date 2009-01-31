@@ -21,10 +21,10 @@ class Streamer
 	private final String fileName;
 	private final boolean attachment;
 	private final HttpServletRequest request;
-	private final HttpServletResponse response;	
+	private final HttpServletResponse response;
 
-	public Streamer(long length, InputStream inputStream, String fileName, boolean attachment, HttpServletRequest request,
-			HttpServletResponse response)
+	public Streamer(long length, InputStream inputStream, String fileName, boolean attachment,
+			HttpServletRequest request, HttpServletResponse response)
 	{
 		this.length = length;
 		this.inputStream = inputStream;
@@ -56,14 +56,15 @@ class Streamer
 	{
 		if (isEmpty(range))
 		{
-			return new Range(0l, length - 1);
+			return new Range(null, null);
 		}
 		String p[] = range.split("=");
 
 		if (p.length != 1 && (p.length != 2 || !"bytes".equals(p[0])))
 		{
 			return new Range(0l, length - 1);
-		} else
+		}
+		else
 		{
 			p = p[p.length - 1].split("-");
 			if (p.length == 1)
@@ -77,13 +78,16 @@ class Streamer
 			if (isEmpty(p[0]) && isEmpty(p[1]))
 			{
 				return new Range(0l, length - 1);
-			} else if (isEmpty(p[0]))
+			}
+			else if (isEmpty(p[0]))
 			{
 				return new Range(length - Long.valueOf(p[1]), length - 1);
-			} else if (isEmpty(p[1]))
+			}
+			else if (isEmpty(p[1]))
 			{
 				return new Range(Long.valueOf(p[0]), length - 1);
-			} else
+			}
+			else
 			{
 				return new Range(Long.valueOf(p[0]), Long.valueOf(p[1]));
 			}
@@ -96,21 +100,23 @@ class Streamer
 		Long first = range.start;
 		Long last = range.end;
 		long contentLength = length;
-
-		if (first != null && last != null && !(first == 0 && last == length - 1))
+		
+		if (first != null && last != null)
 		{
 			response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
 			response.addHeader("Content-Range", "bytes " + first + "-" + last + "/" + length);
 
 			contentLength = last - first + 1;
-		} else
+		}
+		else
 		{
 			response.setStatus(HttpServletResponse.SC_OK);
 			first = 0l;
 			last = length - 1;
-			response.addHeader("Content-Length", "" + contentLength);
 		}
 
+		response.addHeader("Content-Length", "" + contentLength);
+		
 		if (!attachment)
 		{
 			response.addHeader("Content-Disposition", "inline; filename=" + fileName + ";");
@@ -153,23 +159,27 @@ class Streamer
 
 				left -= howMuch;
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			if (e instanceof EofException)
 			{
 				// ignore
-			} else
+			}
+			else
 			{
 				throw new RuntimeException(e);
 			}
-		} finally
+		}
+		finally
 		{
 			if (s != null)
 			{
 				try
 				{
 					s.close();
-				} catch (IOException ignore)
+				}
+				catch (IOException ignore)
 				{
 				}
 			}
