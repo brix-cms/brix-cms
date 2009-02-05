@@ -62,7 +62,14 @@ public final class SiteRootLocatorFactory extends AbstractLocatorFactory
     // ACTUALLY the prefix? Does this matter?
     private String removeRootPrefix(String repositoryPath)
     {
-        return repositoryPath.substring(SimpleServlet.WORKSPACE_ROOT_PATH.length());
+    	if (repositoryPath.startsWith(SimpleServlet.WORKSPACE_ROOT_PATH))
+    	{
+    		return repositoryPath.substring(SimpleServlet.WORKSPACE_ROOT_PATH.length());
+    	}
+    	else
+    	{
+    		return repositoryPath;
+    	}
     }
 
     private boolean startsWithWorkspace(String repositoryPath, String wspPath)
