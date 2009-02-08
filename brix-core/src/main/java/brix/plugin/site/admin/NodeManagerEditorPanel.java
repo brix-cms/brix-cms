@@ -27,181 +27,193 @@ import brix.web.util.PathLabel;
 public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode>
 {
 
-	public NodeManagerEditorPanel(String id, IModel<BrixNode> model)
-	{
-		super(id, model);
+    public NodeManagerEditorPanel(String id, IModel<BrixNode> model)
+    {
+        super(id, model);
 
-		String root = SitePlugin.get().getSiteRootPath();
-		add(new PathLabel("path2", model, root)
-		{
-			@Override
-			protected void onPathClicked(Path path)
-			{
-				BrixNode node = (BrixNode) getNode().getSession().getItem(path.toString());
-				selectNode(node, false);
-			}
-		});
+        String root = SitePlugin.get().getSiteRootPath();
+        add(new PathLabel("path2", model, root)
+        {
+            @Override
+            protected void onPathClicked(Path path)
+            {
+                BrixNode node = (BrixNode)getNode().getSession().getItem(path.toString());
+                selectNode(node, false);
+            }
+        });
 
-		add(new Link<Void>("rename")
-		{
-			@Override
-			public void onClick()
-			{
-				String id = NodeManagerEditorPanel.this.getId();
-				Panel renamePanel = new RenamePanel(id, NodeManagerEditorPanel.this.getModel())
-				{
-					@Override
-					protected void onLeave()
-					{
-						SitePlugin.get().refreshNavigationTree(this);
-						replaceWith(NodeManagerEditorPanel.this);
-					}
-				};
-				NodeManagerEditorPanel.this.replaceWith(renamePanel);
-			}
+        add(new Link<Void>("rename")
+        {
+            @Override
+            public void onClick()
+            {
+                String id = NodeManagerEditorPanel.this.getId();
+                Panel renamePanel = new RenamePanel(id, NodeManagerEditorPanel.this.getModel())
+                {
+                    @Override
+                    protected void onLeave()
+                    {
+                        SitePlugin.get().refreshNavigationTree(this);
+                        replaceWith(NodeManagerEditorPanel.this);
+                    }
+                };
+                NodeManagerEditorPanel.this.replaceWith(renamePanel);
+            }
 
-			@Override
-			public boolean isVisible()
-			{
-				BrixNode node = NodeManagerEditorPanel.this.getModelObject();
-				String path = node.getPath();
-				String web = SitePlugin.get().getSiteRootPath();
-				return SitePlugin.get().canRenameNode(node, Context.ADMINISTRATION) && path.length() > web.length()
-						&& path.startsWith(web);
-			}
-		});
+            @Override
+            public boolean isVisible()
+            {
+                BrixNode node = NodeManagerEditorPanel.this.getModelObject();
+                String path = node.getPath();
+                String web = SitePlugin.get().getSiteRootPath();
+                return SitePlugin.get().canRenameNode(node, Context.ADMINISTRATION) &&
+                        path.length() > web.length() && path.startsWith(web);
+            }
+        });
 
-		add(new Link<Void>("makeVersionable")
-		{
-			@Override
-			public void onClick()
-			{
-				if (!getNode().isNodeType("mix:versionable"))
-				{
-					getNode().addMixin("mix:versionable");
-					getNode().save();
-					getNode().checkin();
-				}
-			}
+        add(new Link<Void>("makeVersionable")
+        {
+            @Override
+            public void onClick()
+            {
+                if (!getNode().isNodeType("mix:versionable"))
+                {
+                    getNode().addMixin("mix:versionable");
+                    getNode().save();
+                    getNode().checkin();
+                }
+            }
 
-			@Override
-			public boolean isVisible()
-			{
-				if (true)
-				{
-					// TODO: Implement proper versioning support!
-					return false;
-				}
+            @Override
+            public boolean isVisible()
+            {
+                if (true)
+                {
+                    // TODO: Implement proper versioning support!
+                    return false;
+                }
 
-				return getNode() != null && getNode().isNodeType("nt:file") && !getNode().isNodeType("mix:versionable")
-						&& SitePlugin.get().canEditNode(getNode(), Context.ADMINISTRATION);
-			}
-		});
+                return getNode() != null && getNode().isNodeType("nt:file") &&
+                        !getNode().isNodeType("mix:versionable") &&
+                        SitePlugin.get().canEditNode(getNode(), Context.ADMINISTRATION);
+            }
+        });
 
-		add(new Link<Void>("delete")
-		{
+        add(new Link<Void>("delete")
+        {
 
-			@Override
-			public void onClick()
-			{
-				BrixNode node = getNode();
-				BrixNode parent = (BrixNode) node.getParent();
+            @Override
+            public void onClick()
+            {
+                BrixNode node = getNode();
+                BrixNode parent = (BrixNode)node.getParent();
 
-				node.remove();
-				try
-				{
-					parent.save();
-					selectNode(parent, true);
-				}
-				catch (JcrException e)
-				{
-					if (e.getCause() instanceof ReferentialIntegrityException)
-					{
-						parent.getSession().refresh(false);
-						NodeManagerEditorPanel.this.getModel().detach();
-						// parent.refresh(false);
-						selectNode(NodeManagerEditorPanel.this.getModelObject(), true);
-						getSession().error(NodeManagerEditorPanel.this.getString("referenceIntegrityError"));
-					}
-					else
-					{
-						throw e;
-					}
-				}
-			}
+                node.remove();
+                try
+                {
+                    parent.save();
+                    selectNode(parent, true);
+                }
+                catch (JcrException e)
+                {
+                    if (e.getCause() instanceof ReferentialIntegrityException)
+                    {
+                        parent.getSession().refresh(false);
+                        NodeManagerEditorPanel.this.getModel().detach();
+                        // parent.refresh(false);
+                        selectNode(NodeManagerEditorPanel.this.getModelObject(), true);
+                        getSession().error(
+                            NodeManagerEditorPanel.this.getString("referenceIntegrityError"));
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
+            }
 
-			@Override
-			public boolean isVisible()
-			{
-				BrixNode node = NodeManagerEditorPanel.this.getModelObject();
-				String path = node.getPath();
-				String web = SitePlugin.get().getSiteRootPath();
+            @Override
+            public boolean isVisible()
+            {
+                BrixNode node = NodeManagerEditorPanel.this.getModelObject();
+                String path = node.getPath();
+                String web = SitePlugin.get().getSiteRootPath();
 
-				return SitePlugin.get().canDeleteNode(getNode(), Context.ADMINISTRATION)
-						&& path.length() > web.length() && path.startsWith(web);
-			}
+                return SitePlugin.get().canDeleteNode(getNode(), Context.ADMINISTRATION) &&
+                        path.length() > web.length() && path.startsWith(web);
+            }
 
-		});
+        });
 
-		add(new SessionFeedbackPanel("sessionFeedback"));
+        add(new SessionFeedbackPanel("sessionFeedback"));
 
-		add(new NodeManagerTabbedPanel("tabbedPanel", getTabs(getModel())));
-	}
+        add(new NodeManagerTabbedPanel("tabbedPanel", getTabs(getModel())));
+    }
 
-	public BrixNode getNode()
-	{
-		return getModelObject();
-	}
+    public BrixNode getNode()
+    {
+        return getModelObject();
+    }
 
-	private void selectNode(BrixNode node, boolean refresh)
-	{
-		SitePlugin.get().selectNode(this, node, refresh);
-	}
+    private void selectNode(BrixNode node, boolean refresh)
+    {
+        SitePlugin.get().selectNode(this, node, refresh);
+    }
 
-	private List<IBrixTab> getTabs(IModel<BrixNode> nodeModel)
-	{
-		Collection<ManageNodeTabFactory> factories = nodeModel.getObject().getBrix().getConfig().getRegistry()
-				.lookupCollection(ManageNodeTabFactory.POINT);
-		
-		if (factories != null && !factories.isEmpty())
-		{
-			List<IBrixTab> result = new ArrayList<IBrixTab>();
-			for (ManageNodeTabFactory f : factories)
-			{
-				List<IBrixTab> tabs = f.getManageNodeTabs(nodeModel);
-				if (tabs != null)
-					result.addAll(tabs);
-			}
-			return result;
-		}
-		else
-		{
-			return Collections.emptyList();
-		}
-	}
+    private List<IBrixTab> getTabs(IModel<BrixNode> nodeModel)
+    {
+        BrixNode node = nodeModel.getObject();
 
-	private static class SessionFeedbackPanel extends FeedbackPanel
-	{
+        final Collection<ManageNodeTabFactory> factories;
+        if (node != null)
+        {
+            factories = node.getBrix().getConfig().getRegistry().lookupCollection(
+                ManageNodeTabFactory.POINT);
+        }
+        else
+        {
+            factories = Collections.emptyList();
+        }
 
-		public SessionFeedbackPanel(String id)
-		{
-			super(id, new Filter());
-		}
+        if (factories != null && !factories.isEmpty())
+        {
+            List<IBrixTab> result = new ArrayList<IBrixTab>();
+            for (ManageNodeTabFactory f : factories)
+            {
+                List<IBrixTab> tabs = f.getManageNodeTabs(nodeModel);
+                if (tabs != null)
+                    result.addAll(tabs);
+            }
+            return result;
+        }
+        else
+        {
+            return Collections.emptyList();
+        }
+    }
 
-		@SuppressWarnings("unchecked")
-		@Override
-		public boolean isVisible()
-		{
-			List messages = (List) getFeedbackMessagesModel().getObject();
-			return messages != null && !messages.isEmpty();
-		}
+    private static class SessionFeedbackPanel extends FeedbackPanel
+    {
 
-		private static class Filter implements IFeedbackMessageFilter
-		{
-			public boolean accept(FeedbackMessage message)
-			{
-				return message.getReporter() == null;
-			}
-		};
-	};
+        public SessionFeedbackPanel(String id)
+        {
+            super(id, new Filter());
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public boolean isVisible()
+        {
+            List messages = (List)getFeedbackMessagesModel().getObject();
+            return messages != null && !messages.isEmpty();
+        }
+
+        private static class Filter implements IFeedbackMessageFilter
+        {
+            public boolean accept(FeedbackMessage message)
+            {
+                return message.getReporter() == null;
+            }
+        };
+    };
 }
