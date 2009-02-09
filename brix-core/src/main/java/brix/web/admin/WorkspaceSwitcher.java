@@ -50,8 +50,6 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace>
 		};
 		choice.setNullValid(false);
 		add(choice);
-
-		fixCurrentWorkspace();
 	}
 
 	private boolean isCurrentWorkspaceValid()
@@ -59,25 +57,6 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace>
 		WorkspaceManager manager = getBrix().getWorkspaceManager();
 		Workspace workspace = getModelObject();
 		return workspace != null && manager.workspaceExists(workspace.getId());
-	}
-
-	private void fixCurrentWorkspace()
-	{
-		if (!isCurrentWorkspaceValid())
-		{
-			List<Workspace> workspaces = getWorkspaces();
-			if (!workspaces.isEmpty())
-			{
-				setModelObject(workspaces.iterator().next());
-			}
-		}
-	}
-
-	@Override
-	protected void onBeforeRender()
-	{
-		fixCurrentWorkspace();
-		super.onBeforeRender();
 	}
 
 	private Brix getBrix()
