@@ -28,7 +28,7 @@ class QueryWrapper extends BaseWrapper<Query> implements Query
 		}
 		else
 		{
-			return QueryWrapper.wrap(delegate, session);
+			return new QueryWrapper(delegate, session);
 		}
 	}
 
