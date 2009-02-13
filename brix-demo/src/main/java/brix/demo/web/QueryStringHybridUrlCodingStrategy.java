@@ -30,7 +30,7 @@ public class QueryStringHybridUrlCodingStrategy extends HybridUrlCodingStrategy
     }
 
     /**
-     * Encodes Map into a url fragment and append that to the provided url buffer.
+     * Encodes Map into a url fragment and appends that to the provided url buffer.
      * 
      * @param url
      *            url so far

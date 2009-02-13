@@ -23,7 +23,7 @@ public class PropertyUtils
         {
             if (throwExceptionIfNotFound)
             {
-                throw new IllegalStateException("could not find classpath poperties resource: " +
+                throw new IllegalStateException("Could not find classpath properties resource: " +
                     resource);
             }
             else

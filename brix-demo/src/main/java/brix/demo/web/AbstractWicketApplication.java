@@ -18,7 +18,7 @@ import brix.workspace.WorkspaceManager;
 
 /**
  * Factors out noise not necessary to demonstrating how to install Brix into a Wicket application.
- * This class takes care of periferal duties such as creating the Jcr repository, setting up
+ * This class takes care of peripheral duties such as creating the Jcr repository, setting up
  * JcrSessionFactory, etc.
  * 
  * @author igor.vaynberg

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package brix.demo.web.tile.time;
 
 import java.text.DateFormat;

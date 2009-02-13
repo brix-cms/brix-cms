@@ -8,7 +8,6 @@ import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.page.tile.Tile;
 import brix.plugin.site.page.tile.admin.EmptyTileEditorPanel;
 import brix.plugin.site.page.tile.admin.TileEditorPanel;
-import brix.web.nodepage.BrixPageParameters;
 
 /**
  * Stateless stock quote tile definition.
