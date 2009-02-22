@@ -119,11 +119,11 @@ class Streamer
 		
 		if (!attachment)
 		{
-			response.addHeader("Content-Disposition", "inline; filename=" + fileName + ";");
+			response.addHeader("Content-Disposition", "inline; filename=\"" + fileName + "\";");
 		}
 		else
 		{
-			response.addHeader("Content-Disposition", "attachment; filename=" + fileName + ";");
+			response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\";");
 		}
 		response.addHeader("Accept-Range", "bytes");
 		response.addHeader("Connection", "close");

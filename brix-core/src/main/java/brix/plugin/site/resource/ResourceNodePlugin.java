@@ -102,6 +102,8 @@ public class ResourceNodePlugin implements SiteNodePlugin
         registerMimeType("image/jpeg", "jpg", "jpeg");
         registerMimeType("image/png", "png");
         registerMimeType("image/gif", "gif");
+        registerMimeType("application/octet-stream", "exe");
+        registerMimeType("application/octet-stream", "dmg");
     }
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)

@@ -24,6 +24,7 @@ public class ReferenceEditorModalWindow extends ModalWindow implements IGenericC
 		setInitialWidth(64);
 		setUseInitialHeight(false);
 		setResizable(false);
+		setCookieName("reference-editor");
 		setTitle(new ResourceModel("title"));
 	}
 
