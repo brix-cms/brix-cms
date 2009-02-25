@@ -1,6 +1,3 @@
-/**
- * 
- */
 package brix.rmiserver.jackrabbit;
 
 import java.util.Properties;

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package brix.jcr.api.wrapper;
 
 import javax.jcr.Item;
@@ -49,7 +46,7 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem
         }
         else
         {
-            throw new IllegalStateException("Uknown Item subclass.");
+            throw new IllegalStateException("Unknown Item subclass.");
         }
     }
 

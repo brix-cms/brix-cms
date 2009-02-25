@@ -62,7 +62,7 @@ public abstract class AbstractRmiExporterBean implements InitializingBean, Dispo
 
     public void destroy() throws Exception
     {
-        logger.info("Unregistring " + server.getClass().getName() +
+        logger.info("Unregistering " + server.getClass().getName() +
             " remote repository with name: {}", serviceName);
         registry.unbind(serviceName);
         UnicastRemoteObject.unexportObject(server, true);

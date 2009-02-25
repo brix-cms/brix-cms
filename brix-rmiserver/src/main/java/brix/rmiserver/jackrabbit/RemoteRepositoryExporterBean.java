@@ -84,7 +84,7 @@ public class RemoteRepositoryExporterBean implements InitializingBean, Disposabl
 
     public void destroy() throws Exception
     {
-        logger.info("Unregistring JackRabbit remote repository with name: {}", serviceName);
+        logger.info("Unregistering JackRabbit remote repository with name: {}", serviceName);
         registry.unbind(serviceName);
         UnicastRemoteObject.unexportObject(remote, false);
     }

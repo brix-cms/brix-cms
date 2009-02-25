@@ -138,7 +138,7 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
             }
             catch (IOException e)
             {
-                throw new RuntimeException("Could no close stream", e);
+                throw new RuntimeException("Could not close stream", e);
             }
         }
     }

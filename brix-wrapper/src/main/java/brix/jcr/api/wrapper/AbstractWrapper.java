@@ -82,7 +82,7 @@ abstract class AbstractWrapper
     protected void handleException(Exception e)
     {
         // TODO: This is definitely not what we want to do.
-        // inspect the exception and register flash messages for certain
+        // Inspect the exception and register flash messages for certain
         // exceptions (versioning, locking, ...)
 
         Behavior behavior = getJcrSession().getBehavior();
