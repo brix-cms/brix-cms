@@ -6,6 +6,13 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
 
+/**
+ * Base class that knows how to recursively collect parameters from child nodes that implement {@link PageParametersAware}.
+ * Child nodes contribute parameters that they need for future instantiation, allowing a stateful URL to be composed from
+ * the dynamic closure of the page and it's tiles.
+ *
+ * @author Igor Vaynberg
+ */
 public abstract class AbstractPageParametersLink extends AbstractLink
 {
 
@@ -42,12 +49,12 @@ public abstract class AbstractPageParametersLink extends AbstractLink
      */
     protected void contributeToPageParameters(BrixPageParameters parameters)
     {
-    
+
     }
 
     /**
      * Returns the initial {@link BrixPageParameters} used to build the URL.
-     * 
+     *
      * @return
      */
     protected BrixPageParameters getInitialParameters()
@@ -59,7 +66,7 @@ public abstract class AbstractPageParametersLink extends AbstractLink
     protected void onComponentTag(ComponentTag tag)
     {
         super.onComponentTag(tag);
-    
+
         // If we're disabled
         if (!isLinkEnabled())
         {
@@ -68,7 +75,7 @@ public abstract class AbstractPageParametersLink extends AbstractLink
         else
         {
             String url = buildUrl();
-    
+
             if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link") ||
                     tag.getName().equalsIgnoreCase("area"))
             {
@@ -91,7 +98,7 @@ public abstract class AbstractPageParametersLink extends AbstractLink
                                         "'; } ;return false");
             }
         }
-    
+
     }
 
 }

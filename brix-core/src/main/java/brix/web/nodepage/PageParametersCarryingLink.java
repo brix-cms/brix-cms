@@ -7,6 +7,15 @@ import brix.jcr.wrapper.BrixNode;
 /**
  * Constructs a link to another page including all parameters from the current page. This link makes
  * it easy to link together tiles located on different pages.
+ *
+ * To use this to create a link in a BrixPanel to another BrixNode, try
+ * <code>
+ *  BrixNode brixNode = (BrixNode) tileNode.getObject().getNode("/path/to/node");
+ *  BrixNodeModel brixNodeModel = new BrixNodeModel(brixNode);
+ *  add(new PageParametersCarryingLink("markupId", brixNodeModel));
+ * </code>
+ *
+ * @todo it's unclear how this is semantically distinguished from {@link PageParametersLink}
  * 
  * @author igor.vaynberg
  * 
