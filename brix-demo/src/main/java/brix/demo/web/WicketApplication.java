@@ -5,6 +5,8 @@ import javax.jcr.ImportUUIDBehavior;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.IRequestCycleProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import brix.Brix;
 import brix.Path;
@@ -28,6 +30,7 @@ import brix.workspace.WorkspaceManager;
  */
 public final class WicketApplication extends AbstractWicketApplication
 {
+    private static final Logger log = LoggerFactory.getLogger(WicketApplication.class);
 
     /** brix instance */
     private Brix brix;
@@ -79,7 +82,7 @@ public final class WicketApplication extends AbstractWicketApplication
                 {
                     final String name = getProperties().getJcrDefaultWorkspace();
                     SitePlugin sitePlugin = SitePlugin.get(brix);
-                    return sitePlugin.getSiteWorkspace(name, "");
+                    return sitePlugin.getSiteWorkspace(name, getProperties().getWorkspaceDefaultState());
                 }
             };
 
@@ -93,6 +96,9 @@ public final class WicketApplication extends AbstractWicketApplication
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
+        }
+        catch (Exception e) {
+            log.error("Exception in WicketApplication init()", e);
         }
         finally
         {
@@ -112,7 +118,7 @@ public final class WicketApplication extends AbstractWicketApplication
     {
         try
         {
-            final String defaultState = "";
+            final String defaultState = getProperties().getWorkspaceDefaultState();
             final String wn = getProperties().getJcrDefaultWorkspace();
             final SitePlugin sp = SitePlugin.get(brix);
 
