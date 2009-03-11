@@ -113,4 +113,7 @@ public class ApplicationProperties
     }
 
 
+    public String getWorkspaceDefaultState() {
+        return properties.getProperty("brixdemo.jcr.defaultWorkspaceState");
+    }
 }
