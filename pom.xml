@@ -22,7 +22,6 @@
     <module>brix-plugin-menu</module>
     <module>brix-plugin-webdavurl</module>
     <module>brix-plugin-publish</module>
-    <module>brix-plugin-user</module>
   </modules>
 	<licenses>
 		<license>
