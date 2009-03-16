@@ -13,14 +13,30 @@ import org.apache.wicket.model.PropertyModel;
 import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
 
+/**
+ * Proxy a BrixNode model object, exposing lightweight transactional semantics through the {@link
+ * brix.web.model.ModelBuffer.Model#apply} method. Properties of a target model are exposed as models themselves and
+ * maintain status regarding whether changes have been made.  When the apply method is called, the changes in the cached
+ * models are iterated and flushed.
+ * <p/>
+ * This is typically used by clients that wish to present a cancelable user interface, without maintaining the original
+ * state of target model object.  If the user cancels the operation, the buffer is deallocated without ever applying the
+ * changes to the target.
+ * <p/>
+ * After creating a ModelBuffer, use {@link ModelBuffer#forProperty(java.lang.String)} and {@link
+ * ModelBuffer#forNodeProperty(java.lang.String)} to create and return these cached model objects.  These can be
+ * provided to user interface objects.
+ * <p/>
+ * {@link brix.plugin.site.page.admin.EditTab#EditTab(java.lang.String, org.apache.wicket.model.IModel<brix.jcr.wrapper.BrixNode>)}
+ * provides a solid use case of this class.
+ */
 public class ModelBuffer implements Serializable
 {
 
-    public ModelBuffer()
-    {
-        this(null);
-    }
-
+    /**
+     * Constructor requiring a BrixNode to proxy.
+     * @param target
+     */
     public ModelBuffer(Object target)
     {
         this.target = target;
@@ -29,6 +45,13 @@ public class ModelBuffer implements Serializable
     private final Object target;
 
 
+    /**
+     * Create a proxy for a node property.  In contrast to {@link brix.web.model.ModelBuffer#forProperty}, this method
+     * always creates the buffered model.
+     * @param delegate Accessor to the underlying targetObject, typically a PropertyModel
+     * @param isNode if the datatype is a JcrNode
+     * @return
+     */
     public IModel forModel(IModel delegate, boolean isNode)
     {
         if (models == null)
@@ -47,6 +70,13 @@ public class ModelBuffer implements Serializable
 
     private Map<String, IModel> propertyMap;
 
+    /**
+     * Backing method for public forProperty API calls.  Property buffers are cached by name, returning an existing
+     * buffer if it was previously created.
+     * @param propertyName The JCR key name of the underlying property
+     * @param isNode Selector for string type or JcrNode type
+     * @return model A model that buffers the requested property
+     */
     @SuppressWarnings("unchecked")
 	protected<T> IModel<T> forProperty(String propertyName, boolean isNode)
     {
@@ -67,12 +97,22 @@ public class ModelBuffer implements Serializable
         propertyMap.put(propertyName, model);
         return model;
     }
-    
+
+    /**
+     * Buffer a string property for the target object.
+     * @param propertyName The JCR key name of the underlying property
+     * @return model A model that buffers the requested property
+     */
     public<T> IModel<T> forProperty(String propertyName) 
     {
         return forProperty(propertyName, false); 
     }
     
+    /**
+     * Buffer a node property for the target object.
+     * @param propertyName The JCR key name of the underlying property
+     * @return model A model that buffers the requested property
+     */
     public<T> IModel<T> forNodeProperty(String propertyName)
     {
         return forProperty(propertyName, true);
@@ -80,6 +120,9 @@ public class ModelBuffer implements Serializable
 
     private List<Model> models = null;
 
+    /**
+     * Internal storage type for non-JcrNode properties
+     */
     private static class Model implements IModel
     {
         private final IModel delegate;
@@ -132,8 +175,11 @@ public class ModelBuffer implements Serializable
             }
         }
 
-    };
+    }
 
+    /**
+     * Internal storage type for JcrNode properties
+     */
     private static class NodeModel extends Model
     {
         public NodeModel(IModel delegate)
@@ -177,7 +223,7 @@ public class ModelBuffer implements Serializable
             }
             super.apply(delegate, value);
         }
-    };
+    }
 
     public void apply()
     {
