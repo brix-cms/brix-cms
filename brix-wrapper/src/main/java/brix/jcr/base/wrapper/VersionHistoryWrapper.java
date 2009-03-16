@@ -1,11 +1,7 @@
 package brix.jcr.base.wrapper;
 
-import javax.jcr.AccessDeniedException;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
-import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.version.Version;
-import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
@@ -35,8 +31,7 @@ class VersionHistoryWrapper extends NodeWrapper implements VersionHistory
 		}
 	}
 
-	public void addVersionLabel(String versionName, String label, boolean moveLabel) throws VersionException,
-			RepositoryException
+	public void addVersionLabel(String versionName, String label, boolean moveLabel) throws RepositoryException
 	{
 		getDelegate().addVersionLabel(versionName, label, moveLabel);
 	}
@@ -51,7 +46,7 @@ class VersionHistoryWrapper extends NodeWrapper implements VersionHistory
 		return VersionWrapper.wrap(getDelegate().getRootVersion(), getSessionWrapper());
 	}
 
-	public Version getVersion(String versionName) throws VersionException, RepositoryException
+	public Version getVersion(String versionName) throws RepositoryException
 	{
 		return VersionWrapper.wrap(getDelegate().getVersion(versionName), getSessionWrapper());
 	}
@@ -66,7 +61,7 @@ class VersionHistoryWrapper extends NodeWrapper implements VersionHistory
 		return getDelegate().getVersionLabels();
 	}
 
-	public String[] getVersionLabels(Version version) throws VersionException, RepositoryException
+	public String[] getVersionLabels(Version version) throws RepositoryException
 	{
 		return getDelegate().getVersionLabels(version);
 	}
@@ -81,18 +76,17 @@ class VersionHistoryWrapper extends NodeWrapper implements VersionHistory
 		return getDelegate().hasVersionLabel(label);
 	}
 
-	public boolean hasVersionLabel(Version version, String label) throws VersionException, RepositoryException
+	public boolean hasVersionLabel(Version version, String label) throws RepositoryException
 	{
 		return getDelegate().hasVersionLabel(unwrap(version), label);
 	}
 
-	public void removeVersion(String versionName) throws ReferentialIntegrityException, AccessDeniedException,
-			UnsupportedRepositoryOperationException, VersionException, RepositoryException
+	public void removeVersion(String versionName) throws RepositoryException
 	{
 		getDelegate().removeVersion(versionName);
 	}
 
-	public void removeVersionLabel(String label) throws VersionException, RepositoryException
+	public void removeVersionLabel(String label) throws RepositoryException
 	{
 		getDelegate().removeVersionLabel(label);
 	}

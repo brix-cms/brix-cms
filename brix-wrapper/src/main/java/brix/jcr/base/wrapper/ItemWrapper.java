@@ -1,20 +1,11 @@
 package brix.jcr.base.wrapper;
 
-import javax.jcr.AccessDeniedException;
-import javax.jcr.InvalidItemStateException;
 import javax.jcr.Item;
-import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.Property;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.Version;
-import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
 
 abstract class ItemWrapper extends BaseWrapper<Item> implements Item
@@ -53,8 +44,7 @@ abstract class ItemWrapper extends BaseWrapper<Item> implements Item
         }
     }
 
-    public Item getAncestor(int depth) throws ItemNotFoundException, AccessDeniedException,
-            RepositoryException
+    public Item getAncestor(int depth) throws RepositoryException
     {
         return getDelegate().getAncestor(depth);
     }
@@ -70,8 +60,7 @@ abstract class ItemWrapper extends BaseWrapper<Item> implements Item
         return getDelegate().getName();
     }
 
-    public Node getParent() throws ItemNotFoundException, AccessDeniedException,
-            RepositoryException
+    public Node getParent() throws RepositoryException
     {    	
         return NodeWrapper.wrap(getDelegate().getParent(), getSessionWrapper());
     }
@@ -102,23 +91,20 @@ abstract class ItemWrapper extends BaseWrapper<Item> implements Item
         return getDelegate().isSame(unwrap(otherItem));
     }
 
-    public void refresh(boolean keepChanges) throws InvalidItemStateException, RepositoryException
+    public void refresh(boolean keepChanges) throws RepositoryException
     {
     	getActionHandler().beforeItemRefresh(this, keepChanges);
         getDelegate().refresh(keepChanges);
         getActionHandler().afterItemRefresh(this, keepChanges);
     }
 
-    public void remove() throws VersionException, LockException, ConstraintViolationException,
-            RepositoryException
+    public void remove() throws RepositoryException
     {
     	// handler is notified from subclasses
         getDelegate().remove();
     }
 
-    public void save() throws AccessDeniedException, ItemExistsException,
-            ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException,
-            VersionException, LockException, NoSuchNodeTypeException, RepositoryException
+    public void save() throws RepositoryException
     {
     	getActionHandler().beforeItemSave(this);
         getDelegate().save();

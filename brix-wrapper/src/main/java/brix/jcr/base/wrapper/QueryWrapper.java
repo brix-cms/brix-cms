@@ -1,16 +1,9 @@
 package brix.jcr.base.wrapper;
 
-import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
-import javax.jcr.version.VersionException;
 
 class QueryWrapper extends BaseWrapper<Query> implements Query
 {
@@ -47,13 +40,12 @@ class QueryWrapper extends BaseWrapper<Query> implements Query
 		return getDelegate().getStatement();
 	}
 
-	public String getStoredQueryPath() throws ItemNotFoundException, RepositoryException
+	public String getStoredQueryPath() throws RepositoryException
 	{
 		return getDelegate().getStoredQueryPath();
 	}
 
-	public Node storeAsNode(String absPath) throws ItemExistsException, PathNotFoundException, VersionException,
-			ConstraintViolationException, LockException, UnsupportedRepositoryOperationException, RepositoryException
+	public Node storeAsNode(String absPath) throws RepositoryException
 	{
 		return NodeWrapper.wrap(getDelegate().storeAsNode(absPath), getSessionWrapper());
 	}

@@ -1,37 +1,22 @@
 package brix.jcr.base.wrapper;
 
-import java.io.InputStream;
-import java.util.Calendar;
+import brix.jcr.base.EventUtil;
 
-import javax.jcr.AccessDeniedException;
-import javax.jcr.InvalidItemStateException;
 import javax.jcr.Item;
-import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.ItemVisitor;
-import javax.jcr.MergeException;
-import javax.jcr.NoSuchWorkspaceException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.RepositoryException;
-import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
 import javax.jcr.lock.Lock;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
-import javax.jcr.version.VersionException;
 import javax.jcr.version.VersionHistory;
-
-import brix.jcr.base.EventUtil;
+import java.io.InputStream;
+import java.util.Calendar;
 
 class NodeWrapper extends ItemWrapper implements Node
 {
@@ -59,16 +44,14 @@ class NodeWrapper extends ItemWrapper implements Node
         return (Node)super.getDelegate();
     }
 
-    public void addMixin(String mixinName) throws NoSuchNodeTypeException, VersionException,
-            ConstraintViolationException, LockException, RepositoryException
+    public void addMixin(String mixinName) throws RepositoryException
     {
     	getActionHandler().beforeNodeAddMixin(this, mixinName);
         getDelegate().addMixin(mixinName);
         getActionHandler().afterNodeAddMixin(this, mixinName);
     }
 
-    public Node addNode(String relPath) throws ItemExistsException, PathNotFoundException,
-            VersionException, ConstraintViolationException, LockException, RepositoryException
+    public Node addNode(String relPath) throws RepositoryException
     {
     	getActionHandler().beforeNodeAdd(this, relPath, null);
         Node result = NodeWrapper.wrap(getDelegate().addNode(relPath), getSessionWrapper());
@@ -76,9 +59,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Node addNode(String relPath, String primaryNodeTypeName) throws ItemExistsException,
-            PathNotFoundException, NoSuchNodeTypeException, LockException, VersionException,
-            ConstraintViolationException, RepositoryException
+    public Node addNode(String relPath, String primaryNodeTypeName) throws RepositoryException
     {
     	getActionHandler().beforeNodeAdd(this, relPath, primaryNodeTypeName);
         Node result = NodeWrapper.wrap(getDelegate().addNode(relPath, primaryNodeTypeName),
@@ -87,22 +68,19 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public boolean canAddMixin(String mixinName) throws NoSuchNodeTypeException,
-            RepositoryException
+    public boolean canAddMixin(String mixinName) throws RepositoryException
     {    	
         return getDelegate().canAddMixin(mixinName);
     }
 
-    public void cancelMerge(Version version) throws VersionException, InvalidItemStateException,
-            UnsupportedRepositoryOperationException, RepositoryException
+    public void cancelMerge(Version version) throws RepositoryException
     {
     	getActionHandler().beforeNodeCancelMerge(this, version);
         getDelegate().cancelMerge(unwrap(version));
         getActionHandler().afterNodeCancelMerge(this, version);
     }
 
-    public Version checkin() throws VersionException, UnsupportedRepositoryOperationException,
-            InvalidItemStateException, LockException, RepositoryException
+    public Version checkin() throws RepositoryException
     {
     	getActionHandler().beforeNodeCheckin(this);
         Version result = VersionWrapper.wrap(getDelegate().checkin(), getSessionWrapper());
@@ -110,8 +88,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public void checkout() throws UnsupportedRepositoryOperationException, LockException,
-            RepositoryException
+    public void checkout() throws RepositoryException
     {
     	getActionHandler().beforeNodeCheckout(this);
         getDelegate().checkout();
@@ -119,9 +96,7 @@ class NodeWrapper extends ItemWrapper implements Node
     }
 
     @Override
-    public void save() throws AccessDeniedException, ItemExistsException,
-            ConstraintViolationException, InvalidItemStateException, ReferentialIntegrityException,
-            VersionException, LockException, NoSuchNodeTypeException, RepositoryException
+    public void save() throws RepositoryException
     {
     	// TODO: Remove this code
         SessionWrapper session = getSessionWrapper();
@@ -136,22 +111,19 @@ class NodeWrapper extends ItemWrapper implements Node
     }
 
     
-    public void doneMerge(Version version) throws VersionException, InvalidItemStateException,
-            UnsupportedRepositoryOperationException, RepositoryException
+    public void doneMerge(Version version) throws RepositoryException
     {
     	getActionHandler().beforeNodeDoneMerge(this, version);
         getDelegate().doneMerge(unwrap(version));
         getActionHandler().afterNodeDoneMerge(this, version);
     }
 
-    public Version getBaseVersion() throws UnsupportedRepositoryOperationException,
-            RepositoryException
+    public Version getBaseVersion() throws RepositoryException
     {
         return VersionWrapper.wrap(getDelegate().getBaseVersion(), getSessionWrapper());
     }
 
-    public String getCorrespondingNodePath(String workspaceName) throws ItemNotFoundException,
-            NoSuchWorkspaceException, AccessDeniedException, RepositoryException
+    public String getCorrespondingNodePath(String workspaceName) throws RepositoryException
     {
         return getDelegate().getCorrespondingNodePath(workspaceName);
     }
@@ -166,8 +138,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return getDelegate().getIndex();
     }
 
-    public Lock getLock() throws UnsupportedRepositoryOperationException, LockException,
-            AccessDeniedException, RepositoryException
+    public Lock getLock() throws RepositoryException
     {
         return getDelegate().getLock();
     }
@@ -177,7 +148,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return getDelegate().getMixinNodeTypes();
     }
 
-    public Node getNode(String relPath) throws PathNotFoundException, RepositoryException
+    public Node getNode(String relPath) throws RepositoryException
     {
         return new NodeWrapper(getDelegate().getNode(relPath), getSessionWrapper());
     }
@@ -192,7 +163,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return NodeIteratorWrapper.wrap(getDelegate().getNodes(namePattern), getSessionWrapper());
     }
 
-    public Item getPrimaryItem() throws ItemNotFoundException, RepositoryException
+    public Item getPrimaryItem() throws RepositoryException
     {
         return ItemWrapper.wrap(getDelegate().getPrimaryItem(), getSessionWrapper());
     }
@@ -213,7 +184,7 @@ class NodeWrapper extends ItemWrapper implements Node
                 getSessionWrapper());
     }
 
-    public Property getProperty(String relPath) throws PathNotFoundException, RepositoryException
+    public Property getProperty(String relPath) throws RepositoryException
     {
         return PropertyWrapper.wrap(getDelegate().getProperty(relPath), getSessionWrapper());
     }
@@ -227,7 +198,7 @@ class NodeWrapper extends ItemWrapper implements Node
     
     private String uuid = UNKNOWN;
     
-    public String getUUID() throws UnsupportedRepositoryOperationException, RepositoryException
+    public String getUUID() throws RepositoryException
     {
     	if (uuid == UNKNOWN) // not the identity equal
     	{
@@ -236,8 +207,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return uuid;
     }
 
-    public VersionHistory getVersionHistory() throws UnsupportedRepositoryOperationException,
-            RepositoryException
+    public VersionHistory getVersionHistory() throws RepositoryException
     {
         return VersionHistoryWrapper.wrap(getDelegate().getVersionHistory(), getSessionWrapper());
     }
@@ -283,8 +253,7 @@ class NodeWrapper extends ItemWrapper implements Node
     }
 
     public Lock lock(boolean isDeep, boolean isSessionScoped)
-            throws UnsupportedRepositoryOperationException, LockException, AccessDeniedException,
-            InvalidItemStateException, RepositoryException
+            throws RepositoryException
     {
     	getActionHandler().beforeNodeLock(this, isDeep, isSessionScoped);
         Lock result = getDelegate().lock(isDeep, isSessionScoped);
@@ -293,42 +262,35 @@ class NodeWrapper extends ItemWrapper implements Node
     }
 
     public NodeIterator merge(String srcWorkspace, boolean bestEffort)
-            throws NoSuchWorkspaceException, AccessDeniedException, MergeException, LockException,
-            InvalidItemStateException, RepositoryException
+            throws RepositoryException
     {
         return NodeIteratorWrapper.wrap(getDelegate().merge(srcWorkspace, bestEffort),
                 getSessionWrapper());
     }
 
     public void orderBefore(String srcChildRelPath, String destChildRelPath)
-            throws UnsupportedRepositoryOperationException, VersionException,
-            ConstraintViolationException, ItemNotFoundException, LockException, RepositoryException
+            throws RepositoryException
     {
     	getActionHandler().beforeNodeChildNodesOrderChange(this);
         getDelegate().orderBefore(srcChildRelPath, destChildRelPath);
         getActionHandler().afterNodeChildNodesOrderChange(this);
     }
 
-    public void removeMixin(String mixinName) throws NoSuchNodeTypeException, VersionException,
-            ConstraintViolationException, LockException, RepositoryException
+    public void removeMixin(String mixinName) throws RepositoryException
     {
     	getActionHandler().beforeNodeRemoveMixin(this, mixinName);
         getDelegate().removeMixin(mixinName);
         getActionHandler().afterNodeRemoveMixin(this, mixinName);
     }
 
-    public void restore(String versionName, boolean removeExisting) throws VersionException,
-            ItemExistsException, UnsupportedRepositoryOperationException, LockException,
-            InvalidItemStateException, RepositoryException
+    public void restore(String versionName, boolean removeExisting) throws RepositoryException
     {
     	getActionHandler().beforeNodeRestoreVersion(this);
         getDelegate().restore(versionName, removeExisting);
         getActionHandler().afterNodeRestoreVersion(this);
     }
 
-    public void restore(Version version, boolean removeExisting) throws VersionException,
-            ItemExistsException, UnsupportedRepositoryOperationException, LockException,
-            RepositoryException
+    public void restore(Version version, boolean removeExisting) throws RepositoryException
     {
     	getActionHandler().beforeNodeRestoreVersion(this);
         getDelegate().restore(unwrap(version), removeExisting);
@@ -336,9 +298,7 @@ class NodeWrapper extends ItemWrapper implements Node
     }
 
     public void restore(Version version, String relPath, boolean removeExisting)
-            throws PathNotFoundException, ItemExistsException, VersionException,
-            ConstraintViolationException, UnsupportedRepositoryOperationException, LockException,
-            InvalidItemStateException, RepositoryException
+            throws RepositoryException
     {
     	getActionHandler().beforeNodeRestoreVersion(this);
         getDelegate().restore(unwrap(version), relPath, removeExisting);
@@ -346,8 +306,7 @@ class NodeWrapper extends ItemWrapper implements Node
     }
 
     public void restoreByLabel(String versionLabel, boolean removeExisting)
-            throws VersionException, ItemExistsException, UnsupportedRepositoryOperationException,
-            LockException, InvalidItemStateException, RepositoryException
+            throws RepositoryException
     {
     	getActionHandler().beforeNodeRestoreVersion(this);
         getDelegate().restoreByLabel(versionLabel, removeExisting);
@@ -378,8 +337,7 @@ class NodeWrapper extends ItemWrapper implements Node
     	}
     }
     
-    public Property setProperty(String name, Value value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Value value) throws RepositoryException
     {
     	
     	beforePropertySet(name, value);
@@ -388,8 +346,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, Value[] values) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Value[] values) throws RepositoryException
     {
     	beforePropertySet(name, values);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, values), getSessionWrapper());
@@ -397,8 +354,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, String[] values) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, String[] values) throws RepositoryException
     {
     	beforePropertySet(name, values);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, values), getSessionWrapper());
@@ -406,8 +362,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, String value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, String value) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -415,8 +370,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, InputStream value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, InputStream value) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -424,8 +378,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, boolean value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, boolean value) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -433,8 +386,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, double value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, double value) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -442,8 +394,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, long value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, long value) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -451,8 +402,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, Calendar value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Calendar value) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -460,8 +410,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, Node value) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Node value) throws RepositoryException
     {        
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, unwrap(value)), getSessionWrapper());
@@ -469,8 +418,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, Value value, int type) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Value value, int type) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -478,8 +426,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, Value[] values, int type) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, Value[] values, int type) throws RepositoryException
     {
     	beforePropertySet(name, values);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, values), getSessionWrapper());
@@ -488,8 +435,7 @@ class NodeWrapper extends ItemWrapper implements Node
     }
 
     public Property setProperty(String name, String[] values, int type)
-            throws ValueFormatException, VersionException, LockException,
-            ConstraintViolationException, RepositoryException
+            throws RepositoryException
     {
     	beforePropertySet(name, values);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, values), getSessionWrapper());
@@ -497,8 +443,7 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public Property setProperty(String name, String value, int type) throws ValueFormatException,
-            VersionException, LockException, ConstraintViolationException, RepositoryException
+    public Property setProperty(String name, String value, int type) throws RepositoryException
     {
     	beforePropertySet(name, value);
         Property result = PropertyWrapper.wrap(getDelegate().setProperty(name, value), getSessionWrapper());
@@ -506,16 +451,14 @@ class NodeWrapper extends ItemWrapper implements Node
         return result;
     }
 
-    public void unlock() throws UnsupportedRepositoryOperationException, LockException,
-            AccessDeniedException, InvalidItemStateException, RepositoryException
+    public void unlock() throws RepositoryException
     {
     	getActionHandler().beforeNodeUnlock(this);
         getDelegate().unlock();
         getActionHandler().afterNodeUnlock(this);
     }
 
-    public void update(String srcWorkspaceName) throws NoSuchWorkspaceException,
-            AccessDeniedException, LockException, InvalidItemStateException, RepositoryException
+    public void update(String srcWorkspaceName) throws RepositoryException
     {
     	getActionHandler().beforeNodeUpdate(this);
         getDelegate().update(srcWorkspaceName);
@@ -545,7 +488,7 @@ class NodeWrapper extends ItemWrapper implements Node
     }
     
     @Override
-    public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
+    public void remove() throws RepositoryException
     {
     	getActionHandler().beforeNodeRemove(this);
     	super.remove();

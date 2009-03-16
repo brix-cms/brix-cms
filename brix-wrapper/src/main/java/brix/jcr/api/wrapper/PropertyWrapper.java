@@ -198,13 +198,13 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty
         });
     }
 
-    public void setValue(Value[] values)
+    public void setValue(final Value[] values)
     {
         executeCallback(new VoidCallback()
         {
             public void execute() throws Exception
             {
-                getDelegate().setValue(getValue());
+                getDelegate().setValue(values);
             }
         });
     }

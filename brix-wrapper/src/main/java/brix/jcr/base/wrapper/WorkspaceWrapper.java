@@ -1,28 +1,17 @@
 package brix.jcr.base.wrapper;
 
-import java.io.IOException;
-import java.io.InputStream;
+import org.xml.sax.ContentHandler;
 
-import javax.jcr.AccessDeniedException;
-import javax.jcr.InvalidItemStateException;
-import javax.jcr.InvalidSerializedDataException;
-import javax.jcr.ItemExistsException;
 import javax.jcr.NamespaceRegistry;
-import javax.jcr.NoSuchWorkspaceException;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.Workspace;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.observation.ObservationManager;
 import javax.jcr.query.QueryManager;
 import javax.jcr.version.Version;
-import javax.jcr.version.VersionException;
-
-import org.xml.sax.ContentHandler;
+import java.io.IOException;
+import java.io.InputStream;
 
 class WorkspaceWrapper extends BaseWrapper<Workspace> implements Workspace
 {
@@ -45,25 +34,21 @@ class WorkspaceWrapper extends BaseWrapper<Workspace> implements Workspace
 	}
 
 	public void clone(String srcWorkspace, String srcAbsPath, String destAbsPath, boolean removeExisting)
-			throws NoSuchWorkspaceException, ConstraintViolationException, VersionException, AccessDeniedException,
-			PathNotFoundException, ItemExistsException, LockException, RepositoryException
+			throws RepositoryException
 	{
 		getActionHandler().beforeWorkspaceClone(srcWorkspace, srcAbsPath, destAbsPath);
 		getDelegate().clone(srcWorkspace, srcAbsPath, destAbsPath, removeExisting);
 		getActionHandler().afterWorkspaceClone(srcWorkspace, srcAbsPath, destAbsPath);
 	}
 
-	public void copy(String srcAbsPath, String destAbsPath) throws ConstraintViolationException, VersionException,
-			AccessDeniedException, PathNotFoundException, ItemExistsException, LockException, RepositoryException
+	public void copy(String srcAbsPath, String destAbsPath) throws RepositoryException
 	{
 		getActionHandler().beforeWorkspaceCopy(srcAbsPath, destAbsPath);
 		getDelegate().copy(srcAbsPath, destAbsPath);
 		getActionHandler().afterWorkspaceCopy(srcAbsPath, destAbsPath);
 	}
 
-	public void copy(String srcWorkspace, String srcAbsPath, String destAbsPath) throws NoSuchWorkspaceException,
-			ConstraintViolationException, VersionException, AccessDeniedException, PathNotFoundException,
-			ItemExistsException, LockException, RepositoryException
+	public void copy(String srcWorkspace, String srcAbsPath, String destAbsPath) throws RepositoryException
 	{
 		getActionHandler().beforeWorkspaceCopy(srcWorkspace, srcAbsPath, destAbsPath);
 		getDelegate().copy(srcWorkspace, srcAbsPath, destAbsPath);
@@ -75,8 +60,7 @@ class WorkspaceWrapper extends BaseWrapper<Workspace> implements Workspace
 		return getDelegate().getAccessibleWorkspaceNames();
 	}
 
-	public ContentHandler getImportContentHandler(String parentAbsPath, int uuidBehavior) throws PathNotFoundException,
-			ConstraintViolationException, VersionException, LockException, AccessDeniedException, RepositoryException
+	public ContentHandler getImportContentHandler(String parentAbsPath, int uuidBehavior) throws RepositoryException
 	{
 		return getDelegate().getImportContentHandler(parentAbsPath, uuidBehavior);
 	}
@@ -96,8 +80,7 @@ class WorkspaceWrapper extends BaseWrapper<Workspace> implements Workspace
 		return getDelegate().getNodeTypeManager();
 	}
 
-	public ObservationManager getObservationManager() throws UnsupportedRepositoryOperationException,
-			RepositoryException
+	public ObservationManager getObservationManager() throws RepositoryException
 	{
 		return getDelegate().getObservationManager();
 	}
@@ -112,26 +95,21 @@ class WorkspaceWrapper extends BaseWrapper<Workspace> implements Workspace
 		return getSessionWrapper();
 	}
 
-	public void importXML(String parentAbsPath, InputStream in, int uuidBehavior) throws IOException,
-			PathNotFoundException, ItemExistsException, ConstraintViolationException, InvalidSerializedDataException,
-			LockException, AccessDeniedException, RepositoryException
+	public void importXML(String parentAbsPath, InputStream in, int uuidBehavior) throws IOException, RepositoryException
 	{
 		getActionHandler().beforeWorkspaceImportXML(parentAbsPath);
 		getDelegate().importXML(parentAbsPath, in, uuidBehavior);
 		getActionHandler().afterWorkspaceImportXML(parentAbsPath);
 	}
 
-	public void move(String srcAbsPath, String destAbsPath) throws ConstraintViolationException, VersionException,
-			AccessDeniedException, PathNotFoundException, ItemExistsException, LockException, RepositoryException
+	public void move(String srcAbsPath, String destAbsPath) throws RepositoryException
 	{
 		getActionHandler().beforeWorkspaceMove(srcAbsPath, destAbsPath);
 		getDelegate().move(srcAbsPath, destAbsPath);
 		getActionHandler().afterWorkspaceMove(srcAbsPath, destAbsPath);
 	}
 
-	public void restore(Version[] versions, boolean removeExisting) throws ItemExistsException,
-			UnsupportedRepositoryOperationException, VersionException, LockException, InvalidItemStateException,
-			RepositoryException
+	public void restore(Version[] versions, boolean removeExisting) throws RepositoryException
 	{		
 		getDelegate().restore(versions, removeExisting);
 	}

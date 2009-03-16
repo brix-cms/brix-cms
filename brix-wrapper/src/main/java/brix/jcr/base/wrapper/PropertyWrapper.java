@@ -1,20 +1,13 @@
 package brix.jcr.base.wrapper;
 
-import java.io.InputStream;
-import java.util.Calendar;
-
-import javax.jcr.AccessDeniedException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.PropertyDefinition;
-import javax.jcr.version.VersionException;
+import java.io.InputStream;
+import java.util.Calendar;
 
 class PropertyWrapper extends ItemWrapper implements Property
 {
@@ -42,12 +35,12 @@ class PropertyWrapper extends ItemWrapper implements Property
         return (Property)super.getDelegate();
     }
 
-    public boolean getBoolean() throws ValueFormatException, RepositoryException
+    public boolean getBoolean() throws RepositoryException
     {
         return getDelegate().getBoolean();
     }
 
-    public Calendar getDate() throws ValueFormatException, RepositoryException
+    public Calendar getDate() throws RepositoryException
     {
         return getDelegate().getDate();
     }
@@ -57,37 +50,37 @@ class PropertyWrapper extends ItemWrapper implements Property
         return getDelegate().getDefinition();
     }
 
-    public double getDouble() throws ValueFormatException, RepositoryException
+    public double getDouble() throws RepositoryException
     {
         return getDelegate().getDouble();
     }
 
-    public long getLength() throws ValueFormatException, RepositoryException
+    public long getLength() throws RepositoryException
     {
         return getDelegate().getLength();
     }
 
-    public long[] getLengths() throws ValueFormatException, RepositoryException
+    public long[] getLengths() throws RepositoryException
     {
         return getDelegate().getLengths();
     }
 
-    public long getLong() throws ValueFormatException, RepositoryException
+    public long getLong() throws RepositoryException
     {
         return getDelegate().getLong();
     }
 
-    public Node getNode() throws ValueFormatException, RepositoryException
+    public Node getNode() throws RepositoryException
     {
         return NodeWrapper.wrap(getDelegate().getNode(), getSessionWrapper());
     }
 
-    public InputStream getStream() throws ValueFormatException, RepositoryException
+    public InputStream getStream() throws RepositoryException
     {
         return getDelegate().getStream();
     }
 
-    public String getString() throws ValueFormatException, RepositoryException
+    public String getString() throws RepositoryException
     {
         return getDelegate().getString();
     }
@@ -97,12 +90,12 @@ class PropertyWrapper extends ItemWrapper implements Property
         return getDelegate().getType();
     }
 
-    public Value getValue() throws ValueFormatException, RepositoryException
+    public Value getValue() throws RepositoryException
     {
         return getDelegate().getValue();
     }
 
-    public Value[] getValues() throws ValueFormatException, RepositoryException
+    public Value[] getValues() throws RepositoryException
     {
         return getDelegate().getValues();
     }
@@ -131,80 +124,70 @@ class PropertyWrapper extends ItemWrapper implements Property
     	}
     }
     
-    public void setValue(Value value) throws ValueFormatException, VersionException, LockException,
-            ConstraintViolationException, RepositoryException
+    public void setValue(Value value) throws RepositoryException
     {
     	beforeValueSet(value);
         getDelegate().setValue(value);
         afterValueSet(value);
     }
 
-    public void setValue(Value[] values) throws ValueFormatException, VersionException,
-            LockException, ConstraintViolationException, RepositoryException
+    public void setValue(Value[] values) throws RepositoryException
     {
     	beforeValueSet(values);
         getDelegate().setValue(values);
         afterValueSet(values);
     }
 
-    public void setValue(String value) throws ValueFormatException, VersionException,
-            LockException, ConstraintViolationException, RepositoryException
+    public void setValue(String value) throws RepositoryException
     {
     	beforeValueSet(value);
         getDelegate().setValue(value);
         afterValueSet(value);
     }
 
-    public void setValue(String[] values) throws ValueFormatException, VersionException,
-            LockException, ConstraintViolationException, RepositoryException
+    public void setValue(String[] values) throws RepositoryException
     {
     	beforeValueSet(values);
         getDelegate().setValue(values);
         afterValueSet(values);
     }
 
-    public void setValue(InputStream value) throws ValueFormatException, VersionException,
-            LockException, ConstraintViolationException, RepositoryException
+    public void setValue(InputStream value) throws RepositoryException
     {
     	beforeValueSet(value);
         getDelegate().setValue(value);
         afterValueSet(value);
     }
 
-    public void setValue(long value) throws ValueFormatException, VersionException, LockException,
-            ConstraintViolationException, RepositoryException
+    public void setValue(long value) throws RepositoryException
     {
     	beforeValueSet(value);
         getDelegate().setValue(value);
         afterValueSet(value);
     }
 
-    public void setValue(double value) throws ValueFormatException, VersionException,
-            LockException, ConstraintViolationException, RepositoryException
+    public void setValue(double value) throws RepositoryException
     {
     	beforeValueSet(value);
         getDelegate().setValue(value);
         afterValueSet(value);
     }
 
-    public void setValue(Calendar value) throws ValueFormatException, VersionException,
-            LockException, ConstraintViolationException, RepositoryException
+    public void setValue(Calendar value) throws RepositoryException
     {
     	beforeValueSet(value);
         getDelegate().setValue(value);
         afterValueSet(value);
     }
 
-    public void setValue(boolean value) throws ValueFormatException, VersionException,
-            LockException, ConstraintViolationException, RepositoryException
+    public void setValue(boolean value) throws RepositoryException
     {
     	beforeValueSet(value);
         getDelegate().setValue(value);
         afterValueSet(value);
     }
 
-    public void setValue(Node value) throws ValueFormatException, VersionException, LockException,
-            ConstraintViolationException, RepositoryException
+    public void setValue(Node value) throws RepositoryException
     {        
     	beforeValueSet(value);
         getDelegate().setValue(unwrap(value));
@@ -234,10 +217,10 @@ class PropertyWrapper extends ItemWrapper implements Property
     }
     
     
-    Node parent = null;
+    private Node parent = null;
     
     @Override
-    public Node getParent() throws ItemNotFoundException, AccessDeniedException, RepositoryException
+    public Node getParent() throws RepositoryException
     {
     	if (parent == null)
     	{
@@ -247,7 +230,7 @@ class PropertyWrapper extends ItemWrapper implements Property
     }
     
     @Override
-    public void remove() throws VersionException, LockException, ConstraintViolationException, RepositoryException
+    public void remove() throws RepositoryException
     {
     	Node parent = getParent();
     	String name = getName();

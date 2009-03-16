@@ -1,8 +1,8 @@
 package brix.jcr.base.wrapper;
 
-import javax.jcr.Session;
-
 import brix.jcr.base.BrixSession;
+
+import javax.jcr.Session;
 
 public class WrapperAccessor
 {

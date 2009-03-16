@@ -1,5 +1,22 @@
 package brix.jcr.base.wrapper;
 
+import brix.jcr.base.BrixSession;
+import brix.jcr.base.action.AbstractActionHandler;
+import brix.jcr.base.action.CompoundActionHandler;
+import brix.jcr.base.event.ChangeLog;
+import brix.jcr.base.event.ChangeLogActionHandler;
+import brix.jcr.base.event.EventsListener;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
+
+import javax.jcr.Credentials;
+import javax.jcr.Item;
+import javax.jcr.Node;
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.ValueFactory;
+import javax.jcr.Workspace;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -8,38 +25,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import javax.jcr.AccessDeniedException;
-import javax.jcr.Credentials;
-import javax.jcr.InvalidItemStateException;
-import javax.jcr.InvalidSerializedDataException;
-import javax.jcr.Item;
-import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.LoginException;
-import javax.jcr.NamespaceException;
-import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.ValueFactory;
-import javax.jcr.Workspace;
-import javax.jcr.lock.LockException;
-import javax.jcr.nodetype.ConstraintViolationException;
-import javax.jcr.nodetype.NoSuchNodeTypeException;
-import javax.jcr.version.VersionException;
-
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-
-import brix.jcr.base.BrixSession;
-import brix.jcr.base.action.AbstractActionHandler;
-import brix.jcr.base.action.CompoundActionHandler;
-import brix.jcr.base.event.ChangeLog;
-import brix.jcr.base.event.ChangeLogActionHandler;
-import brix.jcr.base.event.EventsListener;
 
 class SessionWrapper extends BaseWrapper<Session> implements BrixSession
 {
@@ -76,26 +61,26 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
     }
 
     public void exportDocumentView(String absPath, ContentHandler contentHandler,
-            boolean skipBinary, boolean noRecurse) throws PathNotFoundException, SAXException,
+            boolean skipBinary, boolean noRecurse) throws SAXException,
             RepositoryException
     {
         getDelegate().exportDocumentView(absPath, contentHandler, skipBinary, noRecurse);
     }
 
     public void exportDocumentView(String absPath, OutputStream out, boolean skipBinary,
-            boolean noRecurse) throws IOException, PathNotFoundException, RepositoryException
+            boolean noRecurse) throws IOException, RepositoryException
     {
         getDelegate().exportDocumentView(absPath, out, skipBinary, noRecurse);
     }
 
     public void exportSystemView(String absPath, ContentHandler contentHandler, boolean skipBinary,
-            boolean noRecurse) throws PathNotFoundException, SAXException, RepositoryException
+            boolean noRecurse) throws SAXException, RepositoryException
     {
         getDelegate().exportSystemView(absPath, contentHandler, skipBinary, noRecurse);
     }
 
     public void exportSystemView(String absPath, OutputStream out, boolean skipBinary,
-            boolean noRecurse) throws IOException, PathNotFoundException, RepositoryException
+            boolean noRecurse) throws IOException, RepositoryException
     {
         getDelegate().exportSystemView(absPath, out, skipBinary, noRecurse);
     }
@@ -111,13 +96,12 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
     }
 
     public ContentHandler getImportContentHandler(String parentAbsPath, int uuidBehavior)
-            throws PathNotFoundException, ConstraintViolationException, VersionException,
-            LockException, RepositoryException
+            throws RepositoryException
     {
         return getDelegate().getImportContentHandler(parentAbsPath, uuidBehavior);
     }
 
-    public Item getItem(String absPath) throws PathNotFoundException, RepositoryException
+    public Item getItem(String absPath) throws RepositoryException
     {
         return ItemWrapper.wrap(getDelegate().getItem(absPath), this);
     }
@@ -127,7 +111,7 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
         return getDelegate().getLockTokens();
     }
 
-    public String getNamespacePrefix(String uri) throws NamespaceException, RepositoryException
+    public String getNamespacePrefix(String uri) throws RepositoryException
     {
         return getDelegate().getNamespacePrefix(uri);
     }
@@ -137,12 +121,12 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
         return getDelegate().getNamespacePrefixes();
     }
 
-    public String getNamespaceURI(String prefix) throws NamespaceException, RepositoryException
+    public String getNamespaceURI(String prefix) throws RepositoryException
     {
         return getDelegate().getNamespaceURI(prefix);
     }
 
-    public Node getNodeByUUID(String uuid) throws ItemNotFoundException, RepositoryException
+    public Node getNodeByUUID(String uuid) throws RepositoryException
     {
         return NodeWrapper.wrap(getDelegate().getNodeByUUID(uuid), this);
     }
@@ -162,8 +146,7 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
         return getDelegate().getUserID();
     }
 
-    public ValueFactory getValueFactory() throws UnsupportedRepositoryOperationException,
-            RepositoryException
+    public ValueFactory getValueFactory() throws RepositoryException
     {
         return ValueFactoryWrapper.wrap(getDelegate().getValueFactory(), this);
     }
@@ -178,15 +161,13 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
         return getDelegate().hasPendingChanges();
     }
 
-    public Session impersonate(Credentials credentials) throws LoginException, RepositoryException
+    public Session impersonate(Credentials credentials) throws RepositoryException
     {
         return SessionWrapper.wrap(getDelegate().impersonate(credentials));
     }
 
     public void importXML(String parentAbsPath, InputStream in, int uuidBehavior)
-            throws IOException, PathNotFoundException, ItemExistsException,
-            ConstraintViolationException, VersionException, InvalidSerializedDataException,
-            LockException, RepositoryException
+            throws IOException, RepositoryException
     {
     	getActionHandler().beforeSessionImportXML(parentAbsPath);
         getDelegate().importXML(parentAbsPath, in, uuidBehavior);
@@ -208,9 +189,7 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
         getDelegate().logout();
     }
 
-    public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException,
-            PathNotFoundException, VersionException, ConstraintViolationException, LockException,
-            RepositoryException
+    public void move(String srcAbsPath, String destAbsPath) throws RepositoryException
     {
     	getActionHandler().beforeSessionNodeMove(srcAbsPath, destAbsPath);
         getDelegate().move(srcAbsPath, destAbsPath);
@@ -229,17 +208,14 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
         getDelegate().removeLockToken(lt);
     }
 
-    public void save() throws AccessDeniedException, ItemExistsException,
-            ConstraintViolationException, InvalidItemStateException, VersionException,
-            LockException, NoSuchNodeTypeException, RepositoryException
+    public void save() throws RepositoryException
     {
     	getActionHandler().beforeSessionSave();
         getDelegate().save();
         getActionHandler().afterSessionSave();
     }
 
-    public void setNamespacePrefix(String prefix, String uri) throws NamespaceException,
-            RepositoryException
+    public void setNamespacePrefix(String prefix, String uri) throws RepositoryException
     {
         getDelegate().setNamespacePrefix(prefix, uri);
     }

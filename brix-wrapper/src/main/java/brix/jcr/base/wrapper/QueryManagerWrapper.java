@@ -2,7 +2,6 @@ package brix.jcr.base.wrapper;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
-import javax.jcr.query.InvalidQueryException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
@@ -26,12 +25,12 @@ class QueryManagerWrapper extends BaseWrapper<QueryManager> implements QueryMana
 		}
 	}
 
-	public Query createQuery(String statement, String language) throws InvalidQueryException, RepositoryException
+	public Query createQuery(String statement, String language) throws RepositoryException
 	{
 		return QueryWrapper.wrap(getDelegate().createQuery(statement, language), getSessionWrapper());
 	}
 
-	public Query getQuery(Node node) throws InvalidQueryException, RepositoryException
+	public Query getQuery(Node node) throws RepositoryException
 	{
 		return QueryWrapper.wrap(getDelegate().getQuery(unwrap(node)), getSessionWrapper());
 	}

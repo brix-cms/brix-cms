@@ -1,13 +1,12 @@
 package brix.jcr.base.wrapper;
 
-import java.io.InputStream;
-import java.util.Calendar;
-
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.ValueFormatException;
+import java.io.InputStream;
+import java.util.Calendar;
 
 class ValueFactoryWrapper extends BaseWrapper<ValueFactory> implements ValueFactory
 {
