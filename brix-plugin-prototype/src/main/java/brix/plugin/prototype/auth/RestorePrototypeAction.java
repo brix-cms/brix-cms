@@ -23,4 +23,9 @@ public class RestorePrototypeAction extends AbstractWorkspaceAction
         return getWorkspace();
     }
 
+    @Override
+    public String toString()
+    {
+        return "RestorePrototypeAction{" + "templateWorkspace=" + templateWorkspace + "} " + super.toString();
+    }
 }

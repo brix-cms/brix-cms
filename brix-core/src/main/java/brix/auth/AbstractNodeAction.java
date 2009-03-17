@@ -32,4 +32,9 @@ public abstract class AbstractNodeAction extends AbstractAction
         }
     }
 
+    @Override
+    public String toString()
+    {
+        return "AbstractNodeAction{" + "node=" + node + "} " + super.toString();
+    }
 }

@@ -17,4 +17,10 @@ public abstract class AbstractWorkspaceAction extends AbstractAction
     {
         return workspace;
     }
+
+    @Override
+    public String toString()
+    {
+        return "AbstractWorkspaceAction{" + "workspace=" + workspace + "} " + super.toString();
+    }
 }

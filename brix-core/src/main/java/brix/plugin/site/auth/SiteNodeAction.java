@@ -26,4 +26,10 @@ public class SiteNodeAction extends AbstractNodeAction
     {
         return type;
     }
+
+    @Override
+    public String toString()
+    {
+        return "SiteNodeAction{" + "type=" + type + "} " + super.toString();
+    }
 }

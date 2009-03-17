@@ -29,4 +29,10 @@ public class SelectNewNodeTypeAction extends AbstractAction
     {
         return parentNode;
     }
+
+    @Override
+    public String toString()
+    {
+        return "SelectNewNodeTypeAction{" + "nodeType='" + nodeType + '\'' + ", parentNode=" + parentNode + "} " + super.toString();
+    }
 }

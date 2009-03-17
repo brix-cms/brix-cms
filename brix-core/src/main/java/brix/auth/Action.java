@@ -8,7 +8,7 @@ public interface Action
         PRESENTATION,
         WEBDAV
         /* TODO: Implement action checks for webdav */
-    };
+    }
 
     public Context getContext();
 

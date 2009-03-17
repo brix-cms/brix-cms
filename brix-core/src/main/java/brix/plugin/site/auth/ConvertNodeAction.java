@@ -18,4 +18,9 @@ public class ConvertNodeAction extends AbstractNodeAction
         return targetType;
     }
 
+    @Override
+    public String toString()
+    {
+        return "ConvertNodeAction{" + "targetType='" + targetType + '\'' + "} " + super.toString();
+    }
 }

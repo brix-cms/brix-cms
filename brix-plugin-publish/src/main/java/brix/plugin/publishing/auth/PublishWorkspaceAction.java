@@ -17,4 +17,10 @@ public class PublishWorkspaceAction extends AbstractWorkspaceAction
     {
         return targetState;
     }
+
+    @Override
+    public String toString()
+    {
+        return "PublishWorkspaceAction{" + "targetState='" + targetState + '\'' + "} " + super.toString();
+    }
 }

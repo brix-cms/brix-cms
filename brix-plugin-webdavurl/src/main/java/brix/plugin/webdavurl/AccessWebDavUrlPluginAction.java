@@ -24,4 +24,9 @@ public class AccessWebDavUrlPluginAction implements Action
         return Context.ADMINISTRATION;
     }
 
+    @Override
+    public String toString()
+    {
+        return "AccessWebDavUrlPluginAction{" + "workspace=" + workspace + '}';
+    }
 }
