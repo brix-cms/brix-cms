@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebResponse;
@@ -19,6 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import brix.Brix;
+import brix.web.nodepage.ForbiddenPage;
+import brix.auth.Action;
+import brix.plugin.site.SitePlugin;
+import brix.plugin.site.auth.SiteNodeAction;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 
@@ -52,7 +57,12 @@ public class ResourceRequestTarget implements IRequestTarget
                 .getParameter(SAVE_PARAMETER));
 
         BrixFileNode node = (BrixFileNode)this.node.getObject();
-        
+
+        if (!SitePlugin.get().canViewNode(node, Action.Context.PRESENTATION))
+        {
+            throw new RestartResponseException(ForbiddenPage.class);
+        }
+
         WebResponse response = (WebResponse)requestCycle.getResponse();
         
         response.setContentType(node.getMimeType());
