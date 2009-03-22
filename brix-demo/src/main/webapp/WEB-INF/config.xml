@@ -106,17 +106,19 @@
             <class name="org.apache.jackrabbit.server.io.VersionHandler" />
         </propertyhandler>
         <propertyhandler>
-            <class name="org.apache.jackrabbit.server.io.VersionHistoryHandler" />
+            <class name="org.apache.jackrabbit.server.io.VersionHistoryHandler" />            
         </propertyhandler>
+        <!-- 
         <propertyhandler>
             <class name="org.apache.jackrabbit.server.io.ZipHandler" />
         </propertyhandler>
         <propertyhandler>
             <class name="org.apache.jackrabbit.server.io.XmlHandler" />
         </propertyhandler>
+        -->
         <propertyhandler>
             <class name="org.apache.jackrabbit.server.io.DefaultHandler" />
-        </propertyhandler>
+        </propertyhandler>         
     </propertymanager>
     <!--
      Define nodetypes, that should never by displayed as 'collection'
