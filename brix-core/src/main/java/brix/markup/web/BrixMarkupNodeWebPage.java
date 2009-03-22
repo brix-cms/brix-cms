@@ -41,12 +41,21 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
 	
 	@Override
 	protected void onBeforeRender()
-	{
-		this.markupHelper = new MarkupHelper(this);
-		super.onBeforeRender();
+	{		
+		getMarkupHelper();
+		super.onBeforeRender();		
 	}
 	
 	private transient MarkupHelper markupHelper;
+	
+	private MarkupHelper getMarkupHelper()
+	{
+		if (markupHelper == null)
+		{
+			markupHelper = new MarkupHelper(this);		
+		}
+		return markupHelper;
+	}
 	
 	@Override
 	protected void onDetach()
@@ -57,6 +66,6 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
 	
 	public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass)
 	{
-		return new StringResourceStream(markupHelper.getMarkup(), "text/html");
+		return new StringResourceStream(getMarkupHelper().getMarkup(), "text/html");
 	}
 }
