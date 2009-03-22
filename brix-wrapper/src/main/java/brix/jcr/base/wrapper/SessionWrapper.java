@@ -6,6 +6,8 @@ import brix.jcr.base.action.CompoundActionHandler;
 import brix.jcr.base.event.ChangeLog;
 import brix.jcr.base.event.ChangeLogActionHandler;
 import brix.jcr.base.event.EventsListener;
+import brix.jcr.base.filter.ValueFilter;
+
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -248,5 +250,21 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession
     public Map<String, Object> getAttributesMap()
     {
     	return attributesMap;
+    }
+    
+    private ValueFilter valueFilter = new ValueFilter();
+    
+    public void setValueFilter(ValueFilter valueFilter)
+    {
+    	if (valueFilter == null)
+    	{
+    		throw new IllegalArgumentException("Argument 'valueFilter' may not be null.");
+    	}
+    	this.valueFilter = valueFilter;
+    }
+    
+    public ValueFilter getValueFilter()
+    {
+    	return valueFilter;
     }
 }

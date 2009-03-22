@@ -37,12 +37,12 @@ class PropertyWrapper extends ItemWrapper implements Property
 
     public boolean getBoolean() throws RepositoryException
     {
-        return getDelegate().getBoolean();
+        return getSessionWrapper().getValueFilter().getBoolean(unwrap(this));
     }
 
     public Calendar getDate() throws RepositoryException
     {
-        return getDelegate().getDate();
+        return getSessionWrapper().getValueFilter().getDate(unwrap(this));
     }
 
     public PropertyDefinition getDefinition() throws RepositoryException
@@ -52,52 +52,53 @@ class PropertyWrapper extends ItemWrapper implements Property
 
     public double getDouble() throws RepositoryException
     {
-        return getDelegate().getDouble();
+    	return getSessionWrapper().getValueFilter().getDouble(unwrap(this));
     }
 
     public long getLength() throws RepositoryException
     {
-        return getDelegate().getLength();
+    	return getSessionWrapper().getValueFilter().getLength(unwrap(this));
     }
 
     public long[] getLengths() throws RepositoryException
     {
-        return getDelegate().getLengths();
+    	return getSessionWrapper().getValueFilter().getLengths(unwrap(this));
     }
 
     public long getLong() throws RepositoryException
     {
-        return getDelegate().getLong();
+    	return getSessionWrapper().getValueFilter().getLong(unwrap(this));
     }
 
     public Node getNode() throws RepositoryException
     {
-        return NodeWrapper.wrap(getDelegate().getNode(), getSessionWrapper());
+    	Node node = getSessionWrapper().getValueFilter().getNode(unwrap(this));
+        return NodeWrapper.wrap(node, getSessionWrapper());
     }
 
     public InputStream getStream() throws RepositoryException
     {
-        return getDelegate().getStream();
+    	return getSessionWrapper().getValueFilter().getStream(unwrap(this));
     }
 
     public String getString() throws RepositoryException
     {
-        return getDelegate().getString();
+    	return getSessionWrapper().getValueFilter().getString(unwrap(this));
     }
 
     public int getType() throws RepositoryException
     {
-        return getDelegate().getType();
+    	return getSessionWrapper().getValueFilter().getType(unwrap(this));
     }
 
     public Value getValue() throws RepositoryException
     {
-        return getDelegate().getValue();
+    	return getSessionWrapper().getValueFilter().getValue(unwrap(this));
     }
 
     public Value[] getValues() throws RepositoryException
     {
-        return getDelegate().getValues();
+    	return getSessionWrapper().getValueFilter().getValues(unwrap(this));
     }
 
     private void beforeValueSet(Object value) throws RepositoryException
@@ -126,72 +127,68 @@ class PropertyWrapper extends ItemWrapper implements Property
     
     public void setValue(Value value) throws RepositoryException
     {
-    	beforeValueSet(value);
-        getDelegate().setValue(value);
+    	beforeValueSet(value);    	
+    	getSessionWrapper().getValueFilter().setValue(unwrap(getParent()), getName(), value, null);        
         afterValueSet(value);
     }
 
     public void setValue(Value[] values) throws RepositoryException
     {
     	beforeValueSet(values);
-        getDelegate().setValue(values);
+    	getSessionWrapper().getValueFilter().setValue(unwrap(getParent()), getName(), values, null);
         afterValueSet(values);
     }
 
     public void setValue(String value) throws RepositoryException
     {
-    	beforeValueSet(value);
-        getDelegate().setValue(value);
-        afterValueSet(value);
+    	Value v = value != null ? getSession().getValueFactory().createValue(value) : null;
+    	setValue(v);
     }
 
     public void setValue(String[] values) throws RepositoryException
     {
-    	beforeValueSet(values);
-        getDelegate().setValue(values);
-        afterValueSet(values);
+    	Value[] v = new Value[values.length];
+    	for (int i = 0; i < values.length; ++i)
+    	{
+    		v[i] = getSession().getValueFactory().createValue(values[i]);
+    	}
+    	setValue(v);
     }
 
     public void setValue(InputStream value) throws RepositoryException
     {
-    	beforeValueSet(value);
-        getDelegate().setValue(value);
-        afterValueSet(value);
+    	Value v = value != null ? getSession().getValueFactory().createValue(value) : null;
+    	setValue(v);
     }
 
     public void setValue(long value) throws RepositoryException
     {
-    	beforeValueSet(value);
-        getDelegate().setValue(value);
-        afterValueSet(value);
+    	Value v = getSession().getValueFactory().createValue(value);
+    	setValue(v);
     }
 
     public void setValue(double value) throws RepositoryException
     {
-    	beforeValueSet(value);
-        getDelegate().setValue(value);
-        afterValueSet(value);
+    	Value v =  getSession().getValueFactory().createValue(value);
+    	setValue(v);
     }
 
     public void setValue(Calendar value) throws RepositoryException
     {
-    	beforeValueSet(value);
-        getDelegate().setValue(value);
-        afterValueSet(value);
+    	Value v = value != null ? getSession().getValueFactory().createValue(value) : null;
+    	setValue(v);
     }
 
     public void setValue(boolean value) throws RepositoryException
     {
-    	beforeValueSet(value);
-        getDelegate().setValue(value);
-        afterValueSet(value);
+    	Value v = getSession().getValueFactory().createValue(value);
+    	setValue(v);
     }
 
     public void setValue(Node value) throws RepositoryException
     {        
-    	beforeValueSet(value);
-        getDelegate().setValue(unwrap(value));
-        afterValueSet(value);
+    	Value v = value != null ? getSession().getValueFactory().createValue(unwrap(value)) : null;
+    	setValue(v);
     }
 
     public void accept(ItemVisitor visitor) throws RepositoryException

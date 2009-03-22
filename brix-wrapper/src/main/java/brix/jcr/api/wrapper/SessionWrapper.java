@@ -19,6 +19,7 @@ import brix.jcr.api.JcrWorkspace;
 import brix.jcr.base.BrixSession;
 import brix.jcr.base.action.AbstractActionHandler;
 import brix.jcr.base.event.EventsListener;
+import brix.jcr.base.filter.ValueFilter;
 import brix.jcr.base.wrapper.WrapperAccessor;
 
 /**
@@ -438,5 +439,16 @@ class SessionWrapper extends AbstractWrapper implements JcrSession
 	public Map<String, Object> getAttributesMap()
 	{
 		return getDelegate().getAttributesMap();
-	}	
+	}
+	
+	public ValueFilter getValueFilter()
+	{
+		return getDelegate().getValueFilter();
+	}
+	
+	public void setValueFilter(ValueFilter valueFilter)
+	{
+		getDelegate().setValueFilter(valueFilter);
+	}
 }
+
