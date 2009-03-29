@@ -30,10 +30,15 @@ public class PageRenderingPage extends BrixMarkupNodeWebPage
 
     public MarkupSource getMarkupSource()
     {
-    	MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());
+    	MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());    	
+    	return transform(source, (AbstractContainer) getModelObject());
+    }
+    
+    public static MarkupSource transform(MarkupSource source, AbstractContainer container)
+    {
     	source = new HeadTransformer(source);
-    	source = new VariableTransformer(source, getModelObject());
-    	source = new TitleTransformer(source, (AbstractContainer) getModelObject());
+    	source = new VariableTransformer(source, container);
+    	source = new TitleTransformer(source, container);
     	return source;
     }
 }
