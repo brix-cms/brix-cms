@@ -11,7 +11,7 @@ import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.apache.wicket.request.target.component.listener.IListenerInterfaceRequestTarget;
 
-class NodePageRenderRequestTarget
+public class NodePageRenderRequestTarget
         implements
             IPageRequestTarget,
             PageParametersRequestTarget,
@@ -99,7 +99,7 @@ class NodePageRenderRequestTarget
         public BrixPageParameters getPageParameters();
     };
 
-    NodePageRenderRequestTarget(IModel node, PageFactory pageProvider, String iface)
+    public NodePageRenderRequestTarget(IModel node, PageFactory pageProvider, String iface)
     {
         super();
         this.node = node;
@@ -107,7 +107,7 @@ class NodePageRenderRequestTarget
         this.iface = iface;
     }
 
-    NodePageRenderRequestTarget(IModel node, BrixNodeWebPage page, String iface)
+    public NodePageRenderRequestTarget(IModel node, BrixNodeWebPage page, String iface)
     {
         super();
         this.node = node;

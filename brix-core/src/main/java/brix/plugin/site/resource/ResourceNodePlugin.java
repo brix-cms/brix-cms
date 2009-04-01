@@ -95,7 +95,7 @@ public class ResourceNodePlugin implements SiteNodePlugin
     private void registerDefaultMimeTypes()
     {
         registerMimeType("application/xml", "xml");
-        registerMimeType("text/html", "html", "htm");
+        registerMimeType("text/html", "html", "htm", "dwt");
         registerMimeType("text/plain", "txt");
         registerMimeType("text/css", "css");
         registerMimeType("text/javascript", "js");
