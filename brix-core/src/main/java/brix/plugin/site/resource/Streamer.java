@@ -152,12 +152,12 @@ class Streamer
 				response.getOutputStream().write(buf, 0, numRead);
 				response.flushBuffer();
 
-				if (numRead != howMuch || numRead == 0)
+				if (numRead == -1)
 				{
 					break;
 				}
 
-				left -= howMuch;
+				left -= numRead;
 			}
 		}
 		catch (Exception e)
