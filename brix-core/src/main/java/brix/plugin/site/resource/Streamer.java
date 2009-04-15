@@ -7,8 +7,6 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.jetty.EofException;
-
 /**
  * Responds stream with support for Content-Range header.
  * 
@@ -162,7 +160,7 @@ class Streamer
 		}
 		catch (Exception e)
 		{
-			if (e instanceof EofException)
+			if (e.getClass().getName().contains("Eof"))
 			{
 				// ignore
 			}
