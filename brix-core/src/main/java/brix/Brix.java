@@ -14,6 +14,8 @@ import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.AbstractRestartResponseException;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 
@@ -45,6 +47,7 @@ import brix.web.nodepage.BrixNodeRequestTarget;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.web.nodepage.BrixPageParameters;
 import brix.web.nodepage.PageParametersAwareEnabler;
+import brix.web.nodepage.ForbiddenPage;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
@@ -247,6 +250,10 @@ public abstract class Brix
     }
 
     public abstract AuthorizationStrategy newAuthorizationStrategy();
+
+    public AbstractRestartResponseException getForbiddenException() {
+        return new RestartResponseException(ForbiddenPage.class);
+    }
 
     public static final String ROOT_NODE_NAME = NS_PREFIX + "root";
 

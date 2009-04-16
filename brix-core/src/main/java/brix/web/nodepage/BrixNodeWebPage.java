@@ -8,6 +8,7 @@ import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.generic.IGenericComponent;
+import brix.Brix;
 
 public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNode>
 {
@@ -35,7 +36,7 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
         BrixNode node = getModelObject();
         if (!SitePlugin.get().canViewNode(node, Context.PRESENTATION))
         {
-            throw new RestartResponseException(ForbiddenPage.class);
+            throw Brix.get().getForbiddenException();
         }
     }
 

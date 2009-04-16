@@ -60,7 +60,7 @@ public class ResourceRequestTarget implements IRequestTarget
 
         if (!SitePlugin.get().canViewNode(node, Action.Context.PRESENTATION))
         {
-            throw new RestartResponseException(ForbiddenPage.class);
+            throw Brix.get().getForbiddenException();
         }
 
         WebResponse response = (WebResponse)requestCycle.getResponse();
