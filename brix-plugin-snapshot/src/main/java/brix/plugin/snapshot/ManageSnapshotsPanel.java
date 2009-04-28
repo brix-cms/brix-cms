@@ -56,7 +56,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
 
         add(new ListView<Workspace>("snapshots", snapshotsModel) {
             @Override
-            protected IModel<Workspace> getListItemModel(IModel<List<Workspace>> listViewModel,
+            protected IModel<Workspace> getListItemModel(IModel<? extends List<Workspace>> listViewModel,
                                                          int index) {
                 return new WorkspaceModel(listViewModel.getObject().get(index));
             }

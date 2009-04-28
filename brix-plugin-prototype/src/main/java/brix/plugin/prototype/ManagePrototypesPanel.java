@@ -71,7 +71,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace>
 		add(new ListView<Workspace>("prototypes", prototypesModel)
 		{
 			@Override
-			protected IModel<Workspace> getListItemModel(IModel<List<Workspace>> listViewModel, int index)
+			protected IModel<Workspace> getListItemModel(IModel<? extends List<Workspace>> listViewModel, int index)
 			{
 				return new WorkspaceModel(listViewModel.getObject().get(index));
 			}

@@ -108,7 +108,7 @@ public class MenuTileEditor extends GenericTileEditorPanel<BrixNode>
         }
 
         @Override
-        protected IModel<BrixNode> getListItemModel(IModel<List<BrixNode>> listViewModel, int index)
+        protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel, int index)
         {
             List<BrixNode> nodes = listViewModel.getObject();
             return new BrixNodeModel(nodes.get(index));

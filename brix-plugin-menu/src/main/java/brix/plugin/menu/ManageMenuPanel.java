@@ -119,7 +119,7 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace>
 		}
 
 		@Override
-		protected IModel<BrixNode> getListItemModel(IModel<List<BrixNode>> listViewModel, int index)
+		protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel, int index)
 		{
 			List<BrixNode> nodes = listViewModel.getObject();
 			return new BrixNodeModel(nodes.get(index));
