@@ -13,6 +13,7 @@ import brix.workspace.Workspace;
 import brix.workspace.WorkspaceModel;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.RequestCycle;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -76,12 +77,23 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
                 };
                 item.add(link);
 
-                item.add(new Link<Void>("restore") {
+                Link restoreLink = new Link<Void>("restore") {
                     @Override
                     public void onClick() {
                         Workspace target = ManageSnapshotsPanel.this.getModelObject();
                         SnapshotPlugin.get().restoreSnapshot(item.getModelObject(), target);
                         getSession().info(ManageSnapshotsPanel.this.getString("restoreSuccessful"));
+                    }
+
+                    /**
+                     * Take care that restoring is only allowed in case the workspaces aren't the same
+                     */
+                    @Override
+                    public boolean isEnabled() {
+                        if (item.getModelObject().getId().equals(ManageSnapshotsPanel.this.getModelObject().getId())) {
+                            return false;
+                        }
+                        return true;
                     }
 
                     @Override
@@ -91,7 +103,16 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
                                 .getModelObject(), target);
                         return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
                     }
-                });
+                };
+
+                /*
+                 * in case the link is enabled, make sure it is intended...
+                 */
+                if (restoreLink.isEnabled()) {
+                    restoreLink.add(new SimpleAttributeModifier("onClick", "return confirm('" + getLocalizer().getString("restoreOnClick", this) + "')"));
+                }
+
+                item.add(restoreLink);
 
                 item.add(new Link<Void>("delete") {
                     @Override
@@ -115,19 +136,6 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
             }
         });
 
-//        add(new Link<Object>("createSnapshot") {
-//            @Override
-//            public void onClick() {
-//                SnapshotPlugin.get().createSnapshot(ManageSnapshotsPanel.this.getModelObject(), "TODO: TEST");
-//            }
-//
-//            @Override
-//            public boolean isVisible() {
-//                Workspace current = ManageSnapshotsPanel.this.getModelObject();
-//                Action action = new CreateSnapshotAction(Context.ADMINISTRATION, current);
-//                return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
-//            }
-//        });
 
         add(new Link<Object>("downloadWorkspace") {
             @Override
