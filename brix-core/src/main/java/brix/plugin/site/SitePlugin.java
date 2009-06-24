@@ -285,7 +285,11 @@ public class SitePlugin implements SessionAwarePlugin
 		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
 		attributes.put(WORKSPACE_ATTRIBUTE_NAME, name);
-		attributes.put(WORKSPACE_ATTRIBUTE_STATE, state);
+		
+		if (state != null)
+		{
+			attributes.put(WORKSPACE_ATTRIBUTE_STATE, state);
+		}
 		List<Workspace> res = brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
 		return res.isEmpty() ? null : res.get(0);
 	}
