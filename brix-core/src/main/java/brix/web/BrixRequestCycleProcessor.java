@@ -12,9 +12,10 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.WebRequestCycleProcessor;
 import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.protocol.http.request.WebRequestCodingStrategy;
+import org.apache.wicket.protocol.https.HttpsConfig;
+import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCodingStrategy;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
@@ -33,7 +34,7 @@ import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import brix.web.nodepage.BrixNodeWebPage;
 import brix.workspace.Workspace;
 
-public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
+public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor
 {
     private final Brix brix;
     private final BrixUrlCodingStrategy urlCodingStrategy;
@@ -41,9 +42,15 @@ public class BrixRequestCycleProcessor extends WebRequestCycleProcessor
 
     public BrixRequestCycleProcessor(Brix brix)
     {
+    	this(brix, null);
+    }
+    
+    public BrixRequestCycleProcessor(Brix brix, HttpsConfig config)
+    {
+    	super(config);
         urlCodingStrategy = new BrixUrlCodingStrategy();
         this.brix = brix;
-    }
+    }    
 
     /**
      * Resolves uri path to a {@link BrixNode}. By default this method uses

@@ -24,6 +24,10 @@ public class NodePageRenderRequestTarget
 
     public Page getPage()
     {
+    	if (page == null && pageFactory != null)
+    	{
+    		page = pageFactory.newPage();
+    	}
         return page;
     }
 
