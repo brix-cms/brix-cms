@@ -64,12 +64,11 @@ public class AdminPanel extends BrixGenericPanel<Workspace>
         for (Plugin p : brix.getPlugins())
         {
             List<IBrixTab> pluginTabs = p.newTabs(getModel());
-            if (tabs != null)
+            if (pluginTabs != null)
             {
                 tabs.addAll(pluginTabs);
             }
         }
-        ;
 
         tabbedPanel = new BrixTabbedPanel("tabbedPanel", tabs)
         {
