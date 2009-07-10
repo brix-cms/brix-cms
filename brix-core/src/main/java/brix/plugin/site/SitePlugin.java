@@ -40,6 +40,7 @@ import brix.jcr.wrapper.BrixNode;
 import brix.jcr.wrapper.ResourceNode;
 import brix.markup.MarkupCache;
 import brix.plugin.site.admin.NodeManagerContainerPanel;
+import brix.plugin.site.admin.NodeTreeContainer;
 import brix.plugin.site.admin.convert.ConvertNodeTabFactory;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.auth.SiteNodeAction.Type;
@@ -533,15 +534,15 @@ public class SitePlugin implements SessionAwarePlugin
 
 	private MarkupCache markupCache = new MarkupCache();
 
-	private NodeManagerContainerPanel findContainer(Component component)
+	private NodeTreeContainer findContainer(Component component)
 	{
-		if (component instanceof NodeManagerContainerPanel)
+		if (component instanceof NodeTreeContainer)
 		{
-			return (NodeManagerContainerPanel) component;
+			return (NodeTreeContainer) component;
 		}
 		else
 		{
-			return component.findParent(NodeManagerContainerPanel.class);
+			return component.findParent(NodeTreeContainer.class);
 		}
 	}
 
@@ -552,7 +553,7 @@ public class SitePlugin implements SessionAwarePlugin
 
 	public void selectNode(Component component, BrixNode node, boolean refreshTree)
 	{
-		NodeManagerContainerPanel panel = findContainer(component);
+		NodeTreeContainer panel = findContainer(component);
 		if (panel != null)
 		{
 			panel.selectNode(node);
@@ -566,7 +567,7 @@ public class SitePlugin implements SessionAwarePlugin
 
 	public void refreshNavigationTree(Component component)
 	{
-		NodeManagerContainerPanel panel = findContainer(component);
+		NodeTreeContainer panel = findContainer(component);
 		if (panel != null)
 		{
 			panel.updateTree();

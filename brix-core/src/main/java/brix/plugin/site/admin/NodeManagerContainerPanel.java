@@ -44,7 +44,7 @@ import brix.web.tree.TreeNode;
 import brix.web.util.AbstractModel;
 import brix.workspace.Workspace;
 
-public class NodeManagerContainerPanel extends NodeManagerPanel
+public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeTreeContainer
 {
 
     private Component editor;
