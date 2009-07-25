@@ -238,14 +238,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>IBG Maven Repo</id>
-			<name>IBG Maven Repo</name>
-			<url>http://mvn.inertiabev.com:2080/mvn</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 </project>
