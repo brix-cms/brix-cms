@@ -32,9 +32,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:http://brix-cms.googlecode.com/svn/branches/brix-1.0-beta3</connection>
-		<developerConnection>scm:svn:https://brix-cms.googlecode.com/svn/branches/brix-1.0-beta3</developerConnection>
-		<url>http://brix-cms.googlecode.com/svn/branches/brix-1.0-beta3</url>
+		<connection>scm:svn:http://brix-cms.googlecode.com/svn/tags/brix-1.0-SNAPSHOT</connection>
+		<developerConnection>scm:svn:https://brix-cms.googlecode.com/svn/trunk</developerConnection>
+		<url>http://brix-cms.googlecode.com/svn/trunk</url>
 	</scm>
 	
 	<dependencyManagement>
