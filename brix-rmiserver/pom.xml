@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>brix</artifactId>
 		<groupId>brix</groupId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0-beta3</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>brix</groupId>
@@ -11,7 +11,7 @@
 	<name>Stand-Alone JackRabbit RMI Server</name>
 	<description>Provides a stand alone JackRabbit RMI server in a
 		fully functioning environment</description>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0-beta3</version>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
