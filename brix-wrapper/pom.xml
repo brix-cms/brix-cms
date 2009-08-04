@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>brix</artifactId>
 		<groupId>brix</groupId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0-beta3</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>brix</groupId>
@@ -10,7 +10,7 @@
 	<name>Brix JCR API Wrapper</name>
 	<description>A thin wrapper around the JCR API to remove the annoying
 		checked exceptions</description>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0-beta3</version>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
