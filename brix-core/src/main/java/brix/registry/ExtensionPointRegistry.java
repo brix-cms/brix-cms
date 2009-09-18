@@ -46,6 +46,8 @@ public class ExtensionPointRegistry
             case SINGLETON :
                 extensions.clear();
                 break;
+            case COLLECTION :
+                break;
 
         }
 
