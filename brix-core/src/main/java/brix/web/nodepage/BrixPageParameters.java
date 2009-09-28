@@ -21,8 +21,9 @@ import brix.jcr.wrapper.BrixNode;
 
 public class BrixPageParameters implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 
-    public BrixPageParameters()
+	public BrixPageParameters()
     {
 
     }
@@ -37,18 +38,36 @@ public class BrixPageParameters implements Serializable
             this.indexedParameters = new ArrayList<String>(copy.indexedParameters);
 
         if (copy.queryStringParameters != null)
-            this.queryStringParameters = new ArrayList<Entry>(copy.queryStringParameters);
+            this.queryStringParameters = new ArrayList<QueryStringParameter>(copy.queryStringParameters);
     }
 
     private List<String> indexedParameters = null;
 
-    private static class Entry implements Serializable
+    public static class QueryStringParameter implements Serializable
     {
-        private String key;
-        private String value;
+		private static final long serialVersionUID = 1L;
+
+		private final String key;
+        private final String value;
+        
+        public QueryStringParameter(String key, String value)
+		{
+			this.key = key;
+			this.value = value;
+		}
+        
+        public String getKey()
+		{
+			return key;
+		}
+        
+        public String getValue()
+		{
+			return value;
+		}
     };
 
-    private List<Entry> queryStringParameters = null;
+    private List<QueryStringParameter> queryStringParameters = null;
 
     public int getIndexedParamsCount()
     {
@@ -91,6 +110,18 @@ public class BrixPageParameters implements Serializable
         }
     }
 
+    public List<QueryStringParameter> getQueryStringParams()
+	{
+    	if (queryStringParameters == null)
+    	{
+    		return Collections.emptyList();
+    	}
+    	else
+    	{
+    		return Collections.unmodifiableList(new ArrayList<QueryStringParameter>(queryStringParameters));
+    	}
+	}
+    
     public Set<String> getQueryParamKeys()
     {
         if (queryStringParameters == null || queryStringParameters.isEmpty())
@@ -98,7 +129,7 @@ public class BrixPageParameters implements Serializable
             return Collections.emptySet();
         }
         Set<String> set = new TreeSet<String>();
-        for (Entry entry : queryStringParameters)
+        for (QueryStringParameter entry : queryStringParameters)
         {
             set.add(entry.key);
         }
@@ -113,7 +144,7 @@ public class BrixPageParameters implements Serializable
         }
         if (queryStringParameters != null)
         {
-            for (Entry entry : queryStringParameters)
+            for (QueryStringParameter entry : queryStringParameters)
             {
                 if (entry.key.equals(name))
                 {
@@ -133,7 +164,7 @@ public class BrixPageParameters implements Serializable
         if (queryStringParameters != null)
         {
             List<StringValue> result = new ArrayList<StringValue>();
-            for (Entry entry : queryStringParameters)
+            for (QueryStringParameter entry : queryStringParameters)
             {
                 if (entry.key.equals(name))
                 {
@@ -156,9 +187,9 @@ public class BrixPageParameters implements Serializable
         }
         if (queryStringParameters != null)
         {
-            for (Iterator<Entry> i = queryStringParameters.iterator(); i.hasNext();)
+            for (Iterator<QueryStringParameter> i = queryStringParameters.iterator(); i.hasNext();)
             {
-                Entry e = i.next();
+                QueryStringParameter e = i.next();
                 if (e.key.equals(name))
                 {
                     i.remove();
@@ -186,10 +217,8 @@ public class BrixPageParameters implements Serializable
         }
 
         if (queryStringParameters == null)
-            queryStringParameters = new ArrayList<Entry>(1);
-        Entry entry = new Entry();
-        entry.key = name;
-        entry.value = value.toString();
+            queryStringParameters = new ArrayList<QueryStringParameter>(1);
+        QueryStringParameter entry = new QueryStringParameter(name, value.toString());
 
         if (index == -1)
             queryStringParameters.add(entry);
