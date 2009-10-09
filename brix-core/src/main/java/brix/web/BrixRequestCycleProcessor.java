@@ -8,49 +8,41 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.protocol.http.WebResponse;
-import org.apache.wicket.protocol.http.request.WebRequestCodingStrategy;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCodingStrategy;
 import org.apache.wicket.request.RequestParameters;
-import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
-import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.util.string.UrlUtils;
 
 import brix.Brix;
-import brix.BrixNodeModel;
 import brix.Path;
 import brix.config.BrixConfig;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
-import brix.web.nodepage.BrixNodeWebPage;
 import brix.workspace.Workspace;
 
 public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor
 {
-    private final Brix brix;
-    private final BrixUrlCodingStrategy urlCodingStrategy;
+    final Brix brix;
+    final BrixUrlCodingStrategy urlCodingStrategy;
     private boolean handleHomePage = true;
 
     public BrixRequestCycleProcessor(Brix brix)
     {
-    	this(brix, null);
+        this(brix, null);
     }
-    
+
     public BrixRequestCycleProcessor(Brix brix, HttpsConfig config)
     {
-    	super(config);
-        urlCodingStrategy = new BrixUrlCodingStrategy();
+        super(config);
+        urlCodingStrategy = new BrixUrlCodingStrategy(this);
         this.brix = brix;
-    }    
+    }
 
     /**
      * Resolves uri path to a {@link BrixNode}. By default this method uses
@@ -240,7 +232,7 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor
     @Override
     protected IRequestCodingStrategy newRequestCodingStrategy()
     {
-        return new BrixRequestCodingStrategy();
+        return new BrixRequestCodingStrategy(brix, urlCodingStrategy);
     }
 
     @Override
@@ -255,174 +247,6 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor
         {
             return super.resolveHomePageTarget(requestCycle, requestParameters);
         }
-    }
-
-    private class BrixRequestCodingStrategy extends WebRequestCodingStrategy
-    {
-
-        @Override
-        public IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(String path)
-        {
-
-            IRequestTargetUrlCodingStrategy target = super.urlCodingStrategyForPath(path);
-            if (target == null)
-            {
-                target = urlCodingStrategy;
-            }
-            return target;
-        }
-
-        @Override
-        public String rewriteStaticRelativeUrl(String url)
-        {
-            boolean insideBrixPage = false;
-            IRequestTarget target = RequestCycle.get().getRequestTarget();
-            if (target instanceof IPageRequestTarget)
-            {
-                IPageRequestTarget pageTarget = (IPageRequestTarget)target;
-                Page page = pageTarget.getPage();
-                if (page instanceof BrixNodeWebPage)
-                {
-                    insideBrixPage = true;
-                }
-            }
-
-            if (insideBrixPage && UrlUtils.isRelative(url))
-            {
-                final String prefix = RequestCycle.get().getRequest()
-                        .getRelativePathPrefixToContextRoot();
-
-                return brix.getConfig().getMapper().rewriteStaticRelativeUrl(url, prefix);
-            }
-            else
-            {
-                return super.rewriteStaticRelativeUrl(url);
-            }
-        }
-    }
-
-    private class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
-    {
-
-        private Path decode(Path path)
-        {
-            StringBuilder builder = new StringBuilder(path.toString().length());
-            boolean first = true;
-            for (String s : path)
-            {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    builder.append("/");
-                }
-                builder.append(BrixNodePageUrlCodingStrategy.urlDecode(s));
-            }
-            if (builder.length() == 0)
-            {
-                builder.append("/");
-            }
-            return new Path(builder.toString(), false);
-        }
-
-        private IRequestTarget getSwitchTarget(BrixNode node)
-        {
-            if (node instanceof BrixNode)
-            {
-                return SwitchProtocolRequestTarget.requireProtocol(((BrixNode)node)
-                        .getRequiredProtocol());
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public IRequestTarget targetForPath(String pathStr, RequestParameters requestParameters)
-        {
-            if (!pathStr.startsWith("/"))
-            {
-                pathStr = "/" + pathStr;
-            }
-
-            // TODO: This is just a quick fix
-            if (pathStr.startsWith("/webdav") || pathStr.startsWith("/jcrwebdav"))
-            {
-                return null;
-            }
-
-            Path path = decode(new Path(pathStr, false));
-
-            IRequestTarget target = null;
-
-            while (target == null)
-            {
-                final BrixNode node = getNodeForUriPath(path);
-                if (node != null)
-                {
-                    target = getSwitchTarget(node);
-                    if (target == null)
-                    {
-                        target = SitePlugin.get().getNodePluginForNode(node).respond(
-                                new BrixNodeModel(node), requestParameters);
-                    }
-                }
-                if (path.isRoot() || path.toString().equals("."))
-                {
-                    break;
-                }
-                path = path.parent();
-            }
-            return target;
-        }
-
-        public IRequestTarget decode(RequestParameters requestParameters)
-        {
-            String pathStr = requestParameters.getPath();
-
-            IRequestTarget target = targetForPath(pathStr, requestParameters);
-
-            if (target == null)
-            {
-                // 404 if node not found
-                // return new
-                // WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
-                // "Resource
-                // " + pathStr
-                // + " not found");
-                return null;
-                // return new PageRequestTarget(new
-                // ResourceNotFoundPage(pathStr));
-            }
-            else
-            {
-                return target;
-            }
-
-        }
-
-        public CharSequence encode(IRequestTarget requestTarget)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public String getMountPath()
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean matches(IRequestTarget requestTarget)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean matches(String path, boolean caseSensitive)
-        {
-            throw new UnsupportedOperationException();
-        }
-
     }
 
 }
