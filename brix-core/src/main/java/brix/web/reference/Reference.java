@@ -19,8 +19,9 @@ import brix.web.nodepage.BrixPageParameters;
 
 public class Reference implements Serializable, IDetachable
 {
+	private static final long serialVersionUID = 1L;
 
-    private IModel<BrixNode> nodeModel;
+	private IModel<BrixNode> nodeModel;
     private String url;
     private BrixPageParameters parameters;
 
