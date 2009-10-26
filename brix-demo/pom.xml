@@ -2,7 +2,7 @@
   <parent>
     <artifactId>brix</artifactId>
     <groupId>brix</groupId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>brix</groupId>
@@ -11,7 +11,7 @@
   <name>Brix Demo WebApp</name>
   <description>A simple demo WebApp that demonstrates Brix features and how to integrate it into a
     Wicket Web Application</description>
-  <version>1.0.0</version>
+  <version>1.0.1-SNAPSHOT</version>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>

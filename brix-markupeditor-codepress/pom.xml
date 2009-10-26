@@ -2,14 +2,14 @@
   <parent>
     <artifactId>brix</artifactId>
     <groupId>brix</groupId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>brix-markupeditor-codepress</artifactId>
  	<name>Brix CodePress Integration</name>
 	<description>Makes CodePress[1] available as a Wicket component for
 		integration into admin panel [1] http://codepress.org/</description>
- <version>1.0.0</version>
+ <version>1.0.1-SNAPSHOT</version>
   <url />
   <dependencies>
     <dependency>
