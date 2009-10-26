@@ -397,14 +397,11 @@
         </pluginRepository>
     </pluginRepositories>
     
-  <distributionManagement>
-    <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>Brix</id>
-      <name>Brix Subversion Maven2 Repository</name>
-      <url>dav:https://brix-cms.googlecode.com/svn/maven2</url>
-      <layout>default</layout>
-    </repository>
-  </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>local</id>
+            <url>../maven2</url>
+        </repository>
+    </distributionManagement>
 
 </project>
