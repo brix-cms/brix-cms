@@ -400,7 +400,7 @@
     <distributionManagement>
         <repository>
             <id>local</id>
-            <url>../maven2</url>
+            <url>file:../maven2</url>
         </repository>
     </distributionManagement>
 
