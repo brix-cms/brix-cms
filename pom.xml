@@ -10,8 +10,6 @@
  <url>http://brix-cms.googlecode.com</url>
  <modules>
   <module>brix-core</module>
-  <module>brix-markupeditor-codepress</module>
-  <module>brix-markupeditor-tinymce</module>
   <module>brix-wrapper</module>
   <module>brix-demo</module>
   <module>brix-rmiserver</module>
@@ -47,16 +45,6 @@
    <dependency>
     <groupId>brix</groupId>
     <artifactId>brix-core</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-   </dependency>
-   <dependency>
-    <groupId>brix</groupId>
-    <artifactId>brix-markupeditor-codepress</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-   </dependency>
-   <dependency>
-    <groupId>brix</groupId>
-    <artifactId>brix-markupeditor-tinymce</artifactId>
     <version>1.0.1-SNAPSHOT</version>
    </dependency>
    <dependency>

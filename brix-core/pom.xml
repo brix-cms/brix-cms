@@ -30,14 +30,6 @@
   </dependency>
   <dependency>
    <groupId>brix</groupId>
-   <artifactId>brix-markupeditor-codepress</artifactId>
-  </dependency>
-  <dependency>
-   <groupId>brix</groupId>
-   <artifactId>brix-markupeditor-tinymce</artifactId>
-  </dependency>
-  <dependency>
-   <groupId>brix</groupId>
    <artifactId>brix-workspace</artifactId>
   </dependency>
   <dependency>
