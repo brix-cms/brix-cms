@@ -96,27 +96,27 @@
    <dependency>
     <groupId>org.apache.jackrabbit</groupId>
     <artifactId>jackrabbit-api</artifactId>
-    <version>1.5.0</version>
+    <version>${jackrabbit.version}</version>
    </dependency>
    <dependency>
     <groupId>org.apache.jackrabbit</groupId>
     <artifactId>jackrabbit-core</artifactId>
-    <version>1.5.0</version>
+    <version>${jackrabbit.version}</version>
    </dependency>
    <dependency>
     <groupId>org.apache.jackrabbit</groupId>
     <artifactId>jackrabbit-jcr-commons</artifactId>
-    <version>1.5.0</version>
+    <version>${jackrabbit.version}</version>
    </dependency>
    <dependency>
     <groupId>org.apache.jackrabbit</groupId>
     <artifactId>jackrabbit-jcr-server</artifactId>
-    <version>1.5.0</version>
+    <version>${jackrabbit.version}</version>
    </dependency>
    <dependency>
     <groupId>org.apache.jackrabbit</groupId>
     <artifactId>jackrabbit-jcr-rmi</artifactId>
-    <version>1.5.0</version>
+    <version>${jackrabbit.version}</version>
    </dependency>
 <!--+
 			    | HELPERS
@@ -363,6 +363,7 @@
   <jetty.version>6.1.11</jetty.version>
   <inmethod.grid.version>1.0.0-b4</inmethod.grid.version>
   <htmllexer.version>2.0-beta1</htmllexer.version>
+  <jackrabbit.version>1.6.0</jackrabbit.version>
  </properties>
  <repositories>
   <repository>
