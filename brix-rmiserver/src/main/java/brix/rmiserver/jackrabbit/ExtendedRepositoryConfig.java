@@ -31,6 +31,7 @@ import org.apache.jackrabbit.core.config.VersioningConfig;
 import org.apache.jackrabbit.core.config.WorkspaceConfig;
 import org.apache.jackrabbit.core.data.DataStore;
 import org.apache.jackrabbit.core.fs.FileSystem;
+import org.apache.jackrabbit.core.util.RepositoryLockMechanism;
 import org.xml.sax.InputSource;
 
 /**
@@ -46,7 +47,7 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig
 
     public ExtendedRepositoryConfig(RepositoryConfig delegate)
     {
-        super(null, null, null, null, null, null, 0, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, 0, null, null, null, null, null, null, null);
         this.delegate = delegate;
     }
 
@@ -186,5 +187,10 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig
         return delegate.toString();
     }
 
+    @Override
+    public RepositoryLockMechanism getRepositoryLockMechanism() throws RepositoryException
+    {
+        return delegate.getRepositoryLockMechanism();
+    }
 
 }
