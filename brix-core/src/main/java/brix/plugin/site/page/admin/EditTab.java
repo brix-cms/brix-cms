@@ -17,12 +17,15 @@
  */
 package brix.plugin.site.page.admin;
 
+import java.util.Collection;
+
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 
 import brix.Brix;
@@ -38,20 +41,15 @@ import brix.web.tree.NodeFilter;
 
 abstract class EditTab extends NodeManagerPanel
 {
-
-    private boolean codeEditorEnabled = false;
-    private boolean wysiwygEditorEnabled = false;
+    private String currentEditorFactory;
+    private final MarkupContainer contentEditorParent;
+    private final IModel<String> contentEditorModel;
 
     public EditTab(String id, final IModel<BrixNode> nodeModel)
     {
         super(id, nodeModel);
 
         Brix brix = getModelObject().getBrix();
-
-        // tinymce codepress
-        // final boolean useCodepress = brix.getConfig().getAdminConfig().isEnableCodePress();
-        // final boolean useWysiwyg = brix.getConfig().getAdminConfig().isEnableWysiwyg();
-
         Form<Void> form = new Form<Void>("form");
         add(form);
 
@@ -70,41 +68,48 @@ abstract class EditTab extends NodeManagerPanel
         IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
         form.add(new CheckBox("requiresSSL", booleanModel));
 
-        stringModel = adapter.forProperty("dataAsString");
-        TextArea<String> content = new TextArea<String>("content", stringModel);
-        form.add(content);
+        // set up markup editor
 
-        // tinymce codepress
-        // if (useCodepress)
-        // {
-        // content.add(new CodePressEnabler("html", true)
-        // {
-        // @Override
-        // public boolean isEnabled(Component component)
-        // {
-        // return codeEditorEnabled;
-        // }
-        // });
-        // }
-        // if (useWysiwyg)
-        // {
-        // content.add(new TinyMceEnabler()
-        // {
-        // @Override
-        // public boolean isEnabled(Component component)
-        // {
-        // return wysiwygEditorEnabled;
-        // }
-        // });
-        // }
+        contentEditorModel = adapter.forProperty("dataAsString");
+        contentEditorParent = form;
+
+        Collection<MarkupEditorFactory> editorFactories = brix.getConfig().getRegistry()
+                .lookupCollection(MarkupEditorFactory.POINT);
+
+        setupEditor(editorFactories.iterator().next().getClass().getName());
+
+        // set up buttons to control editor switching
+
+        RepeatingView editors = new RepeatingView("editors")
+        {
+            @Override
+            public boolean isVisible()
+            {
+                return size() > 1;
+            }
+        };
+        form.add(editors);
+
+        for (MarkupEditorFactory factory : editorFactories)
+        {
+            final String cn = factory.getClass().getName();
+            editors.add(new Button(editors.newChildId(), factory.newLabel())
+            {
+                public void onSubmit()
+                {
+                    setupEditor(cn);
+                }
+
+                @Override
+                public boolean isEnabled()
+                {
+                    return !cn.equals(currentEditorFactory);
+                }
+            });
+        }
+
 
         form.add(new ContainerFeedbackPanel("feedback", this));
-
-        // tinymce codepress
-        // form.add(new DisableEditorsButton("disable-editors"));
-        // form.add(new EnableCodeEditorButton("enable-code-editor").setVisible(useCodepress));
-        // form.add(new EnableWysiwygEditorButton("enable-wysiwig-editor")
-        // .setVisibilityAllowed(useWysiwyg));
 
         form.add(new Button("save")
         {
@@ -135,72 +140,27 @@ abstract class EditTab extends NodeManagerPanel
         });
     }
 
-    // tinymce codepress
-    // private class EnableCodeEditorButton extends Button
-    // {
-    // public EnableCodeEditorButton(String id)
-    // {
-    // super(id);
-    // setDefaultFormProcessing(false);
-    // }
-    //
-    // @Override
-    // public void onSubmit()
-    // {
-    // codeEditorEnabled = true;
-    // wysiwygEditorEnabled = false;
-    // }
-    //
-    // @Override
-    // public boolean isEnabled()
-    // {
-    // return codeEditorEnabled == false;
-    // }
-    // }
-
-    // private class EnableWysiwygEditorButton extends Button
-    // {
-    // public EnableWysiwygEditorButton(String id)
-    // {
-    // super(id);
-    // setDefaultFormProcessing(false);
-    // }
-    //
-    // @Override
-    // public void onSubmit()
-    // {
-    // codeEditorEnabled = false;
-    // wysiwygEditorEnabled = true;
-    // }
-    //
-    // @Override
-    // public boolean isEnabled()
-    // {
-    // return wysiwygEditorEnabled == false;
-    // }
-    // }
-    // private class DisableEditorsButton extends Button
-    // {
-    // public DisableEditorsButton(String id)
-    // {
-    // super(id);
-    // setDefaultFormProcessing(false);
-    // }
-    //
-    // @Override
-    // public void onSubmit()
-    // {
-    // codeEditorEnabled = false;
-    // wysiwygEditorEnabled = false;
-    // }
-    //
-    // @Override
-    // public boolean isEnabled()
-    // {
-    // return wysiwygEditorEnabled == true || codeEditorEnabled == true;
-    // }
-    // }
-
     abstract void goBack();
+
+    private void setupEditor(String cn)
+    {
+        final Brix brix = getModelObject().getBrix();
+
+        Collection<MarkupEditorFactory> factories = brix.getConfig().getRegistry()
+                .lookupCollection(MarkupEditorFactory.POINT);
+
+        for (MarkupEditorFactory factory : factories)
+        {
+            if (factory.getClass().getName().equals(cn))
+            {
+                contentEditorParent.addOrReplace(factory.newEditor("content", contentEditorModel));
+                currentEditorFactory = factory.getClass().getName();
+                return;
+            }
+        }
+
+        throw new RuntimeException("Unknown markup editor factory class: " + cn);
+
+    };
 
 }

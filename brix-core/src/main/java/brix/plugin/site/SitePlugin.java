@@ -65,6 +65,8 @@ import brix.plugin.site.page.PageNode;
 import brix.plugin.site.page.PageSiteNodePlugin;
 import brix.plugin.site.page.TemplateNode;
 import brix.plugin.site.page.TemplateSiteNodePlugin;
+import brix.plugin.site.page.admin.MarkupEditorFactory;
+import brix.plugin.site.page.admin.SimpleMarkupEditorFactory;
 import brix.plugin.site.page.global.GlobalContainerNode;
 import brix.plugin.site.page.global.GlobalTilesPanel;
 import brix.plugin.site.page.global.GlobalVariablesPanel;
@@ -197,6 +199,10 @@ public class SitePlugin implements SessionAwarePlugin
         registerNodePlugin(new TemplateSiteNodePlugin(this));
         registerNodePlugin(new PageSiteNodePlugin(this));
         registerManageNodeTabFactory(new ConvertNodeTabFactory());
+
+        // register default editor
+        brix.getConfig().getRegistry().register(MarkupEditorFactory.POINT,
+                new SimpleMarkupEditorFactory());
     }
 
     public final Brix getBrix()
