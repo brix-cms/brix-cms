@@ -18,8 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.ResourceReference;
-import org.apache.wicket.behavior.HeaderContributor;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.html.IHeaderContributor;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -36,7 +37,7 @@ import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
 import brix.workspace.WorkspaceModel;
 
-public class AdminPanel extends BrixGenericPanel<Workspace>
+public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderContributor
 {
 
     private TabbedPanel tabbedPanel;
@@ -52,7 +53,6 @@ public class AdminPanel extends BrixGenericPanel<Workspace>
     {
         super(id);
         setModel(new WorkspaceModel(workspace));
-        add(HeaderContributor.forCss(CSS));
 
         add(container = new WebMarkupContainer("container")
         {
@@ -147,7 +147,7 @@ public class AdminPanel extends BrixGenericPanel<Workspace>
         for (Plugin p : brix.getPlugins())
         {
             List<Workspace> filtered = brix.filterVisibleWorkspaces(
-                p.getWorkspaces(current, false), Context.ADMINISTRATION);
+                    p.getWorkspaces(current, false), Context.ADMINISTRATION);
             for (Workspace w : filtered)
             {
                 workspaces.add(w);
@@ -183,7 +183,7 @@ public class AdminPanel extends BrixGenericPanel<Workspace>
         for (Plugin p : brix.getPlugins())
         {
             List<Workspace> filtered = brix.filterVisibleWorkspaces(
-                p.getWorkspaces(current, false), Context.ADMINISTRATION);
+                    p.getWorkspaces(current, false), Context.ADMINISTRATION);
             for (Workspace w : filtered)
             {
                 workspaces.add(w);
@@ -203,5 +203,10 @@ public class AdminPanel extends BrixGenericPanel<Workspace>
     }
 
     private static final ResourceReference CSS = new CompressedResourceReference(AdminPanel.class,
-        "res/style.css");
+            "res/style.css");
+
+    public void renderHead(IHeaderResponse response)
+    {
+        response.renderCSSReference(CSS);
+    }
 }
