@@ -118,6 +118,8 @@ abstract class ItemWrapper extends BaseWrapper<Item> implements Item
         getDelegate().remove();
     }
 
+    /** @deprecated */
+    @Deprecated
     public void save() throws RepositoryException
     {
     	getActionHandler().beforeItemSave(this);

@@ -18,40 +18,47 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
+import javax.jcr.query.qom.QueryObjectModelFactory;
 
 class QueryManagerWrapper extends BaseWrapper<QueryManager> implements QueryManager
 {
 
-	private QueryManagerWrapper(QueryManager delegate, SessionWrapper session)
-	{
-		super(delegate, session);
-	}
-	
-	public static QueryManagerWrapper wrap(QueryManager delegate, SessionWrapper session)
-	{
-		if (delegate == null)
-		{
-			return null;
-		}
-		else
-		{
-			return new QueryManagerWrapper(delegate, session);
-		}
-	}
+    private QueryManagerWrapper(QueryManager delegate, SessionWrapper session)
+    {
+        super(delegate, session);
+    }
 
-	public Query createQuery(String statement, String language) throws RepositoryException
-	{
-		return QueryWrapper.wrap(getDelegate().createQuery(statement, language), getSessionWrapper());
-	}
+    public static QueryManagerWrapper wrap(QueryManager delegate, SessionWrapper session)
+    {
+        if (delegate == null)
+        {
+            return null;
+        }
+        else
+        {
+            return new QueryManagerWrapper(delegate, session);
+        }
+    }
 
-	public Query getQuery(Node node) throws RepositoryException
-	{
-		return QueryWrapper.wrap(getDelegate().getQuery(unwrap(node)), getSessionWrapper());
-	}
+    public Query createQuery(String statement, String language) throws RepositoryException
+    {
+        return QueryWrapper.wrap(getDelegate().createQuery(statement, language),
+                getSessionWrapper());
+    }
 
-	public String[] getSupportedQueryLanguages() throws RepositoryException
-	{
-		return getDelegate().getSupportedQueryLanguages();
-	}
+    public Query getQuery(Node node) throws RepositoryException
+    {
+        return QueryWrapper.wrap(getDelegate().getQuery(unwrap(node)), getSessionWrapper());
+    }
+
+    public String[] getSupportedQueryLanguages() throws RepositoryException
+    {
+        return getDelegate().getSupportedQueryLanguages();
+    }
+
+    public QueryObjectModelFactory getQOMFactory()
+    {
+        return getDelegate().getQOMFactory();
+    }
 
 }

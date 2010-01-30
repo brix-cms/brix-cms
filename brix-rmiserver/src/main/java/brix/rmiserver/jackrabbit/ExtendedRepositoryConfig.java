@@ -31,7 +31,10 @@ import org.apache.jackrabbit.core.config.VersioningConfig;
 import org.apache.jackrabbit.core.config.WorkspaceConfig;
 import org.apache.jackrabbit.core.data.DataStore;
 import org.apache.jackrabbit.core.fs.FileSystem;
+import org.apache.jackrabbit.core.query.QueryHandler;
+import org.apache.jackrabbit.core.query.QueryHandlerContext;
 import org.apache.jackrabbit.core.util.RepositoryLockMechanism;
+import org.apache.jackrabbit.core.util.db.ConnectionFactory;
 import org.xml.sax.InputSource;
 
 /**
@@ -47,7 +50,9 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig
 
     public ExtendedRepositoryConfig(RepositoryConfig delegate)
     {
-        super(null, null, null, null, null, null, 0, null, null, null, null, null, null, null);
+
+        super(null, null, null, null, null, null, 0, null, null, null, null, null, null, null,
+                null, null);
         this.delegate = delegate;
     }
 
@@ -130,11 +135,6 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig
         return delegate.getHomeDir();
     }
 
-    @Override
-    public SearchConfig getSearchConfig()
-    {
-        return delegate.getSearchConfig();
-    }
 
     @Override
     public SecurityConfig getSecurityConfig()
@@ -192,5 +192,18 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig
     {
         return delegate.getRepositoryLockMechanism();
     }
+
+    @Override
+    public ConnectionFactory getConnectionFactory()
+    {
+        return delegate.getConnectionFactory();
+    }
+
+    @Override
+    public QueryHandler getQueryHandler(QueryHandlerContext context) throws RepositoryException
+    {
+        return delegate.getQueryHandler(context);
+    }
+    
 
 }

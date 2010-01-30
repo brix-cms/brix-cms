@@ -14,6 +14,7 @@
 
 package brix.jcr.api.wrapper;
 
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 
 import brix.jcr.api.JcrNode;
@@ -104,6 +105,61 @@ class QueryWrapper extends AbstractWrapper implements JcrQuery
                 return JcrNode.Wrapper.wrap(getDelegate().storeAsNode(absPath), getJcrSession());
             }
         });
+    }
+
+    public void bindValue(final String varName, final Value value)
+    {
+        executeCallback(new VoidCallback()
+        {
+
+            public void execute() throws Exception
+            {
+                getDelegate().bindValue(varName, value);
+            }
+
+        });
+
+    }
+
+    public String[] getBindVariableNames()
+    {
+        return executeCallback(new Callback<String[]>()
+        {
+
+            public String[] execute() throws Exception
+            {
+                return getDelegate().getBindVariableNames();
+            }
+
+        });
+    }
+
+    public void setLimit(final long limit)
+    {
+        executeCallback(new VoidCallback()
+        {
+
+            public void execute() throws Exception
+            {
+                getDelegate().setLimit(limit);
+            }
+
+        });
+
+    }
+
+    public void setOffset(final long offset)
+    {
+        executeCallback(new VoidCallback()
+        {
+
+            public void execute() throws Exception
+            {
+                getDelegate().setOffset(offset);
+            }
+
+        });
+
     }
 
 }

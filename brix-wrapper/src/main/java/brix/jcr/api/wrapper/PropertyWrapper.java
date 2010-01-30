@@ -15,8 +15,10 @@
 package brix.jcr.api.wrapper;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
+import javax.jcr.Binary;
 import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
 import javax.jcr.Property;
@@ -146,6 +148,8 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty
         });
     }
 
+    /** @deprecated, see Property#getStream() */
+    @Deprecated
     public InputStream getStream()
     {
         return executeCallback(new Callback<InputStream>()
@@ -245,6 +249,8 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty
         });
     }
 
+    /** @deprecated */
+    @Deprecated
     public void setValue(final InputStream value)
     {
         executeCallback(new VoidCallback()
@@ -310,16 +316,96 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty
             }
         });
     }
-    
-	public void accept(final ItemVisitor visitor)
-	{
-		executeCallback(new VoidCallback()
-		{
-			public void execute() throws Exception
-			{
-				visitor.visit(PropertyWrapper.this);
-			}
-		});
-	}
+
+    public void accept(final ItemVisitor visitor)
+    {
+        executeCallback(new VoidCallback()
+        {
+            public void execute() throws Exception
+            {
+                visitor.visit(PropertyWrapper.this);
+            }
+        });
+    }
+
+    public Binary getBinary()
+    {
+        return executeCallback(new Callback<Binary>()
+        {
+
+            public Binary execute() throws Exception
+            {
+                return getDelegate().getBinary();
+            }
+
+        });
+    }
+
+    public BigDecimal getDecimal()
+    {
+        return executeCallback(new Callback<BigDecimal>()
+        {
+
+            public BigDecimal execute() throws Exception
+            {
+                return getDelegate().getDecimal();
+            }
+
+        });
+    }
+
+    public Property getProperty()
+    {
+        return executeCallback(new Callback<Property>()
+        {
+
+            public Property execute() throws Exception
+            {
+                return getDelegate().getProperty();
+            }
+
+        });
+    }
+
+    public void setValue(final Binary value)
+    {
+        executeCallback(new VoidCallback()
+        {
+
+            public void execute() throws Exception
+            {
+                getDelegate().setValue(value);
+            }
+
+        });
+
+    }
+
+    public void setValue(final BigDecimal value)
+    {
+        executeCallback(new VoidCallback()
+        {
+
+            public void execute() throws Exception
+            {
+                getDelegate().setValue(value);
+            }
+
+        });
+
+    }
+
+    public boolean isMultiple()
+    {
+        return executeCallback(new Callback<Boolean>()
+        {
+
+            public Boolean execute() throws Exception
+            {
+                return getDelegate().isMultiple();
+            }
+
+        });
+    }
 
 }

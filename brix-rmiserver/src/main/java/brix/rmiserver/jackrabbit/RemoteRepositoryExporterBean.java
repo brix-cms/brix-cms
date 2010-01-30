@@ -21,7 +21,7 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.jcr.Repository;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitServerAdapterFactory;
+
 import org.apache.jackrabbit.rmi.remote.RemoteRepository;
 import org.apache.jackrabbit.rmi.server.ServerAdapterFactory;
 import org.slf4j.Logger;
@@ -73,7 +73,7 @@ public class RemoteRepositoryExporterBean implements InitializingBean, Disposabl
     public void afterPropertiesSet() throws Exception
     {
 
-        ServerAdapterFactory factory = new JackrabbitServerAdapterFactory();
+        ServerAdapterFactory factory = new ServerAdapterFactory();
         remote = factory.getRemoteRepository(repository);
 
         registry = LocateRegistry.getRegistry(registryPort);

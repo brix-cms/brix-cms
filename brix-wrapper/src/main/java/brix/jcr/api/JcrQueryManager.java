@@ -17,12 +17,14 @@ package brix.jcr.api;
 import javax.jcr.Node;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
+import javax.jcr.query.qom.QueryObjectModelFactory;
 
 import brix.jcr.api.wrapper.WrapperAccessor;
 
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 public interface JcrQueryManager extends QueryManager
 {
@@ -42,5 +44,15 @@ public interface JcrQueryManager extends QueryManager
     public Query getQuery(Node node);
 
     public String[] getSupportedQueryLanguages();
+
+    /**
+     * Returns a <code>QueryObjectModelFactory</code> with which a JCR-JQOM query can be built
+     * programmatically.
+     * 
+     * @return a <code>QueryObjectModelFactory</code> object
+     * @since JCR 2.0
+     */
+    public QueryObjectModelFactory getQOMFactory();
+
 
 }

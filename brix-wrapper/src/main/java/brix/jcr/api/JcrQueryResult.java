@@ -14,6 +14,7 @@
 
 package brix.jcr.api;
 
+import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 
 import brix.jcr.api.wrapper.WrapperAccessor;
@@ -21,6 +22,7 @@ import brix.jcr.api.wrapper.WrapperAccessor;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 public interface JcrQueryResult extends QueryResult
 {
@@ -40,5 +42,15 @@ public interface JcrQueryResult extends QueryResult
     public JcrNodeIterator getNodes();
 
     public JcrRowIterator getRows();
+    
+    /**
+     * Returns an array of all the selector names that were used in the query
+     * that created this result. If the query did not have a selector name then
+     * an empty array is returned.
+     *
+     * @return a <code>String</code> array holding the selector names.
+     * @throws RepositoryException if an error occurs.
+     */
+    public String[] getSelectorNames() ;
 
 }

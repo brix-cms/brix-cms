@@ -17,6 +17,7 @@ package brix.jcr.base;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -135,6 +136,7 @@ public class EventUtil
     {
 
         private final JcrNode node;
+        private long timestamp = System.currentTimeMillis();
 
         public EventImpl(JcrNode node)
         {
@@ -161,6 +163,25 @@ public class EventUtil
             return node.getSession().getUserID();
         }
 
+        public long getDate() throws RepositoryException
+        {
+            return timestamp;
+        }
+
+        public String getIdentifier() throws RepositoryException
+        {
+            return node.getIdentifier();
+        }
+
+        public Map< ? , ? > getInfo() throws RepositoryException
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public String getUserData() throws RepositoryException
+        {
+            throw new UnsupportedOperationException();
+        }
     };
 
 }

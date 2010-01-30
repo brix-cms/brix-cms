@@ -17,6 +17,7 @@ package brix.jcr.api.wrapper;
 import javax.jcr.Node;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
+import javax.jcr.query.qom.QueryObjectModelFactory;
 
 import brix.jcr.api.JcrQuery;
 import brix.jcr.api.JcrQueryManager;
@@ -25,6 +26,7 @@ import brix.jcr.api.JcrSession;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 class QueryManagerWrapper extends AbstractWrapper implements JcrQueryManager
 {
@@ -82,6 +84,18 @@ class QueryManagerWrapper extends AbstractWrapper implements JcrQueryManager
             public String[] execute() throws Exception
             {
                 return getDelegate().getSupportedQueryLanguages();
+            }
+        });
+    }
+
+    public QueryObjectModelFactory getQOMFactory()
+    {
+        return executeCallback(new Callback<QueryObjectModelFactory>()
+        {
+
+            public QueryObjectModelFactory execute() throws Exception
+            {
+                return getDelegate().getQOMFactory();
             }
         });
     }

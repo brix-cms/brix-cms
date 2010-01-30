@@ -15,9 +15,13 @@
 package brix.jcr.api.wrapper;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
+import javax.jcr.Binary;
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 
 import brix.jcr.api.JcrSession;
@@ -27,81 +31,135 @@ import brix.jcr.api.JcrValueFactory;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 class ValueFactoryWrapper extends AbstractWrapper implements JcrValueFactory
 {
 
-	protected ValueFactoryWrapper(ValueFactory delegate, JcrSession session)
-	{
-		super(delegate, session);
-	}
+    protected ValueFactoryWrapper(ValueFactory delegate, JcrSession session)
+    {
+        super(delegate, session);
+    }
 
-	@Override
-	public ValueFactory getDelegate()
-	{
-		return (ValueFactory) super.getDelegate();
-	}
+    @Override
+    public ValueFactory getDelegate()
+    {
+        return (ValueFactory)super.getDelegate();
+    }
 
-	public static JcrValueFactory wrap(ValueFactory delegate, JcrSession session)
-	{
-		if (delegate == null)
-		{
-			return null;
-		} else
-		{
-			return new ValueFactoryWrapper(delegate, session);
-		}
-	}
+    public static JcrValueFactory wrap(ValueFactory delegate, JcrSession session)
+    {
+        if (delegate == null)
+        {
+            return null;
+        }
+        else
+        {
+            return new ValueFactoryWrapper(delegate, session);
+        }
+    }
 
-	public JcrValue createValue(String value)
-	{
-		return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
-	}
+    public JcrValue createValue(String value)
+    {
+        return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
+    }
 
-	public JcrValue createValue(long value)
-	{
-		return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
-	}
+    public JcrValue createValue(long value)
+    {
+        return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
+    }
 
-	public JcrValue createValue(double value)
-	{
-		return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
-	}
+    public JcrValue createValue(double value)
+    {
+        return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
+    }
 
-	public JcrValue createValue(boolean value)
-	{
-		return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
-	}
+    public JcrValue createValue(boolean value)
+    {
+        return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
+    }
 
-	public JcrValue createValue(Calendar value)
-	{
-		return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
-	}
+    public JcrValue createValue(Calendar value)
+    {
+        return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
+    }
 
-	public JcrValue createValue(InputStream value)
-	{
-		return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
-	}
+    /** @deprecated */
+    @Deprecated
+    public JcrValue createValue(InputStream value)
+    {
+        return JcrValue.Wrapper.wrap(getDelegate().createValue(value), getJcrSession());
+    }
 
-	public JcrValue createValue(final Node value)
-	{
-		return executeCallback(new Callback<JcrValue>()
-		{
-			public JcrValue execute() throws Exception
-			{
-				return JcrValue.Wrapper.wrap(getDelegate().createValue(unwrap(value)), getJcrSession());
-			}
-		});
-	}
+    public JcrValue createValue(final Node value)
+    {
+        return executeCallback(new Callback<JcrValue>()
+        {
+            public JcrValue execute() throws Exception
+            {
+                return JcrValue.Wrapper.wrap(getDelegate().createValue(unwrap(value)),
+                        getJcrSession());
+            }
+        });
+    }
 
-	public JcrValue createValue(final String value, final int type)
-	{
-		return executeCallback(new Callback<JcrValue>()
-		{
-			public JcrValue execute() throws Exception
-			{
-				return JcrValue.Wrapper.wrap(getDelegate().createValue(value, type), getJcrSession());
-			}
-		});
-	}
+    public JcrValue createValue(final String value, final int type)
+    {
+        return executeCallback(new Callback<JcrValue>()
+        {
+            public JcrValue execute() throws Exception
+            {
+                return JcrValue.Wrapper.wrap(getDelegate().createValue(value, type),
+                        getJcrSession());
+            }
+        });
+    }
+
+    public Binary createBinary(final InputStream stream)
+    {
+        return executeCallback(new Callback<Binary>()
+        {
+
+            public Binary execute() throws Exception
+            {
+                return getDelegate().createBinary(stream);
+            }
+        });
+    }
+
+    public Value createValue(final BigDecimal value)
+    {
+        return executeCallback(new Callback<Value>()
+        {
+
+            public Value execute() throws Exception
+            {
+                return getDelegate().createValue(value);
+            }
+        });
+    }
+
+    public Value createValue(final Binary binary)
+    {
+        return executeCallback(new Callback<Value>()
+        {
+
+            public Value execute() throws Exception
+            {
+                return getDelegate().createValue(binary);
+            }
+        });
+    }
+
+    public Value createValue(final Node value, final boolean weak) throws RepositoryException
+    {
+        return executeCallback(new Callback<Value>()
+        {
+
+            public Value execute() throws Exception
+            {
+                return getDelegate().createValue(value, weak);
+            }
+        });
+    }
 }

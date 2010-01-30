@@ -24,6 +24,7 @@ import brix.jcr.api.JcrSession;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 class QueryResultWrapper extends AbstractWrapper implements JcrQueryResult
 {
@@ -80,6 +81,18 @@ class QueryResultWrapper extends AbstractWrapper implements JcrQueryResult
             public JcrRowIterator execute() throws Exception
             {
                 return JcrRowIterator.Wrapper.wrap(getDelegate().getRows(), getJcrSession());
+            }
+        });
+    }
+
+    public String[] getSelectorNames()
+    {
+        return executeCallback(new Callback<String[]>()
+        {
+
+            public String[] execute() throws Exception
+            {
+                return getDelegate().getSelectorNames();
             }
         });
     }

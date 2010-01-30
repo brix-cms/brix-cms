@@ -15,6 +15,7 @@
 package brix.jcr.api.wrapper;
 
 import javax.jcr.Item;
+import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.version.Version;
@@ -27,6 +28,7 @@ import brix.jcr.api.JcrSession;
 /**
  * 
  * @author Matej Knopp
+ * @author Igor Vaynberg
  */
 abstract class ItemWrapper extends AbstractWrapper implements JcrItem
 {
@@ -44,11 +46,11 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem
         }
         else if (delegate instanceof Version)
         {
-        	return VersionWrapper.wrap((Version)delegate, session);
+            return VersionWrapper.wrap((Version)delegate, session);
         }
         else if (delegate instanceof VersionHistory)
         {
-        	return VersionHistoryWrapper.wrap((VersionHistory)delegate, session);
+            return VersionHistoryWrapper.wrap((VersionHistory)delegate, session);
         }
         else if (delegate instanceof Node)
         {
@@ -183,6 +185,10 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem
         });
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public void save()
     {
         executeCallback(new VoidCallback()
@@ -199,4 +205,20 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem
     {
         return getPath();
     }
+
+    public void accept(final ItemVisitor visitor)
+    {
+        executeCallback(new VoidCallback()
+        {
+
+            public void execute() throws Exception
+            {
+                getDelegate().accept(visitor);
+            }
+
+        });
+
+    }
+
+
 }

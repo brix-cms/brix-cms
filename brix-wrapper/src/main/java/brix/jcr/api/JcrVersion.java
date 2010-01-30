@@ -16,6 +16,8 @@ package brix.jcr.api;
 
 import java.util.Calendar;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.version.Version;
 
 import brix.jcr.api.wrapper.WrapperAccessor;
@@ -23,6 +25,7 @@ import brix.jcr.api.wrapper.WrapperAccessor;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 public interface JcrVersion extends Version, JcrNode
 {
@@ -49,5 +52,17 @@ public interface JcrVersion extends Version, JcrNode
     public JcrVersion[] getPredecessors();
 
     public JcrVersion[] getSuccessors();
+
+    /**
+     * Returns the frozen node of this version.
+     * 
+     * @return a <code>Node</code> object
+     * @throws RepositoryException
+     *             if an error occurs.
+     * @since JCR 2.0
+     */
+    public Node getFrozenNode();
+    
+    
 
 }

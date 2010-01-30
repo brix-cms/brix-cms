@@ -32,7 +32,7 @@ public class RemoveNodeEvent extends NodeEvent
 	{
 		super(node.getParent());
 		this.nodeName = node.getName();
-		this.nodeUUID = node.isNodeType("mix:referenceable") ? node.getUUID() : null;
+		this.nodeUUID = node.isNodeType("mix:referenceable") ? node.getIdentifier() : null;
 	}
 
 	public Node getParentNode()

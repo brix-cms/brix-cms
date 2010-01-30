@@ -14,13 +14,16 @@
 
 package brix.jcr.base.wrapper;
 
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.Calendar;
+
+import javax.jcr.Binary;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
 import javax.jcr.ValueFormatException;
-import java.io.InputStream;
-import java.util.Calendar;
 
 class ValueFactoryWrapper extends BaseWrapper<ValueFactory> implements ValueFactory
 {
@@ -67,19 +70,41 @@ class ValueFactoryWrapper extends BaseWrapper<ValueFactory> implements ValueFact
         return getDelegate().createValue(value);
     }
 
-    public Value createValue(InputStream value)
+    /** @deprecated */
+    @Deprecated
+ public Value createValue(InputStream value)
     {
         return getDelegate().createValue(value);
     }
 
     public Value createValue(Node value) throws RepositoryException
-    {        
+    {
         return getDelegate().createValue(unwrap(value));
     }
 
     public Value createValue(String value, int type) throws ValueFormatException
     {
         return getDelegate().createValue(value);
+    }
+
+    public Binary createBinary(InputStream stream) throws RepositoryException
+    {
+        return getDelegate().createBinary(stream);
+    }
+
+    public Value createValue(BigDecimal value)
+    {
+        return getDelegate().createValue(value);
+    }
+
+    public Value createValue(Binary value)
+    {
+        return getDelegate().createValue(value);
+    }
+
+    public Value createValue(Node value, boolean weak) throws RepositoryException
+    {
+        return getDelegate().createValue(value, weak);
     }
 
 }

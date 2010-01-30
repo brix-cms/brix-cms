@@ -15,9 +15,13 @@
 package brix.jcr.api.wrapper;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
+import javax.jcr.Binary;
+import javax.jcr.RepositoryException;
 import javax.jcr.Value;
+import javax.jcr.ValueFormatException;
 
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrValue;
@@ -113,6 +117,8 @@ class ValueWrapper extends AbstractWrapper implements JcrValue
         });
     }
 
+    /** @deprecated */
+    @Deprecated
     public InputStream getStream()
     {
         return executeCallback(new Callback<InputStream>()
@@ -142,6 +148,30 @@ class ValueWrapper extends AbstractWrapper implements JcrValue
             public Integer execute() throws Exception
             {
                 return getDelegate().getType();
+            }
+        });
+    }
+
+    public Binary getBinary()
+    {
+       return executeCallback(new Callback<Binary>()
+    {
+
+        public Binary execute() throws Exception
+        {
+            return getDelegate().getBinary();
+        }
+    });
+    }
+
+    public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
+    {
+        return executeCallback(new Callback<BigDecimal>()
+        {
+
+            public BigDecimal execute() throws Exception
+            {
+                return getDelegate().getDecimal();
             }
         });
     }

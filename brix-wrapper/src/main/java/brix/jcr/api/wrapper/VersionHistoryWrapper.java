@@ -14,8 +14,10 @@
 
 package brix.jcr.api.wrapper;
 
+import javax.jcr.NodeIterator;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
+import javax.jcr.version.VersionIterator;
 
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrVersion;
@@ -25,6 +27,7 @@ import brix.jcr.api.JcrVersionIterator;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 class VersionHistoryWrapper extends NodeWrapper implements JcrVersionHistory
 {
@@ -133,6 +136,8 @@ class VersionHistoryWrapper extends NodeWrapper implements JcrVersionHistory
         });
     }
 
+    /** @deprecated */
+    @Deprecated
     public String getVersionableUUID()
     {
         return executeCallback(new Callback<String>()
@@ -187,5 +192,54 @@ class VersionHistoryWrapper extends NodeWrapper implements JcrVersionHistory
             }
         });
     }
+
+    public NodeIterator getAllFrozenNodes()
+    {
+        return executeCallback(new Callback<NodeIterator>()
+        {
+
+            public NodeIterator execute() throws Exception
+            {
+                return getDelegate().getAllFrozenNodes();
+            }
+        });
+    }
+
+    public NodeIterator getAllLinearFrozenNodes()
+    {
+        return executeCallback(new Callback<NodeIterator>()
+        {
+
+            public NodeIterator execute() throws Exception
+            {
+                return getDelegate().getAllLinearFrozenNodes();
+            }
+        });
+    }
+
+    public VersionIterator getAllLinearVersions()
+    {
+        return executeCallback(new Callback<VersionIterator>()
+        {
+
+            public VersionIterator execute() throws Exception
+            {
+                return getDelegate().getAllLinearVersions();
+            }
+        });
+    }
+
+    public String getVersionableIdentifier()
+    {
+        return executeCallback(new Callback<String>()
+        {
+
+            public String execute() throws Exception
+            {
+                return getDelegate().getVersionableIdentifier();
+            }
+        });
+    }
+
 
 }

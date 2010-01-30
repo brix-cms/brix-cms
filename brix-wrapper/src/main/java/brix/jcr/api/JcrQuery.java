@@ -14,6 +14,8 @@
 
 package brix.jcr.api;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 
 import brix.jcr.api.wrapper.WrapperAccessor;
@@ -44,5 +46,28 @@ public interface JcrQuery extends Query
     public String getStoredQueryPath();
 
     public JcrNode storeAsNode(String absPath);
+    
+    /**
+     * Binds the given <code>value</code> to the variable named
+     * <code>varName</code>.
+     *
+     * @param varName name of variable in query
+     * @param value   value to bind
+     * @throws IllegalArgumentException      if <code>varName</code> is not a valid
+     *                                       variable in this query.
+     * @throws javax.jcr.RepositoryException if an error occurs.
+     * @since JCR 2.0
+     */
+    public void bindValue(String varName, Value value);
+
+    /**
+     * Returns the names of the bind variables in this query. If this query does
+     * not contains any bind variables then an empty array is returned.
+     *
+     * @return the names of the bind variables in this query.
+     * @throws RepositoryException if an error occurs.
+     * @since JCR 2.0
+     */
+    public String[] getBindVariableNames();
 
 }

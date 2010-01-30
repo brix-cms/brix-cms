@@ -16,6 +16,8 @@ package brix.jcr.api.wrapper;
 
 import java.util.Calendar;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.version.Version;
 
 import brix.jcr.api.JcrSession;
@@ -25,6 +27,7 @@ import brix.jcr.api.JcrVersionHistory;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 class VersionWrapper extends NodeWrapper implements JcrVersion
 {
@@ -112,6 +115,43 @@ class VersionWrapper extends NodeWrapper implements JcrVersion
                 return JcrVersion.Wrapper.wrap(getDelegate().getSuccessors(), getJcrSession());
             }
         });
+    }
+
+    public Node getFrozenNode()
+    {
+        return executeCallback(new Callback<Node>()
+        {
+
+            public Node execute() throws Exception
+            {
+                return getDelegate().getFrozenNode();
+            }
+        });
+    }
+
+    public Version getLinearPredecessor() throws RepositoryException
+    {
+        return executeCallback(new Callback<Version>()
+        {
+
+            public Version execute() throws Exception
+            {
+                return getDelegate().getLinearPredecessor();
+            }
+        });
+    }
+
+    public Version getLinearSuccessor() throws RepositoryException
+    {
+        return executeCallback(new Callback<Version>()
+    {
+
+        public Version execute() throws Exception
+        {
+            return getDelegate().getLinearSuccessor();
+        }
+    });
+       
     }
 
 }

@@ -17,9 +17,11 @@ package brix.jcr.api.wrapper;
 import java.io.InputStream;
 
 import javax.jcr.Workspace;
+import javax.jcr.lock.LockManager;
 import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.observation.ObservationManager;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionManager;
 
 import org.xml.sax.ContentHandler;
 
@@ -31,180 +33,246 @@ import brix.jcr.api.JcrWorkspace;
 /**
  * 
  * @author Matej Knopp
+ * @author igor.vaynberg
  */
 class WorkspaceWrapper extends AbstractWrapper implements JcrWorkspace
 {
 
-	protected WorkspaceWrapper(Workspace delegate, JcrSession session)
-	{
-		super(delegate, session);
-	}
+    protected WorkspaceWrapper(Workspace delegate, JcrSession session)
+    {
+        super(delegate, session);
+    }
 
-	public static JcrWorkspace wrap(Workspace delegate, JcrSession session)
-	{
-		if (delegate == null)
-		{
-			return null;
-		} else
-		{
-			return new WorkspaceWrapper(delegate, session);
-		}
-	}
+    public static JcrWorkspace wrap(Workspace delegate, JcrSession session)
+    {
+        if (delegate == null)
+        {
+            return null;
+        }
+        else
+        {
+            return new WorkspaceWrapper(delegate, session);
+        }
+    }
 
-	@Override
-	public Workspace getDelegate()
-	{
-		return (Workspace) super.getDelegate();
-	}
+    @Override
+    public Workspace getDelegate()
+    {
+        return (Workspace)super.getDelegate();
+    }
 
-	public void clone(final String srcWorkspace, final String srcAbsPath, final String destAbsPath,
-			final boolean removeExisting)
-	{
-		executeCallback(new VoidCallback()
-		{
-			public void execute() throws Exception
-			{
-				getDelegate().clone(srcWorkspace, srcAbsPath, destAbsPath, removeExisting);
-			}
-		});
-	}
+    public void clone(final String srcWorkspace, final String srcAbsPath, final String destAbsPath,
+            final boolean removeExisting)
+    {
+        executeCallback(new VoidCallback()
+        {
+            public void execute() throws Exception
+            {
+                getDelegate().clone(srcWorkspace, srcAbsPath, destAbsPath, removeExisting);
+            }
+        });
+    }
 
-	public void copy(final String srcAbsPath, final String destAbsPath)
-	{
-		executeCallback(new VoidCallback()
-		{
-			public void execute() throws Exception
-			{
-				getDelegate().copy(srcAbsPath, destAbsPath);
-			}
-		});
-	}
+    public void copy(final String srcAbsPath, final String destAbsPath)
+    {
+        executeCallback(new VoidCallback()
+        {
+            public void execute() throws Exception
+            {
+                getDelegate().copy(srcAbsPath, destAbsPath);
+            }
+        });
+    }
 
-	public void copy(final String srcWorkspace, final String srcAbsPath, final String destAbsPath)
-	{
-		executeCallback(new VoidCallback()
-		{
-			public void execute() throws Exception
-			{
-				getDelegate().copy(srcWorkspace, srcAbsPath, destAbsPath);
-			}
-		});
-	}
+    public void copy(final String srcWorkspace, final String srcAbsPath, final String destAbsPath)
+    {
+        executeCallback(new VoidCallback()
+        {
+            public void execute() throws Exception
+            {
+                getDelegate().copy(srcWorkspace, srcAbsPath, destAbsPath);
+            }
+        });
+    }
 
-	public String[] getAccessibleWorkspaceNames()
-	{
-		return executeCallback(new Callback<String[]>()
-		{
-			public String[] execute() throws Exception
-			{
-				return getDelegate().getAccessibleWorkspaceNames();
-			}
-		});
-	}
+    public String[] getAccessibleWorkspaceNames()
+    {
+        return executeCallback(new Callback<String[]>()
+        {
+            public String[] execute() throws Exception
+            {
+                return getDelegate().getAccessibleWorkspaceNames();
+            }
+        });
+    }
 
-	public ContentHandler getImportContentHandler(final String parentAbsPath, final int uuidBehavior)
-	{
-		return executeCallback(new Callback<ContentHandler>()
-		{
-			public ContentHandler execute() throws Exception
-			{
-				return getDelegate().getImportContentHandler(parentAbsPath, uuidBehavior);
-			}
-		});
-	}
+    public ContentHandler getImportContentHandler(final String parentAbsPath, final int uuidBehavior)
+    {
+        return executeCallback(new Callback<ContentHandler>()
+        {
+            public ContentHandler execute() throws Exception
+            {
+                return getDelegate().getImportContentHandler(parentAbsPath, uuidBehavior);
+            }
+        });
+    }
 
-	public String getName()
-	{
-		return executeCallback(new Callback<String>()
-		{
-			public String execute() throws Exception
-			{
-				return getDelegate().getName();
-			}
-		});
-	}
+    public String getName()
+    {
+        return executeCallback(new Callback<String>()
+        {
+            public String execute() throws Exception
+            {
+                return getDelegate().getName();
+            }
+        });
+    }
 
-	public JcrNamespaceRegistry getNamespaceRegistry()
-	{
-		return executeCallback(new Callback<JcrNamespaceRegistry>()
-		{
-			public JcrNamespaceRegistry execute() throws Exception
-			{
-				return WrapperAccessor.JcrNamespaceRegistryWrapper.wrap(getDelegate().getNamespaceRegistry(),
-						getJcrSession());
-			}
-		});
-	}
+    public JcrNamespaceRegistry getNamespaceRegistry()
+    {
+        return executeCallback(new Callback<JcrNamespaceRegistry>()
+        {
+            public JcrNamespaceRegistry execute() throws Exception
+            {
+                return WrapperAccessor.JcrNamespaceRegistryWrapper.wrap(getDelegate()
+                        .getNamespaceRegistry(), getJcrSession());
+            }
+        });
+    }
 
-	public NodeTypeManager getNodeTypeManager()
-	{
-		return executeCallback(new Callback<NodeTypeManager>()
-		{
-			public NodeTypeManager execute() throws Exception
-			{
-				return getDelegate().getNodeTypeManager();
-			}
-		});
-	}
+    public NodeTypeManager getNodeTypeManager()
+    {
+        return executeCallback(new Callback<NodeTypeManager>()
+        {
+            public NodeTypeManager execute() throws Exception
+            {
+                return getDelegate().getNodeTypeManager();
+            }
+        });
+    }
 
-	public ObservationManager getObservationManager()
-	{
-		return executeCallback(new Callback<ObservationManager>()
-		{
-			public ObservationManager execute() throws Exception
-			{
-				return getDelegate().getObservationManager();
-			}
-		});
-	}
+    public ObservationManager getObservationManager()
+    {
+        return executeCallback(new Callback<ObservationManager>()
+        {
+            public ObservationManager execute() throws Exception
+            {
+                return getDelegate().getObservationManager();
+            }
+        });
+    }
 
-	public JcrQueryManager getQueryManager()
-	{
-		return executeCallback(new Callback<JcrQueryManager>()
-		{
-			public JcrQueryManager execute() throws Exception
-			{
-				return JcrQueryManager.Wrapper.wrap(getDelegate().getQueryManager(), getJcrSession());
-			}
-		});
-	}
+    public JcrQueryManager getQueryManager()
+    {
+        return executeCallback(new Callback<JcrQueryManager>()
+        {
+            public JcrQueryManager execute() throws Exception
+            {
+                return JcrQueryManager.Wrapper.wrap(getDelegate().getQueryManager(),
+                        getJcrSession());
+            }
+        });
+    }
 
-	public JcrSession getSession()
-	{
-		return getJcrSession();
-	}
+    public JcrSession getSession()
+    {
+        return getJcrSession();
+    }
 
-	public void importXML(final String parentAbsPath, final InputStream in, final int uuidBehavior)
-	{
-		executeCallback(new VoidCallback()
-		{
-			public void execute() throws Exception
-			{
-				getDelegate().importXML(parentAbsPath, in, uuidBehavior);
-			}
-		});
-	}
+    public void importXML(final String parentAbsPath, final InputStream in, final int uuidBehavior)
+    {
+        executeCallback(new VoidCallback()
+        {
+            public void execute() throws Exception
+            {
+                getDelegate().importXML(parentAbsPath, in, uuidBehavior);
+            }
+        });
+    }
 
-	public void move(final String srcAbsPath, final String destAbsPath)
-	{
-		executeCallback(new VoidCallback()
-		{
-			public void execute() throws Exception
-			{
-				getDelegate().move(srcAbsPath, destAbsPath);
-			}
-		});
-	}
+    public void move(final String srcAbsPath, final String destAbsPath)
+    {
+        executeCallback(new VoidCallback()
+        {
+            public void execute() throws Exception
+            {
+                getDelegate().move(srcAbsPath, destAbsPath);
+            }
+        });
+    }
 
-	public void restore(final Version[] versions, final boolean removeExisting)
-	{
-		executeCallback(new VoidCallback()
-		{
-			public void execute() throws Exception
-			{
-				getDelegate().restore(versions, removeExisting);
-			}
-		});
-	}
+    /** @deprecated */
+    @Deprecated
+    public void restore(final Version[] versions, final boolean removeExisting)
+    {
+        executeCallback(new VoidCallback()
+        {
+            public void execute() throws Exception
+            {
+                getDelegate().restore(versions, removeExisting);
+            }
+        });
+    }
+
+    public void createWorkspace(final String name)
+    {
+        executeCallback(new VoidCallback()
+        {
+
+            public void execute() throws Exception
+            {
+                getDelegate().createWorkspace(name);
+            }
+        });
+    }
+
+    public void createWorkspace(final String name, final String srcWorkspace)
+    {
+       executeCallback(new VoidCallback()
+    {
+
+        public void execute() throws Exception
+        {
+            getDelegate().createWorkspace(name, srcWorkspace);
+        }
+    });
+
+    }
+
+    public void deleteWorkspace(final String name)
+    {
+       executeCallback(new VoidCallback()
+    {
+
+        public void execute() throws Exception
+        {
+            getDelegate().deleteWorkspace(name);
+        }
+    });
+    }
+
+    public LockManager getLockManager()
+    {
+       return executeCallback(new Callback<LockManager>()
+    {
+
+        public LockManager execute() throws Exception
+        {
+            return getDelegate().getLockManager();
+        }
+    });
+    }
+
+    public VersionManager getVersionManager()
+    {
+       return executeCallback(new Callback<VersionManager>()
+    {
+
+        public VersionManager execute() throws Exception
+        {
+            return getDelegate().getVersionManager();
+        }
+    });
+    }
 
 }

@@ -62,5 +62,9 @@ public interface JcrItem extends Item
 
     public void remove();
 
+    /**
+     * @deprecated, see {@link Item#save()}
+     */
+    @Deprecated
     public void save();
 }

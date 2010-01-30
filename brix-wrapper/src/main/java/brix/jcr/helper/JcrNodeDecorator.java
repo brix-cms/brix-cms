@@ -15,11 +15,16 @@
 package brix.jcr.helper;
 
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
+import javax.jcr.Binary;
 import javax.jcr.Item;
 import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.Property;
+import javax.jcr.PropertyIterator;
 import javax.jcr.Value;
 import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.NodeDefinition;
@@ -73,21 +78,29 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.canAddMixin(mixinName);
     }
 
+    /** @deprecated */
+    @Deprecated
     public void cancelMerge(Version version)
     {
         delegate.cancelMerge(version);
     }
 
+    /** @deprecated */
+    @Deprecated
     public JcrVersion checkin()
     {
         return delegate.checkin();
     }
 
+    /** @deprecated */
+    @Deprecated
     public void checkout()
     {
         delegate.checkout();
     }
 
+    /** @deprecated */
+    @Deprecated
     public void doneMerge(Version version)
     {
         delegate.doneMerge(version);
@@ -98,6 +111,8 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.getAncestor(depth);
     }
 
+    /** @deprecated */
+    @Deprecated
     public JcrVersion getBaseVersion()
     {
         return delegate.getBaseVersion();
@@ -128,6 +143,8 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.getIndex();
     }
 
+    /** @deprecated */
+    @Deprecated
     public Lock getLock()
     {
         return delegate.getLock();
@@ -203,11 +220,15 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.getSession();
     }
 
+    /** @deprecated */
+    @Deprecated
     public String getUUID()
     {
         return delegate.getUUID();
     }
 
+    /** @deprecated */
+    @Deprecated
     public JcrVersionHistory getVersionHistory()
     {
         return delegate.getVersionHistory();
@@ -233,6 +254,8 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.hasProperty(relPath);
     }
 
+    /** @deprecated */
+    @Deprecated
     public boolean holdsLock()
     {
         return delegate.holdsLock();
@@ -273,11 +296,15 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.isSame(otherItem);
     }
 
+    /** @deprecated */
+    @Deprecated
     public Lock lock(boolean isDeep, boolean isSessionScoped)
     {
         return delegate.lock(isDeep, isSessionScoped);
     }
 
+    /** @deprecated */
+    @Deprecated
     public JcrNodeIterator merge(String srcWorkspace, boolean bestEffort)
     {
         return delegate.merge(srcWorkspace, bestEffort);
@@ -303,26 +330,36 @@ public class JcrNodeDecorator implements JcrNode
         delegate.removeMixin(mixinName);
     }
 
+    /** @deprecated */
+    @Deprecated
     public void restore(String versionName, boolean removeExisting)
     {
         delegate.restore(versionName, removeExisting);
     }
 
+    /** @deprecated */
+    @Deprecated
     public void restore(Version version, boolean removeExisting)
     {
         delegate.restore(version, removeExisting);
     }
 
+    /** @deprecated */
+    @Deprecated
     public void restore(Version version, String relPath, boolean removeExisting)
     {
         delegate.restore(version, relPath, removeExisting);
     }
 
+    /** @deprecated */
+    @Deprecated
     public void restoreByLabel(String versionLabel, boolean removeExisting)
     {
         delegate.restoreByLabel(versionLabel, removeExisting);
     }
 
+    /** @deprecated */
+    @Deprecated
     public void save()
     {
         delegate.save();
@@ -343,6 +380,8 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.setProperty(name, value);
     }
 
+    /** @deprecated */
+    @Deprecated
     public JcrProperty setProperty(String name, InputStream value)
     {
         return delegate.setProperty(name, value);
@@ -398,6 +437,8 @@ public class JcrNodeDecorator implements JcrNode
         return delegate.setProperty(name, values);
     }
 
+    /** @deprecated */
+    @Deprecated
     public void unlock()
     {
         delegate.unlock();
@@ -406,6 +447,77 @@ public class JcrNodeDecorator implements JcrNode
     public void update(String srcWorkspaceName)
     {
         delegate.update(srcWorkspaceName);
+    }
+
+    public void followLifecycleTransition(String transition)
+    {
+        delegate.followLifecycleTransition(transition);
+
+    }
+
+    public String[] getAllowedLifecycleTransistions()
+    {
+        return delegate.getAllowedLifecycleTransistions();
+    }
+
+    public String getIdentifier()
+    {
+        return delegate.getIdentifier();
+    }
+
+    public NodeIterator getNodes(String[] nameGlobs)
+    {
+        return delegate.getNodes(nameGlobs);
+    }
+
+    public PropertyIterator getProperties(String[] nameGlobs)
+    {
+        return delegate.getProperties(nameGlobs);
+    }
+
+    public PropertyIterator getReferences(String name)
+    {
+        return delegate.getReferences(name);
+    }
+
+    public NodeIterator getSharedSet()
+    {
+        return delegate.getSharedSet();
+    }
+
+    public PropertyIterator getWeakReferences()
+    {
+        return delegate.getWeakReferences();
+    }
+
+    public PropertyIterator getWeakReferences(String name)
+    {
+        return delegate.getWeakReferences(name);
+    }
+
+    public void removeShare()
+    {
+        delegate.removeShare();
+    }
+
+    public void removeSharedSet()
+    {
+        delegate.removeSharedSet();
+    }
+
+    public void setPrimaryType(String nodeTypeName)
+    {
+        delegate.setPrimaryType(nodeTypeName);
+    }
+
+    public Property setProperty(String name, Binary value)
+    {
+        return delegate.setProperty(name, value);
+    }
+
+    public Property setProperty(String name, BigDecimal value)
+    {
+        return delegate.setProperty(name, value);
     }
 
 
