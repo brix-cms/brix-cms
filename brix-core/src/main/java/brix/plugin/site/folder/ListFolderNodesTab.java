@@ -81,7 +81,7 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode>
 			@Override
 			protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
 			{
-				((ServletWebRequest) getRequest()).setForceNewVersion(true);
+				//((ServletWebRequest) getRequest()).setForceNewVersion(true);
 
 				BrixNode node = (BrixNode) rowModel.getObject();
 				Page page = getPage();
