@@ -354,16 +354,14 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty
         });
     }
 
-    public Property getProperty()
+    public JcrProperty getProperty()
     {
-        return executeCallback(new Callback<Property>()
+        return executeCallback(new Callback<JcrProperty>()
         {
-
-            public Property execute() throws Exception
+            public JcrProperty execute() throws Exception
             {
-                return getDelegate().getProperty();
+                return JcrProperty.Wrapper.wrap(getDelegate().getProperty(), getJcrSession());
             }
-
         });
     }
 
@@ -371,28 +369,22 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty
     {
         executeCallback(new VoidCallback()
         {
-
             public void execute() throws Exception
             {
                 getDelegate().setValue(value);
             }
-
         });
-
     }
 
     public void setValue(final BigDecimal value)
     {
         executeCallback(new VoidCallback()
         {
-
             public void execute() throws Exception
             {
                 getDelegate().setValue(value);
             }
-
         });
-
     }
 
     public boolean isMultiple()

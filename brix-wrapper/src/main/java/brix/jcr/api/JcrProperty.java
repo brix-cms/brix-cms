@@ -169,6 +169,7 @@ public interface JcrProperty extends JcrItem, Property
      * @see Binary
      * @since JCR 2.0
      */
+    // TODO wrap Binary in JcrBinary
     public Binary getBinary() ;
 
 
@@ -223,6 +224,6 @@ public interface JcrProperty extends JcrItem, Property
      *             if another error occurs.
      * @since JCR 2.0
      */
-    public Property getProperty();
+    public JcrProperty getProperty();
 
 }

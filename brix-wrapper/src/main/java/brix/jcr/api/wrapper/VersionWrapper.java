@@ -16,10 +16,10 @@ package brix.jcr.api.wrapper;
 
 import java.util.Calendar;
 
-import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.version.Version;
 
+import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrVersion;
 import brix.jcr.api.JcrVersionHistory;
@@ -117,41 +117,42 @@ class VersionWrapper extends NodeWrapper implements JcrVersion
         });
     }
 
-    public Node getFrozenNode()
+    public JcrNode getFrozenNode()
     {
-        return executeCallback(new Callback<Node>()
+        return executeCallback(new Callback<JcrNode>()
         {
 
-            public Node execute() throws Exception
+            public JcrNode execute() throws Exception
             {
-                return getDelegate().getFrozenNode();
+                return JcrNode.Wrapper.wrap(getDelegate().getFrozenNode(), getJcrSession());
             }
         });
     }
 
-    public Version getLinearPredecessor() throws RepositoryException
+    public JcrVersion getLinearPredecessor() throws RepositoryException
     {
-        return executeCallback(new Callback<Version>()
+        return executeCallback(new Callback<JcrVersion>()
         {
 
-            public Version execute() throws Exception
+            public JcrVersion execute() throws Exception
             {
-                return getDelegate().getLinearPredecessor();
+                return JcrVersion.Wrapper.wrap(getDelegate().getLinearPredecessor(),
+                        getJcrSession());
             }
         });
     }
 
-    public Version getLinearSuccessor() throws RepositoryException
+    public JcrVersion getLinearSuccessor() throws RepositoryException
     {
-        return executeCallback(new Callback<Version>()
-    {
-
-        public Version execute() throws Exception
+        return executeCallback(new Callback<JcrVersion>()
         {
-            return getDelegate().getLinearSuccessor();
-        }
-    });
-       
+
+            public JcrVersion execute() throws Exception
+            {
+                return JcrVersion.Wrapper.wrap(getDelegate().getLinearSuccessor(), getSession());
+            }
+        });
+
     }
 
 }

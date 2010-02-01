@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.jcr.Credentials;
-import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 import javax.jcr.retention.RetentionManager;
@@ -31,6 +29,7 @@ import org.xml.sax.ContentHandler;
 
 import brix.jcr.api.JcrItem;
 import brix.jcr.api.JcrNode;
+import brix.jcr.api.JcrProperty;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrValueFactory;
 import brix.jcr.api.JcrWorkspace;
@@ -492,38 +491,39 @@ class SessionWrapper extends AbstractWrapper implements JcrSession
         });
     }
 
-    public Node getNode(final String absPath)
+    public JcrNode getNode(final String absPath)
     {
-        return executeCallback(new Callback<Node>()
+        return executeCallback(new Callback<JcrNode>()
         {
 
-            public Node execute() throws Exception
+            public JcrNode execute() throws Exception
             {
-                return getDelegate().getNode(absPath);
+                return JcrNode.Wrapper.wrap(getDelegate().getNode(absPath), getJcrSession());
             }
         });
     }
 
-    public Node getNodeByIdentifier(final String id)
+    public JcrNode getNodeByIdentifier(final String id)
     {
-        return executeCallback(new Callback<Node>()
+        return executeCallback(new Callback<JcrNode>()
         {
 
-            public Node execute() throws Exception
+            public JcrNode execute() throws Exception
             {
-                return getDelegate().getNodeByIdentifier(id);
+                return JcrNode.Wrapper.wrap(getDelegate().getNodeByIdentifier(id), getJcrSession());
             }
         });
     }
 
-    public Property getProperty(final String absPath)
+    public JcrProperty getProperty(final String absPath)
     {
-        return executeCallback(new Callback<Property>()
+        return executeCallback(new Callback<JcrProperty>()
         {
 
-            public Property execute() throws Exception
+            public JcrProperty execute() throws Exception
             {
-                return getDelegate().getProperty(absPath);
+                return JcrProperty.Wrapper
+                        .wrap(getDelegate().getProperty(absPath), getJcrSession());
             }
         });
 

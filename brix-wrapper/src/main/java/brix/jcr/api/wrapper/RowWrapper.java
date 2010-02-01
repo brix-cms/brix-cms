@@ -14,10 +14,9 @@
 
 package brix.jcr.api.wrapper;
 
-import javax.jcr.Node;
-import javax.jcr.Value;
 import javax.jcr.query.Row;
 
+import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrRow;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrValue;
@@ -63,7 +62,7 @@ class RowWrapper extends AbstractWrapper implements JcrRow
         });
     }
 
-    public Value[] getValues()
+    public JcrValue[] getValues()
     {
         return executeCallback(new Callback<JcrValue[]>()
         {
@@ -74,27 +73,27 @@ class RowWrapper extends AbstractWrapper implements JcrRow
         });
     }
 
-    public Node getNode()
+    public JcrNode getNode()
     {
-        return executeCallback(new Callback<Node>()
+        return executeCallback(new Callback<JcrNode>()
         {
 
-            public Node execute() throws Exception
+            public JcrNode execute() throws Exception
             {
-                return getDelegate().getNode();
+                return JcrNode.Wrapper.wrap(getDelegate().getNode(), getJcrSession());
             }
 
         });
     }
 
-    public Node getNode(final String selectorName)
+    public JcrNode getNode(final String selectorName)
     {
-        return executeCallback(new Callback<Node>()
+        return executeCallback(new Callback<JcrNode>()
         {
 
-            public Node execute() throws Exception
+            public JcrNode execute() throws Exception
             {
-                return getDelegate().getNode(selectorName);
+                return JcrNode.Wrapper.wrap(getDelegate().getNode(selectorName), getJcrSession());
             }
 
         });

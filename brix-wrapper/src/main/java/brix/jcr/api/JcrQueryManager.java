@@ -15,7 +15,6 @@
 package brix.jcr.api;
 
 import javax.jcr.Node;
-import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.qom.QueryObjectModelFactory;
 
@@ -41,7 +40,7 @@ public interface JcrQueryManager extends QueryManager
 
     public JcrQuery createQuery(String statement, String language);
 
-    public Query getQuery(Node node);
+    public JcrQuery getQuery(Node node);
 
     public String[] getSupportedQueryLanguages();
 

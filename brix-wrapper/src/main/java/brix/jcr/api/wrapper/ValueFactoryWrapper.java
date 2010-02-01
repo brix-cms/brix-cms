@@ -127,38 +127,38 @@ class ValueFactoryWrapper extends AbstractWrapper implements JcrValueFactory
         });
     }
 
-    public Value createValue(final BigDecimal value)
+    public JcrValue createValue(final BigDecimal value)
     {
-        return executeCallback(new Callback<Value>()
+        return executeCallback(new Callback<JcrValue>()
         {
 
-            public Value execute() throws Exception
+            public JcrValue execute() throws Exception
             {
-                return getDelegate().createValue(value);
+                return JcrValue.Wrapper.wrap(getDelegate().createValue(unwrap(value)), getJcrSession());
             }
         });
     }
 
-    public Value createValue(final Binary binary)
+    public JcrValue createValue(final Binary binary)
     {
-        return executeCallback(new Callback<Value>()
+        return executeCallback(new Callback<JcrValue>()
         {
 
-            public Value execute() throws Exception
+            public JcrValue execute() throws Exception
             {
-                return getDelegate().createValue(binary);
+                return JcrValue.Wrapper.wrap(getDelegate().createValue(unwrap(binary)), getJcrSession());
             }
         });
     }
 
-    public Value createValue(final Node value, final boolean weak) throws RepositoryException
+    public JcrValue createValue(final Node value, final boolean weak)
     {
-        return executeCallback(new Callback<Value>()
+        return executeCallback(new Callback<JcrValue>()
         {
 
-            public Value execute() throws Exception
+            public JcrValue execute() throws Exception
             {
-                return getDelegate().createValue(value, weak);
+                return JcrValue.Wrapper.wrap(getDelegate().createValue(unwrap(value), weak), getJcrSession());
             }
         });
     }

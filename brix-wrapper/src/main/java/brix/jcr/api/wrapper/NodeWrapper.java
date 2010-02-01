@@ -21,8 +21,6 @@ import java.util.Calendar;
 import javax.jcr.Binary;
 import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.Value;
 import javax.jcr.lock.Lock;
@@ -844,74 +842,76 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         });
     }
 
-    public NodeIterator getNodes(final String[] nameGlobs)
+    public JcrNodeIterator getNodes(final String[] nameGlobs)
     {
-        return executeCallback(new Callback<NodeIterator>()
+        return executeCallback(new Callback<JcrNodeIterator>()
         {
-
-            public NodeIterator execute() throws Exception
+            public JcrNodeIterator execute() throws Exception
             {
-                return getDelegate().getNodes(nameGlobs);
+                return JcrNodeIterator.Wrapper.wrap(getDelegate().getNodes(nameGlobs),
+                        getJcrSession());
             }
         });
     }
 
-    public PropertyIterator getProperties(final String[] nameGlobs)
+    public JcrPropertyIterator getProperties(final String[] nameGlobs)
     {
-        return executeCallback(new Callback<PropertyIterator>()
+        return executeCallback(new Callback<JcrPropertyIterator>()
         {
 
-            public PropertyIterator execute() throws Exception
+            public JcrPropertyIterator execute() throws Exception
             {
-                return getDelegate().getProperties(nameGlobs);
+                return JcrPropertyIterator.Wrapper.wrap(getDelegate().getProperties(nameGlobs),
+                        getJcrSession());
             }
         });
     }
 
-    public PropertyIterator getReferences(final String name)
+    public JcrPropertyIterator getReferences(final String name)
     {
-        return executeCallback(new Callback<PropertyIterator>()
+        return executeCallback(new Callback<JcrPropertyIterator>()
         {
 
-            public PropertyIterator execute() throws Exception
+            public JcrPropertyIterator execute() throws Exception
             {
-                return getDelegate().getReferences(name);
+                return JcrPropertyIterator.Wrapper.wrap(getDelegate().getReferences(name),
+                        getJcrSession());
             }
         });
     }
 
-    public NodeIterator getSharedSet()
+    public JcrNodeIterator getSharedSet()
     {
-        return executeCallback(new Callback<NodeIterator>()
+        return executeCallback(new Callback<JcrNodeIterator>()
         {
 
-            public NodeIterator execute() throws Exception
+            public JcrNodeIterator execute() throws Exception
             {
-                return getDelegate().getSharedSet();
+                return JcrNodeIterator.Wrapper.wrap(getDelegate().getSharedSet(), getJcrSession());
             }
         });
     }
 
-    public PropertyIterator getWeakReferences()
+    public JcrPropertyIterator getWeakReferences()
     {
-        return executeCallback(new Callback<PropertyIterator>()
+        return executeCallback(new Callback<JcrPropertyIterator>()
         {
 
-            public PropertyIterator execute() throws Exception
+            public JcrPropertyIterator execute() throws Exception
             {
-                return getDelegate().getWeakReferences();
+                return JcrPropertyIterator.Wrapper.wrap(getDelegate().getWeakReferences(),getJcrSession());
             }
         });
     }
 
-    public PropertyIterator getWeakReferences(final String name)
+    public JcrPropertyIterator getWeakReferences(final String name)
     {
-        return executeCallback(new Callback<PropertyIterator>()
+        return executeCallback(new Callback<JcrPropertyIterator>()
         {
 
-            public PropertyIterator execute() throws Exception
+            public JcrPropertyIterator execute() throws Exception
             {
-                return getDelegate().getWeakReferences(name);
+                return JcrPropertyIterator.Wrapper.wrap(getDelegate().getWeakReferences(name), getJcrSession());
             }
         });
     }
@@ -955,12 +955,12 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
 
     }
 
-    public Property setProperty(final String name, final Binary value)
+    public JcrProperty setProperty(final String name, final Binary value)
     {
-        return executeCallback(new Callback<Property>()
+        return executeCallback(new Callback<JcrProperty>()
         {
 
-            public Property execute() throws Exception
+            public JcrProperty execute() throws Exception
             {
                 return JcrProperty.Wrapper.wrap(getDelegate().setProperty(name, unwrap(value)),
                         getJcrSession());
@@ -968,12 +968,12 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         });
     }
 
-    public Property setProperty(final String name, final BigDecimal value)
+    public JcrProperty setProperty(final String name, final BigDecimal value)
     {
-        return executeCallback(new Callback<Property>()
+        return executeCallback(new Callback<JcrProperty>()
         {
 
-            public Property execute() throws Exception
+            public JcrProperty execute() throws Exception
             {
                 return JcrProperty.Wrapper.wrap(getDelegate().setProperty(name, unwrap(value)),
                         getJcrSession());

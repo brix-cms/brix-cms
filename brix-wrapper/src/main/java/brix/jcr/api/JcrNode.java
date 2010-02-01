@@ -281,7 +281,7 @@ public interface JcrNode extends JcrItem, Node
      *             if another error occurs.
      * @since JCR 2.0
      */
-    public Property setProperty(String name, Binary value);
+    public JcrProperty setProperty(String name, Binary value);
 
     /**
      * The behavior of this method is identical to that of
@@ -310,7 +310,7 @@ public interface JcrNode extends JcrItem, Node
      *             if another error occurs.
      * @since JCR 2.0
      */
-    public Property setProperty(String name, BigDecimal value);
+    public JcrProperty setProperty(String name, BigDecimal value);
 
     /**
      * Gets all child nodes of this node accessible through the current <code>Session</code> that
@@ -345,7 +345,7 @@ public interface JcrNode extends JcrItem, Node
      *             if an unexpected error occurs.
      * @since JCR 2.0
      */
-    public NodeIterator getNodes(String[] nameGlobs);
+    public JcrNodeIterator getNodes(String[] nameGlobs);
 
     /**
      * Gets all properties of this node accessible through the current <code>Session</code> that
@@ -378,7 +378,7 @@ public interface JcrNode extends JcrItem, Node
      *             if an unexpected error occurs.
      * @since JCR 2.0
      */
-    public PropertyIterator getProperties(String[] nameGlobs);
+    public JcrPropertyIterator getProperties(String[] nameGlobs);
 
     /**
      * Returns the identifier of this node. Applies to both referenceable and non-referenceable
@@ -420,7 +420,7 @@ public interface JcrNode extends JcrItem, Node
      *             if an error occurs.
      * @since JCR 2.0
      */
-    public PropertyIterator getReferences(String name);
+    public JcrPropertyIterator getReferences(String name);
 
     /**
      * This method returns all <code>WEAKREFERENCE</code> properties that refer to this node and
@@ -436,7 +436,7 @@ public interface JcrNode extends JcrItem, Node
      * @see #getWeakReferences(String).
      * @since JCR 2.0
      */
-    public PropertyIterator getWeakReferences();
+    public JcrPropertyIterator getWeakReferences();
 
     /**
      * This method returns all <code>WEAKREFERENCE</code> properties that refer to this node, have
@@ -466,7 +466,7 @@ public interface JcrNode extends JcrItem, Node
      *             if an error occurs.
      * @since JCR 2.0
      */
-    public PropertyIterator getWeakReferences(String name);
+    public JcrPropertyIterator getWeakReferences(String name);
 
     /**
      * Changes the primary node type of this node to <code>nodeTypeName</code>. Also immediately
@@ -530,7 +530,7 @@ public interface JcrNode extends JcrItem, Node
      *             if an error occurs.
      * @since JCR 2.0
      */
-    public NodeIterator getSharedSet();
+    public JcrNodeIterator getSharedSet();
 
     /**
      * Removes this node and every other node in the shared set of this node.

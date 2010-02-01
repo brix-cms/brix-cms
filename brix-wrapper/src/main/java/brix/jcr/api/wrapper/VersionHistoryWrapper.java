@@ -14,11 +14,10 @@
 
 package brix.jcr.api.wrapper;
 
-import javax.jcr.NodeIterator;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
-import javax.jcr.version.VersionIterator;
 
+import brix.jcr.api.JcrNodeIterator;
 import brix.jcr.api.JcrSession;
 import brix.jcr.api.JcrVersion;
 import brix.jcr.api.JcrVersionHistory;
@@ -102,7 +101,7 @@ class VersionHistoryWrapper extends NodeWrapper implements JcrVersionHistory
         });
     }
 
-    public Version getVersionByLabel(final String label)
+    public JcrVersion getVersionByLabel(final String label)
     {
         return executeCallback(new Callback<JcrVersion>()
         {
@@ -193,38 +192,40 @@ class VersionHistoryWrapper extends NodeWrapper implements JcrVersionHistory
         });
     }
 
-    public NodeIterator getAllFrozenNodes()
+    public JcrNodeIterator getAllFrozenNodes()
     {
-        return executeCallback(new Callback<NodeIterator>()
+        return executeCallback(new Callback<JcrNodeIterator>()
         {
 
-            public NodeIterator execute() throws Exception
+            public JcrNodeIterator execute() throws Exception
             {
-                return getDelegate().getAllFrozenNodes();
+                return JcrNodeIterator.Wrapper.wrap(getDelegate().getAllFrozenNodes(),
+                        getJcrSession());
             }
         });
     }
 
-    public NodeIterator getAllLinearFrozenNodes()
+    public JcrNodeIterator getAllLinearFrozenNodes()
     {
-        return executeCallback(new Callback<NodeIterator>()
+        return executeCallback(new Callback<JcrNodeIterator>()
         {
 
-            public NodeIterator execute() throws Exception
+            public JcrNodeIterator execute() throws Exception
             {
-                return getDelegate().getAllLinearFrozenNodes();
+                return JcrNodeIterator.Wrapper.wrap(getDelegate().getAllLinearFrozenNodes(),
+                        getJcrSession());
             }
         });
     }
 
-    public VersionIterator getAllLinearVersions()
+    public JcrVersionIterator getAllLinearVersions()
     {
-        return executeCallback(new Callback<VersionIterator>()
+        return executeCallback(new Callback<JcrVersionIterator>()
         {
 
-            public VersionIterator execute() throws Exception
+            public JcrVersionIterator execute() throws Exception
             {
-                return getDelegate().getAllLinearVersions();
+                return JcrVersionIterator.Wrapper.wrap(getDelegate().getAllLinearVersions(), getJcrSession());
             }
         });
     }

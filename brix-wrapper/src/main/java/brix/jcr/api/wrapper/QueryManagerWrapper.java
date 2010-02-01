@@ -66,7 +66,7 @@ class QueryManagerWrapper extends AbstractWrapper implements JcrQueryManager
         });
     }
 
-    public Query getQuery(final Node node)
+    public JcrQuery getQuery(final Node node)
     {
         return executeCallback(new Callback<JcrQuery>()
         {
