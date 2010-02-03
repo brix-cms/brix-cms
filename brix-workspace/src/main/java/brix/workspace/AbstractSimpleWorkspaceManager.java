@@ -15,6 +15,8 @@
 package brix.workspace;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -29,11 +31,12 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 /**
- * Simple workspace manager. This class will not work properly in clustered JCR environment. 
+ * Simple workspace manager. This class will not work properly in clustered JCR environment.
  * 
  * @author Matej Knopp
  */
-public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceManager {
+public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceManager
+{
 
     private Set<String> availableWorkspaceNames;
 
@@ -42,12 +45,13 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
 
     public AbstractSimpleWorkspaceManager initialize()
     {
+        super.initialize();
+        
         Session session = null;
 
         try
         {
             availableWorkspaceNames = new HashSet<String>();
-
             deletedWorkspaceNames = new ArrayList<String>();
 
             List<String> accessibleWorkspaces = getAccessibleWorkspaceNames();
@@ -58,10 +62,10 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
                     session = createSession(workspace);
                     if (session.itemExists(NODE_PATH))
                     {
-                        Node node = (Node)session.getItem(NODE_PATH);                        
-                        
+                        Node node = (Node)session.getItem(NODE_PATH);
+
                         if (node.hasProperty(DELETED_PROPERTY) &&
-                            node.getProperty(DELETED_PROPERTY).getBoolean() == true)
+                                node.getProperty(DELETED_PROPERTY).getBoolean() == true)
                         {
                             deletedWorkspaceNames.add(workspace);
                         }
@@ -76,7 +80,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
                                 {
                                     Property property = iterator.nextProperty();
                                     setCachedAttribute(workspace, property.getName(), property
-                                        .getValue().getString());
+                                            .getValue().getString());
                                 }
                             }
                         }
@@ -101,7 +105,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
         if (!availableWorkspaceNames.contains(workspaceId))
         {
             throw new IllegalStateException("Can not set attribute '" + key +
-                "' on deleted or non-existing workspace '" + workspaceId + "'.");
+                    "' on deleted or non-existing workspace '" + workspaceId + "'.");
         }
         setCachedAttribute(workspaceId, key, value);
         try
@@ -166,32 +170,32 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
         }
     }
 
-	public synchronized boolean workspaceExists(String workspaceId)
-	{
-		return availableWorkspaceNames.contains(workspaceId);
-	}
+    public synchronized boolean workspaceExists(String workspaceId)
+    {
+        return availableWorkspaceNames.contains(workspaceId);
+    }
 
-	@Override
-	protected synchronized String getAttribute(String workspaceId, String key)
-	{
-		if (!availableWorkspaceNames.contains(workspaceId))
-		{
-			throw new IllegalStateException("Trying to get attribute of workspace " + workspaceId
-					+ " that doesn't exist or was removed.");
-		}
-		return getCachedAttribute(workspaceId, key);
-	}
+    @Override
+    protected synchronized String getAttribute(String workspaceId, String key)
+    {
+        if (!availableWorkspaceNames.contains(workspaceId))
+        {
+            throw new IllegalStateException("Trying to get attribute of workspace " + workspaceId +
+                    " that doesn't exist or was removed.");
+        }
+        return getCachedAttribute(workspaceId, key);
+    }
 
-	@Override
-	protected Iterator<String> getAttributeKeys(String workspaceId)
-	{
-		if (!availableWorkspaceNames.contains(workspaceId))
-		{
-			throw new IllegalStateException("Trying to get attribute keys of workspace " + workspaceId
-					+ " that doesn't exist or was removed.");
-		}
-		return getCachedAttributeKeys(workspaceId);
-	}	
+    @Override
+    protected Iterator<String> getAttributeKeys(String workspaceId)
+    {
+        if (!availableWorkspaceNames.contains(workspaceId))
+        {
+            throw new IllegalStateException("Trying to get attribute keys of workspace " +
+                    workspaceId + " that doesn't exist or was removed.");
+        }
+        return getCachedAttributeKeys(workspaceId);
+    }
 
     public Workspace createWorkspace()
     {
@@ -245,12 +249,15 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
         while (iterator.hasNext())
         {
             Node node = iterator.nextNode();
-            if (!node.getName().equals(NODE_NAME) && !node.getName().equals("jcr:system"))
+            if (!NODES_TO_LEAVE_WHEN_CLEANING.contains(node.getName()))
             {
                 node.remove();
             }
         }
     }
+
+    private static final Collection<String> NODES_TO_LEAVE_WHEN_CLEANING = Arrays
+            .asList(new String[] { NODE_NAME, "jcr:system", "rep:policy" });
 
     protected void delete(String workspaceId) throws RepositoryException
     {
@@ -259,7 +266,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
             if (!availableWorkspaceNames.contains(workspaceId))
             {
                 throw new IllegalStateException("Workspace " + workspaceId +
-                    " either does not exist or was already deleted.");
+                        " either does not exist or was already deleted.");
             }
         }
         Session session = createSession(workspaceId);
@@ -294,7 +301,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
             closeSession(session, saveSession);
         }
     }
-    
+
 
     public synchronized List<Workspace> getWorkspaces()
     {
@@ -308,7 +315,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
         return result;
     }
 
-   
+
     abstract protected List<String> getAccessibleWorkspaceNames();
 
     abstract protected Session createSession(String workspaceName);
