@@ -326,6 +326,7 @@
    <plugin>
     <groupId>com.mycila.maven-license-plugin</groupId>
     <artifactId>maven-license-plugin</artifactId>
+    <version>1.5.1</version>
     <inherited>false</inherited>
     <configuration>
      <header>${basedir}/etc/license-header.txt</header>
