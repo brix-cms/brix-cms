@@ -38,7 +38,9 @@
   <inmethod.grid.version>1.0.0-b4</inmethod.grid.version>
   <htmllexer.version>2.0-beta1</htmllexer.version>
   <jackrabbit.version>2.0.0</jackrabbit.version>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
  </properties>
+
 
  <dependencyManagement>
   <dependencies>
@@ -364,10 +366,19 @@
     </executions>
    </plugin>
    <plugin>
+     <groupId>org.apache.maven.plugins</groupId>
+     <artifactId>maven-resources-plugin</artifactId>
+     <version>2.2</version>
+     <configuration>
+        <encoding>${project.build.sourceEncoding}</encoding>
+     </configuration>
+   </plugin>
+   <plugin>
     <artifactId>maven-compiler-plugin</artifactId>
     <configuration>
      <source>1.5</source>
      <target>1.5</target>
+     <encoding>${project.build.sourceEncoding}</encoding>
     </configuration>
     <version>2.0.2</version>
    </plugin>
