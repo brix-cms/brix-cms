@@ -27,11 +27,11 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.lang.Objects;
 
 import brix.BrixNodeModel;
 import brix.jcr.api.JcrSession;
@@ -83,7 +83,8 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace>
 	{
 		String workspaceId = getModelObject().getId();
 		BrixNode current = currentNode.getObject();
-		if (current != null && current.getSession().getWorkspace().getName().equals(workspaceId) == false)
+		if (current != null
+				&& current.getSession().getWorkspace().getName().equals(workspaceId) == false)
 		{
 			currentNode.setObject(null);
 			currentMenu = new Menu();
@@ -114,7 +115,13 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace>
 				@Override
 				public boolean isEnabled()
 				{
-					return item.getModelObject().equals(currentNode.getObject()) != true;
+					BrixNode myNode = item.getModelObject();
+					BrixNode selectedNode = currentNode.getObject();
+					if (selectedNode!=null) {
+						return !Objects.equal(myNode.getIdentifier(), selectedNode.getIdentifier());
+					} else {
+						return true;
+					}
 				}
 			};
 			IModel<String> labelModel = new AbstractModel<String>()
@@ -133,7 +140,8 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace>
 		}
 
 		@Override
-		protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel, int index)
+		protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel,
+				int index)
 		{
 			List<BrixNode> nodes = listViewModel.getObject();
 			return new BrixNodeModel(nodes.get(index));
@@ -182,8 +190,8 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace>
 				public void onSubmit()
 				{
 					MenuPlugin plugin = MenuPlugin.get();
-					currentNode.setObject(plugin.saveMenu(model.getObject(), ManageMenuPanel.this.getModelObject()
-							.getId(), currentNode.getObject()));
+					currentNode.setObject(plugin.saveMenu(model.getObject(), ManageMenuPanel.this
+							.getModelObject().getId(), currentNode.getObject()));
 					getSession().info(ManageMenuPanel.this.getString("menuSaved"));
 				}
 			});
@@ -209,7 +217,8 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace>
 						{
 							currentNode.getObject().getSession().refresh(false);
 							currentNode.detach();
-							getSession().error("Couldn't delete menu, it is referenced from a tile(s).");
+							getSession().error(
+									"Couldn't delete menu, it is referenced from a tile(s).");
 						}
 					}
 

@@ -40,17 +40,16 @@ class BaseWrapper<T>
 
 	Integer hashCode;
 
-	/*
-	 * Jackrabbit doesn't seem to implement either hashCode or equals, so we just rely on object identity 
-	 
 	@Override
 	public int hashCode()
 	{
-		if (hashCode == null)
-		{
-			hashCode = getDelegate().hashCode();
-		}
-		return hashCode();
+		return getDelegate().hashCode();
+		// optimization, is it really needed? used in equals...
+//		if (hashCode == null)
+//		{
+//			hashCode = getDelegate().hashCode();
+//		}
+//		return hashCode;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -77,7 +76,6 @@ class BaseWrapper<T>
 			return getDelegate() == wrapper.getDelegate() || getDelegate().equals(wrapper.getDelegate());
 		}
 	}
-	*/
 
 	@SuppressWarnings("unchecked")
 	protected <TYPE> TYPE unwrap(TYPE wrapper)
