@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package brix.plugin.menu.tile;
+package brix.plugin.menu.tile.subtree;
 
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
@@ -21,7 +21,7 @@ import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 
-public class MenuContainer implements IDetachable
+class MenuContainer implements IDetachable
 {
 	IModel<BrixNode> menuNodeModel = new BrixNodeModel();
 	private Menu cachedMenu;
@@ -162,6 +162,7 @@ public class MenuContainer implements IDetachable
 
 	public void load(BrixNode node)
 	{
+		detach();
 		if (node.hasProperty(PROP_INNER_CONTAINER_STYLE_CLASS))
 		{
 			setInnerContainerStyleClass(node.getProperty(PROP_INNER_CONTAINER_STYLE_CLASS).getString());
