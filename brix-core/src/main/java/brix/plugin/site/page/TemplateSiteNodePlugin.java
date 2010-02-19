@@ -24,6 +24,7 @@ import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.admin.CreatePageOrTemplatePanel;
+import org.apache.wicket.model.ResourceModel;
 
 public class TemplateSiteNodePlugin extends AbstractSitePagePlugin
 {
@@ -71,6 +72,6 @@ public class TemplateSiteNodePlugin extends AbstractSitePagePlugin
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
     {
-        return new Model<String>("Create New Template");
+        return new ResourceModel("createTemplate", "Create New Template");
     }
 }

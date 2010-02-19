@@ -28,6 +28,7 @@ import org.apache.wicket.model.Model;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.*;
+import org.apache.wicket.model.ResourceModel;
 
 public class SnapshotPlugin implements Plugin {
 
@@ -156,7 +157,8 @@ public class SnapshotPlugin implements Plugin {
     }
 
     public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel) {
-        IBrixTab tabs[] = new IBrixTab[]{new Tab(new Model<String>("Snapshots"), workspaceModel)};
+        IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("snapshots", "Snapshots"),
+                workspaceModel)};
         return Arrays.asList(tabs);
     }
 

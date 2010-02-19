@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
 
 import brix.Brix;
@@ -129,7 +129,8 @@ public class PrototypePlugin implements Plugin
 
 	public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)
 	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new Model<String>("Prototypes"), workspaceModel) };
+		IBrixTab tabs[] = new IBrixTab[] { new Tab(new ResourceModel("prototypes", "Prototypes"),
+                workspaceModel) };
 		return Arrays.asList(tabs);
 	}
 

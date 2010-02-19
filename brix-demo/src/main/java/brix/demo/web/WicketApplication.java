@@ -14,9 +14,14 @@
 
 package brix.demo.web;
 
+import java.util.Locale;
+
 import javax.jcr.ImportUUIDBehavior;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.Request;
+import org.apache.wicket.Response;
+import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.apache.wicket.request.IRequestCycleProcessor;
 import org.slf4j.Logger;
@@ -172,6 +177,5 @@ public final class WicketApplication extends AbstractWicketApplication
             cleanupSessionFactory();
         }
     }
-
-
+   
 }

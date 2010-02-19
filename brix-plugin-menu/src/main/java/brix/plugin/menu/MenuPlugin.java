@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.Brix;
 import brix.Plugin;
@@ -69,7 +69,8 @@ public class MenuPlugin implements Plugin
 
 	public List<IBrixTab> newTabs(final IModel<Workspace> workspaceModel)
 	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new Model<String>("Menus"), workspaceModel) };
+		IBrixTab tabs[] = new IBrixTab[] { new Tab(new ResourceModel("menus", "Menus"),
+                workspaceModel) };
 		return Arrays.asList(tabs);
 	}
 

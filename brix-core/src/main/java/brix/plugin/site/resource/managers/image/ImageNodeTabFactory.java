@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixFileNode;
@@ -58,7 +58,7 @@ public class ImageNodeTabFactory implements ManageNodeTabFactory
 
 	private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel)
 	{
-		return new CachingAbstractTab(new Model<String>("View"), 100)
+		return new CachingAbstractTab(new ResourceModel("view", "View"), 100)
 		{
 			@Override
 			public Panel newPanel(String panelId)

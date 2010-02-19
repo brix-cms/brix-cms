@@ -33,6 +33,7 @@ import brix.plugin.site.resource.admin.ManageResourceNodeTabFactory;
 import brix.plugin.site.resource.admin.UploadResourcesPanel;
 import brix.plugin.site.resource.managers.image.ImageNodeTabFactory;
 import brix.plugin.site.resource.managers.text.TextNodeTabFactory;
+import org.apache.wicket.model.ResourceModel;
 
 public class ResourceNodePlugin implements SiteNodePlugin
 {
@@ -122,6 +123,6 @@ public class ResourceNodePlugin implements SiteNodePlugin
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
     {
-    	return new Model<String>("Upload Images & Documents");
+    	return new ResourceModel("upload", "Upload Images & Documents");
     }
 }

@@ -32,6 +32,7 @@ import brix.plugin.site.SitePlugin;
 import brix.web.BrixRequestCycleProcessor;
 import brix.web.nodepage.ForbiddenPage;
 import brix.web.reference.Reference;
+import org.apache.wicket.model.ResourceModel;
 
 public class FolderNodePlugin implements SiteNodePlugin
 {
@@ -103,7 +104,7 @@ public class FolderNodePlugin implements SiteNodePlugin
 
 	public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
 	{
-		return new Model<String>("Create New Folder");
+		return new ResourceModel("createFolder", "Create New Folder");
 	}
 
 	public FolderNodePlugin(SitePlugin sp)

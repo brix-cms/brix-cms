@@ -16,7 +16,7 @@ package brix.plugin.site.page;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
@@ -71,6 +71,6 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
     {
-        return new Model<String>("Create New Page");
+        return new ResourceModel("newPage", "Create New Page");
     }
 }

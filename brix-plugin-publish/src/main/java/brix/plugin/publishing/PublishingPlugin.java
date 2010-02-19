@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.Brix;
 import brix.Plugin;
@@ -148,7 +148,8 @@ public class PublishingPlugin implements Plugin
 
 	public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)
 	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new Model<String>("Publishing"), workspaceModel) };
+		IBrixTab tabs[] = new IBrixTab[] { new Tab(new ResourceModel("publishing", "Publishing"),
+                workspaceModel) };
 		return Arrays.asList(tabs);
 	}
 	

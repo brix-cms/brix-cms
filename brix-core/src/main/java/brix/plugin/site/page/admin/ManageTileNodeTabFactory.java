@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
@@ -50,9 +50,7 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
     {
         List<IBrixTab> tabs = new ArrayList<IBrixTab>();
         
-        // TODO: Externalize strings
-        
-        tabs.add(new CachingAbstractTab(new Model<String>("View"))
+        tabs.add(new CachingAbstractTab(new ResourceModel("view", "View"))
         {
 
             @Override
@@ -69,7 +67,7 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 
         });
 
-        tabs.add(new CachingAbstractTab(new Model<String>("Tiles"))
+        tabs.add(new CachingAbstractTab(new ResourceModel("tiles", "Tiles"))
         {
 
             @Override
@@ -86,7 +84,7 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory
 
         });
         
-        tabs.add(new CachingAbstractTab(new Model<String>("Variables"))
+        tabs.add(new CachingAbstractTab(new ResourceModel("variables", "Variables"))
         {
 
             @Override
