@@ -19,7 +19,11 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
+import org.apache.wicket.util.time.Time;
+
+import brix.jcr.wrapper.BrixNode;
 
 public class BrixNodePageRequestTarget
 		implements
@@ -27,19 +31,19 @@ public class BrixNodePageRequestTarget
 			IPageRequestTarget,
 			PageParametersRequestTarget
 {
-	private final IModel<?> node;
+	private final IModel<BrixNode> node;
 	private BrixNodeWebPage page;
 	private final PageFactory pageFactory;
 
 
-	public BrixNodePageRequestTarget(IModel<?> node, BrixNodeWebPage page)
+	public BrixNodePageRequestTarget(IModel<BrixNode> node, BrixNodeWebPage page)
 	{
 		this.node = node;
 		this.page = page;
 		this.pageFactory = null;
 	}
 
-	public BrixNodePageRequestTarget(IModel<?> node, PageFactory pageFactory)
+	public BrixNodePageRequestTarget(IModel<BrixNode> node, PageFactory pageFactory)
 	{
 		this.node = node;
 		this.page = null;
@@ -105,6 +109,17 @@ public class BrixNodePageRequestTarget
 		// request target
 		if (RequestCycle.get().getRequestTarget() == this)
 		{
+
+			WebResponse response = (WebResponse)requestCycle.getResponse();
+
+			// force text/html content type for pages
+			response.setContentType("text/html");
+			
+			// TODO figure out how to handle last modified for pages.
+			// lastmodified depends on both the page and the tiles, maybe tiles
+			// can contribute lastmodified dates and we take the latest...
+			// response.setLastModifiedTime(Time.valueOf(node.getObject().getLastModified()));
+
 			getPage().renderPage();
 		}
 	}

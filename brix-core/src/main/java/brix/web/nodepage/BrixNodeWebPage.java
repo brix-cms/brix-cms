@@ -14,15 +14,14 @@
 
 package brix.web.nodepage;
 
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 
+import brix.Brix;
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.generic.IGenericComponent;
-import brix.Brix;
 
 public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNode>
 {

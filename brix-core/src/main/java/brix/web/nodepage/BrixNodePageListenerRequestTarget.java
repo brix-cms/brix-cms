@@ -22,24 +22,28 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.component.listener.IListenerInterfaceRequestTarget;
 
+import brix.jcr.wrapper.BrixNode;
+
 public class BrixNodePageListenerRequestTarget extends BrixNodePageRequestTarget
 		implements
 			IListenerInterfaceRequestTarget
 {
 	private final String iface;
 
-	public BrixNodePageListenerRequestTarget(IModel<?> node, BrixNodeWebPage page, String iface)
+	public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, BrixNodeWebPage page,
+			String iface)
 	{
 		super(node, page);
 		this.iface = iface;
 	}
 
-	public BrixNodePageListenerRequestTarget(IModel<?> node, PageFactory pageFactory, String iface)
+	public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, PageFactory pageFactory,
+			String iface)
 	{
 		super(node, pageFactory);
 		this.iface = iface;
 	}
-	
+
 	public RequestListenerInterface getRequestListenerInterface()
 	{
 		if (this.iface != null)

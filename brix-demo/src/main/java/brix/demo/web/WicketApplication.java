@@ -90,6 +90,8 @@ public final class WicketApplication extends AbstractWicketApplication
         final JcrSessionFactory sf = getJcrSessionFactory();
         final WorkspaceManager wm = getWorkspaceManager();
 
+        getDebugSettings().setOutputMarkupContainerClassName(true);
+        
         try
         {
             // create uri mapper for the cms
