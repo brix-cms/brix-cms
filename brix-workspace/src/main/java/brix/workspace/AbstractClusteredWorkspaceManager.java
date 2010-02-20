@@ -556,7 +556,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 				session = createSession(workspaceId);
 				EventListener listener = new SessionEventListener(session);
 				int events = Event.NODE_ADDED | Event.PROPERTY_ADDED | Event.PROPERTY_CHANGED | Event.PROPERTY_REMOVED;
-				session.getWorkspace().getObservationManager().addEventListener(listener, events, NODE_PATH, true,
+				session.getWorkspace().getObservationManager().addEventListener(listener, events, "/", true,
 						null, null, true);
 				
 				// we need to keep the sessions opened otherwise the listeners will be removed
