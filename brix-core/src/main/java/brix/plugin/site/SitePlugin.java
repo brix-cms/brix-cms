@@ -33,7 +33,7 @@ import javax.jcr.Session;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.Strings;
 
 import brix.Brix;
@@ -94,10 +94,10 @@ public class SitePlugin implements SessionAwarePlugin
 
     public List<IBrixTab> newTabs(final IModel<Workspace> workspaceModel)
     {
-        IBrixTab tabs[] = new IBrixTab[] { new SiteTab(new Model<String>("Site"), workspaceModel),
-                new GlobalTilesTab(new Model<String>("Tiles"), workspaceModel),
-                new GlobalVariablesTab(new Model<String>("Variables"), workspaceModel),
-                new WebDAVRulesTab(new Model<String>("WebDAV Rules"), workspaceModel) };
+        IBrixTab tabs[] = new IBrixTab[] { new SiteTab(new ResourceModel("site", "Site"), workspaceModel),
+                new GlobalTilesTab(new ResourceModel("tiles", "Tiles"), workspaceModel),
+                new GlobalVariablesTab(new ResourceModel("variables", "Variables"), workspaceModel),
+                new WebDAVRulesTab(new ResourceModel("webdav.rules", "WebDAV Rules"), workspaceModel) };
         return Arrays.asList(tabs);
     }
 
