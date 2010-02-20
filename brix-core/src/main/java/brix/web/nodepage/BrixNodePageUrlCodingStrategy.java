@@ -113,9 +113,8 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 		return iface;
 	}
 
-	private void addIndexedParameters(BrixPageParameters parameters, IModel<BrixNode> nodeModel)
+	private void addIndexedParameters(String requestPathString, BrixPageParameters parameters, IModel<BrixNode> nodeModel)
 	{
-		String requestPathString = RequestCycle.get().getRequest().getPath();
 		if (!requestPathString.startsWith("/"))
 			requestPathString = "/" + requestPathString;
 
@@ -183,7 +182,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 		}
 		iface = addQueryStringParameters(pageParameters, pageInfo, requestParameters);
 
-		addIndexedParameters(pageParameters, nodeModel);
+		addIndexedParameters(requestParameters.getPath(), pageParameters, nodeModel);
 
 		BrixNodeWebPage page = null;
 		PageFactory factory = null;
