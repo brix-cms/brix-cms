@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
@@ -53,8 +54,11 @@ public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode>
 			}
 		};
 		IModel<Protocol> protocolModel = model.forProperty("requiredProtocol");
-		form.add(new DropDownChoice<Protocol>("requiredProtocol", protocolModel, protocols, renderer)
-				.setNullValid(false));
+		form.add(new DropDownChoice<Protocol>("requiredProtocol", protocolModel, protocols,
+				renderer).setNullValid(false));
+
+		IModel<String> mimeTypeModel = model.forProperty("mimeType");
+		form.add(new TextField<String>("mimeType", mimeTypeModel));
 
 		form.add(new SubmitLink("save")
 		{
