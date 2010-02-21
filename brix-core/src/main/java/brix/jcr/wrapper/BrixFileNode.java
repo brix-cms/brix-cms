@@ -54,8 +54,8 @@ public class BrixFileNode extends BrixNode
 	 * Returns if the node is a file node,
 	 * 
 	 * @param node
-	 * @return <code>true</code> if the node is a file node,
-	 *         <code>false</code> otherwise
+	 * @return <code>true</code> if the node is a file node, <code>false</code>
+	 *         otherwise
 	 */
 	public static boolean isFileNode(JcrNode node)
 	{
@@ -69,7 +69,7 @@ public class BrixFileNode extends BrixNode
 
 	private JcrNode getContent()
 	{
-		return (JcrNode) getPrimaryItem();
+		return (JcrNode)getPrimaryItem();
 	}
 
 	/**
@@ -89,7 +89,8 @@ public class BrixFileNode extends BrixNode
 	 */
 	public String getEncoding()
 	{
-		return getContent().hasProperty("jcr:encoding") ? getContent().getProperty("jcr:encoding").getString() : null;
+		return getContent().hasProperty("jcr:encoding") ? getContent().getProperty("jcr:encoding")
+				.getString() : null;
 	}
 
 	/**
@@ -115,8 +116,8 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Returns the mime type for this node. If the property is not specified and
-	 * <code>useExtension</code> is <code>true</code>, tries to determine
-	 * mime type from extension.
+	 * <code>useExtension</code> is <code>true</code>, tries to determine mime
+	 * type from extension.
 	 * 
 	 * @param useExtension
 	 * @return
@@ -128,8 +129,8 @@ public class BrixFileNode extends BrixNode
 		String mime = getContent().getProperty("jcr:mimeType").getString();
 		if (useExtension && (Strings.isEmpty(mime) || mime.equals("application/octet-stream")))
 		{
-			ResourceNodePlugin plugin = (ResourceNodePlugin) SitePlugin.get(getBrix()).getNodePluginForType(
-					ResourceNodePlugin.TYPE);
+			ResourceNodePlugin plugin = (ResourceNodePlugin)SitePlugin.get(getBrix())
+					.getNodePluginForType(ResourceNodePlugin.TYPE);
 			return plugin.resolveMimeTypeFromFileName(getName());
 		}
 		return mime;
@@ -225,10 +226,10 @@ public class BrixFileNode extends BrixNode
 		if (node.isNodeType("nt:file") == false)
 		{
 			throw new IllegalStateException("Argument 'node' must have JCR type nt:file.");
-		} 
+		}
 		else if (node instanceof BrixFileNode)
 		{
-			return (BrixFileNode) node;
+			return (BrixFileNode)node;
 		}
 		node.addNode("jcr:content", "nt:resource");
 		BrixFileNode wrapped = new BrixFileNode(node.getDelegate(), node.getSession());
@@ -236,5 +237,31 @@ public class BrixFileNode extends BrixNode
 		wrapped.getContent().setProperty("jcr:lastModified", Calendar.getInstance());
 		wrapped.getContent().setProperty("jcr:data", "");
 		return wrapped;
+	}
+
+	public static boolean isText(String mimeType)
+	{
+		if (Strings.isEmpty(mimeType))
+		{
+			return false;
+		}
+		if (mimeType.equals("text")||mimeType.startsWith("text/"))
+		{
+			return true;
+		}
+		if ("application/xml".equals(mimeType))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isText(BrixFileNode node)
+	{
+		if (node == null)
+		{
+			throw new IllegalArgumentException("Argument 'node' cannot be null");
+		}
+		return isText(node.getMimeType());
 	}
 }

@@ -22,13 +22,15 @@ import org.apache.wicket.model.Model;
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
+import brix.jcr.wrapper.BrixNode.Protocol;
 import brix.plugin.site.SitePlugin;
+import brix.plugin.site.resource.ResourceRequestTarget;
 import brix.web.generic.BrixGenericPanel;
 
 public class ViewTextPanel extends BrixGenericPanel<BrixNode>
 {
 
-	public ViewTextPanel(String id, IModel<BrixNode> model)
+	public ViewTextPanel(String id, final IModel<BrixNode> model)
 	{
 		super(id, model);
 
@@ -37,29 +39,68 @@ public class ViewTextPanel extends BrixGenericPanel<BrixNode>
 			@Override
 			public String getObject()
 			{
-				BrixFileNode node = (BrixFileNode) getModel().getObject();
+				BrixFileNode node = (BrixFileNode)getModel().getObject();
 				return node.getDataAsString();
 			}
 		};
-
 		add(new Label("label", labelModel));
+
+		add(new Label("mimeType", new Model<String>()
+		{
+			@Override
+			public String getObject()
+			{
+				BrixFileNode node = (BrixFileNode)model.getObject();
+				return node.getMimeType();
+			}
+		}));
+
+		add(new Label("size", new Model<String>()
+		{
+			@Override
+			public String getObject()
+			{
+				BrixFileNode node = (BrixFileNode)model.getObject();
+				return node.getContentLength() + " bytes";
+			}
+		}));
+
+		add(new Label("requiredProtocol", new Model<String>()
+		{
+			@Override
+			public String getObject()
+			{
+				Protocol protocol = model.getObject().getRequiredProtocol();
+				return getString(protocol.toString());
+			}
+		}));
+
+		add(new Link<Void>("download")
+		{
+			@Override
+			public void onClick()
+			{
+				getRequestCycle().setRequestTarget(new ResourceRequestTarget(model, true));
+			}
+		});
 
 		add(new Link<Void>("edit")
 		{
 			@Override
 			public void onClick()
 			{
-				EditTextPanel panel = new EditTextPanel(ViewTextPanel.this.getId(), ViewTextPanel.this.getModel())
+				EditTextResourcePanel panel = new EditTextResourcePanel(ViewTextPanel.this.getId(),
+						ViewTextPanel.this.getModel())
 				{
 					@Override
-					protected void goBack()
+					protected void done()
 					{
 						replaceWith(ViewTextPanel.this);
 					}
 				};
-				ViewTextPanel.this.replaceWith(panel);				
+				ViewTextPanel.this.replaceWith(panel);
 			}
-			
+
 			@Override
 			public boolean isVisible()
 			{

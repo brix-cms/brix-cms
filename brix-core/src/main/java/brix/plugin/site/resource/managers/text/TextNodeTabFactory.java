@@ -37,21 +37,15 @@ public class TextNodeTabFactory implements ManageNodeTabFactory
 		List<IBrixTab> result = new ArrayList<IBrixTab>();
 
 		BrixNode node = nodeModel.getObject();
-		if (node instanceof ResourceNode && hasViewPermission(nodeModel)) 
+		if (node instanceof ResourceNode && hasViewPermission(nodeModel))
 		{
-			String mime = ((BrixFileNode) node).getMimeType();
-			if (canHandleMimeType(mime))
+			if (BrixFileNode.isText((ResourceNode)node))
 			{
 				result.add(getViewTab(nodeModel));
 			}
 		}
 
 		return result;
-	}
-
-	private static boolean canHandleMimeType(String mimeType)
-	{
-		return mimeType != null && (mimeType.startsWith("text/") || mimeType.equals("application/xml"));
 	}
 
 	private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel)

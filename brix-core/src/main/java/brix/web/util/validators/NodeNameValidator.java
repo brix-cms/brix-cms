@@ -20,7 +20,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-public class NodeNameValidator implements IValidator
+public class NodeNameValidator implements IValidator<String>
 {
 
     public static final char[] forbidden = new char[] { '\\', '/', ':', '?', '<', '>' };

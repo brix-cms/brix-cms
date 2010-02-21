@@ -14,7 +14,6 @@
 
 package brix.web.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,225 +27,265 @@ import brix.BrixNodeModel;
 import brix.jcr.wrapper.BrixNode;
 
 /**
- * Proxy a BrixNode model object, exposing lightweight transactional semantics through the {@link
- * brix.web.model.ModelBuffer.Model#apply} method. Properties of a target model are exposed as models themselves and
- * maintain status regarding whether changes have been made.  When the apply method is called, the changes in the cached
- * models are iterated and flushed.
+ * Proxy a BrixNode model object, exposing lightweight transactional semantics
+ * through the {@link brix.web.model.ModelBuffer.Model#apply} method. Properties
+ * of a target model are exposed as models themselves and maintain status
+ * regarding whether changes have been made. When the apply method is called,
+ * the changes in the cached models are iterated and flushed.
  * <p/>
- * This is typically used by clients that wish to present a cancelable user interface, without maintaining the original
- * state of target model object.  If the user cancels the operation, the buffer is deallocated without ever applying the
- * changes to the target.
+ * This is typically used by clients that wish to present a cancelable user
+ * interface, without maintaining the original state of target model object. If
+ * the user cancels the operation, the buffer is deallocated without ever
+ * applying the changes to the target.
  * <p/>
- * After creating a ModelBuffer, use {@link ModelBuffer#forProperty(java.lang.String)} and {@link
- * ModelBuffer#forNodeProperty(java.lang.String)} to create and return these cached model objects.  These can be
- * provided to user interface objects.
+ * After creating a ModelBuffer, use
+ * {@link ModelBuffer#forProperty(java.lang.String)} and
+ * {@link ModelBuffer#forNodeProperty(java.lang.String)} to create and return
+ * these cached model objects. These can be provided to user interface objects.
  * <p/>
- * {@link brix.plugin.site.page.admin.EditTab#EditTab(java.lang.String, org.apache.wicket.model.IModel<brix.jcr.wrapper.BrixNode>)}
- * provides a solid use case of this class.
+ * {@link brix.plugin.site.page.admin.EditTab#EditTab(java.lang.String,
+ * org.apache.wicket.model.IModel<brix.jcr.wrapper.BrixNode>)} provides a solid
+ * use case of this class.
  */
-public class ModelBuffer implements Serializable
+public class ModelBuffer implements IModel<Object>
 {
+	public ModelBuffer()
+	{
 
-    /**
-     * Constructor requiring a BrixNode to proxy.
-     * @param target
-     */
-    public ModelBuffer(Object target)
-    {
-        this.target = target;
-    }
-
-    private final Object target;
+	}
 
 
-    /**
-     * Create a proxy for a node property.  In contrast to {@link brix.web.model.ModelBuffer#forProperty}, this method
-     * always creates the buffered model.
-     * @param delegate Accessor to the underlying targetObject, typically a PropertyModel
-     * @param isNode if the datatype is a JcrNode
-     * @return
-     */
-    public IModel forModel(IModel delegate, boolean isNode)
-    {
-        if (models == null)
-        {
-            models = new ArrayList<Model>();
-        }
-        Model model;
-        if (!isNode)
-            model = new Model(delegate);
-        else
-            model = new NodeModel(delegate);
-        
-        models.add(model);
-        return model;
-    }
+	/**
+	 * Constructor requiring a BrixNode to proxy.
+	 * 
+	 * @param target
+	 */
+	public ModelBuffer(Object target)
+	{
+		this.target = target;
+	}
 
-    private Map<String, IModel> propertyMap;
+	private Object target;
 
-    /**
-     * Backing method for public forProperty API calls.  Property buffers are cached by name, returning an existing
-     * buffer if it was previously created.
-     * @param propertyName The JCR key name of the underlying property
-     * @param isNode Selector for string type or JcrNode type
-     * @return model A model that buffers the requested property
-     */
-    @SuppressWarnings("unchecked")
-	protected<T> IModel<T> forProperty(String propertyName, boolean isNode)
-    {
-        if (target == null)
-        {
-            throw new IllegalStateException(
-                "The 'forProperty' call requires the target object to be set.");
-        }
-        if (propertyMap != null && propertyMap.containsKey(propertyName))
-        {
-            return propertyMap.get(propertyName);
-        }
-        IModel model = forModel(new PropertyModel(target, propertyName), isNode);
-        if (propertyMap == null)
-        {
-            propertyMap = new HashMap<String, IModel>();
-        }
-        propertyMap.put(propertyName, model);
-        return model;
-    }
 
-    /**
-     * Buffer a string property for the target object.
-     * @param propertyName The JCR key name of the underlying property
-     * @return model A model that buffers the requested property
-     */
-    public<T> IModel<T> forProperty(String propertyName) 
-    {
-        return forProperty(propertyName, false); 
-    }
-    
-    /**
-     * Buffer a node property for the target object.
-     * @param propertyName The JCR key name of the underlying property
-     * @return model A model that buffers the requested property
-     */
-    public<T> IModel<T> forNodeProperty(String propertyName)
-    {
-        return forProperty(propertyName, true);
-    }
+	/**
+	 * Create a proxy for a node property. In contrast to
+	 * {@link brix.web.model.ModelBuffer#forProperty}, this method always
+	 * creates the buffered model.
+	 * 
+	 * @param delegate
+	 *            Accessor to the underlying targetObject, typically a
+	 *            PropertyModel
+	 * @param isNode
+	 *            if the datatype is a JcrNode
+	 * @return
+	 */
+	public IModel forModel(IModel delegate, boolean isNode)
+	{
+		if (models == null)
+		{
+			models = new ArrayList<Model>();
+		}
+		Model model;
+		if (!isNode)
+			model = new Model(delegate);
+		else
+			model = new NodeModel(delegate);
 
-    private List<Model> models = null;
+		models.add(model);
+		return model;
+	}
 
-    /**
-     * Internal storage type for non-JcrNode properties
-     */
-    private static class Model implements IModel
-    {
-        private final IModel delegate;
-        private Object value;
-        private boolean valueSet = false;
+	private Map<String, IModel> propertyMap;
 
-        public Model(IModel delegate)
-        {
-            this.delegate = delegate;
-        }
+	/**
+	 * Backing method for public forProperty API calls. Property buffers are
+	 * cached by name, returning an existing buffer if it was previously
+	 * created.
+	 * 
+	 * @param propertyName
+	 *            The JCR key name of the underlying property
+	 * @param isNode
+	 *            Selector for string type or JcrNode type
+	 * @return model A model that buffers the requested property
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> IModel<T> forProperty(String propertyName, boolean isNode)
+	{
+		
+		if (propertyMap != null && propertyMap.containsKey(propertyName))
+		{
+			return propertyMap.get(propertyName);
+		}
+		IModel model = forModel(new PropertyModel(this, propertyName), isNode);
+		if (propertyMap == null)
+		{
+			propertyMap = new HashMap<String, IModel>();
+		}
+		propertyMap.put(propertyName, model);
+		return model;
+	}
 
-        public Object getObject()
-        {
-            if (valueSet)
-            {
-                return value;
-            }
-            else
-            {
-                return delegate.getObject();
-            }
-        }
+	/**
+	 * Buffer a string property for the target object.
+	 * 
+	 * @param propertyName
+	 *            The JCR key name of the underlying property
+	 * @return model A model that buffers the requested property
+	 */
+	public <T> IModel<T> forProperty(String propertyName)
+	{
+		return forProperty(propertyName, false);
+	}
 
-        public void setObject(Object object)
-        {
-            valueSet = true;
-            value = object;
-        }
+	/**
+	 * Buffer a node property for the target object.
+	 * 
+	 * @param propertyName
+	 *            The JCR key name of the underlying property
+	 * @return model A model that buffers the requested property
+	 */
+	public <T> IModel<T> forNodeProperty(String propertyName)
+	{
+		return forProperty(propertyName, true);
+	}
 
-        public void detach()
-        {
-            delegate.detach();
-            if (value instanceof IDetachable)
-            {
-                ((IDetachable)value).detach();
-            }
-        }
+	private List<Model> models = null;
 
-        protected void apply(IModel delegate, Object value)
-        {
-            delegate.setObject(value);
-        }
+	/**
+	 * Internal storage type for non-JcrNode properties
+	 */
+	private static class Model implements IModel
+	{
+		private final IModel delegate;
+		private Object value;
+		private boolean valueSet = false;
 
-        public void apply()
-        {
-            if (valueSet)
-            {
-                apply(delegate, value);
-                valueSet = false;
-            }
-        }
+		public Model(IModel delegate)
+		{
+			this.delegate = delegate;
+		}
 
-    }
+		public Object getObject()
+		{
+			if (valueSet)
+			{
+				return value;
+			}
+			else
+			{
+				return delegate.getObject();
+			}
+		}
 
-    /**
-     * Internal storage type for JcrNode properties
-     */
-    private static class NodeModel extends Model
-    {
-        public NodeModel(IModel delegate)
-        {
-            super(delegate);
-        }
+		public void setObject(Object object)
+		{
+			valueSet = true;
+			value = object;
+		}
 
-        @Override
-        public Object getObject()
-        {
-            Object value = super.getObject();
-            if (value instanceof IModel)
-            {
-                return ((IModel)value).getObject();
-            }
-            else
-            {
-                return value;
-            }
-        }
+		public void detach()
+		{
+			delegate.detach();
+			if (value instanceof IDetachable)
+			{
+				((IDetachable)value).detach();
+			}
+		}
 
-        @Override
-        public void setObject(Object object)
-        {
-            if (object instanceof BrixNode)
-            {
-                super.setObject(new BrixNodeModel((BrixNode)object));
-            }
-            else
-            {
-                super.setObject(object);
-            }
-        }
+		protected void apply(IModel delegate, Object value)
+		{
+			delegate.setObject(value);
+		}
 
-        @Override
-        protected void apply(IModel delegate, Object value)
-        {
-            if (value instanceof IModel)
-            {
-                value = ((IModel)value).getObject();
-            }
-            super.apply(delegate, value);
-        }
-    }
+		public void apply()
+		{
+			if (valueSet)
+			{
+				apply(delegate, value);
+				valueSet = false;
+			}
+		}
 
-    public void apply()
-    {
-        if (models != null)
-        {
-            for (Model model : models)
-            {
-                model.apply();
-            }
-        }
-    }
+	}
+
+	/**
+	 * Internal storage type for JcrNode properties
+	 */
+	private static class NodeModel extends Model
+	{
+		public NodeModel(IModel delegate)
+		{
+			super(delegate);
+		}
+
+		@Override
+		public Object getObject()
+		{
+			Object value = super.getObject();
+			if (value instanceof IModel)
+			{
+				return ((IModel)value).getObject();
+			}
+			else
+			{
+				return value;
+			}
+		}
+
+		@Override
+		public void setObject(Object object)
+		{
+			if (object instanceof BrixNode)
+			{
+				super.setObject(new BrixNodeModel((BrixNode)object));
+			}
+			else
+			{
+				super.setObject(object);
+			}
+		}
+
+		@Override
+		protected void apply(IModel delegate, Object value)
+		{
+			if (value instanceof IModel)
+			{
+				value = ((IModel)value).getObject();
+			}
+			super.apply(delegate, value);
+		}
+	}
+
+	public void apply()
+	{
+		if (models != null)
+		{
+			for (Model model : models)
+			{
+				model.apply();
+			}
+		}
+	}
+
+	public Object getObject()
+	{
+		return target;
+	}
+
+	public void setObject(Object object)
+	{
+		target = object;
+	}
+
+	public void detach()
+	{
+		
+		if (target != null && target instanceof IModel)
+		{
+			((IModel<?>)target).detach();
+		}
+
+
+	}
 }
