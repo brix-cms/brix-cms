@@ -123,6 +123,6 @@ public class ResourceNodePlugin implements SiteNodePlugin
 
 	public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
 	{
-		return new ResourceModel("upload", "Upload Images & Documents");
+		return new ResourceModel("create");
 	}
 }
