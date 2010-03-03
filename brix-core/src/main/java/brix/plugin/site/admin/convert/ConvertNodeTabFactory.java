@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
@@ -47,7 +47,7 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory
 
 	private static IBrixTab newTab(final IModel<BrixNode> nodeModel)
 	{
-		return new CachingAbstractTab(new Model<String>("Convert"), -1)
+		return new CachingAbstractTab(new ResourceModel("convert", "Convert"), -1)
 		{
 			@Override
 			public Panel newPanel(String panelId)

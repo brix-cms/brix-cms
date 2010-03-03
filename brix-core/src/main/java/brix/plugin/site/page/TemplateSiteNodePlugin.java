@@ -16,7 +16,7 @@ package brix.plugin.site.page;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.Brix;
 import brix.jcr.wrapper.BrixNode;
@@ -24,7 +24,6 @@ import brix.plugin.site.NodeConverter;
 import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.page.admin.CreatePageOrTemplatePanel;
-import org.apache.wicket.model.ResourceModel;
 
 public class TemplateSiteNodePlugin extends AbstractSitePagePlugin
 {
@@ -67,7 +66,7 @@ public class TemplateSiteNodePlugin extends AbstractSitePagePlugin
 
     public String getName()
     {
-        return "Template";
+        return (new ResourceModel("template", "Template")).getObject();
     }
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)

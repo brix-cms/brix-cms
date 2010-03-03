@@ -66,7 +66,7 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin
 
     public String getName()
     {
-        return "Page";
+        return (new ResourceModel("page", "Page")).getObject();
     }
 
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)

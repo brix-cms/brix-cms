@@ -54,7 +54,7 @@ public class ResourceNodePlugin implements SiteNodePlugin
 
 	public String getName()
 	{
-		return "Resource";
+		return (new ResourceModel("resource", "Resource")).getObject();
 	}
 
 	public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)

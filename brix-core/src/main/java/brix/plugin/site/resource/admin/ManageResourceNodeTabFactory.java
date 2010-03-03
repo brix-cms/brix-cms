@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
@@ -48,7 +48,7 @@ public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
     {
         List<IBrixTab> tabs = new ArrayList<IBrixTab>();
 
-        tabs.add(new CachingAbstractTab(new Model<String>("Properties"))
+        tabs.add(new CachingAbstractTab(new ResourceModel("properties", "Properties"))
         {
             @Override
             public Panel newPanel(String panelId)
