@@ -200,7 +200,7 @@ public interface JcrSession extends BrixSession
      *             if another error occurs.
      * @since JCR 2.0
      */
-    public Node getNodeByIdentifier(String id);
+    public JcrNode getNodeByIdentifier(String id);
 
     /**
      * Returns the node at the specified absolute path in the workspace.
@@ -214,7 +214,7 @@ public interface JcrSession extends BrixSession
      *             If another error occurs.
      * @since JCR 2.0
      */
-    public Node getNode(String absPath);
+    public JcrNode getNode(String absPath);
 
     /**
      * Returns the property at the specified absolute path in the workspace.
@@ -228,7 +228,7 @@ public interface JcrSession extends BrixSession
      *             if another error occurs.
      * @since JCR 2.0
      */
-    public Property getProperty(String absPath);
+    public JcrProperty getProperty(String absPath);
 
     /**
      * Returns <code>true</code> if a node exists at <code>absPath</code> and this
