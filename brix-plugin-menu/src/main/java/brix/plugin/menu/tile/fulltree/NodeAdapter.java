@@ -21,6 +21,7 @@ class NodeAdapter extends AbstractNodeAdapter
 {
 	private static final String P_MENU = "menu";
 	private static final String P_SELECTED_LI_CSS_CLASS = "selectedLiCssClass";
+	private static final String P_SELECT_ALL_PARENT_LI = "selectAllParentLi";
 	private static final String P_OUTER_UL_CSS_CLASS = "outerUlCssClass";
 
 
@@ -47,6 +48,16 @@ class NodeAdapter extends AbstractNodeAdapter
 	public void setSelectedLiCssClass(String cssClass)
 	{
 		setProperty(P_SELECTED_LI_CSS_CLASS, cssClass);
+	}
+
+	public Boolean getSelectAllParentLi()
+	{
+		return Boolean.valueOf(getProperty(P_SELECT_ALL_PARENT_LI, "false"));
+	}
+
+	public void setSelectAllParentLi(Boolean parentLi)
+	{
+		setProperty(P_SELECT_ALL_PARENT_LI, parentLi.toString());
 	}
 
 	public String getOuterUlCssClass()

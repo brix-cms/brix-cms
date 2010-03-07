@@ -14,18 +14,19 @@
 
 package brix.plugin.menu.tile.fulltree;
 
-import org.apache.wicket.Response;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.string.Strings;
-
 import brix.auth.Action.Context;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.menu.Menu;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.plugin.menu.tile.AbstractMenuRenderer;
 import brix.plugin.site.SitePlugin;
+import org.apache.wicket.Response;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.string.Strings;
+
+import java.util.Set;
 
 /**
  * Component used to render the menu
@@ -67,16 +68,17 @@ public class MenuRenderer extends AbstractMenuRenderer
 		response.write(">");
 		for (ChildEntry entry : menu.getRoot().getChildren())
 		{
-			renderEntry(entry, adapter, response);
+			renderEntry(entry, adapter, response, getSelectedItems(menu));
 		}
 		response.write("</ul>");
 	}
 
-	private void renderEntry(ChildEntry entry, NodeAdapter adapter, Response response)
+	private void renderEntry(ChildEntry entry, NodeAdapter adapter, Response response, Set<ChildEntry> selectedItems)
 	{
 		// build css classes string
 		StringBuilder cssClasses = new StringBuilder();
-		if (!Strings.isEmpty(adapter.getSelectedLiCssClass()) && isSelected(entry))
+		if ((!Strings.isEmpty(adapter.getSelectedLiCssClass()) && isSelected(entry)) ||
+                (adapter.getSelectAllParentLi() && anyChildSelected(entry, selectedItems)))
 		{
 			cssClasses.append(adapter.getSelectedLiCssClass()).append(" ");
 		}
@@ -118,7 +120,7 @@ public class MenuRenderer extends AbstractMenuRenderer
 				BrixNode node = getNode(e);
 				if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION))
 				{
-					renderEntry(e, adapter, response);
+					renderEntry(e, adapter, response, selectedItems);
 				}
 			}
 			response.write("</ul>");

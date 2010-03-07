@@ -14,20 +14,21 @@
 
 package brix.plugin.menu.tile.fulltree;
 
+import brix.BrixNodeModel;
+import brix.jcr.wrapper.BrixNode;
+import brix.plugin.menu.tile.MenuPicker;
+import brix.plugin.site.page.tile.admin.TileEditorPanel;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import brix.BrixNodeModel;
-import brix.jcr.wrapper.BrixNode;
-import brix.plugin.menu.tile.MenuPicker;
-import brix.plugin.site.page.tile.admin.TileEditorPanel;
-
 class FullTreeMenuEditor extends TileEditorPanel
 {
 	private BrixNodeModel menu = new BrixNodeModel();
 	private String selectedLiCssClass;
+	private Boolean selectAllParentLi;
 	private String outerUlCssClass;
 
 	public FullTreeMenuEditor(String id, IModel<BrixNode> tileParent)
@@ -38,6 +39,8 @@ class FullTreeMenuEditor extends TileEditorPanel
 		add(form);
 		form.add(new TextField<String>("selectedLiCssClass", new PropertyModel<String>(this,
 				"selectedLiCssClass")));
+        form.add(new CheckBox("selectAllParentLi", new PropertyModel<Boolean>(this,
+				"selectAllParentLi")));
 		form.add(new TextField<String>("outerUlCssClass", new PropertyModel<String>(this,
 				"outerUlCssClass")));
 	}
@@ -49,6 +52,7 @@ class FullTreeMenuEditor extends TileEditorPanel
 		menu.setObject(adapter.getMenuNode());
 		selectedLiCssClass = adapter.getSelectedLiCssClass();
 		outerUlCssClass = adapter.getOuterUlCssClass();
+		selectAllParentLi = adapter.getSelectAllParentLi();
 	}
 
 	@Override
@@ -58,6 +62,7 @@ class FullTreeMenuEditor extends TileEditorPanel
 		adapter.setMenuNode(menu.getObject());
 		adapter.setSelectedLiCssClass(selectedLiCssClass);
 		adapter.setOuterUlCssClass(outerUlCssClass);
+        adapter.setSelectAllParentLi(selectAllParentLi);
 	}
 
 
