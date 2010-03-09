@@ -28,6 +28,8 @@ class FullTreeMenuEditor extends TileEditorPanel
 {
 	private BrixNodeModel menu = new BrixNodeModel();
 	private String selectedLiCssClass;
+	private String firstLiCssClass;
+	private String lastLiCssClass;
 	private Boolean selectAllParentLi;
 	private String outerUlCssClass;
 
@@ -41,6 +43,10 @@ class FullTreeMenuEditor extends TileEditorPanel
 				"selectedLiCssClass")));
         form.add(new CheckBox("selectAllParentLi", new PropertyModel<Boolean>(this,
 				"selectAllParentLi")));
+        form.add(new TextField<String>("firstLiCssClass", new PropertyModel<String>(this,
+                "firstLiCssClass")));
+        form.add(new TextField<String>("lastLiCssClass", new PropertyModel<String>(this,
+                "lastLiCssClass")));
 		form.add(new TextField<String>("outerUlCssClass", new PropertyModel<String>(this,
 				"outerUlCssClass")));
 	}
@@ -51,6 +57,8 @@ class FullTreeMenuEditor extends TileEditorPanel
 		NodeAdapter adapter = new NodeAdapter(node);
 		menu.setObject(adapter.getMenuNode());
 		selectedLiCssClass = adapter.getSelectedLiCssClass();
+		firstLiCssClass = adapter.getFirstLiCssClass();
+		lastLiCssClass = adapter.getLastLiCssClass();
 		outerUlCssClass = adapter.getOuterUlCssClass();
 		selectAllParentLi = adapter.getSelectAllParentLi();
 	}
@@ -61,6 +69,8 @@ class FullTreeMenuEditor extends TileEditorPanel
 		NodeAdapter adapter = new NodeAdapter(node);
 		adapter.setMenuNode(menu.getObject());
 		adapter.setSelectedLiCssClass(selectedLiCssClass);
+		adapter.setFirstLiCssClass(firstLiCssClass);
+		adapter.setLastLiCssClass(lastLiCssClass);
 		adapter.setOuterUlCssClass(outerUlCssClass);
         adapter.setSelectAllParentLi(selectAllParentLi);
 	}

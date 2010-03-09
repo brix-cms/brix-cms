@@ -26,6 +26,7 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -66,14 +67,17 @@ public class MenuRenderer extends AbstractMenuRenderer
 			response.write("\"");
 		}
 		response.write(">");
-		for (ChildEntry entry : menu.getRoot().getChildren())
+        List<ChildEntry> childEntryList = menu.getRoot().getChildren();
+        ChildEntry firstEntry = childEntryList.get(0);
+        ChildEntry lastEntry = childEntryList.get(childEntryList.size() - 1);
+        for (ChildEntry entry : childEntryList)
 		{
-			renderEntry(entry, adapter, response, getSelectedItems(menu));
+            renderEntry(entry, adapter, response, getSelectedItems(menu), firstEntry.equals(entry), lastEntry.equals(entry));
 		}
 		response.write("</ul>");
 	}
 
-	private void renderEntry(ChildEntry entry, NodeAdapter adapter, Response response, Set<ChildEntry> selectedItems)
+	private void renderEntry(ChildEntry entry, NodeAdapter adapter, Response response, Set<ChildEntry> selectedItems, boolean isFirst, boolean isLast)
 	{
 		// build css classes string
 		StringBuilder cssClasses = new StringBuilder();
@@ -82,6 +86,14 @@ public class MenuRenderer extends AbstractMenuRenderer
 		{
 			cssClasses.append(adapter.getSelectedLiCssClass()).append(" ");
 		}
+        if (isFirst && !Strings.isEmpty(adapter.getFirstLiCssClass()))
+        {
+            cssClasses.append(adapter.getFirstLiCssClass()).append(" ");
+        }
+        if (isLast && !Strings.isEmpty(adapter.getLastLiCssClass()))
+        {
+            cssClasses.append(adapter.getLastLiCssClass()).append(" ");
+        }
 		if (!Strings.isEmpty(entry.getCssClass()))
 		{
 			cssClasses.append(entry.getCssClass()).append(" ");
@@ -115,12 +127,15 @@ public class MenuRenderer extends AbstractMenuRenderer
 		if (anyChildren(entry))
 		{
 			response.write("<ul>");
-			for (ChildEntry e : entry.getChildren())
+            List<ChildEntry> childEntryList = entry.getChildren();
+            ChildEntry firstEntry = childEntryList.get(0);
+            ChildEntry lastEntry = childEntryList.get(childEntryList.size() - 1);
+			for (ChildEntry e : childEntryList)
 			{
 				BrixNode node = getNode(e);
 				if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION))
 				{
-					renderEntry(e, adapter, response, selectedItems);
+					renderEntry(e, adapter, response, selectedItems, firstEntry.equals(e), lastEntry.equals(e));
 				}
 			}
 			response.write("</ul>");
