@@ -65,8 +65,16 @@ public abstract class AbstractMimeTypeTreeRenderer extends AbstractNodeTreeRende
 		// TODO: perhaps should only test on lower case here?
 		// if so, need to lowercase all incoming types in the constructor
 		String type = rn.getMimeType();
-		String prefix = type.substring(0, type.indexOf('/'));
-		return mimeTypes.contains(type) || mimeTypePrefixes.contains(prefix);
+		int slash = type.indexOf('/');
+		if (slash < 0)
+		{
+			return mimeTypePrefixes.contains(type);
+		}
+		else
+		{
+			String prefix = type.substring(0, slash);
+			return mimeTypes.contains(type) || mimeTypePrefixes.contains(prefix);
+		}
 	}
 
 }
