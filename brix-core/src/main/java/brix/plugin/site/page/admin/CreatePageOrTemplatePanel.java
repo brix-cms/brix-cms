@@ -95,14 +95,7 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 
 			AbstractContainer node;
 
-			if (type.equals(PageSiteNodePlugin.TYPE))
-			{
-				node = PageNode.initialize(page);
-			}
-			else
-			{
-				node = TemplateNode.initialize(page);
-			}
+			node = initializePage(type, page);
 			
 			node.setTitle(name);
 
@@ -113,6 +106,19 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel
 
 			SitePlugin.get().selectNode(this, node, true);
 		}
+	}
+
+	protected AbstractContainer initializePage(String type, JcrNode page) {
+		AbstractContainer node;
+		if (type.equals(PageSiteNodePlugin.TYPE))
+		{
+			node = PageNode.initialize(page);
+		}
+		else
+		{
+			node = TemplateNode.initialize(page);
+		}
+		return node;
 	}
 
 }

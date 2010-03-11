@@ -46,6 +46,7 @@ import brix.jcr.JcrUtil;
 import brix.jcr.api.JcrSession;
 import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.NodeTreeRenderer;
 import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SiteNodePlugin;
 import brix.plugin.site.SitePlugin;
@@ -311,6 +312,20 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
             super(id, model);
             setLinkType(LinkType.REGULAR);
             getTreeState().expandNode(model.getRoot());
+        }
+        
+        @Override
+        protected Component newNodeComponent(String id, IModel<Object> model) {
+        	JcrTreeNode node = (JcrTreeNode) model.getObject();
+            BrixNode n = node.getNodeModel().getObject();
+            Collection<NodeTreeRenderer> renderers = n.getBrix().getConfig().getRegistry().lookupCollection(NodeTreeRenderer.POINT);
+        	for(NodeTreeRenderer renderer : renderers) {
+        		Component component = renderer.newNodeComponent(id, Tree.this, model);
+        		if (component != null) {
+        			return component;
+        		}
+        	}
+        	return super.newNodeComponent(id, model);
         }
 
         @Override

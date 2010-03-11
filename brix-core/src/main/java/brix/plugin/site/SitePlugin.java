@@ -56,6 +56,15 @@ import brix.markup.MarkupCache;
 import brix.plugin.site.admin.NodeManagerContainerPanel;
 import brix.plugin.site.admin.NodeTreeContainer;
 import brix.plugin.site.admin.convert.ConvertNodeTabFactory;
+import brix.plugin.site.admin.nodetree.AudioNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.CssNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.ImageNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.OfficeDocumentNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.OfficePresentationNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.OfficeSpreadsheetNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.PageNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.TemplateNodeTreeRenderer;
+import brix.plugin.site.admin.nodetree.VideoNodeTreeRenderer;
 import brix.plugin.site.auth.SiteNodeAction;
 import brix.plugin.site.auth.SiteNodeAction.Type;
 import brix.plugin.site.fallback.FallbackNodePlugin;
@@ -75,6 +84,7 @@ import brix.plugin.site.resource.ResourceNodePlugin;
 import brix.plugin.site.webdav.Rule;
 import brix.plugin.site.webdav.RulesNode;
 import brix.plugin.site.webdav.RulesPanel;
+import brix.registry.ExtensionPointRegistry;
 import brix.web.tab.AbstractWorkspaceTab;
 import brix.web.tab.IBrixTab;
 import brix.workspace.JcrException;
@@ -201,8 +211,19 @@ public class SitePlugin implements SessionAwarePlugin
         registerManageNodeTabFactory(new ConvertNodeTabFactory());
 
         // register default editor
-        brix.getConfig().getRegistry().register(MarkupEditorFactory.POINT,
-                new SimpleMarkupEditorFactory());
+        ExtensionPointRegistry registry = brix.getConfig().getRegistry();
+		registry.register(MarkupEditorFactory.POINT, new SimpleMarkupEditorFactory());
+		
+		// register node types for tree renderer
+		registry.register(NodeTreeRenderer.POINT, new PageNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new TemplateNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new CssNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new AudioNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new ImageNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new VideoNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new OfficeDocumentNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new OfficeSpreadsheetNodeTreeRenderer());
+		registry.register(NodeTreeRenderer.POINT, new OfficePresentationNodeTreeRenderer());
     }
 
     public final Brix getBrix()
