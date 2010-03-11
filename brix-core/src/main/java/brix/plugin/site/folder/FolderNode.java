@@ -22,7 +22,6 @@ import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
-import brix.plugin.site.SiteRootNode;
 import brix.web.reference.Reference;
 
 public class FolderNode extends BrixNode
