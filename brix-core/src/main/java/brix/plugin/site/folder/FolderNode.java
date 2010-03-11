@@ -21,6 +21,8 @@ import brix.jcr.JcrNodeWrapperFactory;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SitePlugin;
+import brix.plugin.site.SiteRootNode;
 import brix.web.reference.Reference;
 
 public class FolderNode extends BrixNode
@@ -36,7 +38,16 @@ public class FolderNode extends BrixNode
         @Override
         public boolean canWrap(Brix brix, JcrNode node)
         {
-            return node.isNodeType("nt:folder");
+            if (!node.isNodeType("nt:folder")) {
+            	return false;
+            }
+            
+        	SitePlugin site=SitePlugin.get(brix);
+            if (site==null) {
+            	return false;
+            }
+        	
+            return node.getPath().startsWith(site.getSiteRootPath());
         }
 
         /** {@inheritDoc} */
