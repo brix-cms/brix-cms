@@ -75,7 +75,6 @@ public class ApplicationProperties
         return properties.getProperty("brixdemo.workspaceManagerUrl");
     }
 
-
     /**
      * @return jcr login name
      */
@@ -95,7 +94,6 @@ public class ApplicationProperties
     /**
      * @return jcr default workspace
      */
-
     public String getJcrDefaultWorkspace()
     {
         return properties.getProperty("brixdemo.jcr.defaultWorkspace");
@@ -104,7 +102,6 @@ public class ApplicationProperties
     /**
      * @return jcr {@link Credentials} built from username and password
      */
-
     public Credentials buildSimpleCredentials()
     {
         return new SimpleCredentials(getJcrLogin(), getJcrPassword().toString().toCharArray());
@@ -126,7 +123,9 @@ public class ApplicationProperties
         return Integer.parseInt(properties.getProperty("brixdemo.httpsPort"));
     }
 
-
+    /**
+     * @return default workspace state
+     */
     public String getWorkspaceDefaultState() {
         return properties.getProperty("brixdemo.jcr.defaultWorkspaceState");
     }
