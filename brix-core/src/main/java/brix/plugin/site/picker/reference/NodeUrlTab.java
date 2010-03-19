@@ -25,9 +25,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import brix.plugin.site.picker.node.SiteNodePicker;
+import brix.plugin.site.tree.SiteNodeFilter;
 import brix.web.generic.BrixGenericPanel;
+import brix.web.picker.common.TreeAwareNode;
+import brix.web.picker.node.NodePicker;
 import brix.web.reference.Reference;
 import brix.web.reference.Reference.Type;
+import brix.web.tree.JcrTreeNode;
 
 public abstract class NodeUrlTab extends BrixGenericPanel<Reference>
 {
@@ -73,15 +77,27 @@ public abstract class NodeUrlTab extends BrixGenericPanel<Reference>
 			}
 		});
 
-		add(new SiteNodePicker("nodePicker", getReference().getNodeModel(), getConfiguration().getWorkspaceName(),
-				getConfiguration().getNodeFilter())
+		NodePicker picker = null;
+		if (getConfiguration().getRootNode() != null)
 		{
-			@Override
-			public boolean isVisible()
+			JcrTreeNode rootNode = TreeAwareNode.Util.getTreeNode(getConfiguration().getRootNode().getObject());
+			picker = new NodePicker("nodePicker", getReference().getNodeModel(), rootNode,
+					new SiteNodeFilter(false, null), getConfiguration().getNodeFilter());
+		}
+		else
+		{
+			picker = new SiteNodePicker("nodePicker", getReference().getNodeModel(),
+					getConfiguration().getWorkspaceName(), getConfiguration().getNodeFilter())
 			{
-				return getConfiguration().isAllowNodePicker() && getReference().getType() == Reference.Type.NODE;
-			}
-		});
+				@Override
+				public boolean isVisible()
+				{
+					return getConfiguration().isAllowNodePicker()
+							&& getReference().getType() == Reference.Type.NODE;
+				}
+			};
+		}
+		add(picker);
 
 		add(new UrlPanel("urlPanel", new PropertyModel<String>(getModel(), "url"))
 		{

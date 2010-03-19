@@ -34,9 +34,20 @@ public class ReferenceEditorConfiguration implements Serializable
     private boolean allowQueryParameters = true;
     private boolean displayFiles = true;
     private String workspaceName;
+    private IModel<BrixNode> rootNode;
 
     private NodeFilter nodeFilter;
 
+    public IModel<BrixNode> getRootNode()
+	{
+		return rootNode;
+	}
+    
+    public void setRootNode(IModel<BrixNode> rootNode)
+	{
+		this.rootNode = rootNode;
+	}
+    
     public boolean isAllowNodePicker()
     {
         return allowNodePicker;
