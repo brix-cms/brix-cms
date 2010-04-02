@@ -28,9 +28,9 @@
   </license>
  </licenses>
  <scm>
-  <connection>scm:svn:http://brix-cms.googlecode.com/svn/tags/brix-1.1.0-SNAPSHOT</connection>
-  <developerConnection>scm:svn:https://brix-cms.googlecode.com/svn/tags/brix-1.1.0-SNAPSHOT</developerConnection>
-  <url>http://brix-cms.googlecode.com/svn/tags/brix-1.1.0-SNAPSHOT</url>
+  <connection>scm:svn:http://brix-cms.googlecode.com/svn</connection>
+  <developerConnection>scm:svn:https://brix-cms.googlecode.com/svn</developerConnection>
+  <url>http://brix-cms.googlecode.com/svn</url>
  </scm>
  <properties>
   <wicket.version>1.4.1</wicket.version>
