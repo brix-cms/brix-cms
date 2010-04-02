@@ -433,9 +433,12 @@
   </pluginRepository>
  </pluginRepositories>
  <distributionManagement>
-  <repository>
-   <id>local</id>
-   <url>file:../maven2</url>
-  </repository>
+     <repository>
+         <uniqueVersion>false</uniqueVersion>
+         <id>brix-plugins-svn-repo</id>
+         <name>Brix Subversion Maven2 Repository</name>
+         <url>scm:svn:https://brix-cms-plugins.googlecode.com/svn/maven2</url>
+         <layout>default</layout>
+     </repository>
  </distributionManagement>
 </project>
