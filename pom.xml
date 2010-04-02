@@ -437,7 +437,7 @@
          <uniqueVersion>false</uniqueVersion>
          <id>brix-svn-repo</id>
          <name>Brix Subversion Maven2 Repository</name>
-         <url>dav:https://brix-cms.googlecode.com/svn/maven2</url>
+         <url>https://brix-cms.googlecode.com/svn/maven2</url>
          <layout>default</layout>
      </repository>
  </distributionManagement>
