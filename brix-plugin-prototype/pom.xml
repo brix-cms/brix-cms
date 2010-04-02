@@ -2,19 +2,19 @@
  <parent>
   <artifactId>brix</artifactId>
   <groupId>brix</groupId>
-  <version>1.2.0-SNAPSHOT</version>
+  <version>1.2.0</version>
  </parent>
  <modelVersion>4.0.0</modelVersion>
  <groupId>brix</groupId>
  <artifactId>brix-plugin-prototype</artifactId>
  <name>Brix Site Prototypes Plugin</name>
- <version>1.2.0-SNAPSHOT</version>
+ <version>1.2.0</version>
  <url>http://maven.apache.org</url>
  <dependencies>
   <dependency>
    <groupId>brix</groupId>
    <artifactId>brix-core</artifactId>
-   <version>1.2.0-SNAPSHOT</version>
+   <version>1.2.0</version>
   </dependency>
   <dependency>
    <groupId>junit</groupId>
