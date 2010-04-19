@@ -126,7 +126,14 @@ public class MenuRenderer extends AbstractMenuRenderer
 
 		if (anyChildren(entry))
 		{
-			response.write("<ul>");
+            response.write("<ul");
+            if (!Strings.isEmpty(adapter.getInnerUlCssClass()))
+            {
+                response.write(" class=\"");
+                response.write(adapter.getInnerUlCssClass());
+                response.write("\"");
+            }
+            response.write(">");
             List<ChildEntry> childEntryList = entry.getChildren();
             ChildEntry firstEntry = childEntryList.get(0);
             ChildEntry lastEntry = childEntryList.get(childEntryList.size() - 1);

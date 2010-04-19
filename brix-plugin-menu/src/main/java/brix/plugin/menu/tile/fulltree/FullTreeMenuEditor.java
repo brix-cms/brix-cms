@@ -32,6 +32,7 @@ class FullTreeMenuEditor extends TileEditorPanel
 	private String lastLiCssClass;
 	private Boolean selectAllParentLi;
 	private String outerUlCssClass;
+	private String innerUlCssClass;
 
 	public FullTreeMenuEditor(String id, IModel<BrixNode> tileParent)
 	{
@@ -49,6 +50,8 @@ class FullTreeMenuEditor extends TileEditorPanel
                 "lastLiCssClass")));
 		form.add(new TextField<String>("outerUlCssClass", new PropertyModel<String>(this,
 				"outerUlCssClass")));
+		form.add(new TextField<String>("innerUlCssClass", new PropertyModel<String>(this,
+				"innerUlCssClass")));
 	}
 
 	@Override
@@ -60,6 +63,7 @@ class FullTreeMenuEditor extends TileEditorPanel
 		firstLiCssClass = adapter.getFirstLiCssClass();
 		lastLiCssClass = adapter.getLastLiCssClass();
 		outerUlCssClass = adapter.getOuterUlCssClass();
+		innerUlCssClass = adapter.getInnerUlCssClass();
 		selectAllParentLi = adapter.getSelectAllParentLi();
 	}
 
@@ -72,6 +76,7 @@ class FullTreeMenuEditor extends TileEditorPanel
 		adapter.setFirstLiCssClass(firstLiCssClass);
 		adapter.setLastLiCssClass(lastLiCssClass);
 		adapter.setOuterUlCssClass(outerUlCssClass);
+		adapter.setInnerUlCssClass(innerUlCssClass);
         adapter.setSelectAllParentLi(selectAllParentLi);
 	}
 

@@ -25,6 +25,7 @@ class NodeAdapter extends AbstractNodeAdapter
 	private static final String P_LAST_LI_CSS_CLASS = "lastLiCssClass";
 	private static final String P_SELECT_ALL_PARENT_LI = "selectAllParentLi";
 	private static final String P_OUTER_UL_CSS_CLASS = "outerUlCssClass";
+	private static final String P_INNER_UL_CSS_CLASS = "innerUlCssClass";
 
 
 	public NodeAdapter(BrixNode node)
@@ -90,6 +91,16 @@ class NodeAdapter extends AbstractNodeAdapter
 	public void setOuterUlCssClass(String cssClass)
 	{
 		setProperty(P_OUTER_UL_CSS_CLASS, cssClass);
+	}
+
+	public String getInnerUlCssClass()
+	{
+		return getProperty(P_INNER_UL_CSS_CLASS, (String)null);
+	}
+
+	public void setInnerUlCssClass(String cssClass)
+	{
+		setProperty(P_INNER_UL_CSS_CLASS, cssClass);
 	}
 
 }
