@@ -22,11 +22,15 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.request.WebRequestCodingStrategy;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
+import org.apache.wicket.request.target.component.IBookmarkablePageRequestTarget;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.apache.wicket.util.string.UrlUtils;
 
 import brix.Brix;
+import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.page.PageRenderingPage;
 import brix.web.nodepage.BrixNodeWebPage;
+import brix.web.nodepage.BrixPageParameters;
 
 public class BrixRequestCodingStrategy extends WebRequestCodingStrategy
 {
@@ -77,5 +81,41 @@ public class BrixRequestCodingStrategy extends WebRequestCodingStrategy
         {
             return super.rewriteStaticRelativeUrl(url);
         }
+    }
+
+    @Override
+    protected CharSequence encode(RequestCycle rc, IBookmarkablePageRequestTarget target)
+    {
+        boolean selfReferentialBookmarkableUrl = false;
+
+        if (PageRenderingPage.class.equals(target.getPageClass()))
+        {
+            // target of the url is brix's internal page rendering page, check if we are in a brix
+            // page right now...
+            IRequestTarget crt = rc.getRequestTarget();
+            if (crt instanceof IPageRequestTarget)
+            {
+                IPageRequestTarget cprt = (IPageRequestTarget)crt;
+                if (cprt.getPage() instanceof PageRenderingPage)
+                {
+                    // we are currently on the page rendering page
+                    selfReferentialBookmarkableUrl = true;
+                }
+            }
+        }
+
+        if (!selfReferentialBookmarkableUrl)
+        {
+            return super.encode(rc, target);
+        }
+
+        // we are on a self referential bookmarkable url, rewrite it
+
+        PageRenderingPage currentPage = (PageRenderingPage)((IPageRequestTarget)rc
+                .getRequestTarget()).getPage();
+
+        BrixPageParameters params = new BrixPageParameters(target.getPageParameters());
+
+        return params.urlFor(currentPage);
     }
 }

@@ -30,7 +30,7 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
     {
         super(nodeModel);
     }
-    
+
     public BrixNodeWebPage(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters)
     {
         super(nodeModel);
@@ -61,11 +61,11 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
         }
         return pageParameters;
     }
-    
+
     @SuppressWarnings("unchecked")
-	public IModel<BrixNode> getModel()
+    public IModel<BrixNode> getModel()
     {
-    	return (IModel<BrixNode>) getDefaultModel();
+        return (IModel<BrixNode>)getDefaultModel();
     }
 
     @Override
@@ -81,18 +81,25 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
         return false;
     }
 
-	public BrixNode getModelObject()
-	{
-		return (BrixNode) getDefaultModelObject();
-	}
+    public BrixNode getModelObject()
+    {
+        return (BrixNode)getDefaultModelObject();
+    }
 
-	public void setModel(IModel<BrixNode> model)
-	{
-		setDefaultModel(model);
-	}
+    public void setModel(IModel<BrixNode> model)
+    {
+        setDefaultModel(model);
+    }
 
-	public void setModelObject(BrixNode object)
-	{
-		setDefaultModelObject(object);
-	}
+    public void setModelObject(BrixNode object)
+    {
+        setDefaultModelObject(object);
+    }
+
+    public BrixNode getPageNode()
+    {
+        return getModelObject();
+    }
+
+
 }

@@ -24,6 +24,7 @@ import java.util.TreeSet;
 
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
@@ -35,11 +36,22 @@ import brix.jcr.wrapper.BrixNode;
 
 public class BrixPageParameters implements Serializable
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public BrixPageParameters()
+    public BrixPageParameters()
     {
 
+    }
+
+    public BrixPageParameters(PageParameters params)
+    {
+        if (params != null)
+        {
+            for (String name : params.keySet())
+            {
+                addQueryParam(name, params.get(name));
+            }
+        }
     }
 
     public BrixPageParameters(BrixPageParameters copy)
@@ -52,33 +64,34 @@ public class BrixPageParameters implements Serializable
             this.indexedParameters = new ArrayList<String>(copy.indexedParameters);
 
         if (copy.queryStringParameters != null)
-            this.queryStringParameters = new ArrayList<QueryStringParameter>(copy.queryStringParameters);
+            this.queryStringParameters = new ArrayList<QueryStringParameter>(
+                    copy.queryStringParameters);
     }
 
     private List<String> indexedParameters = null;
 
     public static class QueryStringParameter implements Serializable
     {
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		private final String key;
+        private final String key;
         private final String value;
-        
+
         public QueryStringParameter(String key, String value)
-		{
-			this.key = key;
-			this.value = value;
-		}
-        
+        {
+            this.key = key;
+            this.value = value;
+        }
+
         public String getKey()
-		{
-			return key;
-		}
-        
+        {
+            return key;
+        }
+
         public String getValue()
-		{
-			return value;
-		}
+        {
+            return value;
+        }
     };
 
     private List<QueryStringParameter> queryStringParameters = null;
@@ -125,17 +138,18 @@ public class BrixPageParameters implements Serializable
     }
 
     public List<QueryStringParameter> getQueryStringParams()
-	{
-    	if (queryStringParameters == null)
-    	{
-    		return Collections.emptyList();
-    	}
-    	else
-    	{
-    		return Collections.unmodifiableList(new ArrayList<QueryStringParameter>(queryStringParameters));
-    	}
-	}
-    
+    {
+        if (queryStringParameters == null)
+        {
+            return Collections.emptyList();
+        }
+        else
+        {
+            return Collections.unmodifiableList(new ArrayList<QueryStringParameter>(
+                    queryStringParameters));
+        }
+    }
+
     public Set<String> getQueryParamKeys()
     {
         if (queryStringParameters == null || queryStringParameters.isEmpty())
