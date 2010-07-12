@@ -57,6 +57,10 @@ public abstract class BrixMarkupNodePanel extends BrixGenericPanel<BrixNode> imp
 		super.onBeforeRender();
 	}
 
+	public MarkupHelper getMarkupHelper() {
+		return markupHelper;
+	}
+
 	private MarkupHelper markupHelper;
 
 	@Override

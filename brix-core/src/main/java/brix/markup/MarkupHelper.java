@@ -46,11 +46,11 @@ public class MarkupHelper implements Serializable
 	private final IGenericComponent<BrixNode> component;
 	
 	/**
-	 * Each tag component idis prefixed by this.
+	 * Each tag component ids prefixed by this.
 	 */
 	private final static String COMPONENT_PREFIX = "brix-";
 
-	private String getComponentID(ComponentTag tag)
+	public String getComponentID(ComponentTag tag)
 	{
 		String uid = tag.getUniqueTagId();
 		return COMPONENT_PREFIX + (uid != null ? uid.toString() : "");
