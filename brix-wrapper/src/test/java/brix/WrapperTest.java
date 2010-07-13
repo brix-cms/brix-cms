@@ -47,6 +47,8 @@ public class WrapperTest
 	private Repository repo;
 	private List<JcrSession> sessions;
 
+	private File home;
+
 	private static void delete(File file)
 	{
 		if (!file.exists())
@@ -70,10 +72,10 @@ public class WrapperTest
 	public void setupManager() throws IOException, RepositoryException
 	{
 		String temp = System.getProperty("java.io.tmpdir");
-		File home = new File(temp, getClass().getName());
-
+		home = new File(temp, getClass().getName());
 		delete(home);
-
+		home.deleteOnExit();
+		
 		if (!home.mkdirs())
 		{
 			throw new RuntimeException("Could not create directory: " + home.getAbsolutePath());
@@ -108,6 +110,8 @@ public class WrapperTest
 			}
 		}
 		((JackrabbitRepository)repo).shutdown();
+		
+		delete(home);
 	}
 
 	@Test
