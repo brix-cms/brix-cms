@@ -50,6 +50,8 @@ public class WorkspaceManagerTest
     private Repository repo;
     private WorkspaceManager manager;
 
+	private File home;
+
     private static void delete(File file)
     {
         if (!file.exists())
@@ -73,10 +75,10 @@ public class WorkspaceManagerTest
     public void setupManager() throws IOException, RepositoryException
     {
         String temp = System.getProperty("java.io.tmpdir");
-        File home = new File(temp, getClass().getName());
-
+        home = new File(temp, getClass().getName());
         delete(home);
-
+        home.deleteOnExit();
+        
         if (!home.mkdirs())
         {
             throw new RuntimeException("Could not create directory: " + home.getAbsolutePath());
@@ -102,6 +104,8 @@ public class WorkspaceManagerTest
     public void destroyManager()
     {
         ((JackrabbitRepository)repo).shutdown();
+        
+        delete(home);
     }
 
     @Test
