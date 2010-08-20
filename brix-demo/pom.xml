@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
  <parent>
   <artifactId>brix</artifactId>
   <groupId>brix</groupId>
@@ -10,16 +11,35 @@
  <packaging>war</packaging>
  <name>Brix Demo WebApp</name>
  <description>A simple demo WebApp that demonstrates Brix features and how to integrate it into a
-    Wicket Web Application</description>
+  Wicket Web Application
+ </description>
  <version>1.2.2-SNAPSHOT</version>
  <licenses>
   <license>
    <name>The Apache Software License, Version 2.0</name>
    <url>http://www.apache.org/licenses/LICENSE-2.0.txt
-      </url>
+   </url>
    <distribution>repo</distribution>
   </license>
  </licenses>
+ <profiles>
+  <profile>
+   <id>virgo</id>
+   <build>
+    <plugins>
+     <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-war-plugin</artifactId>
+      <configuration>
+       <archive>
+        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+       </archive>
+      </configuration>
+     </plugin>
+    </plugins>
+   </build>
+  </profile>
+ </profiles>
  <build>
   <finalName>brixdemo</finalName>
   <resources>
@@ -62,6 +82,28 @@
     <artifactId>maven-eclipse-plugin</artifactId>
     <configuration>
      <downloadSources>true</downloadSources>
+    </configuration>
+   </plugin>
+   <plugin>
+    <groupId>org.apache.felix</groupId>
+    <artifactId>maven-bundle-plugin</artifactId>
+    <version>2.1.0</version>
+    <extensions>true</extensions>
+    <executions>
+     <execution>
+      <id>bundle-manifest</id>
+      <phase>process-classes</phase>
+      <goals>
+       <goal>manifest</goal>
+      </goals>
+     </execution>
+    </executions>
+    <configuration>
+     <supportedProjectTypes>
+      <supportedProjectType>war</supportedProjectType>
+     </supportedProjectTypes>
+     <instructions>
+     </instructions>
     </configuration>
    </plugin>
   </plugins>
@@ -137,9 +179,9 @@
    <artifactId>jetty-management</artifactId>
    <scope>provided</scope>
   </dependency>
-<!--+
-			    | LOGGING
-			    +-->
+  <!--+
+       | LOGGING
+       +-->
   <dependency>
    <groupId>org.slf4j</groupId>
    <artifactId>slf4j-api</artifactId>

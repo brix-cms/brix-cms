@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
  <parent>
   <artifactId>brix</artifactId>
   <groupId>brix</groupId>
@@ -9,8 +10,10 @@
  <artifactId>brix-wrapper</artifactId>
  <name>Brix JCR API Wrapper</name>
  <description>A thin wrapper around the JCR API to remove the annoying
-		checked exceptions</description>
+  checked exceptions
+ </description>
  <version>1.2.2-SNAPSHOT</version>
+ <packaging>bundle</packaging>
  <url>http://maven.apache.org</url>
  <dependencies>
   <dependency>
@@ -21,7 +24,7 @@
   <dependency>
    <groupId>org.slf4j</groupId>
    <artifactId>slf4j-log4j12</artifactId>
-    <scope>test</scope>
+   <scope>test</scope>
   </dependency>
   <dependency>
    <groupId>javax.jcr</groupId>
@@ -80,4 +83,26 @@
    </exclusions>
   </dependency>
  </dependencies>
+ <build>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.felix</groupId>
+    <artifactId>maven-bundle-plugin</artifactId>
+    <version>2.1.0</version>
+    <extensions>true</extensions>
+    <configuration>
+     <instructions>
+      <Export-Package>
+       brix.jcr.base, brix.jcr.api,brix.jcr.exception,brix.jcr.api.wrapper,brix.jcr.base.event,brix.jcr.base.action
+      </Export-Package>
+      <Import-Package>
+       org.osgi*, javax.jcr, javax.jcr.lock, javax.jcr.nodetype, javax.jcr.observation, javax.jcr.query, javax.jcr.query.qom, javax.jcr.retention, javax.jcr.security, javax.jcr.version, org.xml.sax
+      </Import-Package>
+      <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
+      <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
+     </instructions>
+    </configuration>
+   </plugin>
+  </plugins>
+ </build>
 </project>
