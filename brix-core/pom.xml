@@ -3,11 +3,11 @@
  <parent>
   <groupId>brix</groupId>
   <artifactId>brix</artifactId>
-  <version>1.2.2</version>
+  <version>1.2.3-SNAPSHOT</version>
  </parent>
  <artifactId>brix-core</artifactId>
  <packaging>bundle</packaging>
- <version>1.2.2</version>
+ <version>1.2.3-SNAPSHOT</version>
 <!-- TODO project name  -->
  <name>Brix Core</name>
  <description>Brix Core module provides the bulk of CMS
