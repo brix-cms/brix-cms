@@ -111,18 +111,32 @@ public class MenuRenderer extends AbstractMenuRenderer
 			response.write("\"");
 		}
 		response.write(">");
-		response.write("<a");
-		if (cssClasses.length() > 0)
-		{
-			response.write(" class=\"");
-			response.write(cssClasses);
-			response.write("\"");
-		}
-		response.write(" href=\"");
-		response.write(getUrl(entry));
-		response.write("\">");
-		response.write(entry.getTitle());
-		response.write("</a>");
+
+        //Rendering for REFERENCE
+        if(entry.getMenuType() == ChildEntry.MenuType.REFERENCE) {
+            response.write("<a");
+            if (cssClasses.length() > 0)
+            {
+                response.write(" class=\"");
+                response.write(cssClasses);
+                response.write("\"");
+            }
+            response.write(" href=\"");
+            response.write(getUrl(entry));
+            response.write("\">");
+            response.write(entry.getTitle());
+            response.write("</a>");
+        }
+
+        //Rendering for CODE
+        else if(entry.getMenuType() == ChildEntry.MenuType.CODE) {
+            response.write(entry.getLabelOrCode());
+        }
+        //Rendering for LABEL
+        else if(entry.getMenuType() == ChildEntry.MenuType.LABEL) {
+            response.write(Strings.escapeMarkup(entry.getLabelOrCode(), false, true));
+        }
+
 
 		if (anyChildren(entry))
 		{

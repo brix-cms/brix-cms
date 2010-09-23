@@ -54,7 +54,7 @@ public class Menu implements IDetachable
                 entry.detach();
             }
         }
-    };
+    }
 
     public static class RootEntry extends Entry
     {
@@ -68,22 +68,22 @@ public class Menu implements IDetachable
         {
             return "Menu Root";
         }
-        
+
         public String getTitle()
         {
         	return "Menu Root";
         }
-        
+
         public Reference getReference()
         {
         	return null;
         }
-        
+
         public String getCssClass()
         {
         	return null;
         }
-    };
+    }
 
     public static class ChildEntry extends Entry
     {
@@ -93,8 +93,28 @@ public class Menu implements IDetachable
             super(parent);
         }
 
+
+
+        public static enum MenuType {
+            REFERENCE, LABEL, CODE
+        }
+
+        private MenuType menuType;
+
+        public MenuType getMenuType() {
+            if(menuType == null) {
+                menuType = MenuType.REFERENCE;
+            }
+        return menuType;
+        }
+
+        public void setMenuType(MenuType menuType) {
+            this.menuType = menuType;
+        }
+
         private String title;
         private Reference reference;
+        private String labelOrCode;
         private String cssClass;
 
         public String getTitle()
@@ -115,6 +135,14 @@ public class Menu implements IDetachable
         public void setReference(Reference reference)
         {
             this.reference = reference;
+        }
+
+        public String getLabelOrCode() {
+            return labelOrCode;
+        }
+
+        public void setLabelOrCode(String labelOrCode) {
+            this.labelOrCode = labelOrCode;
         }
 
         public String getCssClass()
@@ -175,6 +203,8 @@ public class Menu implements IDetachable
             ChildEntry childEntry = (ChildEntry)entry;
             node.setProperty("title", childEntry.getTitle());
             node.setProperty("cssClass", childEntry.getCssClass());
+            node.setProperty("menuType", childEntry.getMenuType().toString());
+            node.setProperty("labelOrCode", childEntry.getLabelOrCode());
             if (childEntry.getReference() != null)
             {
                 childEntry.getReference().save(node, "reference");
@@ -216,10 +246,20 @@ public class Menu implements IDetachable
         {
             entry.setTitle(node.getProperty("title").getString());
         }
+
         entry.setReference(Reference.load(node, "reference"));
+
         if (node.hasProperty("cssClass"))
         {
             entry.setCssClass(node.getProperty("cssClass").getString());
+        }
+
+        if (node.hasProperty("labelOrCode")) {
+            entry.setLabelOrCode(node.getProperty("labelOrCode").getString());
+        }
+
+        if(node.hasProperty("menuType") && ChildEntry.MenuType.valueOf(node.getProperty("menuType").getString()) != null) {
+            entry.setMenuType(ChildEntry.MenuType.valueOf(node.getProperty("menuType").getString()));
         }
     }
 
