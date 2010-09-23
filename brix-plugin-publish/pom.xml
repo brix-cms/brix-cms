@@ -1,22 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
  <parent>
   <artifactId>brix</artifactId>
   <groupId>brix</groupId>
-  <version>1.2.2-SNAPSHOT</version>
+  <version>1.2.2</version>
  </parent>
  <modelVersion>4.0.0</modelVersion>
  <groupId>brix</groupId>
  <artifactId>brix-plugin-publish</artifactId>
  <name>Brix Site Publishing Workflow Plugin</name>
- <version>1.2.2-SNAPSHOT</version>
+ <version>1.2.2</version>
  <packaging>bundle</packaging>
  <url>http://maven.apache.org</url>
  <dependencies>
   <dependency>
    <groupId>brix</groupId>
    <artifactId>brix-core</artifactId>
-   <version>1.2.2-SNAPSHOT</version>
+   <version>1.2.2</version>
   </dependency>
   <dependency>
    <groupId>junit</groupId>
@@ -34,7 +33,7 @@
     <extensions>true</extensions>
     <configuration>
      <instructions>
-      <Export-Package/>
+      <Export-Package />
       <Import-Package>
        org.osgi*,brix, brix.auth, brix.jcr.api, brix.plugin.site, brix.web.generic, brix.web.tab, brix.workspace, org.apache.wicket, org.apache.wicket.markup.html.link, org.apache.wicket.markup.html.panel, org.apache.wicket.model
       </Import-Package>
