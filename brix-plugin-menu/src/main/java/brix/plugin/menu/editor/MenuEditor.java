@@ -17,14 +17,13 @@ package brix.plugin.menu.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.Component;
+import brix.plugin.menu.editor.cell.SwitcherColumn;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.tree.AbstractTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 
 import brix.plugin.menu.ManageMenuPanel;
@@ -32,11 +31,9 @@ import brix.plugin.menu.Menu;
 import brix.plugin.menu.Menu.ChildEntry;
 import brix.plugin.site.picker.reference.ReferenceEditorConfiguration;
 import brix.web.generic.BrixGenericPanel;
-import brix.web.reference.Reference;
 
 import com.inmethod.grid.IGridColumn;
 import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.AbstractColumn;
 import com.inmethod.grid.column.editable.EditablePropertyColumn;
 import com.inmethod.grid.column.editable.EditablePropertyTreeColumn;
 import com.inmethod.grid.column.editable.SubmitCancelColumn;
@@ -106,33 +103,14 @@ public class MenuEditor extends BrixGenericPanel<Menu>
 				return false;
 			}
 		}.setInitialSize(200));
-		columns.add(new AbstractColumn("referenceEditor", new ResourceModel("reference"))
-		{
-			@Override
-			public Component newCell(WebMarkupContainer parent, String componentId, final IModel rowModel)
-			{
-				IModel<Reference> model = new PropertyModel<Reference>(rowModel, "entry.reference");
 
-				return new ReferenceColumnPanel(componentId, model)
-				{
-					@Override
-					public ReferenceEditorConfiguration getConfiguration()
-					{
-						return conf;
-					}
+        columns.add(new SwitcherColumn("referenceEditor", new ResourceModel("referenceLabelCode") ,conf).setInitialSize(400));
 
-					@Override
-					protected boolean isEditing()
-					{
-						return getGrid().isItemEdited(rowModel);
-					}
-				};
-			}
-		}.setInitialSize(300));
 		columns.add(new SubmitCancelColumn("submitCancel2", new ResourceModel("edit")));
 
 		return columns;
 	};
+
 
 	@SuppressWarnings("unchecked")
 	private void init()

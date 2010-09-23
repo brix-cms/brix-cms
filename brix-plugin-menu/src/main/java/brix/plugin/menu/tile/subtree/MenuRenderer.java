@@ -155,24 +155,37 @@ class MenuRenderer extends AbstractMenuRenderer
 
 			response.write(">");
 
-			final String url = getUrl(entry);
 
-			response.write("<a");
-			if (!Strings.isEmpty(anchorCssClass))
-			{
-				response.write(" class=\"");
-				response.write(anchorCssClass);
-				response.write("\"");
-			}
-			response.write(" href=\"");
-			response.write(url);
-			response.write("\"><span>");
+            //Rendering for REFERENCE
+            if(entry.getMenuType() == ChildEntry.MenuType.REFERENCE) {
+                response.write("<a");
+                final String url = getUrl(entry);
 
-			// TODO. escape or not (probably a property would be nice?
+                response.write("<a");
+                if (!Strings.isEmpty(anchorCssClass))
+                {
+                    response.write(" class=\"");
+                    response.write(anchorCssClass);
+                    response.write("\"");
+                }
+                response.write(" href=\"");
+                response.write(url);
+                response.write("\"><span>");
+                
+                // TODO. escape or not (probably a property would be nice?
+                response.write(entry.getTitle());
+                response.write("</span></a>");
+            }
 
-			response.write(entry.getTitle());
+            //Rendering for CODE
+            else if(entry.getMenuType() == ChildEntry.MenuType.CODE) {
+                response.write(entry.getLabelOrCode());
+            }
+            //Rendering for LABEL
+            else if(entry.getMenuType() == ChildEntry.MenuType.LABEL) {
+                response.write(Strings.escapeMarkup(entry.getLabelOrCode(), false, true));
+            }
 
-			response.write("</span></a>");
 		}
 
 		// only decrement skip levels for child if current is begger than 0
