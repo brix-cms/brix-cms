@@ -37,7 +37,7 @@
        brix.plugin.menu
       </Export-Package>
       <Import-Package>
-       org.osgi*,brix, brix.auth, brix.config, brix.jcr, brix.jcr.api, brix.jcr.exception, brix.jcr.wrapper, brix.plugin.site, brix.plugin.site.page.tile, brix.plugin.site.page.tile.admin, brix.plugin.site.picker.reference, brix.registry, brix.web.generic, brix.web.nodepage, brix.web.picker.common, brix.web.reference, brix.web.tab, brix.web.tree, brix.web.util, brix.workspace, com.inmethod.grid, com.inmethod.grid.column, com.inmethod.grid.column.editable, com.inmethod.grid.common, com.inmethod.grid.treegrid, javax.jcr, javax.swing.tree, org.apache.wicket, org.apache.wicket.ajax, org.apache.wicket.ajax.markup.html, org.apache.wicket.markup, org.apache.wicket.markup.html, org.apache.wicket.markup.html.basic, org.apache.wicket.markup.html.form, org.apache.wicket.markup.html.link, org.apache.wicket.markup.html.list, org.apache.wicket.markup.html.panel, org.apache.wicket.markup.html.tree, org.apache.wicket.model, org.apache.wicket.util.lang, org.apache.wicket.util.string
+       org.osgi*, brix.*, com.inmethod.grid.*, javax.jcr, javax.swing.tree, org.apache.wicket.*
       </Import-Package>
       <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
       <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
