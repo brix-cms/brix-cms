@@ -24,26 +24,4 @@
    <scope>test</scope>
   </dependency>
  </dependencies>
- <build>
-  <plugins>
-   <plugin>
-    <groupId>org.apache.felix</groupId>
-    <artifactId>maven-bundle-plugin</artifactId>
-    <version>2.1.0</version>
-    <extensions>true</extensions>
-    <configuration>
-     <instructions>
-      <Export-Package>
-       brix.plugin.snapshot
-      </Export-Package>
-      <Import-Package>
-       org.osgi*,brix, brix.auth, brix.exception, brix.jcr.api, brix.plugin.site, brix.web.generic, brix.web.tab, brix.workspace, org.apache.wicket, org.apache.wicket.behavior, org.apache.wicket.markup.html.basic, org.apache.wicket.markup.html.form, org.apache.wicket.markup.html.form.upload, org.apache.wicket.markup.html.link, org.apache.wicket.markup.html.list, org.apache.wicket.markup.html.panel, org.apache.wicket.model, org.apache.wicket.protocol.http
-      </Import-Package>
-      <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
-      <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
-     </instructions>
-    </configuration>
-   </plugin>
-  </plugins>
- </build>
 </project>

@@ -118,24 +118,6 @@
     </configuration>
     <version>2.0.2</version>
    </plugin>
-   <plugin>
-    <groupId>org.apache.felix</groupId>
-    <artifactId>maven-bundle-plugin</artifactId>
-    <version>2.1.0</version>
-    <extensions>true</extensions>
-    <configuration>
-     <instructions>
-      <Export-Package>
-       brix.workspace.rmi,brix.workspace
-      </Export-Package>
-      <Import-Package>
-       org.osgi*, javax.jcr, javax.jcr.lock, javax.jcr.observation, org.slf4j
-      </Import-Package>
-      <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
-      <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
-     </instructions>
-    </configuration>
-   </plugin>
   </plugins>
  </build>
 </project>

@@ -21,7 +21,6 @@ import java.util.Calendar;
 import javax.jcr.Binary;
 import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
-import javax.jcr.PropertyIterator;
 import javax.jcr.Value;
 import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.NodeDefinition;

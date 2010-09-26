@@ -15,7 +15,6 @@
 package brix.jcr.api.wrapper;
 
 import javax.jcr.Node;
-import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.qom.QueryObjectModelFactory;
 
