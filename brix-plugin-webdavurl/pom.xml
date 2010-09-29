@@ -1,33 +1,48 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- <parent>
-  <artifactId>brix</artifactId>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <artifactId>brix</artifactId>
+    <groupId>brix</groupId>
+    <version>1.2.3-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
   <groupId>brix</groupId>
+  <artifactId>brix-plugin-webdavurl</artifactId>
+
+  <name>Brix WebDav Url Plugin</name>
   <version>1.2.3-SNAPSHOT</version>
- </parent>
- <modelVersion>4.0.0</modelVersion>
- <groupId>brix</groupId>
- <artifactId>brix-plugin-webdavurl</artifactId>
- <name>Brix WebDav Url Plugin</name>
- <version>1.2.3-SNAPSHOT</version>
- <packaging>bundle</packaging>
- <url>http://maven.apache.org</url>
- <dependencies>
-  <dependency>
-   <groupId>brix</groupId>
-   <artifactId>brix-core</artifactId>
-   <version>1.2.3-SNAPSHOT</version>
-  </dependency>
-  <dependency>
-   <groupId>javax.servlet</groupId>
-   <artifactId>servlet-api</artifactId>
-   <version>2.3</version>
-   <scope>provided</scope>
-  </dependency>
-  <dependency>
-   <groupId>junit</groupId>
-   <artifactId>junit</artifactId>
-   <version>3.8.1</version>
-   <scope>test</scope>
-  </dependency>
- </dependencies>
+
+  <packaging>bundle</packaging>
+
+  <url>http://maven.apache.org</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>brix</groupId>
+      <artifactId>brix-core</artifactId>
+      <version>1.2.3-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.3</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.inmethod</groupId>
+      <artifactId>grid</artifactId>
+      <version>1.0.0-b4</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
 </project>

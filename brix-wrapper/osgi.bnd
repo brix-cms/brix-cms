@@ -1,1 +1,18 @@
+Import-Package: \
+ !EDU.oswego.*,\
+ !org.apache.commons.*,\
+ !org.apache.jackrabbit.test.*,\
+ *
 
+Export-Package: brix.jcr.*;version="${pom.version}"
+
+Embed-Dependency:\
+ jcr;groupId=javax.jcr;inline=false,\
+ jackrabbit-core;groupId=org.apache.jackrabbit;inline=false,\
+ jackrabbit-jcr-server;groupId=org.apache.jackrabbit;inline=false,\
+ jackrabbit-spi;groupId=org.apache.jackrabbit;inline=false,\
+ jackrabbit-spi-commons;groupId=org.apache.jackrabbit;inline=false,\
+ jackrabbit-webdav;groupId=org.apache.jackrabbit;inline=false
+
+ -exportcontents: \
+ org.apache.jackrabbit.*;version=2.0.0;provider="brix"

@@ -1,1 +1,6 @@
+Import-Package: \
+ *
 
+Private-Package: com.inmethod.*
+
+Embed-Dependency: grid;groupId=com.inmethod;inline=false

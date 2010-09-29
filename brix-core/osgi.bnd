@@ -1,1 +1,11 @@
-
+Import-Package: \
+ !EDU.oswego.*,\
+ !javax.portlet.*,\
+ !net.sf.cglib.*,\
+ !org.apache.commons.*,\
+ !org.apache.jackrabbit.test.*,\
+ !org.dom4j.*,\
+ !org.jdom.*,\
+ !org.slf4j.impl.*,\
+ !sun.*,\
+ *
