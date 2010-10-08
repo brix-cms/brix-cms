@@ -17,6 +17,8 @@
  */
 package brix.web;
 
+import brix.jcr.exception.JcrException;
+import org.apache.jackrabbit.spi.commons.conversion.MalformedPathException;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
@@ -26,9 +28,12 @@ import brix.Path;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
 {
+    Logger logger = LoggerFactory.getLogger(BrixUrlCodingStrategy.class);
 
     /**
      * request cycle processor
@@ -96,25 +101,37 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
         Path path = decode(new Path(pathStr, false));
 
         IRequestTarget target = null;
-
-        while (target == null)
-        {
-            final BrixNode node = this.brixRequestCycleProcessor.getNodeForUriPath(path);
-            if (node != null)
+        try {
+            while (target == null)
             {
-                target = getSwitchTarget(node);
-                if (target == null)
+                final BrixNode node = this.brixRequestCycleProcessor.getNodeForUriPath(path);
+                if (node != null)
                 {
-                    target = SitePlugin.get().getNodePluginForNode(node).respond(
-                            new BrixNodeModel(node), requestParameters);
+                    target = getSwitchTarget(node);
+                    if (target == null)
+                    {
+                        target = SitePlugin.get().getNodePluginForNode(node).respond(
+                                new BrixNodeModel(node), requestParameters);
+                    }
                 }
+                if (path.isRoot() || path.toString().equals("."))
+                {
+                    break;
+                }
+                path = path.parent();
             }
-            if (path.isRoot() || path.toString().equals("."))
-            {
-                break;
+        } catch (JcrException e) {
+            Throwable iter = e;
+            while (iter.getCause() != null) {
+                iter = iter.getCause();
             }
-            path = path.parent();
+            if (iter instanceof MalformedPathException) {
+                logger.info("JcrException caught due to incorrect url",e);
+            } else {
+                throw e;
+            }
         }
+
         return target;
     }
 

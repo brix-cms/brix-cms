@@ -111,11 +111,7 @@ public class BrixPageParameters implements Serializable
             indexedParameters.add(null);
         }
 
-        String value = object != null ? object.toString() : null;
-        if (value!=null)
-        {
-        	value=value.replace("/","%2f");
-        }
+        String value = object != null ? object.toString() : null;        
 		indexedParameters.set(index, value);
     }
 
@@ -125,11 +121,7 @@ public class BrixPageParameters implements Serializable
         {
             if (index >= 0 && index < indexedParameters.size())
             {
-                String value = indexedParameters.get(index);
-				if (value!=null)
-				{
-					value=value.replaceAll("%2f", "/");
-				}
+                String value = indexedParameters.get(index);				
                 return StringValue.valueOf(value);
             }
         }

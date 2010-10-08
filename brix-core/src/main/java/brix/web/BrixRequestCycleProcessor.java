@@ -46,7 +46,7 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor
 
     public BrixRequestCycleProcessor(Brix brix)
     {
-        this(brix, null);
+        this(brix, new HttpsConfig());
     }
 
     public BrixRequestCycleProcessor(Brix brix, HttpsConfig config)

@@ -158,7 +158,6 @@ class MenuRenderer extends AbstractMenuRenderer
 
             //Rendering for REFERENCE
             if(entry.getMenuType() == ChildEntry.MenuType.REFERENCE) {
-                response.write("<a");
                 final String url = getUrl(entry);
 
                 response.write("<a");
