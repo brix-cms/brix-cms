@@ -50,7 +50,7 @@ public class MarkupHelper implements Serializable
 	 */
 	private final static String COMPONENT_PREFIX = "brix-";
 
-	public String getComponentID(ComponentTag tag)
+	public static String getComponentID(ComponentTag tag)
 	{
 		String uid = tag.getUniqueTagId();
 		return COMPONENT_PREFIX + (uid != null ? uid.toString() : "");
