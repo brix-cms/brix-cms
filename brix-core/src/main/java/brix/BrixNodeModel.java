@@ -102,7 +102,7 @@ public class BrixNodeModel implements IModel<BrixNode>
             if (id.startsWith("/"))
                 return (BrixNode) session.getItem(id);
             else
-                return (BrixNode) session.getNodeByUUID(id);
+                return (BrixNode) session.getNodeByIdentifier(id);
         }
         else
         {
@@ -114,7 +114,7 @@ public class BrixNodeModel implements IModel<BrixNode>
     {
         if (node.isNodeType("mix:referenceable"))
         {
-            return node.getUUID();
+            return node.getIdentifier();
         }
         else
         {

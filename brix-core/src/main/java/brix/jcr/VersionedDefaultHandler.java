@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.version.Version;
+import javax.jcr.version.VersionManager;
 
 import org.apache.jackrabbit.server.io.DefaultHandler;
 import org.apache.jackrabbit.server.io.IOManager;
@@ -72,9 +74,11 @@ public class VersionedDefaultHandler extends DefaultHandler
             Node node = getNode(context, isCollection);
 
             boolean needToCheckIn = false;
-            if (node.isNodeType("mix:versionable") && node.isCheckedOut() == false)
+            VersionManager vm = node.getSession().getWorkspace().getVersionManager();
+
+            if (node instanceof Version && node.isCheckedOut() == false)
             {
-                node.checkout();
+                vm.checkout(node.getPath());
                 needToCheckIn = true;
             }
 
@@ -82,8 +86,8 @@ public class VersionedDefaultHandler extends DefaultHandler
 
             if (needToCheckIn)
             {
-                node.save();
-                node.checkin();
+                node.getSession().save();
+                vm.checkin(node.getPath());
             }
 
             return result;

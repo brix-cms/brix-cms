@@ -22,7 +22,6 @@ import javax.jcr.Repository;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
-import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
 import org.apache.wicket.util.file.File;
 
 import brix.jcr.JackrabbitWorkspaceManager;
@@ -52,7 +51,7 @@ public class JcrUtils
      * <code>url</code> is left blank, a local workspace manager will be created.
      * 
      * @param url
-     * @param brix
+     * @param sessionFactory
      * @return
      */
     public static WorkspaceManager createWorkspaceManager(String url,
@@ -152,8 +151,7 @@ public class JcrUtils
     {
         try
         {
-            ClientRepositoryFactory factory = new ClientRepositoryFactory(
-                    new JackrabbitClientAdapterFactory());
+            ClientRepositoryFactory factory = new ClientRepositoryFactory();
             Repository repository = factory.getRepository(url);
             return repository;
         }

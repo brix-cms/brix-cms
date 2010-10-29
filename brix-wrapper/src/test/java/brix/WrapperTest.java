@@ -139,7 +139,7 @@ public class WrapperTest
 		
 		assertNotNull(node.getIdentifier());
 		
-		JcrNode node1=session.getNodeByUUID(node.getIdentifier());
+		JcrNode node1=session.getNodeByIdentifier(node.getIdentifier());
 		assertNotNull(node1);
 		node1.setProperty("property", "value");
 	}

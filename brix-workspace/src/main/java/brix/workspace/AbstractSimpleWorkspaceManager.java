@@ -124,7 +124,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
 
             properties.setProperty(key, value);
 
-            node.save();
+            node.getSession().save();
         }
         catch (RepositoryException e)
         {
@@ -212,7 +212,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
                     session = createSession(id);
                     Node node = (Node)session.getItem(NODE_PATH);
                     node.setProperty(DELETED_PROPERTY, (String)null);
-                    node.save();
+                    node.getSession().save();
                     closeSession(session, true);
                     session = null;
                     return new WorkspaceImpl(id);
@@ -282,7 +282,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
                 node.getNode(PROPERTIES_NODE).remove();
             }
             node.setProperty(DELETED_PROPERTY, true);
-            node.save();
+            node.getSession().save();
 
             synchronized (this)
             {

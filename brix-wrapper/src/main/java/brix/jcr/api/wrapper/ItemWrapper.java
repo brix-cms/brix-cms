@@ -186,16 +186,15 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem
     }
 
     /**
-     * @deprecated
+     * Convinient wrapper fir saving a JcrItem
      */
-    @Deprecated
     public void save()
     {
         executeCallback(new VoidCallback()
         {
             public void execute() throws Exception
             {
-                getDelegate().save();
+                getDelegate().getSession().save();
             }
         });
     }

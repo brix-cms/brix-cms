@@ -38,6 +38,9 @@ import org.apache.jackrabbit.core.util.db.ConnectionFactory;
 import org.xml.sax.InputSource;
 
 /**
+ *
+ * //TODO: check if we really need this hack?!
+ *
  * Extended config that allows us to install a factory for login modules. All in all this is a big
  * hack because jackrabbit config is not very pluggable
  * 

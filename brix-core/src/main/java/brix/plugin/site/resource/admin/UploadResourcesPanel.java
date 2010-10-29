@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.apache.jackrabbit.value.BinaryImpl;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -41,6 +42,8 @@ import brix.plugin.site.SimpleCallback;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.NodeManagerPanel;
 import brix.web.ContainerFeedbackPanel;
+
+import javax.jcr.Binary;
 
 public class UploadResourcesPanel extends NodeManagerPanel
 {
@@ -118,7 +121,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
                 String mime = upload.getContentType();
 
                 BrixFileNode file = BrixFileNode.initialize(newNode, mime);
-                file.setData(new FileInputStream(temp));
+                file.setData(new BinaryImpl( new FileInputStream(temp)));
                 file.getParent().save();
 
             }

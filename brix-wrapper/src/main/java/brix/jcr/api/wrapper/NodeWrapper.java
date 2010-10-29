@@ -27,6 +27,7 @@ import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
+import javax.jcr.version.VersionManager;
 
 import brix.jcr.api.JcrItem;
 import brix.jcr.api.JcrNode;
@@ -136,8 +137,9 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         });
     }
 
-    /** @depreated */
-    @Deprecated
+    /**
+     * convinient method from Brix to checkin a node, not JCR 2 standard
+     */
     public JcrVersion checkin()
     {
         return executeCallback(new Callback<JcrVersion>()
@@ -145,20 +147,20 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
             public JcrVersion execute() throws Exception
             {
                 final Node delegate = getDelegate();
-                if (delegate.isNodeType("mix:versionable"))
-                {
-                    return JcrVersion.Wrapper.wrap(delegate.checkin(), getJcrSession());
+                if(delegate instanceof Version) {
+                    VersionManager vm = delegate.getSession().getWorkspace().getVersionManager();
+                    if(vm.isCheckedOut(delegate.getPath())) {
+                        return JcrVersion.Wrapper.wrap(vm.checkin(delegate.getPath()), getJcrSession());
+                    }
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
         });
     }
 
-    /** @depreated */
-    @Deprecated
+    /**
+     *  Method to save this node and also execute a nodeSaved() behaviour;
+     */
     @Override
     public void save()
     {
@@ -167,21 +169,24 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         {
             behavior.nodeSaved(this);
         }
-        super.save();
+        super.getJcrSession().save();
     }
 
-    /** @depreated */
-    @Deprecated
+    /**
+     * convinient method from Brix to checkout a node, not JCR 2 standard
+     */
     public void checkout()
     {
         executeCallback(new VoidCallback()
         {
             public void execute() throws Exception
             {
-                if (getDelegate().isNodeType("mix:versionable"))
-                {
-                    getDelegate().checkout();
+
+                if(getDelegate() instanceof Version) {
+                    VersionManager vm = getDelegate().getSession().getWorkspace().getVersionManager();
+                    vm.checkout(getDelegate().getPath());
                 }
+               
             }
         });
     }
@@ -245,15 +250,18 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         });
     }
 
-    /** @depreated */
-    @Deprecated
+    /**
+     * convinient method to get Lock of a node
+     *
+     * @return
+     */
     public Lock getLock()
     {
         return executeCallback(new Callback<Lock>()
         {
             public Lock execute() throws Exception
             {
-                return getDelegate().getLock();
+                return getDelegate().getSession().getWorkspace().getLockManager().getLock(getDelegate().getPath());
             }
         });
     }

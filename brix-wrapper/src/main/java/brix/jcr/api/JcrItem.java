@@ -63,8 +63,7 @@ public interface JcrItem extends Item
     public void remove();
 
     /**
-     * @deprecated, see {@link Item#save()}
+     * Convinient method from brix to save an JcrItem
      */
-    @Deprecated
     public void save();
 }

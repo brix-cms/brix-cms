@@ -75,17 +75,13 @@ public interface JcrNode extends JcrItem, Node
     public void cancelMerge(Version version);
 
     /**
-     * @deprecated As of JCR 2.0, {@link javax.jcr.version.VersionManager#checkin} should be used
-     *             instead.
+     * convinient method from Brix to checkin a node, not JCR 2 standard
      */
-    @Deprecated
     public JcrVersion checkin();
 
     /**
-     * @deprecated As of JCR 2.0, {@link javax.jcr.version.VersionManager#checkout} should be used
-     *             instead.
+     * convinient method from Brix to checkout a node, not JCR 2 standard
      */
-    @Deprecated
     public void checkout();
 
     /**

@@ -47,7 +47,7 @@ public class MarkupCache
 		{
 			if (node.isNodeType("mix:referenceable"))
 			{
-				nodeId = node.getUUID();
+				nodeId = node.getIdentifier();
 			}
 			else
 			{

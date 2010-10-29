@@ -131,7 +131,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
                 // 1 try to get node with same UUID, 2 try to get node with same
                 // path, 3 get root node
                 JcrSession newSession = node.getBrix().getCurrentSession(workspace.getId());
-                String uuid = node.getUUID();
+                String uuid = node.getIdentifier();
                 BrixNode newNode = JcrUtil.getNodeByUUID(newSession, uuid);
                 if (newNode == null)
                 {

@@ -19,7 +19,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 
+import javax.jcr.Binary;
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 
 import org.apache.wicket.util.io.Streams;
 import org.apache.wicket.util.string.Strings;
@@ -177,7 +179,7 @@ public class BrixFileNode extends BrixNode
 	 * 
 	 * @param data
 	 */
-	public void setData(InputStream data)
+	public void setData(Binary data)
 	{
 		getContent().setProperty("jcr:data", data);
 	}
@@ -194,12 +196,12 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Returns the data of this node as stream
-	 * 
+	 *
 	 * @return
+     * @throws javax.jcr.RepositoryException
 	 */
-	public InputStream getDataAsStream()
-	{
-		return getContent().getProperty("jcr:data").getStream();
+	public InputStream getDataAsStream() throws RepositoryException {
+		return getContent().getProperty("jcr:data").getBinary().getStream();
 	}
 
 	/**
@@ -207,8 +209,9 @@ public class BrixFileNode extends BrixNode
 	 * 
 	 * @param stream
 	 * @throws IOException
+     * @throws javax.jcr.RepositoryException
 	 */
-	public void writeData(OutputStream stream) throws IOException
+	public void writeData(OutputStream stream) throws IOException, RepositoryException
 	{
 		Streams.copy(getDataAsStream(), stream);
 	}
