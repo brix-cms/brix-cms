@@ -17,12 +17,15 @@
  */
 package brix.plugin.site.page.admin;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -66,7 +69,35 @@ abstract class EditTab extends NodeManagerPanel
         form.add(new SiteNodePickerPanel("templatePicker", model, workspace, filter));
 
         IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
-        form.add(new CheckBox("requiresSSL", booleanModel));
+        List<Boolean> SSL = Arrays.asList(new Boolean[] { new Boolean(true), new Boolean(false) });
+		IChoiceRenderer<Boolean> sslChoiceRenderer = new IChoiceRenderer<Boolean>() {
+			private static final long serialVersionUID = 1L;
+
+			public Object getDisplayValue(Boolean object) {
+				if (object == null) {
+					return "";
+				}
+				return getLocalizer().getString((object ? "requiresSSL" : "requiresNonSSL"), EditTab.this);
+			}
+
+			public String getIdValue(Boolean object, int index) {
+				return object == null ? "" : object.toString();
+			}
+		};
+		DropDownChoice<Boolean> dropDownChoice = new DropDownChoice<Boolean>("requiresSSL", booleanModel, SSL, sslChoiceRenderer) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isNullValid() {
+				return true;
+			}
+
+			@Override
+			protected String getNullValidKey() {
+				return "keepExisting";
+			}
+		};
+		form.add(dropDownChoice);
 
         // set up markup editor
 

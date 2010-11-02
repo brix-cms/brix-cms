@@ -126,12 +126,16 @@ public abstract class AbstractContainer extends BrixFileNode
         return template != null ? SitePlugin.get().pathForNode(template) : null;
     }
 
-    public void setRequiresSSL(boolean value)
+    public void setRequiresSSL(Boolean value)
     {
-        if (value == false)
+    	if (value == null)
         {
             setProperty(Properties.REQUIRES_SSL, (String)null);
         }
+    	else if (value == false)
+    	{
+    		setProperty(Properties.REQUIRES_SSL, false);
+    	}
         else
         {
             setProperty(Properties.REQUIRES_SSL, true);
@@ -142,10 +146,11 @@ public abstract class AbstractContainer extends BrixFileNode
 
     public boolean requiresSSL()
     {    	
-        return isRequiresSSL() || tileManager.anyTileRequiresSSL() || (getTemplate() != null && getTemplate().requiresSSL());
+    	Boolean requiresSSL = isRequiresSSL();
+    	return (requiresSSL != null && requiresSSL.booleanValue()) || tileManager.anyTileRequiresSSL() || (getTemplate() != null && getTemplate().requiresSSL());
     }
 
-    public boolean isRequiresSSL()
+    public Boolean isRequiresSSL()
     {
         if (hasProperty(Properties.REQUIRES_SSL))
         {
@@ -153,20 +158,33 @@ public abstract class AbstractContainer extends BrixFileNode
         }
         else
         {
-            return false;
+        	return null;
         }
     }
+    
+    public boolean requiresNonSSL()
+	{
+		// ignore tiles assuming that tiles which don't require SSL are equivalent to Protocol.PRESERVE_CURRENT
+    	// in future could add method: Protocol getRequiredProtocol() to Tile
+		Boolean requiresSSL = isRequiresSSL();
+		return (requiresSSL != null && !requiresSSL.booleanValue()) || (getTemplate() != null && getTemplate().requiresNonSSL());
+	}
 
     @Override
     public Protocol getRequiredProtocol()
     {
+    	// requiring SSL takes precedence
         if (requiresSSL())
         {
             return Protocol.HTTPS;
         }
-        else
+        else if (requiresNonSSL())
         {
             return Protocol.HTTP;
+        }
+        else
+        {
+            return Protocol.PRESERVE_CURRENT;
         }
     }
 

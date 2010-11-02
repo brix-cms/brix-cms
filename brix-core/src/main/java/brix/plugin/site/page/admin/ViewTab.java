@@ -30,6 +30,7 @@ import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.PreviewNodeIFrame;
+import brix.plugin.site.page.AbstractContainer;
 import brix.web.generic.BrixGenericPanel;
 import brix.web.tab.BrixTabbedPanel;
 import brix.web.tab.CachingAbstractTab;
@@ -42,7 +43,25 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
 
 		add(new Label("title", new PropertyModel<String>(model, "title")));
 		add(new Label("template", new PropertyModel<String>(model, "templatePath")));
-		add(new Label("requiresSSL", new PropertyModel<Boolean>(model, "requiresSSL")));
+		add(new Label("requiresSSL", new Model<String>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getObject() {
+				BrixNode node = ViewTab.this.getModel().getObject();
+				AbstractContainer container = (AbstractContainer) node;
+				Boolean required = container.isRequiresSSL();
+				String key;
+				if (required == null) {
+					key = "noProtocolRequired";
+				} else if (required.booleanValue()) {
+					key = "SSLRequired";
+				} else {
+					key = "nonSSLRequired";
+				}
+				return getLocalizer().getString(key, ViewTab.this);
+			}
+		}));
 
 		// add(new Label("content", new PropertyModel(model, "dataAsString")));
 
