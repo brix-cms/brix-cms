@@ -69,35 +69,7 @@ abstract class EditTab extends NodeManagerPanel
         form.add(new SiteNodePickerPanel("templatePicker", model, workspace, filter));
 
         IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
-        List<Boolean> SSL = Arrays.asList(new Boolean[] { new Boolean(true), new Boolean(false) });
-		IChoiceRenderer<Boolean> sslChoiceRenderer = new IChoiceRenderer<Boolean>() {
-			private static final long serialVersionUID = 1L;
-
-			public Object getDisplayValue(Boolean object) {
-				if (object == null) {
-					return "";
-				}
-				return getLocalizer().getString((object ? "requiresSSL" : "requiresNonSSL"), EditTab.this);
-			}
-
-			public String getIdValue(Boolean object, int index) {
-				return object == null ? "" : object.toString();
-			}
-		};
-		DropDownChoice<Boolean> dropDownChoice = new DropDownChoice<Boolean>("requiresSSL", booleanModel, SSL, sslChoiceRenderer) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isNullValid() {
-				return true;
-			}
-
-			@Override
-			protected String getNullValidKey() {
-				return "keepExisting";
-			}
-		};
-		form.add(dropDownChoice);
+        form.add(new ProtocolSelector("requiresSSL", booleanModel));
 
         // set up markup editor
 

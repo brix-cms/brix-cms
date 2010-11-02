@@ -43,26 +43,7 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
 
 		add(new Label("title", new PropertyModel<String>(model, "title")));
 		add(new Label("template", new PropertyModel<String>(model, "templatePath")));
-		add(new Label("requiresSSL", new Model<String>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getObject() {
-				BrixNode node = ViewTab.this.getModel().getObject();
-				AbstractContainer container = (AbstractContainer) node;
-				Boolean required = container.isRequiresSSL();
-				String key;
-				if (required == null) {
-					key = "noProtocolRequired";
-				} else if (required.booleanValue()) {
-					key = "SSLRequired";
-				} else {
-					key = "nonSSLRequired";
-				}
-				return getLocalizer().getString(key, ViewTab.this);
-			}
-		}));
-
+		add(new ProtocolLabel("requiresSSL", new PropertyModel<Boolean>(model, "requiresSSL")));
 		// add(new Label("content", new PropertyModel(model, "dataAsString")));
 
 		List<IBrixTab> tabs = new ArrayList<IBrixTab>();

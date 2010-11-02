@@ -1,0 +1,18 @@
+----------------------------------------------------------------
+2010-11-02 03:41:19.210 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance a816c00e-012c-0aac-b38c-000000b83d00
+on database directory C:\Users\igor\AppData\Local\Temp\brix.demo.repository\version\db  
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+2010-11-02 03:41:19.822 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance 80840021-012c-0aac-b38c-000000b83d00
+on database directory C:\Users\igor\AppData\Local\Temp\brix.demo.repository\workspaces\default\db  
+
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+2010-11-02 03:41:20.463 GMT:
+ Booting Derby version The Apache Software Foundation - Apache Derby - 10.5.3.0 - (802917): instance 594b8034-012c-0aac-b38c-000000b83d00
+on database directory C:\Users\igor\AppData\Local\Temp\brix.demo.repository\workspaces\brix_ws_05dc5cf1_fbca_41ba_9f44_987770c95588\db  
+
+Database Class Loader started - derby.database.classpath=''
