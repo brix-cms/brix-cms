@@ -28,17 +28,20 @@ import brix.web.tree.NodeFilter;
 public class PageTileEditorPanel extends GenericTileEditorPanel<BrixNode>
 {
 
-    public PageTileEditorPanel(String id, IModel<BrixNode> tileContainerNode)
+    private IModel<BrixNode> targetNodeModel = new BrixNodeModel();
+
+    public PageTileEditorPanel(String id, IModel<BrixNode> tileContainerNode, NodeFilter filter) 
     {
         super(id, tileContainerNode);
-
-        NodeFilter filter = new NodeTypeFilter(PageSiteNodePlugin.TYPE); 
         NodePickerPanel picker = new SiteNodePickerPanel("nodePicker", targetNodeModel, tileContainerNode.getObject().getSession().getWorkspace().getName(), filter);
         picker.setRequired(true);
         add(picker);
     }
 
-    private IModel<BrixNode> targetNodeModel = new BrixNodeModel();
+    public PageTileEditorPanel(String id, IModel<BrixNode> tileContainerNode)
+    {
+    	this(id, tileContainerNode, new NodeTypeFilter(PageSiteNodePlugin.TYPE));
+    }
 
     @Override
     public void load(BrixNode node)
