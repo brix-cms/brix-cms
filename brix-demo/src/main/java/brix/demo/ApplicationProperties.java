@@ -19,7 +19,7 @@ import java.util.Properties;
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
-import brix.demo.util.FileUtils;
+import brix.util.FileUtils;
 import brix.demo.util.PropertyUtils;
 import brix.demo.util.PropertyUtils.MergeMode;
 
