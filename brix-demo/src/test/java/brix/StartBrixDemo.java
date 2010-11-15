@@ -30,7 +30,7 @@ public class StartBrixDemo
 
     public static void main(String[] args) throws Exception
     {
-        ApplicationProperties properties = new ApplicationProperties();
+        ApplicationProperties properties = new ApplicationProperties("brix.demo");
 
         Server server = new Server();
         SocketConnector connector = new SocketConnector();

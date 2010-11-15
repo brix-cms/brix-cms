@@ -14,12 +14,12 @@
 
 package brix.demo;
 
+import java.io.File;
 import java.util.Properties;
 
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
-import brix.util.FileUtils;
 import brix.demo.util.PropertyUtils;
 import brix.demo.util.PropertyUtils.MergeMode;
 
@@ -33,16 +33,25 @@ public class ApplicationProperties
 {
 
     private final Properties properties;
+    private String prefix;
 
-    public ApplicationProperties()
+    /**
+     * @deprecated
+     */
+    public ApplicationProperties() {
+        this("brix.demo");
+    }
+
+    public ApplicationProperties(String prefix)
     {
+        this.prefix = prefix;
         // load base properties
-        String baseProperties = "brix/demo/application.properties";
+        String baseProperties = prefix.replace(".","/") + "/application.properties";
         Properties base = PropertyUtils.loadFromClassPath(baseProperties, false);
 
         // load user-specific property overrides
         String username = System.getProperty("user.name");
-        String userProperties = "brix/demo/application." + username + ".properties";
+        String userProperties = prefix.replace(".","/") + "/application." + username + ".properties";
         Properties user = PropertyUtils.loadFromClassPath(userProperties, false);
 
         // load system properties
@@ -57,12 +66,12 @@ public class ApplicationProperties
      */
     public String getJcrRepositoryUrl()
     {
-        String url = properties.getProperty("brixdemo.jcr.url");
+        String url = properties.getProperty(prefix + ".jcr.url");
         if (url == null || url.trim().length() == 0)
         {
             // if no url was specified generate a unique temporary one
-            url = "file://" + FileUtils.getDefaultRepositoryFileName();
-            properties.setProperty("brixdemo.jcr.url", url);
+            url = "file://" + getDefaultRepositoryFileName();
+            properties.setProperty(prefix + ".jcr.url", url);
         }
         return url;
     }
@@ -72,7 +81,7 @@ public class ApplicationProperties
      */
     public String getWorkspaceManagerUrl()
     {
-        return properties.getProperty("brixdemo.workspaceManagerUrl");
+        return properties.getProperty(prefix + ".workspaceManagerUrl");
     }
 
     /**
@@ -80,7 +89,7 @@ public class ApplicationProperties
      */
     public String getJcrLogin()
     {
-        return properties.getProperty("brixdemo.jcr.login");
+        return properties.getProperty(prefix + ".jcr.login");
     }
 
     /**
@@ -88,7 +97,7 @@ public class ApplicationProperties
      */
     public String getJcrPassword()
     {
-        return properties.getProperty("brixdemo.jcr.password");
+        return properties.getProperty(prefix + ".jcr.password");
     }
 
     /**
@@ -96,7 +105,7 @@ public class ApplicationProperties
      */
     public String getJcrDefaultWorkspace()
     {
-        return properties.getProperty("brixdemo.jcr.defaultWorkspace");
+        return properties.getProperty(prefix + ".jcr.defaultWorkspace");
     }
 
     /**
@@ -104,7 +113,7 @@ public class ApplicationProperties
      */
     public Credentials buildSimpleCredentials()
     {
-        return new SimpleCredentials(getJcrLogin(), getJcrPassword().toString().toCharArray());
+        return new SimpleCredentials(getJcrLogin(), getJcrPassword().toCharArray());
     }
 
     /**
@@ -112,7 +121,7 @@ public class ApplicationProperties
      */
     public int getHttpPort()
     {
-        return Integer.parseInt(properties.getProperty("brixdemo.httpPort"));
+        return Integer.parseInt(properties.getProperty(prefix + ".httpPort"));
     }
 
     /**
@@ -120,13 +129,33 @@ public class ApplicationProperties
      */
     public int getHttpsPort()
     {
-        return Integer.parseInt(properties.getProperty("brixdemo.httpsPort"));
+        return Integer.parseInt(properties.getProperty(prefix + ".httpsPort"));
     }
 
     /**
      * @return default workspace state
      */
     public String getWorkspaceDefaultState() {
-        return properties.getProperty("brixdemo.jcr.defaultWorkspaceState");
+        return properties.getProperty(prefix + ".jcr.defaultWorkspaceState");
+    }
+
+    /**
+     * Generates a temporary file name inside tmp directory
+     *
+     * @return
+     */
+    public String getDefaultRepositoryFileName()
+    {
+        String fileName = System.getProperty("java.io.tmpdir");
+        if (!fileName.endsWith(File.separator))
+        {
+            fileName += File.separator;
+        }
+        fileName += prefix + ".repository";
+        return fileName;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }

@@ -15,20 +15,21 @@
 package brix.util;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.jcr.Repository;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
-import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
-import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
 import org.apache.wicket.util.file.File;
 
 import brix.jcr.JackrabbitWorkspaceManager;
 import brix.jcr.JcrSessionFactory;
 import brix.workspace.WorkspaceManager;
 import brix.workspace.rmi.ClientWorkspaceManager;
+import org.apache.wicket.util.io.Streams;
 
 /**
  * Jcr and Jackrabbit related utilities
@@ -79,7 +80,7 @@ public class JcrUtils
     /**
      * Creates a jackrabbit repository based on the url. Accepted urls are <code>rmi://</code> and
      * <code>file://</code>
-     * 
+     *
      * @param url
      *            repository url
      * @throws RuntimeException
@@ -119,13 +120,13 @@ public class JcrUtils
         {
             // ensure home dir exists
             final File home = new File(url.substring(6));
-            FileUtils.mkdirs(home);
+            mkdirs(home);
 
             // create default config file if one is not present
             File cfg = new File(home, "repository.xml");
             if (!cfg.exists())
             {
-                FileUtils.copyClassResourceToFile("/brix/demo/repository.xml", cfg);
+                copyClassResourceToFile("/brix/demo/repository.xml", cfg);
             }
 
             InputStream configStream = new FileInputStream(cfg);
@@ -153,13 +154,57 @@ public class JcrUtils
         try
         {
             JcrUtils.class.getClassLoader().loadClass("org.apache.jackrabbit.rmi.client.ClientRepositoryFactory");
-            ClientRepositoryFactory factory = new ClientRepositoryFactory(new JackrabbitClientAdapterFactory());
-            Repository repository = factory.getRepository(url);
-            return repository;
+            return RmiRepositoryFactory.getRmiRepository(url);
         }
         catch (Exception e)
         {
             throw new RuntimeException("Could not create rmi repository instance at url: " + url, e);
+        }
+    }
+
+    /**
+     * {@link java.io.File#mkdirs()} that throws runtime exception if it fails
+     *
+     * @param file
+     */
+    public static void mkdirs(java.io.File file)
+    {
+        if (!file.exists())
+        {
+            if (!file.mkdirs())
+            {
+                throw new RuntimeException("Could not create directory: " + file.getAbsolutePath());
+            }
+        }
+    }
+
+    /**
+     * Copies a resource from classpath to a {@link java.io.File}
+     *
+     * @param source
+     *            classpath to resource
+     * @param destination
+     *            destination file
+     */
+    public static void copyClassResourceToFile(String source, java.io.File destination)
+    {
+        final InputStream in = JcrUtils.class.getResourceAsStream(source);
+        if (in == null)
+        {
+            throw new RuntimeException("Class resource: " + source + " does not exist");
+        }
+
+        try
+        {
+            final FileOutputStream fos = new FileOutputStream(destination);
+            Streams.copy(in, fos);
+            fos.close();
+            in.close();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Could not copy class resource: " + source +
+                " to destination: " + destination.getAbsolutePath());
         }
     }
 

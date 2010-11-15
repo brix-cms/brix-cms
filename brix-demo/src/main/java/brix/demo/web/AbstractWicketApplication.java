@@ -70,7 +70,7 @@ public abstract class AbstractWicketApplication extends WebApplication
     {
         super.init();
         // read application properties
-        properties = new ApplicationProperties();
+        properties = new ApplicationProperties("brix.demo");
 
         logger.info("Using JCR repository url: " + properties.getJcrRepositoryUrl());
 
