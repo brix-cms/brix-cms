@@ -35,6 +35,7 @@ import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 
 import org.apache.jackrabbit.api.JackrabbitRepository;
+import org.apache.jackrabbit.api.JackrabbitWorkspace;
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
 import org.junit.After;
@@ -108,6 +109,18 @@ public class WorkspaceManagerTest
         delete(home);
     }
 
+	@Test
+	public void testWorkspaceIdLength() {
+		// some database systems do not allow table names over 30 characters
+		// (oracle), make sure we do not cross that limit
+		for (int i = 0; i < 10; i++) {
+			Workspace w = manager.createWorkspace();
+			assertNotNull(w);
+			System.out.println(w.getId() + " " + w.getId().length());
+			assertTrue(30 >= w.getId().length());
+		}
+	}
+    
     @Test
     public void testWorkspaceCreation() throws RepositoryException
     {
@@ -120,7 +133,7 @@ public class WorkspaceManagerTest
         Workspace w2 = manager.createWorkspace();
         assertNotNull(w2);
         assertEquals(2, manager.getWorkspaces().size());
-
+        
         // test retrieval of created workspaces
         Workspace w11 = manager.getWorkspace(w1.getId());
         assertNotNull(w11);
