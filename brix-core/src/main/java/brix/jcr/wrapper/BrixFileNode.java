@@ -14,28 +14,26 @@
 
 package brix.jcr.wrapper;
 
+import brix.jcr.api.JcrNode;
+import brix.jcr.api.JcrSession;
+import brix.plugin.site.SitePlugin;
+import brix.plugin.site.resource.ResourceNodePlugin;
+import org.apache.wicket.util.io.Streams;
+import org.apache.wicket.util.string.Strings;
+
+import javax.jcr.Binary;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 
-import javax.jcr.Binary;
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-
-import org.apache.wicket.util.io.Streams;
-import org.apache.wicket.util.string.Strings;
-
-import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrSession;
-import brix.plugin.site.SitePlugin;
-import brix.plugin.site.resource.ResourceNodePlugin;
-
 /**
  * Base class for nodes with content (with JCR primary type nt:file).
- * 
+ *
  * @see #initialize(JcrNode, String)
- * 
+ *
  * @author Matej Knopp
  */
 public class BrixFileNode extends BrixNode
@@ -43,7 +41,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Wraps the given delegate node using provided {@link JcrSession}.
-	 * 
+	 *
 	 * @param delegate
 	 * @param session
 	 */
@@ -54,7 +52,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Returns if the node is a file node,
-	 * 
+	 *
 	 * @param node
 	 * @return <code>true</code> if the node is a file node, <code>false</code>
 	 *         otherwise
@@ -76,7 +74,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Sets the encoding property
-	 * 
+	 *
 	 * @param encoding
 	 */
 	public void setEncoding(String encoding)
@@ -86,7 +84,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Returns the encoding property
-	 * 
+	 *
 	 * @return
 	 */
 	public String getEncoding()
@@ -97,7 +95,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Sets the mime type property
-	 * 
+	 *
 	 * @param mimeType
 	 */
 	public void setMimeType(String mimeType)
@@ -108,7 +106,7 @@ public class BrixFileNode extends BrixNode
 	/**
 	 * Returns the mime type property. If the property is not specified, tries
 	 * to determine mime type from node name extension.
-	 * 
+	 *
 	 * @return
 	 */
 	public String getMimeType()
@@ -120,7 +118,7 @@ public class BrixFileNode extends BrixNode
 	 * Returns the mime type for this node. If the property is not specified and
 	 * <code>useExtension</code> is <code>true</code>, tries to determine mime
 	 * type from extension.
-	 * 
+	 *
 	 * @param useExtension
 	 * @return
 	 */
@@ -140,7 +138,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Returns the length of content in bytes
-	 * 
+	 *
 	 * @return
 	 */
 	public long getContentLength()
@@ -150,7 +148,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Sets the actual data of this node
-	 * 
+	 *
 	 * @param data
 	 */
 	public void setData(String data)
@@ -166,7 +164,7 @@ public class BrixFileNode extends BrixNode
 	/**
 	 * Sets the actual data of this node. Provided as complementary setter for
 	 * {@link #getDataAsString()}.
-	 * 
+	 *
 	 * @param data
 	 */
 	public void setDataAsString(String data)
@@ -176,7 +174,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Sets the actual data of this node
-	 * 
+	 *
 	 * @param data
 	 */
 	public void setData(Binary data)
@@ -186,7 +184,7 @@ public class BrixFileNode extends BrixNode
 
 	/**
 	 * Returns the data of this node as string
-	 * 
+	 *
 	 * @return
 	 */
 	public String getDataAsString()
@@ -200,26 +198,30 @@ public class BrixFileNode extends BrixNode
 	 * @return
      * @throws javax.jcr.RepositoryException
 	 */
-	public InputStream getDataAsStream() throws RepositoryException {
-		return getContent().getProperty("jcr:data").getBinary().getStream();
-	}
+	public InputStream getDataAsStream() {
+        try {
+            return getContent().getProperty("jcr:data").getBinary().getStream();
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	/**
 	 * Writes the node data to the specified output stream.
-	 * 
+	 *
 	 * @param stream
 	 * @throws IOException
      * @throws javax.jcr.RepositoryException
 	 */
-	public void writeData(OutputStream stream) throws IOException, RepositoryException
+	public void writeData(OutputStream stream) throws IOException
 	{
-		Streams.copy(getDataAsStream(), stream);
-	}
+         Streams.copy(getDataAsStream(), stream);
+    }
 
 	/**
 	 * Initializes the specified node to be a valid file node. The node's
 	 * primary type must be nt:file.
-	 * 
+	 *
 	 * @param node
 	 * @param mimeType
 	 * @return
