@@ -33,7 +33,7 @@
   <url>http://brix-cms.googlecode.com/svn</url>
  </scm>
  <properties>
-  <wicket.version>1.4.1</wicket.version>
+  <wicket.version>1.4.14</wicket.version>
   <jetty.version>6.1.11</jetty.version>
   <inmethod.grid.version>1.0.0-b4</inmethod.grid.version>
   <htmllexer.version>2.0-beta1</htmllexer.version>
@@ -182,12 +182,12 @@
    <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-api</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.10</version>
    </dependency>
    <dependency>
     <groupId>org.slf4j</groupId>
     <artifactId>slf4j-log4j12</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.10</version>
     <scope>provided</scope>
    </dependency>
    <dependency>

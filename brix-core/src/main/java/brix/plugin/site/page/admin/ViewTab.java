@@ -30,6 +30,7 @@ import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.admin.PreviewNodeIFrame;
+import brix.plugin.site.page.AbstractContainer;
 import brix.web.generic.BrixGenericPanel;
 import brix.web.tab.BrixTabbedPanel;
 import brix.web.tab.CachingAbstractTab;
@@ -42,8 +43,7 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
 
 		add(new Label("title", new PropertyModel<String>(model, "title")));
 		add(new Label("template", new PropertyModel<String>(model, "templatePath")));
-		add(new Label("requiresSSL", new PropertyModel<Boolean>(model, "requiresSSL")));
-
+		add(new ProtocolLabel("requiresSSL", new PropertyModel<Boolean>(model, "requiresSSL")));
 		// add(new Label("content", new PropertyModel(model, "dataAsString")));
 
 		List<IBrixTab> tabs = new ArrayList<IBrixTab>();

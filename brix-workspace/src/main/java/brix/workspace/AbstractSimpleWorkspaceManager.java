@@ -206,7 +206,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
                 }
             }
 
-            String id = getWorkspaceId(UUID.randomUUID().toString());
+            String id = getWorkspaceId(UUID.randomUUID());
             createWorkspace(id);
             synchronized (this)
             {

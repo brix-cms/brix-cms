@@ -236,7 +236,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 			}
 
 			// or create new one
-			String id = getWorkspaceId(UUID.randomUUID().toString());
+			String id = getWorkspaceId(UUID.randomUUID());
 			createWorkspace(id);
 			Session session = getSession(id);
 			Node node = session.getRootNode().addNode(NODE_NAME, "nt:unstructured");

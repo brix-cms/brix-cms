@@ -17,12 +17,15 @@
  */
 package brix.plugin.site.page.admin;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -66,7 +69,7 @@ abstract class EditTab extends NodeManagerPanel
         form.add(new SiteNodePickerPanel("templatePicker", model, workspace, filter));
 
         IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
-        form.add(new CheckBox("requiresSSL", booleanModel));
+        form.add(new ProtocolSelector("requiresSSL", booleanModel));
 
         // set up markup editor
 

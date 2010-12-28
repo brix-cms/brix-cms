@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import javax.jcr.RepositoryException;
 
@@ -255,21 +256,31 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager
     }
 
     // for compatibility with existing workspaces
-    protected final String WORKSPACE_PREFIX_LONG = "brix-workspace-";
+	protected final String[] LEGACY_PREFIXES = new String[] {
+			"brix-workspace-", "brix_ws_" };
 
-    protected final String WORKSPACE_PREFIX = "brix_ws_";
+    protected final String WORKSPACE_PREFIX = "bx_";
 
-    protected String getWorkspaceId(String uuid)
+    protected String getWorkspaceId(UUID uuid)
     {
-        return WORKSPACE_PREFIX + uuid.replace('-', '_');
+        final long most=uuid.getMostSignificantBits();
+        final long least=uuid.getLeastSignificantBits();
+        final String smost=LongEncoder.encode(most);
+        final String sleast=LongEncoder.encode(least);
+    	return WORKSPACE_PREFIX + smost+sleast;
     }
 
-    protected boolean isBrixWorkspace(String id)
-    {
-        // we could check if the prefix is followed by real uuid here, but
-        // that's probably an overkill.
-        return id.startsWith(WORKSPACE_PREFIX) || id.startsWith(WORKSPACE_PREFIX_LONG);
-    }
+	protected boolean isBrixWorkspace(String id) {
+		if (id.startsWith(WORKSPACE_PREFIX)) {
+			return true;
+		}
+		for (int i = 0; i < LEGACY_PREFIXES.length; i++) {
+			if (id.startsWith(LEGACY_PREFIXES[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
 
     protected static final String NODE_NAME = "brix:workspace";
 
