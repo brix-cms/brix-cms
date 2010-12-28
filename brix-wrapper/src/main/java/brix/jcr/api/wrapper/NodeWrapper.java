@@ -14,29 +14,21 @@
 
 package brix.jcr.api.wrapper;
 
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.Calendar;
+import brix.jcr.api.*;
+import brix.jcr.api.JcrSession.Behavior;
 
 import javax.jcr.Binary;
 import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
-import javax.jcr.PropertyIterator;
 import javax.jcr.Value;
 import javax.jcr.lock.Lock;
 import javax.jcr.nodetype.NodeDefinition;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.version.Version;
-
-import brix.jcr.api.JcrItem;
-import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrNodeIterator;
-import brix.jcr.api.JcrProperty;
-import brix.jcr.api.JcrPropertyIterator;
-import brix.jcr.api.JcrSession;
-import brix.jcr.api.JcrVersion;
-import brix.jcr.api.JcrVersionHistory;
-import brix.jcr.api.JcrSession.Behavior;
+import javax.jcr.version.VersionManager;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.Calendar;
 
 /**
  * 
@@ -145,14 +137,15 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
             public JcrVersion execute() throws Exception
             {
                 final Node delegate = getDelegate();
-                if (delegate.isNodeType("mix:versionable"))
+
+                if (delegate instanceof Version)
                 {
-                    return JcrVersion.Wrapper.wrap(delegate.checkin(), getJcrSession());
+                    VersionManager vm = delegate.getSession().getWorkspace().getVersionManager();
+                    if(vm.isCheckedOut(delegate.getPath())) {
+                        return JcrVersion.Wrapper.wrap(vm.checkin(delegate.getPath()), getJcrSession());
+                    }
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
         });
     }
@@ -167,7 +160,7 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         {
             behavior.nodeSaved(this);
         }
-        super.save();
+        super.getJcrSession().save();
     }
 
     /** @depreated */
@@ -178,9 +171,10 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         {
             public void execute() throws Exception
             {
-                if (getDelegate().isNodeType("mix:versionable"))
+                if (getDelegate() instanceof Version)
                 {
-                    getDelegate().checkout();
+                    VersionManager vm = getDelegate().getSession().getWorkspace().getVersionManager();
+                    vm.checkout(getDelegate().getPath());
                 }
             }
         });
@@ -253,7 +247,7 @@ public class NodeWrapper extends ItemWrapper implements JcrNode
         {
             public Lock execute() throws Exception
             {
-                return getDelegate().getLock();
+                return getDelegate().getSession().getWorkspace().getLockManager().getLock(getDelegate().getPath());
             }
         });
     }

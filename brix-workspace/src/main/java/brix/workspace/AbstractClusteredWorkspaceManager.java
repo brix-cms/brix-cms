@@ -14,32 +14,22 @@
 
 package brix.workspace;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
+import javax.jcr.*;
 import javax.jcr.lock.LockException;
 import javax.jcr.observation.Event;
 import javax.jcr.observation.EventIterator;
 import javax.jcr.observation.EventListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.*;
 
 public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspaceManager implements
 		ClusteredWorkspaceManager
 {
+
+    private Long lockTimeoutHint = 360L;
+    private String ownerInfo = "Locked by AbstractClusteredWorkspaceManager";
 
 	public AbstractClusteredWorkspaceManager()
 	{
@@ -71,7 +61,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 					if (!node.isNodeType("mix:lockable"))
 					{
 						node.addMixin("mix:lockable");
-						node.save();
+						node.getSession().save();
 					}
 
 					// ignore workspaces in which the node is either locked or
@@ -83,7 +73,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 
 					try
 					{
-						node.lock(false, true);
+                        node.getSession().getWorkspace().getLockManager().lock(node.getPath(), false, true, lockTimeoutHint, ownerInfo);
 					}
 					catch (LockException e)
 					{
@@ -117,7 +107,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 					}
 					finally
 					{
-						node.unlock();
+						node.getSession().getWorkspace().getLockManager().unlock(node.getPath());
 					}
 				}
 			}
@@ -192,7 +182,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 			{
 				return false;
 			}
-			node.lock(false, false);
+			node.getSession().getWorkspace().getLockManager().lock(node.getPath(), false, false, lockTimeoutHint, ownerInfo);
 			try
 			{
 				// if the workspace is still deleted
@@ -223,7 +213,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 			}
 			finally
 			{
-				node.unlock();
+				node.getSession().getWorkspace().getLockManager().unlock(node.getPath());
 			}
 		}
 		catch (LockException e)
@@ -286,7 +276,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 			{
 				try
 				{
-					node.lock(false, true);
+					node.getSession().getWorkspace().getLockManager().lock(node.getPath(), false, true, lockTimeoutHint, ownerInfo);
 					return;
 				}
 				catch (LockException e)
@@ -334,7 +324,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 				{
 					node.getNode(PROPERTIES_NODE).remove();
 				}
-				node.save();
+				node.getSession().save();
 
 			}
 
@@ -347,7 +337,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 			{
 				// problem deleting nodes
 				node.setProperty(PROPERTY_DO_NOT_USE, true);
-				node.save();
+				node.getSession().save();
 				throw (e);
 			}
 
@@ -359,7 +349,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 		finally
 		{
 
-			node.unlock();
+			node.getSession().getWorkspace().getLockManager().unlock(node.getPath());
 		}
 
 	}
@@ -430,7 +420,7 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 
 		properties.setProperty(attributeKey, attributeValue);
 
-		node.save();
+		node.getSession().save();
 
 		setCachedAttribute(workspaceId, attributeKey, attributeValue);
 	}

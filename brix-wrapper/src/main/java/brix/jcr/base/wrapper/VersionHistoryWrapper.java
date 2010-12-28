@@ -84,7 +84,7 @@ class VersionHistoryWrapper extends NodeWrapper implements VersionHistory
 
     public String getVersionableUUID() throws RepositoryException
     {
-        return getVersionableUUID();
+        return getDelegate().getVersionableIdentifier();
     }
 
     public boolean hasVersionLabel(String label) throws RepositoryException

@@ -14,21 +14,8 @@
 
 package brix.workspace;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
+import javax.jcr.*;
+import java.util.*;
 
 /**
  * Simple workspace manager. This class will not work properly in clustered JCR environment.
@@ -124,7 +111,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
 
             properties.setProperty(key, value);
 
-            node.save();
+            node.getSession().save();
         }
         catch (RepositoryException e)
         {
@@ -212,7 +199,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
                     session = createSession(id);
                     Node node = (Node)session.getItem(NODE_PATH);
                     node.setProperty(DELETED_PROPERTY, (String)null);
-                    node.save();
+                    node.getSession().save();
                     closeSession(session, true);
                     session = null;
                     return new WorkspaceImpl(id);
@@ -257,7 +244,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
     }
 
     private static final Collection<String> NODES_TO_LEAVE_WHEN_CLEANING = Arrays
-            .asList(new String[] { NODE_NAME, "jcr:system", "rep:policy" });
+            .asList(NODE_NAME, "jcr:system", "rep:policy");
 
     protected void delete(String workspaceId) throws RepositoryException
     {
@@ -282,7 +269,7 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
                 node.getNode(PROPERTIES_NODE).remove();
             }
             node.setProperty(DELETED_PROPERTY, true);
-            node.save();
+            node.getSession().save();
 
             synchronized (this)
             {
