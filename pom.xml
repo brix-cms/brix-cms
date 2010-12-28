@@ -37,7 +37,7 @@
   <jetty.version>6.1.11</jetty.version>
   <inmethod.grid.version>1.0.0-b4</inmethod.grid.version>
   <htmllexer.version>2.0-beta1</htmllexer.version>
-  <jackrabbit.version>2.0.0</jackrabbit.version>
+  <jackrabbit.version>2.2.0</jackrabbit.version>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
  </properties>
 
