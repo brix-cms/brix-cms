@@ -14,6 +14,15 @@
 
 package brix.jcr;
 
+import brix.jcr.api.*;
+import brix.jcr.exception.JcrException;
+import brix.jcr.wrapper.BrixNode;
+import org.apache.wicket.util.string.Strings;
+
+import javax.jcr.ImportUUIDBehavior;
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.PropertyType;
+import javax.jcr.nodetype.NodeType;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -21,25 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.jcr.ImportUUIDBehavior;
-import javax.jcr.ItemNotFoundException;
-import javax.jcr.PropertyType;
-import javax.jcr.nodetype.NodeType;
-
-import org.apache.wicket.util.string.Strings;
-
-import brix.jcr.api.JcrNamespaceRegistry;
-import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrNodeIterator;
-import brix.jcr.api.JcrProperty;
-import brix.jcr.api.JcrPropertyIterator;
-import brix.jcr.api.JcrSession;
-import brix.jcr.api.JcrValue;
-import brix.jcr.api.JcrValueFactory;
-import brix.jcr.api.JcrWorkspace;
-import brix.jcr.exception.JcrException;
-import brix.jcr.wrapper.BrixNode;
 
 /**
  * 
@@ -153,7 +143,7 @@ public class JcrUtil
 			Map<String, String> uuidMap)
 	{
 		// construct the import xml snippet
-		String uuid = originalNode.getUUID();
+		String uuid = originalNode.getIdentifier();
 		String name = originalNode.getName();
 		JcrSession session = parentNode.getSession();
 		StringBuilder xml = new StringBuilder();
@@ -188,7 +178,7 @@ public class JcrUtil
 			// there doesn't seem to be a way in JCR to check if there is
 			// such node in workspace
 			// except trying to get it and then catching the exception
-			existing = session.getNodeByUUID(uuid);
+			existing = session.getNodeByIdentifier(uuid);
 		}
 		catch (JcrException e)
 		{
@@ -211,7 +201,7 @@ public class JcrUtil
 			// simpler alternative - if we replace node or throw error on UUID
 			// clash
 			session.importXML(parentNode.getPath(), stream, uuidBehavior);
-			return session.getNodeByUUID(uuid);
+			return session.getNodeByIdentifier(uuid);
 		}
 		else
 		{
@@ -225,7 +215,7 @@ public class JcrUtil
 			if (exists == false)
 			{
 				// if there was no node with such uuid in target workspace
-				return session.getNodeByUUID(uuid);
+				return session.getNodeByIdentifier(uuid);
 			}
 			else
 			{
@@ -233,7 +223,7 @@ public class JcrUtil
 				JcrNodeIterator iterator = parentNode.getNodes(name);
 				iterator.skip(iterator.getSize() - 1);
 				JcrNode newNode = iterator.nextNode();
-				String newUuid = newNode.getUUID();
+				String newUuid = newNode.getIdentifier();
 
 				// and if it has uuid other than the existing one (should always
 				// be the case)
@@ -563,7 +553,7 @@ public class JcrUtil
 			JcrWorkspace targetWorkspace, Map<JcrNode, List<JcrNode>> result)
 	{
 		// get the referenced node and it's path
-		JcrNode target = node.getSession().getNodeByUUID(value.getString());
+		JcrNode target = node.getSession().getNodeByIdentifier(value.getString());
 		String path = target.getPath();
 
 		// check if the node is child of node from paths
@@ -583,7 +573,7 @@ public class JcrUtil
 		{
 			try
 			{
-				targetWorkspace.getSession().getNodeByUUID(value.getString());
+				targetWorkspace.getSession().getNodeByIdentifier(value.getString());
 				found = true;
 			}
 			catch (JcrException ignore)
@@ -696,7 +686,7 @@ public class JcrUtil
 	{
 		try
 		{
-			BrixNode node = (BrixNode) session.getNodeByUUID(uuid);
+			BrixNode node = (BrixNode) session.getNodeByIdentifier(uuid);
 			return node;
 		}
 		catch (JcrException e)

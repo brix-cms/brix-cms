@@ -14,21 +14,18 @@
 
 package brix.demo.util;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-
-import javax.jcr.Repository;
-
-import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.jackrabbit.core.config.RepositoryConfig;
-import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
-import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
-import org.apache.wicket.util.file.File;
-
 import brix.jcr.JackrabbitWorkspaceManager;
 import brix.jcr.JcrSessionFactory;
 import brix.workspace.WorkspaceManager;
 import brix.workspace.rmi.ClientWorkspaceManager;
+import org.apache.jackrabbit.core.RepositoryImpl;
+import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
+import org.apache.wicket.util.file.File;
+
+import javax.jcr.Repository;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 /**
  * Jcr and Jackrabbit related utilities
@@ -52,7 +49,7 @@ public class JcrUtils
      * <code>url</code> is left blank, a local workspace manager will be created.
      * 
      * @param url
-     * @param brix
+     * @param sessionFactory
      * @return
      */
     public static WorkspaceManager createWorkspaceManager(String url,
@@ -152,10 +149,8 @@ public class JcrUtils
     {
         try
         {
-            ClientRepositoryFactory factory = new ClientRepositoryFactory(
-                    new JackrabbitClientAdapterFactory());
-            Repository repository = factory.getRepository(url);
-            return repository;
+            ClientRepositoryFactory factory = new ClientRepositoryFactory();
+            return factory.getRepository(url);
         }
         catch (Exception e)
         {

@@ -14,15 +14,13 @@
 
 package brix.plugin.site.resource.admin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
-
+import brix.Brix;
+import brix.jcr.wrapper.BrixFileNode;
+import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SimpleCallback;
+import brix.plugin.site.SitePlugin;
+import brix.plugin.site.admin.NodeManagerPanel;
+import brix.web.ContainerFeedbackPanel;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -34,13 +32,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.io.Streams;
 
-import brix.Brix;
-import brix.jcr.wrapper.BrixFileNode;
-import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SimpleCallback;
-import brix.plugin.site.SitePlugin;
-import brix.plugin.site.admin.NodeManagerPanel;
-import brix.web.ContainerFeedbackPanel;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
 public class UploadResourcesPanel extends NodeManagerPanel
 {
@@ -118,7 +113,7 @@ public class UploadResourcesPanel extends NodeManagerPanel
                 String mime = upload.getContentType();
 
                 BrixFileNode file = BrixFileNode.initialize(newNode, mime);
-                file.setData(new FileInputStream(temp));
+                file.setData(file.getSession().getValueFactory().createBinary(new FileInputStream(temp)));
                 file.getParent().save();
 
             }

@@ -14,20 +14,20 @@
 
 package brix.jcr.wrapper;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Calendar;
-
-import javax.jcr.Node;
-
-import org.apache.wicket.util.io.Streams;
-import org.apache.wicket.util.string.Strings;
-
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.resource.ResourceNodePlugin;
+import org.apache.wicket.util.io.Streams;
+import org.apache.wicket.util.string.Strings;
+
+import javax.jcr.Binary;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Calendar;
 
 /**
  * Base class for nodes with content (with JCR primary type nt:file).
@@ -177,7 +177,7 @@ public class BrixFileNode extends BrixNode
 	 * 
 	 * @param data
 	 */
-	public void setData(InputStream data)
+	public void setData(Binary data)
 	{
 		getContent().setProperty("jcr:data", data);
 	}
@@ -199,8 +199,12 @@ public class BrixFileNode extends BrixNode
 	 */
 	public InputStream getDataAsStream()
 	{
-		return getContent().getProperty("jcr:data").getStream();
-	}
+        try {
+            return getContent().getProperty("jcr:data").getBinary().getStream();
+        } catch (RepositoryException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	/**
 	 * Writes the node data to the specified output stream.

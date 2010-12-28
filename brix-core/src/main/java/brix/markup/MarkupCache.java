@@ -14,13 +14,12 @@
 
 package brix.markup;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.wicket.MarkupContainer;
-
 import brix.jcr.wrapper.BrixNode;
 import brix.web.generic.IGenericComponent;
+import org.apache.wicket.MarkupContainer;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Contains {@link GeneratedMarkup} instances associated with
@@ -47,7 +46,7 @@ public class MarkupCache
 		{
 			if (node.isNodeType("mix:referenceable"))
 			{
-				nodeId = node.getUUID();
+				nodeId = node.getIdentifier();
 			}
 			else
 			{

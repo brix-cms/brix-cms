@@ -14,31 +14,6 @@
 
 package brix.plugin.site.admin;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.jcr.ItemNotFoundException;
-
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.DefaultTreeState;
-import org.apache.wicket.markup.html.tree.ITreeState;
-import org.apache.wicket.markup.html.tree.LinkTree;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-
 import brix.Brix;
 import brix.BrixNodeModel;
 import brix.auth.Action.Context;
@@ -58,6 +33,29 @@ import brix.web.tree.JcrTreeNode;
 import brix.web.tree.TreeNode;
 import brix.web.util.AbstractModel;
 import brix.workspace.Workspace;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.tree.BaseTree;
+import org.apache.wicket.markup.html.tree.DefaultTreeState;
+import org.apache.wicket.markup.html.tree.ITreeState;
+import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+
+import javax.jcr.ItemNotFoundException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeTreeContainer
 {
@@ -112,7 +110,6 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
                 throw (e);
             }
         }
-        ;
 
         String nodeWorkspaceName = node.getSession().getWorkspace().getName();
         if (!nodeWorkspaceName.equals(workspace.getId()))
@@ -131,7 +128,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
                 // 1 try to get node with same UUID, 2 try to get node with same
                 // path, 3 get root node
                 JcrSession newSession = node.getBrix().getCurrentSession(workspace.getId());
-                String uuid = node.getUUID();
+                String uuid = node.getIdentifier();
                 BrixNode newNode = JcrUtil.getNodeByUUID(newSession, uuid);
                 if (newNode == null)
                 {
@@ -150,7 +147,6 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
                 tree.getTreeState().expandNode(((TreeModel)tree.getDefaultModelObject()).getRoot());
             }
         }
-        ;
 
         super.onBeforeRender();
 
@@ -271,7 +267,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         {
             return SitePlugin.get().getNodePluginForType(nodeType);
         }
-    };
+    }
 
     private IModel<List<SiteNodePluginEntry>> createNodesModel = new LoadableDetachableModel<List<SiteNodePluginEntry>>()
     {
@@ -302,7 +298,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         {
             return new BrixNodeModel((BrixNode)current.getParent());
         }
-    };
+    }
 
     private class Tree extends LinkTree
     {
@@ -358,7 +354,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         {
             return new TreeState();
         }
-    };
+    }
 
     private class TreeState extends DefaultTreeState
     {
@@ -398,7 +394,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
             JcrTreeNode node = getTreeNode(getModelObject());
             return Arrays.asList(new Object[] { node });
         }
-    };
+    }
 
     private class TreeModel extends AbstractTreeModel
     {
@@ -407,7 +403,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
             Workspace workspace = workspaceModel.getObject();
             return getTreeNode(SitePlugin.get().getSiteRootNode(workspace.getId()));
         }
-    };
+    }
 
     private static final SiteNodeFilter NODE_FILTER = new SiteNodeFilter(false, null);
 
@@ -430,7 +426,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
     private Component getEditor()
     {
         return get(EDITOR_ID);
-    };
+    }
 
     private void setupEditor(Component newEditor)
     {

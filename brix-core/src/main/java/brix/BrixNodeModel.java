@@ -17,12 +17,11 @@
  */
 package brix;
 
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.lang.Objects;
-
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
 import brix.jcr.wrapper.BrixNode;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.lang.Objects;
 
 public class BrixNodeModel implements IModel<BrixNode>
 {
@@ -102,7 +101,7 @@ public class BrixNodeModel implements IModel<BrixNode>
             if (id.startsWith("/"))
                 return (BrixNode) session.getItem(id);
             else
-                return (BrixNode) session.getNodeByUUID(id);
+                return (BrixNode) session.getNodeByIdentifier(id);
         }
         else
         {
@@ -114,7 +113,7 @@ public class BrixNodeModel implements IModel<BrixNode>
     {
         if (node.isNodeType("mix:referenceable"))
         {
-            return node.getUUID();
+            return node.getIdentifier();
         }
         else
         {

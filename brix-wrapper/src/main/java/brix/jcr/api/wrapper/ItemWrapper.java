@@ -14,16 +14,16 @@
 
 package brix.jcr.api.wrapper;
 
+import brix.jcr.api.JcrItem;
+import brix.jcr.api.JcrNode;
+import brix.jcr.api.JcrSession;
+
 import javax.jcr.Item;
 import javax.jcr.ItemVisitor;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
-
-import brix.jcr.api.JcrItem;
-import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrSession;
 
 /**
  * 
@@ -195,7 +195,7 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem
         {
             public void execute() throws Exception
             {
-                getDelegate().save();
+                getDelegate().getSession().save();
             }
         });
     }
