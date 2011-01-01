@@ -14,8 +14,8 @@
 
 package brix.util;
 
+import org.apache.jackrabbit.rmi.client.ClientAdapterFactory;
 import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;
-import org.apache.jackrabbit.rmi.jackrabbit.JackrabbitClientAdapterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +36,7 @@ public class RmiRepositoryFactory {
 
 
     static Repository getRmiRepository(String url) throws MalformedURLException, NotBoundException, RemoteException {
-        ClientRepositoryFactory factory = new ClientRepositoryFactory(new JackrabbitClientAdapterFactory());
-        Repository repository = factory.getRepository(url);
-        return repository;
+        ClientRepositoryFactory factory = new ClientRepositoryFactory(new ClientAdapterFactory());
+        return factory.getRepository(url);
     }
 }

@@ -17,17 +17,16 @@
  */
 package brix.web;
 
+import brix.BrixNodeModel;
+import brix.Path;
 import brix.jcr.exception.JcrException;
+import brix.jcr.wrapper.BrixNode;
+import brix.plugin.site.SitePlugin;
+import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import org.apache.jackrabbit.spi.commons.conversion.MalformedPathException;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
-
-import brix.BrixNodeModel;
-import brix.Path;
-import brix.jcr.wrapper.BrixNode;
-import brix.plugin.site.SitePlugin;
-import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,6 +124,7 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
             while (iter.getCause() != null) {
                 iter = iter.getCause();
             }
+            //TODO: shall we relly rely on Jackrabbit implementation for this??? - truoble is that SPI is not covered by JCR2 intentionally
             if (iter instanceof MalformedPathException) {
                 logger.info("JcrException caught due to incorrect url",e);
             } else {

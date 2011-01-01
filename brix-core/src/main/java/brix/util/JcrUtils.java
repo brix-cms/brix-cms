@@ -14,22 +14,20 @@
 
 package brix.util;
 
+import brix.jcr.Jcr2WorkspaceManager;
+import brix.jcr.JcrSessionFactory;
+import brix.workspace.WorkspaceManager;
+import brix.workspace.rmi.ClientWorkspaceManager;
+import org.apache.jackrabbit.core.RepositoryImpl;
+import org.apache.jackrabbit.core.config.RepositoryConfig;
+import org.apache.wicket.util.file.File;
+import org.apache.wicket.util.io.Streams;
+
+import javax.jcr.Repository;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.jcr.Repository;
-
-import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.jackrabbit.core.config.RepositoryConfig;
-import org.apache.wicket.util.file.File;
-
-import brix.jcr.JackrabbitWorkspaceManager;
-import brix.jcr.JcrSessionFactory;
-import brix.workspace.WorkspaceManager;
-import brix.workspace.rmi.ClientWorkspaceManager;
-import org.apache.wicket.util.io.Streams;
 
 /**
  * Jcr and Jackrabbit related utilities
@@ -53,7 +51,7 @@ public class JcrUtils
      * <code>url</code> is left blank, a local workspace manager will be created.
      * 
      * @param url
-     * @param brix
+     * @param sessionFactory
      * @return
      */
     public static WorkspaceManager createWorkspaceManager(String url,
@@ -62,7 +60,7 @@ public class JcrUtils
         if (url == null || url.trim().length() == 0)
         {
             // create workspace manager for a file system repository
-            JackrabbitWorkspaceManager mgr = new JackrabbitWorkspaceManager(sessionFactory);
+            Jcr2WorkspaceManager mgr = new Jcr2WorkspaceManager(sessionFactory);
             mgr.initialize();
             return mgr;
         }
@@ -129,6 +127,7 @@ public class JcrUtils
                 copyClassResourceToFile("/brix/demo/repository.xml", cfg);
             }
 
+            //TODO: try to clean from Jackrabbit dependency
             InputStream configStream = new FileInputStream(cfg);
             RepositoryConfig config = RepositoryConfig.create(configStream, home.getAbsolutePath());
             return RepositoryImpl.create(config);
@@ -154,6 +153,7 @@ public class JcrUtils
         try
         {
             JcrUtils.class.getClassLoader().loadClass("org.apache.jackrabbit.rmi.client.ClientRepositoryFactory");
+
             return RmiRepositoryFactory.getRmiRepository(url);
         }
         catch (Exception e)

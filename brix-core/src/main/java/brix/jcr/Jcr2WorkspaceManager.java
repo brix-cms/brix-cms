@@ -15,23 +15,23 @@
 package brix.jcr;
 
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import brix.workspace.AbstractSimpleWorkspaceManager;
 import brix.workspace.JcrException;
 import brix.workspace.WorkspaceManager;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * Jackrabbit specific implementation of {@link WorkspaceManager}
+ * JCR2 specific implementation of {@link WorkspaceManager}
  * 
  * @author igor.vaynberg
+ * @author kbachl
  * 
  */
-public class JackrabbitWorkspaceManager extends AbstractSimpleWorkspaceManager
+public class Jcr2WorkspaceManager extends AbstractSimpleWorkspaceManager
 {
 
     private final JcrSessionFactory sf;
@@ -42,7 +42,7 @@ public class JackrabbitWorkspaceManager extends AbstractSimpleWorkspaceManager
      * @param sf
      *            session factory that will be used to feed workspace manager sessions
      */
-    public JackrabbitWorkspaceManager(JcrSessionFactory sf)
+    public Jcr2WorkspaceManager(JcrSessionFactory sf)
     {
         super();
         this.sf = sf;
@@ -55,9 +55,7 @@ public class JackrabbitWorkspaceManager extends AbstractSimpleWorkspaceManager
         Session session = createSession(null);
         try
         {
-        	org.apache.jackrabbit.core.WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl) session
-					.getWorkspace();
-            workspace.createWorkspace(workspaceName);
+            session.getWorkspace().createWorkspace(workspaceName);
         }
         catch (RepositoryException e)
         {

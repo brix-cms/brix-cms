@@ -14,29 +14,10 @@
 
 package brix;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
-import org.apache.jackrabbit.core.WorkspaceImpl;
-import org.apache.wicket.AbstractRestartResponseException;
-import org.apache.wicket.Application;
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Page;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.target.component.IPageRequestTarget;
-
 import brix.auth.Action;
+import brix.auth.Action.Context;
 import brix.auth.AuthorizationStrategy;
 import brix.auth.ViewWorkspaceAction;
-import brix.auth.Action.Context;
 import brix.config.BrixConfig;
 import brix.exception.BrixException;
 import brix.jcr.JcrNodeWrapperFactory;
@@ -44,7 +25,6 @@ import brix.jcr.RepositoryInitializer;
 import brix.jcr.SessionBehavior;
 import brix.jcr.api.JcrNode;
 import brix.jcr.api.JcrSession;
-import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.plugin.site.SiteRootNode;
@@ -57,24 +37,29 @@ import brix.plugin.site.page.tile.Tile;
 import brix.plugin.site.webdav.RulesNode;
 import brix.registry.ExtensionPointRegistry;
 import brix.web.BrixExtensionStringResourceLoader;
-import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
-import brix.web.nodepage.BrixNodeRequestTarget;
-import brix.web.nodepage.BrixNodeWebPage;
-import brix.web.nodepage.BrixPageParameters;
-import brix.web.nodepage.ForbiddenPage;
-import brix.web.nodepage.PageParametersAwareEnabler;
+import brix.web.nodepage.*;
 import brix.web.tile.pagetile.PageTile;
 import brix.workspace.Workspace;
 import brix.workspace.WorkspaceManager;
+import org.apache.wicket.*;
+import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.target.component.IPageRequestTarget;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * TODO doc
- * 
+ *
  * Before brix can be used {@link #initRepository()} method should be called.
- * 
- * 
+ *
+ *
  * @author igor.vaynberg
- * 
+ *
  */
 public abstract class Brix
 {
@@ -163,7 +148,7 @@ public abstract class Brix
 
 	/**
 	 * Performs any {@link WebApplication} specific initialization
-	 * 
+	 *
 	 * @param application
 	 */
 	public void attachTo(WebApplication application)
@@ -203,16 +188,7 @@ public abstract class Brix
 	 */
 	protected void createWorkspace(JcrSession session, String name)
 	{
-		// TODO: Decouple this from BRIX
-		WorkspaceImpl workspace = (WorkspaceImpl)session.getWorkspace().getDelegate();
-		try
-		{
-			workspace.createWorkspace(name);
-		}
-		catch (RepositoryException e)
-		{
-			throw new JcrException(e);
-		}
+        session.getWorkspace().createWorkspace(name);
 	}
 
 	public void clone(JcrSession src, JcrSession dest)
@@ -250,13 +226,13 @@ public abstract class Brix
 	 * public void publish(String workspace, String targetState, SessionProvider
 	 * sessionProvider) { String dest = getWorkspaceNameForState(workspace,
 	 * targetState);
-	 * 
+	 *
 	 * if (workspace.equals(dest) == false) { List<String> workspaces =
 	 * getAvailableWorkspaces(); if (workspaces.contains(dest) == false) {
 	 * createWorkspace(sessionProvider.getJcrSession(null), dest); }
-	 * 
+	 *
 	 * cleanWorkspace(BrixRequestCycle.Locator.getSession(dest));
-	 * 
+	 *
 	 * cloneWorkspace(BrixRequestCycle.Locator.getSession(workspace),
 	 * BrixRequestCycle.Locator .getSession(dest)); } }
 	 */
@@ -305,7 +281,7 @@ public abstract class Brix
 		}
 		catch (RepositoryException e)
 		{
-			throw new RuntimeException("Couldn't init jackrabbit repository", e);
+			throw new RuntimeException("Couldn't initialize repository", e);
 		}
 
 		for (Workspace w : getWorkspaceManager().getWorkspaces())
@@ -391,10 +367,10 @@ public abstract class Brix
 	 * Constructs a URL to the current page. This method can only be called
 	 * within an active wicket request because it relies on the
 	 * {@link RequestCycle} threadlocal.
-	 * 
+	 *
 	 * @throws BrixException
 	 *             if the current request was not for a brix page
-	 * 
+	 *
 	 * @return url to the current brix page
 	 */
 	public static String urlForCurrentPage()
@@ -407,13 +383,13 @@ public abstract class Brix
 	 * Constructs a URL to the current page. This method can only be called
 	 * within an active wicket request because it relies on the
 	 * {@link RequestCycle} threadlocal.
-	 * 
+	 *
 	 * @param params
 	 *            parameters to be encoded into the url
-	 * 
+	 *
 	 * @throws BrixException
 	 *             if the current request was not for a brix page
-	 * 
+	 *
 	 * @return url to the current brix page
 	 */
 	public static String urlForCurrentPage(BrixPageParameters params)
@@ -427,10 +403,10 @@ public abstract class Brix
 	/**
 	 * Returns current brix page being processed. Must only be called within a
 	 * wicket request.
-	 * 
+	 *
 	 * @throws BrixException
 	 *             if current request was not to a brix page
-	 * 
+	 *
 	 * @return brix page
 	 */
 	private static BrixNodeWebPage getCurrentPage()

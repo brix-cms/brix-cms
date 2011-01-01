@@ -15,23 +15,23 @@
 package brix.jcr;
 
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import brix.workspace.AbstractClusteredWorkspaceManager;
 import brix.workspace.JcrException;
 import brix.workspace.WorkspaceManager;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * Jackrabbit specific implementation of {@link WorkspaceManager}
+ * JCR2 specific implementation of {@link WorkspaceManager}
  * 
  * @author igor.vaynberg
+ * @author kbachl
  * 
  */
-public class JackrabbitClusteredWorkspaceManager extends AbstractClusteredWorkspaceManager
+public class Jcr2ClusteredWorkspaceManager extends AbstractClusteredWorkspaceManager
 {
 
     private final JcrSessionFactory sf;
@@ -42,7 +42,7 @@ public class JackrabbitClusteredWorkspaceManager extends AbstractClusteredWorksp
      * @param sf
      *            session factory that will be used to feed workspace manager sessions
      */
-    public JackrabbitClusteredWorkspaceManager(JcrSessionFactory sf)
+    public Jcr2ClusteredWorkspaceManager(JcrSessionFactory sf)
     {
         super();
         this.sf = sf;
@@ -55,9 +55,7 @@ public class JackrabbitClusteredWorkspaceManager extends AbstractClusteredWorksp
         Session session = createSession(null);
         try
         {
-        	org.apache.jackrabbit.core.WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl) session
-					.getWorkspace();
-            workspace.createWorkspace(workspaceName);
+        	session.getWorkspace().createWorkspace(workspaceName);
         }
         catch (RepositoryException e)
         {
