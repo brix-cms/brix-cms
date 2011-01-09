@@ -33,7 +33,7 @@
   <url>http://brix-cms.googlecode.com/svn</url>
  </scm>
  <properties>
-  <wicket.version>1.4.14</wicket.version>
+  <wicket.version>1.4.15</wicket.version>
   <jetty.version>6.1.11</jetty.version>
   <inmethod.grid.version>1.0.0-b4</inmethod.grid.version>
   <htmllexer.version>2.0-beta1</htmllexer.version>
