@@ -1,4 +1,4 @@
-![Brix Logo](http://brix-cms.googlecode.com/svn/wiki/brix-logo.jpg)
+![Brix Logo](https://github.com/brix-cms/brix-cms/raw/master/brix-logo.jpg)
 
 Based on Wicket and JCR, it is the best Wicket-based CMS framework available today. BRIX is simple yet powerful and extensible, allowing designers the highest degree of freedom in developing a rich user experience.   
 
