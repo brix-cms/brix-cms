@@ -14,14 +14,14 @@
 
 package brix.jcr;
 
-import javax.jcr.Workspace;
-
-import org.apache.jackrabbit.api.JackrabbitNodeTypeManager;
+import brix.Brix;
+import org.apache.jackrabbit.commons.cnd.CndImporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brix.Brix;
-import brix.util.StringInputStream;
+import javax.jcr.Workspace;
+import javax.jcr.nodetype.NodeTypeManager;
+import java.io.StringReader;
 
 /**
  * 
@@ -37,8 +37,7 @@ public class RepositoryUtil
     {
         try
         {
-            JackrabbitNodeTypeManager manager = (JackrabbitNodeTypeManager)workspace
-                .getNodeTypeManager();
+            NodeTypeManager manager = workspace.getNodeTypeManager();
 
             if (manager.hasNodeType(typeName) == false)
             {
@@ -55,9 +54,9 @@ public class RepositoryUtil
 
                 if (mixin)
                 	type += " mixin";
- 
-                manager.registerNodeTypes(new StringInputStream(type),
-                    JackrabbitNodeTypeManager.TEXT_X_JCR_CND);
+
+                CndImporter.registerNodeTypes(new StringReader(type), workspace.getSession());
+
             }
             else
             {
