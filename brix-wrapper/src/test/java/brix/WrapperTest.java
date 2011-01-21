@@ -14,19 +14,8 @@
 
 package brix;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jcr.Credentials;
-import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
-import javax.jcr.SimpleCredentials;
-
+import brix.jcr.api.JcrNode;
+import brix.jcr.api.JcrSession;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.jackrabbit.api.JackrabbitRepository;
 import org.apache.jackrabbit.core.RepositoryImpl;
@@ -37,8 +26,17 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brix.jcr.api.JcrNode;
-import brix.jcr.api.JcrSession;
+import javax.jcr.Credentials;
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.SimpleCredentials;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 public class WrapperTest
 {
@@ -139,7 +137,7 @@ public class WrapperTest
 		
 		assertNotNull(node.getIdentifier());
 		
-		JcrNode node1=session.getNodeByUUID(node.getIdentifier());
+		JcrNode node1=session.getNodeByIdentifier(node.getIdentifier());
 		assertNotNull(node1);
 		node1.setProperty("property", "value");
 	}

@@ -131,6 +131,23 @@ public class JcrUtils
             InputStream configStream = new FileInputStream(cfg);
             RepositoryConfig config = RepositoryConfig.create(configStream, home.getAbsolutePath());
             return RepositoryImpl.create(config);
+
+//
+//           --> EXAMPLE FOR REAL JCR2 INIT, REQUIRES JAVA6, THEREFORE NOT IMPLEMENTED!!!
+//
+//            Properties properties = new Properties();
+//            properties.load(configStream);
+//
+//            Repository repository = null;
+//
+//            for (RepositoryFactory factory : ServiceLoader.load(RepositoryFactory.class)) {
+//                repository = factory.getRepository(properties);
+//                if(repository != null) {
+//                    break;
+//                }
+//            }
+//
+//            return repository;
         }
         catch (Exception e)
         {

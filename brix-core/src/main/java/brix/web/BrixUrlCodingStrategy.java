@@ -124,7 +124,9 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
             while (iter.getCause() != null) {
                 iter = iter.getCause();
             }
-            //TODO: shall we really rely on Jackrabbit implementation for this??? - truoble is that SPI is not covered by JCR2 intentionally
+
+            //TODO: shall we really rely on Jackrabbit implementation for this??? - trouble is that SPI is not covered by JCR2 intentionally
+            //it's the last bit of jackrabbit in core!
             if (iter instanceof MalformedPathException) {
                 logger.info("JcrException caught due to incorrect url",e);
             } else {

@@ -19,6 +19,7 @@
   <module>brix-plugin-menu</module>
   <module>brix-plugin-webdavurl</module>
   <module>brix-plugin-publish</module>
+  <module>brix-jackrabbit</module>
  </modules>
  <licenses>
   <license>
@@ -91,6 +92,11 @@
     <groupId>brix</groupId>
     <artifactId>brix-plugin-publish</artifactId>
     <version>1.2.3-SNAPSHOT</version>
+   </dependency>
+   <dependency>
+       <groupId>brix</groupId>
+       <artifactId>brix-jackrabbit</artifactId>
+       <version>1.2.3-SNAPSHOT</version>
    </dependency>
 <!--+
 			    | JCR
