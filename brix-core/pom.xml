@@ -190,7 +190,7 @@
              org.osgi*, brix.jcr.api, brix.jcr.*, com.inmethod.grid.*, javax.jcr.*, javax.servlet, javax.servlet.http,
              javax.swing.event, javax.swing.tree, org.apache.jackrabbit.api, org.apache.jackrabbit.spi.*,
              org.apache.jackrabbit.core, org.apache.jackrabbit.server.io, org.apache.wicket.*, org.htmlparser,
-             org.htmlparser.lexer, org.htmlparser.util, org.slf4j, brix.workspace.rmi, org.apache.jackrabbit.core.config, org.apache.jackrabbit.rmi.client, org.apache.jackrabbit.rmi.jackrabbit
+             org.htmlparser.lexer, org.htmlparser.util, org.slf4j, brix.workspace.rmi, org.apache.jackrabbit.commons.cnd
          </Import-Package>
          <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
       <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
