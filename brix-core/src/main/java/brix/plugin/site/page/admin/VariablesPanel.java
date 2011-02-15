@@ -53,6 +53,7 @@ import com.inmethod.grid.column.PropertyColumn;
 import com.inmethod.grid.column.editable.EditablePropertyColumn;
 import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.datagrid.DataGrid;
+import com.inmethod.grid.datagrid.DefaultDataGrid;
 
 public class VariablesPanel extends BrixGenericPanel<BrixNode>
 {
@@ -86,7 +87,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode>
 			}
 		});
 							
-		final DataGrid grid = new DataGrid("grid", new DataSource(), columns) {
+		final DataGrid grid = new DefaultDataGrid("grid", new DataSource(), columns) {
 			@Override
 			public void onItemSelectionChanged(IModel item, boolean newValue)
 			{
@@ -163,8 +164,12 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode>
 					return o1.getKey().compareTo(o2.getKey());
 				}				
 			});
-			result.setItems(res.iterator());
-			result.setTotalCount(res.size());
+            int total = res.size();
+            if (total > query.getFrom()) {
+                res = res.subList(query.getFrom(), total);
+            }
+            result.setItems(res.iterator());
+            result.setTotalCount(total);
 		}
 
 		public void detach()
