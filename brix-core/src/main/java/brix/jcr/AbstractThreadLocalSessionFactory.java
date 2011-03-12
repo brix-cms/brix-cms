@@ -83,6 +83,7 @@ public abstract class AbstractThreadLocalSessionFactory
                 session.logout();
             }
         }
+        container.get().clear();
     }
 
     public Session createSession(String workspace) throws CannotOpenJcrSessionException
