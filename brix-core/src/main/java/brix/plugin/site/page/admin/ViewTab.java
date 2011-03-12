@@ -44,6 +44,7 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
 		add(new Label("title", new PropertyModel<String>(model, "title")));
 		add(new Label("template", new PropertyModel<String>(model, "templatePath")));
 		add(new ProtocolLabel("requiresSSL", new PropertyModel<Boolean>(model, "requiresSSL")));
+		add(new Label("mimeType", new PropertyModel<String>(model, "mimeType")));
 		// add(new Label("content", new PropertyModel(model, "dataAsString")));
 
 		List<IBrixTab> tabs = new ArrayList<IBrixTab>();

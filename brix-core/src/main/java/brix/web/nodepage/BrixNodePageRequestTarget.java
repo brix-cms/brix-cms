@@ -21,8 +21,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
-import org.apache.wicket.util.time.Time;
 
+import brix.jcr.wrapper.BrixFileNode;
 import brix.jcr.wrapper.BrixNode;
 
 public class BrixNodePageRequestTarget
@@ -111,9 +111,6 @@ public class BrixNodePageRequestTarget
 		{
 
 			WebResponse response = (WebResponse)requestCycle.getResponse();
-
-			// force text/html content type for pages
-			response.setContentType("text/html");
 			
 			// TODO figure out how to handle last modified for pages.
 			// lastmodified depends on both the page and the tiles, maybe tiles
@@ -121,7 +118,26 @@ public class BrixNodePageRequestTarget
 			// response.setLastModifiedTime(Time.valueOf(node.getObject().getLastModified()));
 
 			getPage().renderPage();
+			
+			// must be after render page because Page.configureResponse() sets
+			// response.setContentType("text/" + getMarkupType() + "; charset=" + encoding);
+			String mimeType = getMimeType(node.getObject());
+			String encoding = requestCycle.getApplication().getRequestCycleSettings().getResponseRequestEncoding();
+			response.setContentType(mimeType + "; charset=" + encoding);
 		}
+	}
+	
+	protected static String getMimeType(BrixNode brixNode) {
+        
+        BrixFileNode brixFileNode = new BrixFileNode(brixNode.getDelegate(), brixNode.getSession());
+        
+        String mimeType = null;
+        mimeType = brixFileNode.getMimeType();
+        
+        if (mimeType == null || mimeType.trim().isEmpty()) {
+        	mimeType = "text/html";
+        }
+        return mimeType;
 	}
 
 

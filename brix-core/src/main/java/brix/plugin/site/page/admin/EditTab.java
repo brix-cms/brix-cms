@@ -70,6 +70,9 @@ abstract class EditTab extends NodeManagerPanel
 
         IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
         form.add(new ProtocolSelector("requiresSSL", booleanModel));
+        
+        IModel<String> mimeTypeModel = adapter.forProperty("mimeType");
+        form.add(new TextField<String>("mimeType", mimeTypeModel));
 
         // set up markup editor
 
