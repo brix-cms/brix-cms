@@ -29,12 +29,12 @@
   </license>
  </licenses>
  <scm>
-  <connection>scm:svn:http://brix-cms.googlecode.com/svn</connection>
-  <developerConnection>scm:svn:https://brix-cms.googlecode.com/svn</developerConnection>
-  <url>http://brix-cms.googlecode.com/svn</url>
+  <connection>scm:git:git://github.com/brix-cms</connection>
+  <developerConnection>scm:git:git://github.com/brix-cms</developerConnection>
+  <url>https://github.com/brix-cms/brix-cms</url>
  </scm>
  <properties>
-  <wicket.version>1.4.15</wicket.version>
+  <wicket.version>1.4.16</wicket.version>
   <jetty.version>6.1.11</jetty.version>
   <inmethod.grid.version>1.0.0-b4</inmethod.grid.version>
   <htmllexer.version>2.0-beta1</htmllexer.version>
