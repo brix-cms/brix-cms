@@ -107,7 +107,8 @@
    </plugin>
   </plugins>
  </build>
- <dependencies>
+
+    <dependencies>
   <dependency>
    <groupId>org.apache.jackrabbit</groupId>
    <artifactId>jackrabbit-jcr-rmi</artifactId>
@@ -122,6 +123,8 @@
     </exclusion>
    </exclusions>
   </dependency>
+
+
   <dependency>
    <groupId>brix</groupId>
    <artifactId>brix-core</artifactId>
@@ -146,10 +149,17 @@
    <groupId>brix</groupId>
    <artifactId>brix-workspace</artifactId>
   </dependency>
-  <dependency>
-      <groupId>brix</groupId>
-      <artifactId>brix-jackrabbit</artifactId>
-  </dependency>
+
+  <!--<dependency>-->
+      <!--<groupId>brix</groupId>-->
+      <!--<artifactId>brix-jackrabbit</artifactId>-->
+  <!--</dependency>-->
+
+        <dependency>
+            <groupId>brix</groupId>
+            <artifactId>brix-modeshape</artifactId>
+        </dependency>
+
   <dependency>
    <groupId>org.apache.wicket</groupId>
    <artifactId>wicket</artifactId>

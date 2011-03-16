@@ -20,6 +20,7 @@
   <module>brix-plugin-webdavurl</module>
   <module>brix-plugin-publish</module>
   <module>brix-jackrabbit</module>
+     <module>brix-modeshape</module>
  </modules>
  <licenses>
   <license>
@@ -98,6 +99,13 @@
        <artifactId>brix-jackrabbit</artifactId>
        <version>1.2.3-SNAPSHOT</version>
    </dependency>
+   <dependency>
+      <groupId>brix</groupId>
+      <artifactId>brix-modeshape</artifactId>
+      <version>1.2.3-SNAPSHOT</version>
+   </dependency>
+
+
 <!--+
 			    | JCR
 			    +-->
