@@ -118,7 +118,7 @@ public class JcrUtils
             JcrConfiguration config = new JcrConfiguration().loadFrom(configStream);
             JcrEngine engine = config.build();
             engine.start();
-            return engine.getRepository("default");
+            return engine.getRepository("Brix repository");
 
 
             // This was try 2 - but it won't start because of
@@ -131,10 +131,15 @@ public class JcrUtils
 //            .setDescription("The Repository")
 //            .setProperty("defaultWorkspaceName", "default");
 //
+//            config.repository("brix").setSource("BrixRepoSource")
+//                    .setOption(JcrRepository.Option.JAAS_LOGIN_CONFIG_NAME, "user")
+//
+//            .setOption(JcrRepository.Option.ANONYMOUS_USER_ROLES, "admin");
+
 //
 //            JcrEngine engine = config.build();
 //            engine.start();
-//            return engine.getRepository("default");
+//            return engine.getRepository("brix");
 
 
 

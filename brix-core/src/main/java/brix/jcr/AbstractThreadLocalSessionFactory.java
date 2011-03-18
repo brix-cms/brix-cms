@@ -14,15 +14,14 @@
 
 package brix.jcr;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.jcr.Credentials;
 import javax.jcr.Repository;
 import javax.jcr.Session;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public abstract class AbstractThreadLocalSessionFactory
@@ -62,7 +61,7 @@ public abstract class AbstractThreadLocalSessionFactory
                 final Credentials credentials=getCredentials();
                 logger.debug("Opening managed jcr session to workspace: {} with credentials: {}",
                     workspace, credentials);
-                session = getRepository().login(credentials, workspace);
+                session = getRepository().login(null, workspace);
             }
             catch (Exception e)
             {
@@ -93,7 +92,8 @@ public abstract class AbstractThreadLocalSessionFactory
             final Credentials credentials=getCredentials();
             logger.debug("Opening unmanaged jcr session to workspace: {} with credentials: {}",
                 workspace, credentials);
-            return getRepository().login(credentials, workspace);
+//            return getRepository().login(credentials, workspace);
+             return getRepository().login(null, workspace);
         }
         catch (Exception e)
         {

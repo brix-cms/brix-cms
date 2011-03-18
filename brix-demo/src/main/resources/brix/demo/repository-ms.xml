@@ -10,7 +10,7 @@
         <mode:repository jcr:name="Brix repository" mode:source="Brix">
             <mode:options jcr:primaryType="mode:options">
                 <systemSourceName jcr:primaryType="mode:option" mode:value="system@Brix"/>
-                <jaasLoginConfigName jcr:primaryType="mode:option" mode:value="modeshape-jcr"/>
+                <!--<jaasLoginConfigName jcr:primaryType="mode:option" mode:value="modeshape-jcr"/>-->
                 <!--
                 As a convenience, ModeShape defaults to granting guest users full access.
                 In a production system, you would want to limit this access by uncommenting one of the
@@ -22,6 +22,7 @@
                 for read-only acces:
                 <anonymousUserRoles jcr:PrimaryType="mode:option" mode:value="readonly" />
                 -->
+                <anonymousUserRoles jcr:PrimaryType="mode:option" mode:value="admin" />
 
             </mode:options>
         </mode:repository>

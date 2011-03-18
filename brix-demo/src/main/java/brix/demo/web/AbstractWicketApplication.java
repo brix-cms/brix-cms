@@ -14,10 +14,10 @@
 
 package brix.demo.web;
 
-import javax.jcr.Repository;
-
+import brix.demo.ApplicationProperties;
+import brix.jcr.ThreadLocalSessionFactory;
 import brix.util.JcrUtils;
-import org.apache.jackrabbit.core.RepositoryImpl;
+import brix.workspace.WorkspaceManager;
 import org.apache.wicket.Request;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Response;
@@ -26,9 +26,9 @@ import org.apache.wicket.protocol.http.WebRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import brix.demo.ApplicationProperties;
-import brix.jcr.ThreadLocalSessionFactory;
-import brix.workspace.WorkspaceManager;
+import javax.jcr.Repository;
+
+//import org.apache.jackrabbit.core.RepositoryImpl;
 
 /**
  * Factors out noise not necessary to demonstrating how to install Brix into a Wicket application.
@@ -102,11 +102,11 @@ public abstract class AbstractWicketApplication extends WebApplication
     protected void onDestroy()
     {
         // shutdown the repository cleanly
-        if (repository instanceof RepositoryImpl)
-        {
-            logger.info("Shutting down JackRabbit repository...");
-            ((RepositoryImpl)repository).shutdown();
-        }
+//        if (repository instanceof RepositoryImpl)
+//        {
+//            logger.info("Shutting down JackRabbit repository...");
+//            ((RepositoryImpl)repository).shutdown();
+//        }
         super.onDestroy();
     }
 
