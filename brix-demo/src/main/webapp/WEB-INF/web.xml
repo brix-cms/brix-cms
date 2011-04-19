@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app>
-  <display-name>brix-demo</display-name>
+  <display-name>org.brixcms-demo</display-name>
   
 <!--+
     | WICKET CONFIG
@@ -11,7 +11,7 @@
     </filter-class>
     <init-param>
       <param-name>applicationClassName</param-name>
-      <param-value>brix.demo.web.WicketApplication</param-value>
+      <param-value>org.brixcms.demo.web.WicketApplication</param-value>
     </init-param>
     <init-param>
       <param-name>wicket.configuration</param-name>
@@ -31,7 +31,7 @@
     +-->
   <servlet>
     <servlet-name>SimpleWebDav</servlet-name>
-    <servlet-class>brix.demo.web.dav.SimpleServlet</servlet-class>
+    <servlet-class>org.brixcms.demo.web.dav.SimpleServlet</servlet-class>
     <init-param>
       <param-name>resource-path-prefix</param-name>
       <param-value>/webdav</param-value>
@@ -47,7 +47,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>JcrWebDav</servlet-name>
-    <servlet-class>brix.demo.web.dav.JcrServlet</servlet-class>
+    <servlet-class>org.brixcms.demo.web.dav.JcrServlet</servlet-class>
     <init-param>
       <param-name>resource-path-prefix</param-name>
       <param-value>/jcrwebdav</param-value>

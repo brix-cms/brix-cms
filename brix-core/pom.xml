@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
  <modelVersion>4.0.0</modelVersion>
  <parent>
-  <groupId>brix</groupId>
-  <artifactId>brix</artifactId>
-  <version>1.2.3-SNAPSHOT</version>
+  <groupId>org.brixcms</groupId>
+  <artifactId>brixcms</artifactId>
+  <version>1.3-SNAPSHOT</version>
  </parent>
- <artifactId>brix-core</artifactId>
+ <artifactId>brixcms-core</artifactId>
  <packaging>bundle</packaging>
- <version>1.2.3-SNAPSHOT</version>
+ <version>1.3-SNAPSHOT</version>
 <!-- TODO project name  -->
  <name>Brix Core</name>
  <description>Brix Core module provides the bulk of CMS
@@ -184,13 +184,15 @@
     <configuration>
      <instructions>
       <Export-Package>
-       brix.plugin.site.page.tile.admin,brix.plugin.site.page.tile,brix.jcr,brix.web.admin,brix.config,brix.auth,brix,brix.web,brix.web.nodepage,brix.registry,brix.jcr.wrapper,brix.plugin.site,brix.web.picker.common,brix.web.reference,brix.web.util,brix.web.tab,brix.web.generic,brix.plugin.site.page.global,brix.plugin.site.picker.reference,brix.plugin.site.picker.node,brix.web.tree,brix.exception
+          org.brixcms.plugin.site.page.tile.adorg.brixcmsxcms.plugin.site.pagebrixcmse,bribrixcmsr,brix.web.admbrixcmsrix.confbrixcmsrix.abribrixcmsbrix,brix.web,bribrixcmsb.nodepage,brix.brixcmsstry,brix.jcr.wrappbrixcmsrix.plubrixcmssite,brix.web.picbrixcmscommbrixcmsrix.web.referebrixcmsbrix.web.utbrixcmsrix.web.tbrixcmsrix.web.generic,brix.plugin.site.pagbrixcmsobal,brix.plugin.sbrixcbrixcbrixcmser.reference,brix.plugin.site.picker.node,brix.web.tree,brix.exception
       </Export-Package>
          <Import-Package>
-             org.osgi*, brix.jcr.api, brix.jcr.*, com.inmethod.grid.*, javax.jcr.*, javax.servlet, javax.servlet.http,
+             org.osgi*, org.brixcms.jcr.api, org.brixcms.jcr.*, com.inmethod.grid.*, javax.jcr.*, javax.servlet,
+             javax.servlet.http,
              javax.swing.event, javax.swing.tree, org.apache.jackrabbit.api, org.apache.jackrabbit.spi.*,
              org.apache.jackrabbit.core, org.apache.jackrabbit.server.io, org.apache.wicket.*, org.htmlparser,
-             org.htmlparser.lexer, org.htmlparser.util, org.slf4j, brix.workspace.rmi, org.apache.jackrabbit.commons.cnd
+             org.htmlparser.lexer, org.htmlparser.util, org.slf4brixcmsrix.workspace.rmi,
+             org.apache.jackrabbit.commons.cnd
          </Import-Package>
          <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
       <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>

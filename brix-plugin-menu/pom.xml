@@ -1,21 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
  <parent>
-  <artifactId>brix</artifactId>
-  <groupId>brix</groupId>
-  <version>1.2.3-SNAPSHOT</version>
+  <artifactId>brixcms</artifactId>
+  <groupId>org.brixcms</groupId>
+  <version>1.3-SNAPSHOT</version>
  </parent>
  <modelVersion>4.0.0</modelVersion>
- <groupId>brix</groupId>
- <artifactId>brix-plugin-menu</artifactId>
+ <groupId>org.brixcms</groupId>
+ <artifactId>brixcms-plugin-menu</artifactId>
  <name>Brix Menu System Plugin</name>
- <version>1.2.3-SNAPSHOT</version>
+ <version>1.3-SNAPSHOT</version>
  <packaging>bundle</packaging>
  <url>http://maven.apache.org</url>
  <dependencies>
   <dependency>
-   <groupId>brix</groupId>
-   <artifactId>brix-core</artifactId>
-   <version>1.2.3-SNAPSHOT</version>
+   <groupId>org.brixcms</groupId>
+   <artifactId>brixcms-core</artifactId>
+   <version>1.3-SNAPSHOT</version>
   </dependency>
   <dependency>
    <groupId>junit</groupId>
@@ -34,10 +34,10 @@
     <configuration>
      <instructions>
       <Export-Package>
-       brix.plugin.menu
+          org.brixcms.plugin.menu
       </Export-Package>
       <Import-Package>
-       org.osgi*, brix.*, com.inmethod.grid.*, javax.jcr, javax.swing.tree, org.apache.wicket.*
+          org.osgi*, org.brixcms.*, com.inmethod.grid.*, javax.jcr, javax.swing.tree, org.apache.wicket.*
       </Import-Package>
       <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
       <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>

@@ -2,7 +2,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	version="2.4">
-	<display-name>brix-rmiserver</display-name>
+	<display-name>org.brixcms-rmiserver</display-name>
 
   <!--+
       | SPRING CONFIG
@@ -34,7 +34,7 @@
 		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
 		<init-param>
 			<param-name>applicationClassName</param-name>
-			<param-value>brix.rmiserver.web.admin.AdminApplication</param-value>
+			<param-value>org.brixcms.rmiserver.web.admin.AdminApplication</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -46,7 +46,7 @@
 	    +-->
 	<servlet>
 		<servlet-name>webdav</servlet-name>
-		<servlet-class>brix.rmiserver.web.dav.WebDavServlet</servlet-class>
+		<servlet-class>org.brixcms.rmiserver.web.dav.WebDavServlet</servlet-class>
 		<init-param>
 			<param-name>resource-path-prefix</param-name>
 			<param-value>/webdav</param-value>
