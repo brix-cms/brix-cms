@@ -114,8 +114,8 @@
         | BRIX
         +-->
   <dependency>
-   <groupId>brix</groupId>
-   <artifactId>brix-workspace</artifactId>
+   <groupId>org.brixcms</groupId>
+   <artifactId>brixcms-workspace</artifactId>
   </dependency>
 <!--+
         | JCR AND JACKRABBIT

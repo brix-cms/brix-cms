@@ -13,8 +13,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>brix</groupId>
-            <artifactId>brix-core</artifactId>
+            <groupId>org.brixcms</groupId>
+            <artifactId>brixcms-core</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.jcr</groupId>

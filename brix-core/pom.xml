@@ -25,12 +25,12 @@
  </licenses>
  <dependencies>
   <dependency>
-   <groupId>brix</groupId>
-   <artifactId>brix-wrapper</artifactId>
+   <groupId>org.brixcms</groupId>
+   <artifactId>brixcms-wrapper</artifactId>
   </dependency>
   <dependency>
-   <groupId>brix</groupId>
-   <artifactId>brix-workspace</artifactId>
+   <groupId>org.brixcms</groupId>
+   <artifactId>brixcms-workspace</artifactId>
   </dependency>
   <dependency>
    <groupId>com.inmethod</groupId>
