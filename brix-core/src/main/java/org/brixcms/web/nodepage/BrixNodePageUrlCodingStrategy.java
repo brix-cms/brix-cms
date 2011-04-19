@@ -23,6 +23,7 @@ import org.apache.wicket.request.target.component.BookmarkableListenerInterfaceR
 import org.apache.wicket.request.target.component.IBookmarkablePageRequestTarget;
 import org.apache.wicket.request.target.component.listener.ListenerInterfaceRequestTarget;
 import org.apache.wicket.util.string.AppendingStringBuffer;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
 import org.brixcms.BrixNodeModel;

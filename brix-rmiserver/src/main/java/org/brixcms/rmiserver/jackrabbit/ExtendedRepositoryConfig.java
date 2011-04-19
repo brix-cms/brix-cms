@@ -15,6 +15,7 @@
 package org.brixcms.rmiserver.jackrabbit;
 
 
+import org.apache.jackrabbit.core.config.*;
 import org.apache.jackrabbit.core.data.DataStore;
 import org.apache.jackrabbit.core.fs.FileSystem;
 import org.apache.jackrabbit.core.query.QueryHandler;

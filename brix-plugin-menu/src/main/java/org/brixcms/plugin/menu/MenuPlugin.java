@@ -51,9 +51,14 @@ public class MenuPlugin implements Plugin
 
 	private static final String ID = MenuPlugin.class.getName();
 
+    // for backwards compatibility: todo decide!
+//    private static final String ID = "brix.plugin.menu.MenuPlugin";
+
+
 	public String getId()
 	{
-		return ID;
+//		System.out.print(ID);
+        return ID;
 	}
 
 	public static MenuPlugin get(Brix brix)

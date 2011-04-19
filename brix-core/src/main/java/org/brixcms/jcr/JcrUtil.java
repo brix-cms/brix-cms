@@ -15,6 +15,7 @@
 package org.brixcms.jcr;
 
 import org.apache.wicket.util.string.Strings;
+import org.brixcms.jcr.api.*;
 import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
 

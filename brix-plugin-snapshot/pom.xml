@@ -33,17 +33,17 @@
     <extensions>true</extensions>
     <configuration>
      <instructions>
-      <Export-Package>
-          org.brixcms.plugin.snapshot
+          <Export-Package>
+       org.brixcms.plugin.snapshot
       </Export-Package>
       <Import-Package>
-          org.osgi*,org.brixcms, org.brixcms.autbrixcmsrix.exception, org.brixcms.brixcmsapi, brix.plugbrixcmsite,
-          brix.wbrixcmseneric,
-          brix.web.tabrixcmsrix.workspace, org.apache.wicket, org.apache.wicket.behavior,
+       org.osgi*, org.brixcms, org.brixcms.auth, org.brixcms.exception,
+          org.brixcms.jcr.api, org.brixcms.plugin.site, org.brixcms.web.generic, org.brixcms.web.tab,
+          org.brixcms.workspace, org.apache.wicket, org.apache.wicket.behavior,
           org.apache.wicket.markup.html.basic, org.apache.wicket.markup.html.form,
           org.apache.wicket.markup.html.form.upload, org.apache.wicket.markup.html.link,
-          org.apache.wicket.markup.html.list, org.apache.wicket.markup.html.panel, org.apache.wicket.model,
-          org.apache.wicket.protocol.http
+          org.apache.wicket.markup.html.list, org.apache.wicket.markup.html.panel,
+          org.apache.wicket.model, org.apache.wicket.protocol.http
       </Import-Package>
       <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
       <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>

@@ -45,7 +45,8 @@ public class ApplicationProperties
     {
         this.prefix = prefix;
         // load base properties
-        String baseProperties = prefix.replace(".","/") + "/application.properties";
+        String baseProperties = "org/brixcms/demo" + "/application.properties";
+
         Properties base = PropertyUtils.loadFromClassPath(baseProperties, false);
 
         // load user-specific property overrides

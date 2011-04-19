@@ -21,6 +21,7 @@ import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.apache.wicket.util.lang.Objects;
+import org.apache.wicket.util.string.StringValue;
 import org.brixcms.exception.BrixException;
 import org.brixcms.jcr.wrapper.BrixNode;
 
@@ -372,7 +373,7 @@ public class BrixPageParameters implements Serializable
     /**
      * Constructs a url to the specified page appending these page parameters
      * 
-     * @param page
+     * @param
      * @return url
      */
     public String urlFor(IModel<BrixNode> node)

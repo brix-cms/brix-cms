@@ -124,7 +124,7 @@ public class JcrUtils
             File cfg = new File(home, "repository.xml");
             if (!cfg.exists())
             {
-                copyClassResourceToFile("/brix/demo/repository.xml", cfg);
+                copyClassResourceToFile("/org/brixcms/demo/repository.xml", cfg);
             }
 
             //TODO: try to clean from Jackrabbit dependency

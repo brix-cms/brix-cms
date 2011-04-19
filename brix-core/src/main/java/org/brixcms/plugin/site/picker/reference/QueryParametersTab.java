@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.util.lang.Objects;
+import org.apache.wicket.util.string.StringValue;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
 import java.io.Serializable;

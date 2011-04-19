@@ -40,14 +40,14 @@
     <configuration>
      <instructions>
       <Export-Package>
-          org.brixcms.plugin.webdavurl
+       org.brixcms.plugin.webdavurl
       </Export-Package>
       <Import-Package>
-          org.osgi*,org.brixcms, org.brixcms.autbrixcmsrix.jcr.api, org.brixcms.web.brixcmsric, brbrixcmseb.tab,
-          brix.wbrixcmstil,
-          brix.workspace, javax.servlet.http, org.apache.wicket, org.apache.wicket.markup,
-          org.apache.wicket.markup.html, org.apache.wicket.markup.html.panel, org.apache.wicket.model,
-          org.apache.wicket.protocol.http
+       org.osgi*, org.brixcms, org.brixcms.auth, org.brixcms.jcr.api, org.brixcms.web.generic,
+          org.brixcms.web.tab, org.brixcms.web.util, org.brixcms.workspace,
+          javax.servlet.http, org.apache.wicket, org.apache.wicket.markup,
+          org.apache.wicket.markup.html, org.apache.wicket.markup.html.panel,
+          org.apache.wicket.model, org.apache.wicket.protocol.http
       </Import-Package>
       <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
       <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>

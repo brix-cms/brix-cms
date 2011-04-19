@@ -14,6 +14,7 @@
 
 package org.brixcms;
 
+import org.apache.wicket.*;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.brixcms.auth.Action;
@@ -365,7 +366,7 @@ public abstract class Brix
 	/**
 	 * Constructs a URL to the current page. This method can only be called
 	 * within an active wicket request because it relies on the
-	 * {@link RequestCycle} threadlocal.
+	 * {@link org.apache.wicket.RequestCycle} threadlocal.
 	 *
 	 * @throws BrixException
 	 *             if the current request was not for a brix page

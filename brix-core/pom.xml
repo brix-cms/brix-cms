@@ -184,15 +184,19 @@
     <configuration>
      <instructions>
       <Export-Package>
-          org.brixcms.plugin.site.page.tile.adorg.brixcmsxcms.plugin.site.pagebrixcmse,bribrixcmsr,brix.web.admbrixcmsrix.confbrixcmsrix.abribrixcmsbrix,brix.web,bribrixcmsb.nodepage,brix.brixcmsstry,brix.jcr.wrappbrixcmsrix.plubrixcmssite,brix.web.picbrixcmscommbrixcmsrix.web.referebrixcmsbrix.web.utbrixcmsrix.web.tbrixcmsrix.web.generic,brix.plugin.site.pagbrixcmsobal,brix.plugin.sbrixcbrixcbrixcmser.reference,brix.plugin.site.picker.node,brix.web.tree,brix.exception
+       org.brixcms.plugin.site.page.tile.admin, org.brixcms.plugin.site.page.tile,
+          org.brixcms.jcr, org.brixcms.web.admin, org.brixcms.config, org.brixcms.auth,
+          org.brixcms, org.brixcms.web, org.brixcms.web.nodepage, org.brixcms.registry,
+          org.brixcms.jcr.wrapper, org.brixcms.plugin.site, org.brixcms.web.picker.common,
+          org.brixcms.web.reference, org.brixcms.web.util, org.brixcms.web.tab, org.brixcms.web.generic,
+          org.brixcms.plugin.site.page.global, org.brixcms.plugin.site.picker.reference,
+          org.brixcms.plugin.site.picker.node, org.brixcms.web.tree, org.brixcms.exception
       </Export-Package>
          <Import-Package>
-             org.osgi*, org.brixcms.jcr.api, org.brixcms.jcr.*, com.inmethod.grid.*, javax.jcr.*, javax.servlet,
-             javax.servlet.http,
+             org.osgi*, org.brixcms.jcr.api, org.brixcms.jcr.*, com.inmethod.grid.*, javax.jcr.*, javax.servlet, javax.servlet.http,
              javax.swing.event, javax.swing.tree, org.apache.jackrabbit.api, org.apache.jackrabbit.spi.*,
              org.apache.jackrabbit.core, org.apache.jackrabbit.server.io, org.apache.wicket.*, org.htmlparser,
-             org.htmlparser.lexer, org.htmlparser.util, org.slf4brixcmsrix.workspace.rmi,
-             org.apache.jackrabbit.commons.cnd
+             org.htmlparser.lexer, org.htmlparser.util, org.slf4j, org.brixcms.workspace.rmi, org.apache.jackrabbit.commons.cnd
          </Import-Package>
          <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true</Bundle-SymbolicName>
       <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>

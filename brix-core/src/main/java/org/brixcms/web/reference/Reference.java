@@ -18,6 +18,7 @@ import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.BrixNodeModel;
 import org.brixcms.jcr.api.JcrNodeIterator;
