@@ -13,7 +13,7 @@
  */
 
 /**
- * 
+ *
  */
 package brix.web;
 
@@ -23,15 +23,13 @@ import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
-import org.apache.jackrabbit.spi.commons.conversion.MalformedPathException;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
-{
+public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
     Logger logger = LoggerFactory.getLogger(BrixUrlCodingStrategy.class);
 
     /**
@@ -41,59 +39,45 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
 
     /**
      * Constructor
-     * 
+     *
      * @param brixRequestCycleProcessor
      */
-    public BrixUrlCodingStrategy(BrixRequestCycleProcessor brixRequestCycleProcessor)
-    {
+    public BrixUrlCodingStrategy(BrixRequestCycleProcessor brixRequestCycleProcessor) {
         this.brixRequestCycleProcessor = brixRequestCycleProcessor;
     }
 
-    private Path decode(Path path)
-    {
+    private Path decode(Path path) {
         StringBuilder builder = new StringBuilder(path.toString().length());
         boolean first = true;
-        for (String s : path)
-        {
-            if (first)
-            {
+        for (String s : path) {
+            if (first) {
                 first = false;
-            }
-            else
-            {
+            } else {
                 builder.append("/");
             }
             builder.append(BrixNodePageUrlCodingStrategy.urlDecode(s));
         }
-        if (builder.length() == 0)
-        {
+        if (builder.length() == 0) {
             builder.append("/");
         }
         return new Path(builder.toString(), false);
     }
 
-    private IRequestTarget getSwitchTarget(BrixNode node)
-    {
-        if (node instanceof BrixNode)
-        {
+    private IRequestTarget getSwitchTarget(BrixNode node) {
+        if (node instanceof BrixNode) {
             return SwitchProtocolRequestTarget.requireProtocol((node).getRequiredProtocol());
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public IRequestTarget targetForPath(String pathStr, RequestParameters requestParameters)
-    {
-        if (!pathStr.startsWith("/"))
-        {
+    public IRequestTarget targetForPath(String pathStr, RequestParameters requestParameters) {
+        if (!pathStr.startsWith("/")) {
             pathStr = "/" + pathStr;
         }
 
         // TODO: This is just a quick fix
-        if (pathStr.startsWith("/webdav") || pathStr.startsWith("/jcrwebdav"))
-        {
+        if (pathStr.startsWith("/webdav") || pathStr.startsWith("/jcrwebdav")) {
             return null;
         }
 
@@ -101,20 +85,16 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
 
         IRequestTarget target = null;
         try {
-            while (target == null)
-            {
+            while (target == null) {
                 final BrixNode node = this.brixRequestCycleProcessor.getNodeForUriPath(path);
-                if (node != null)
-                {
+                if (node != null) {
                     target = getSwitchTarget(node);
-                    if (target == null)
-                    {
+                    if (target == null) {
                         target = SitePlugin.get().getNodePluginForNode(node).respond(
                                 new BrixNodeModel(node), requestParameters);
                     }
                 }
-                if (path.isRoot() || path.toString().equals("."))
-                {
+                if (path.isRoot() || path.toString().equals(".")) {
                     break;
                 }
                 path = path.parent();
@@ -127,24 +107,22 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
 
             //TODO: shall we really rely on Jackrabbit implementation for this??? - trouble is that SPI is not covered by JCR2 intentionally
             //it's the last bit of jackrabbit in core!
-            if (iter instanceof MalformedPathException) {
-                logger.info("JcrException caught due to incorrect url",e);
-            } else {
-                throw e;
-            }
+//            if (iter instanceof MalformedPathException) {
+//                logger.info("JcrException caught due to incorrect url",e);
+//            } else {
+//                throw e;
+//            }
         }
 
         return target;
     }
 
-    public IRequestTarget decode(RequestParameters requestParameters)
-    {
+    public IRequestTarget decode(RequestParameters requestParameters) {
         String pathStr = requestParameters.getPath();
 
         IRequestTarget target = targetForPath(pathStr, requestParameters);
 
-        if (target == null)
-        {
+        if (target == null) {
             // 404 if node not found
             // return new
             // WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
@@ -154,31 +132,25 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
             return null;
             // return new PageRequestTarget(new
             // ResourceNotFoundPage(pathStr));
-        }
-        else
-        {
+        } else {
             return target;
         }
 
     }
 
-    public CharSequence encode(IRequestTarget requestTarget)
-    {
+    public CharSequence encode(IRequestTarget requestTarget) {
         throw new UnsupportedOperationException();
     }
 
-    public String getMountPath()
-    {
+    public String getMountPath() {
         throw new UnsupportedOperationException();
     }
 
-    public boolean matches(IRequestTarget requestTarget)
-    {
+    public boolean matches(IRequestTarget requestTarget) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean matches(String path, boolean caseSensitive)
-    {
+    public boolean matches(String path, boolean caseSensitive) {
         throw new UnsupportedOperationException();
     }
 
