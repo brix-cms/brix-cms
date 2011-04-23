@@ -30,7 +30,7 @@
  </licenses>
  <scm>
   <connection>scm:git:git://github.com/brix-cms</connection>
-  <developerConnection>scm:git:git://github.com/brix-cms</developerConnection>
+  <developerConnection>scm:git:git@github.com:brix-cms.git</developerConnection>
   <url>https://github.com/brix-cms/brix-cms</url>
  </scm>
  <properties>
