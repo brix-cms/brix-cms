@@ -2,7 +2,7 @@
  <parent>
   <artifactId>brix</artifactId>
   <groupId>brix</groupId>
-  <version>1.2.3</version>
+  <version>1.3.0-SNAPSHOT</version>
  </parent>
  <modelVersion>4.0.0</modelVersion>
  <groupId>brix</groupId>
@@ -11,7 +11,7 @@
  <description>A thin wrapper around the JCR API to remove the annoying
   checked exceptions
  </description>
- <version>1.2.3</version>
+ <version>1.3.0-SNAPSHOT</version>
  <packaging>bundle</packaging>
  <url>http://maven.apache.org</url>
  <dependencies>
