@@ -180,10 +180,11 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            brix.plugin.site.page.tile.admin,brix.plugin.site.page.tile,brix.jcr,brix.web.admin,brix.config,brix.auth,brix,brix.web,brix.web.nodepage,brix.registry,brix.jcr.wrapper,brix.plugin.site,brix.web.picker.common,brix.web.reference,brix.web.util,brix.web.tab,brix.web.generic,brix.plugin.site.page.global,brix.plugin.site.picker.reference,brix.plugin.site.picker.node,brix.web.tree,brix.exception
+                            org.brixcms.plugin.site.page.tile.admin,org.brixcms.plugin.site.page.tile,org.brixcms.jcr,org.brixcms.web.admin,org.brixcms.config,brix.auth,org.brixcms,brix.web,brix.web.nodepage,org.brixcms.registry,org.brixcms.jcr.wrapper,org.brixcms.plugin.site,brix.web.picker.common,org.brixcms.web.reference,org.brixcms.web.util,org.brixcms.web.tab,org.brixcms.web.generic,org.brixcms.plugin.site.page.global,org.brixcms.plugin.site.picker.reference,org.brixcms.plugin.site.picker.node,org.brixcms.web.tree,org.brixcms.exception
                         </Export-Package>
                         <Import-Package>
-                            org.osgi*, brix.jcr.api, brix.jcr.*, com.inmethod.grid.*, javax.jcr.*, javax.servlet,
+                            org.osgi*, org.brixcms.jcr.api, org.brixcms.jcr.*, com.inmethod.grid.*, javax.jcr.*,
+                            javax.servlet,
                             javax.servlet.http,
                             javax.swing.event, javax.swing.tree, org.apache.jackrabbit.api, org.apache.jackrabbit.spi.*,
                             org.apache.jackrabbit.core, org.apache.jackrabbit.server.io, org.apache.wicket.*,

@@ -130,7 +130,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            brix.workspace.rmi,brix.workspace
+                            org.brixcms.workspace.rmi,org.brixcms.workspace
                         </Export-Package>
                         <Import-Package>
                             org.osgi*, javax.jcr, javax.jcr.lock, javax.jcr.observation, org.slf4j

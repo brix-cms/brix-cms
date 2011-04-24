@@ -45,11 +45,11 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            brix.plugin.webdavurl
+                            org.brixcms.plugin.webdavurl
                         </Export-Package>
                         <Import-Package>
-                            org.osgi*,brix, brix.auth, brix.jcr.api, brix.web.generic, brix.web.tab, brix.web.util,
-                            brix.workspace, javax.servlet.http, org.apache.wicket, org.apache.wicket.markup,
+                            org.osgi*,org.brixcms, org.brixcms.auth, org.brixcms.jcr.api, org.brixcms.web.generic, org.brixcms.web.tab, org.brixcms.web.util,
+                            org.brixcms.workspace, javax.servlet.http, org.apache.wicket, org.apache.wicket.markup,
                             org.apache.wicket.markup.html, org.apache.wicket.markup.html.panel, org.apache.wicket.model,
                             org.apache.wicket.protocol.http
                         </Import-Package>
