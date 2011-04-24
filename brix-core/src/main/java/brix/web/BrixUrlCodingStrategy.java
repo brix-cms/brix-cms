@@ -23,7 +23,6 @@ import brix.jcr.exception.JcrException;
 import brix.jcr.wrapper.BrixNode;
 import brix.plugin.site.SitePlugin;
 import brix.web.nodepage.BrixNodePageUrlCodingStrategy;
-import org.apache.jackrabbit.spi.commons.conversion.MalformedPathException;
 import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
@@ -126,12 +125,12 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy
             }
 
             //TODO: shall we really rely on Jackrabbit implementation for this??? - trouble is that SPI is not covered by JCR2 intentionally
-            //it's the last bit of jackrabbit in core!
-            if (iter instanceof MalformedPathException) {
-                logger.info("JcrException caught due to incorrect url",e);
-            } else {
+//            //it's the last bit of jackrabbit in core!
+//            if (iter instanceof MalformedPathException) {
+//                logger.info("JcrException caught due to incorrect url",e);
+//            } else {
                 throw e;
-            }
+//            }
         }
 
         return target;
