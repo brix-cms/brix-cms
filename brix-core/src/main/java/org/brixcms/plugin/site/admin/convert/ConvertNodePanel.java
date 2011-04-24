@@ -28,11 +28,10 @@ import org.brixcms.web.util.TextLink;
 
 import java.util.Collection;
 
-public class ConvertNodePanel extends NodeManagerPanel
-{
+public class ConvertNodePanel extends NodeManagerPanel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public ConvertNodePanel(String id, IModel<BrixNode> nodeModel)
-    {
+    public ConvertNodePanel(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
 
         RepeatingView converters = new RepeatingView("converters");
@@ -43,29 +42,22 @@ public class ConvertNodePanel extends NodeManagerPanel
 
         boolean found = false;
 
-        for (SiteNodePlugin plugin : plugins)
-        {
-            if (plugin.getConverterForNode(node) != null)
-            {
-
+        for (SiteNodePlugin plugin : plugins) {
+            if (plugin.getConverterForNode(node) != null) {
                 Action action = new ConvertNodeAction(Action.Context.ADMINISTRATION, node,
                         plugin.getNodeType());
 
-                if (node.getBrix().getAuthorizationStrategy().isActionAuthorized(action))
-                {
-
+                if (node.getBrix().getAuthorizationStrategy().isActionAuthorized(action)) {
                     found = true;
 
                     WebMarkupContainer item = new WebMarkupContainer(converters.newChildId());
                     converters.add(item);
 
                     Model<String> typeName = new Model<String>(plugin.getNodeType());
-                    item.add(new TextLink<String>("convert", typeName, new Model<String>(plugin.getName()))
-                    {
+                    item.add(new TextLink<String>("convert", typeName, new Model<String>(plugin.getName())) {
                         @Override
-                        public void onClick()
-                        {
-                            final String type = (String)getModelObject();
+                        public void onClick() {
+                            final String type = (String) getModelObject();
                             convertToType(type);
                             getSession().info(getString("nodeConverted"));
                         }
@@ -77,18 +69,16 @@ public class ConvertNodePanel extends NodeManagerPanel
         setVisible(found);
     }
 
-    private void convertToType(String type)
-    {
+    private void convertToType(String type) {
         final BrixNode node = getModelObject();
 
         node.checkout();
         SitePlugin.get().getNodePluginForType(type).getConverterForNode(getModelObject()).convert(node);
         node.save();
         node.checkin();
-        
+
         getModel().detach();
 
         SitePlugin.get().selectNode(this, getModelObject());
     }
-
 }

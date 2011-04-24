@@ -13,7 +13,7 @@
  */
 
 /**
- * 
+ *
  */
 package org.brixcms.web;
 
@@ -30,86 +30,84 @@ import org.brixcms.plugin.site.page.PageRenderingPage;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
-public class BrixRequestCodingStrategy extends WebRequestCodingStrategy
-{
+public class BrixRequestCodingStrategy extends WebRequestCodingStrategy {
+// ------------------------------ FIELDS ------------------------------
+
     private final Brix brix;
     private final BrixUrlCodingStrategy urlCodingStrategy;
 
-    public BrixRequestCodingStrategy(Brix brix, BrixUrlCodingStrategy urlCodingStrategy)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public BrixRequestCodingStrategy(Brix brix, BrixUrlCodingStrategy urlCodingStrategy) {
         this.brix = brix;
         this.urlCodingStrategy = urlCodingStrategy;
     }
 
-    @Override
-    public IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(String path)
-    {
+// ------------------------ INTERFACE METHODS ------------------------
 
+
+// --------------------- Interface IRequestCodingStrategy ---------------------
+
+
+    @Override
+    public String rewriteStaticRelativeUrl(String url) {
+        boolean insideBrixPage = false;
+        IRequestTarget target = RequestCycle.get().getRequestTarget();
+        if (target instanceof IPageRequestTarget) {
+            IPageRequestTarget pageTarget = (IPageRequestTarget) target;
+            Page page = pageTarget.getPage();
+            if (page instanceof BrixNodeWebPage) {
+                insideBrixPage = true;
+            }
+        }
+
+        if (insideBrixPage && UrlUtils.isRelative(url)) {
+            final String prefix = RequestCycle.get().getRequest()
+                    .getRelativePathPrefixToContextRoot();
+
+            return this.brix.getConfig().getMapper().rewriteStaticRelativeUrl(url, prefix);
+        } else {
+            return super.rewriteStaticRelativeUrl(url);
+        }
+    }
+
+// --------------------- Interface IRequestTargetMounter ---------------------
+
+    @Override
+    public IRequestTargetUrlCodingStrategy urlCodingStrategyForPath(String path) {
         IRequestTargetUrlCodingStrategy target = super.urlCodingStrategyForPath(path);
-        if (target == null)
-        {
+        if (target == null) {
             target = this.urlCodingStrategy;
         }
         return target;
     }
 
-    @Override
-    public String rewriteStaticRelativeUrl(String url)
-    {
-        boolean insideBrixPage = false;
-        IRequestTarget target = RequestCycle.get().getRequestTarget();
-        if (target instanceof IPageRequestTarget)
-        {
-            IPageRequestTarget pageTarget = (IPageRequestTarget)target;
-            Page page = pageTarget.getPage();
-            if (page instanceof BrixNodeWebPage)
-            {
-                insideBrixPage = true;
-            }
-        }
-
-        if (insideBrixPage && UrlUtils.isRelative(url))
-        {
-            final String prefix = RequestCycle.get().getRequest()
-                    .getRelativePathPrefixToContextRoot();
-
-            return this.brix.getConfig().getMapper().rewriteStaticRelativeUrl(url, prefix);
-        }
-        else
-        {
-            return super.rewriteStaticRelativeUrl(url);
-        }
-    }
+// -------------------------- OTHER METHODS --------------------------
 
     @Override
-    protected CharSequence encode(RequestCycle rc, IBookmarkablePageRequestTarget target)
-    {
+    protected CharSequence encode(RequestCycle rc, IBookmarkablePageRequestTarget target) {
         boolean selfReferentialBookmarkableUrl = false;
 
-        if (PageRenderingPage.class.equals(target.getPageClass()))
-        {
+        if (PageRenderingPage.class.equals(target.getPageClass())) {
             // target of the url is brix's internal page rendering page, check if we are in a brix
             // page right now...
             IRequestTarget crt = rc.getRequestTarget();
-            if (crt instanceof IPageRequestTarget)
-            {
-                IPageRequestTarget cprt = (IPageRequestTarget)crt;
-                if (cprt.getPage() instanceof PageRenderingPage)
-                {
+            if (crt instanceof IPageRequestTarget) {
+                IPageRequestTarget cprt = (IPageRequestTarget) crt;
+                if (cprt.getPage() instanceof PageRenderingPage) {
                     // we are currently on the page rendering page
                     selfReferentialBookmarkableUrl = true;
                 }
             }
         }
 
-        if (!selfReferentialBookmarkableUrl)
-        {
+        if (!selfReferentialBookmarkableUrl) {
             return super.encode(rc, target);
         }
 
         // we are on a self referential bookmarkable url, rewrite it
 
-        PageRenderingPage currentPage = (PageRenderingPage)((IPageRequestTarget)rc
+        PageRenderingPage currentPage = (PageRenderingPage) ((IPageRequestTarget) rc
                 .getRequestTarget()).getPage();
 
         BrixPageParameters params = new BrixPageParameters(target.getPageParameters());

@@ -26,153 +26,123 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 
 /**
- * 
  * @author Matej Knopp
  */
-class ValueWrapper extends AbstractWrapper implements JcrValue
-{
+class ValueWrapper extends AbstractWrapper implements JcrValue {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected ValueWrapper(Value delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrValue wrap(Value delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrValue wrap(Value delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new ValueWrapper(delegate, session);
         }
     }
 
-    public static JcrValue[] wrap(Value[] delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrValue[] wrap(Value[] delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             JcrValue result[] = new JcrValue[delegate.length];
-            for (int i = 0; i < delegate.length; ++i)
-            {
+            for (int i = 0; i < delegate.length; ++i) {
                 result[i] = wrap(delegate[i], session);
             }
             return result;
         }
     }
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected ValueWrapper(Value delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface JcrValue ---------------------
+
     @Override
-    public Value getDelegate()
-    {
-        return (Value)super.getDelegate();
+    public Value getDelegate() {
+        return (Value) super.getDelegate();
     }
 
-    public boolean getBoolean()
-    {
-        return executeCallback(new Callback<Boolean>()
-        {
-            public Boolean execute() throws Exception
-            {
-                return getDelegate().getBoolean();
-            }
-        });
-    }
+// --------------------- Interface Value ---------------------
 
-    public Calendar getDate()
-    {
-        return executeCallback(new Callback<Calendar>()
-        {
-            public Calendar execute() throws Exception
-            {
-                return getDelegate().getDate();
-            }
-        });
-    }
 
-    public double getDouble()
-    {
-        return executeCallback(new Callback<Double>()
-        {
-            public Double execute() throws Exception
-            {
-                return getDelegate().getDouble();
-            }
-        });
-    }
-
-    public long getLong()
-    {
-        return executeCallback(new Callback<Long>()
-        {
-            public Long execute() throws Exception
-            {
-                return getDelegate().getLong();
-            }
-        });
-    }
-
-    /** @deprecated */
-    @Deprecated
-    public InputStream getStream()
-    {
-        return executeCallback(new Callback<InputStream>()
-        {
-            public InputStream execute() throws Exception
-            {
-                return getDelegate().getStream();
-            }
-        });
-    }
-
-    public String getString()
-    {
-        return executeCallback(new Callback<String>()
-        {
-            public String execute() throws Exception
-            {
+    public String getString() {
+        return executeCallback(new Callback<String>() {
+            public String execute() throws Exception {
                 return getDelegate().getString();
             }
         });
     }
 
-    public int getType()
-    {
-        return executeCallback(new Callback<Integer>()
-        {
-            public Integer execute() throws Exception
-            {
-                return getDelegate().getType();
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public InputStream getStream() {
+        return executeCallback(new Callback<InputStream>() {
+            public InputStream execute() throws Exception {
+                return getDelegate().getStream();
             }
         });
     }
 
-    public Binary getBinary()
-    {
-       return executeCallback(new Callback<Binary>()
-    {
-
-        public Binary execute() throws Exception
-        {
-            return getDelegate().getBinary();
-        }
-    });
+    public Binary getBinary() {
+        return executeCallback(new Callback<Binary>() {
+            public Binary execute() throws Exception {
+                return getDelegate().getBinary();
+            }
+        });
     }
 
-    public BigDecimal getDecimal() throws ValueFormatException, RepositoryException
-    {
-        return executeCallback(new Callback<BigDecimal>()
-        {
+    public long getLong() {
+        return executeCallback(new Callback<Long>() {
+            public Long execute() throws Exception {
+                return getDelegate().getLong();
+            }
+        });
+    }
 
-            public BigDecimal execute() throws Exception
-            {
+    public double getDouble() {
+        return executeCallback(new Callback<Double>() {
+            public Double execute() throws Exception {
+                return getDelegate().getDouble();
+            }
+        });
+    }
+
+    public BigDecimal getDecimal() throws ValueFormatException, RepositoryException {
+        return executeCallback(new Callback<BigDecimal>() {
+            public BigDecimal execute() throws Exception {
                 return getDelegate().getDecimal();
             }
         });
     }
 
+    public Calendar getDate() {
+        return executeCallback(new Callback<Calendar>() {
+            public Calendar execute() throws Exception {
+                return getDelegate().getDate();
+            }
+        });
+    }
+
+    public boolean getBoolean() {
+        return executeCallback(new Callback<Boolean>() {
+            public Boolean execute() throws Exception {
+                return getDelegate().getBoolean();
+            }
+        });
+    }
+
+    public int getType() {
+        return executeCallback(new Callback<Integer>() {
+            public Integer execute() throws Exception {
+                return getDelegate().getType();
+            }
+        });
+    }
 }

@@ -35,143 +35,129 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class MenuPlugin implements Plugin
-{
-	private final Brix brix;
+public class MenuPlugin implements Plugin {
+// ------------------------------ FIELDS ------------------------------
 
-	public MenuPlugin(Brix brix)
-	{
-		this.brix = brix;
+    private static final String ID = MenuPlugin.class.getName();
+    ;
 
-		brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenusNode.FACTORY);
-		brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenuNode.FACTORY);
-		brix.getConfig().getRegistry().register(Tile.POINT, new SubTreeMenuTile());
-		brix.getConfig().getRegistry().register(Tile.POINT, new FullTreeMenuTile());
-	}
+    private static String ROOT_NODE_NAME = Brix.NS_PREFIX + "menu";
+    private final Brix brix;
 
-	private static final String ID = MenuPlugin.class.getName();
+// -------------------------- STATIC METHODS --------------------------
+
+    public static MenuPlugin get() {
+        return get(Brix.get());
+    }
+
+    public static MenuPlugin get(Brix brix) {
+        return (MenuPlugin) brix.getPlugin(ID);
+    }
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public MenuPlugin(Brix brix) {
+        this.brix = brix;
+
+        brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenusNode.FACTORY);
+        brix.getConfig().getRegistry().register(JcrNodeWrapperFactory.POINT, MenuNode.FACTORY);
+        brix.getConfig().getRegistry().register(Tile.POINT, new SubTreeMenuTile());
+        brix.getConfig().getRegistry().register(Tile.POINT, new FullTreeMenuTile());
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Plugin ---------------------
 
     // for backwards compatibility: todo decide!
 //    private static final String ID = "brix.plugin.menu.MenuPlugin";
 
 
-	public String getId()
-	{
+    public String getId() {
 //		System.out.print(ID);
         return ID;
-	}
+    }
 
-	public static MenuPlugin get(Brix brix)
-	{
-		return (MenuPlugin)brix.getPlugin(ID);
-	}
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
+        return null;
+    }
 
-	public static MenuPlugin get()
-	{
-		return get(Brix.get());
-	}
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
+        return null;
+    }
 
-	public List<IBrixTab> newTabs(final IModel<Workspace> workspaceModel)
-	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new ResourceModel("menus", "Menus"),
-                workspaceModel) };
-		return Arrays.asList(tabs);
-	}
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
 
-	static class Tab extends AbstractWorkspaceTab
-	{
-		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
-		{
-			super(title, workspaceModel, 100);
-		}
+    }
 
-		@Override
-		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
-		{
-			return new ManageMenuPanel(panelId, workspaceModel);
-		}
-	};
+    public boolean isPluginWorkspace(Workspace workspace) {
+        return false;
+    }
 
-	private static String ROOT_NODE_NAME = Brix.NS_PREFIX + "menu";
+    public List<IBrixTab> newTabs(final IModel<Workspace> workspaceModel) {
+        IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("menus", "Menus"),
+                workspaceModel)};
+        return Arrays.asList(tabs);
+    }
 
-	public String getRootPath()
-	{
-		return brix.getRootPath() + "/" + ROOT_NODE_NAME;
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	private BrixNode getRootNode(String workspaceId, boolean createIfNotExist)
-	{
-		JcrSession session = brix.getCurrentSession(workspaceId);
+    public List<BrixNode> getMenuNodes(String workspaceId) {
+        BrixNode root = getRootNode(workspaceId, false);
+        if (root != null) {
+            List<BrixNode> result = new ArrayList<BrixNode>();
+            JcrNodeIterator i = root.getNodes("menu");
+            while (i.hasNext()) {
+                result.add((BrixNode) i.nextNode());
+            }
+            return result;
+        } else {
+            return Collections.emptyList();
+        }
+    }
 
-		if (session.itemExists(getRootPath()) == false)
-		{
-			if (createIfNotExist)
-			{
-				BrixNode parent = (BrixNode)session.getItem(brix.getRootPath());
-				parent.addNode(ROOT_NODE_NAME, "nt:unstructured");
-			}
-			else
-			{
-				return null;
-			}
-		}
+    private BrixNode getRootNode(String workspaceId, boolean createIfNotExist) {
+        JcrSession session = brix.getCurrentSession(workspaceId);
 
-		return (BrixNode)session.getItem(getRootPath());
-	}
+        if (session.itemExists(getRootPath()) == false) {
+            if (createIfNotExist) {
+                BrixNode parent = (BrixNode) session.getItem(brix.getRootPath());
+                parent.addNode(ROOT_NODE_NAME, "nt:unstructured");
+            } else {
+                return null;
+            }
+        }
 
-	public List<BrixNode> getMenuNodes(String workspaceId)
-	{
-		BrixNode root = getRootNode(workspaceId, false);
-		if (root != null)
-		{
-			List<BrixNode> result = new ArrayList<BrixNode>();
-			JcrNodeIterator i = root.getNodes("menu");
-			while (i.hasNext())
-			{
-				result.add((BrixNode)i.nextNode());
-			}
-			return result;
-		}
-		else
-		{
-			return Collections.emptyList();
-		}
-	}
+        return (BrixNode) session.getItem(getRootPath());
+    }
 
-	public BrixNode saveMenu(Menu menu, String workspaceId, BrixNode node)
-	{
-		if (node != null)
-		{
-			menu.save(node);
-		}
-		else
-		{
-			BrixNode root = getRootNode(workspaceId, true);
-			node = (BrixNode)root.addNode("menu");
-			menu.save(node);
-		}
-		node.getSession().save();
-		return node;
-	}
+    public String getRootPath() {
+        return brix.getRootPath() + "/" + ROOT_NODE_NAME;
+    }
 
-	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
-	{
+    public BrixNode saveMenu(Menu menu, String workspaceId, BrixNode node) {
+        if (node != null) {
+            menu.save(node);
+        } else {
+            BrixNode root = getRootNode(workspaceId, true);
+            node = (BrixNode) root.addNode("menu");
+            menu.save(node);
+        }
+        node.getSession().save();
+        return node;
+    }
 
-	}
+// -------------------------- INNER CLASSES --------------------------
 
-	public boolean isPluginWorkspace(Workspace workspace)
-	{
-		return false;
-	}
+    static class Tab extends AbstractWorkspaceTab {
+        public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {
+            super(title, workspaceModel, 100);
+        }
 
-	public String getUserVisibleName(Workspace workspace, boolean isFrontend)
-	{
-		return null;
-	}
-
-	public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
-	{
-		return null;
-	}
-
+        @Override
+        public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
+            return new ManageMenuPanel(panelId, workspaceModel);
+        }
+    }
 }

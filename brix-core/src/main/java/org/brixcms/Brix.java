@@ -14,7 +14,13 @@
 
 package org.brixcms;
 
-import org.apache.wicket.*;
+import org.apache.wicket.AbstractRestartResponseException;
+import org.apache.wicket.Application;
+import org.apache.wicket.IRequestTarget;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.Page;
+import org.apache.wicket.RequestCycle;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.brixcms.auth.Action;
@@ -40,7 +46,12 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.webdav.RulesNode;
 import org.brixcms.registry.ExtensionPointRegistry;
 import org.brixcms.web.BrixExtensionStringResourceLoader;
-import org.brixcms.web.nodepage.*;
+import org.brixcms.web.nodepage.BrixNodePageUrlCodingStrategy;
+import org.brixcms.web.nodepage.BrixNodeRequestTarget;
+import org.brixcms.web.nodepage.BrixNodeWebPage;
+import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.web.nodepage.ForbiddenPage;
+import org.brixcms.web.nodepage.PageParametersAwareEnabler;
 import org.brixcms.web.tile.pagetile.PageTile;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
@@ -54,379 +65,318 @@ import java.util.List;
 
 /**
  * TODO doc
- *
+ * <p/>
  * Before brix can be used {@link #initRepository()} method should be called.
  *
- *
  * @author igor.vaynberg
- *
  */
-public abstract class Brix
-{
-	public static final String NS = "brix";
-	public static final String NS_PREFIX = NS + ":";
+public abstract class Brix {
+// ------------------------------ FIELDS ------------------------------
 
-	private final BrixConfig config;
+    public static final String NS = "brix";
+    public static final String NS_PREFIX = NS + ":";
 
-	private static MetaDataKey<Brix> APP_KEY = new MetaDataKey<Brix>()
-	{
-	};
+    public static final String WORKSPACE_ATTRIBUTE_TYPE = "brix:workspace-type";
 
-	public Brix(BrixConfig config)
-	{
-		this.config = config;
+    public static final String ROOT_NODE_NAME = NS_PREFIX + "root";
 
-		final ExtensionPointRegistry registry = config.getRegistry();
+    private static MetaDataKey<Brix> APP_KEY = new MetaDataKey<Brix>() {
+    };
 
-		registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
+    private final BrixConfig config;
 
-		registry.register(JcrNodeWrapperFactory.POINT, SiteRootNode.FACTORY);
-		registry.register(JcrNodeWrapperFactory.POINT, WebRootNode.FACTORY);
-		registry.register(JcrNodeWrapperFactory.POINT, FolderNode.FACTORY);
-		registry.register(JcrNodeWrapperFactory.POINT, GlobalContainerNode.FACTORY);
+    /*
+      * public void publish(String workspace, String targetState, SessionProvider
+      * sessionProvider) { String dest = getWorkspaceNameForState(workspace,
+      * targetState);
+      *
+      * if (workspace.equals(dest) == false) { List<String> workspaces =
+      * getAvailableWorkspaces(); if (workspaces.contains(dest) == false) {
+      * createWorkspace(sessionProvider.getJcrSession(null), dest); }
+      *
+      * cleanWorkspace(BrixRequestCycle.Locator.getSession(dest));
+      *
+      * cloneWorkspace(BrixRequestCycle.Locator.getSession(workspace),
+      * BrixRequestCycle.Locator .getSession(dest)); } }
+      */
 
-		registry.register(JcrNodeWrapperFactory.POINT, PageNode.FACTORY);
-		registry.register(JcrNodeWrapperFactory.POINT, TemplateNode.FACTORY);
+    private AuthorizationStrategy authorizationStrategy = null;
 
-		registry.register(JcrNodeWrapperFactory.POINT, RulesNode.FACTORY);
+// -------------------------- STATIC METHODS --------------------------
 
-		registry.register(Tile.POINT, new PageTile());
+    public static Brix get() {
+        Application application = Application.get();
+        if (application == null) {
+            throw new IllegalStateException(
+                    "Could not find Application threadlocal; this method can only be called within a Wicket request");
+        }
+        return get(application);
+    }
 
-		registry.register(Plugin.POINT, new SitePlugin(this));
-		// registry.register(Plugin.POINT, new MenuPlugin(this));
-		// registry.register(Plugin.POINT, new SnapshotPlugin(this));
-		// registry.register(Plugin.POINT, new PrototypePlugin(this));
-		// registry.register(Plugin.POINT, new PublishingPlugin(this));
+    public static Brix get(Application application) {
+        if (application == null) {
+            throw new IllegalArgumentException("application cannot be null");
+        }
+        Brix brix = application.getMetaData(APP_KEY);
+        if (brix == null) {
+            throw new IllegalStateException(
+                    "Could not find instance of Brix associated with application: "
+                            + application.getApplicationKey()
+                            + ". Make sure Brix.attachTo(this) was called in application's init() method");
+        }
+        return brix;
+    }
+
+    /**
+     * Constructs a URL to the current page. This method can only be called within an active wicket request because it
+     * relies on the {@link org.apache.wicket.RequestCycle} threadlocal.
+     *
+     * @return url to the current brix page
+     * @throws BrixException if the current request was not for a brix page
+     */
+    public static String urlForCurrentPage() {
+        return urlForCurrentPage(new BrixPageParameters());
+    }
+
+    /**
+     * Constructs a URL to the current page. This method can only be called within an active wicket request because it
+     * relies on the {@link RequestCycle} threadlocal.
+     *
+     * @param params parameters to be encoded into the url
+     * @return url to the current brix page
+     * @throws BrixException if the current request was not for a brix page
+     */
+    public static String urlForCurrentPage(BrixPageParameters params) {
+        IRequestTarget target = new BrixNodeRequestTarget(getCurrentPage(), params);
+        String url = RequestCycle.get().urlFor(target).toString();
+        target.detach(RequestCycle.get());
+        return url;
+    }
+
+    /**
+     * Returns current brix page being processed. Must only be called within a wicket request.
+     *
+     * @return brix page
+     * @throws BrixException if current request was not to a brix page
+     */
+    private static BrixNodeWebPage getCurrentPage() {
+        IRequestTarget target = RequestCycle.get().getRequestTarget();
+        BrixNodeWebPage page = null;
+        if (target != null && target instanceof IPageRequestTarget) {
+            Page p = ((IPageRequestTarget) target).getPage();
+            if (p instanceof BrixNodeWebPage) {
+                page = (BrixNodeWebPage) p;
+            }
+        }
+        if (page == null) {
+            throw new BrixException(
+                    "Couldn't obtain the BrixNodeWebPage instance from RequestTarget.");
+        }
+        return page;
+    }
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public Brix(BrixConfig config) {
+        this.config = config;
+
+        final ExtensionPointRegistry registry = config.getRegistry();
+
+        registry.register(RepositoryInitializer.POINT, new BrixRepositoryInitializer());
+
+        registry.register(JcrNodeWrapperFactory.POINT, SiteRootNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, WebRootNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, FolderNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, GlobalContainerNode.FACTORY);
+
+        registry.register(JcrNodeWrapperFactory.POINT, PageNode.FACTORY);
+        registry.register(JcrNodeWrapperFactory.POINT, TemplateNode.FACTORY);
+
+        registry.register(JcrNodeWrapperFactory.POINT, RulesNode.FACTORY);
+
+        registry.register(Tile.POINT, new PageTile());
+
+        registry.register(Plugin.POINT, new SitePlugin(this));
+        // registry.register(Plugin.POINT, new MenuPlugin(this));
+        // registry.register(Plugin.POINT, new SnapshotPlugin(this));
+        // registry.register(Plugin.POINT, new PrototypePlugin(this));
+        // registry.register(Plugin.POINT, new PublishingPlugin(this));
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public final AuthorizationStrategy getAuthorizationStrategy() {
+        if (authorizationStrategy == null) {
+            authorizationStrategy = newAuthorizationStrategy();
+        }
+        return authorizationStrategy;
+    }
+
+    public abstract AuthorizationStrategy newAuthorizationStrategy();
+
+    public final BrixConfig getConfig() {
+        return config;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * Performs any {@link WebApplication} specific initialization
+     *
+     * @param application
+     */
+    public void attachTo(WebApplication application) {
+        if (application == null) {
+            throw new IllegalArgumentException("Application cannot be null");
+        }
+
+        // store brix instance in applicaton's metadata so it can be retrieved
+        // easily later
+        application.setMetaData(APP_KEY, this);
+
+        /*
+           * XXX we are coupling to nodepage plugin here instead of using the
+           * usual register mechanism - we either need to make plugins application
+           * aware so they can install their own listeners or have some brix-level
+           * registery
+           */
+        application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
 
 
-	}
+        // allow brix to handle any url that wicket cant
+        application.mount(new BrixNodePageUrlCodingStrategy());
 
-	public static Brix get(Application application)
-	{
-		if (application == null)
-		{
-			throw new IllegalArgumentException("application cannot be null");
-		}
-		Brix brix = application.getMetaData(APP_KEY);
-		if (brix == null)
-		{
-			throw new IllegalStateException(
-					"Could not find instance of Brix associated with application: "
-							+ application.getApplicationKey()
-							+ ". Make sure Brix.attachTo(this) was called in application's init() method");
-		}
-		return brix;
-	}
+        // register a string resoure loader that allows any object that acts as
+        // an extension supply its own resource bundle for the UI
+        BrixExtensionStringResourceLoader loader = new BrixExtensionStringResourceLoader();
+        application.getResourceSettings().addStringResourceLoader(loader);
+        config.getRegistry().register(loader, true);
+    }
 
-	public static Brix get()
-	{
-		Application application = Application.get();
-		if (application == null)
-		{
-			throw new IllegalStateException(
-					"Could not find Application threadlocal; this method can only be called within a Wicket request");
-		}
-		return get(application);
-	}
+    public void clone(JcrSession src, JcrSession dest) {
+        cleanWorkspace(dest);
+        cloneWorkspace(src, dest);
+    }
 
-	public final BrixConfig getConfig()
-	{
-		return config;
-	}
+    private void cleanWorkspace(JcrSession session) {
+        if (session.itemExists(getRootPath())) {
+            JcrNode root = (JcrNode) session.getItem(getRootPath());
+            root.remove();
+            session.save();
+        }
 
-	public JcrSession getCurrentSession(String workspace)
-	{
-		Session session = config.getSessionFactory().getCurrentSession(workspace);
-		return wrapSession(session);
-	}
+        session.save();
+    }
 
-	public JcrSession wrapSession(Session session)
-	{
-		SessionBehavior behavior = new SessionBehavior(this);
-		return JcrSession.Wrapper.wrap(session, behavior);
-	}
+    public String getRootPath() {
+        return "/" + ROOT_NODE_NAME;
+    }
 
-	/**
-	 * Performs any {@link WebApplication} specific initialization
-	 *
-	 * @param application
-	 */
-	public void attachTo(WebApplication application)
-	{
-		if (application == null)
-		{
-			throw new IllegalArgumentException("Application cannot be null");
-		}
+    private void cloneWorkspace(JcrSession srcSession, JcrSession destSession) {
+        String root = getRootPath();
+        destSession.getWorkspace().clone(srcSession.getWorkspace().getName(), root, root, true);
+    }
 
-		// store brix instance in applicaton's metadata so it can be retrieved
-		// easily later
-		application.setMetaData(APP_KEY, this);
-
-		/*
-		 * XXX we are coupling to nodepage plugin here instead of using the
-		 * usual register mechanism - we either need to make plugins application
-		 * aware so they can install their own listeners or have some brix-level
-		 * registery
-		 */
-		application.addPreComponentOnBeforeRenderListener(new PageParametersAwareEnabler());
-
-
-		// allow brix to handle any url that wicket cant
-		application.mount(new BrixNodePageUrlCodingStrategy());
-
-		// register a string resoure loader that allows any object that acts as
-		// an extension supply its own resource bundle for the UI
-		BrixExtensionStringResourceLoader loader = new BrixExtensionStringResourceLoader();
-		application.getResourceSettings().addStringResourceLoader(loader);
-		config.getRegistry().register(loader, true);
-	}
-
-	/**
-	 * @deprecated should forward to workspace manager?
-	 * @param session
-	 * @param name
-	 */
-	protected void createWorkspace(JcrSession session, String name)
-	{
+    /**
+     * @param session
+     * @param name
+     * @deprecated should forward to workspace manager?
+     */
+    protected void createWorkspace(JcrSession session, String name) {
         session.getWorkspace().createWorkspace(name);
-	}
+    }
 
-	public void clone(JcrSession src, JcrSession dest)
-	{
-		cleanWorkspace(dest);
-		cloneWorkspace(src, dest);
-	}
+    public List<org.brixcms.workspace.Workspace> filterVisibleWorkspaces(
+            List<org.brixcms.workspace.Workspace> workspaces, Context context) {
+        if (workspaces == null) {
+            return Collections.emptyList();
+        } else {
+            List<org.brixcms.workspace.Workspace> result = new ArrayList<org.brixcms.workspace.Workspace>(
+                    workspaces.size());
+            for (org.brixcms.workspace.Workspace w : workspaces) {
+                Action action = new ViewWorkspaceAction(context, w);
+                if (getAuthorizationStrategy().isActionAuthorized(action)) {
+                    result.add(w);
+                }
+            }
 
-	private void cleanWorkspace(JcrSession session)
-	{
-		if (session.itemExists(getRootPath()))
-		{
-			JcrNode root = (JcrNode)session.getItem(getRootPath());
-			root.remove();
-			session.save();
-		}
+            return result;
+        }
+    }
 
-		session.save();
-	}
+    public AbstractRestartResponseException getForbiddenException() {
+        return new RestartResponseException(ForbiddenPage.class);
+    }
 
-	private void cloneWorkspace(JcrSession srcSession, JcrSession destSession)
-	{
-		String root = getRootPath();
-		destSession.getWorkspace().clone(srcSession.getWorkspace().getName(), root, root, true);
-	}
-
-	public final WorkspaceManager getWorkspaceManager()
-	{
-		return config.getWorkspaceManager();
-	}
-
-	public static final String WORKSPACE_ATTRIBUTE_TYPE = "brix:workspace-type";
-
-	/*
-	 * public void publish(String workspace, String targetState, SessionProvider
-	 * sessionProvider) { String dest = getWorkspaceNameForState(workspace,
-	 * targetState);
-	 *
-	 * if (workspace.equals(dest) == false) { List<String> workspaces =
-	 * getAvailableWorkspaces(); if (workspaces.contains(dest) == false) {
-	 * createWorkspace(sessionProvider.getJcrSession(null), dest); }
-	 *
-	 * cleanWorkspace(BrixRequestCycle.Locator.getSession(dest));
-	 *
-	 * cloneWorkspace(BrixRequestCycle.Locator.getSession(workspace),
-	 * BrixRequestCycle.Locator .getSession(dest)); } }
-	 */
-
-	private AuthorizationStrategy authorizationStrategy = null;
-
-	public final AuthorizationStrategy getAuthorizationStrategy()
-	{
-		if (authorizationStrategy == null)
-		{
-			authorizationStrategy = newAuthorizationStrategy();
-		}
-		return authorizationStrategy;
-	}
-
-	public abstract AuthorizationStrategy newAuthorizationStrategy();
-
-	public AbstractRestartResponseException getForbiddenException()
-	{
-		return new RestartResponseException(ForbiddenPage.class);
-	}
-
-	public static final String ROOT_NODE_NAME = NS_PREFIX + "root";
-
-	public String getRootPath()
-	{
-		return "/" + ROOT_NODE_NAME;
-	}
+    public Plugin getPlugin(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Argument 'id' may not be null.");
+        }
 
 
-	public void initRepository()
-	{
-		List<RepositoryInitializer> initializers = new ArrayList<RepositoryInitializer>();
-		initializers.addAll(config.getRegistry().lookupCollection(RepositoryInitializer.POINT));
-		initializers.addAll(config.getRegistry().lookupCollection(JcrNodeWrapperFactory.POINT));
+        for (Plugin p : getPlugins()) {
+            if (id.equals(p.getId())) {
+                return p;
+            }
+        }
+        return null;
+    }
 
-		try
-		{
-			JcrSession s = getCurrentSession(null);
-			for (RepositoryInitializer initializer : initializers)
-			{
-				initializer.initializeRepository(this, s);
-			}
-			s.save();
-			s.logout();
-		}
-		catch (RepositoryException e)
-		{
-			throw new RuntimeException("Couldn't initialize repository", e);
-		}
+    public final WorkspaceManager getWorkspaceManager() {
+        return config.getWorkspaceManager();
+    }
 
-		for (Workspace w : getWorkspaceManager().getWorkspaces())
-		{
-			JcrSession s = getCurrentSession(w.getId());
-			initWorkspace(w, s);
-			s.logout();
-		}
-	}
+    public void initRepository() {
+        List<RepositoryInitializer> initializers = new ArrayList<RepositoryInitializer>();
+        initializers.addAll(config.getRegistry().lookupCollection(RepositoryInitializer.POINT));
+        initializers.addAll(config.getRegistry().lookupCollection(JcrNodeWrapperFactory.POINT));
 
-	public void initWorkspace(org.brixcms.workspace.Workspace workspace, JcrSession session)
-	{
-		JcrNode root;
-		if (session.itemExists(getRootPath()))
-		{
-			root = (JcrNode)session.getItem(getRootPath());
-		}
-		else
-		{
-			root = session.getRootNode().addNode(ROOT_NODE_NAME, "nt:folder");
-		}
-		if (!root.isNodeType(BrixNode.JCR_TYPE_BRIX_NODE))
-		{
-			root.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
-		}
+        try {
+            JcrSession s = getCurrentSession(null);
+            for (RepositoryInitializer initializer : initializers) {
+                initializer.initializeRepository(this, s);
+            }
+            s.save();
+            s.logout();
+        } catch (RepositoryException e) {
+            throw new RuntimeException("Couldn't initialize repository", e);
+        }
 
-		for (Plugin p : getPlugins())
-		{
-			p.initWorkspace(workspace, session);
-		}
-		session.save();
-	}
+        for (Workspace w : getWorkspaceManager().getWorkspaces()) {
+            JcrSession s = getCurrentSession(w.getId());
+            initWorkspace(w, s);
+            s.logout();
+        }
+    }
 
-	public final Collection<Plugin> getPlugins()
-	{
-		return config.getRegistry().lookupCollection(Plugin.POINT);
-	}
+    public JcrSession getCurrentSession(String workspace) {
+        Session session = config.getSessionFactory().getCurrentSession(workspace);
+        return wrapSession(session);
+    }
 
-	public Plugin getPlugin(String id)
-	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("Argument 'id' may not be null.");
-		}
+    public JcrSession wrapSession(Session session) {
+        SessionBehavior behavior = new SessionBehavior(this);
+        return JcrSession.Wrapper.wrap(session, behavior);
+    }
 
+    public void initWorkspace(org.brixcms.workspace.Workspace workspace, JcrSession session) {
+        JcrNode root;
+        if (session.itemExists(getRootPath())) {
+            root = (JcrNode) session.getItem(getRootPath());
+        } else {
+            root = session.getRootNode().addNode(ROOT_NODE_NAME, "nt:folder");
+        }
+        if (!root.isNodeType(BrixNode.JCR_TYPE_BRIX_NODE)) {
+            root.addMixin(BrixNode.JCR_TYPE_BRIX_NODE);
+        }
 
-		for (Plugin p : getPlugins())
-		{
-			if (id.equals(p.getId()))
-			{
-				return p;
-			}
-		}
-		return null;
-	}
+        for (Plugin p : getPlugins()) {
+            p.initWorkspace(workspace, session);
+        }
+        session.save();
+    }
 
-
-	public List<org.brixcms.workspace.Workspace> filterVisibleWorkspaces(
-			List<org.brixcms.workspace.Workspace> workspaces, Context context)
-	{
-		if (workspaces == null)
-		{
-			return Collections.emptyList();
-		}
-		else
-		{
-			List<org.brixcms.workspace.Workspace> result = new ArrayList<org.brixcms.workspace.Workspace>(
-					workspaces.size());
-			for (org.brixcms.workspace.Workspace w : workspaces)
-			{
-				Action action = new ViewWorkspaceAction(context, w);
-				if (getAuthorizationStrategy().isActionAuthorized(action))
-				{
-					result.add(w);
-				}
-			}
-
-			return result;
-		}
-	}
-
-	/**
-	 * Constructs a URL to the current page. This method can only be called
-	 * within an active wicket request because it relies on the
-	 * {@link org.apache.wicket.RequestCycle} threadlocal.
-	 *
-	 * @throws BrixException
-	 *             if the current request was not for a brix page
-	 *
-	 * @return url to the current brix page
-	 */
-	public static String urlForCurrentPage()
-	{
-		return urlForCurrentPage(new BrixPageParameters());
-	}
-
-
-	/**
-	 * Constructs a URL to the current page. This method can only be called
-	 * within an active wicket request because it relies on the
-	 * {@link RequestCycle} threadlocal.
-	 *
-	 * @param params
-	 *            parameters to be encoded into the url
-	 *
-	 * @throws BrixException
-	 *             if the current request was not for a brix page
-	 *
-	 * @return url to the current brix page
-	 */
-	public static String urlForCurrentPage(BrixPageParameters params)
-	{
-		IRequestTarget target = new BrixNodeRequestTarget(getCurrentPage(), params);
-		String url = RequestCycle.get().urlFor(target).toString();
-		target.detach(RequestCycle.get());
-		return url;
-	}
-
-	/**
-	 * Returns current brix page being processed. Must only be called within a
-	 * wicket request.
-	 *
-	 * @throws BrixException
-	 *             if current request was not to a brix page
-	 *
-	 * @return brix page
-	 */
-	private static BrixNodeWebPage getCurrentPage()
-	{
-		IRequestTarget target = RequestCycle.get().getRequestTarget();
-		BrixNodeWebPage page = null;
-		if (target != null && target instanceof IPageRequestTarget)
-		{
-			Page p = ((IPageRequestTarget)target).getPage();
-			if (p instanceof BrixNodeWebPage)
-			{
-				page = (BrixNodeWebPage)p;
-			}
-		}
-		if (page == null)
-		{
-			throw new BrixException(
-					"Couldn't obtain the BrixNodeWebPage instance from RequestTarget.");
-		}
-		return page;
-
-	}
+    public final Collection<Plugin> getPlugins() {
+        return config.getRegistry().lookupCollection(Plugin.POINT);
+    }
 }

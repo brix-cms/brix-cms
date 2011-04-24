@@ -42,297 +42,249 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public abstract class NodePickerTreeGridPanel extends Panel
-{
+public abstract class NodePickerTreeGridPanel extends Panel {
+// ------------------------------ FIELDS ------------------------------
 
-	public NodePickerTreeGridPanel(String id, IModel<?> model, NodeFilter visibilityFilter, NodeFilter enabledFilter)
-	{
-		super(id, model);
-		this.visibilityFilter = visibilityFilter;
-		this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
-	}
+    private final static NodeFilter ALLOW_ALL_FILTER = new NodeFilter() {
+        public boolean isNodeAllowed(BrixNode node) {
+            return true;
+        }
+    };
 
-	public NodePickerTreeGridPanel(String id, NodeFilter visibilityFilter, NodeFilter enabledFilter)
-	{
-		super(id);
+    private final NodeFilter visibilityFilter;
+    private final NodeFilter enabledFilter;
 
-		this.visibilityFilter = visibilityFilter;
-		this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
-	}
+    private TreeGrid grid;
 
-	private final static NodeFilter ALLOW_ALL_FILTER = new NodeFilter()
-	{
-		public boolean isNodeAllowed(BrixNode node)
-		{
-			return true;
-		}
-	};
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public NodeFilter getVisibilityFilter()
-	{
-		return visibilityFilter;
-	}
+    public NodePickerTreeGridPanel(String id, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
+        super(id);
 
-	@Override
-	protected void onBeforeRender()
-	{
-		if (!hasBeenRendered())
-		{
-			initComponents();
-		}
-		expandToSelectedNodes();
-		super.onBeforeRender();
-	}
+        this.visibilityFilter = visibilityFilter;
+        this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
+    }
 
-	private BrixNode getNode(IModel<?> model)
-	{
-		Object object = model.getObject();
-		if (object instanceof JcrTreeNode)
-		{
-			IModel<BrixNode> nodeModel = ((JcrTreeNode) object).getNodeModel();
-			return nodeModel != null ? nodeModel.getObject() : null;
-		}
-		else
-		{
-			return null;
-		}
-	}
+    public NodePickerTreeGridPanel(String id, IModel<?> model, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
+        super(id, model);
+        this.visibilityFilter = visibilityFilter;
+        this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
+    }
 
-	private final NodeFilter visibilityFilter;
-	private final NodeFilter enabledFilter;
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	private boolean isNodeEnabled(JcrTreeNode node)
-	{
-		BrixNode n = node.getNodeModel() != null ? node.getNodeModel().getObject() : null;
-		return enabledFilter.isNodeAllowed(n);
-	}
+    public TreeGrid getGrid() {
+        return grid;
+    }
 
-	protected void initComponents()
-	{
-		grid = new TreeGrid("grid", newTreeModel(), newGridColumns())
-		{
-			@Override
-			protected void onItemSelectionChanged(IModel rowModel, boolean newValue)
-			{							
-				BrixNode node = getNode(rowModel);
-				if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null)
-				{										
-					if (isItemSelected(rowModel) == true)
-					{
-						onNodeSelected(node);
-					}
-					else
-					{
-						onNodeDeselected(node);
-					}
-					update();
-				}	
-				super.onItemSelectionChanged(rowModel, newValue);
-			}
-			
-			@Override
-			protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
-			{
-				BrixNode node = getNode(rowModel);
-				if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null)
-				{	
-					super.onRowClicked(target, rowModel);
-				}
-			}
+    public NodeFilter getVisibilityFilter() {
+        return visibilityFilter;
+    }
 
-			@Override
-			protected void onRowPopulated(WebMarkupContainer rowComponent)
-			{
-				super.onRowPopulated(rowComponent);
-				rowComponent.add(new AbstractBehavior()
-				{
-					@Override
-					public void onComponentTag(Component component, ComponentTag tag)
-					{
-						BrixNode node = getNode(component.getDefaultModel());
-						if (!isNodeEnabled((JcrTreeNode) component.getDefaultModelObject()) || node == null)
-						{
-							tag.put("class", "disabled");
-						}
-					}
-				});
-			}
-		};
+// -------------------------- OTHER METHODS --------------------------
 
-		configureGrid(grid);
-		add(grid);
-	};
+    @Override
+    protected void onBeforeRender() {
+        if (!hasBeenRendered()) {
+            initComponents();
+        }
+        expandToSelectedNodes();
+        super.onBeforeRender();
+    }
 
-	private void expandToNode(JcrTreeNode node)
-	{
-		boolean first = true;
-		while (node != null && node.getNodeModel() != null && node.getNodeModel().getObject() != null)
-		{
-			BrixNode n = node.getNodeModel().getObject();
-			if (!first)
-			{
-				getGrid().getTreeState().expandNode(node);
-			}
-			else
-			{
-				first = false;
-			}
+    protected void initComponents() {
+        grid = new TreeGrid("grid", newTreeModel(), newGridColumns()) {
+            @Override
+            protected void onItemSelectionChanged(IModel rowModel, boolean newValue) {
+                BrixNode node = getNode(rowModel);
+                if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null) {
+                    if (isItemSelected(rowModel) == true) {
+                        onNodeSelected(node);
+                    } else {
+                        onNodeDeselected(node);
+                    }
+                    update();
+                }
+                super.onItemSelectionChanged(rowModel, newValue);
+            }
 
-			if (n.getDepth() > 0)
-			{
-				node = TreeAwareNode.Util.getTreeNode((BrixNode) n.getParent(), visibilityFilter);
-			}
-			else
-			{
-				node = null;
-			}
-		}
-	}
+            @Override
+            protected void onRowClicked(AjaxRequestTarget target, IModel rowModel) {
+                BrixNode node = getNode(rowModel);
+                if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null) {
+                    super.onRowClicked(target, rowModel);
+                }
+            }
 
-	protected void expandToSelectedNodes()
-	{
-		for (IModel<?> model : getGrid().getSelectedItems())
-		{
-			JcrTreeNode node = (JcrTreeNode) model.getObject();
-			expandToNode(node);
-		}
-	}
+            @Override
+            protected void onRowPopulated(WebMarkupContainer rowComponent) {
+                super.onRowPopulated(rowComponent);
+                rowComponent.add(new AbstractBehavior() {
+                    @Override
+                    public void onComponentTag(Component component, ComponentTag tag) {
+                        BrixNode node = getNode(component.getDefaultModel());
+                        if (!isNodeEnabled((JcrTreeNode) component.getDefaultModelObject()) || node == null) {
+                            tag.put("class", "disabled");
+                        }
+                    }
+                });
+            }
+        };
 
-	protected void configureGrid(TreeGrid grid)
-	{
-		grid.getTree().setRootLess(true);
-		grid.setClickRowToSelect(true);
-		grid.setContentHeight(18, SizeUnit.EM);
-	}
+        configureGrid(grid);
+        add(grid);
+    }
 
-	protected void onNodeSelected(BrixNode node)
-	{
-	}
+    ;
 
-	protected void onNodeDeselected(BrixNode node)
-	{
-	}
+    protected TreeModel newTreeModel() {
+        return new AbstractTreeModel() {
+            public JcrTreeNode getRoot() {
+                return new FilteredJcrTreeNode(getRootNode(), visibilityFilter);
+            }
+        };
+    }
 
-	private TreeGrid grid;
+    ;
 
-	public TreeGrid getGrid()
-	{
-		return grid;
-	}
+    protected abstract JcrTreeNode getRootNode();
 
-	protected List<IGridColumn> newGridColumns()
-	{
-		IGridColumn columns[] = { new NodePickerCheckBoxColumn("checkbox"),
-				new TreeColumn("name", new ResourceModel("name")).setInitialSize(300),
-				new NodePropertyColumn(new ResourceModel("type"), "userVisibleType"),
-				new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified"),
-				new NodePropertyColumn(new ResourceModel("lastModifiedBy"), "lastModifiedBy") };
-		return Arrays.asList(columns);
-	};
+    protected List<IGridColumn> newGridColumns() {
+        IGridColumn columns[] = {new NodePickerCheckBoxColumn("checkbox"),
+                new TreeColumn("name", new ResourceModel("name")).setInitialSize(300),
+                new NodePropertyColumn(new ResourceModel("type"), "userVisibleType"),
+                new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified"),
+                new NodePropertyColumn(new ResourceModel("lastModifiedBy"), "lastModifiedBy")};
+        return Arrays.asList(columns);
+    }
 
-	private class TreeColumn extends AbstractTreeColumn
-	{
+    protected void onNodeSelected(BrixNode node) {
+    }
 
-		public TreeColumn(String columnId, IModel headerModel)
-		{
-			super(columnId, headerModel);
-		}
+    protected void onNodeDeselected(BrixNode node) {
+    }
 
-		@Override
-		protected Component newNodeComponent(String id, final IModel model)
-		{
-			IModel<String> labelModel = new AbstractModel<String>()
-			{
-				@Override
-				public String getObject()
-				{
-					BrixNode node = getNode(model);
-					if (node != null)
-					{
-						return node.getUserVisibleName();
-					}
-					else
-					{
-						return model.getObject().toString();
-					}
-				}
-			};
-			return new Label(id, labelModel);
-		}
+    private BrixNode getNode(IModel<?> model) {
+        Object object = model.getObject();
+        if (object instanceof JcrTreeNode) {
+            IModel<BrixNode> nodeModel = ((JcrTreeNode) object).getNodeModel();
+            return nodeModel != null ? nodeModel.getObject() : null;
+        } else {
+            return null;
+        }
+    }
 
-		@Override
-		public int getColSpan(IModel rowModel)
-		{
-			BrixNode node = getNode(rowModel);
-			return node != null ? 1 : 4;
-		}
-	};
+    private boolean isNodeEnabled(JcrTreeNode node) {
+        BrixNode n = node.getNodeModel() != null ? node.getNodeModel().getObject() : null;
+        return enabledFilter.isNodeAllowed(n);
+    }
 
-	private class NodePropertyColumn extends PropertyColumn
-	{
+    protected void configureGrid(TreeGrid grid) {
+        grid.getTree().setRootLess(true);
+        grid.setClickRowToSelect(true);
+        grid.setContentHeight(18, SizeUnit.EM);
+    }
 
-		public NodePropertyColumn(IModel headerModel, String propertyExpression)
-		{
-			super(headerModel, propertyExpression);
-		}
+    protected void expandToSelectedNodes() {
+        for (IModel<?> model : getGrid().getSelectedItems()) {
+            JcrTreeNode node = (JcrTreeNode) model.getObject();
+            expandToNode(node);
+        }
+    }
 
-		@Override
-		protected Object getModelObject(IModel rowModel)
-		{
-			return getNode(rowModel);
-		}
-	};
+    ;
 
-	protected TreeModel newTreeModel()
-	{
-		return new AbstractTreeModel()
-		{
-			public JcrTreeNode getRoot()
-			{
-				return new FilteredJcrTreeNode(getRootNode(), visibilityFilter);
-			}
-		};
-	};
+    private void expandToNode(JcrTreeNode node) {
+        boolean first = true;
+        while (node != null && node.getNodeModel() != null && node.getNodeModel().getObject() != null) {
+            BrixNode n = node.getNodeModel().getObject();
+            if (!first) {
+                getGrid().getTreeState().expandNode(node);
+            } else {
+                first = false;
+            }
 
-	protected abstract JcrTreeNode getRootNode();
+            if (n.getDepth() > 0) {
+                node = TreeAwareNode.Util.getTreeNode((BrixNode) n.getParent(), visibilityFilter);
+            } else {
+                node = null;
+            }
+        }
+    }
 
-	protected class NodePickerCheckBoxColumn extends CheckBoxColumn
-	{
+// -------------------------- INNER CLASSES --------------------------
+    ;
 
-		public NodePickerCheckBoxColumn(String columnId)
-		{
-			super(columnId);
-		}
+    private class TreeColumn extends AbstractTreeColumn {
+        public TreeColumn(String columnId, IModel headerModel) {
+            super(columnId, headerModel);
+        }
 
-		@Override
-		protected boolean isCheckBoxEnabled(IModel model)
-		{
-			BrixNode node = getNode(model);
-			return isNodeEnabled((JcrTreeNode) model.getObject()) && node != null;
-		}
+        @Override
+        protected Component newNodeComponent(String id, final IModel model) {
+            IModel<String> labelModel = new AbstractModel<String>() {
+                @Override
+                public String getObject() {
+                    BrixNode node = getNode(model);
+                    if (node != null) {
+                        return node.getUserVisibleName();
+                    } else {
+                        return model.getObject().toString();
+                    }
+                }
+            };
+            return new Label(id, labelModel);
+        }
 
-	};
+        @Override
+        public int getColSpan(IModel rowModel) {
+            BrixNode node = getNode(rowModel);
+            return node != null ? 1 : 4;
+        }
+    }
 
-	protected class DatePropertyColumn extends NodePropertyColumn
-	{
-		public DatePropertyColumn(IModel<?> headerModel, String propertyExpression)
-		{
-			super(headerModel, propertyExpression);
-		}
+    ;
 
-		@Override
-		protected CharSequence convertToString(Object object)
-		{
-			if (object instanceof Date)
-			{
-				Date date = (Date) object;
-				return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
-			}
-			else
-			{
-				return null;
-			}
-		}
-	};
+    private class NodePropertyColumn extends PropertyColumn {
+        public NodePropertyColumn(IModel headerModel, String propertyExpression) {
+            super(headerModel, propertyExpression);
+        }
 
+        @Override
+        protected Object getModelObject(IModel rowModel) {
+            return getNode(rowModel);
+        }
+    }
+
+    protected class NodePickerCheckBoxColumn extends CheckBoxColumn {
+        public NodePickerCheckBoxColumn(String columnId) {
+            super(columnId);
+        }
+
+        @Override
+        protected boolean isCheckBoxEnabled(IModel model) {
+            BrixNode node = getNode(model);
+            return isNodeEnabled((JcrTreeNode) model.getObject()) && node != null;
+        }
+    }
+
+    ;
+
+    protected class DatePropertyColumn extends NodePropertyColumn {
+        public DatePropertyColumn(IModel<?> headerModel, String propertyExpression) {
+            super(headerModel, propertyExpression);
+        }
+
+        @Override
+        protected CharSequence convertToString(Object object) {
+            if (object instanceof Date) {
+                Date date = (Date) object;
+                return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    ;
 }

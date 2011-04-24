@@ -13,7 +13,7 @@
  */
 
 /**
- * 
+ *
  */
 package org.brixcms.plugin.site.resource;
 
@@ -37,82 +37,78 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.Date;
 
-public class ResourceRequestTarget implements IRequestTarget
-{
+public class ResourceRequestTarget implements IRequestTarget {
+// ------------------------------ FIELDS ------------------------------
+
+    public static final String SAVE_PARAMETER = Brix.NS_PREFIX + "save";
+
+    private static final Logger log = LoggerFactory.getLogger(ResourceRequestTarget.class);
     private final IModel<BrixNode> node;
     private final Boolean save;
 
-    public ResourceRequestTarget(IModel<BrixNode> node)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ResourceRequestTarget(IModel<BrixNode> node) {
         super();
         this.node = node;
         this.save = null;
     }
 
-    public ResourceRequestTarget(IModel<BrixNode> node, boolean save)
-    {
+    public ResourceRequestTarget(IModel<BrixNode> node, boolean save) {
         super();
         this.node = node;
         this.save = save;
     }
 
-    public void detach(RequestCycle requestCycle)
-    {
-        node.detach();
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public void respond(RequestCycle requestCycle)
-    {
+
+// --------------------- Interface IRequestTarget ---------------------
+
+
+    public void respond(RequestCycle requestCycle) {
         boolean save = (this.save != null) ? this.save : Strings.isTrue(requestCycle.getRequest()
                 .getParameter(SAVE_PARAMETER));
 
-        BrixFileNode node = (BrixFileNode)this.node.getObject();
+        BrixFileNode node = (BrixFileNode) this.node.getObject();
 
-        if (!SitePlugin.get().canViewNode(node, Action.Context.PRESENTATION))
-        {
+        if (!SitePlugin.get().canViewNode(node, Action.Context.PRESENTATION)) {
             throw Brix.get().getForbiddenException();
         }
 
-        WebResponse response = (WebResponse)requestCycle.getResponse();
-        
+        WebResponse response = (WebResponse) requestCycle.getResponse();
+
         response.setContentType(node.getMimeType());
-    
-        Date lastModified = node.getLastModified();        
-        response.setLastModifiedTime(Time.valueOf(lastModified));        
-        
-        try
-        {   
-        	HttpServletRequest r = ((WebRequest)requestCycle.getRequest()).getHttpServletRequest();
-        	String since = r.getHeader("If-Modified-Since");
-        	if (!save && since != null) 
-        	{
-        		Date d = new Date(r.getDateHeader("If-Modified-Since"));        	        		
-        		        	
-        		// the weird toString comparison is to prevent comparing milliseconds
-        		if (d.after(lastModified) || d.toString().equals(lastModified.toString()))
-        		{        	
-        			response.setContentLength(node.getContentLength());
-        			response.getHttpServletResponse().setStatus(HttpServletResponse.SC_NOT_MODIFIED);        			
-        			return;
-        				
-        		}        		
-        	}
-        	String fileName = node.getName();
-        	long length = node.getContentLength();
-        	HttpServletRequest httpServletRequest = ((WebRequest)requestCycle.getRequest()).getHttpServletRequest();
-        	HttpServletResponse httpServletResponse = response.getHttpServletResponse();
-        	InputStream stream = node.getDataAsStream(); 
-        	
+
+        Date lastModified = node.getLastModified();
+        response.setLastModifiedTime(Time.valueOf(lastModified));
+
+        try {
+            HttpServletRequest r = ((WebRequest) requestCycle.getRequest()).getHttpServletRequest();
+            String since = r.getHeader("If-Modified-Since");
+            if (!save && since != null) {
+                Date d = new Date(r.getDateHeader("If-Modified-Since"));
+
+                // the weird toString comparison is to prevent comparing milliseconds
+                if (d.after(lastModified) || d.toString().equals(lastModified.toString())) {
+                    response.setContentLength(node.getContentLength());
+                    response.getHttpServletResponse().setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    return;
+                }
+            }
+            String fileName = node.getName();
+            long length = node.getContentLength();
+            HttpServletRequest httpServletRequest = ((WebRequest) requestCycle.getRequest()).getHttpServletRequest();
+            HttpServletResponse httpServletResponse = response.getHttpServletResponse();
+            InputStream stream = node.getDataAsStream();
+
             new Streamer(length, stream, fileName, save, httpServletRequest, httpServletResponse).stream();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             log.error("Error writing resource data to content", e);
         }
     }
 
-    private static final Logger log = LoggerFactory.getLogger(ResourceRequestTarget.class);
-
-    public static final String SAVE_PARAMETER = Brix.NS_PREFIX + "save";
-
+    public void detach(RequestCycle requestCycle) {
+        node.detach();
+    }
 }

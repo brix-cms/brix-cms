@@ -21,64 +21,55 @@ import org.apache.wicket.model.PropertyModel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.reference.Reference;
 
-public class ReferenceEditorWithButtons extends BrixGenericPanel<Reference>
-{
+public class ReferenceEditorWithButtons extends BrixGenericPanel<Reference> {
+// ------------------------------ FIELDS ------------------------------
 
-    public ReferenceEditorWithButtons(String id, ReferenceEditorConfiguration configuration)
-    {
+    private Reference reference;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ReferenceEditorWithButtons(String id, ReferenceEditorConfiguration configuration) {
         super(id);
         init(configuration);
     }
 
-    public ReferenceEditorWithButtons(String id, IModel<Reference> model,
-            ReferenceEditorConfiguration configuration)
-    {
-        super(id, model);
-        init(configuration);
-    }
-
-    private Reference reference;
-
-    private void init(ReferenceEditorConfiguration configuration)
-    {
+    private void init(ReferenceEditorConfiguration configuration) {
         Reference old = getModelObject();
 
         reference = old != null ? new Reference(old) : new Reference();
 
         add(new ReferenceEditor("editor", new PropertyModel<Reference>(this, "reference"), configuration));
 
-        add(new AjaxLink<Void>("ok")
-        {
+        add(new AjaxLink<Void>("ok") {
             @Override
-            public void onClick(AjaxRequestTarget target)
-            {
+            public void onClick(AjaxRequestTarget target) {
                 onOk(target);
             }
         });
 
-        add(new AjaxLink<Void>("cancel")
-        {
+        add(new AjaxLink<Void>("cancel") {
             @Override
-            public void onClick(AjaxRequestTarget target)
-            {
+            public void onClick(AjaxRequestTarget target) {
                 onCancel(target);
             }
         });
     }
 
-    protected Reference getEditedReference()
-    {
-        return reference;
-    }
-
-    protected void onCancel(AjaxRequestTarget target)
-    {
-
-    }
-
-    protected void onOk(AjaxRequestTarget target)
-    {
+    protected void onOk(AjaxRequestTarget target) {
         setModelObject(getEditedReference());
     }
 
+    protected Reference getEditedReference() {
+        return reference;
+    }
+
+    protected void onCancel(AjaxRequestTarget target) {
+
+    }
+
+    public ReferenceEditorWithButtons(String id, IModel<Reference> model,
+                                      ReferenceEditorConfiguration configuration) {
+        super(id, model);
+        init(configuration);
+    }
 }

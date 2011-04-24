@@ -32,76 +32,72 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.admin.NodeManagerPanel;
 import org.brixcms.web.ContainerFeedbackPanel;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
-public class UploadResourcesPanel extends NodeManagerPanel
-{
+public class UploadResourcesPanel extends NodeManagerPanel {
+// ------------------------------ FIELDS ------------------------------
 
     private Collection<FileUpload> uploads = new ArrayList<FileUpload>();
     private boolean overwrite = false;
 
-    public UploadResourcesPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack)
-    {
-        super(id, model);        
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public UploadResourcesPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack) {
+        super(id, model);
 
         Form<?> form = new Form<UploadResourcesPanel>("form", new CompoundPropertyModel<UploadResourcesPanel>(this));
         add(form);
-        
+
         form.add(new ContainerFeedbackPanel("feedback", this));
-        
+
         form.add(new SubmitLink("upload") {
-        	@Override
-        	public void onSubmit()
-        	{
-        		processUploads();
-        	}
+            @Override
+            public void onSubmit() {
+                processUploads();
+            }
         });
-        
+
         form.add(new Link<Void>("cancel") {
-        	@Override
-        	public void onClick()
-        	{
-        		goBack.execute();
-        	}
+            @Override
+            public void onClick() {
+                goBack.execute();
+            }
         });
 
         form.add(new MultiFileUploadField("uploads"));
         form.add(new CheckBox("overwrite"));
     }
 
-    private void processUploads()
-    {
+    private void processUploads() {
         final BrixNode parentNode = getModelObject();
 
-        for (final FileUpload upload : uploads)
-        {
+        for (final FileUpload upload : uploads) {
             final String fileName = upload.getClientFileName();
 
-            if (parentNode.hasNode(fileName))
-            {
-                if (overwrite)
-                {
+            if (parentNode.hasNode(fileName)) {
+                if (overwrite) {
                     parentNode.getNode(fileName).remove();
-                }
-                else
-                {
-                	class ModelObject implements Serializable {
-                		@SuppressWarnings("unused")
-						private String fileName = upload.getClientFileName(); 
-                	}
-                	
-                    getSession().error(getString("fileExists", new Model<ModelObject>(new ModelObject())));                    
+                } else {
+                    class ModelObject implements Serializable {
+                        @SuppressWarnings("unused")
+                        private String fileName = upload.getClientFileName();
+                    }
+
+                    getSession().error(getString("fileExists", new Model<ModelObject>(new ModelObject())));
                     continue;
                 }
             }
 
             BrixNode newNode = (BrixNode) parentNode.addNode(fileName, "nt:file");
 
-            try
-            {
+            try {
                 // copy the upload into a temp file and assign that
                 // output stream to the node
                 File temp = File.createTempFile(
@@ -115,21 +111,19 @@ public class UploadResourcesPanel extends NodeManagerPanel
                 BrixFileNode file = BrixFileNode.initialize(newNode, mime);
                 file.setData(file.getSession().getValueFactory().createBinary(new FileInputStream(temp)));
                 file.getParent().save();
-
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
         }
 
-                
+
         SitePlugin.get().selectNode(this, parentNode, true);
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    protected void onDetach()
-    {
+    protected void onDetach() {
         uploads.clear();
         super.onDetach();
     }

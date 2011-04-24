@@ -17,26 +17,27 @@ package org.brixcms.jcr.exception;
 import javax.jcr.RepositoryException;
 
 /**
- * 
  * @author Matej Knopp
  */
-public class JcrException extends RuntimeException
-{
-	private static final long serialVersionUID = 1L;
+public class JcrException extends RuntimeException {
+// ------------------------------ FIELDS ------------------------------
 
-	public JcrException(RepositoryException cause)
-    {
+    private static final long serialVersionUID = 1L;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public JcrException(RepositoryException cause) {
         super(cause);
     }
 
-    public JcrException(String message, RepositoryException cause)
-    {
+    public JcrException(String message, RepositoryException cause) {
         super(message, cause);
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    public RepositoryException getCause()
-    {
-        return (RepositoryException)super.getCause();
+    public RepositoryException getCause() {
+        return (RepositoryException) super.getCause();
     }
 }

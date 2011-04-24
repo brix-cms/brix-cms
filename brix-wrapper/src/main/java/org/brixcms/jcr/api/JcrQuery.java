@@ -21,48 +21,38 @@ import javax.jcr.Value;
 import javax.jcr.query.Query;
 
 /**
- * 
  * @author Matej Knopp
  */
-public interface JcrQuery extends Query
-{
+public interface JcrQuery extends Query {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrQuery wrap(Query delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrQueryWrapper.wrap(delegate, session);
-        }
-    };
 
-    public Query getDelegate();
+// --------------------- Interface Query ---------------------
 
     public JcrQueryResult execute();
 
-    public String getLanguage();
-
     public String getStatement();
+
+    public String getLanguage();
 
     public String getStoredQueryPath();
 
     public JcrNode storeAsNode(String absPath);
-    
+
     /**
-     * Binds the given <code>value</code> to the variable named
-     * <code>varName</code>.
+     * Binds the given <code>value</code> to the variable named <code>varName</code>.
      *
      * @param varName name of variable in query
      * @param value   value to bind
-     * @throws IllegalArgumentException      if <code>varName</code> is not a valid
-     *                                       variable in this query.
+     * @throws IllegalArgumentException      if <code>varName</code> is not a valid variable in this query.
      * @throws javax.jcr.RepositoryException if an error occurs.
      * @since JCR 2.0
      */
     public void bindValue(String varName, Value value);
 
     /**
-     * Returns the names of the bind variables in this query. If this query does
-     * not contains any bind variables then an empty array is returned.
+     * Returns the names of the bind variables in this query. If this query does not contains any bind variables then an
+     * empty array is returned.
      *
      * @return the names of the bind variables in this query.
      * @throws RepositoryException if an error occurs.
@@ -70,4 +60,16 @@ public interface JcrQuery extends Query
      */
     public String[] getBindVariableNames();
 
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public Query getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrQuery wrap(Query delegate, JcrSession session) {
+            return WrapperAccessor.JcrQueryWrapper.wrap(delegate, session);
+        }
+    }
 }

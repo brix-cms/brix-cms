@@ -22,46 +22,47 @@ import javax.jcr.version.Version;
 import java.util.Calendar;
 
 /**
- * 
  * @author Matej Knopp
  * @author igor.vaynberg
  */
-public interface JcrVersion extends Version, JcrNode
-{
+public interface JcrVersion extends Version, JcrNode {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrVersion wrap(Version delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrVersionWrapper.wrap(delegate, session);
-        }
 
-        public static JcrVersion[] wrap(Version delegate[], JcrSession session)
-        {
-            return WrapperAccessor.JcrVersionWrapper.wrap(delegate, session);
-        }
-    };
+// --------------------- Interface JcrItem ---------------------
+    ;
 
     public Version getDelegate();
+
+// --------------------- Interface Version ---------------------
+
 
     public JcrVersionHistory getContainingHistory();
 
     public Calendar getCreated();
 
-    public JcrVersion[] getPredecessors();
-
     public JcrVersion[] getSuccessors();
+
+    public JcrVersion[] getPredecessors();
 
     /**
      * Returns the frozen node of this version.
-     * 
+     *
      * @return a <code>Node</code> object
-     * @throws RepositoryException
-     *             if an error occurs.
+     * @throws RepositoryException if an error occurs.
      * @since JCR 2.0
      */
     public Node getFrozenNode();
-    
-    
 
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrVersion wrap(Version delegate, JcrSession session) {
+            return WrapperAccessor.JcrVersionWrapper.wrap(delegate, session);
+        }
+
+        public static JcrVersion[] wrap(Version delegate[], JcrSession session) {
+            return WrapperAccessor.JcrVersionWrapper.wrap(delegate, session);
+        }
+    }
 }

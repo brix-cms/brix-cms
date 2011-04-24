@@ -21,85 +21,73 @@ import javax.jcr.version.VersionHistory;
 import java.util.Calendar;
 
 
-class VersionWrapper extends NodeWrapper implements javax.jcr.version.Version
-{
+class VersionWrapper extends NodeWrapper implements javax.jcr.version.Version {
+// -------------------------- STATIC METHODS --------------------------
 
-    private VersionWrapper(Version delegate, SessionWrapper session)
-    {
-        super(delegate, session);
-    }
-
-    @Override
-    public Version getDelegate()
-    {
-        return (Version)super.getDelegate();
-    }
-
-    public static VersionWrapper wrap(Version delegate, SessionWrapper session)
-    {
-        if (delegate == null)
-        {
+    public static VersionWrapper wrap(Version delegate, SessionWrapper session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new VersionWrapper(delegate, session);
         }
     }
 
-    public static VersionWrapper[] wrap(Version delegate[], SessionWrapper session)
-    {
-        if (delegate == null)
-        {
+    public static VersionWrapper[] wrap(Version delegate[], SessionWrapper session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             VersionWrapper result[] = new VersionWrapper[delegate.length];
-            for (int i = 0; i < delegate.length; ++i)
-            {
+            for (int i = 0; i < delegate.length; ++i) {
                 result[i] = wrap(delegate[i], session);
             }
             return result;
         }
     }
 
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public VersionHistory getContainingHistory() throws RepositoryException
-    {
+    private VersionWrapper(Version delegate, SessionWrapper session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Version ---------------------
+
+    public VersionHistory getContainingHistory() throws RepositoryException {
         return VersionHistoryWrapper
                 .wrap(getDelegate().getContainingHistory(), getSessionWrapper());
     }
 
-    public Calendar getCreated() throws RepositoryException
-    {
+    public Calendar getCreated() throws RepositoryException {
         return getDelegate().getCreated();
     }
 
-    public Version[] getPredecessors() throws RepositoryException
-    {
-        return wrap(getDelegate().getPredecessors(), getSessionWrapper());
-    }
-
-    public Version[] getSuccessors() throws RepositoryException
-    {
-        return wrap(getDelegate().getSuccessors(), getSessionWrapper());
-    }
-
-    public Node getFrozenNode() throws RepositoryException
-    {
-        return NodeWrapper.wrap(getDelegate().getFrozenNode(), getSessionWrapper());
-    }
-
-    public Version getLinearPredecessor() throws RepositoryException
-    {
-        return VersionWrapper.wrap(getDelegate().getLinearPredecessor(), getSessionWrapper());
-    }
-
-    public Version getLinearSuccessor() throws RepositoryException
-    {
+    public Version getLinearSuccessor() throws RepositoryException {
         return VersionWrapper.wrap(getDelegate().getLinearSuccessor(), getSessionWrapper());
     }
 
-  
+    public Version[] getSuccessors() throws RepositoryException {
+        return wrap(getDelegate().getSuccessors(), getSessionWrapper());
+    }
+
+    public Version getLinearPredecessor() throws RepositoryException {
+        return VersionWrapper.wrap(getDelegate().getLinearPredecessor(), getSessionWrapper());
+    }
+
+    public Version[] getPredecessors() throws RepositoryException {
+        return wrap(getDelegate().getPredecessors(), getSessionWrapper());
+    }
+
+    public Node getFrozenNode() throws RepositoryException {
+        return NodeWrapper.wrap(getDelegate().getFrozenNode(), getSessionWrapper());
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public Version getDelegate() {
+        return (Version) super.getDelegate();
+    }
 }

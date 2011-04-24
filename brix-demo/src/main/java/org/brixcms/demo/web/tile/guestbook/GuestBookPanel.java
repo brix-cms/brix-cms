@@ -34,66 +34,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class GuestBookPanel extends Panel
-{
+public class GuestBookPanel extends Panel {
+// ------------------------------ FIELDS ------------------------------
+
     private static final long serialVersionUID = 1L;
 
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public GuestBookPanel(String id, IModel<BrixNode> model)
-    {
+    public GuestBookPanel(String id, IModel<BrixNode> model) {
         super(id, model);
         add(new FeedbackPanel("feedback"));
         add(new MessageForm("form"));
-        add(new PropertyListView<Entry>("entries", new EntriesModel())
-        {
+        add(new PropertyListView<Entry>("entries", new EntriesModel()) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<Entry> item)
-            {
+            protected void populateItem(ListItem<Entry> item) {
                 item.add(new Label("name"));
                 item.add(new Label("message"));
                 item.add(new Label("timestamp"));
             }
-
         });
     }
 
-    private class MessageForm extends Form<Entry>
-    {
-        private static final long serialVersionUID = 1L;
+// -------------------------- OTHER METHODS --------------------------
 
-        private Entry entry = new Entry();
-
-        public MessageForm(String id)
-        {
-            super(id);
-            add(new TextField<String>("name", new PropertyModel<String>(this, "entry.name"))
-                    .setRequired(true));
-            add(new TextArea<String>("message", new PropertyModel<String>(this, "entry.message"))
-                    .setRequired(true));
-        }
-
-        @Override
-        protected void onSubmit()
-        {
-            onMessage(entry);
-            entry = new Entry();
-        }
-    }
-
-    private static class Entry implements Serializable
-    {
-        private static final long serialVersionUID = 1L;
-
-        public String name;
-        public String message;
-        public Date timestamp;
-    }
-
-    protected void onMessage(Entry message)
-    {
-        JcrNode tile = (JcrNode)getDefaultModelObject();
+    protected void onMessage(Entry message) {
+        JcrNode tile = (JcrNode) getDefaultModelObject();
 
         JcrNode entry = tile.addNode("entry");
         entry.setProperty("name", message.name);
@@ -103,20 +70,46 @@ public class GuestBookPanel extends Panel
         tile.getSession().save();
     }
 
-    private class EntriesModel extends LoadableDetachableModel<List<Entry>>
-    {
+// -------------------------- INNER CLASSES --------------------------
 
+    private class MessageForm extends Form<Entry> {
+        private static final long serialVersionUID = 1L;
+
+        private Entry entry = new Entry();
+
+        public MessageForm(String id) {
+            super(id);
+            add(new TextField<String>("name", new PropertyModel<String>(this, "entry.name"))
+                    .setRequired(true));
+            add(new TextArea<String>("message", new PropertyModel<String>(this, "entry.message"))
+                    .setRequired(true));
+        }
+
+        @Override
+        protected void onSubmit() {
+            onMessage(entry);
+            entry = new Entry();
+        }
+    }
+
+    private static class Entry implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        public String name;
+        public String message;
+        public Date timestamp;
+    }
+
+    private class EntriesModel extends LoadableDetachableModel<List<Entry>> {
         private static final long serialVersionUID = 1L;
 
         @Override
-        protected List<Entry> load()
-        {
-            JcrNode tile = (JcrNode)getDefaultModelObject();
+        protected List<Entry> load() {
+            JcrNode tile = (JcrNode) getDefaultModelObject();
             JcrNodeIterator entryNodes = tile.getNodes("entry");
-            ArrayList<Entry> entries = new ArrayList<Entry>((int)entryNodes.getSize());
+            ArrayList<Entry> entries = new ArrayList<Entry>((int) entryNodes.getSize());
 
-            while (entryNodes.hasNext())
-            {
+            while (entryNodes.hasNext()) {
                 JcrNode entryNode = entryNodes.nextNode();
                 Entry entry = new Entry();
                 entry.name = entryNode.getProperty("name").getString();
@@ -127,8 +120,5 @@ public class GuestBookPanel extends Panel
 
             return entries;
         }
-
     }
-
-
 }

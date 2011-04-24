@@ -25,39 +25,36 @@ import org.brixcms.plugin.site.webdav.Rule.Type;
 import java.util.Arrays;
 import java.util.List;
 
-public class TypePanel extends EditableCellPanel
-{
+public class TypePanel extends EditableCellPanel {
+// ------------------------------ FIELDS ------------------------------
 
-	public TypePanel(String id, AbstractColumn column, IModel rowModel, IModel itemModel)
-	{
-		super(id, column, rowModel);
-	
-		List<Type> types = Arrays.asList(Type.values());
-		
-		DropDownChoice<Type> choice;
-		add(choice = new DropDownChoice<Type>("dropDown", itemModel, types, typeRenderer));
-		choice.setNullValid(false);
-		choice.setRequired(true);
-	}	
-	
+    private IChoiceRenderer<Type> typeRenderer = new IChoiceRenderer<Type>() {
+        public Object getDisplayValue(Type object) {
+            return getString(object.toString());
+        }
 
-	private IChoiceRenderer<Type> typeRenderer = new IChoiceRenderer<Type>()
-	{
-		public Object getDisplayValue(Type object)
-		{
-			return getString(object.toString());
-		}
+        public String getIdValue(Type object, int index) {
+            return "" + index;
+        }
+    };
 
-		public String getIdValue(Type object, int index)
-		{
-			return "" + index;
-		}
-	};
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	protected FormComponent getEditComponent()
-	{
-		return (FormComponent) get("dropDown");
-	}
+    public TypePanel(String id, AbstractColumn column, IModel rowModel, IModel itemModel) {
+        super(id, column, rowModel);
 
+        List<Type> types = Arrays.asList(Type.values());
+
+        DropDownChoice<Type> choice;
+        add(choice = new DropDownChoice<Type>("dropDown", itemModel, types, typeRenderer));
+        choice.setNullValid(false);
+        choice.setRequired(true);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected FormComponent getEditComponent() {
+        return (FormComponent) get("dropDown");
+    }
 }

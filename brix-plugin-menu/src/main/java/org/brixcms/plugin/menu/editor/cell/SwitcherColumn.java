@@ -24,38 +24,39 @@ import org.brixcms.plugin.site.picker.reference.ReferenceEditorConfiguration;
 import org.brixcms.web.reference.Reference;
 
 /**
- * Created by IntelliJ IDEA.
- * User: korbinianbachl
- * Date: 08.09.2010
- * Time: 21:11:23
+ * Created by IntelliJ IDEA. User: korbinianbachl Date: 08.09.2010 Time: 21:11:23
  */
 public class SwitcherColumn extends AbstractColumn {
+// ------------------------------ FIELDS ------------------------------
 
     ReferenceEditorConfiguration conf;
 
+// --------------------------- CONSTRUCTORS ---------------------------
 
     public SwitcherColumn(String id, IModel<String> displayModel, ReferenceEditorConfiguration conf) {
         super(id, displayModel);
         this.conf = conf;
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IGridColumn ---------------------
+
     /**
      * {@inheritDoc}
      */
     @Override
     public Component newCell(WebMarkupContainer parent, String componentId, final IModel rowModel) {
-
         IModel<Menu.ChildEntry.MenuType> typeModel = new PropertyModel<Menu.ChildEntry.MenuType>(rowModel, "entry.menuType");
         IModel<Reference> referenceModel = new PropertyModel<Reference>(rowModel, "entry.reference");
         IModel<String> labelOrCodeModel = new PropertyModel<String>(rowModel, "entry.labelOrCode");
 
-        return new SwitcherCellPanel(componentId, typeModel,referenceModel, labelOrCodeModel, conf) {
-
+        return new SwitcherCellPanel(componentId, typeModel, referenceModel, labelOrCodeModel, conf) {
             @Override
             boolean isEditing() {
                 return getGrid().isItemEdited(rowModel);
             }
         };
     }
-
 }

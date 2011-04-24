@@ -26,71 +26,64 @@ import java.util.List;
 
 /**
  * JCR2 specific implementation of {@link WorkspaceManager}
- * 
+ *
  * @author igor.vaynberg
  * @author kbachl
- * 
  */
-public class Jcr2WorkspaceManager extends AbstractSimpleWorkspaceManager
-{
+public class Jcr2WorkspaceManager extends AbstractSimpleWorkspaceManager {
+// ------------------------------ FIELDS ------------------------------
 
     private final JcrSessionFactory sf;
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
     /**
      * Construction
-     * 
-     * @param sf
-     *            session factory that will be used to feed workspace manager sessions
+     *
+     * @param sf session factory that will be used to feed workspace manager sessions
      */
-    public Jcr2WorkspaceManager(JcrSessionFactory sf)
-    {
+    public Jcr2WorkspaceManager(JcrSessionFactory sf) {
         super();
         this.sf = sf;
     }
 
-    /** {@inheritDoc} */
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected void createWorkspace(String workspaceName)
-    {
+    protected void createWorkspace(String workspaceName) {
         Session session = createSession(null);
-        try
-        {
+        try {
             session.getWorkspace().createWorkspace(workspaceName);
-        }
-        catch (RepositoryException e)
-        {
+        } catch (RepositoryException e) {
             throw new JcrException(e);
-        }
-        finally
-        {
+        } finally {
             closeSession(session, false);
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected List<String> getAccessibleWorkspaceNames()
-    {
-        Session session = createSession(null);
-        try
-        {
-            return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
-        }
-        catch (RepositoryException e)
-        {
-            throw new JcrException(e);
-        }
-        finally
-        {
-            closeSession(session, false);
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected Session createSession(String workspaceName)
-    {
+    protected Session createSession(String workspaceName) {
         return sf.createSession(workspaceName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<String> getAccessibleWorkspaceNames() {
+        Session session = createSession(null);
+        try {
+            return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
+        } catch (RepositoryException e) {
+            throw new JcrException(e);
+        } finally {
+            closeSession(session, false);
+        }
+    }
 }

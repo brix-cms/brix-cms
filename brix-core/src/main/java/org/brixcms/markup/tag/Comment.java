@@ -16,10 +16,11 @@ package org.brixcms.markup.tag;
 
 /**
  * Represents an HTML comment.
- * 
+ *
  * @author Matej Knopp
  */
-public interface Comment extends Item
-{
-	public String getText();
+public interface Comment extends Item {
+// -------------------------- OTHER METHODS --------------------------
+
+    public String getText();
 }

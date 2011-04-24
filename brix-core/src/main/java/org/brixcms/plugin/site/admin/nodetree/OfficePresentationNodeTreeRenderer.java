@@ -19,25 +19,27 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 
 /**
  * Renderer for office presentation nodes
- * 
+ *
  * @author Jeremy Thomerson
  */
-public class OfficePresentationNodeTreeRenderer extends AbstractMimeTypeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class OfficePresentationNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final ResourceReference RESOURCE = new ResourceReference(
-			PageNodeTreeRenderer.class, "resources/x-office-presentation.png");
+    private static final long serialVersionUID = 1L;
 
-	public OfficePresentationNodeTreeRenderer()
-	{
-		super(new String[] { "application/vnd.ms-powerpoint", "application/vnd.sun.xml.impress" });
-	}
+    private static final ResourceReference RESOURCE = new ResourceReference(
+            PageNodeTreeRenderer.class, "resources/x-office-presentation.png");
 
-	@Override
-	protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-	{
-		return RESOURCE;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
+    public OfficePresentationNodeTreeRenderer() {
+        super(new String[]{"application/vnd.ms-powerpoint", "application/vnd.sun.xml.impress"});
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+        return RESOURCE;
+    }
 }

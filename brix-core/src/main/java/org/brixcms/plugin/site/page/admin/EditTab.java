@@ -13,7 +13,7 @@
  */
 
 /**
- * 
+ *
  */
 package org.brixcms.plugin.site.page.admin;
 
@@ -37,14 +37,16 @@ import org.brixcms.web.tree.NodeFilter;
 
 import java.util.Collection;
 
-abstract class EditTab extends NodeManagerPanel
-{
+abstract class EditTab extends NodeManagerPanel {
+// ------------------------------ FIELDS ------------------------------
+
     private String currentEditorFactory;
     private final MarkupContainer contentEditorParent;
     private final IModel<String> contentEditorModel;
 
-    public EditTab(String id, final IModel<BrixNode> nodeModel)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public EditTab(String id, final IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
 
         Brix brix = getModelObject().getBrix();
@@ -65,7 +67,7 @@ abstract class EditTab extends NodeManagerPanel
 
         IModel<Boolean> booleanModel = adapter.forProperty("requiresSSL");
         form.add(new ProtocolSelector("requiresSSL", booleanModel));
-        
+
         IModel<String> mimeTypeModel = adapter.forProperty("mimeType");
         form.add(new TextField<String>("mimeType", mimeTypeModel));
 
@@ -81,29 +83,23 @@ abstract class EditTab extends NodeManagerPanel
 
         // set up buttons to control editor switching
 
-        RepeatingView editors = new RepeatingView("editors")
-        {
+        RepeatingView editors = new RepeatingView("editors") {
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return size() > 1;
             }
         };
         form.add(editors);
 
-        for (MarkupEditorFactory factory : editorFactories)
-        {
+        for (MarkupEditorFactory factory : editorFactories) {
             final String cn = factory.getClass().getName();
-            editors.add(new Button(editors.newChildId(), factory.newLabel())
-            {
-                public void onSubmit()
-                {
+            editors.add(new Button(editors.newChildId(), factory.newLabel()) {
+                public void onSubmit() {
                     setupEditor(cn);
                 }
 
                 @Override
-                public boolean isEnabled()
-                {
+                public boolean isEnabled() {
                     return !cn.equals(currentEditorFactory);
                 }
             });
@@ -112,11 +108,9 @@ abstract class EditTab extends NodeManagerPanel
 
         form.add(new ContainerFeedbackPanel("feedback", this));
 
-        form.add(new Button("save")
-        {
+        form.add(new Button("save") {
             @Override
-            public void onSubmit()
-            {
+            public void onSubmit() {
                 JcrNode node = nodeModel.getObject();
                 node.checkout();
                 adapter.apply();
@@ -128,32 +122,23 @@ abstract class EditTab extends NodeManagerPanel
             }
         });
 
-        form.add(new Link<Void>("cancel")
-        {
-
+        form.add(new Link<Void>("cancel") {
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 getSession().info(getString("status.cancelled"));
                 goBack();
             }
-
         });
     }
 
-    abstract void goBack();
-
-    private void setupEditor(String cn)
-    {
+    private void setupEditor(String cn) {
         final Brix brix = getModelObject().getBrix();
 
         Collection<MarkupEditorFactory> factories = brix.getConfig().getRegistry()
                 .lookupCollection(MarkupEditorFactory.POINT);
 
-        for (MarkupEditorFactory factory : factories)
-        {
-            if (factory.getClass().getName().equals(cn))
-            {
+        for (MarkupEditorFactory factory : factories) {
+            if (factory.getClass().getName().equals(cn)) {
                 contentEditorParent.addOrReplace(factory.newEditor("content", contentEditorModel));
                 currentEditorFactory = factory.getClass().getName();
                 return;
@@ -161,7 +146,9 @@ abstract class EditTab extends NodeManagerPanel
         }
 
         throw new RuntimeException("Unknown markup editor factory class: " + cn);
+    }
 
-    };
+    abstract void goBack();
 
+    ;
 }

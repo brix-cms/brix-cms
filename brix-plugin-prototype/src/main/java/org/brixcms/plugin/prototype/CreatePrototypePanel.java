@@ -27,45 +27,35 @@ import java.util.List;
 import java.util.Map;
 
 
-public class CreatePrototypePanel extends SelectItemsPanel<Void>
-{
+public class CreatePrototypePanel extends SelectItemsPanel<Void> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public CreatePrototypePanel(String id, String workspaceId, final String targetPrototypeName)
-    {
+    public CreatePrototypePanel(String id, String workspaceId, final String targetPrototypeName) {
         super(id, workspaceId);
 
         final Component message = new MultiLineLabel("message", new Model<String>(
-            ""));
+                ""));
         message.setOutputMarkupId(true);
         add(message);
 
-        add(new AjaxLink<Void>("create")
-        {
+        add(new AjaxLink<Void>("create") {
             @Override
-            public void onClick(AjaxRequestTarget target)
-            {
+            public void onClick(AjaxRequestTarget target) {
                 List<JcrNode> nodes = getSelectedNodes();
-                if (!nodes.isEmpty())
-                {
+                if (!nodes.isEmpty()) {
                     Map<JcrNode, List<JcrNode>> dependencies = JcrUtil.getUnsatisfiedDependencies(
-                        nodes, null);
-                    if (!dependencies.isEmpty())
-                    {
-                        message.setDefaultModelObject(getDependenciesMessage(dependencies));                        
-                    }
-                    else
-                    {
+                            nodes, null);
+                    if (!dependencies.isEmpty()) {
+                        message.setDefaultModelObject(getDependenciesMessage(dependencies));
+                    } else {
                         PrototypePlugin.get().createPrototype(nodes, targetPrototypeName);
                         findParent(ModalWindow.class).close(target);
-                    }                    
-                }
-                else
-                {
+                    }
+                } else {
                     message.setDefaultModelObject(getString("youHaveToSelectAtLeastOneNode"));
                 }
                 target.addComponent(message);
             }
         });
     }
-    
 }

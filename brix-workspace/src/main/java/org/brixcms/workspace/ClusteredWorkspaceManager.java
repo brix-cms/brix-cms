@@ -15,18 +15,17 @@
 package org.brixcms.workspace;
 
 /**
- * Workspace manager that can be running in clustered JCR environment. 
- * 
+ * Workspace manager that can be running in clustered JCR environment.
+ *
  * @author Matej Knopp
  */
-public interface ClusteredWorkspaceManager extends WorkspaceManager
-{
+public interface ClusteredWorkspaceManager extends WorkspaceManager {
+// -------------------------- OTHER METHODS --------------------------
 
-	/**
-	 * Notification that a workspace has been created externally (e.g. on different node).
-	 * 
-	 * @param workspaceId
-	 */
-	public void workspaceCreated(String workspaceId);
-	
+    /**
+     * Notification that a workspace has been created externally (e.g. on different node).
+     *
+     * @param workspaceId
+     */
+    public void workspaceCreated(String workspaceId);
 }

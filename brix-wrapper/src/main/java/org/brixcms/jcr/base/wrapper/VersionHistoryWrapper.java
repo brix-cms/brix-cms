@@ -20,112 +20,100 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
-class VersionHistoryWrapper extends NodeWrapper implements VersionHistory
-{
+class VersionHistoryWrapper extends NodeWrapper implements VersionHistory {
+// -------------------------- STATIC METHODS --------------------------
 
-    private VersionHistoryWrapper(VersionHistory delegate, SessionWrapper session)
-    {
-        super(delegate, session);
-    }
-
-    @Override
-    public VersionHistory getDelegate()
-    {
-        return (VersionHistory)super.getDelegate();
-    }
-
-    public static VersionHistoryWrapper wrap(VersionHistory history, SessionWrapper session)
-    {
-        if (history == null)
-        {
+    public static VersionHistoryWrapper wrap(VersionHistory history, SessionWrapper session) {
+        if (history == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new VersionHistoryWrapper(history, session);
         }
     }
 
-    public void addVersionLabel(String versionName, String label, boolean moveLabel)
-            throws RepositoryException
-    {
-        getDelegate().addVersionLabel(versionName, label, moveLabel);
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    private VersionHistoryWrapper(VersionHistory delegate, SessionWrapper session) {
+        super(delegate, session);
     }
 
-    public VersionIterator getAllVersions() throws RepositoryException
-    {
-        return VersionIteratorWrapper.wrap(getDelegate().getAllVersions(), getSessionWrapper());
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public Version getRootVersion() throws RepositoryException
-    {
-        return VersionWrapper.wrap(getDelegate().getRootVersion(), getSessionWrapper());
-    }
 
-    public Version getVersion(String versionName) throws RepositoryException
-    {
-        return VersionWrapper.wrap(getDelegate().getVersion(versionName), getSessionWrapper());
-    }
+// --------------------- Interface VersionHistory ---------------------
 
-    public Version getVersionByLabel(String label) throws RepositoryException
-    {
-        return VersionWrapper.wrap(getDelegate().getVersionByLabel(label), getSessionWrapper());
-    }
 
-    public String[] getVersionLabels() throws RepositoryException
-    {
-        return getDelegate().getVersionLabels();
-    }
-
-    public String[] getVersionLabels(Version version) throws RepositoryException
-    {
-        return getDelegate().getVersionLabels(version);
-    }
-
-    public String getVersionableUUID() throws RepositoryException
-    {
+    public String getVersionableUUID() throws RepositoryException {
         return getDelegate().getVersionableIdentifier();
     }
 
-    public boolean hasVersionLabel(String label) throws RepositoryException
-    {
-        return getDelegate().hasVersionLabel(label);
+    public String getVersionableIdentifier() throws RepositoryException {
+        return getDelegate().getVersionableIdentifier();
     }
 
-    public boolean hasVersionLabel(Version version, String label) throws RepositoryException
-    {
-        return getDelegate().hasVersionLabel(unwrap(version), label);
+    public Version getRootVersion() throws RepositoryException {
+        return VersionWrapper.wrap(getDelegate().getRootVersion(), getSessionWrapper());
     }
 
-    public void removeVersion(String versionName) throws RepositoryException
-    {
-        getDelegate().removeVersion(versionName);
-    }
-
-    public void removeVersionLabel(String label) throws RepositoryException
-    {
-        getDelegate().removeVersionLabel(label);
-    }
-
-    public NodeIterator getAllFrozenNodes() throws RepositoryException
-    {
-        return NodeIteratorWrapper.wrap(getDelegate().getAllFrozenNodes(), getSessionWrapper());
-    }
-
-    public NodeIterator getAllLinearFrozenNodes() throws RepositoryException
-    {
-        return NodeIteratorWrapper.wrap(getDelegate().getAllLinearFrozenNodes(),
-                getSessionWrapper());
-    }
-
-    public VersionIterator getAllLinearVersions() throws RepositoryException
-    {
+    public VersionIterator getAllLinearVersions() throws RepositoryException {
         return VersionIteratorWrapper.wrap(getDelegate().getAllLinearVersions(),
                 getSessionWrapper());
     }
 
-    public String getVersionableIdentifier() throws RepositoryException
-    {
-        return getDelegate().getVersionableIdentifier();
+    public VersionIterator getAllVersions() throws RepositoryException {
+        return VersionIteratorWrapper.wrap(getDelegate().getAllVersions(), getSessionWrapper());
+    }
+
+    public NodeIterator getAllLinearFrozenNodes() throws RepositoryException {
+        return NodeIteratorWrapper.wrap(getDelegate().getAllLinearFrozenNodes(),
+                getSessionWrapper());
+    }
+
+    public NodeIterator getAllFrozenNodes() throws RepositoryException {
+        return NodeIteratorWrapper.wrap(getDelegate().getAllFrozenNodes(), getSessionWrapper());
+    }
+
+    public Version getVersion(String versionName) throws RepositoryException {
+        return VersionWrapper.wrap(getDelegate().getVersion(versionName), getSessionWrapper());
+    }
+
+    public Version getVersionByLabel(String label) throws RepositoryException {
+        return VersionWrapper.wrap(getDelegate().getVersionByLabel(label), getSessionWrapper());
+    }
+
+    public void addVersionLabel(String versionName, String label, boolean moveLabel)
+            throws RepositoryException {
+        getDelegate().addVersionLabel(versionName, label, moveLabel);
+    }
+
+    public void removeVersionLabel(String label) throws RepositoryException {
+        getDelegate().removeVersionLabel(label);
+    }
+
+    public boolean hasVersionLabel(String label) throws RepositoryException {
+        return getDelegate().hasVersionLabel(label);
+    }
+
+    public boolean hasVersionLabel(Version version, String label) throws RepositoryException {
+        return getDelegate().hasVersionLabel(unwrap(version), label);
+    }
+
+    public String[] getVersionLabels() throws RepositoryException {
+        return getDelegate().getVersionLabels();
+    }
+
+    public String[] getVersionLabels(Version version) throws RepositoryException {
+        return getDelegate().getVersionLabels(version);
+    }
+
+    public void removeVersion(String versionName) throws RepositoryException {
+        getDelegate().removeVersion(versionName);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public VersionHistory getDelegate() {
+        return (VersionHistory) super.getDelegate();
     }
 }

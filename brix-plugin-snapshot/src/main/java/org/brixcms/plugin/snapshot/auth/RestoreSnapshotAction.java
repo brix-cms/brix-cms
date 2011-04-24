@@ -17,35 +17,36 @@ package org.brixcms.plugin.snapshot.auth;
 import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
-public class RestoreSnapshotAction extends AbstractWorkspaceAction
-{
+public class RestoreSnapshotAction extends AbstractWorkspaceAction {
+// ------------------------------ FIELDS ------------------------------
+
     private final Workspace snapshotWorkspace;
 
-    public RestoreSnapshotAction(Context context, Workspace targetWorkspace, Workspace snapshotWorkspace)
-    {
-        super(context, targetWorkspace);
-        this.snapshotWorkspace = snapshotWorkspace;
-    }
-    
-    public RestoreSnapshotAction(Context context, Workspace targetWorkspace)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public RestoreSnapshotAction(Context context, Workspace targetWorkspace) {
         super(context, targetWorkspace);
         this.snapshotWorkspace = null;
     }
-    
-    public boolean isFromXML()
-    {
-        return snapshotWorkspace == null;
+
+    public RestoreSnapshotAction(Context context, Workspace targetWorkspace, Workspace snapshotWorkspace) {
+        super(context, targetWorkspace);
+        this.snapshotWorkspace = snapshotWorkspace;
     }
-    
-    public Workspace getSnapshotWorkspace()
-    {
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public Workspace getSnapshotWorkspace() {
         return snapshotWorkspace;
     }
-    
-    public Workspace getTargetWorkspace()
-    {
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Workspace getTargetWorkspace() {
         return getWorkspace();
     }
 
+    public boolean isFromXML() {
+        return snapshotWorkspace == null;
+    }
 }

@@ -17,59 +17,59 @@ package org.brixcms.jcr.base.wrapper;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
-class VersionIteratorWrapper extends BaseWrapper<VersionIterator> implements VersionIterator
-{
+class VersionIteratorWrapper extends BaseWrapper<VersionIterator> implements VersionIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-	private VersionIteratorWrapper(VersionIterator delegate, SessionWrapper session)
-	{
-		super(delegate, session);
-	}
+    public static VersionIteratorWrapper wrap(VersionIterator delegate, SessionWrapper session) {
+        if (delegate == null) {
+            return null;
+        } else {
+            return new VersionIteratorWrapper(delegate, session);
+        }
+    }
 
-	public static VersionIteratorWrapper wrap(VersionIterator delegate, SessionWrapper session)
-	{
-		if (delegate == null)
-		{
-			return null;
-		}
-		else
-		{
-			return new VersionIteratorWrapper(delegate, session);
-		}
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public Version nextVersion()
-	{
-		return VersionWrapper.wrap(getDelegate().nextVersion(), getSessionWrapper());
-	}
+    private VersionIteratorWrapper(VersionIterator delegate, SessionWrapper session) {
+        super(delegate, session);
+    }
 
-	public long getPosition()
-	{
-		return getDelegate().getPosition();
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public long getSize()
-	{
-		return getDelegate().getSize();
-	}
 
-	public void skip(long skipNum)
-	{
-		getDelegate().skip(skipNum);
-	}
+// --------------------- Interface Iterator ---------------------
 
-	public boolean hasNext()
-	{
-		return getDelegate().hasNext();
-	}
 
-	public Object next()
-	{
-		return VersionWrapper.wrap((Version) getDelegate().next(), getSessionWrapper());
-	}
+    public boolean hasNext() {
+        return getDelegate().hasNext();
+    }
 
-	public void remove()
-	{
-		getDelegate().remove();
-	}
+    public Object next() {
+        return VersionWrapper.wrap((Version) getDelegate().next(), getSessionWrapper());
+    }
 
+    public void remove() {
+        getDelegate().remove();
+    }
+
+// --------------------- Interface RangeIterator ---------------------
+
+
+    public void skip(long skipNum) {
+        getDelegate().skip(skipNum);
+    }
+
+    public long getSize() {
+        return getDelegate().getSize();
+    }
+
+    public long getPosition() {
+        return getDelegate().getPosition();
+    }
+
+// --------------------- Interface VersionIterator ---------------------
+
+    public Version nextVersion() {
+        return VersionWrapper.wrap(getDelegate().nextVersion(), getSessionWrapper());
+    }
 }

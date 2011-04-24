@@ -28,45 +28,43 @@ import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-public abstract class RenamePanel extends BrixGenericPanel<BrixNode>
-{
+public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
+    ;
+    private String newName;
 
-    public RenamePanel(String id, IModel<BrixNode> model)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public RenamePanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
-        Form< ? > form = new Form<Void>("form");
+        Form<?> form = new Form<Void>("form");
 
         newName = model.getObject().getName();
-        
+
         TextField<String> newName = new TextField<String>("newName", new PropertyModel<String>(
-            this, "newName"));
+                this, "newName"));
         newName.setRequired(true);
         newName.add(new NewNameValidator());
         form.add(newName);
 
-        form.add(new SubmitLink("rename")
-        {
+        form.add(new SubmitLink("rename") {
             @Override
-            public void onSubmit()
-            {
+            public void onSubmit() {
                 JcrNode node = RenamePanel.this.getModelObject();
-                
+
                 if (RenamePanel.this.newName.equals(node.getName()) == false) {
-                
                     node.getSession().move(node.getPath(),
-                        node.getParent().getPath() + "/" + RenamePanel.this.newName);
+                            node.getParent().getPath() + "/" + RenamePanel.this.newName);
                     node.getSession().save();
                 }
                 onLeave();
             }
         });
 
-        form.add(new Link<Void>("cancel")
-        {
+        form.add(new Link<Void>("cancel") {
             @Override
-            public void onClick()
-            {
+            public void onClick() {
                 onLeave();
             }
         });
@@ -76,29 +74,21 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode>
         add(form);
     }
 
-    private class NewNameValidator implements IValidator
-    {
+    protected abstract void onLeave();
 
-        public void validate(IValidatable validatable)
-        {
-            String name = (String)validatable.getValue();
-            
-            if (getModelObject().getName().equals(name) == false)
-            {
-            
+// -------------------------- INNER CLASSES --------------------------
+
+    private class NewNameValidator implements IValidator {
+        public void validate(IValidatable validatable) {
+            String name = (String) validatable.getValue();
+
+            if (getModelObject().getName().equals(name) == false) {
                 JcrNode parent = getModelObject().getParent();
-                if (parent.hasNode(name))
-                {
+                if (parent.hasNode(name)) {
                     validatable.error(new ValidationError().addMessageKey("NewNameValidator")
-                        .setVariable("name", name));
+                            .setVariable("name", name));
                 }
             }
         }
-
-    };
-
-    private String newName;
-
-    protected abstract void onLeave();
-
+    }
 }

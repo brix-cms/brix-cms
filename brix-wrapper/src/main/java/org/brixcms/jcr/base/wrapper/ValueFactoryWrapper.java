@@ -14,91 +14,87 @@
 
 package org.brixcms.jcr.base.wrapper;
 
-import javax.jcr.*;
+import javax.jcr.Binary;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Value;
+import javax.jcr.ValueFactory;
+import javax.jcr.ValueFormatException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
-class ValueFactoryWrapper extends BaseWrapper<ValueFactory> implements ValueFactory
-{
+class ValueFactoryWrapper extends BaseWrapper<ValueFactory> implements ValueFactory {
+// -------------------------- STATIC METHODS --------------------------
 
-    private ValueFactoryWrapper(ValueFactory delegate, SessionWrapper session)
-    {
-        super(delegate, session);
-    }
-
-    public static ValueFactory wrap(ValueFactory delegate, SessionWrapper session)
-    {
-        if (delegate == null)
-        {
+    public static ValueFactory wrap(ValueFactory delegate, SessionWrapper session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new ValueFactoryWrapper(delegate, session);
         }
     }
 
-    public Value createValue(String value)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    private ValueFactoryWrapper(ValueFactory delegate, SessionWrapper session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface ValueFactory ---------------------
+
+    public Value createValue(String value) {
         return getDelegate().createValue(value);
     }
 
-    public Value createValue(long value)
-    {
+    public Value createValue(String value, int type) throws ValueFormatException {
         return getDelegate().createValue(value);
     }
 
-    public Value createValue(double value)
-    {
+    public Value createValue(long value) {
         return getDelegate().createValue(value);
     }
 
-    public Value createValue(boolean value)
-    {
+    public Value createValue(double value) {
         return getDelegate().createValue(value);
     }
 
-    public Value createValue(Calendar value)
-    {
+    public Value createValue(BigDecimal value) {
         return getDelegate().createValue(value);
     }
 
-    /** @deprecated */
+    public Value createValue(boolean value) {
+        return getDelegate().createValue(value);
+    }
+
+    public Value createValue(Calendar value) {
+        return getDelegate().createValue(value);
+    }
+
+    /**
+     * @deprecated
+     */
     @Deprecated
- public Value createValue(InputStream value)
-    {
+    public Value createValue(InputStream value) {
         return getDelegate().createValue(value);
     }
 
-    public Value createValue(Node value) throws RepositoryException
-    {
+    public Value createValue(Binary value) {
+        return getDelegate().createValue(value);
+    }
+
+    public Value createValue(Node value) throws RepositoryException {
         return getDelegate().createValue(unwrap(value));
     }
 
-    public Value createValue(String value, int type) throws ValueFormatException
-    {
-        return getDelegate().createValue(value);
-    }
-
-    public Binary createBinary(InputStream stream) throws RepositoryException
-    {
-        return getDelegate().createBinary(stream);
-    }
-
-    public Value createValue(BigDecimal value)
-    {
-        return getDelegate().createValue(value);
-    }
-
-    public Value createValue(Binary value)
-    {
-        return getDelegate().createValue(value);
-    }
-
-    public Value createValue(Node value, boolean weak) throws RepositoryException
-    {
+    public Value createValue(Node value, boolean weak) throws RepositoryException {
         return getDelegate().createValue(value, weak);
     }
 
+    public Binary createBinary(InputStream stream) throws RepositoryException {
+        return getDelegate().createBinary(stream);
+    }
 }

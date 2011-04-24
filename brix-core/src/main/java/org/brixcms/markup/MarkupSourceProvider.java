@@ -19,14 +19,14 @@ import org.brixcms.markup.web.BrixMarkupNodeWebPage;
 
 /**
  * Implemented by components that can provide {@link MarkupSource}.
- * 
+ *
+ * @author Matej Knopp
  * @see BrixMarkupNodePanel
  * @see BrixMarkupNodeWebPage
  * @see MarkupCache
- * 
- * @author Matej Knopp
  */
-public interface MarkupSourceProvider
-{
-	public MarkupSource getMarkupSource();
+public interface MarkupSourceProvider {
+// -------------------------- OTHER METHODS --------------------------
+
+    public MarkupSource getMarkupSource();
 }

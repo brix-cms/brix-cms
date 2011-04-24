@@ -38,108 +38,96 @@ import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
-public class WrapperTest
-{
-	private static final Logger logger = LoggerFactory.getLogger(WrapperTest.class);
+public class WrapperTest {
+// ------------------------------ FIELDS ------------------------------
 
-	private Repository repo;
-	private List<JcrSession> sessions;
+    private static final Logger logger = LoggerFactory.getLogger(WrapperTest.class);
 
-	private File home;
+    private Repository repo;
+    private List<JcrSession> sessions;
 
-	private static void delete(File file)
-	{
-		if (!file.exists())
-		{
-			return;
-		}
-		if (file.isDirectory())
-		{
-			for (File child : file.listFiles())
-			{
-				delete(child);
-			}
-		}
-		if (!file.delete())
-		{
-			throw new RuntimeException("Could not delete file: " + file.getAbsolutePath());
-		}
-	}
+    private File home;
 
-	@Before
-	public void setupManager() throws IOException, RepositoryException
-	{
-		String temp = System.getProperty("java.io.tmpdir");
-		home = new File(temp, getClass().getName());
-		delete(home);
-		home.deleteOnExit();
-		
-		if (!home.mkdirs())
-		{
-			throw new RuntimeException("Could not create directory: " + home.getAbsolutePath());
-		}
+// -------------------------- OTHER METHODS --------------------------
 
-		InputStream configStream = getClass().getResourceAsStream("repository.xml");
-		RepositoryConfig config = RepositoryConfig.create(configStream, home.getAbsolutePath());
-		repo = RepositoryImpl.create(config);
+    @After
+    public void cleanup() {
+        for (JcrSession session : sessions) {
+            if (session.isLive()) {
+                session.logout();
+            }
+        }
+        ((JackrabbitRepository) repo).shutdown();
 
-		logger.info("Initializer Jackrabbit Repository in: " + home.getAbsolutePath());
+        delete(home);
+    }
 
-		sessions = new ArrayList<JcrSession>();
-	}
+    @Before
+    public void setupManager() throws IOException, RepositoryException {
+        String temp = System.getProperty("java.io.tmpdir");
+        home = new File(temp, getClass().getName());
+        delete(home);
+        home.deleteOnExit();
 
-	private JcrSession login() throws RepositoryException
-	{
-		Credentials credentials = new SimpleCredentials("admin", "admin".toCharArray());
-		JcrSession session = JcrSession.Wrapper.wrap(repo.login(credentials));
-		sessions.add(session);
-		return session;
-	}
+        if (!home.mkdirs()) {
+            throw new RuntimeException("Could not create directory: " + home.getAbsolutePath());
+        }
 
+        InputStream configStream = getClass().getResourceAsStream("repository.xml");
+        RepositoryConfig config = RepositoryConfig.create(configStream, home.getAbsolutePath());
+        repo = RepositoryImpl.create(config);
 
-	@After
-	public void cleanup()
-	{
-		for (JcrSession session : sessions)
-		{
-			if (session.isLive())
-			{
-				session.logout();
-			}
-		}
-		((JackrabbitRepository)repo).shutdown();
-		
-		delete(home);
-	}
+        logger.info("Initializer Jackrabbit Repository in: " + home.getAbsolutePath());
 
-	@Test
-	public void testgetNodeByIdentifier() throws RepositoryException
-	{
-		JcrSession session = login();
-		
-		JcrNode node=session.getRootNode().addNode("node");
-		node.addMixin(JcrConstants.MIX_REFERENCEABLE);
-		
-		assertNotNull(node.getIdentifier());
-		
-		JcrNode node1=session.getNodeByIdentifier(node.getIdentifier());
-		assertNotNull(node1);
-		node1.setProperty("property", "value");
-	}
+        sessions = new ArrayList<JcrSession>();
+    }
 
-	@Test
-	public void testgetNodeByUUID() throws RepositoryException
-	{
-		JcrSession session = login();
-		
-		JcrNode node=session.getRootNode().addNode("node");
-		node.addMixin(JcrConstants.MIX_REFERENCEABLE);
-		
-		assertNotNull(node.getIdentifier());
-		
-		JcrNode node1=session.getNodeByIdentifier(node.getIdentifier());
-		assertNotNull(node1);
-		node1.setProperty("property", "value");
-	}
+    private static void delete(File file) {
+        if (!file.exists()) {
+            return;
+        }
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                delete(child);
+            }
+        }
+        if (!file.delete()) {
+            throw new RuntimeException("Could not delete file: " + file.getAbsolutePath());
+        }
+    }
 
+    @Test
+    public void testgetNodeByIdentifier() throws RepositoryException {
+        JcrSession session = login();
+
+        JcrNode node = session.getRootNode().addNode("node");
+        node.addMixin(JcrConstants.MIX_REFERENCEABLE);
+
+        assertNotNull(node.getIdentifier());
+
+        JcrNode node1 = session.getNodeByIdentifier(node.getIdentifier());
+        assertNotNull(node1);
+        node1.setProperty("property", "value");
+    }
+
+    private JcrSession login() throws RepositoryException {
+        Credentials credentials = new SimpleCredentials("admin", "admin".toCharArray());
+        JcrSession session = JcrSession.Wrapper.wrap(repo.login(credentials));
+        sessions.add(session);
+        return session;
+    }
+
+    @Test
+    public void testgetNodeByUUID() throws RepositoryException {
+        JcrSession session = login();
+
+        JcrNode node = session.getRootNode().addNode("node");
+        node.addMixin(JcrConstants.MIX_REFERENCEABLE);
+
+        assertNotNull(node.getIdentifier());
+
+        JcrNode node1 = session.getNodeByIdentifier(node.getIdentifier());
+        assertNotNull(node1);
+        node1.setProperty("property", "value");
+    }
 }

@@ -20,14 +20,35 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class PathSetTest
-{
+public class PathSetTest {
+// ------------------------------ FIELDS ------------------------------
 
     private PathSet data;
 
+// -------------------------- OTHER METHODS --------------------------
+
+    @Test
+    public void containsAncestor() {
+        assertTrue(data.remove(new Path("/")));
+
+        assertTrue(data.containsAncestor(new Path("/foo/baz")));
+        assertTrue(data.containsAncestor(new Path("/bar/baz")));
+        assertTrue(!data.containsAncestor(new Path("/foo")));
+        assertTrue(!data.containsAncestor(new Path("/baz")));
+    }
+
+    @Test
+    public void containsParent() {
+        assertTrue(!data.containsParent(new Path("/")));
+        assertTrue(data.containsParent(new Path("/foo")));
+        assertTrue(data.containsParent(new Path("/foo/baz")));
+        assertTrue(data.containsParent(new Path("/foo/bar/baz")));
+        assertTrue(data.containsParent(new Path("/foo/bar/baz/boz")));
+        assertTrue(!data.containsParent(new Path("/foo/baz/bar")));
+    }
+
     @Before
-    public void initData()
-    {
+    public void initData() {
         data = new PathSet();
         data.add(new Path("/"));
         data.add(new Path("/bar"));
@@ -37,8 +58,7 @@ public class PathSetTest
     }
 
     @Test
-    public void removeDescendants()
-    {
+    public void removeDescendants() {
         data.removeDescendants(new Path("/foo"));
         assertTrue(data.size() == 3);
         assertTrue(data.contains(new Path("/")));
@@ -51,8 +71,7 @@ public class PathSetTest
     }
 
     @Test
-    public void removeWithDescendants()
-    {
+    public void removeWithDescendants() {
         data.removeWithDescendants(new Path("/foo"));
         assertTrue(data.size() == 2);
         assertTrue(data.contains(new Path("/")));
@@ -61,27 +80,4 @@ public class PathSetTest
         data.removeWithDescendants(new Path("/"));
         assertTrue(data.isEmpty());
     }
-
-    @Test
-    public void containsAncestor()
-    {
-        assertTrue(data.remove(new Path("/")));
-
-        assertTrue(data.containsAncestor(new Path("/foo/baz")));
-        assertTrue(data.containsAncestor(new Path("/bar/baz")));
-        assertTrue(!data.containsAncestor(new Path("/foo")));
-        assertTrue(!data.containsAncestor(new Path("/baz")));
-    }
-
-    @Test
-    public void containsParent()
-    {
-        assertTrue(!data.containsParent(new Path("/")));
-        assertTrue(data.containsParent(new Path("/foo")));
-        assertTrue(data.containsParent(new Path("/foo/baz")));
-        assertTrue(data.containsParent(new Path("/foo/bar/baz")));
-        assertTrue(data.containsParent(new Path("/foo/bar/baz/boz")));
-        assertTrue(!data.containsParent(new Path("/foo/baz/bar")));
-    }
-
 }

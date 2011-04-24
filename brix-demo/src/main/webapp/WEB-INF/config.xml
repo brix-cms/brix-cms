@@ -64,22 +64,22 @@
              Note, that the handlers are being added and called in the order
              they appear in the configuration.
         -->
-        <class name="org.apache.jackrabbit.server.io.IOManagerImpl" />
+        <class name="org.apache.jackrabbit.server.io.IOManagerImpl"/>
         <iohandler>
-            <class name="org.apache.jackrabbit.server.io.VersionHandler" />
+            <class name="org.apache.jackrabbit.server.io.VersionHandler"/>
         </iohandler>
         <iohandler>
-            <class name="org.apache.jackrabbit.server.io.VersionHistoryHandler" />
+            <class name="org.apache.jackrabbit.server.io.VersionHistoryHandler"/>
         </iohandler>
         <iohandler>
-            <class name="org.apache.jackrabbit.server.io.ZipHandler" />
+            <class name="org.apache.jackrabbit.server.io.ZipHandler"/>
         </iohandler>
         <iohandler>
-            <class name="org.apache.jackrabbit.server.io.DirListingExportHandler" />
+            <class name="org.apache.jackrabbit.server.io.DirListingExportHandler"/>
         </iohandler>
         <iohandler>
-           <!--  <class name="org.apache.jackrabbit.server.io.DefaultHandler" />  -->
-           <class name="org.brixcms.jcr.VersionedDefaultHandler" />
+            <!--  <class name="org.apache.jackrabbit.server.io.DefaultHandler" />  -->
+            <class name="org.brixcms.jcr.VersionedDefaultHandler"/>
         </iohandler>
     </iomanager>
     <!--
@@ -101,12 +101,12 @@
              Note, that the handlers are being added and called in the order
              they appear in the configuration.
         -->
-        <class name="org.apache.jackrabbit.server.io.PropertyManagerImpl" />
+        <class name="org.apache.jackrabbit.server.io.PropertyManagerImpl"/>
         <propertyhandler>
-            <class name="org.apache.jackrabbit.server.io.VersionHandler" />
+            <class name="org.apache.jackrabbit.server.io.VersionHandler"/>
         </propertyhandler>
         <propertyhandler>
-            <class name="org.apache.jackrabbit.server.io.VersionHistoryHandler" />            
+            <class name="org.apache.jackrabbit.server.io.VersionHistoryHandler"/>
         </propertyhandler>
         <!-- 
         <propertyhandler>
@@ -117,8 +117,8 @@
         </propertyhandler>
         -->
         <propertyhandler>
-            <class name="org.apache.jackrabbit.server.io.DefaultHandler" />
-        </propertyhandler>         
+            <class name="org.apache.jackrabbit.server.io.DefaultHandler"/>
+        </propertyhandler>
     </propertymanager>
     <!--
      Define nodetypes, that should never by displayed as 'collection'
@@ -152,7 +152,7 @@
     <filter>
         <!-- class element defines the resource filter to be used. The specified class
              must implement the ItemFilter interface -->
-        <class name="org.brixcms.demo.web.dav.ItemFilter" />
+        <class name="org.brixcms.demo.web.dav.ItemFilter"/>
         <!--
          Nodetype names to be used to filter child nodes.
          A child node can be filtered if the declaring nodetype of its definition
@@ -179,7 +179,7 @@
             -->
         </namespaces>
     </filter>
-    
+
     <!--
      Optional 'mimetypeproperties' element.
      It defines additional or replaces existing mappings for the MimeResolver

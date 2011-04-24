@@ -25,38 +25,40 @@ import org.brixcms.web.nodepage.PageParametersAware;
 import org.brixcms.web.nodepage.PageParametersForm;
 
 /**
- * {@link StatelessStockQuoteTile} panel. This panel demonstrates Brix's stateless tile
- * functionality.
- * 
- * The state of this panel is the {@link #symbol} variable and so this panel must encode and decode
- * this variable into the url. To facilitate that this panel implements {@link PageParametersAware}
- * which is a Brix interface that includes url related callbacks to make manual state management
- * easier.
- * 
- * See {@link #initializeFromPageParameters(BrixPageParameters)} and
- * {@link #contributeToPageParameters(BrixPageParameters)} to see how this panel keeps the value of
- * {@link #symbol} variable synchronized with the url.
- * 
+ * {@link StatelessStockQuoteTile} panel. This panel demonstrates Brix's stateless tile functionality.
+ * <p/>
+ * The state of this panel is the {@link #symbol} variable and so this panel must encode and decode this variable into
+ * the url. To facilitate that this panel implements {@link PageParametersAware} which is a Brix interface that includes
+ * url related callbacks to make manual state management easier.
+ * <p/>
+ * See {@link #initializeFromPageParameters(BrixPageParameters)} and {@link #contributeToPageParameters(BrixPageParameters)}
+ * to see how this panel keeps the value of {@link #symbol} variable synchronized with the url.
+ *
  * @author igor.vaynberg
- * 
  */
-public class StatelessStockQuotePanel extends Panel implements PageParametersAware
-{
+public class StatelessStockQuotePanel extends Panel implements PageParametersAware {
+// ------------------------------ FIELDS ------------------------------
+
     private static final long serialVersionUID = 1L;
 
-    /** stock symbol */
+    /**
+     * stock symbol
+     */
     private String symbol;
 
-    /** value of stock symbol */
+    /**
+     * value of stock symbol
+     */
     private String value;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
-     * 
+     *
      * @param id
      */
-    public StatelessStockQuotePanel(String id)
-    {
+    public StatelessStockQuotePanel(String id) {
         super(id);
 
         // display value of stock symbol
@@ -69,29 +71,34 @@ public class StatelessStockQuotePanel extends Panel implements PageParametersAwa
          * form will submit and immediately redirect to a url with submitted form values appended
          * into it to keep the url looking clean.
          */
-        Form< ? > form = new PageParametersForm("form");
+        Form<?> form = new PageParametersForm("form");
         add(form);
 
         // symbol text field
         form.add(new TextField<String>("symbol", new PropertyModel(this, "symbol")));
     }
 
-    /** {@inheritDoc} */
-    public void contributeToPageParameters(BrixPageParameters params)
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface PageParametersAware ---------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    public void contributeToPageParameters(BrixPageParameters params) {
         // store the symbol into the url
         params.setQueryParam("symbol", symbol);
     }
 
-    /** {@inheritDoc} */
-    public void initializeFromPageParameters(BrixPageParameters params)
-    {
+    /**
+     * {@inheritDoc}
+     */
+    public void initializeFromPageParameters(BrixPageParameters params) {
         // restore symbol from url
         symbol = params.getQueryParam("symbol").toString(null);
 
         // restore value by looking it up
         value = new StockQuoteRequest(symbol).getQuote();
     }
-
-
 }

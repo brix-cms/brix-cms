@@ -20,33 +20,33 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
-public class SubTreeMenuTile implements Tile
-{
+public class SubTreeMenuTile implements Tile {
+// ------------------------------ FIELDS ------------------------------
+
     public static final String TYPE_NAME = "brix.web.tile.menu.MenuTile";
 
-    public String getDisplayName()
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Tile ---------------------
+
+    public String getDisplayName() {
         return "Menu";
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return TYPE_NAME;
     }
 
-    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
-    {
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
         return new MenuTileEditor(id, tileContainerNode);
     }
 
-    public Component newViewer(String id, IModel<BrixNode> tileNode)
-    {
+    public Component newViewer(String id, IModel<BrixNode> tileNode) {
         return new MenuRenderer(id, tileNode);
     }
 
-    public boolean requiresSSL(IModel<BrixNode> tileNode)
-    {
+    public boolean requiresSSL(IModel<BrixNode> tileNode) {
         return false;
     }
-
 }

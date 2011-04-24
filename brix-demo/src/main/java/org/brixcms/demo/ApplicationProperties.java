@@ -24,15 +24,16 @@ import java.util.Properties;
 
 /**
  * Application-wide configuration settings for Brix Demo Application
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class ApplicationProperties
-{
+public class ApplicationProperties {
+// ------------------------------ FIELDS ------------------------------
 
     private final Properties properties;
     private String prefix;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * @deprecated
@@ -41,8 +42,7 @@ public class ApplicationProperties
         this("brix.demo");
     }
 
-    public ApplicationProperties(String prefix)
-    {
+    public ApplicationProperties(String prefix) {
         this.prefix = prefix;
         // load base properties
         String baseProperties = "org/brixcms/demo" + "/application.properties";
@@ -51,7 +51,7 @@ public class ApplicationProperties
 
         // load user-specific property overrides
         String username = System.getProperty("user.name");
-        String userProperties = prefix.replace(".","/") + "/application." + username + ".properties";
+        String userProperties = prefix.replace(".", "/") + "/application." + username + ".properties";
         Properties user = PropertyUtils.loadFromClassPath(userProperties, false);
 
         // load system properties
@@ -61,14 +61,62 @@ public class ApplicationProperties
         properties = PropertyUtils.merge(MergeMode.OVERRIDE_ONLY, base, user, system);
     }
 
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * @return jcr {@link Credentials} built from username and password
+     */
+    public Credentials buildSimpleCredentials() {
+        return new SimpleCredentials(getJcrLogin(), getJcrPassword().toCharArray());
+    }
+
+    /**
+     * @return jcr login name
+     */
+    public String getJcrLogin() {
+        return properties.getProperty(prefix + ".jcr.login");
+    }
+
+    /**
+     * @return http port the server is using
+     */
+    public int getHttpPort() {
+        return Integer.parseInt(properties.getProperty(prefix + ".httpPort"));
+    }
+
+    /**
+     * @return https port the server is using
+     */
+    public int getHttpsPort() {
+        return Integer.parseInt(properties.getProperty(prefix + ".httpsPort"));
+    }
+
+    /**
+     * @return jcr default workspace
+     */
+    public String getJcrDefaultWorkspace() {
+        return properties.getProperty(prefix + ".jcr.defaultWorkspace");
+    }
+
+    /**
+     * @return jcr login password
+     */
+    public String getJcrPassword() {
+        return properties.getProperty(prefix + ".jcr.password");
+    }
+
     /**
      * @return jcr repository url
      */
-    public String getJcrRepositoryUrl()
-    {
+    public String getJcrRepositoryUrl() {
         String url = properties.getProperty(prefix + ".jcr.url");
-        if (url == null || url.trim().length() == 0)
-        {
+        if (url == null || url.trim().length() == 0) {
             // if no url was specified generate a unique temporary one
             url = "file://" + getDefaultRepositoryFileName();
             properties.setProperty(prefix + ".jcr.url", url);
@@ -77,59 +125,17 @@ public class ApplicationProperties
     }
 
     /**
-     * @return workspace manager url
+     * Generates a temporary file name inside tmp directory
+     *
+     * @return
      */
-    public String getWorkspaceManagerUrl()
-    {
-        return properties.getProperty(prefix + ".workspaceManagerUrl");
-    }
-
-    /**
-     * @return jcr login name
-     */
-    public String getJcrLogin()
-    {
-        return properties.getProperty(prefix + ".jcr.login");
-    }
-
-    /**
-     * @return jcr login password
-     */
-    public String getJcrPassword()
-    {
-        return properties.getProperty(prefix + ".jcr.password");
-    }
-
-    /**
-     * @return jcr default workspace
-     */
-    public String getJcrDefaultWorkspace()
-    {
-        return properties.getProperty(prefix + ".jcr.defaultWorkspace");
-    }
-
-    /**
-     * @return jcr {@link Credentials} built from username and password
-     */
-    public Credentials buildSimpleCredentials()
-    {
-        return new SimpleCredentials(getJcrLogin(), getJcrPassword().toCharArray());
-    }
-
-    /**
-     * @return http port the server is using
-     */
-    public int getHttpPort()
-    {
-        return Integer.parseInt(properties.getProperty(prefix + ".httpPort"));
-    }
-
-    /**
-     * @return https port the server is using
-     */
-    public int getHttpsPort()
-    {
-        return Integer.parseInt(properties.getProperty(prefix + ".httpsPort"));
+    public String getDefaultRepositoryFileName() {
+        String fileName = System.getProperty("java.io.tmpdir");
+        if (!fileName.endsWith(File.separator)) {
+            fileName += File.separator;
+        }
+        fileName += prefix + ".repository";
+        return fileName;
     }
 
     /**
@@ -140,22 +146,9 @@ public class ApplicationProperties
     }
 
     /**
-     * Generates a temporary file name inside tmp directory
-     *
-     * @return
+     * @return workspace manager url
      */
-    public String getDefaultRepositoryFileName()
-    {
-        String fileName = System.getProperty("java.io.tmpdir");
-        if (!fileName.endsWith(File.separator))
-        {
-            fileName += File.separator;
-        }
-        fileName += prefix + ".repository";
-        return fileName;
-    }
-
-    public String getPrefix() {
-        return prefix;
+    public String getWorkspaceManagerUrl() {
+        return properties.getProperty(prefix + ".workspaceManagerUrl");
     }
 }

@@ -19,25 +19,27 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 
 /**
  * Renderer for audio nodes
- * 
+ *
  * @author Jeremy Thomerson
  */
-public class AudioNodeTreeRenderer extends AbstractMimeTypeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class AudioNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final ResourceReference RESOURCE = new ResourceReference(
-			PageNodeTreeRenderer.class, "resources/audio-x-generic.png");
+    private static final long serialVersionUID = 1L;
 
-	public AudioNodeTreeRenderer()
-	{
-		super(new String[0], new String[] { "audio" });
-	}
+    private static final ResourceReference RESOURCE = new ResourceReference(
+            PageNodeTreeRenderer.class, "resources/audio-x-generic.png");
 
-	@Override
-	protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-	{
-		return RESOURCE;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
+    public AudioNodeTreeRenderer() {
+        super(new String[0], new String[]{"audio"});
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+        return RESOURCE;
+    }
 }

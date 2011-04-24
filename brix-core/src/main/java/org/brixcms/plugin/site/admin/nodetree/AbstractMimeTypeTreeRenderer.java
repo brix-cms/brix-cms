@@ -22,59 +22,54 @@ import java.util.List;
 
 /**
  * A renderer that decides if it is rendering the node based on mime type
- * 
+ *
  * @author Jeremy Thomerson
  */
-public abstract class AbstractMimeTypeTreeRenderer extends AbstractNodeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public abstract class AbstractMimeTypeTreeRenderer extends AbstractNodeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private final List<String> mimeTypes;
-	private final List<String> mimeTypePrefixes;
+    private static final long serialVersionUID = 1L;
 
-	protected AbstractMimeTypeTreeRenderer(String[] mimeTypes)
-	{
-		this(mimeTypes, new String[0]);
-	}
+    private final List<String> mimeTypes;
+    private final List<String> mimeTypePrefixes;
 
-	protected AbstractMimeTypeTreeRenderer(String[] mimeTypes, String[] mimeTypePrefixes)
-	{
-		this.mimeTypes = Arrays.asList(mimeTypes);
-		this.mimeTypePrefixes = Arrays.asList(mimeTypePrefixes);
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	protected boolean isForThisNode(BrixNode bn)
-	{
-		return super.isForThisNode(bn) && isCorrectMimeType(bn);
-	}
+    protected AbstractMimeTypeTreeRenderer(String[] mimeTypes) {
+        this(mimeTypes, new String[0]);
+    }
 
-	@Override
-	protected final Class<? extends BrixNode> getNodeClass()
-	{
-		return ResourceNode.class;
-	}
+    protected AbstractMimeTypeTreeRenderer(String[] mimeTypes, String[] mimeTypePrefixes) {
+        this.mimeTypes = Arrays.asList(mimeTypes);
+        this.mimeTypePrefixes = Arrays.asList(mimeTypePrefixes);
+    }
 
-	protected boolean isCorrectMimeType(BrixNode bn)
-	{
-		ResourceNode rn = (ResourceNode)bn;
-		if (bn == null || rn.getMimeType() == null)
-		{
-			return false;
-		}
-		// TODO: perhaps should only test on lower case here?
-		// if so, need to lowercase all incoming types in the constructor
-		String type = rn.getMimeType();
-		int slash = type.indexOf('/');
-		if (slash < 0)
-		{
-			return mimeTypePrefixes.contains(type);
-		}
-		else
-		{
-			String prefix = type.substring(0, slash);
-			return mimeTypes.contains(type) || mimeTypePrefixes.contains(prefix);
-		}
-	}
+// -------------------------- OTHER METHODS --------------------------
 
+    @Override
+    protected final Class<? extends BrixNode> getNodeClass() {
+        return ResourceNode.class;
+    }
+
+    @Override
+    protected boolean isForThisNode(BrixNode bn) {
+        return super.isForThisNode(bn) && isCorrectMimeType(bn);
+    }
+
+    protected boolean isCorrectMimeType(BrixNode bn) {
+        ResourceNode rn = (ResourceNode) bn;
+        if (bn == null || rn.getMimeType() == null) {
+            return false;
+        }
+        // TODO: perhaps should only test on lower case here?
+        // if so, need to lowercase all incoming types in the constructor
+        String type = rn.getMimeType();
+        int slash = type.indexOf('/');
+        if (slash < 0) {
+            return mimeTypePrefixes.contains(type);
+        } else {
+            String prefix = type.substring(0, slash);
+            return mimeTypes.contains(type) || mimeTypePrefixes.contains(prefix);
+        }
+    }
 }

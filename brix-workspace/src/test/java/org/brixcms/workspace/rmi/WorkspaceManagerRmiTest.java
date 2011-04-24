@@ -28,12 +28,11 @@ import java.rmi.server.UnicastRemoteObject;
 
 // FIXME figure out why this is failing on teamcity
 @Ignore
-public class WorkspaceManagerRmiTest
-{
-    @Test
-    public void test() throws Exception
-    {
+public class WorkspaceManagerRmiTest {
+// -------------------------- OTHER METHODS --------------------------
 
+    @Test
+    public void test() throws Exception {
         WorkspaceManager remote = EasyMock.createMock(WorkspaceManager.class);
 
         Workspace workspace = EasyMock.createMock(Workspace.class);
@@ -49,7 +48,7 @@ public class WorkspaceManagerRmiTest
         RemoteStub stub = UnicastRemoteObject.exportObject(server);
         registry.rebind("wm", stub);
 
-        RemoteWorkspaceManager client = (RemoteWorkspaceManager)registry.lookup("wm");
+        RemoteWorkspaceManager client = (RemoteWorkspaceManager) registry.lookup("wm");
         WorkspaceManager local = new ClientWorkspaceManager(client);
 
         Workspace w = local.createWorkspace();
@@ -57,6 +56,5 @@ public class WorkspaceManagerRmiTest
         EasyMock.verify(remote, workspace);
 
         UnicastRemoteObject.unexportObject(server, true);
-
     }
 }

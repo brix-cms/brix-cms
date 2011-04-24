@@ -22,53 +22,54 @@ import org.brixcms.web.tree.AbstractJcrTreeNode;
 import org.brixcms.web.tree.AbstractTreeModel;
 import org.brixcms.web.tree.TreeNode;
 
-public abstract class NodePickerTreeModel extends AbstractTreeModel
-{
-    public class NodePickerTreeNode extends AbstractJcrTreeNode
-    {
+public abstract class NodePickerTreeModel extends AbstractTreeModel {
+// ------------------------------ FIELDS ------------------------------
 
-        public NodePickerTreeNode(BrixNode node)
-        {
+    private NodePickerTreeNode root;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public NodePickerTreeModel(String workspaceName) {
+        JcrSession session = Brix.get().getCurrentSession(workspaceName);
+
+        root = new NodePickerTreeNode((BrixNode) session.getItem(SitePlugin.get().getSiteRootPath()));
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public TreeNode getRoot() {
+        return root;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    protected abstract boolean displayFoldersOnly();
+
+    ;
+
+    public NodePickerTreeNode treeNodeFor(BrixNode node) {
+        return new NodePickerTreeNode(node);
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public class NodePickerTreeNode extends AbstractJcrTreeNode {
+        public NodePickerTreeNode(BrixNode node) {
             super(node);
         }
 
         @Override
-        protected AbstractJcrTreeNode newTreeNode(BrixNode node)
-        {
+        protected AbstractJcrTreeNode newTreeNode(BrixNode node) {
             return new NodePickerTreeNode(node);
         }
 
         @Override
-        protected boolean displayFoldersOnly()
-        {
+        protected boolean displayFoldersOnly() {
             return NodePickerTreeModel.this.displayFoldersOnly();
         }
 
-        public BrixNode getNode()
-        {
-            return (BrixNode)getNodeModel().getObject();
+        public BrixNode getNode() {
+            return (BrixNode) getNodeModel().getObject();
         }
-    };
-
-    public NodePickerTreeNode treeNodeFor(BrixNode node)
-    {
-        return new NodePickerTreeNode(node);
     }
-
-    protected abstract boolean displayFoldersOnly();
-
-    private NodePickerTreeNode root;
-
-    public NodePickerTreeModel(String workspaceName)
-    {
-        JcrSession session = Brix.get().getCurrentSession(workspaceName);
-
-        root = new NodePickerTreeNode((BrixNode)session.getItem(SitePlugin.get().getSiteRootPath()));
-    }
-
-    public TreeNode getRoot()
-    {
-        return root;
-    }
-
 }

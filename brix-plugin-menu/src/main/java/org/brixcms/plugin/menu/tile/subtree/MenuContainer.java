@@ -20,183 +20,154 @@ import org.brixcms.BrixNodeModel;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.menu.Menu;
 
-class MenuContainer implements IDetachable
-{
-	IModel<BrixNode> menuNodeModel = new BrixNodeModel();
-	private Menu cachedMenu;
+class MenuContainer implements IDetachable {
+// ------------------------------ FIELDS ------------------------------
 
-	public void setMenuNode(BrixNode node)
-	{
-		this.cachedMenu = null;
-		this.menuNodeModel.setObject(node);
-	}
+    private static final String PROP_OUTER_CONTAINER_STYLE_CLASS = "outerContainerStyleClass";
 
-	public BrixNode getMenuNode()
-	{
-		return menuNodeModel.getObject();
-	}
+    private static final String PROP_INNER_CONTAINER_STYLE_CLASS = "innerContainerStyleClass";
 
-	public Menu getMenu()
-	{
-		if (cachedMenu == null && getMenuNode() != null)
-		{
-			cachedMenu = new Menu();
-			cachedMenu.load(getMenuNode());
-		}
-		return cachedMenu;
-	}
+    private static final String PROP_SELECTED_ITEM_STYLE_CLASS = "selectedItemStyleClass";
 
-	private String outerContainerStyleClass;
+    private static final String PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS = "itemWithSelectedChildStyleClass";
 
-	private String innerContainerStyleClass;
+    private static final String PROP_MENU = "menu";
 
-	private String selectedItemStyleClass;
+    private static final String PROP_START_AT_LEVEL = "startAtLevel";
 
-	private String itemWithSelectedChildStyleClass;
+    private static final String PROP_RENDER_LEVELS = "renderLevels";
+    IModel<BrixNode> menuNodeModel = new BrixNodeModel();
+    private Menu cachedMenu;
 
-	private Integer startAtLevel;
+    private String outerContainerStyleClass;
 
-	private Integer renderLevels;
+    private String innerContainerStyleClass;
 
-	public String getOuterContainerStyleClass()
-	{
-		return outerContainerStyleClass;
-	}
+    private String selectedItemStyleClass;
 
-	public void setOuterContainerStyleClass(String outerContainerStyleClass)
-	{
-		this.outerContainerStyleClass = outerContainerStyleClass;
-	}
+    private String itemWithSelectedChildStyleClass;
 
-	public String getInnerContainerStyleClass()
-	{
-		return innerContainerStyleClass;
-	}
+    private Integer startAtLevel;
 
-	public void setInnerContainerStyleClass(String innerContainerStyleClass)
-	{
-		this.innerContainerStyleClass = innerContainerStyleClass;
-	}
+    private Integer renderLevels;
 
-	public String getSelectedItemStyleClass()
-	{
-		return selectedItemStyleClass;
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	public void setSelectedItemStyleClass(String selectedItemStyleClass)
-	{
-		this.selectedItemStyleClass = selectedItemStyleClass;
-	}
+    public String getInnerContainerStyleClass() {
+        return innerContainerStyleClass;
+    }
 
-	public void setItemWithSelectedChildStyleClass(String itemWithSelecteChildStyleClass)
-	{
-		this.itemWithSelectedChildStyleClass = itemWithSelecteChildStyleClass;
-	}
+    public void setInnerContainerStyleClass(String innerContainerStyleClass) {
+        this.innerContainerStyleClass = innerContainerStyleClass;
+    }
 
-	public String getItemWithSelectedChildStyleClass()
-	{
-		return itemWithSelectedChildStyleClass;
-	}
+    public String getItemWithSelectedChildStyleClass() {
+        return itemWithSelectedChildStyleClass;
+    }
 
-	public Integer getStartAtLevel()
-	{
-		return startAtLevel;
-	}
+    public void setItemWithSelectedChildStyleClass(String itemWithSelecteChildStyleClass) {
+        this.itemWithSelectedChildStyleClass = itemWithSelecteChildStyleClass;
+    }
 
-	public void setStartAtLevel(Integer startAtLevel)
-	{
-		this.startAtLevel = startAtLevel;
-	}
+    public String getOuterContainerStyleClass() {
+        return outerContainerStyleClass;
+    }
 
-	public Integer getRenderLevels()
-	{
-		return renderLevels;
-	}
+    public void setOuterContainerStyleClass(String outerContainerStyleClass) {
+        this.outerContainerStyleClass = outerContainerStyleClass;
+    }
 
-	public void setRenderLevels(Integer renderLevels)
-	{
-		this.renderLevels = renderLevels;
-	}
+    public Integer getRenderLevels() {
+        return renderLevels;
+    }
 
-	private static final String PROP_OUTER_CONTAINER_STYLE_CLASS = "outerContainerStyleClass";
+    public void setRenderLevels(Integer renderLevels) {
+        this.renderLevels = renderLevels;
+    }
 
-	private static final String PROP_INNER_CONTAINER_STYLE_CLASS = "innerContainerStyleClass";
+    public String getSelectedItemStyleClass() {
+        return selectedItemStyleClass;
+    }
 
-	private static final String PROP_SELECTED_ITEM_STYLE_CLASS = "selectedItemStyleClass";
+    public void setSelectedItemStyleClass(String selectedItemStyleClass) {
+        this.selectedItemStyleClass = selectedItemStyleClass;
+    }
 
-	private static final String PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS = "itemWithSelectedChildStyleClass";
+    public Integer getStartAtLevel() {
+        return startAtLevel;
+    }
 
-	private static final String PROP_MENU = "menu";
+    public void setStartAtLevel(Integer startAtLevel) {
+        this.startAtLevel = startAtLevel;
+    }
 
-	private static final String PROP_START_AT_LEVEL = "startAtLevel";
+// -------------------------- OTHER METHODS --------------------------
 
-	private static final String PROP_RENDER_LEVELS = "renderLevels";
+    public Menu getMenu() {
+        if (cachedMenu == null && getMenuNode() != null) {
+            cachedMenu = new Menu();
+            cachedMenu.load(getMenuNode());
+        }
+        return cachedMenu;
+    }
 
-	public void save(BrixNode node)
-	{
-		node.setProperty(PROP_INNER_CONTAINER_STYLE_CLASS, getInnerContainerStyleClass());
-		node.setProperty(PROP_OUTER_CONTAINER_STYLE_CLASS, getOuterContainerStyleClass());
-		node.setProperty(PROP_SELECTED_ITEM_STYLE_CLASS, getSelectedItemStyleClass());
-		node.setProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS, getItemWithSelectedChildStyleClass());
-		node.setProperty(PROP_MENU, getMenuNode());
+    public BrixNode getMenuNode() {
+        return menuNodeModel.getObject();
+    }
 
-		if (getStartAtLevel() == null)
-		{
-			node.setProperty(PROP_START_AT_LEVEL, (String) null);
-		}
-		else
-		{
-			node.setProperty(PROP_START_AT_LEVEL, getStartAtLevel());
-		}
+    public void load(BrixNode node) {
+        detach();
+        if (node.hasProperty(PROP_INNER_CONTAINER_STYLE_CLASS)) {
+            setInnerContainerStyleClass(node.getProperty(PROP_INNER_CONTAINER_STYLE_CLASS).getString());
+        }
+        if (node.hasProperty(PROP_OUTER_CONTAINER_STYLE_CLASS)) {
+            setOuterContainerStyleClass(node.getProperty(PROP_OUTER_CONTAINER_STYLE_CLASS).getString());
+        }
+        if (node.hasProperty(PROP_SELECTED_ITEM_STYLE_CLASS)) {
+            setSelectedItemStyleClass(node.getProperty(PROP_SELECTED_ITEM_STYLE_CLASS).getString());
+        }
+        if (node.hasProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS)) {
+            setItemWithSelectedChildStyleClass(node.getProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS)
+                    .getString());
+        }
+        if (node.hasProperty(PROP_MENU)) {
+            setMenuNode((BrixNode) node.getProperty(PROP_MENU).getNode());
+        }
+        if (node.hasProperty(PROP_START_AT_LEVEL)) {
+            setStartAtLevel((int) node.getProperty(PROP_START_AT_LEVEL).getLong());
+        }
+        if (node.hasProperty(PROP_RENDER_LEVELS)) {
+            setRenderLevels((int) node.getProperty(PROP_RENDER_LEVELS).getLong());
+        }
+    }
 
-		if (getRenderLevels() == null)
-		{
-			node.setProperty(PROP_RENDER_LEVELS, (String) null);
-		}
-		else
-		{
-			node.setProperty(PROP_RENDER_LEVELS, getRenderLevels());
-		}
-	}
+    public void detach() {
+        menuNodeModel.detach();
+        cachedMenu = null;
+    }
 
-	public void load(BrixNode node)
-	{
-		detach();
-		if (node.hasProperty(PROP_INNER_CONTAINER_STYLE_CLASS))
-		{
-			setInnerContainerStyleClass(node.getProperty(PROP_INNER_CONTAINER_STYLE_CLASS).getString());
-		}
-		if (node.hasProperty(PROP_OUTER_CONTAINER_STYLE_CLASS))
-		{
-			setOuterContainerStyleClass(node.getProperty(PROP_OUTER_CONTAINER_STYLE_CLASS).getString());
-		}
-		if (node.hasProperty(PROP_SELECTED_ITEM_STYLE_CLASS))
-		{
-			setSelectedItemStyleClass(node.getProperty(PROP_SELECTED_ITEM_STYLE_CLASS).getString());
-		}
-		if (node.hasProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS))
-		{
-			setItemWithSelectedChildStyleClass(node.getProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS)
-					.getString());
-		}
-		if (node.hasProperty(PROP_MENU))
-		{
-			setMenuNode((BrixNode) node.getProperty(PROP_MENU).getNode());
-		}
-		if (node.hasProperty(PROP_START_AT_LEVEL))
-		{
-			setStartAtLevel((int) node.getProperty(PROP_START_AT_LEVEL).getLong());
-		}
-		if (node.hasProperty(PROP_RENDER_LEVELS))
-		{
-			setRenderLevels((int) node.getProperty(PROP_RENDER_LEVELS).getLong());
-		}
-	}
+    public void setMenuNode(BrixNode node) {
+        this.cachedMenu = null;
+        this.menuNodeModel.setObject(node);
+    }
 
-	public void detach()
-	{
-		menuNodeModel.detach();
-		cachedMenu = null;
-	}
+    public void save(BrixNode node) {
+        node.setProperty(PROP_INNER_CONTAINER_STYLE_CLASS, getInnerContainerStyleClass());
+        node.setProperty(PROP_OUTER_CONTAINER_STYLE_CLASS, getOuterContainerStyleClass());
+        node.setProperty(PROP_SELECTED_ITEM_STYLE_CLASS, getSelectedItemStyleClass());
+        node.setProperty(PROP_ITEM_WITH_SELECTED_CHILD_STYLE_CLASS, getItemWithSelectedChildStyleClass());
+        node.setProperty(PROP_MENU, getMenuNode());
 
+        if (getStartAtLevel() == null) {
+            node.setProperty(PROP_START_AT_LEVEL, (String) null);
+        } else {
+            node.setProperty(PROP_START_AT_LEVEL, getStartAtLevel());
+        }
+
+        if (getRenderLevels() == null) {
+            node.setProperty(PROP_RENDER_LEVELS, (String) null);
+        } else {
+            node.setProperty(PROP_RENDER_LEVELS, getRenderLevels());
+        }
+    }
 }

@@ -25,38 +25,34 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
 import org.brixcms.web.reference.Reference;
 
-public class PropertiesTab extends BrixGenericPanel<BrixNode>
-{
+public class PropertiesTab extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public PropertiesTab(String id, final IModel<BrixNode> folderNodeModel)
-	{
-		super(id, folderNodeModel);
+    public PropertiesTab(String id, final IModel<BrixNode> folderNodeModel) {
+        super(id, folderNodeModel);
 
-		final ModelBuffer buffer = new ModelBuffer(folderNodeModel);
+        final ModelBuffer buffer = new ModelBuffer(folderNodeModel);
 
-		Form<Void> form = new Form<Void>("form");
+        Form<Void> form = new Form<Void>("form");
 
-		form.add(new SubmitLink("submit")
-		{
-			@Override
-			public void onSubmit()
-			{
-				buffer.apply();
-				folderNodeModel.getObject().save();
-				getSession().info(PropertiesTab.this.getString("propertiesSaved"));
-			}
-		});
-		add(form);
+        form.add(new SubmitLink("submit") {
+            @Override
+            public void onSubmit() {
+                buffer.apply();
+                folderNodeModel.getObject().save();
+                getSession().info(PropertiesTab.this.getString("propertiesSaved"));
+            }
+        });
+        add(form);
 
-		add(new ContainerFeedbackPanel("feedback", this));
+        add(new ContainerFeedbackPanel("feedback", this));
 
-		ReferenceEditorConfiguration conf = new ReferenceEditorConfiguration();
+        ReferenceEditorConfiguration conf = new ReferenceEditorConfiguration();
 
-		conf.setDisplayFiles(true);
-		conf.setWorkspaceName(folderNodeModel);
+        conf.setDisplayFiles(true);
+        conf.setWorkspaceName(folderNodeModel);
 
-		IModel<Reference> model = buffer.forProperty("redirectReference");
-		form.add(new ReferenceEditorPanel("redirectReference", model).setConfiguration(conf));
-
-	}
+        IModel<Reference> model = buffer.forProperty("redirectReference");
+        form.add(new ReferenceEditorPanel("redirectReference", model).setConfiguration(conf));
+    }
 }

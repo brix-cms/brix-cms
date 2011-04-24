@@ -21,34 +21,39 @@ import org.brixcms.markup.tag.Text;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class VariableText implements Text, VariableKeyProvider
-{
-	private final BrixNodeModel pageNodeModel;
-	private final String key;
+public class VariableText implements Text, VariableKeyProvider {
+// ------------------------------ FIELDS ------------------------------
 
-	public VariableText(BrixNode pageNode, String key)
-	{
-		this.pageNodeModel = new BrixNodeModel(pageNode);
-		this.key = key;
-		this.pageNodeModel.detach();
-	}
-	
-	public String getText()
-	{
-		BrixNode node = new BrixNodeModel(pageNodeModel).getObject();
-		if (node instanceof VariableValueProvider)
-		{
-			String value = ((VariableValueProvider) node).getVariableValue(key);			
-			return value != null ? value : "[" + key + "]";
-		}
-		else
-		{
-			return "Couldn't resolve variable '" + key + "'";
-		}
-	}
+    private final BrixNodeModel pageNodeModel;
+    private final String key;
 
-	public Collection<String> getVariableKeys()
-	{
-		return Arrays.asList(new String[] { key } );
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public VariableText(BrixNode pageNode, String key) {
+        this.pageNodeModel = new BrixNodeModel(pageNode);
+        this.key = key;
+        this.pageNodeModel.detach();
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Text ---------------------
+
+    public String getText() {
+        BrixNode node = new BrixNodeModel(pageNodeModel).getObject();
+        if (node instanceof VariableValueProvider) {
+            String value = ((VariableValueProvider) node).getVariableValue(key);
+            return value != null ? value : "[" + key + "]";
+        } else {
+            return "Couldn't resolve variable '" + key + "'";
+        }
+    }
+
+// --------------------- Interface VariableKeyProvider ---------------------
+
+
+    public Collection<String> getVariableKeys() {
+        return Arrays.asList(new String[]{key});
+    }
 }

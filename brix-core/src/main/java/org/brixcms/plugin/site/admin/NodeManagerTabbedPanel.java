@@ -20,19 +20,17 @@ import org.brixcms.web.tab.IBrixTab;
 
 import java.util.List;
 
-public class NodeManagerTabbedPanel extends Panel
-{
-	public NodeManagerTabbedPanel(String id, List<IBrixTab> tabs)
-	{
-		super(id);
-		
-		add(new BrixTabbedPanel("tabbedPanel", tabs) {
-			@Override
-			protected String getTabContainerCssClass()
-			{				
-				return "brix-site-manager-tab-row";
-			}
-		});
-	}
+public class NodeManagerTabbedPanel extends Panel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
+    public NodeManagerTabbedPanel(String id, List<IBrixTab> tabs) {
+        super(id);
+
+        add(new BrixTabbedPanel("tabbedPanel", tabs) {
+            @Override
+            protected String getTabContainerCssClass() {
+                return "brix-site-manager-tab-row";
+            }
+        });
+    }
 }

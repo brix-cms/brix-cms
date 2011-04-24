@@ -24,52 +24,56 @@ import org.brixcms.plugin.site.SimpleCallback;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.admin.CreatePageOrTemplatePanel;
 
-public class PageSiteNodePlugin extends AbstractSitePagePlugin
-{
+public class PageSiteNodePlugin extends AbstractSitePagePlugin {
+// ------------------------------ FIELDS ------------------------------
 
     public static final String TYPE = Brix.NS_PREFIX + "tilePage";
 
-    public PageSiteNodePlugin(SitePlugin plugin)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PageSiteNodePlugin(SitePlugin plugin) {
         super(plugin);
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface SiteNodePlugin ---------------------
+
+
     @Override
-    public NodeConverter getConverterForNode(BrixNode node)
-    {
-        if (TemplateSiteNodePlugin.TYPE.equals(((BrixNode)node).getNodeType()))
+    public String getNodeType() {
+        return TYPE;
+    }
+
+    public String getName() {
+        return (new ResourceModel("page", "Page")).getObject();
+    }
+
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode) {
+        return new ResourceModel("newPage", "Create New Page");
+    }
+
+    ;
+
+    @Override
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack) {
+        return new CreatePageOrTemplatePanel(id, parentNode, getNodeType(), goBack);
+    }
+
+    @Override
+    public NodeConverter getConverterForNode(BrixNode node) {
+        if (TemplateSiteNodePlugin.TYPE.equals(((BrixNode) node).getNodeType()))
             return new FromTemplateConverter(getNodeType());
         else
             return super.getConverterForNode(node);
     }
 
-    private static class FromTemplateConverter extends SetTypeConverter
-    {
-        public FromTemplateConverter(String type)
-        {
+// -------------------------- INNER CLASSES --------------------------
+
+    private static class FromTemplateConverter extends SetTypeConverter {
+        public FromTemplateConverter(String type) {
             super(type);
         }
-    };
-
-    @Override
-    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
-    {
-        return new CreatePageOrTemplatePanel(id, parentNode, getNodeType(), goBack);
-    }
-
-    @Override
-    public String getNodeType()
-    {
-        return TYPE;
-    }
-
-    public String getName()
-    {
-        return (new ResourceModel("page", "Page")).getObject();
-    }
-
-    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
-    {
-        return new ResourceModel("newPage", "Create New Page");
     }
 }

@@ -14,17 +14,20 @@
 
 package org.brixcms.auth;
 
-public abstract class AbstractAction implements Action
-{
+public abstract class AbstractAction implements Action {
+// ------------------------------ FIELDS ------------------------------
+
     private final Context context;
-    
-    public AbstractAction(Context context)
-    {
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public AbstractAction(Context context) {
         this.context = context;
     }
-    
-    public Context getContext()
-    {
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public Context getContext() {
         return context;
     }
 }

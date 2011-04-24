@@ -29,69 +29,64 @@ import org.brixcms.workspace.Workspace;
 import java.util.Arrays;
 import java.util.List;
 
-public class WebdavUrlPlugin implements Plugin
-{
+public class WebdavUrlPlugin implements Plugin {
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public String getId()
-	{
-		return getClass().getName();
-	}
 
-	public String getUserVisibleName(Workspace workspace, boolean isFrontend)
-	{
-		return null;
-	}
+// --------------------- Interface Plugin ---------------------
 
-	public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
-	{
-		return null;
-	}
+    public String getId() {
+        return getClass().getName();
+    }
 
-	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
-	{
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
+        return null;
+    }
 
-	}
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
+        return null;
+    }
 
-	public boolean isPluginWorkspace(Workspace workspace)
-	{
-		return false;
-	}
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
 
-	public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)
-	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new ResourceModel("webdav", "WebDAV"),
-                workspaceModel) };
-		return Arrays.asList(tabs);
-	}
+    }
 
-	static class Tab extends AbstractWorkspaceTab
-	{
-		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
-		{
-			super(title, workspaceModel, 10);
-		}
+    public boolean isPluginWorkspace(Workspace workspace) {
+        return false;
+    }
 
-		@Override
-		public Panel newPanel(String panelId, final IModel<Workspace> workspaceModel)
-		{
-			return new WebdavUrlPanel(panelId, new AbstractModel<String>()
-			{
-				@Override
-				public String getObject()
-				{
-					return workspaceModel.getObject().getId();
-				}
-			});
-		}
+    public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel) {
+        IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("webdav", "WebDAV"),
+                workspaceModel)};
+        return Arrays.asList(tabs);
+    }
 
-		@Override
-		public boolean isVisible()
-		{
-			final Brix brix = Brix.get();
-			final Workspace workspace = getWorkspaceModel().getObject();
-			final Action action = new AccessWebDavUrlPluginAction(workspace);
-			final boolean granted = brix.getAuthorizationStrategy().isActionAuthorized(action);
-			return granted;
-		}
-	};
+// -------------------------- INNER CLASSES --------------------------
+
+    static class Tab extends AbstractWorkspaceTab {
+        public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {
+            super(title, workspaceModel, 10);
+        }
+
+        @Override
+        public Panel newPanel(String panelId, final IModel<Workspace> workspaceModel) {
+            return new WebdavUrlPanel(panelId, new AbstractModel<String>() {
+                @Override
+                public String getObject() {
+                    return workspaceModel.getObject().getId();
+                }
+            });
+        }
+
+        @Override
+        public boolean isVisible() {
+            final Brix brix = Brix.get();
+            final Workspace workspace = getWorkspaceModel().getObject();
+            final Action action = new AccessWebDavUrlPluginAction(workspace);
+            final boolean granted = brix.getAuthorizationStrategy().isActionAuthorized(action);
+            return granted;
+        }
+    }
+
+    ;
 }

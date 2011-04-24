@@ -25,158 +25,139 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * AbstractTreeModel that delegates the tree structure to {@link TreeNode}. It
- * also contains convenience methods that inform the tree component that the
- * tree structure has been changed.
- * 
+ * AbstractTreeModel that delegates the tree structure to {@link TreeNode}. It also contains convenience methods that
+ * inform the tree component that the tree structure has been changed.
+ *
  * @author Matej Knopp
  */
-public abstract class AbstractTreeModel implements Serializable, TreeModel
-{
-	/**
-	 * Returns the root node of this tree. This is the only mandatory method to
-	 * be implemented for custom tree models.
-	 */
-	public abstract TreeNode getRoot();
+public abstract class AbstractTreeModel implements Serializable, TreeModel {
+// ------------------------------ FIELDS ------------------------------
 
-	private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>(0);
+    private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>(0);
 
-	public void removeTreeModelListener(TreeModelListener l)
-	{
-		listeners.remove(l);
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public void addTreeModelListener(TreeModelListener l)
-	{
-		listeners.add(l);
-	}
 
-	public Object getChild(Object parent, int index)
-	{
-		List<?> children = ((TreeNode) parent).getChildren();
-		return children != null ? children.get(index) : null;
-	}
+// --------------------- Interface TreeModel ---------------------
 
-	public int getChildCount(Object parent)
-	{
-		List<?> children = ((TreeNode) parent).getChildren();
-		return children != null ? children.size() : 0;
-	}
+    /**
+     * Returns the root node of this tree. This is the only mandatory method to be implemented for custom tree models.
+     */
+    public abstract TreeNode getRoot();
 
-	public int getIndexOfChild(Object parent, Object child)
-	{
-		List<?> children = ((TreeNode) parent).getChildren();
-		return children != null ? children.indexOf(child) : -1;
-	}
+    public Object getChild(Object parent, int index) {
+        List<?> children = ((TreeNode) parent).getChildren();
+        return children != null ? children.get(index) : null;
+    }
 
-	public boolean isLeaf(Object node)
-	{
-		return ((TreeNode) node).isLeaf();
-	}
+    public int getChildCount(Object parent) {
+        List<?> children = ((TreeNode) parent).getChildren();
+        return children != null ? children.size() : 0;
+    }
 
-	public void valueForPathChanged(TreePath path, Object newValue)
-	{
+    public boolean isLeaf(Object node) {
+        return ((TreeNode) node).isLeaf();
+    }
 
-	}
+    public void valueForPathChanged(TreePath path, Object newValue) {
 
-	public Object getParent(AbstractTree tree, Object node)
-	{
-		return tree.getParentNode(node);
-	}
+    }
 
-	private TreePath pathFromNode(AbstractTree tree, TreeNode node)
-	{
-		List<TreeNode> l = new ArrayList<TreeNode>();
-		for (TreeNode n = node; n != null; n = (TreeNode) getParent(tree, n))
-		{
-			l.add(0, n);
-		}
-		return new TreePath(l.toArray(new TreeNode[l.size()]));
-	}
+    public int getIndexOfChild(Object parent, Object child) {
+        List<?> children = ((TreeNode) parent).getChildren();
+        return children != null ? children.indexOf(child) : -1;
+    }
 
-	/**
-	 * Notifies the tree that the given node has been changed while it's
-	 * children remained unchanged.
-	 * 
-	 * @param tree
-	 * @param node
-	 */
-	public void nodeChanged(AbstractTree tree, TreeNode node)
-	{
-		TreeNode parent = (TreeNode) getParent(tree, node);
-		if (parent != null)
-		{
-			int index = parent.getChildren().indexOf(node);
-			if (index != -1)
-			{
-				TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent), new int[] { index },
-						new Object[] { node });
-				for (TreeModelListener l : listeners)
-				{
-					l.treeNodesChanged(e);
-				}
-			}
-		}
-	}
+    public void addTreeModelListener(TreeModelListener l) {
+        listeners.add(l);
+    }
 
-	/**
-	 * Notifies the tree that the given node has been added.
-	 * 
-	 * @param tree
-	 * @param node
-	 */
-	public void nodeInserted(AbstractTree tree, TreeNode parent, TreeNode node)
-	{
-		int index = parent.getChildren().indexOf(node);
-		if (index != -1)
-		{
-			TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent), new int[] { index },
-					new Object[] { node });
-			for (TreeModelListener l : listeners)
-			{
-				l.treeNodesInserted(e);
-			}
-		}
+    public void removeTreeModelListener(TreeModelListener l) {
+        listeners.remove(l);
+    }
 
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	/**
-	 * Notifies the tree that the given node will be removed. This method must
-	 * be called <b>before</b> the node is actually deleted.
-	 * 
-	 * @param tree
-	 * @param node
-	 */
-	public void nodeDeleted(AbstractTree tree, TreeNode node)
-	{
-		TreeNode parent = (TreeNode) getParent(tree, node);
-		if (parent != null)
-		{
-			int index = parent.getChildren().indexOf(node);
-			if (index != -1)
-			{
-				TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent), new int[] { index },
-						new Object[] { node });
-				for (TreeModelListener l : listeners)
-				{
-					l.treeNodesRemoved(e);
-				}
-			}
-		}
-	}
+    /**
+     * Notifies the tree that the given node has been changed while it's children remained unchanged.
+     *
+     * @param tree
+     * @param node
+     */
+    public void nodeChanged(AbstractTree tree, TreeNode node) {
+        TreeNode parent = (TreeNode) getParent(tree, node);
+        if (parent != null) {
+            int index = parent.getChildren().indexOf(node);
+            if (index != -1) {
+                TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent), new int[]{index},
+                        new Object[]{node});
+                for (TreeModelListener l : listeners) {
+                    l.treeNodesChanged(e);
+                }
+            }
+        }
+    }
 
-	/**
-	 * Notifies the tree that the children of given node have been changed.
-	 * 
-	 * @param tree
-	 * @param node
-	 */
-	public void nodeChildrenChanged(AbstractTree tree, TreeNode node)
-	{
-		TreeModelEvent event = new TreeModelEvent(this, pathFromNode(tree, node));
-		for (TreeModelListener l : listeners)
-		{
-			l.treeStructureChanged(event);
-		}
-	}
+    private TreePath pathFromNode(AbstractTree tree, TreeNode node) {
+        List<TreeNode> l = new ArrayList<TreeNode>();
+        for (TreeNode n = node; n != null; n = (TreeNode) getParent(tree, n)) {
+            l.add(0, n);
+        }
+        return new TreePath(l.toArray(new TreeNode[l.size()]));
+    }
+
+    public Object getParent(AbstractTree tree, Object node) {
+        return tree.getParentNode(node);
+    }
+
+    /**
+     * Notifies the tree that the children of given node have been changed.
+     *
+     * @param tree
+     * @param node
+     */
+    public void nodeChildrenChanged(AbstractTree tree, TreeNode node) {
+        TreeModelEvent event = new TreeModelEvent(this, pathFromNode(tree, node));
+        for (TreeModelListener l : listeners) {
+            l.treeStructureChanged(event);
+        }
+    }
+
+    /**
+     * Notifies the tree that the given node will be removed. This method must be called <b>before</b> the node is actually
+     * deleted.
+     *
+     * @param tree
+     * @param node
+     */
+    public void nodeDeleted(AbstractTree tree, TreeNode node) {
+        TreeNode parent = (TreeNode) getParent(tree, node);
+        if (parent != null) {
+            int index = parent.getChildren().indexOf(node);
+            if (index != -1) {
+                TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent), new int[]{index},
+                        new Object[]{node});
+                for (TreeModelListener l : listeners) {
+                    l.treeNodesRemoved(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Notifies the tree that the given node has been added.
+     *
+     * @param tree
+     * @param node
+     */
+    public void nodeInserted(AbstractTree tree, TreeNode parent, TreeNode node) {
+        int index = parent.getChildren().indexOf(node);
+        if (index != -1) {
+            TreeModelEvent e = new TreeModelEvent(this, pathFromNode(tree, parent), new int[]{index},
+                    new Object[]{node});
+            for (TreeModelListener l : listeners) {
+                l.treeNodesInserted(e);
+            }
+        }
+    }
 }

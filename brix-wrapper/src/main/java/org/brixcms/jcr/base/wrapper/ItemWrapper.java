@@ -14,113 +14,101 @@
 
 package org.brixcms.jcr.base.wrapper;
 
-import javax.jcr.*;
+import javax.jcr.Item;
+import javax.jcr.Node;
+import javax.jcr.Property;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 
-abstract class ItemWrapper extends BaseWrapper<Item> implements Item
-{
+abstract class ItemWrapper extends BaseWrapper<Item> implements Item {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected ItemWrapper(Item delegate, SessionWrapper session)
-    {
-        super(delegate, session);
-    }
-
-    public static ItemWrapper wrap(Item item, SessionWrapper session)
-    {
-        if (item == null)
-        {
+    public static ItemWrapper wrap(Item item, SessionWrapper session) {
+        if (item == null) {
             return null;
-        }
-        else if (item instanceof Version)
-        {
-        	return VersionWrapper.wrap((Version)item, session);
-        }
-        else if (item instanceof VersionHistory)
-        {
-        	return VersionHistoryWrapper.wrap((VersionHistory)item, session);
-        }
-        else if (item instanceof Node)
-        {
-            return NodeWrapper.wrap((Node)item, session);
-        }
-        else if (item instanceof Property)
-        {
-            return PropertyWrapper.wrap((Property)item, session);
-        }
-        else
-        {
+        } else if (item instanceof Version) {
+            return VersionWrapper.wrap((Version) item, session);
+        } else if (item instanceof VersionHistory) {
+            return VersionHistoryWrapper.wrap((VersionHistory) item, session);
+        } else if (item instanceof Node) {
+            return NodeWrapper.wrap((Node) item, session);
+        } else if (item instanceof Property) {
+            return PropertyWrapper.wrap((Property) item, session);
+        } else {
             throw new IllegalStateException("Unknown item subclass");
         }
     }
 
-    public Item getAncestor(int depth) throws RepositoryException
-    {
-        return getDelegate().getAncestor(depth);
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected ItemWrapper(Item delegate, SessionWrapper session) {
+        super(delegate, session);
     }
 
-    public int getDepth() throws RepositoryException
-    {
-        return getDelegate().getDepth();
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public String getName() throws RepositoryException
-    {
-    	// TODO: Cache
-        return getDelegate().getName();
-    }
 
-    public Node getParent() throws RepositoryException
-    {    	
-        return NodeWrapper.wrap(getDelegate().getParent(), getSessionWrapper());
-    }
+// --------------------- Interface Item ---------------------
 
-    public String getPath() throws RepositoryException
-    {
-    	// TODO: Cache
+
+    public String getPath() throws RepositoryException {
+        // TODO: Cache
         return getDelegate().getPath();
     }
 
-    public Session getSession() throws RepositoryException
-    {
+    public String getName() throws RepositoryException {
+        // TODO: Cache
+        return getDelegate().getName();
+    }
+
+    public Item getAncestor(int depth) throws RepositoryException {
+        return getDelegate().getAncestor(depth);
+    }
+
+    public Node getParent() throws RepositoryException {
+        return NodeWrapper.wrap(getDelegate().getParent(), getSessionWrapper());
+    }
+
+    public int getDepth() throws RepositoryException {
+        return getDelegate().getDepth();
+    }
+
+    public Session getSession() throws RepositoryException {
         return getSessionWrapper();
     }
 
-    public boolean isModified()
-    {
+    public boolean isNew() {
+        return getDelegate().isNew();
+    }
+
+    public boolean isModified() {
         return getDelegate().isModified();
     }
 
-    public boolean isNew()
-    {
-        return getDelegate().isNew();
-    }    
-
-    public boolean isSame(Item otherItem) throws RepositoryException
-    {    	
+    public boolean isSame(Item otherItem) throws RepositoryException {
         return getDelegate().isSame(unwrap(otherItem));
     }
 
-    public void refresh(boolean keepChanges) throws RepositoryException
-    {
-    	getActionHandler().beforeItemRefresh(this, keepChanges);
-        getDelegate().refresh(keepChanges);
-        getActionHandler().afterItemRefresh(this, keepChanges);
-    }
-
-    public void remove() throws RepositoryException
-    {
-    	// handler is notified from subclasses
-        getDelegate().remove();
-    }
-
-    /** @deprecated */
+    /**
+     * @deprecated
+     */
     @Deprecated
-    public void save() throws RepositoryException
-    {
-    	getActionHandler().beforeItemSave(this);
+    public void save() throws RepositoryException {
+        getActionHandler().beforeItemSave(this);
         getDelegate().save();
         getActionHandler().afterItemSave(this);
     }
 
+    public void refresh(boolean keepChanges) throws RepositoryException {
+        getActionHandler().beforeItemRefresh(this, keepChanges);
+        getDelegate().refresh(keepChanges);
+        getActionHandler().afterItemRefresh(this, keepChanges);
+    }
+
+    public void remove() throws RepositoryException {
+        // handler is notified from subclasses
+        getDelegate().remove();
+    }
 }

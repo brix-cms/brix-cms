@@ -17,10 +17,10 @@ package org.brixcms.plugin.snapshot.auth;
 import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
-public class DeleteSnapshotAction extends AbstractWorkspaceAction
-{
-    public DeleteSnapshotAction(Context context, Workspace workspace)
-    {
+public class DeleteSnapshotAction extends AbstractWorkspaceAction {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public DeleteSnapshotAction(Context context, Workspace workspace) {
         super(context, workspace);
     }
 }

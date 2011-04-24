@@ -19,34 +19,36 @@ import javax.jcr.RepositoryException;
 
 /**
  * Event indicating that a node has been removed.
- * 
+ *
  * @author Matej
- * 
  */
-public class RemoveNodeEvent extends NodeEvent
-{
-	private final String nodeName;
-	private final String nodeUUID;
+public class RemoveNodeEvent extends NodeEvent {
+// ------------------------------ FIELDS ------------------------------
 
-	RemoveNodeEvent(Node node) throws RepositoryException
-	{
-		super(node.getParent());
-		this.nodeName = node.getName();
-		this.nodeUUID = node.isNodeType("mix:referenceable") ? node.getIdentifier() : null;
-	}
+    private final String nodeName;
+    private final String nodeUUID;
 
-	public Node getParentNode()
-	{
-		return super.getNode();
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public String getNodeName()
-	{
-		return nodeName;
-	}
+    RemoveNodeEvent(Node node) throws RepositoryException {
+        super(node.getParent());
+        this.nodeName = node.getName();
+        this.nodeUUID = node.isNodeType("mix:referenceable") ? node.getIdentifier() : null;
+    }
 
-	public String getNodeUUID()
-	{
-		return nodeUUID;
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public String getNodeUUID() {
+        return nodeUUID;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Node getParentNode() {
+        return super.getNode();
+    }
 }

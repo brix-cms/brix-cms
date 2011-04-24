@@ -17,20 +17,24 @@ package org.brixcms.jcr.api;
 import javax.jcr.NamespaceRegistry;
 
 /**
- * 
  * @author Matej Knopp
  */
-public interface JcrNamespaceRegistry extends NamespaceRegistry
-{
-	public String getPrefix(String uri);
+public interface JcrNamespaceRegistry extends NamespaceRegistry {
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public String[] getPrefixes();
 
-	public String getURI(String prefix);
+// --------------------- Interface NamespaceRegistry ---------------------
 
-	public String[] getURIs();
 
-	public void registerNamespace(String prefix, String uri);
+    public void registerNamespace(String prefix, String uri);
 
-	public void unregisterNamespace(String prefix);
+    public void unregisterNamespace(String prefix);
+
+    public String[] getPrefixes();
+
+    public String[] getURIs();
+
+    public String getURI(String prefix);
+
+    public String getPrefix(String uri);
 }

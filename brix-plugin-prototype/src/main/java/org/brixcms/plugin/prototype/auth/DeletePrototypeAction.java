@@ -17,10 +17,10 @@ package org.brixcms.plugin.prototype.auth;
 import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
-public class DeletePrototypeAction extends AbstractWorkspaceAction
-{
-    public DeletePrototypeAction(Context context, Workspace workspace)
-    {
+public class DeletePrototypeAction extends AbstractWorkspaceAction {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public DeletePrototypeAction(Context context, Workspace workspace) {
         super(context, workspace);
     }
 }

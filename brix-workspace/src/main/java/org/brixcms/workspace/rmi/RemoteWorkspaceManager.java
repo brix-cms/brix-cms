@@ -19,16 +19,17 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
-interface RemoteWorkspaceManager extends Remote
-{
+interface RemoteWorkspaceManager extends Remote {
+// -------------------------- OTHER METHODS --------------------------
+
+    public RemoteWorkspace createWorkspace() throws RemoteException;
+
+    public RemoteWorkspace getWorkspace(String workspaceId) throws RemoteException;
+
     public List<RemoteWorkspace> getWorkspaces() throws RemoteException;
 
     public List<RemoteWorkspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes)
             throws RemoteException;
 
-    public RemoteWorkspace createWorkspace() throws RemoteException;
-
-    public RemoteWorkspace getWorkspace(String workspaceId) throws RemoteException;
-    
     public boolean workspaceExists(String workspaceId) throws RemoteException;
 }

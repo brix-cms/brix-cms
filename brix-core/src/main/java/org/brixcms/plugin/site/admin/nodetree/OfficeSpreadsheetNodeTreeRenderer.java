@@ -19,25 +19,27 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 
 /**
  * Renderer for office spreadsheet nodes
- * 
+ *
  * @author Jeremy Thomerson
  */
-public class OfficeSpreadsheetNodeTreeRenderer extends AbstractMimeTypeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class OfficeSpreadsheetNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final ResourceReference RESOURCE = new ResourceReference(
-			PageNodeTreeRenderer.class, "resources/x-office-spreadsheet.png");
+    private static final long serialVersionUID = 1L;
 
-	public OfficeSpreadsheetNodeTreeRenderer()
-	{
-		super(new String[] { "application/vnd.ms-excel", "application/vnd.sun.xml.calc" });
-	}
+    private static final ResourceReference RESOURCE = new ResourceReference(
+            PageNodeTreeRenderer.class, "resources/x-office-spreadsheet.png");
 
-	@Override
-	protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-	{
-		return RESOURCE;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
+    public OfficeSpreadsheetNodeTreeRenderer() {
+        super(new String[]{"application/vnd.ms-excel", "application/vnd.sun.xml.calc"});
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+        return RESOURCE;
+    }
 }

@@ -18,11 +18,12 @@ import org.brixcms.jcr.api.JcrNode;
 
 import javax.jcr.observation.Event;
 
-public interface SaveEvent extends Event
-{
+public interface SaveEvent extends Event {
+// ------------------------------ FIELDS ------------------------------
 
     public static final int NODE_SAVE = 4096;
 
-    JcrNode getNode();
+// -------------------------- OTHER METHODS --------------------------
 
+    JcrNode getNode();
 }

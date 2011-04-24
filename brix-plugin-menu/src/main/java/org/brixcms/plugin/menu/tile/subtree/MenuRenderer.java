@@ -30,138 +30,125 @@ import java.util.Set;
 
 /**
  * Component used to render the menu
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-class MenuRenderer extends AbstractMenuRenderer
-{
-	private static final long serialVersionUID = 1L;
+class MenuRenderer extends AbstractMenuRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 * @param model
-	 */
-	public MenuRenderer(String id, IModel<BrixNode> model)
-	{
-		super(id, model);
-	}
+    private static final long serialVersionUID = 1L;
 
-	/** {@inheritDoc} */
-	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
-	{
-		MenuContainer container = new MenuContainer();
-		container.load(getModelObject());
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		Set<ChildEntry> selected = getSelectedItems(container.getMenu());
+    /**
+     * Constructor
+     *
+     * @param id
+     * @param model
+     */
+    public MenuRenderer(String id, IModel<BrixNode> model) {
+        super(id, model);
+    }
 
-		// how many levels to skip to start rendering
-		int skipLevels = container.getStartAtLevel() != null ? container.getStartAtLevel() : 0;
+// -------------------------- OTHER METHODS --------------------------
 
-		// how many levels should be rendered
-		int renderLevels = container.getRenderLevels() != null
-				? container.getRenderLevels()
-				: Integer.MAX_VALUE;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+        MenuContainer container = new MenuContainer();
+        container.load(getModelObject());
 
-		Response response = getResponse();
-		renderEntry(container, container.getMenu().getRoot(), response, selected, skipLevels,
-				renderLevels);
-	}
+        Set<ChildEntry> selected = getSelectedItems(container.getMenu());
 
-	private void renderEntry(MenuContainer container, Entry entry, Response response,
-			Set<ChildEntry> selected, int skipLevels, int renderLevels)
-	{
-		if (renderLevels <= 0)
-		{
-			return;
-		}
+        // how many levels to skip to start rendering
+        int skipLevels = container.getStartAtLevel() != null ? container.getStartAtLevel() : 0;
 
-		if (skipLevels <= 0)
-		{
-			boolean outer = skipLevels == 0;
-			String klass = "";
-			if (outer && !Strings.isEmpty(container.getOuterContainerStyleClass()))
-			{
-				klass = " class='" + container.getOuterContainerStyleClass() + "'";
-			}
-			else if (!outer && !Strings.isEmpty(container.getInnerContainerStyleClass()))
-			{
-				klass = " class='" + container.getInnerContainerStyleClass() + "'";
-			}
-			response.write("\n<ul");
-			response.write(klass);
-			response.write(">\n");
-		}
+        // how many levels should be rendered
+        int renderLevels = container.getRenderLevels() != null
+                ? container.getRenderLevels()
+                : Integer.MAX_VALUE;
 
-		for (ChildEntry e : entry.getChildren())
-		{
-			BrixNode node = getNode(e);
-			if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION))
-			{
-				renderChild(container, e, response, selected, skipLevels, renderLevels);
-			}
-		}
+        Response response = getResponse();
+        renderEntry(container, container.getMenu().getRoot(), response, selected, skipLevels,
+                renderLevels);
+    }
 
-		if (skipLevels <= 0)
-		{
-			response.write("</ul>\n");
-		}
-	}
+    private void renderEntry(MenuContainer container, Entry entry, Response response,
+                             Set<ChildEntry> selected, int skipLevels, int renderLevels) {
+        if (renderLevels <= 0) {
+            return;
+        }
 
-	private void renderChild(MenuContainer container, ChildEntry entry, Response response,
-			Set<ChildEntry> selectedSet, int skipLevels, int renderLevels)
-	{
-		boolean selected = selectedSet.contains(entry);
+        if (skipLevels <= 0) {
+            boolean outer = skipLevels == 0;
+            String klass = "";
+            if (outer && !Strings.isEmpty(container.getOuterContainerStyleClass())) {
+                klass = " class='" + container.getOuterContainerStyleClass() + "'";
+            } else if (!outer && !Strings.isEmpty(container.getInnerContainerStyleClass())) {
+                klass = " class='" + container.getInnerContainerStyleClass() + "'";
+            }
+            response.write("\n<ul");
+            response.write(klass);
+            response.write(">\n");
+        }
 
-		boolean anyChildren = selected && anyChildren(entry);
+        for (ChildEntry e : entry.getChildren()) {
+            BrixNode node = getNode(e);
+            if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION)) {
+                renderChild(container, e, response, selected, skipLevels, renderLevels);
+            }
+        }
 
-		if (skipLevels <= 0)
-		{
-			String listItemCssClass = "";
-			String anchorCssClass = "";
-			if (selected && !Strings.isEmpty(container.getSelectedItemStyleClass()))
-			{
-				listItemCssClass = container.getSelectedItemStyleClass();
-				anchorCssClass = container.getSelectedItemStyleClass();
-			}
+        if (skipLevels <= 0) {
+            response.write("</ul>\n");
+        }
+    }
 
-			if (anyChildren && selected && anyChildSelected(entry, selectedSet)
-					&& !Strings.isEmpty(container.getItemWithSelectedChildStyleClass()))
-			{
-				listItemCssClass = container.getItemWithSelectedChildStyleClass();
-			}
+    private void renderChild(MenuContainer container, ChildEntry entry, Response response,
+                             Set<ChildEntry> selectedSet, int skipLevels, int renderLevels) {
+        boolean selected = selectedSet.contains(entry);
 
-			if (!Strings.isEmpty(entry.getCssClass()))
-			{
-				if (!Strings.isEmpty(listItemCssClass))
-				{
-					listItemCssClass += " ";
-				}
-				listItemCssClass += entry.getCssClass();
-			}
+        boolean anyChildren = selected && anyChildren(entry);
 
-			response.write("\n<li");
+        if (skipLevels <= 0) {
+            String listItemCssClass = "";
+            String anchorCssClass = "";
+            if (selected && !Strings.isEmpty(container.getSelectedItemStyleClass())) {
+                listItemCssClass = container.getSelectedItemStyleClass();
+                anchorCssClass = container.getSelectedItemStyleClass();
+            }
 
-			if (!Strings.isEmpty(listItemCssClass))
-			{
-				response.write(" class=\"");
-				response.write(listItemCssClass);
-				response.write("\"");
-			}
+            if (anyChildren && selected && anyChildSelected(entry, selectedSet)
+                    && !Strings.isEmpty(container.getItemWithSelectedChildStyleClass())) {
+                listItemCssClass = container.getItemWithSelectedChildStyleClass();
+            }
 
-			response.write(">");
+            if (!Strings.isEmpty(entry.getCssClass())) {
+                if (!Strings.isEmpty(listItemCssClass)) {
+                    listItemCssClass += " ";
+                }
+                listItemCssClass += entry.getCssClass();
+            }
+
+            response.write("\n<li");
+
+            if (!Strings.isEmpty(listItemCssClass)) {
+                response.write(" class=\"");
+                response.write(listItemCssClass);
+                response.write("\"");
+            }
+
+            response.write(">");
 
 
             //Rendering for REFERENCE
-            if(entry.getMenuType() == ChildEntry.MenuType.REFERENCE) {
+            if (entry.getMenuType() == ChildEntry.MenuType.REFERENCE) {
                 final String url = getUrl(entry);
 
                 response.write("<a");
-                if (!Strings.isEmpty(anchorCssClass))
-                {
+                if (!Strings.isEmpty(anchorCssClass)) {
                     response.write(" class=\"");
                     response.write(anchorCssClass);
                     response.write("\"");
@@ -169,38 +156,34 @@ class MenuRenderer extends AbstractMenuRenderer
                 response.write(" href=\"");
                 response.write(url);
                 response.write("\"><span>");
-                
+
                 // TODO. escape or not (probably a property would be nice?
                 response.write(entry.getTitle());
                 response.write("</span></a>");
             }
 
             //Rendering for CODE
-            else if(entry.getMenuType() == ChildEntry.MenuType.CODE) {
+            else if (entry.getMenuType() == ChildEntry.MenuType.CODE) {
                 response.write(entry.getLabelOrCode());
             }
             //Rendering for LABEL
-            else if(entry.getMenuType() == ChildEntry.MenuType.LABEL) {
+            else if (entry.getMenuType() == ChildEntry.MenuType.LABEL) {
                 response.write(Strings.escapeMarkup(entry.getLabelOrCode(), false, true));
             }
+        }
 
-		}
+        // only decrement skip levels for child if current is begger than 0
+        int childSkipLevels = skipLevels - 1;
 
-		// only decrement skip levels for child if current is begger than 0
-		int childSkipLevels = skipLevels - 1;
+        // only decrement render levels when we are already rendering
+        int childRenderLevels = skipLevels <= 0 ? renderLevels - 1 : renderLevels;
 
-		// only decrement render levels when we are already rendering
-		int childRenderLevels = skipLevels <= 0 ? renderLevels - 1 : renderLevels;
+        if (anyChildren) {
+            renderEntry(container, entry, response, selectedSet, childSkipLevels, childRenderLevels);
+        }
 
-		if (anyChildren)
-		{
-			renderEntry(container, entry, response, selectedSet, childSkipLevels, childRenderLevels);
-		}
-
-		if (skipLevels == 0)
-		{
-			response.write("</li>\n");
-		}
-	}
-
+        if (skipLevels == 0) {
+            response.write("</li>\n");
+        }
+    }
 }

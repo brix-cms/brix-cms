@@ -23,65 +23,60 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
-public class NodePickerWithButtons extends BrixGenericPanel<BrixNode>
-{
+public class NodePickerWithButtons extends BrixGenericPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-    public NodePickerWithButtons(String id, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter)
-    {
+    private IModel<BrixNode> nodeModel;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public NodePickerWithButtons(String id, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter) {
         super(id);
         init(rootNode, visibleFilter, enabledFilter);
     }
 
-    public NodePickerWithButtons(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter)
-    {
-        super(id, model);
-        init(rootNode, visibleFilter, enabledFilter);
-    }
+    private void init(JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter) {
+        nodeModel = new BrixNodeModel(getModel().getObject());
 
-    private IModel<BrixNode> nodeModel;
-
-    public boolean isDisplayFiles()
-    {
-        return true;
-    }
-    
-    private void init(JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter)
-    {
-    	nodeModel = new BrixNodeModel(getModel().getObject());
-    	
         add(new NodePicker("picker", this.nodeModel, rootNode, visibleFilter, enabledFilter));
 
-        add(new AjaxLink<Void>("ok")
-        {
+        add(new AjaxLink<Void>("ok") {
             @Override
-            public void onClick(AjaxRequestTarget target)
-            {
+            public void onClick(AjaxRequestTarget target) {
                 onOk(target);
             }
         });
 
-        add(new AjaxLink<Void>("cancel")
-        {
+        add(new AjaxLink<Void>("cancel") {
             @Override
-            public void onClick(AjaxRequestTarget target)
-            {
+            public void onClick(AjaxRequestTarget target) {
                 onCancel(target);
             }
         });
     }
 
-    protected IModel<BrixNode> getNodeModel()
-    {
+    protected void onOk(AjaxRequestTarget target) {
+        setModelObject(getNodeModel().getObject());
+    }
+
+    protected void onCancel(AjaxRequestTarget target) {
+
+    }
+
+    public NodePickerWithButtons(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter) {
+        super(id, model);
+        init(rootNode, visibleFilter, enabledFilter);
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    protected IModel<BrixNode> getNodeModel() {
         return nodeModel;
     }
 
-    protected void onCancel(AjaxRequestTarget target)
-    {
+// -------------------------- OTHER METHODS --------------------------
 
-    }
-
-    protected void onOk(AjaxRequestTarget target)
-    {
-        setModelObject(getNodeModel().getObject());
+    public boolean isDisplayFiles() {
+        return true;
     }
 }

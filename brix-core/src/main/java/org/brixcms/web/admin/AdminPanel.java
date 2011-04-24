@@ -36,78 +36,98 @@ import org.brixcms.workspace.WorkspaceModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderContributor
-{
+public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderContributor {
+// ------------------------------ FIELDS ------------------------------
+
+    private static final ResourceReference CSS = new CompressedResourceReference(AdminPanel.class,
+            "res/style.css");
 
     private TabbedPanel tabbedPanel;
     private final WebMarkupContainer container;
     private WebMarkupContainer noWorkspacesContainer;
 
-    protected Panel newWorkspaceSwitcher(String id, IModel<Workspace> workspaceModel)
-    {
-        return new WorkspaceSwitcher(id, workspaceModel);
-    }
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public AdminPanel(String id, String workspace)
-    {
+    public AdminPanel(String id, String workspace) {
         super(id);
         setModel(new WorkspaceModel(workspace));
 
-        add(container = new WebMarkupContainer("container")
-        {
+        add(container = new WebMarkupContainer("container") {
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return AdminPanel.this.getModelObject() != null;
             }
         });
-
     }
 
-    private void setupTabbedPanel()
-    {
-        if (tabbedPanel != null)
-        {
-            tabbedPanel.remove();
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    private List<Workspace> getWorkspaces() {
+        Brix brix = getBrix();
+        List<Workspace> workspaces = new ArrayList<Workspace>();
+
+        Workspace current = getModelObject();
+
+        for (Plugin p : brix.getPlugins()) {
+            List<Workspace> filtered = brix.filterVisibleWorkspaces(
+                    p.getWorkspaces(current, false), Context.ADMINISTRATION);
+            for (Workspace w : filtered) {
+                workspaces.add(w);
+            }
         }
 
-        List<IBrixTab> tabs = new ArrayList<IBrixTab>();
+        if (!workspaces.contains(current)) {
+            workspaces.add(current);
+        }
+        return workspaces;
+    }
 
+    private Brix getBrix() {
+        return Brix.get();
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IHeaderContributor ---------------------
+
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference(CSS);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    private List<Workspace> getAvailableWorkspaces() {
         Brix brix = Brix.get();
-        for (Plugin p : brix.getPlugins())
-        {
-            List<IBrixTab> pluginTabs = p.newTabs(getModel());
-            if (pluginTabs != null)
-            {
-                tabs.addAll(pluginTabs);
+        List<Workspace> workspaces = new ArrayList<Workspace>();
+
+        Workspace current = getModelObject();
+
+        for (Plugin p : brix.getPlugins()) {
+            List<Workspace> filtered = brix.filterVisibleWorkspaces(
+                    p.getWorkspaces(current, false), Context.ADMINISTRATION);
+            for (Workspace w : filtered) {
+                workspaces.add(w);
             }
         }
 
-        tabbedPanel = new BrixTabbedPanel("tabbedPanel", tabs)
-        {
-            @Override
-            protected String getTabContainerCssClass()
-            {
-                return "brix-plugins-tabbed-panel-row";
-            }
-        };
-        container.add(tabbedPanel);
+        if (!workspaces.contains(current) && current != null) {
+            workspaces.add(current);
+        }
+        return workspaces;
     }
 
     @Override
-    protected void onBeforeRender()
-    {
+    protected void onBeforeRender() {
         fixCurrentWorkspace();
 
-        if (noWorkspacesContainer == null)
-        {
+        if (noWorkspacesContainer == null) {
             add(noWorkspacesContainer = newNoWorkspacesContainer("no-workspaces"));
         }
         noWorkspacesContainer.setVisible(!container.determineVisibility());
 
 
-        if (tabbedPanel == null && container.determineVisibility())
-        {
+        if (tabbedPanel == null && container.determineVisibility()) {
             container.add(newWorkspaceSwitcher("switcher", getModel()));
             setupTabbedPanel();
         }
@@ -115,97 +135,57 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
         super.onBeforeRender();
     }
 
-
-    /**
-     * Factory method for a container that will display the "no workspaces found" message. This
-     * component usually provides its own markup so it is best to use a {@link Panel} or a
-     * {@link Fragment}
-     * 
-     * @param id
-     * @return
-     */
-    private WebMarkupContainer newNoWorkspacesContainer(String id)
-    {
-        return new WebMarkupContainer(id);
-    }
-
-    private boolean isCurrentWorkspaceValid()
-    {
-        WorkspaceManager manager = getBrix().getWorkspaceManager();
-        Workspace workspace = getModelObject();
-        return workspace != null && manager.workspaceExists(workspace.getId());
-    }
-
-    private List<Workspace> getWorkspaces()
-    {
-        Brix brix = getBrix();
-        List<Workspace> workspaces = new ArrayList<Workspace>();
-
-        Workspace current = getModelObject();
-
-        for (Plugin p : brix.getPlugins())
-        {
-            List<Workspace> filtered = brix.filterVisibleWorkspaces(
-                    p.getWorkspaces(current, false), Context.ADMINISTRATION);
-            for (Workspace w : filtered)
-            {
-                workspaces.add(w);
-            }
-        }
-
-        if (!workspaces.contains(current))
-        {
-            workspaces.add(current);
-        }
-        return workspaces;
-    }
-
-    private void fixCurrentWorkspace()
-    {
-        if (!isCurrentWorkspaceValid())
-        {
+    private void fixCurrentWorkspace() {
+        if (!isCurrentWorkspaceValid()) {
             List<Workspace> workspaces = getWorkspaces();
-            if (!workspaces.isEmpty())
-            {
+            if (!workspaces.isEmpty()) {
                 setModelObject(workspaces.iterator().next());
             }
         }
     }
 
-    private List<Workspace> getAvailableWorkspaces()
-    {
+    private boolean isCurrentWorkspaceValid() {
+        WorkspaceManager manager = getBrix().getWorkspaceManager();
+        Workspace workspace = getModelObject();
+        return workspace != null && manager.workspaceExists(workspace.getId());
+    }
+
+    /**
+     * Factory method for a container that will display the "no workspaces found" message. This component usually
+     * provides its own markup so it is best to use a {@link Panel} or a {@link Fragment}
+     *
+     * @param id
+     * @return
+     */
+    private WebMarkupContainer newNoWorkspacesContainer(String id) {
+        return new WebMarkupContainer(id);
+    }
+
+    protected Panel newWorkspaceSwitcher(String id, IModel<Workspace> workspaceModel) {
+        return new WorkspaceSwitcher(id, workspaceModel);
+    }
+
+    private void setupTabbedPanel() {
+        if (tabbedPanel != null) {
+            tabbedPanel.remove();
+        }
+
+        List<IBrixTab> tabs = new ArrayList<IBrixTab>();
+
         Brix brix = Brix.get();
-        List<Workspace> workspaces = new ArrayList<Workspace>();
-
-        Workspace current = getModelObject();
-
-        for (Plugin p : brix.getPlugins())
-        {
-            List<Workspace> filtered = brix.filterVisibleWorkspaces(
-                    p.getWorkspaces(current, false), Context.ADMINISTRATION);
-            for (Workspace w : filtered)
-            {
-                workspaces.add(w);
+        for (Plugin p : brix.getPlugins()) {
+            List<IBrixTab> pluginTabs = p.newTabs(getModel());
+            if (pluginTabs != null) {
+                tabs.addAll(pluginTabs);
             }
         }
 
-        if (!workspaces.contains(current) && current != null)
-        {
-            workspaces.add(current);
-        }
-        return workspaces;
-    }
-
-    private Brix getBrix()
-    {
-        return Brix.get();
-    }
-
-    private static final ResourceReference CSS = new CompressedResourceReference(AdminPanel.class,
-            "res/style.css");
-
-    public void renderHead(IHeaderResponse response)
-    {
-        response.renderCSSReference(CSS);
+        tabbedPanel = new BrixTabbedPanel("tabbedPanel", tabs) {
+            @Override
+            protected String getTabContainerCssClass() {
+                return "brix-plugins-tabbed-panel-row";
+            }
+        };
+        container.add(tabbedPanel);
     }
 }

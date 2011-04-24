@@ -19,28 +19,30 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.markup.tag.ComponentTag;
 
-public class VariableComponentTag extends VariableTag implements ComponentTag
-{
+public class VariableComponentTag extends VariableTag implements ComponentTag {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public VariableComponentTag(BrixNode pageNode, ComponentTag delegate)
-	{
-		super(pageNode, delegate);
-	}
-	
-	@Override
-	public ComponentTag getDelegate()
-	{
-		return (ComponentTag) super.getDelegate();
-	}
+    public VariableComponentTag(BrixNode pageNode, ComponentTag delegate) {
+        super(pageNode, delegate);
+    }
 
-	public Component getComponent(String id, IModel<BrixNode> pageNodeModel)
-	{
-		return getDelegate().getComponent(id, pageNodeModel);
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public String getUniqueTagId()
-	{
-		return getDelegate().getUniqueTagId();
-	}
 
+// --------------------- Interface ComponentTag ---------------------
+
+    public Component getComponent(String id, IModel<BrixNode> pageNodeModel) {
+        return getDelegate().getComponent(id, pageNodeModel);
+    }
+
+    public String getUniqueTagId() {
+        return getDelegate().getUniqueTagId();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public ComponentTag getDelegate() {
+        return (ComponentTag) super.getDelegate();
+    }
 }

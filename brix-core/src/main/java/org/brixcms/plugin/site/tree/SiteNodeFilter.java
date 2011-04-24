@@ -17,33 +17,32 @@ package org.brixcms.plugin.site.tree;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.tree.NodeFilter;
 
-public class SiteNodeFilter implements NodeFilter
-{
+public class SiteNodeFilter implements NodeFilter {
+// ------------------------------ FIELDS ------------------------------
 
-	private final boolean foldersOnly;
-	private final NodeFilter customFilter;
+    private final boolean foldersOnly;
+    private final NodeFilter customFilter;
 
-	public SiteNodeFilter(boolean foldersOnly, NodeFilter customFilter)
-	{
-		this.foldersOnly = foldersOnly;
-		this.customFilter = customFilter;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public boolean isNodeAllowed(BrixNode node)
-	{
-		if (node == null)
-		{
-			return false;
-		}
-		else if (foldersOnly && !node.isFolder())
-		{
-			return false;
-		}
-		else if (customFilter != null && !customFilter.isNodeAllowed(node))
-		{
-			return false;
-		}
-		return true;
-	}
-	
+    public SiteNodeFilter(boolean foldersOnly, NodeFilter customFilter) {
+        this.foldersOnly = foldersOnly;
+        this.customFilter = customFilter;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface NodeFilter ---------------------
+
+    public boolean isNodeAllowed(BrixNode node) {
+        if (node == null) {
+            return false;
+        } else if (foldersOnly && !node.isFolder()) {
+            return false;
+        } else if (customFilter != null && !customFilter.isNodeAllowed(node)) {
+            return false;
+        }
+        return true;
+    }
 }

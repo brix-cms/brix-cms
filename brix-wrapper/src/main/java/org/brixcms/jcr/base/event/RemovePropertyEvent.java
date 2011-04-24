@@ -18,14 +18,13 @@ import javax.jcr.Node;
 
 /**
  * Event for node property being removed.
- * 
+ *
  * @author Matej Knopp
  */
-public class RemovePropertyEvent extends PropertyEvent
-{
+public class RemovePropertyEvent extends PropertyEvent {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	RemovePropertyEvent(Node node, String propertyName)
-	{
-		super(node, propertyName);
-	}	
+    RemovePropertyEvent(Node node, String propertyName) {
+        super(node, propertyName);
+    }
 }

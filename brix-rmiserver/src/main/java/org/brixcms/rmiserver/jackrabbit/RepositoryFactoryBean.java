@@ -32,8 +32,9 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class RepositoryFactoryBean implements FactoryBean, InitializingBean, DisposableBean
-{
+public class RepositoryFactoryBean implements FactoryBean, InitializingBean, DisposableBean {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory.getLogger(RepositoryFactoryBean.class);
 
     private RepositoryImpl repository;
@@ -41,32 +42,40 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
     private Authorizer authorizer;
     private Resource repositoryConfig;
 
-    @Required
-    public void setUserService(UserService userService)
-    {
-        authorizer = new Authorizer(userService);
-    }
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
-    public void setRepositoryHomeDir(String repositoryHomeDir)
-    {
-        this.repositoryHomeDir = repositoryHomeDir;
-    }
-
-    @Required
-    public void setRepositoryConfig(Resource repositoryConfig)
-    {
+    public void setRepositoryConfig(Resource repositoryConfig) {
         this.repositoryConfig = repositoryConfig;
     }
 
-    public Object getObject() throws Exception
-    {
-        if (repository == null)
-        {
-            synchronized (this)
-            {
-                if (repository == null)
-                {
+    @Required
+    public void setRepositoryHomeDir(String repositoryHomeDir) {
+        this.repositoryHomeDir = repositoryHomeDir;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface DisposableBean ---------------------
+
+
+    public void destroy() throws Exception {
+        if (repository != null) {
+            synchronized (this) {
+                if (repository != null) {
+                    destroyRepositoryInstance();
+                }
+            }
+        }
+    }
+
+// --------------------- Interface FactoryBean ---------------------
+
+    public Object getObject() throws Exception {
+        if (repository == null) {
+            synchronized (this) {
+                if (repository == null) {
                     createRepositoryInstance();
                 }
             }
@@ -74,106 +83,76 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
         return repository;
     }
 
-    public Class getObjectType()
-    {
+    public Class getObjectType() {
         return Repository.class;
     }
 
-    public boolean isSingleton()
-    {
+    public boolean isSingleton() {
         return true;
     }
 
-    private void createRepositoryInstance()
-    {
+// --------------------- Interface InitializingBean ---------------------
+
+
+    public void afterPropertiesSet() throws Exception {
+        // eagerly create repo
+        getObject();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    private void createRepositoryInstance() {
         logger.info("Initializing JackRabbit repository at {}", repositoryHomeDir);
 
         RepositoryConfig config = loadRepositoryConfig();
 
         // install config hack to allow custom LoginModule instances
-        ExtendedRepositoryConfig config2 = new ExtendedRepositoryConfig(config)
-        {
-
+        ExtendedRepositoryConfig config2 = new ExtendedRepositoryConfig(config) {
             @Override
-            protected LoginModule newLoginModule()
-            {
+            protected LoginModule newLoginModule() {
                 return new ServerLoginModule(authorizer);
             }
-
         };
 
         // create repository
-        try
-        {
+        try {
             repository = RepositoryImpl.create(config2);
-        }
-        catch (RepositoryException e)
-        {
+        } catch (RepositoryException e) {
             throw new RuntimeException("Could not create JackRabbit repository", e);
         }
     }
 
-    private RepositoryConfig loadRepositoryConfig()
-    {
+    private RepositoryConfig loadRepositoryConfig() {
         RepositoryConfig config = null;
         InputStream fis = null;
-        try
-        {
+        try {
             fis = repositoryConfig.getInputStream();
             config = RepositoryConfig.create(fis, repositoryHomeDir);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException("Could not configure JackRabbit repository", e);
-        }
-        finally
-        {
+        } finally {
             close(fis);
         }
         return config;
     }
 
-    private void destroyRepositoryInstance()
-    {
-        logger.info("Shutting down JackRabbit repository");
-        repository.shutdown();
-    }
-
-
-    public static final void close(Closeable c)
-    {
-        if (c != null)
-        {
-            try
-            {
+    public static final void close(Closeable c) {
+        if (c != null) {
+            try {
                 c.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 throw new RuntimeException("Could not close stream", e);
             }
         }
     }
 
-    public void afterPropertiesSet() throws Exception
-    {
-        // eagerly create repo
-        getObject();
+    private void destroyRepositoryInstance() {
+        logger.info("Shutting down JackRabbit repository");
+        repository.shutdown();
     }
 
-    public void destroy() throws Exception
-    {
-        if (repository != null)
-        {
-            synchronized (this)
-            {
-                if (repository != null)
-                {
-                    destroyRepositoryInstance();
-                }
-            }
-        }
+    @Required
+    public void setUserService(UserService userService) {
+        authorizer = new Authorizer(userService);
     }
-
-
 }

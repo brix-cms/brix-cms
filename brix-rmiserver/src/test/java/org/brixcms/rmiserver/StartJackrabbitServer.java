@@ -20,11 +20,10 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class StartJackrabbitServer
-{
+public class StartJackrabbitServer {
+// --------------------------- main() method ---------------------------
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         final int port = Integer.parseInt(System.getProperty("jetty.port", "10000"));
 
         Server server = new Server();
@@ -33,7 +32,7 @@ public class StartJackrabbitServer
         connector.setMaxIdleTime(1000 * 60 * 60);
         connector.setSoLingerTime(-1);
         connector.setPort(port);
-        server.setConnectors(new Connector[] { connector });
+        server.setConnectors(new Connector[]{connector});
 
         WebAppContext bb = new WebAppContext();
         bb.setServer(server);
@@ -49,17 +48,14 @@ public class StartJackrabbitServer
 
         server.addHandler(bb);
 
-        try
-        {
+        try {
             System.out.println(">>> STARTING EMBEDDED JETTY SERVER ON PORT: " + port +
                     ", PRESS ANY KEY TO STOP");
             server.start();
             System.in.read();
             server.stop();
             server.join();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(100);
         }

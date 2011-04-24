@@ -20,25 +20,22 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.tile.admin.TilesPanel;
 import org.brixcms.workspace.Workspace;
 
-public class GlobalTilesPanel extends AbstractGlobalPanel
-{
+public class GlobalTilesPanel extends AbstractGlobalPanel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public GlobalTilesPanel(String id, IModel<Workspace> workspaceModel)
-	{
-		super(id, workspaceModel);
-	}
+    public GlobalTilesPanel(String id, IModel<Workspace> workspaceModel) {
+        super(id, workspaceModel);
+    }
 
-	@Override
-	protected Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel)
-	{
-		return new TilesPanel(id, containerNodeModel) 
-		{
-			@Override
-			protected boolean filterFeedback()
-			{
-				return false;
-			}
-		};
-	}
+// -------------------------- OTHER METHODS --------------------------
 
+    @Override
+    protected Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel) {
+        return new TilesPanel(id, containerNodeModel) {
+            @Override
+            protected boolean filterFeedback() {
+                return false;
+            }
+        };
+    }
 }

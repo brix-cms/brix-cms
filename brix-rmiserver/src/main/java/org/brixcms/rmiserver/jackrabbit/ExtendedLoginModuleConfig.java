@@ -21,63 +21,58 @@ import org.apache.jackrabbit.core.config.LoginModuleConfig;
 import javax.security.auth.spi.LoginModule;
 import java.util.Properties;
 
-abstract class ExtendedLoginModuleConfig extends LoginModuleConfig
-{
+abstract class ExtendedLoginModuleConfig extends LoginModuleConfig {
+// ------------------------------ FIELDS ------------------------------
+
     private final LoginModuleConfig delegate;
 
-    public ExtendedLoginModuleConfig(LoginModuleConfig delegate)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ExtendedLoginModuleConfig(LoginModuleConfig delegate) {
         super(new BeanConfig("java.lang.String", new Properties()));
         this.delegate = delegate;
     }
 
-    protected abstract LoginModule newLoginModule();
+// ------------------------ CANONICAL METHODS ------------------------
 
-    @Override
-    public LoginModule getLoginModule() throws ConfigurationException
-    {
-        return newLoginModule();
-    }
-
-    public boolean equals(Object arg0)
-    {
+    public boolean equals(Object arg0) {
         return delegate.equals(arg0);
     }
 
-    public ClassLoader getClassLoader()
-    {
-        return delegate.getClassLoader();
-    }
-
-    public String getClassName()
-    {
-        return delegate.getClassName();
-    }
-
-    public Properties getParameters()
-    {
-        return delegate.getParameters();
-    }
-
-    public int hashCode()
-    {
+    public int hashCode() {
         return delegate.hashCode();
     }
 
-    public Object newInstance() throws ConfigurationException
-    {
-        return newLoginModule();
-    }
-
-    public void setClassLoader(ClassLoader classLoader)
-    {
-        delegate.setClassLoader(classLoader);
-    }
-
-    public String toString()
-    {
+    public String toString() {
         return delegate.toString();
     }
 
+// -------------------------- OTHER METHODS --------------------------
 
+    public ClassLoader getClassLoader() {
+        return delegate.getClassLoader();
+    }
+
+    public String getClassName() {
+        return delegate.getClassName();
+    }
+
+    @Override
+    public LoginModule getLoginModule() throws ConfigurationException {
+        return newLoginModule();
+    }
+
+    protected abstract LoginModule newLoginModule();
+
+    public Properties getParameters() {
+        return delegate.getParameters();
+    }
+
+    public Object newInstance() throws ConfigurationException {
+        return newLoginModule();
+    }
+
+    public void setClassLoader(ClassLoader classLoader) {
+        delegate.setClassLoader(classLoader);
+    }
 }

@@ -17,29 +17,28 @@ package org.brixcms.web.nodepage;
 import org.apache.wicket.model.IModel;
 
 /**
- * Stateless link component that allows {@link PageParametersAware} components to contribute to it's
- * URL. This link doesn't have a callback method, instead it allows user to override it's
- * {@link #contributeToPageParameters(BrixPageParameters)} method to postprocess the link's URL.
+ * Stateless link component that allows {@link PageParametersAware} components to contribute to it's URL. This link
+ * doesn't have a callback method, instead it allows user to override it's {@link #contributeToPageParameters(BrixPageParameters)}
+ * method to postprocess the link's URL.
  *
- * @todo it's unclear how this is semantically distinguished from {@link PageParametersCarryingLink}
- * 
  * @author Matej Knopp
+ * @todo it's unclear how this is semantically distinguished from {@link PageParametersCarryingLink}
  */
-public class PageParametersLink extends AbstractPageParametersLink
-{
-    public PageParametersLink(String id)
-    {
+public class PageParametersLink extends AbstractPageParametersLink {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PageParametersLink(String id) {
         super(id);
     }
 
-    public PageParametersLink(String id, IModel< ? > model)
-    {
+    public PageParametersLink(String id, IModel<?> model) {
         super(id, model);
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    protected String constructUrl(BrixPageParameters params)
-    {
+    protected String constructUrl(BrixPageParameters params) {
         return params.toCallbackURL();
     }
 }

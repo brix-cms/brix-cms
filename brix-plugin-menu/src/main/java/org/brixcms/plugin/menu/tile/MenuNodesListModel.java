@@ -13,7 +13,7 @@
  */
 
 /**
- * 
+ *
  */
 package org.brixcms.plugin.menu.tile;
 
@@ -26,30 +26,36 @@ import java.util.List;
 
 /**
  * A model that creates a list of all available menu nodes
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public final class MenuNodesListModel extends LoadableDetachableModel<List<BrixNode>>
-{
-	private final IModel<BrixNode> workspaceNodeModel;
+public final class MenuNodesListModel extends LoadableDetachableModel<List<BrixNode>> {
+// ------------------------------ FIELDS ------------------------------
 
-	MenuNodesListModel(IModel<BrixNode> workspaceNodeModel)
-	{
-		this.workspaceNodeModel = workspaceNodeModel;
-	}
+    private final IModel<BrixNode> workspaceNodeModel;
 
-	@Override
-	protected List<BrixNode> load()
-	{
-		return MenuPlugin.get().getMenuNodes(
-				workspaceNodeModel.getObject().getSession().getWorkspace().getName());
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	public void detach()
-	{
-		super.detach();
-		workspaceNodeModel.detach();
-	}
+    MenuNodesListModel(IModel<BrixNode> workspaceNodeModel) {
+        this.workspaceNodeModel = workspaceNodeModel;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IDetachable ---------------------
+
+    @Override
+    public void detach() {
+        super.detach();
+        workspaceNodeModel.detach();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected List<BrixNode> load() {
+        return MenuPlugin.get().getMenuNodes(
+                workspaceNodeModel.getObject().getSession().getWorkspace().getName());
+    }
 }

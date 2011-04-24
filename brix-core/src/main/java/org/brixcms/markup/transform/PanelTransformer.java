@@ -25,70 +25,69 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Transformer that makes the markup usable with wicket panel. All &lt;head&gt;
- * sections are grouped in one &lt;wicket:head&gt; section and the rest of
- * markup (except for the &lt;html&gt;tag if present) is grouped in a
+ * Transformer that makes the markup usable with wicket panel. All &lt;head&gt; sections are grouped in one
+ * &lt;wicket:head&gt; section and the rest of markup (except for the &lt;html&gt;tag if present) is grouped in a
  * &lt;wicket:panel&gt; section.
- * 
+ * <p/>
  * Also removes all &lt;body&gt; and &lt;wicket:panel&gt; tags in markup.
- * 
+ *
  * @author Matej Knopp
  */
-public class PanelTransformer extends HeadTransformer
-{
-	public PanelTransformer(MarkupSource delegate)
-	{
-		super(delegate);
-	}
+public class PanelTransformer extends HeadTransformer {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	private boolean shouldFilter(String tagName)
-	{
-		return "html".equals(tagName) || "body".equals(tagName) || "wicket:panel".equals(tagName);
-	}
+    public PanelTransformer(MarkupSource delegate) {
+        super(delegate);
+    }
 
-	private List<Item> filter(List<Item> items)
-	{
-		List<Item> result = new ArrayList<Item>();
+// ------------------------ INTERFACE METHODS ------------------------
 
-		for (Item i : items)
-		{
-			if (i instanceof Tag)
-			{
-				Tag tag = (Tag) i;
-				if (shouldFilter(tag.getName()))
-				{
-					continue;
-				}
-			}
-			result.add(i);
-		}
 
-		return result;
-	}
+// --------------------- Interface MarkupSource ---------------------
 
-	@Override
-	protected List<Item> transform(List<Item> originalItems)
-	{
-		List<Item> headContent = extractHeadContent(originalItems);
-		List<Item> body = filter(transform(originalItems, null));
+    @Override
+    public String getDoctype() {
+        return null;
+    }
 
-		Map<String, String> emptyMap = Collections.emptyMap();
-		List<Item> result = new ArrayList<Item>();
+// -------------------------- OTHER METHODS --------------------------
 
-		result.add(new SimpleTag("wicket:head", Tag.Type.OPEN, emptyMap));
-		result.addAll(headContent);
-		result.add(new SimpleTag("wicket:head", Tag.Type.CLOSE, emptyMap));
+    @Override
+    protected List<Item> transform(List<Item> originalItems) {
+        List<Item> headContent = extractHeadContent(originalItems);
+        List<Item> body = filter(transform(originalItems, null));
 
-		result.add(new SimpleTag("wicket:panel", Tag.Type.OPEN, emptyMap));
-		result.addAll(body);
-		result.add(new SimpleTag("wicket:panel", Tag.Type.CLOSE, emptyMap));
+        Map<String, String> emptyMap = Collections.emptyMap();
+        List<Item> result = new ArrayList<Item>();
 
-		return result;
-	}
-	
-	@Override
-	public String getDoctype()
-	{
-		return null;
-	}
+        result.add(new SimpleTag("wicket:head", Tag.Type.OPEN, emptyMap));
+        result.addAll(headContent);
+        result.add(new SimpleTag("wicket:head", Tag.Type.CLOSE, emptyMap));
+
+        result.add(new SimpleTag("wicket:panel", Tag.Type.OPEN, emptyMap));
+        result.addAll(body);
+        result.add(new SimpleTag("wicket:panel", Tag.Type.CLOSE, emptyMap));
+
+        return result;
+    }
+
+    private List<Item> filter(List<Item> items) {
+        List<Item> result = new ArrayList<Item>();
+
+        for (Item i : items) {
+            if (i instanceof Tag) {
+                Tag tag = (Tag) i;
+                if (shouldFilter(tag.getName())) {
+                    continue;
+                }
+            }
+            result.add(i);
+        }
+
+        return result;
+    }
+
+    private boolean shouldFilter(String tagName) {
+        return "html".equals(tagName) || "body".equals(tagName) || "wicket:panel".equals(tagName);
+    }
 }

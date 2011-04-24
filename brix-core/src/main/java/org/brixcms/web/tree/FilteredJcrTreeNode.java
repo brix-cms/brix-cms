@@ -22,108 +22,102 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FilteredJcrTreeNode implements JcrTreeNode
-{
-	private final JcrTreeNode delegate;
-	private final NodeFilter visibilityFilter;
-	
-	public FilteredJcrTreeNode(final JcrTreeNode delegate, final NodeFilter visibilityFilter)
-	{
-		this.delegate = delegate;
-		this.visibilityFilter = visibilityFilter;
-		
-		if (delegate == null)
-		{
-			throw new IllegalArgumentException("Argument 'delegate' may not be null.");
-		}
-	}
+public class FilteredJcrTreeNode implements JcrTreeNode {
+// ------------------------------ FIELDS ------------------------------
 
-	private List<JcrTreeNode> children = null;
-	
-	private void buildChildren()
-	{
-		final List<? extends JcrTreeNode> original = delegate.getChildren();
-		if (original == null)
-		{
-			children = Collections.emptyList();
-		}
-		else if (visibilityFilter != null)
-		{
-			children = new ArrayList<JcrTreeNode>(original.size());
-			for (JcrTreeNode node : original)
-			{
-				BrixNode n = node.getNodeModel() != null ? node.getNodeModel().getObject() : null;
-				if (visibilityFilter.isNodeAllowed(n))
-				{
-					children.add(new FilteredJcrTreeNode(node, visibilityFilter));
-				}
-			}
-		}	
-		else
-		{
-			children = new ArrayList<JcrTreeNode>(original);
-		}
-	};
-	
-	public List<? extends JcrTreeNode> getChildren()	
-	{
-		if (children == null)
-		{
-			buildChildren();
-		}
-		return children;
-	}
+    private final JcrTreeNode delegate;
+    private final NodeFilter visibilityFilter;
 
-	public IModel<BrixNode> getNodeModel()
-	{
-		return delegate.getNodeModel();	
-	}
+    private List<JcrTreeNode> children = null;
 
-	public boolean isLeaf()
-	{
-		return delegate.isLeaf();
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	public int hashCode()
-	{
-		return delegate.hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		else if (obj instanceof JcrTreeNode == false)
-		{
-			return false;			
-		}
-		
-		JcrTreeNode that;
-		if (obj instanceof FilteredJcrTreeNode)
-		{
-			that = ((FilteredJcrTreeNode)obj).delegate;
-		}
-		else
-		{
-			that = (JcrTreeNode)obj;
-		}
-		return Objects.equal(delegate, that);
-	}
-	
-	@Override
-	public String toString()
-	{
-		return delegate.toString();
-	}
-	
-	public void detach()
-	{
-		children = null;
-		delegate.detach();
-	}
+    public FilteredJcrTreeNode(final JcrTreeNode delegate, final NodeFilter visibilityFilter) {
+        this.delegate = delegate;
+        this.visibilityFilter = visibilityFilter;
 
+        if (delegate == null) {
+            throw new IllegalArgumentException("Argument 'delegate' may not be null.");
+        }
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+    ;
+
+    public List<? extends JcrTreeNode> getChildren() {
+        if (children == null) {
+            buildChildren();
+        }
+        return children;
+    }
+
+    private void buildChildren() {
+        final List<? extends JcrTreeNode> original = delegate.getChildren();
+        if (original == null) {
+            children = Collections.emptyList();
+        } else if (visibilityFilter != null) {
+            children = new ArrayList<JcrTreeNode>(original.size());
+            for (JcrTreeNode node : original) {
+                BrixNode n = node.getNodeModel() != null ? node.getNodeModel().getObject() : null;
+                if (visibilityFilter.isNodeAllowed(n)) {
+                    children.add(new FilteredJcrTreeNode(node, visibilityFilter));
+                }
+            }
+        } else {
+            children = new ArrayList<JcrTreeNode>(original);
+        }
+    }
+
+// ------------------------ CANONICAL METHODS ------------------------
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj instanceof JcrTreeNode == false) {
+            return false;
+        }
+
+        JcrTreeNode that;
+        if (obj instanceof FilteredJcrTreeNode) {
+            that = ((FilteredJcrTreeNode) obj).delegate;
+        } else {
+            that = (JcrTreeNode) obj;
+        }
+        return Objects.equal(delegate, that);
+    }
+
+    @Override
+    public int hashCode() {
+        return delegate.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return delegate.toString();
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IDetachable ---------------------
+
+
+    public void detach() {
+        children = null;
+        delegate.detach();
+    }
+
+// --------------------- Interface JcrTreeNode ---------------------
+
+    public IModel<BrixNode> getNodeModel() {
+        return delegate.getNodeModel();
+    }
+
+// --------------------- Interface TreeNode ---------------------
+
+
+    public boolean isLeaf() {
+        return delegate.isLeaf();
+    }
 }

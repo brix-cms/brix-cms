@@ -32,242 +32,214 @@ import org.brixcms.web.tab.AbstractWorkspaceTab;
 import org.brixcms.web.tab.IBrixTab;
 import org.brixcms.workspace.Workspace;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-public class PrototypePlugin implements Plugin
-{
+public class PrototypePlugin implements Plugin {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final String ID = PrototypePlugin.class.getName();
+    private static final String ID = PrototypePlugin.class.getName();
 
-	private final Brix brix;
+    private static final String WORKSPACE_TYPE = "brix:prototype";
 
-	public PrototypePlugin(Brix brix)
-	{
-		this.brix = brix;
-	}
+    private static final String WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME = "brix:prototype-name";
 
-	public String getId()
-	{
-		return ID;
-	}
+    private final Brix brix;
 
-	public static PrototypePlugin get(Brix brix)
-	{
-		return (PrototypePlugin) brix.getPlugin(ID);
-	}
+// -------------------------- STATIC METHODS --------------------------
 
-	public static PrototypePlugin get()
-	{
-		return get(Brix.get());
-	}
+    public static PrototypePlugin get() {
+        return get(Brix.get());
+    }
 
-	private static final String WORKSPACE_TYPE = "brix:prototype";
+    public static PrototypePlugin get(Brix brix) {
+        return (PrototypePlugin) brix.getPlugin(ID);
+    }
 
-	private static final String WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME = "brix:prototype-name";
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public boolean isPrototypeWorkspace(Workspace workspace)
-	{
-		return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
-	}
+    public PrototypePlugin(Brix brix) {
+        this.brix = brix;
+    }
 
-	public void setPrototypeName(Workspace workspace, String name)
-	{
-		workspace.setAttribute(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME, name);
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public String getPrototypeName(Workspace workspace)
-	{
-		return workspace.getAttribute(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME);
-	}
 
-	public List<Workspace> getPrototypes()
-	{
-		Map<String, String> attributes = new HashMap<String, String>();
-		attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-		return brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
-	}
+// --------------------- Interface Plugin ---------------------
 
-	public boolean prototypeExists(String protypeName)
-	{
-		Map<String, String> attributes = new HashMap<String, String>();
-		attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-		attributes.put(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME, protypeName);
-		return !brix.getWorkspaceManager().getWorkspacesFiltered(attributes).isEmpty();
-	}
+    public String getId() {
+        return ID;
+    }
 
-	public void createPrototype(Workspace originalWorkspace, String prototypeName)
-	{
-		Workspace workspace = brix.getWorkspaceManager().createWorkspace();
-		workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-		setPrototypeName(workspace, prototypeName);
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
+        return "Prototype " + getPrototypeName(workspace);
+    }
 
-		JcrSession originalSession = brix.getCurrentSession(originalWorkspace.getId());
-		JcrSession destSession = brix.getCurrentSession(workspace.getId());
-		brix.clone(originalSession, destSession);
-	}
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
+        if (isFrontend) {
+            Map<String, String> attributes = new HashMap<String, String>();
+            attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+            return brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
+        } else {
+            return null;
+        }
+    }
 
-	public void createPrototype(List<JcrNode> nodes, String prototypeName)
-	{
-		if (nodes.isEmpty())
-		{
-			throw new IllegalStateException("Node list can not be empty.");
-		}
-		Workspace workspace = brix.getWorkspaceManager().createWorkspace();
-		workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-		setPrototypeName(workspace, prototypeName);
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
 
-		JcrSession destSession = brix.getCurrentSession(workspace.getId());
+    }
 
-		JcrUtil.cloneNodes(nodes, destSession.getRootNode());
-		destSession.save();
-	}
+    public boolean isPluginWorkspace(Workspace workspace) {
+        return isPrototypeWorkspace(workspace);
+    }
 
-	public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)
-	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new ResourceModel("prototypes", "Prototypes"),
-                workspaceModel) };
-		return Arrays.asList(tabs);
-	}
+    public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel) {
+        IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("prototypes", "Prototypes"),
+                workspaceModel)};
+        return Arrays.asList(tabs);
+    }
 
-	static class Tab extends AbstractWorkspaceTab
-	{
-		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
-		{
-			super(title, workspaceModel, 50);
-		}
+// -------------------------- OTHER METHODS --------------------------
 
-		@Override
-		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
-		{
-			return new ManagePrototypesPanel(panelId, workspaceModel);
-		}
-	};
+    public void createPrototype(Workspace originalWorkspace, String prototypeName) {
+        Workspace workspace = brix.getWorkspaceManager().createWorkspace();
+        workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        setPrototypeName(workspace, prototypeName);
 
-	private String getCommonParentPath(List<JcrNode> nodes)
-	{
-		Path current = null;
-		String sitePath = SitePlugin.get().getSiteRootPath();
-		for (JcrNode node : nodes)
-		{
-			if (node.getPath().startsWith(sitePath) && node instanceof GlobalContainerNode == false)
-			{
-				if (current == null)
-				{
-					current = new Path(node.getPath()).parent();
-				}
-				else
-				{
-					Path another = new Path(node.getPath()).parent();
+        JcrSession originalSession = brix.getCurrentSession(originalWorkspace.getId());
+        JcrSession destSession = brix.getCurrentSession(workspace.getId());
+        brix.clone(originalSession, destSession);
+    }
 
-					Path common = Path.ROOT;
+    public void setPrototypeName(Workspace workspace, String name) {
+        workspace.setAttribute(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME, name);
+    }
 
-					Iterator<String> i1 = current.iterator();
-					Iterator<String> i2 = another.iterator();
-					while (i1.hasNext() && i2.hasNext())
-					{
-						String s1 = i1.next();
-						String s2 = i2.next();
-						if (Objects.equal(s1, s2))
-						{
-							common = common.append(new Path(s1));
-						}
-						else
-						{
-							break;
-						}
-					}
+    public void createPrototype(List<JcrNode> nodes, String prototypeName) {
+        if (nodes.isEmpty()) {
+            throw new IllegalStateException("Node list can not be empty.");
+        }
+        Workspace workspace = brix.getWorkspaceManager().createWorkspace();
+        workspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        setPrototypeName(workspace, prototypeName);
 
-					current = common;
-				}
-			}
-		}
+        JcrSession destSession = brix.getCurrentSession(workspace.getId());
 
-		if (current == null)
-		{
-			current = Path.ROOT;
-		}
+        JcrUtil.cloneNodes(nodes, destSession.getRootNode());
+        destSession.save();
+    }
 
-		return current.toString();
-	}
+    public String getPrototypeName(Workspace workspace) {
+        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME);
+    }
 
-	public void restoreNodes(List<JcrNode> nodes, final JcrNode targetRootNode)
-	{
-		if (nodes.isEmpty())
-		{
-			throw new IllegalStateException("List 'nodes' must contain at least one node.");
-		}
+    public List<Workspace> getPrototypes() {
+        Map<String, String> attributes = new HashMap<String, String>();
+        attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        return brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
+    }
 
-		ParentLimiter limiter = null;
+    public boolean isPrototypeWorkspace(Workspace workspace) {
+        return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
+    }
 
-		// targetRootNode is only applicable for regular Site nodes (not even
-		// global container)
+    public boolean prototypeExists(String protypeName) {
+        Map<String, String> attributes = new HashMap<String, String>();
+        attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        attributes.put(WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME, protypeName);
+        return !brix.getWorkspaceManager().getWorkspacesFiltered(attributes).isEmpty();
+    }
 
-		final String siteRoot = SitePlugin.get().getSiteRootPath();
+    public void restoreNodes(List<JcrNode> nodes, final JcrNode targetRootNode) {
+        if (nodes.isEmpty()) {
+            throw new IllegalStateException("List 'nodes' must contain at least one node.");
+        }
 
-		if (targetRootNode.getDepth() > 0)
-		{
-			final String commonParent = getCommonParentPath(nodes);
-			limiter = new ParentLimiter()
-			{
-				public boolean isFinalParent(JcrNode node, JcrNode parent)
-				{					
-					if (node.getPath().startsWith(siteRoot) && node instanceof GlobalContainerNode == false)
-					{
-						return parent.getPath().equals(commonParent);
-					}
-					else
-					{
-						return parent.getDepth() == 0;
-					}
-				}
-			};
-		}
+        ParentLimiter limiter = null;
 
-		TargetRootNodeProvider provider = new TargetRootNodeProvider()
-		{
-			public JcrNode getTargetRootNode(JcrNode node)
-			{
-				if (node.getPath().startsWith(siteRoot) && node instanceof GlobalContainerNode == false)
-				{
-					return targetRootNode;
-				}
-				else
-				{
-					return targetRootNode.getSession().getRootNode();
-				}
-			}
-		};
+        // targetRootNode is only applicable for regular Site nodes (not even
+        // global container)
 
-		JcrUtil.cloneNodes(nodes, provider, limiter);
-		targetRootNode.getSession().save();
-	}
+        final String siteRoot = SitePlugin.get().getSiteRootPath();
 
-	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
-	{
+        if (targetRootNode.getDepth() > 0) {
+            final String commonParent = getCommonParentPath(nodes);
+            limiter = new ParentLimiter() {
+                public boolean isFinalParent(JcrNode node, JcrNode parent) {
+                    if (node.getPath().startsWith(siteRoot) && node instanceof GlobalContainerNode == false) {
+                        return parent.getPath().equals(commonParent);
+                    } else {
+                        return parent.getDepth() == 0;
+                    }
+                }
+            };
+        }
 
-	}
+        TargetRootNodeProvider provider = new TargetRootNodeProvider() {
+            public JcrNode getTargetRootNode(JcrNode node) {
+                if (node.getPath().startsWith(siteRoot) && node instanceof GlobalContainerNode == false) {
+                    return targetRootNode;
+                } else {
+                    return targetRootNode.getSession().getRootNode();
+                }
+            }
+        };
 
-	public String getUserVisibleName(Workspace workspace, boolean isFrontend)
-	{
-		return "Prototype " + getPrototypeName(workspace);
-	}
+        JcrUtil.cloneNodes(nodes, provider, limiter);
+        targetRootNode.getSession().save();
+    }
 
-	public boolean isPluginWorkspace(Workspace workspace)
-	{
-		return isPrototypeWorkspace(workspace);
-	}
+    ;
 
-	public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
-	{
-		if (isFrontend)
-		{
-			Map<String, String> attributes = new HashMap<String, String>();
-			attributes.put(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-			return brix.getWorkspaceManager().getWorkspacesFiltered(attributes);
-		}
-		else
-		{
-			return null;
-		}
-	}
+    private String getCommonParentPath(List<JcrNode> nodes) {
+        Path current = null;
+        String sitePath = SitePlugin.get().getSiteRootPath();
+        for (JcrNode node : nodes) {
+            if (node.getPath().startsWith(sitePath) && node instanceof GlobalContainerNode == false) {
+                if (current == null) {
+                    current = new Path(node.getPath()).parent();
+                } else {
+                    Path another = new Path(node.getPath()).parent();
+
+                    Path common = Path.ROOT;
+
+                    Iterator<String> i1 = current.iterator();
+                    Iterator<String> i2 = another.iterator();
+                    while (i1.hasNext() && i2.hasNext()) {
+                        String s1 = i1.next();
+                        String s2 = i2.next();
+                        if (Objects.equal(s1, s2)) {
+                            common = common.append(new Path(s1));
+                        } else {
+                            break;
+                        }
+                    }
+
+                    current = common;
+                }
+            }
+        }
+
+        if (current == null) {
+            current = Path.ROOT;
+        }
+
+        return current.toString();
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    static class Tab extends AbstractWorkspaceTab {
+        public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {
+            super(title, workspaceModel, 50);
+        }
+
+        @Override
+        public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
+            return new ManagePrototypesPanel(panelId, workspaceModel);
+        }
+    }
 }

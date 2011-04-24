@@ -16,26 +16,21 @@ package org.brixcms.plugin.site.page.exception;
 
 import org.brixcms.exception.BrixException;
 
-public class MarkupParseException extends BrixException
-{
+public class MarkupParseException extends BrixException {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public MarkupParseException()
-    {
+    public MarkupParseException() {
     }
 
-    public MarkupParseException(String message)
-    {
+    public MarkupParseException(String message) {
         super(message);
     }
 
-    public MarkupParseException(Throwable cause)
-    {
+    public MarkupParseException(Throwable cause) {
         super(cause);
     }
 
-    public MarkupParseException(String message, Throwable cause)
-    {
+    public MarkupParseException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

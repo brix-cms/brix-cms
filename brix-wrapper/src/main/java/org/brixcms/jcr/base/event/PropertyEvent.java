@@ -20,54 +20,53 @@ import javax.jcr.RepositoryException;
 
 /**
  * Base event for node property.
- * 
+ *
  * @author Matej Knopp
  */
-abstract class PropertyEvent extends NodeEvent
-{
-	private final String propertyName;
+abstract class PropertyEvent extends NodeEvent {
+// ------------------------------ FIELDS ------------------------------
 
-	PropertyEvent(Property property) throws RepositoryException
-	{
-		super(property.getParent());
-		this.propertyName = property.getName();
-	}
+    private final String propertyName;
 
-	public PropertyEvent(Node node, String propertyName)
-	{
-		super(node);
-		this.propertyName = propertyName;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public String getPropertyName()
-	{
-		return propertyName;
-	}
+    PropertyEvent(Property property) throws RepositoryException {
+        super(property.getParent());
+        this.propertyName = property.getName();
+    }
 
-	@Override
-	public Node getNode()
-	{
-		return super.getNode();
-	}
-	
-	@Override
-	boolean isAffected(String path) throws RepositoryException
-	{
-		String currentPath = getNode().getPath() + "/" + getPropertyName();
-		return currentPath.startsWith(path);			
-	}
-	
-	@Override
-	Event onNewEvent(Event event, QueueCallback callback) throws RepositoryException
-	{
-		if (event instanceof PropertyEvent)
-		{
-			PropertyEvent e = (PropertyEvent) event;
-			if (e.getNode().getPath().equals(getNode().getPath()) && e.getPropertyName().equals(getPropertyName()))
-			{
-				return null;
-			}
-		}
-		return super.onNewEvent(event, callback);
-	}
+    public PropertyEvent(Node node, String propertyName) {
+        super(node);
+        this.propertyName = propertyName;
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public Node getNode() {
+        return super.getNode();
+    }
+
+    @Override
+    boolean isAffected(String path) throws RepositoryException {
+        String currentPath = getNode().getPath() + "/" + getPropertyName();
+        return currentPath.startsWith(path);
+    }
+
+    @Override
+    Event onNewEvent(Event event, QueueCallback callback) throws RepositoryException {
+        if (event instanceof PropertyEvent) {
+            PropertyEvent e = (PropertyEvent) event;
+            if (e.getNode().getPath().equals(getNode().getPath()) && e.getPropertyName().equals(getPropertyName())) {
+                return null;
+            }
+        }
+        return super.onNewEvent(event, callback);
+    }
 }

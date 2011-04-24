@@ -17,24 +17,28 @@ package org.brixcms.auth;
 import org.brixcms.workspace.Workspace;
 
 
-public abstract class AbstractWorkspaceAction extends AbstractAction
-{    
+public abstract class AbstractWorkspaceAction extends AbstractAction {
+// ------------------------------ FIELDS ------------------------------
+
     private final Workspace workspace;
 
-    public AbstractWorkspaceAction(Context context, Workspace workspace)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public AbstractWorkspaceAction(Context context, Workspace workspace) {
         super(context);
         this.workspace = workspace;
     }
 
-    public Workspace getWorkspace()
-    {
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public Workspace getWorkspace() {
         return workspace;
     }
 
+// ------------------------ CANONICAL METHODS ------------------------
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "AbstractWorkspaceAction{" + "workspace=" + workspace + "} " + super.toString();
     }
 }

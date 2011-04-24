@@ -21,48 +21,50 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
-public class WorkspaceManagerFactoryBean extends AbstractFactoryBean
-{
+public class WorkspaceManagerFactoryBean extends AbstractFactoryBean {
+// ------------------------------ FIELDS ------------------------------
+
     private RepositoryImpl repository;
     private String login;
     private String password;
 
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
-    public void setRepository(RepositoryImpl repository)
-    {
-        this.repository = repository;
-    }
-
-    @Required
-    public void setLogin(String login)
-    {
+    public void setLogin(String login) {
         this.login = login;
     }
 
     @Required
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
+    @Required
+    public void setRepository(RepositoryImpl repository) {
+        this.repository = repository;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface FactoryBean ---------------------
+
     @Override
-    protected Object createInstance() throws Exception
-    {
+    public Class getObjectType() {
+        return JackrabbitWorkspaceManagerImpl.class;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected Object createInstance() throws Exception {
         Credentials simple = new SimpleCredentials(login, password.toCharArray());
 
         JackrabbitWorkspaceManagerImpl manager = new JackrabbitWorkspaceManagerImpl(repository,
-            simple);
+                simple);
         manager.initialize();
 
         return manager;
     }
-
-    @Override
-    public Class getObjectType()
-    {
-        return JackrabbitWorkspaceManagerImpl.class;
-    }
-
-
 }

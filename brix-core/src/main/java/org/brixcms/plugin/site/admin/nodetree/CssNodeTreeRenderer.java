@@ -19,25 +19,27 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 
 /**
  * Renderer for css nodes
- * 
+ *
  * @author Jeremy Thomerson
  */
-public class CssNodeTreeRenderer extends AbstractMimeTypeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class CssNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final ResourceReference RESOURCE = new ResourceReference(
-			PageNodeTreeRenderer.class, "resources/gnome-mime-text-css.png");
+    private static final long serialVersionUID = 1L;
 
-	public CssNodeTreeRenderer()
-	{
-		super(new String[] { "text/css" });
-	}
+    private static final ResourceReference RESOURCE = new ResourceReference(
+            PageNodeTreeRenderer.class, "resources/gnome-mime-text-css.png");
 
-	@Override
-	protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-	{
-		return RESOURCE;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
+    public CssNodeTreeRenderer() {
+        super(new String[]{"text/css"});
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+        return RESOURCE;
+    }
 }

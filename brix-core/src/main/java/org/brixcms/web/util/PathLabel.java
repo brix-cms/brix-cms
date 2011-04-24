@@ -26,75 +26,73 @@ import org.brixcms.Path;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericWebMarkupContainer;
 
-public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> implements ILinkListener
-{
+public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> implements ILinkListener {
+// ------------------------------ FIELDS ------------------------------
 
     private final String rootPath;
 
-    public PathLabel(String id, IModel<BrixNode> model, String rootPath)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PathLabel(String id, IModel<BrixNode> model, String rootPath) {
         super(id, model);
         this.rootPath = rootPath;
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface ILinkListener ---------------------
+
+    public final void onLinkClicked() {
+        String path = getRequest().getParameter("path");
+        if (path == null) {
+            path = getRequestCycle().getPageParameters().getString("path");
+        }
+        path = WicketURLDecoder.QUERY_INSTANCE.decode(path);
+        onPathClicked(new Path(path));
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
-    {
-    	PrependingStringBuffer b = new PrependingStringBuffer();
-    	BrixNode current = getModelObject();
-    	
-    	while(true)
-    	{
-	    	StringBuilder builder = new StringBuilder();
-	    	writePath(current, builder, current.equals(getModelObject()));
-	    	if (b.length() > 0)
-	    	{
-	    		b.prepend("&nbsp;/&nbsp;");	    		
-	    	}
-	    	b.prepend(builder.toString());
-	    	if (current.getDepth() == 0 || current.getPath().equals(rootPath))
-	    	{
-	    		break;
-	    	}
-	    	current = (BrixNode) current.getParent();
-    	}
-    	
+    protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+        PrependingStringBuffer b = new PrependingStringBuffer();
+        BrixNode current = getModelObject();
+
+        while (true) {
+            StringBuilder builder = new StringBuilder();
+            writePath(current, builder, current.equals(getModelObject()));
+            if (b.length() > 0) {
+                b.prepend("&nbsp;/&nbsp;");
+            }
+            b.prepend(builder.toString());
+            if (current.getDepth() == 0 || current.getPath().equals(rootPath)) {
+                break;
+            }
+            current = (BrixNode) current.getParent();
+        }
+
         final Response r = getResponse();
         r.write(b.toString());
     }
 
-    private void writePath(BrixNode node, StringBuilder builder, boolean last)
-    {
+    private void writePath(BrixNode node, StringBuilder builder, boolean last) {
         builder.append("<a href=\"");
         builder.append(createCallbackUrl(node.getPath()));
         builder.append("\"><span");
-        if (last)
-        {
-        	builder.append(" class=\"brix-node-path-last\"");
+        if (last) {
+            builder.append(" class=\"brix-node-path-last\"");
         }
-        builder.append(">");        
+        builder.append(">");
         builder.append(node.getUserVisibleName());
         builder.append("</span></a>");
     }
 
-    private CharSequence createCallbackUrl(String subpath)
-    {
+    private CharSequence createCallbackUrl(String subpath) {
         ValueMap params = new ValueMap();
         params.add("path", subpath);
         return getRequestCycle().urlFor(this, ILinkListener.INTERFACE, params);
     }
 
-    public final void onLinkClicked()
-    {
-        String path = getRequest().getParameter("path");
-        if (path == null)
-        {
-            path = getRequestCycle().getPageParameters().getString("path");
-        }
-        path = WicketURLDecoder.QUERY_INSTANCE.decode(path);
-        onPathClicked(new Path(path));
-
-    }    
-
-    protected abstract void onPathClicked(Path path);    
+    protected abstract void onPathClicked(Path path);
 }

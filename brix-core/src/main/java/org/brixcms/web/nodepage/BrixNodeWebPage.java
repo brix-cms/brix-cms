@@ -22,83 +22,76 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.generic.IGenericComponent;
 
-public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNode>
-{
+public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-    public BrixNodeWebPage(IModel<BrixNode> nodeModel)
-    {
+    private BrixPageParameters pageParameters;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public BrixNodeWebPage(IModel<BrixNode> nodeModel) {
         super(nodeModel);
     }
 
-    public BrixNodeWebPage(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters)
-    {
+    public BrixNodeWebPage(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters) {
         super(nodeModel);
         this.pageParameters = pageParameters;
     }
 
-    @Override
-    protected void onBeforeRender()
-    {
-        checkAccess();
-        super.onBeforeRender();
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IGenericComponent ---------------------
+
+    @SuppressWarnings("unchecked")
+    public IModel<BrixNode> getModel() {
+        return (IModel<BrixNode>) getDefaultModel();
     }
 
-    protected void checkAccess()
-    {
-        BrixNode node = getModelObject();
-        if (!SitePlugin.get().canViewNode(node, Context.PRESENTATION))
-        {
-            throw Brix.get().getForbiddenException();
-        }
+    public void setModel(IModel<BrixNode> model) {
+        setDefaultModel(model);
     }
 
-    public BrixPageParameters getBrixPageParameters()
-    {
-        if (pageParameters == null)
-        {
+    public void setModelObject(BrixNode object) {
+        setDefaultModelObject(object);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public BrixPageParameters getBrixPageParameters() {
+        if (pageParameters == null) {
             pageParameters = new BrixPageParameters();
         }
         return pageParameters;
     }
 
-    @SuppressWarnings("unchecked")
-    public IModel<BrixNode> getModel()
-    {
-        return (IModel<BrixNode>)getDefaultModel();
-    }
-
-    @Override
-    public boolean isBookmarkable()
-    {
-        return true;
-    }
-
-    private BrixPageParameters pageParameters;
-
-    public boolean initialRedirect()
-    {
-        return false;
-    }
-
-    public BrixNode getModelObject()
-    {
-        return (BrixNode)getDefaultModelObject();
-    }
-
-    public void setModel(IModel<BrixNode> model)
-    {
-        setDefaultModel(model);
-    }
-
-    public void setModelObject(BrixNode object)
-    {
-        setDefaultModelObject(object);
-    }
-
-    public BrixNode getPageNode()
-    {
+    public BrixNode getPageNode() {
         return getModelObject();
     }
 
+    public boolean initialRedirect() {
+        return false;
+    }
 
+    @Override
+    public boolean isBookmarkable() {
+        return true;
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        checkAccess();
+        super.onBeforeRender();
+    }
+
+    protected void checkAccess() {
+        BrixNode node = getModelObject();
+        if (!SitePlugin.get().canViewNode(node, Context.PRESENTATION)) {
+            throw Brix.get().getForbiddenException();
+        }
+    }
+
+    public BrixNode getModelObject() {
+        return (BrixNode) getDefaultModelObject();
+    }
 }

@@ -14,8 +14,12 @@
 
 package org.brixcms.auth;
 
-public interface Action
-{
+public interface Action {
+// -------------------------- OTHER METHODS --------------------------
+
+    public Context getContext();
+
+// -------------------------- ENUMERATIONS --------------------------
 
     public enum Context {
         ADMINISTRATION,
@@ -23,7 +27,4 @@ public interface Action
         WEBDAV
         /* TODO: Implement action checks for webdav */
     }
-
-    public Context getContext();
-
 }

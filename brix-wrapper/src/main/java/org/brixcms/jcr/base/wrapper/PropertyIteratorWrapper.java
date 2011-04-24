@@ -17,59 +17,59 @@ package org.brixcms.jcr.base.wrapper;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 
-class PropertyIteratorWrapper extends BaseWrapper<PropertyIterator> implements PropertyIterator
-{
+class PropertyIteratorWrapper extends BaseWrapper<PropertyIterator> implements PropertyIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-	private PropertyIteratorWrapper(PropertyIterator delegate, SessionWrapper session)
-	{
-		super(delegate, session);
-	}
+    public static PropertyIteratorWrapper wrap(PropertyIterator delegate, SessionWrapper session) {
+        if (delegate == null) {
+            return null;
+        } else {
+            return new PropertyIteratorWrapper(delegate, session);
+        }
+    }
 
-	public static PropertyIteratorWrapper wrap(PropertyIterator delegate, SessionWrapper session)
-	{
-		if (delegate == null)
-		{
-			return null;
-		}
-		else
-		{
-			return new PropertyIteratorWrapper(delegate, session);
-		}
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public Property nextProperty()
-	{
-		return PropertyWrapper.wrap(getDelegate().nextProperty(), getSessionWrapper());
-	}
+    private PropertyIteratorWrapper(PropertyIterator delegate, SessionWrapper session) {
+        super(delegate, session);
+    }
 
-	public long getPosition()
-	{
-		return getDelegate().getPosition();
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public long getSize()
-	{
-		return getDelegate().getSize();
-	}
 
-	public void skip(long skipNum)
-	{
-		getDelegate().skip(skipNum);
-	}
+// --------------------- Interface Iterator ---------------------
 
-	public boolean hasNext()
-	{
-		return getDelegate().hasNext();
-	}
 
-	public Object next()
-	{
-		return PropertyWrapper.wrap((Property) getDelegate().next(), getSessionWrapper());
-	}
+    public boolean hasNext() {
+        return getDelegate().hasNext();
+    }
 
-	public void remove()
-	{
-		getDelegate().remove();		
-	}
+    public Object next() {
+        return PropertyWrapper.wrap((Property) getDelegate().next(), getSessionWrapper());
+    }
 
+    public void remove() {
+        getDelegate().remove();
+    }
+
+// --------------------- Interface PropertyIterator ---------------------
+
+    public Property nextProperty() {
+        return PropertyWrapper.wrap(getDelegate().nextProperty(), getSessionWrapper());
+    }
+
+// --------------------- Interface RangeIterator ---------------------
+
+
+    public void skip(long skipNum) {
+        getDelegate().skip(skipNum);
+    }
+
+    public long getSize() {
+        return getDelegate().getSize();
+    }
+
+    public long getPosition() {
+        return getDelegate().getPosition();
+    }
 }

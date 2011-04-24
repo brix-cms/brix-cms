@@ -17,8 +17,33 @@ package org.brixcms.plugin.site.auth;
 import org.brixcms.auth.AbstractNodeAction;
 import org.brixcms.jcr.wrapper.BrixNode;
 
-public class SiteNodeAction extends AbstractNodeAction
-{
+public class SiteNodeAction extends AbstractNodeAction {
+// ------------------------------ FIELDS ------------------------------
+    ;
+    private final Type type;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public SiteNodeAction(Context context, Type type, BrixNode node) {
+        super(context, node);
+        this.type = type;
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public Type getType() {
+        return type;
+    }
+
+// ------------------------ CANONICAL METHODS ------------------------
+
+    @Override
+    public String toString() {
+        return "SiteNodeAction{" + "type=" + type + "} " + super.toString();
+    }
+
+// -------------------------- ENUMERATIONS --------------------------
+
     public enum Type {
         NODE_VIEW,
         NODE_VIEW_CHILDREN,
@@ -26,24 +51,5 @@ public class SiteNodeAction extends AbstractNodeAction
         NODE_EDIT,
         NODE_DELETE,
         NODE_RENAME,
-    };
-
-    private final Type type;
-
-    public SiteNodeAction(Context context, Type type, BrixNode node)
-    {
-        super(context, node);
-        this.type = type;
-    }
-
-    public Type getType()
-    {
-        return type;
-    }
-
-    @Override
-    public String toString()
-    {
-        return "SiteNodeAction{" + "type=" + type + "} " + super.toString();
     }
 }

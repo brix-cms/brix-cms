@@ -21,21 +21,23 @@ import java.util.Set;
 
 /**
  * Tests {@link LongEncoder}
- * 
+ *
  * @author igor
  */
 public class LongEncoderTest {
-	/**
-	 * Tests the default alphabet included with the encoder
-	 */
-	@Test
-	public void defaultAlphabet() {
-		Set<String> encoded = new HashSet<String>();
-		for (int i = -10000; i < 10000; i++) {
-			String enc = LongEncoder.encode(i);
-			Assert.assertFalse("uniqueness: " + i, encoded.contains(enc));
-			encoded.add(enc);
-			Assert.assertEquals("decoding: " + i, i, LongEncoder.decode(enc));
-		}
-	}
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * Tests the default alphabet included with the encoder
+     */
+    @Test
+    public void defaultAlphabet() {
+        Set<String> encoded = new HashSet<String>();
+        for (int i = -10000; i < 10000; i++) {
+            String enc = LongEncoder.encode(i);
+            Assert.assertFalse("uniqueness: " + i, encoded.contains(enc));
+            encoded.add(enc);
+            Assert.assertEquals("decoding: " + i, i, LongEncoder.decode(enc));
+        }
+    }
 }

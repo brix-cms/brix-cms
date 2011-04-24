@@ -30,123 +30,109 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WorkspaceSwitcher extends BrixGenericPanel<Workspace>
-{
+public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
+// ------------------------------ FIELDS ------------------------------
 
-	public WorkspaceSwitcher(String id, IModel<Workspace> model)
-	{
-		super(id, model);
+    private Map<String, String> workspaceNameCache;
 
-		IModel<List<? extends Workspace>> workspaceModel = new LoadableDetachableModel<List<? extends Workspace>>()
-		{
-			@Override
-			protected List<? extends Workspace> load()
-			{
-				return getWorkspaces();
-			}
-		};
-		DropDownChoice<Workspace> choice = new DropDownChoice<Workspace>("workspaces", model, workspaceModel,
-				new Renderer())
-		{
-			@Override
-			protected boolean wantOnSelectionChangedNotifications()
-			{
-				return true;
-			}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-			@Override
-			protected void onSelectionChanged(Workspace newSelection)
-			{
-				detach();
-				super.onSelectionChanged(newSelection);
-			}
-		};
-		choice.setNullValid(false);
-		add(choice);
-	}
+    public WorkspaceSwitcher(String id, IModel<Workspace> model) {
+        super(id, model);
 
-	private boolean isCurrentWorkspaceValid()
-	{
-		WorkspaceManager manager = getBrix().getWorkspaceManager();
-		Workspace workspace = getModelObject();
-		return workspace != null && manager.workspaceExists(workspace.getId());
-	}
+        IModel<List<? extends Workspace>> workspaceModel = new LoadableDetachableModel<List<? extends Workspace>>() {
+            @Override
+            protected List<? extends Workspace> load() {
+                return getWorkspaces();
+            }
+        };
+        DropDownChoice<Workspace> choice = new DropDownChoice<Workspace>("workspaces", model, workspaceModel,
+                new Renderer()) {
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
+            }
 
-	private Brix getBrix()
-	{
-		return Brix.get();
-	}
+            @Override
+            protected void onSelectionChanged(Workspace newSelection) {
+                detach();
+                super.onSelectionChanged(newSelection);
+            }
+        };
+        choice.setNullValid(false);
+        add(choice);
+    }
 
-	private Map<String, String> workspaceNameCache;
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	private class Renderer implements IChoiceRenderer<Workspace>
-	{
-		public Object getDisplayValue(Workspace object)
-		{
-			return getWorkspaceName(object);
-		}
+    private List<Workspace> getWorkspaces() {
+        Brix brix = getBrix();
+        List<Workspace> workspaces = new ArrayList<Workspace>();
 
-		public String getIdValue(Workspace object, int index)
-		{
-			return object.getId();
-		}
-	};
+        Workspace current = getModelObject();
 
-	private String getWorkspaceName(Workspace workspace)
-	{
-		if (workspaceNameCache == null)
-		{
-			workspaceNameCache = new HashMap<String, String>();
-		}
-		String name = workspaceNameCache.get(workspace.getId());
-		if (name == null)
-		{
-			for (Plugin p : getBrix().getPlugins())
-			{
-				if (p.isPluginWorkspace(workspace))
-				{
-					name = p.getUserVisibleName(workspace, false);
-				}
-				workspaceNameCache.put(workspace.getId(), name);
-			}
-		}
-		return name;
-	}
+        for (Plugin p : brix.getPlugins()) {
+            List<Workspace> filtered = brix.filterVisibleWorkspaces(p.getWorkspaces(current, false),
+                    Context.ADMINISTRATION);
+            for (Workspace w : filtered) {
+                if (workspaceNameCache == null) {
+                    workspaceNameCache = new HashMap<String, String>();
+                }
+                workspaceNameCache.put(w.getId(), p.getUserVisibleName(w, false));
+                workspaces.add(w);
+            }
+        }
 
-	@Override
-	protected void onDetach()
-	{
-		workspaceNameCache = null;
-		super.onDetach();
-	}
+        if (!workspaces.contains(current)) {
+            workspaces.add(current);
+        }
+        return workspaces;
+    }
 
-	private List<Workspace> getWorkspaces()
-	{
-		Brix brix = getBrix();
-		List<Workspace> workspaces = new ArrayList<Workspace>();
+    private Brix getBrix() {
+        return Brix.get();
+    }
 
-		Workspace current = getModelObject();
+// -------------------------- OTHER METHODS --------------------------
+    ;
 
-		for (Plugin p : brix.getPlugins())
-		{
-			List<Workspace> filtered = brix.filterVisibleWorkspaces(p.getWorkspaces(current, false),
-					Context.ADMINISTRATION);
-			for (Workspace w : filtered)
-			{
-				if (workspaceNameCache == null)
-				{
-					workspaceNameCache = new HashMap<String, String>();
-				}
-				workspaceNameCache.put(w.getId(), p.getUserVisibleName(w, false));
-				workspaces.add(w);
-			}
-		}
+    private String getWorkspaceName(Workspace workspace) {
+        if (workspaceNameCache == null) {
+            workspaceNameCache = new HashMap<String, String>();
+        }
+        String name = workspaceNameCache.get(workspace.getId());
+        if (name == null) {
+            for (Plugin p : getBrix().getPlugins()) {
+                if (p.isPluginWorkspace(workspace)) {
+                    name = p.getUserVisibleName(workspace, false);
+                }
+                workspaceNameCache.put(workspace.getId(), name);
+            }
+        }
+        return name;
+    }
 
-		if (!workspaces.contains(current))
-		{
-			workspaces.add(current);
-		}
-		return workspaces;
-	}
+    private boolean isCurrentWorkspaceValid() {
+        WorkspaceManager manager = getBrix().getWorkspaceManager();
+        Workspace workspace = getModelObject();
+        return workspace != null && manager.workspaceExists(workspace.getId());
+    }
 
+    @Override
+    protected void onDetach() {
+        workspaceNameCache = null;
+        super.onDetach();
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private class Renderer implements IChoiceRenderer<Workspace> {
+        public Object getDisplayValue(Workspace object) {
+            return getWorkspaceName(object);
+        }
+
+        public String getIdValue(Workspace object, int index) {
+            return object.getId();
+        }
+    }
 }

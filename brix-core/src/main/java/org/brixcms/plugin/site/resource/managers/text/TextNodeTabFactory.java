@@ -29,38 +29,37 @@ import org.brixcms.web.tab.IBrixTab;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextNodeTabFactory implements ManageNodeTabFactory
-{
-	public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
-	{
-		List<IBrixTab> result = new ArrayList<IBrixTab>();
+public class TextNodeTabFactory implements ManageNodeTabFactory {
+// -------------------------- STATIC METHODS --------------------------
 
-		BrixNode node = nodeModel.getObject();
-		if (node instanceof ResourceNode && hasViewPermission(nodeModel))
-		{
-			if (BrixFileNode.isText((ResourceNode)node))
-			{
-				result.add(getViewTab(nodeModel));
-			}
-		}
+    private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel) {
+        return new CachingAbstractTab(new ResourceModel("view", "View"), 100) {
+            @Override
+            public Panel newPanel(String panelId) {
+                return new ViewTextPanel(panelId, nodeModel);
+            }
+        };
+    }
 
-		return result;
-	}
+    private static boolean hasViewPermission(IModel<BrixNode> model) {
+        return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
+    }
 
-	private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel)
-	{
-		return new CachingAbstractTab(new ResourceModel("view", "View"), 100)
-		{
-			@Override
-			public Panel newPanel(String panelId)
-			{
-				return new ViewTextPanel(panelId, nodeModel);
-			}
-		};
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	private static boolean hasViewPermission(IModel<BrixNode> model)
-	{
-		return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
-	}
+
+// --------------------- Interface ManageNodeTabFactory ---------------------
+
+    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
+        List<IBrixTab> result = new ArrayList<IBrixTab>();
+
+        BrixNode node = nodeModel.getObject();
+        if (node instanceof ResourceNode && hasViewPermission(nodeModel)) {
+            if (BrixFileNode.isText((ResourceNode) node)) {
+                result.add(getViewTab(nodeModel));
+            }
+        }
+
+        return result;
+    }
 }

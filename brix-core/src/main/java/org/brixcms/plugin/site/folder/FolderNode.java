@@ -24,74 +24,65 @@ import org.brixcms.web.reference.Reference;
 
 import javax.jcr.Node;
 
-public class FolderNode extends BrixNode
-{
+public class FolderNode extends BrixNode {
+// ------------------------------ FIELDS ------------------------------
 
     /**
      * NodeWrapperFactory that can create {@link FolderNode} wrappers
      */
-    public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-    {
-
+    public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         /** {@inheritDoc} */
         @Override
-        public boolean canWrap(Brix brix, JcrNode node)
-        {
+        public boolean canWrap(Brix brix, JcrNode node) {
             if (!node.isNodeType("nt:folder")) {
-            	return false;
+                return false;
             }
-            
-        	SitePlugin site=SitePlugin.get(brix);
-            if (site==null) {
-            	return false;
+
+            SitePlugin site = SitePlugin.get(brix);
+            if (site == null) {
+                return false;
             }
-        	
+
             return node.getPath().startsWith(site.getSiteRootPath());
         }
 
         /** {@inheritDoc} */
         @Override
-        public JcrNode wrap(Brix brix, Node node, JcrSession session)
-        {
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
             return new FolderNode(node, session);
         }
-
     };
-
-
-    public FolderNode(Node delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
 
     private static final String REDIRECT_REFERENCE = FolderNodePlugin.TYPE + "RedirectReference";
 
-    public void setRedirectReference(Reference reference)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public FolderNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Reference getRedirectReference() {
+        return Reference.load(this, REDIRECT_REFERENCE);
+    }
+
+    @Override
+    public String getUserVisibleType() {
+        return "Folder";
+    }
+
+    public void setRedirectReference(Reference reference) {
         ensureType();
-        if (reference == null)
-        {
+        if (reference == null) {
             reference = new Reference();
         }
         reference.save(this, REDIRECT_REFERENCE);
     }
 
-    public Reference getRedirectReference()
-    {
-        return Reference.load(this, REDIRECT_REFERENCE);
-    }
-    
-    private void ensureType()
-    {
-        if (!isNodeType(FolderNodePlugin.TYPE))
-        {
+    private void ensureType() {
+        if (!isNodeType(FolderNodePlugin.TYPE)) {
             addMixin(FolderNodePlugin.TYPE);
         }
-    }
-
-    @Override
-    public String getUserVisibleType()
-    {
-    	return "Folder";
     }
 }

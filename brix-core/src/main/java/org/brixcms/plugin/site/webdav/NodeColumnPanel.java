@@ -26,56 +26,51 @@ import org.brixcms.web.picker.node.NodeTypeFilter;
 import org.brixcms.web.tree.NodeFilter;
 import org.brixcms.web.util.AbstractModel;
 
-public abstract class NodeColumnPanel extends BrixGenericPanel<BrixNode>
-{
+public abstract class NodeColumnPanel extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public NodeColumnPanel(String id, IModel<BrixNode> model, String workspace)
-	{
-		super(id, model);
-		
-		IModel<String> labelModel = new AbstractModel<String>() {
-			@Override
-			public String getObject()
-			{
-				BrixNode node = NodeColumnPanel.this.getModelObject();
-				return node != null ? SitePlugin.get().pathForNode(node) : "";
-			}
-		};
-		final Label label = new Label("label", labelModel);			
-		add(label);
-		label.setOutputMarkupId(true);
-		
-		NodeFilter filter = new NodeTypeFilter(TemplateSiteNodePlugin.TYPE);
-		
-		SiteNodePickerPanel picker = new SiteNodePickerPanel("picker", model, workspace, false, filter) {
-			@Override
-			public boolean isVisible()
-			{
-				return isEditing();
-			}			
-			@Override
-			protected IModel<String> newLabelModel()
-			{
-				return new AbstractModel<String>() {
-					@Override
-					public String getObject()
-					{
-						return "";
-					}
-				};
-			}
-			
-			@Override
-			protected void onUpdate(AjaxRequestTarget target)
-			{				
-				super.onUpdate(target);
-				target.addComponent(label);
-			}
-		};
-		
-		picker.setOutputMarkupPlaceholderTag(true);
-		add(picker);				
-	}
+    public NodeColumnPanel(String id, IModel<BrixNode> model, String workspace) {
+        super(id, model);
 
-	protected abstract boolean isEditing();
+        IModel<String> labelModel = new AbstractModel<String>() {
+            @Override
+            public String getObject() {
+                BrixNode node = NodeColumnPanel.this.getModelObject();
+                return node != null ? SitePlugin.get().pathForNode(node) : "";
+            }
+        };
+        final Label label = new Label("label", labelModel);
+        add(label);
+        label.setOutputMarkupId(true);
+
+        NodeFilter filter = new NodeTypeFilter(TemplateSiteNodePlugin.TYPE);
+
+        SiteNodePickerPanel picker = new SiteNodePickerPanel("picker", model, workspace, false, filter) {
+            @Override
+            public boolean isVisible() {
+                return isEditing();
+            }
+
+            @Override
+            protected IModel<String> newLabelModel() {
+                return new AbstractModel<String>() {
+                    @Override
+                    public String getObject() {
+                        return "";
+                    }
+                };
+            }
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                super.onUpdate(target);
+                target.addComponent(label);
+            }
+        };
+
+        picker.setOutputMarkupPlaceholderTag(true);
+        add(picker);
+    }
+
+    protected abstract boolean isEditing();
 }

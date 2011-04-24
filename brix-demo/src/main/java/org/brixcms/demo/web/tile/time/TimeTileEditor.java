@@ -26,51 +26,40 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 import java.text.SimpleDateFormat;
 
-public class TimeTileEditor extends TileEditorPanel
-{
+public class TimeTileEditor extends TileEditorPanel {
+// ------------------------------ FIELDS ------------------------------
 
-    public TimeTileEditor(String id, IModel<BrixNode> tileContainerNode)
-    {
+    private String format;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public TimeTileEditor(String id, IModel<BrixNode> tileContainerNode) {
         super(id);
         add(new TextField("format", new PropertyModel(this, "format"))
-                .setLabel(new Model("format")).add(new IValidator()
-                {
-
-                    public void validate(IValidatable validatable)
-                    {
+                .setLabel(new Model("format")).add(new IValidator() {
+                    public void validate(IValidatable validatable) {
                         String expr = validatable.getValue().toString();
-                        try
-                        {
+                        try {
                             new SimpleDateFormat(expr);
-                        }
-                        catch (IllegalArgumentException e)
-                        {
+                        } catch (IllegalArgumentException e) {
                             validatable.error(new ValidationError()
                                     .setMessage("${input} is an illegal date format pattern"));
                         }
                     }
-
                 }));
-
-
     }
 
-    private String format;
-
+// -------------------------- OTHER METHODS --------------------------
 
     @Override
-    public void load(BrixNode node)
-    {
-        if (node.hasProperty("format"))
-        {
+    public void load(BrixNode node) {
+        if (node.hasProperty("format")) {
             format = node.getProperty("format").getString();
         }
     }
 
     @Override
-    public void save(BrixNode node)
-    {
+    public void save(BrixNode node) {
         node.setProperty("format", format);
     }
-
 }

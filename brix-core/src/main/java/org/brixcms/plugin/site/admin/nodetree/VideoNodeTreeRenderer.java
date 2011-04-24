@@ -19,25 +19,27 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 
 /**
  * Renderer for video nodes
- * 
+ *
  * @author Jeremy Thomerson
  */
-public class VideoNodeTreeRenderer extends AbstractMimeTypeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class VideoNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final ResourceReference RESOURCE = new ResourceReference(
-			PageNodeTreeRenderer.class, "resources/video-x-generic.png");
+    private static final long serialVersionUID = 1L;
 
-	public VideoNodeTreeRenderer()
-	{
-		super(new String[0], new String[] { "video" });
-	}
+    private static final ResourceReference RESOURCE = new ResourceReference(
+            PageNodeTreeRenderer.class, "resources/video-x-generic.png");
 
-	@Override
-	protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-	{
-		return RESOURCE;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
+    public VideoNodeTreeRenderer() {
+        super(new String[0], new String[]{"video"});
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+        return RESOURCE;
+    }
 }

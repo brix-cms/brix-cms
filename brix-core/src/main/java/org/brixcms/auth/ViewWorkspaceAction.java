@@ -16,10 +16,10 @@ package org.brixcms.auth;
 
 import org.brixcms.workspace.Workspace;
 
-public class ViewWorkspaceAction extends AbstractWorkspaceAction
-{
-    public ViewWorkspaceAction(Context context, Workspace workspace)
-    {
+public class ViewWorkspaceAction extends AbstractWorkspaceAction {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ViewWorkspaceAction(Context context, Workspace workspace) {
         super(context, workspace);
     }
 }

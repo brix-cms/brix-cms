@@ -17,38 +17,37 @@ package org.brixcms.web.generic;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
-public class BrixGenericWebMarkupContainer<T> extends WebMarkupContainer implements IGenericComponent<T>
-{
+public class BrixGenericWebMarkupContainer<T> extends WebMarkupContainer implements IGenericComponent<T> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public BrixGenericWebMarkupContainer(String id)
-	{
-		super(id);
-	}
+    public BrixGenericWebMarkupContainer(String id) {
+        super(id);
+    }
 
-	public BrixGenericWebMarkupContainer(String id, IModel<T> model)
-	{
-		super(id, model);
-	}
+    public BrixGenericWebMarkupContainer(String id, IModel<T> model) {
+        super(id, model);
+    }
 
-	@SuppressWarnings("unchecked")
-	public final IModel<T> getModel()
-	{
-		return (IModel<T>) getDefaultModel();
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	@SuppressWarnings("unchecked")
-	public final T getModelObject()
-	{
-		return (T) getDefaultModelObject();
-	}
 
-	public final void setModel(IModel<T> model)
-	{
-		setDefaultModel(model);
-	}
+// --------------------- Interface IGenericComponent ---------------------
 
-	public final void setModelObject(T object)
-	{
-		setDefaultModelObject(object);
-	}
+    @SuppressWarnings("unchecked")
+    public final IModel<T> getModel() {
+        return (IModel<T>) getDefaultModel();
+    }
+
+    public final void setModel(IModel<T> model) {
+        setDefaultModel(model);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final T getModelObject() {
+        return (T) getDefaultModelObject();
+    }
+
+    public final void setModelObject(T object) {
+        setDefaultModelObject(object);
+    }
 }

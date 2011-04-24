@@ -18,11 +18,10 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-public class NodeManagerPanel extends BrixGenericPanel<BrixNode>
-{
+public class NodeManagerPanel extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public NodeManagerPanel(String id, IModel<BrixNode> nodeModel)
-    {
+    public NodeManagerPanel(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
     }
 }

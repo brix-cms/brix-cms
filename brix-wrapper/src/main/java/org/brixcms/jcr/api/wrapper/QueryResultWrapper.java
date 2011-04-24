@@ -22,79 +22,68 @@ import org.brixcms.jcr.api.JcrSession;
 import javax.jcr.query.QueryResult;
 
 /**
- * 
  * @author Matej Knopp
  * @author igor.vaynberg
  */
-class QueryResultWrapper extends AbstractWrapper implements JcrQueryResult
-{
+class QueryResultWrapper extends AbstractWrapper implements JcrQueryResult {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected QueryResultWrapper(QueryResult delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrQueryResult wrap(QueryResult delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrQueryResult wrap(QueryResult delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new QueryResultWrapper(delegate, session);
         }
     }
 
-    @Override
-    public QueryResult getDelegate()
-    {
-        return (QueryResult)super.getDelegate();
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected QueryResultWrapper(QueryResult delegate, JcrSession session) {
+        super(delegate, session);
     }
 
-    public String[] getColumnNames()
-    {
-        return executeCallback(new Callback<String[]>()
-        {
-            public String[] execute() throws Exception
-            {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface JcrQueryResult ---------------------
+
+    @Override
+    public QueryResult getDelegate() {
+        return (QueryResult) super.getDelegate();
+    }
+
+// --------------------- Interface QueryResult ---------------------
+
+
+    public String[] getColumnNames() {
+        return executeCallback(new Callback<String[]>() {
+            public String[] execute() throws Exception {
                 return getDelegate().getColumnNames();
             }
         });
     }
 
-    public JcrNodeIterator getNodes()
-    {
-        return executeCallback(new Callback<JcrNodeIterator>()
-        {
-            public JcrNodeIterator execute() throws Exception
-            {
-                return JcrNodeIterator.Wrapper.wrap(getDelegate().getNodes(), getJcrSession());
-            }
-        });
-    }
-
-    public JcrRowIterator getRows()
-    {
-        return executeCallback(new Callback<JcrRowIterator>()
-        {
-            public JcrRowIterator execute() throws Exception
-            {
+    public JcrRowIterator getRows() {
+        return executeCallback(new Callback<JcrRowIterator>() {
+            public JcrRowIterator execute() throws Exception {
                 return JcrRowIterator.Wrapper.wrap(getDelegate().getRows(), getJcrSession());
             }
         });
     }
 
-    public String[] getSelectorNames()
-    {
-        return executeCallback(new Callback<String[]>()
-        {
-
-            public String[] execute() throws Exception
-            {
-                return getDelegate().getSelectorNames();
+    public JcrNodeIterator getNodes() {
+        return executeCallback(new Callback<JcrNodeIterator>() {
+            public JcrNodeIterator execute() throws Exception {
+                return JcrNodeIterator.Wrapper.wrap(getDelegate().getNodes(), getJcrSession());
             }
         });
     }
 
+    public String[] getSelectorNames() {
+        return executeCallback(new Callback<String[]>() {
+            public String[] execute() throws Exception {
+                return getDelegate().getSelectorNames();
+            }
+        });
+    }
 }

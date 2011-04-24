@@ -14,7 +14,5 @@
 
 package org.brixcms.rmiserver;
 
-public class AuthenticationException extends Exception
-{
-
+public class AuthenticationException extends Exception {
 }

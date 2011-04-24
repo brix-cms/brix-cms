@@ -19,59 +19,61 @@ import org.brixcms.jcr.api.JcrSession;
 import javax.jcr.RangeIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-class RangeIteratorWrapper extends AbstractWrapper implements RangeIterator
-{
+class RangeIteratorWrapper extends AbstractWrapper implements RangeIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected RangeIteratorWrapper(RangeIterator delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static RangeIteratorWrapper wrap(RangeIterator delegate, JcrSession session)
-    {
+    public static RangeIteratorWrapper wrap(RangeIterator delegate, JcrSession session) {
         if (delegate == null)
             return null;
         else
             return new RangeIteratorWrapper(delegate, session);
     }
 
-    @Override
-    public RangeIterator getDelegate()
-    {
-        return (RangeIterator)super.getDelegate();
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected RangeIteratorWrapper(RangeIterator delegate, JcrSession session) {
+        super(delegate, session);
     }
 
-    public long getPosition()
-    {
-        return getDelegate().getPosition();
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public long getSize()
-    {
-        return getDelegate().getSize();
-    }
 
-    public void skip(long skipNum)
-    {
-        getDelegate().skip(skipNum);
-    }
+// --------------------- Interface Iterator ---------------------
 
-    public boolean hasNext()
-    {
+
+    public boolean hasNext() {
         return getDelegate().hasNext();
     }
 
-    public Object next()
-    {
+    public Object next() {
         return getDelegate().next();
     }
 
-    public void remove()
-    {
+    public void remove() {
         getDelegate().remove();
     }
 
+// --------------------- Interface RangeIterator ---------------------
+
+
+    public void skip(long skipNum) {
+        getDelegate().skip(skipNum);
+    }
+
+    public long getSize() {
+        return getDelegate().getSize();
+    }
+
+    public long getPosition() {
+        return getDelegate().getPosition();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public RangeIterator getDelegate() {
+        return (RangeIterator) super.getDelegate();
+    }
 }

@@ -25,48 +25,47 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-public class PageNode extends AbstractContainer
-{
+public class PageNode extends AbstractContainer {
+// ------------------------------ FIELDS ------------------------------
 
-    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-    {
+    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
-        public boolean canWrap(Brix brix, JcrNode node)
-        {
+        public boolean canWrap(Brix brix, JcrNode node) {
             return PageSiteNodePlugin.TYPE.equals(getNodeType(node));
         }
 
         @Override
-        public JcrNode wrap(Brix brix, Node node, JcrSession session)
-        {
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
             return new PageNode(node, session);
         }
 
         @Override
-        public void initializeRepository(Brix brix, Session session)
-        {
+        public void initializeRepository(Brix brix, Session session) {
             RepositoryUtil.registerNodeType(session.getWorkspace(), PageSiteNodePlugin.TYPE,
-                false, false, true);
+                    false, false, true);
         }
     };
 
-    public PageNode(Node delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
+// -------------------------- STATIC METHODS --------------------------
 
-    public static PageNode initialize(JcrNode node)
-    {
-        BrixNode brixNode = (BrixNode)node;
+    public static PageNode initialize(JcrNode node) {
+        BrixNode brixNode = (BrixNode) node;
         BrixFileNode.initialize(node, "text/html");
         brixNode.setNodeType(PageSiteNodePlugin.TYPE);
 
         return new PageNode(node.getDelegate(), node.getSession());
     }
-    
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PageNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    public String getUserVisibleType()
-    {    
-    	return "Page";
+    public String getUserVisibleType() {
+        return "Page";
     }
 }

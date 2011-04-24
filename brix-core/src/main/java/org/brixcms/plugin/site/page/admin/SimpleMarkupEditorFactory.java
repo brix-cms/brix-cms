@@ -20,21 +20,20 @@ import org.apache.wicket.model.Model;
 
 /**
  * Default implementation of markup editor factory. Uses a simple textarea.
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class SimpleMarkupEditorFactory implements MarkupEditorFactory
-{
+public class SimpleMarkupEditorFactory implements MarkupEditorFactory {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public TextArea<String> newEditor(String id, IModel<String> markup)
-    {
+
+// --------------------- Interface MarkupEditorFactory ---------------------
+
+    public TextArea<String> newEditor(String id, IModel<String> markup) {
         return new TextArea<String>("content", markup);
     }
 
-    public IModel<String> newLabel()
-    {
+    public IModel<String> newLabel() {
         return new Model<String>("Simple Text");
     }
-
 }

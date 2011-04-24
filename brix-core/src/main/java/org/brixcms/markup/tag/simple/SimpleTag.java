@@ -20,35 +20,35 @@ import java.util.Map;
 
 /**
  * Simple implementation of the {@link Tag} interface.
- * 
+ *
  * @author Matej Knopp
  */
-public class SimpleTag implements Tag
-{
-	private final Map<String, String> attributeMap;	
-	private final String name;	
-	private final Type type;
-	
-	public SimpleTag(String name, Type type, Map<String, String> attributeMap)
-	{
-		this.name = name;
-		this.type = type;
-		this.attributeMap = attributeMap;
-	}
+public class SimpleTag implements Tag {
+// ------------------------------ FIELDS ------------------------------
 
-	public Map<String, String> getAttributeMap()
-	{	
-		return attributeMap;
-	}
+    private final Map<String, String> attributeMap;
+    private final String name;
+    private final Type type;
 
-	public String getName()
-	{
-		return name;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public Type getType()
-	{
-		return type;
-	}
+    public SimpleTag(String name, Type type, Map<String, String> attributeMap) {
+        this.name = name;
+        this.type = type;
+        this.attributeMap = attributeMap;
+    }
 
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public Map<String, String> getAttributeMap() {
+        return attributeMap;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Type getType() {
+        return type;
+    }
 }

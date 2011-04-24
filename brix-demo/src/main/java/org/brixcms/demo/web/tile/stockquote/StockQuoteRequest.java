@@ -31,7 +31,11 @@ package org.brixcms.demo.web.tile.stockquote;
  * limitations under the License.
  */
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -41,64 +45,66 @@ import java.net.URLConnection;
  * Provides access to a SOAP service for getting stock quotes based on a symbol. Found on
  * http://www.devx.com/Java/Article/27559/0/page/2
  */
-public class StockQuoteRequest
-{
+public class StockQuoteRequest {
+// ------------------------------ FIELDS ------------------------------
+
     /**
-     * We used to use the www.xmethods.com demo webservice for stockquotes. We now use webservicex,
-     * as xmethods was really overloaded and unreliable.
+     * We used to use the www.xmethods.com demo webservice for stockquotes. We now use webservicex, as xmethods was
+     * really overloaded and unreliable.
      */
     private static final String serviceUrl = "http://www.webservicex.net/stockquote.asmx";
 
-    /** the symbol to get the quote for. */
+    /**
+     * the symbol to get the quote for.
+     */
     private String symbol;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Default constructor.
      */
-    public StockQuoteRequest()
-    {
+    public StockQuoteRequest() {
     }
 
     /**
      * Constructor setting the symbol to get the quote for.
-     * 
-     * @param symbol
-     *            the symbol to look up
+     *
+     * @param symbol the symbol to look up
      */
-    public StockQuoteRequest(String symbol)
-    {
+    public StockQuoteRequest(String symbol) {
         this.symbol = symbol;
     }
 
+// --------------------- GETTER / SETTER METHODS ---------------------
+
     /**
      * Gets the symbol.
-     * 
+     *
      * @return the symbol
      */
-    public String getSymbol()
-    {
+    public String getSymbol() {
         return symbol;
     }
 
     /**
      * Sets the symbol for getting the quote.
-     * 
+     *
      * @param symbol
      */
-    public void setSymbol(String symbol)
-    {
+    public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
     /**
      * Gets a stock quote for the given symbol
-     * 
+     *
      * @return the stock quote
      */
-    public String getQuote()
-    {
-        if (symbol == null || symbol.trim().length() == 0)
-        {
+    public String getQuote() {
+        if (symbol == null || symbol.trim().length() == 0) {
             return null;
         }
 
@@ -109,8 +115,7 @@ public class StockQuoteRequest
         int end = response.indexOf("&lt;/Last&gt;");
 
         // if the string returned isn't valid, just return empty.
-        if (start < "&lt;Last&gt;".length())
-        {
+        if (start < "&lt;Last&gt;".length()) {
             return "(unknown)";
         }
         String result = response.substring(start, end);
@@ -119,17 +124,14 @@ public class StockQuoteRequest
 
     /**
      * Calls the SOAP service to get the stock quote for the symbol.
-     * 
-     * @param symbol
-     *            the name to search for
+     *
+     * @param symbol the name to search for
      * @return the SOAP response containing the stockquote
      */
-    private String getSOAPQuote(String symbol)
-    {
+    private String getSOAPQuote(String symbol) {
         String response = "";
 
-        try
-        {
+        try {
             final URL url = new URL(serviceUrl);
             final String message = createMessage(symbol);
 
@@ -142,46 +144,44 @@ public class StockQuoteRequest
 
             // Read the response and write it to standard out.
             response = readResult(httpConn);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return response;
     }
 
     /**
-     * Writes the message to the connection.
-     * 
-     * @param message
-     *            the message to write
-     * @param httpConn
-     *            the connection
-     * @throws IOException
+     * Creates the request message for retrieving a stock quote.
+     *
+     * @param symbol the symbol to query for
+     * @return the request message
      */
-    private void writeRequest(String message, HttpURLConnection httpConn) throws IOException
-    {
-        OutputStream out = httpConn.getOutputStream();
-        out.write(message.getBytes());
-        out.close();
+    private String createMessage(String symbol) {
+        StringBuffer message = new StringBuffer("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        message
+                .append("<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">");
+        message.append("  <soap:Body>");
+        message.append("    <GetQuote xmlns=\"http://www.webserviceX.NET/\">");
+        message.append("      <symbol>").append(symbol).append("</symbol>");
+        message.append("    </GetQuote>");
+        message.append("  </soap:Body>");
+        message.append("</soap:Envelope>");
+        return message.toString();
     }
 
     /**
      * Sets up the HTTP connection.
-     * 
-     * @param url
-     *            the url to connect to
-     * @param length
-     *            the length to the input message
+     *
+     * @param url    the url to connect to
+     * @param length the length to the input message
      * @return the HttpurLConnection
      * @throws IOException
      * @throws ProtocolException
      */
     private HttpURLConnection setUpHttpConnection(URL url, int length) throws IOException,
-            ProtocolException
-    {
+            ProtocolException {
         URLConnection connection = url.openConnection();
-        HttpURLConnection httpConn = (HttpURLConnection)connection;
+        HttpURLConnection httpConn = (HttpURLConnection) connection;
         // Set the appropriate HTTP parameters.
         httpConn.setRequestProperty("Content-Length", String.valueOf(length));
         httpConn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
@@ -193,48 +193,37 @@ public class StockQuoteRequest
     }
 
     /**
+     * Writes the message to the connection.
+     *
+     * @param message  the message to write
+     * @param httpConn the connection
+     * @throws IOException
+     */
+    private void writeRequest(String message, HttpURLConnection httpConn) throws IOException {
+        OutputStream out = httpConn.getOutputStream();
+        out.write(message.getBytes());
+        out.close();
+    }
+
+    /**
      * Reads the response from the http connection.
-     * 
-     * @param connection
-     *            the connection to read the response from
+     *
+     * @param connection the connection to read the response from
      * @return the response
      * @throws IOException
      */
-    private String readResult(HttpURLConnection connection) throws IOException
-    {
+    private String readResult(HttpURLConnection connection) throws IOException {
         InputStream inputStream = connection.getInputStream();
         InputStreamReader isr = new InputStreamReader(inputStream);
         BufferedReader in = new BufferedReader(isr);
 
         StringBuffer sb = new StringBuffer();
         String inputLine;
-        while ((inputLine = in.readLine()) != null)
-        {
+        while ((inputLine = in.readLine()) != null) {
             sb.append(inputLine);
         }
 
         in.close();
         return sb.toString();
-    }
-
-    /**
-     * Creates the request message for retrieving a stock quote.
-     * 
-     * @param symbol
-     *            the symbol to query for
-     * @return the request message
-     */
-    private String createMessage(String symbol)
-    {
-        StringBuffer message = new StringBuffer("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        message
-            .append("<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">");
-        message.append("  <soap:Body>");
-        message.append("    <GetQuote xmlns=\"http://www.webserviceX.NET/\">");
-        message.append("      <symbol>").append(symbol).append("</symbol>");
-        message.append("    </GetQuote>");
-        message.append("  </soap:Body>");
-        message.append("</soap:Envelope>");
-        return message.toString();
     }
 }

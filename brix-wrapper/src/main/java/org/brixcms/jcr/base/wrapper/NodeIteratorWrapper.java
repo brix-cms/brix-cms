@@ -17,59 +17,59 @@ package org.brixcms.jcr.base.wrapper;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
-class NodeIteratorWrapper extends BaseWrapper<NodeIterator> implements NodeIterator
-{
+class NodeIteratorWrapper extends BaseWrapper<NodeIterator> implements NodeIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-	private NodeIteratorWrapper(NodeIterator delegate, SessionWrapper session)
-	{
-		super(delegate, session);
-	}
+    public static NodeIteratorWrapper wrap(NodeIterator delegate, SessionWrapper session) {
+        if (delegate == null) {
+            return null;
+        } else {
+            return new NodeIteratorWrapper(delegate, session);
+        }
+    }
 
-	public static NodeIteratorWrapper wrap(NodeIterator delegate, SessionWrapper session)
-	{
-		if (delegate == null)
-		{
-			return null;
-		}
-		else
-		{
-			return new NodeIteratorWrapper(delegate, session);
-		}
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public Node nextNode()
-	{
-		return NodeWrapper.wrap(getDelegate().nextNode(), getSessionWrapper());
-	}
+    private NodeIteratorWrapper(NodeIterator delegate, SessionWrapper session) {
+        super(delegate, session);
+    }
 
-	public long getPosition()
-	{
-		return getDelegate().getPosition();
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public long getSize()
-	{
-		return getDelegate().getSize();
-	}
 
-	public void skip(long skipNum)
-	{
-		getDelegate().skip(skipNum);
-	}
+// --------------------- Interface Iterator ---------------------
 
-	public boolean hasNext()
-	{
-		return getDelegate().hasNext();
-	}
 
-	public Object next()
-	{
-		return  NodeWrapper.wrap((Node) getDelegate().next(), getSessionWrapper());
-	}
+    public boolean hasNext() {
+        return getDelegate().hasNext();
+    }
 
-	public void remove()
-	{
-		getDelegate().remove();
-	}
+    public Object next() {
+        return NodeWrapper.wrap((Node) getDelegate().next(), getSessionWrapper());
+    }
 
+    public void remove() {
+        getDelegate().remove();
+    }
+
+// --------------------- Interface NodeIterator ---------------------
+
+    public Node nextNode() {
+        return NodeWrapper.wrap(getDelegate().nextNode(), getSessionWrapper());
+    }
+
+// --------------------- Interface RangeIterator ---------------------
+
+
+    public void skip(long skipNum) {
+        getDelegate().skip(skipNum);
+    }
+
+    public long getSize() {
+        return getDelegate().getSize();
+    }
+
+    public long getPosition() {
+        return getDelegate().getPosition();
+    }
 }

@@ -24,36 +24,34 @@ import javax.jcr.Node;
 
 /**
  * Node that can wrap the brix:root/brix:site node
- * 
+ *
  * @author Matej Knopp
  */
-public class SiteRootNode extends FolderNode 
-{
-	
-	public SiteRootNode(Node delegate, JcrSession session)
-	{
-		super(delegate, session);
-	}
+public class SiteRootNode extends FolderNode {
+// ------------------------------ FIELDS ------------------------------
 
-	@Override
-	public String getUserVisibleName()
-	{
-		return "Site";
-	}
+    public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
+        @Override
+        public boolean canWrap(Brix brix, JcrNode node) {
+            return node.getPath().equals(SitePlugin.get(brix).getSiteRootPath());
+        }
 
-	public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-	{
+        @Override
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
+            return new SiteRootNode(node, session);
+        }
+    };
 
-		@Override
-		public boolean canWrap(Brix brix, JcrNode node)
-		{
-			return node.getPath().equals(SitePlugin.get(brix).getSiteRootPath());
-		}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		@Override
-		public JcrNode wrap(Brix brix, Node node, JcrSession session)
-		{
-			return new SiteRootNode(node, session);
-		}
-	};
+    public SiteRootNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public String getUserVisibleName() {
+        return "Site";
+    }
 }

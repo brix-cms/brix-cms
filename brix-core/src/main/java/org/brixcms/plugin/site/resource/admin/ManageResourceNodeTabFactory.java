@@ -28,36 +28,20 @@ import org.brixcms.web.tab.IBrixTab;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
-{
+public class ManageResourceNodeTabFactory implements ManageNodeTabFactory {
+// -------------------------- STATIC METHODS --------------------------
 
-    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
-    {
-        if (ResourceNodePlugin.TYPE.equals(nodeModel.getObject().getNodeType()))
-        {
-            return getTabs(nodeModel);
-        }
-        else
-        {
-            return null;
-        }
-    }
-  
-    private static List<IBrixTab> getTabs(final IModel<BrixNode> nodeModel)
-    {
+    private static List<IBrixTab> getTabs(final IModel<BrixNode> nodeModel) {
         List<IBrixTab> tabs = new ArrayList<IBrixTab>();
 
-        tabs.add(new CachingAbstractTab(new ResourceModel("properties", "Properties"))
-        {
+        tabs.add(new CachingAbstractTab(new ResourceModel("properties", "Properties")) {
             @Override
-            public Panel newPanel(String panelId)
-            {
+            public Panel newPanel(String panelId) {
                 return new ViewPropertiesTab(panelId, nodeModel);
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return hasViewPermission(nodeModel);
             }
         });
@@ -65,9 +49,20 @@ public class ManageResourceNodeTabFactory implements ManageNodeTabFactory
         return tabs;
     }
 
-    private static boolean hasViewPermission(IModel<BrixNode> model)
-    {
-    	return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
+    private static boolean hasViewPermission(IModel<BrixNode> model) {
+        return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface ManageNodeTabFactory ---------------------
+
+    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
+        if (ResourceNodePlugin.TYPE.equals(nodeModel.getObject().getNodeType())) {
+            return getTabs(nodeModel);
+        } else {
+            return null;
+        }
+    }
 }

@@ -18,19 +18,20 @@ import org.brixcms.auth.Action;
 import org.brixcms.auth.AuthorizationStrategy;
 
 /**
- * Implementation of {@link AuthorizationStrategy} that allows everything for the purposes of the
- * demo
- * 
+ * Implementation of {@link AuthorizationStrategy} that allows everything for the purposes of the demo
+ *
  * @author ivaynberg
- * 
  */
-public class DemoAuthorizationStrategy implements AuthorizationStrategy
-{
+public class DemoAuthorizationStrategy implements AuthorizationStrategy {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    /** {@inheritDoc} */
-    public boolean isActionAuthorized(Action action)
-    {
+
+// --------------------- Interface AuthorizationStrategy ---------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isActionAuthorized(Action action) {
         return true;
     }
-
 }

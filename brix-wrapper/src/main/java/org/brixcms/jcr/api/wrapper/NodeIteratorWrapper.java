@@ -23,44 +23,47 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RangeIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-class NodeIteratorWrapper extends RangeIteratorWrapper implements JcrNodeIterator
-{
+class NodeIteratorWrapper extends RangeIteratorWrapper implements JcrNodeIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected NodeIteratorWrapper(RangeIterator delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrNodeIterator wrap(NodeIterator delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrNodeIterator wrap(NodeIterator delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new NodeIteratorWrapper(delegate, session);
         }
     }
 
-    @Override
-    public NodeIterator getDelegate()
-    {
-        return (NodeIterator)super.getDelegate();
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected NodeIteratorWrapper(RangeIterator delegate, JcrSession session) {
+        super(delegate, session);
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Iterator ---------------------
+
+
     @Override
-    public Object next()
-    {
-        return JcrNode.Wrapper.wrap((Node)getDelegate().next(), getJcrSession());
+    public Object next() {
+        return JcrNode.Wrapper.wrap((Node) getDelegate().next(), getJcrSession());
     }
 
-    public JcrNode nextNode()
-    {
+// --------------------- Interface JcrNodeIterator ---------------------
+
+    @Override
+    public NodeIterator getDelegate() {
+        return (NodeIterator) super.getDelegate();
+    }
+
+// --------------------- Interface NodeIterator ---------------------
+
+
+    public JcrNode nextNode() {
         return JcrNode.Wrapper.wrap(getDelegate().nextNode(), getJcrSession());
     }
-
 }

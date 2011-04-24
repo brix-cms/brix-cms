@@ -21,37 +21,38 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.qom.QueryObjectModelFactory;
 
 /**
- * 
  * @author Matej Knopp
  * @author igor.vaynberg
  */
-public interface JcrQueryManager extends QueryManager
-{
+public interface JcrQueryManager extends QueryManager {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrQueryManager wrap(QueryManager delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrQueryManagerWrapper.wrap(delegate, session);
-        }
-    }
 
-    public QueryManager getDelegate();
+// --------------------- Interface QueryManager ---------------------
 
     public JcrQuery createQuery(String statement, String language);
 
-    public JcrQuery getQuery(Node node);
-
-    public String[] getSupportedQueryLanguages();
-
     /**
-     * Returns a <code>QueryObjectModelFactory</code> with which a JCR-JQOM query can be built
-     * programmatically.
-     * 
+     * Returns a <code>QueryObjectModelFactory</code> with which a JCR-JQOM query can be built programmatically.
+     *
      * @return a <code>QueryObjectModelFactory</code> object
      * @since JCR 2.0
      */
     public QueryObjectModelFactory getQOMFactory();
 
+    public JcrQuery getQuery(Node node);
 
+    public String[] getSupportedQueryLanguages();
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public QueryManager getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrQueryManager wrap(QueryManager delegate, JcrSession session) {
+            return WrapperAccessor.JcrQueryManagerWrapper.wrap(delegate, session);
+        }
+    }
 }

@@ -18,45 +18,45 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 
-public class StringInputStream extends InputStream
-{
+public class StringInputStream extends InputStream {
+// ------------------------------ FIELDS ------------------------------
 
     private StringReader in;
 
-    public StringInputStream(String source)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public StringInputStream(String source) {
         in = new StringReader(source);
     }
 
-    public int read() throws IOException
-    {
-        return in.read();
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public void close() throws IOException
-    {
+
+// --------------------- Interface Closeable ---------------------
+
+    public void close() throws IOException {
         in.close();
     }
 
-    public synchronized void mark(final int limit)
-    {
-        try
-        {
+// -------------------------- OTHER METHODS --------------------------
+
+    public synchronized void mark(final int limit) {
+        try {
             in.mark(limit);
-        }
-        catch (IOException ioe)
-        {
+        } catch (IOException ioe) {
             throw new RuntimeException(ioe.getMessage());
         }
     }
 
-    public synchronized void reset() throws IOException
-    {
-        in.reset();
+    public boolean markSupported() {
+        return in.markSupported();
     }
 
-    public boolean markSupported()
-    {
-        return in.markSupported();
+    public int read() throws IOException {
+        return in.read();
+    }
+
+    public synchronized void reset() throws IOException {
+        in.reset();
     }
 }

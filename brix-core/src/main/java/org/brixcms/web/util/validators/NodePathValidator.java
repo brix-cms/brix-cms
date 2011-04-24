@@ -23,47 +23,43 @@ import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 
-public class NodePathValidator implements IValidator
-{
+public class NodePathValidator implements IValidator {
+// ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> nodeModel;
 
-    public NodePathValidator(IModel<BrixNode> nodeModel)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public NodePathValidator(IModel<BrixNode> nodeModel) {
         this.nodeModel = nodeModel;
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IValidator ---------------------
 
     @SuppressWarnings("unchecked")
-    public void validate(IValidatable validatable)
-    {
+    public void validate(IValidatable validatable) {
         Object o = validatable.getValue();
-        if (o != null)
-        {
+        if (o != null) {
             JcrNode node = nodeModel.getObject();
             Path path = null;
-            if (o instanceof Path)
-            {
-                path = (Path)o;
-            }
-            else
-            {
+            if (o instanceof Path) {
+                path = (Path) o;
+            } else {
                 path = new Path(o.toString());
             }
 
-            if (!path.isAbsolute())
-            {
+            if (!path.isAbsolute()) {
                 Path parent = new Path(node.getPath());
-                if (!((BrixNode)node).isFolder())
+                if (!((BrixNode) node).isFolder())
                     parent = parent.parent();
                 path = parent.append(path);
-            }
-            else
-            {
+            } else {
                 path = new Path(SitePlugin.get().toRealWebNodePath(path.toString()));
             }
-            if (node.getSession().itemExists(path.toString()) == false)
-            {
+            if (node.getSession().itemExists(path.toString()) == false) {
                 ValidationError error = new ValidationError();
                 error.setMessage("Node ${path} could not be found");
                 error.addMessageKey("NodePathValidator");
@@ -71,7 +67,5 @@ public class NodePathValidator implements IValidator
                 validatable.error(error);
             }
         }
-
     }
-
 }

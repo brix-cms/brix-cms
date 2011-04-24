@@ -29,158 +29,134 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class EventUtil
-{
+public class EventUtil {
+// ------------------------------ FIELDS ------------------------------
 
-    public static void raiseSaveEvent(Node node)
-    {
-        try
-        {
+    private final static List<SaveEventListener> listeners = Collections
+            .synchronizedList(new ArrayList<SaveEventListener>());
+
+// -------------------------- STATIC METHODS --------------------------
+
+    public static void raiseSaveEvent(Node node) {
+        try {
             JcrSession session = JcrSession.Wrapper.wrap(node.getSession(), null);
             JcrNode wrapped = JcrNode.Wrapper.wrap(node, session);
             raiseSaveEvent(wrapped);
-        }
-        catch (RepositoryException e)
-        {
+        } catch (RepositoryException e) {
             throw new JcrException(e);
         }
     }
 
-    public static void raiseSaveEvent(JcrNode node)
-    {
+    public static void raiseSaveEvent(JcrNode node) {
         Event event = new EventImpl(node);
 
-        synchronized (listeners)
-        {
-            for (SaveEventListener listener : listeners)
-            {
+        synchronized (listeners) {
+            for (SaveEventListener listener : listeners) {
                 listener.onEvent(new Iterator(event));
             }
         }
     }
 
-    private final static List<SaveEventListener> listeners = Collections
-            .synchronizedList(new ArrayList<SaveEventListener>());
-
-    public static void registerSaveEventListener(SaveEventListener listener)
-    {
+    public static void registerSaveEventListener(SaveEventListener listener) {
         listeners.add(listener);
     }
 
     /**
      * Ensure that calling checkin and save on nodes within the session raises the save event.
-     * 
+     *
      * @param session
      * @return
      */
-    public static BrixSession wrapSession(Session session)
-    {
+    public static BrixSession wrapSession(Session session) {
         return WrapperAccessor.wrap(session);
     }
 
-    public static Session unwrapSession(Session session)
-    {
+    public static Session unwrapSession(Session session) {
         return WrapperAccessor.unwrap(session);
     }
 
-    private static class Iterator implements EventIterator
-    {
+// -------------------------- INNER CLASSES --------------------------
 
+    private static class Iterator implements EventIterator {
         private Event event;
 
-        public Iterator(Event event)
-        {
+        public Iterator(Event event) {
             this.event = event;
         }
 
-        public Event nextEvent()
-        {
+        public Event nextEvent() {
             Event res = event;
             event = null;
             return res;
         }
 
-        public long getPosition()
-        {
+        public long getPosition() {
             return 0;
         }
 
-        public long getSize()
-        {
+        public long getSize() {
             return -1;
         }
 
-        public void skip(long skipNum)
-        {
+        public void skip(long skipNum) {
 
         }
 
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return event != null;
         }
 
-        public Object next()
-        {
+        public Object next() {
             return nextEvent();
         }
 
-        public void remove()
-        {
+        public void remove() {
             throw new UnsupportedOperationException();
         }
-    };
+    }
 
-    private static class EventImpl implements SaveEvent
-    {
+    ;
 
+    private static class EventImpl implements SaveEvent {
         private final JcrNode node;
         private long timestamp = System.currentTimeMillis();
 
-        public EventImpl(JcrNode node)
-        {
+        public EventImpl(JcrNode node) {
             this.node = node;
         }
 
-        public JcrNode getNode()
-        {
+        public JcrNode getNode() {
             return node;
         }
 
-        public String getPath() throws RepositoryException
-        {
+        public String getPath() throws RepositoryException {
             return node.getPath();
         }
 
-        public int getType()
-        {
+        public int getType() {
             return SaveEvent.NODE_SAVE;
         }
 
-        public String getUserID()
-        {
+        public String getUserID() {
             return node.getSession().getUserID();
         }
 
-        public long getDate() throws RepositoryException
-        {
+        public long getDate() throws RepositoryException {
             return timestamp;
         }
 
-        public String getIdentifier() throws RepositoryException
-        {
+        public String getIdentifier() throws RepositoryException {
             return node.getIdentifier();
         }
 
-        public Map< ? , ? > getInfo() throws RepositoryException
-        {
+        public Map<?, ?> getInfo() throws RepositoryException {
             throw new UnsupportedOperationException();
         }
 
-        public String getUserData() throws RepositoryException
-        {
+        public String getUserData() throws RepositoryException {
             throw new UnsupportedOperationException();
         }
-    };
+    }
 
+    ;
 }

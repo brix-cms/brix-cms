@@ -26,79 +26,78 @@ import java.util.Date;
 
 /**
  * Label used to render time in {@link TimeTile}
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class TimeLabel extends Label
-{
+public class TimeLabel extends Label {
+// ------------------------------ FIELDS ------------------------------
+
     private static final long serialVersionUID = 1L;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
-     * 
-     * @param id
-     *            component id
-     * @param nodeModel
-     *            time tile node
+     *
+     * @param id        component id
+     * @param nodeModel time tile node
      */
-    public TimeLabel(String id, IModel<BrixNode> nodeModel)
-    {
+    public TimeLabel(String id, IModel<BrixNode> nodeModel) {
         super(id, new TimeStringModel(nodeModel));
     }
 
+// -------------------------- INNER CLASSES --------------------------
+
     /**
      * Constructs time expression string
-     * 
+     *
      * @author igor.vaynberg
-     * 
      */
-    private static class TimeStringModel extends AbstractReadOnlyModel<String>
-    {
+    private static class TimeStringModel extends AbstractReadOnlyModel<String> {
         private static final long serialVersionUID = 1L;
 
-        /** jcr tile node that contains the time expression format */
+        /**
+         * jcr tile node that contains the time expression format
+         */
         private final IModel<BrixNode> tileNode;
 
         /**
          * Constructor
-         * 
+         *
          * @param tileNode
          */
-        public TimeStringModel(IModel<BrixNode> tileNode)
-        {
+        public TimeStringModel(IModel<BrixNode> tileNode) {
             super();
             this.tileNode = tileNode;
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public String getObject()
-        {
+        public String getObject() {
             // get the tile's jcr node and retrieve the format expression
             JcrNode tileNode = this.tileNode.getObject();
             String format = tileNode.hasProperty("format") ? tileNode.getProperty("format")
-                .getString() : null;
+                    .getString() : null;
 
             // create the time expression
-            if (format == null)
-            {
+            if (format == null) {
                 format = "MM/dd/yyyy HH:mm:ss z";
             }
             DateFormat fmt = new SimpleDateFormat(format);
             return fmt.format(new Date());
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public void detach()
-        {
+        public void detach() {
             // detach inner model
             tileNode.detach();
 
             super.detach();
         }
-
     }
-
 }

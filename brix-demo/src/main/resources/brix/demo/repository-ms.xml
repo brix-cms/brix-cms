@@ -22,7 +22,7 @@
                 for read-only acces:
                 <anonymousUserRoles jcr:PrimaryType="mode:option" mode:value="readonly" />
                 -->
-                <anonymousUserRoles jcr:PrimaryType="mode:option" mode:value="admin" />
+                <anonymousUserRoles jcr:PrimaryType="mode:option" mode:value="admin"/>
 
             </mode:options>
         </mode:repository>
@@ -47,12 +47,12 @@
     Define the sequencers. This is an optional section.
     -->
     <!--<mode:sequencers>-->
-        <!--<mode:sequencer jcr:name="Image Sequencer"-->
-                        <!--mode:classname="org.modeshape.sequencer.image.ImageMetadataSequencer">-->
-            <!--<mode:description>Image metadata sequencer</mode:description>-->
-            <!--<mode:pathExpression>/foo/source => /foo/target</mode:pathExpression>-->
-            <!--<mode:pathExpression>/bar/source => /bar/target</mode:pathExpression>-->
-        <!--</mode:sequencer>-->
+    <!--<mode:sequencer jcr:name="Image Sequencer"-->
+    <!--mode:classname="org.modeshape.sequencer.image.ImageMetadataSequencer">-->
+    <!--<mode:description>Image metadata sequencer</mode:description>-->
+    <!--<mode:pathExpression>/foo/source => /foo/target</mode:pathExpression>-->
+    <!--<mode:pathExpression>/bar/source => /bar/target</mode:pathExpression>-->
+    <!--</mode:sequencer>-->
     <!--</mode:sequencers>-->
     <!--
       Define how ModeShape will determine the MIME type of files. This is an optional section;
@@ -60,7 +60,7 @@
       filename extensions for most commonly-used files.
     -->
     <!--<mode:mimeTypeDetectors>-->
-        <!--<mode:mimeTypeDetector jcr:name="Detector"-->
-                               <!--mode:description="Standard extension-based MIME type detector"/>-->
+    <!--<mode:mimeTypeDetector jcr:name="Detector"-->
+    <!--mode:description="Standard extension-based MIME type detector"/>-->
     <!--</mode:mimeTypeDetectors>-->
 </configuration>

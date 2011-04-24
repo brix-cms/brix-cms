@@ -26,90 +26,73 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.resource.ResourceRequestTarget;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-public class ViewTextPanel extends BrixGenericPanel<BrixNode>
-{
+public class ViewTextPanel extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public ViewTextPanel(String id, final IModel<BrixNode> model)
-	{
-		super(id, model);
+    public ViewTextPanel(String id, final IModel<BrixNode> model) {
+        super(id, model);
 
-		IModel<String> labelModel = new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				BrixFileNode node = (BrixFileNode)getModel().getObject();
-				return node.getDataAsString();
-			}
-		};
-		add(new Label("label", labelModel));
+        IModel<String> labelModel = new Model<String>() {
+            @Override
+            public String getObject() {
+                BrixFileNode node = (BrixFileNode) getModel().getObject();
+                return node.getDataAsString();
+            }
+        };
+        add(new Label("label", labelModel));
 
-		add(new Label("mimeType", new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				BrixFileNode node = (BrixFileNode)model.getObject();
-				return node.getMimeType();
-			}
-		}));
+        add(new Label("mimeType", new Model<String>() {
+            @Override
+            public String getObject() {
+                BrixFileNode node = (BrixFileNode) model.getObject();
+                return node.getMimeType();
+            }
+        }));
 
-		add(new Label("size", new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				BrixFileNode node = (BrixFileNode)model.getObject();
-				return node.getContentLength() + " bytes";
-			}
-		}));
+        add(new Label("size", new Model<String>() {
+            @Override
+            public String getObject() {
+                BrixFileNode node = (BrixFileNode) model.getObject();
+                return node.getContentLength() + " bytes";
+            }
+        }));
 
-		add(new Label("requiredProtocol", new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				Protocol protocol = model.getObject().getRequiredProtocol();
-				return getString(protocol.toString());
-			}
-		}));
+        add(new Label("requiredProtocol", new Model<String>() {
+            @Override
+            public String getObject() {
+                Protocol protocol = model.getObject().getRequiredProtocol();
+                return getString(protocol.toString());
+            }
+        }));
 
-		add(new Link<Void>("download")
-		{
-			@Override
-			public void onClick()
-			{
-				getRequestCycle().setRequestTarget(new ResourceRequestTarget(model, true));
-			}
-		});
+        add(new Link<Void>("download") {
+            @Override
+            public void onClick() {
+                getRequestCycle().setRequestTarget(new ResourceRequestTarget(model, true));
+            }
+        });
 
-		add(new Link<Void>("edit")
-		{
-			@Override
-			public void onClick()
-			{
-				EditTextResourcePanel panel = new EditTextResourcePanel(ViewTextPanel.this.getId(),
-						ViewTextPanel.this.getModel())
-				{
-					@Override
-					protected void done()
-					{
-						replaceWith(ViewTextPanel.this);
-					}
-				};
-				ViewTextPanel.this.replaceWith(panel);
-			}
+        add(new Link<Void>("edit") {
+            @Override
+            public void onClick() {
+                EditTextResourcePanel panel = new EditTextResourcePanel(ViewTextPanel.this.getId(),
+                        ViewTextPanel.this.getModel()) {
+                    @Override
+                    protected void done() {
+                        replaceWith(ViewTextPanel.this);
+                    }
+                };
+                ViewTextPanel.this.replaceWith(panel);
+            }
 
-			@Override
-			public boolean isVisible()
-			{
-				return hasEditPermission(ViewTextPanel.this.getModel());
-			}
-		});
-	}
+            @Override
+            public boolean isVisible() {
+                return hasEditPermission(ViewTextPanel.this.getModel());
+            }
+        });
+    }
 
-	private static boolean hasEditPermission(IModel<BrixNode> model)
-	{
-		return SitePlugin.get().canEditNode(model.getObject(), Context.ADMINISTRATION);
-	}
+    private static boolean hasEditPermission(IModel<BrixNode> model) {
+        return SitePlugin.get().canEditNode(model.getObject(), Context.ADMINISTRATION);
+    }
 }

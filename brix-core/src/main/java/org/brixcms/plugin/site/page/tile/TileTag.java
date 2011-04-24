@@ -29,104 +29,110 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Base class for tags that represent {@link Tile}s
- * 
+ *
  * @author ivaynberg, Matej Knopp
  */
 public class TileTag extends SimpleTag
         implements
-            ComponentTag,
-            VariableKeyProvider
-{
-    /** name of tile this tag is attached to */
+        ComponentTag,
+        VariableKeyProvider {
+// ------------------------------ FIELDS ------------------------------
+
+    private final static AtomicLong atomicLong = new AtomicLong();
+
+    private final static String PREFIX = "tile-";
+    /**
+     * name of tile this tag is attached to
+     */
     private final String tileName;
 
     private final BrixNodeModel tileContainerNodeModel;
-    
+
+    private String id;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
     /**
      * Constructor
-     * 
+     *
      * @param name
      * @param type
      * @param attributeMap
      * @param tileName
      */
-    public TileTag(String name, Type type, Map<String, String> attributeMap, AbstractContainer tileContainerNode, String tileName)
-    {
+    public TileTag(String name, Type type, Map<String, String> attributeMap, AbstractContainer tileContainerNode, String tileName) {
         super(name, type, attributeMap);
         this.tileName = tileName;
         tileContainerNodeModel = new BrixNodeModel(tileContainerNode);
         tileContainerNodeModel.detach();
     }
 
-    /**
-     * @return tile container that contains the tile
-     */
-    protected AbstractContainer getTileContainer()
-    {
-        AbstractContainer container = (AbstractContainer)tileContainerNodeModel.getObject();
-        tileContainerNodeModel.detach();
-        return container;
-    }
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     /**
      * @return name of tile
      */
-    public String getTileName()
-    {
+    public String getTileName() {
         return tileName;
     }
 
-    /** {@inheritDoc} */
-    public Component getComponent(String id, IModel<BrixNode> pageNodeModel)
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface ComponentTag ---------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    public Component getComponent(String id, IModel<BrixNode> pageNodeModel) {
         AbstractContainer container = getTileContainer();
         BrixNode tileNode = container.getTileNode(tileName);
 
-        if (tileNode != null)
-        {
+        if (tileNode != null) {
             Tile tile = Tile.Helper.getTileOfType(TileContainerFacet.getTileClassName(tileNode),
-                tileNode.getBrix());            
+                    tileNode.getBrix());
             return tile.newViewer(id, new BrixNodeModel(tileNode));
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    /** {@inheritDoc} */
-    public Collection<String> getVariableKeys()
-    {
-
-        BrixNode tileNode = getTileContainer().tiles().getTile(tileName);
-        if (tileNode != null)
-        {
-            Tile tile = Tile.Helper.getTileOfType(TileContainerFacet.getTileClassName(tileNode),
-                tileNode.getBrix());
-            if (tile instanceof VariableKeyProvider)
-            {
-                return ((VariableKeyProvider)tile).getVariableKeys();
-            }
-        }
-        return null;
-    }
-
-    private final static AtomicLong atomicLong = new AtomicLong();
-
-    private final static String PREFIX = "tile-";
-
-    private String id;
-
     /**
      * return unique id of this tag
      */
-    public String getUniqueTagId()
-    {
-        if (id == null)
-        {
+    public String getUniqueTagId() {
+        if (id == null) {
             id = PREFIX + atomicLong.incrementAndGet();
         }
         return id;
     }
 
+// --------------------- Interface VariableKeyProvider ---------------------
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<String> getVariableKeys() {
+        BrixNode tileNode = getTileContainer().tiles().getTile(tileName);
+        if (tileNode != null) {
+            Tile tile = Tile.Helper.getTileOfType(TileContainerFacet.getTileClassName(tileNode),
+                    tileNode.getBrix());
+            if (tile instanceof VariableKeyProvider) {
+                return ((VariableKeyProvider) tile).getVariableKeys();
+            }
+        }
+        return null;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * @return tile container that contains the tile
+     */
+    protected AbstractContainer getTileContainer() {
+        AbstractContainer container = (AbstractContainer) tileContainerNodeModel.getObject();
+        tileContainerNodeModel.detach();
+        return container;
+    }
 }

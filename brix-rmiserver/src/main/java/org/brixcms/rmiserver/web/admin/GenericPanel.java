@@ -17,38 +17,34 @@ package org.brixcms.rmiserver.web.admin;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-public class GenericPanel<T> extends Panel 
-{
-	public GenericPanel(String id)
-	{
-		super(id);
-	}
+public class GenericPanel<T> extends Panel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public GenericPanel(String id, IModel<T> model)
-	{
-		super(id, model);
-	}
+    public GenericPanel(String id) {
+        super(id);
+    }
 
-	@SuppressWarnings("unchecked")
-	public final IModel<T> getModel()
-	{
-		return (IModel<T>) getDefaultModel();
-	}
+    public GenericPanel(String id, IModel<T> model) {
+        super(id, model);
+    }
 
-	@SuppressWarnings("unchecked")
-	public final T getModelObject()
-	{
-		return (T) getDefaultModelObject();
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	public final void setModel(IModel<T> model)
-	{
-		setDefaultModel(model);
-	}
+    @SuppressWarnings("unchecked")
+    public final IModel<T> getModel() {
+        return (IModel<T>) getDefaultModel();
+    }
 
-	public final void setModelObject(T object)
-	{
-		setDefaultModelObject(object);
-	}
+    @SuppressWarnings("unchecked")
+    public final T getModelObject() {
+        return (T) getDefaultModelObject();
+    }
 
+    public final void setModel(IModel<T> model) {
+        setDefaultModel(model);
+    }
+
+    public final void setModelObject(T object) {
+        setDefaultModelObject(object);
+    }
 }

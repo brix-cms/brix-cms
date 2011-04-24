@@ -22,36 +22,33 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class BrixTabbedPanel extends TabbedPanel
-{
+public class BrixTabbedPanel extends TabbedPanel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public BrixTabbedPanel(String id, List<IBrixTab> tabs)
-	{
-		super(id, sort(tabs));
-	}
-	
-	static List<ITab> sort(List<IBrixTab> tabs)
-	{
-		List<ITab> result = new ArrayList<ITab>();		
-		
-		result.addAll(tabs);
-		Collections.sort(result, new Comparator<ITab>() {
-			public int compare(ITab o1, ITab o2)
-			{
-				IBrixTab t1 = (IBrixTab) o1;
-				IBrixTab t2 = (IBrixTab) o2;
-				
-				return t2.getPriority() - t1.getPriority();
-			}
-		});
-		
-		return result;
-	}	
-	
-	@Override
-	protected String getTabContainerCssClass()
-	{
-		return "brix-tab-row";
-	}
+    public BrixTabbedPanel(String id, List<IBrixTab> tabs) {
+        super(id, sort(tabs));
+    }
 
+    static List<ITab> sort(List<IBrixTab> tabs) {
+        List<ITab> result = new ArrayList<ITab>();
+
+        result.addAll(tabs);
+        Collections.sort(result, new Comparator<ITab>() {
+            public int compare(ITab o1, ITab o2) {
+                IBrixTab t1 = (IBrixTab) o1;
+                IBrixTab t2 = (IBrixTab) o2;
+
+                return t2.getPriority() - t1.getPriority();
+            }
+        });
+
+        return result;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected String getTabContainerCssClass() {
+        return "brix-tab-row";
+    }
 }

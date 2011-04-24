@@ -19,22 +19,26 @@ import org.brixcms.jcr.api.wrapper.WrapperAccessor;
 import javax.jcr.version.VersionIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-public interface JcrVersionIterator extends VersionIterator
-{
+public interface JcrVersionIterator extends VersionIterator {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrVersionIterator wrap(VersionIterator delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrVersionIteratorWrapper.wrap(delegate, session);
-        }
-    };
 
-    public VersionIterator getDelegate();
+// --------------------- Interface VersionIterator ---------------------
 
     public JcrVersion nextVersion();
 
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public VersionIterator getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrVersionIterator wrap(VersionIterator delegate, JcrSession session) {
+            return WrapperAccessor.JcrVersionIteratorWrapper.wrap(delegate, session);
+        }
+    }
 }

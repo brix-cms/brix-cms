@@ -17,13 +17,9 @@ package org.brixcms.plugin.menu.tile;
 import org.brixcms.plugin.menu.tile.subtree.SubTreeMenuTile;
 
 /**
- * 
  * @author igor.vaynberg
- *@deprecated this is here only for backwards compatibility, usee
- *             {@link SubTreeMenuTile} instead
+ * @deprecated this is here only for backwards compatibility, usee {@link SubTreeMenuTile} instead
  */
 @Deprecated
-public class MenuTile extends SubTreeMenuTile
-{
-
+public class MenuTile extends SubTreeMenuTile {
 }

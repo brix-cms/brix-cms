@@ -24,48 +24,55 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 /**
  * Stateful stock quote tile definition.
- * 
- * This tile is stateful because its {@link StatefulStockQuotePanel} keeps state like a regular
- * Wicket component and thus gains all the advantages of Wicket's automatic state management.
- * 
- * Brix supports both stateful and stateless tiles, for a stateless variant of this tile see
- * {@link StatelessStockQuoteTile}
- * 
+ * <p/>
+ * This tile is stateful because its {@link StatefulStockQuotePanel} keeps state like a regular Wicket component and
+ * thus gains all the advantages of Wicket's automatic state management.
+ * <p/>
+ * Brix supports both stateful and stateless tiles, for a stateless variant of this tile see {@link
+ * StatelessStockQuoteTile}
+ *
  * @author igor.vaynberg
  */
-public class StatefulStockQuoteTile implements Tile
-{
+public class StatefulStockQuoteTile implements Tile {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    /** {@inheritDoc} */
-    public String getDisplayName()
-    {
+
+// --------------------- Interface Tile ---------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDisplayName() {
         return "Stateful Quote";
     }
 
-    /** {@inheritDoc} */
-    public String getTypeName()
-    {
+    /**
+     * {@inheritDoc}
+     */
+    public String getTypeName() {
         return "brix.demo.StatefulStockQuoteTile";
     }
 
-    /** {@inheritDoc} */
-    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
-    {
+    /**
+     * {@inheritDoc}
+     */
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
         // this tile has no config options
         return new EmptyTileEditorPanel(id);
     }
 
-    /** {@inheritDoc} */
-    public Component newViewer(String id, IModel<BrixNode> tileNode)
-    {
+    /**
+     * {@inheritDoc}
+     */
+    public Component newViewer(String id, IModel<BrixNode> tileNode) {
         // create and return a panel that will render the tile
         return new StatefulStockQuotePanel(id);
     }
 
-    /** {@inheritDoc} */
-    public boolean requiresSSL(IModel<BrixNode> tileNode)
-    {
+    /**
+     * {@inheritDoc}
+     */
+    public boolean requiresSSL(IModel<BrixNode> tileNode) {
         return false;
     }
-
 }

@@ -32,14 +32,11 @@ import java.util.Arrays;
 
 /**
  * A Panel that is used to change the type of a MenuType to any of the possible options
- *
- * Created by IntelliJ IDEA.
- * User: korbinianbachl
- * Date: 08.09.2010
- * Time: 20:55:51
+ * <p/>
+ * Created by IntelliJ IDEA. User: korbinianbachl Date: 08.09.2010 Time: 20:55:51
  */
 public abstract class SwitcherCellPanel extends Panel {
-
+// ------------------------------ FIELDS ------------------------------
 
     IModel<Menu.ChildEntry.MenuType> typeModel;
     IModel<Reference> referenceModel;
@@ -47,13 +44,14 @@ public abstract class SwitcherCellPanel extends Panel {
     ReferenceEditorConfiguration conf;
     WebMarkupContainer container;
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
     /**
-     * 
-     * @param id ComponentID
-     * @param typeModel Model of the MenuType
-     * @param referenceModel Model of the Reference (backwards compatible)
+     * @param id               ComponentID
+     * @param typeModel        Model of the MenuType
+     * @param referenceModel   Model of the Reference (backwards compatible)
      * @param labelOrCodeModel Model of the "Label" or "Code" String
-     * @param conf  ReferenceEditorConfiguration for ReferenceEditor
+     * @param conf             ReferenceEditorConfiguration for ReferenceEditor
      */
     public SwitcherCellPanel(String id,
                              IModel<Menu.ChildEntry.MenuType> typeModel,
@@ -85,20 +83,18 @@ public abstract class SwitcherCellPanel extends Panel {
 
         form.add(choice);
         add(form);
-
     }
 
     /**
      * derives the right editPanel
      *
-     * @return  a Component that is to be attached
+     * @return a Component that is to be attached
      */
     private Component getEditPanel() {
         String id = "editPanel";
         Component returnComponent;
 
         if (typeModel.getObject() == Menu.ChildEntry.MenuType.REFERENCE) {
-
             returnComponent = new ReferenceColumnPanel(id, referenceModel) {
                 @Override
                 public ReferenceEditorConfiguration getConfiguration() {
@@ -111,13 +107,10 @@ public abstract class SwitcherCellPanel extends Panel {
                 }
             };
         } else {
-            returnComponent = new AjaxEditableMultiLineLabel<String>(id,labelOrCodeModel);             
+            returnComponent = new AjaxEditableMultiLineLabel<String>(id, labelOrCodeModel);
         }
         return returnComponent;
     }
 
-
     abstract boolean isEditing();
-
-
 }

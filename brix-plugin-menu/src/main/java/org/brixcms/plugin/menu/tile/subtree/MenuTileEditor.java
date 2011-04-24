@@ -23,48 +23,48 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.menu.tile.MenuPicker;
 import org.brixcms.plugin.site.page.tile.admin.GenericTileEditorPanel;
 
-class MenuTileEditor extends GenericTileEditorPanel<BrixNode>
-{
-	private MenuContainer currentEntry = new MenuContainer();
+class MenuTileEditor extends GenericTileEditorPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-		public MenuTileEditor(String id, IModel<BrixNode> containerNode)
-	{
-		super(id, containerNode);
+    private MenuContainer currentEntry = new MenuContainer();
 
-		add(new MenuPicker("menuPicker",
-				new PropertyModel<BrixNode>(currentEntry, "menuNode"), containerNode));
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		Form<MenuContainer> form;
-		add(form = new Form<MenuContainer>("form", new CompoundPropertyModel<MenuContainer>(
-				new PropertyModel<MenuContainer>(this, "currentEntry"))));
+    public MenuTileEditor(String id, IModel<BrixNode> containerNode) {
+        super(id, containerNode);
 
-		form.add(new TextField<String>("outerContainerStyleClass"));
-		form.add(new TextField<String>("innerContainerStyleClass"));
-		form.add(new TextField<String>("selectedItemStyleClass"));
-		form.add(new TextField<String>("itemWithSelectedChildStyleClass"));
-		form.add(new TextField<Integer>("startAtLevel"));
-		form.add(new TextField<Integer>("renderLevels"));
-	}
+        add(new MenuPicker("menuPicker",
+                new PropertyModel<BrixNode>(currentEntry, "menuNode"), containerNode));
 
-	@Override
-	public void load(BrixNode node)
-	{
-		currentEntry.load(node);
-	}
+        Form<MenuContainer> form;
+        add(form = new Form<MenuContainer>("form", new CompoundPropertyModel<MenuContainer>(
+                new PropertyModel<MenuContainer>(this, "currentEntry"))));
 
-	@Override
-	public void save(BrixNode node)
-	{
-		currentEntry.save(node);
-	}
+        form.add(new TextField<String>("outerContainerStyleClass"));
+        form.add(new TextField<String>("innerContainerStyleClass"));
+        form.add(new TextField<String>("selectedItemStyleClass"));
+        form.add(new TextField<String>("itemWithSelectedChildStyleClass"));
+        form.add(new TextField<Integer>("startAtLevel"));
+        form.add(new TextField<Integer>("renderLevels"));
+    }
 
-	@Override
-	protected void onDetach()
-	{
-		if (currentEntry != null)
-		{
-			currentEntry.detach();
-		}
-		super.onDetach();
-	}
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public void load(BrixNode node) {
+        currentEntry.load(node);
+    }
+
+    @Override
+    protected void onDetach() {
+        if (currentEntry != null) {
+            currentEntry.detach();
+        }
+        super.onDetach();
+    }
+
+    @Override
+    public void save(BrixNode node) {
+        currentEntry.save(node);
+    }
 }

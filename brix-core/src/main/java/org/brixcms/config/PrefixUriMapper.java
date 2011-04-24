@@ -18,75 +18,69 @@ import org.brixcms.Brix;
 import org.brixcms.Path;
 
 /**
- * Uri mapper that mounts cms urls on a certain prefix. Eg
- * <code>new PrefixUriMapper(new Path("/docs/cms"))</code> will mount all cms urls under the
- * <code>/docs/cms/*</code> url space.
- * 
+ * Uri mapper that mounts cms urls on a certain prefix. Eg <code>new PrefixUriMapper(new Path("/docs/cms"))</code> will
+ * mount all cms urls under the <code>/docs/cms/*</code> url space.
+ *
  * @author ivaynberg
- * 
  */
-public abstract class PrefixUriMapper implements UriMapper
-{
+public abstract class PrefixUriMapper implements UriMapper {
+// ------------------------------ FIELDS ------------------------------
+
     private final Path prefix;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
-     * 
-     * @param prefix
-     *            absolute path to mount the cms uri space on
+     *
+     * @param prefix absolute path to mount the cms uri space on
      */
-    public PrefixUriMapper(Path prefix)
-    {
-        if (!prefix.isAbsolute())
-        {
+    public PrefixUriMapper(Path prefix) {
+        if (!prefix.isAbsolute()) {
             throw new IllegalArgumentException("Prefix must be an absolute path");
         }
 
         this.prefix = prefix;
     }
 
-    /** {@inheritDoc} */
-    public Path getNodePathForUriPath(Path uriPath, Brix brix)
-    {
-        if (prefix.isAncestorOf(uriPath))
-        {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface UriMapper ---------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    public Path getNodePathForUriPath(Path uriPath, Brix brix) {
+        if (prefix.isAncestorOf(uriPath)) {
             // strip prefix from path
             return uriPath.toRelative(prefix).toAbsolute();
-        }
-        else if (prefix.equals(uriPath))
-        {
+        } else if (prefix.equals(uriPath)) {
             // path is same as prefix, which equates to root
             return Path.ROOT;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    /** {@inheritDoc} */
-    public Path getUriPathForNode(Path nodePath, Brix brix)
-    {
+    /**
+     * {@inheritDoc}
+     */
+    public Path getUriPathForNode(Path nodePath, Brix brix) {
         Path uriPath = prefix;
 
-        if (!nodePath.isRoot())
-        {
+        if (!nodePath.isRoot()) {
             // nodePath is not root, we have to append it to prefix
             uriPath = prefix.append(nodePath.toRelative(Path.ROOT));
         }
 
         return uriPath;
-
     }
 
-    public String rewriteStaticRelativeUrl(String url, String contextPrefix)
-    {
-        if (prefix.isRoot())
-        {
+    public String rewriteStaticRelativeUrl(String url, String contextPrefix) {
+        if (prefix.isRoot()) {
             return contextPrefix + url;
-        }
-        else
-        {
+        } else {
             return contextPrefix + prefix.toRelative(Path.ROOT) + "/" + url;
         }
     }

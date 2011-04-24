@@ -18,28 +18,32 @@ import org.brixcms.BrixNodeModel;
 import org.brixcms.markup.tag.Text;
 import org.brixcms.plugin.site.page.AbstractContainer;
 
-public class TitleText implements Text
-{
-	private final BrixNodeModel nodeModel;
+public class TitleText implements Text {
+// ------------------------------ FIELDS ------------------------------
 
-	public TitleText(AbstractContainer container)
-	{
-		nodeModel = new BrixNodeModel(container);
-		nodeModel.detach();
-	}
+    private final BrixNodeModel nodeModel;
 
-	public String getText()
-	{
-		AbstractContainer container = (AbstractContainer) new BrixNodeModel(nodeModel).getObject();
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		String title = null;
-		while (title == null && container != null)
-		{
-			title = container.getTitle();
-			container = container.getTemplate();
-		}
-		
-		return title != null ? title : "";
-	}
+    public TitleText(AbstractContainer container) {
+        nodeModel = new BrixNodeModel(container);
+        nodeModel.detach();
+    }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Text ---------------------
+
+    public String getText() {
+        AbstractContainer container = (AbstractContainer) new BrixNodeModel(nodeModel).getObject();
+
+        String title = null;
+        while (title == null && container != null) {
+            title = container.getTitle();
+            container = container.getTemplate();
+        }
+
+        return title != null ? title : "";
+    }
 }

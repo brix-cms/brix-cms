@@ -18,37 +18,39 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.workspace.Workspace;
 
 
-public abstract class AbstractNodeAction extends AbstractAction
-{
+public abstract class AbstractNodeAction extends AbstractAction {
+// ------------------------------ FIELDS ------------------------------
+
     private final BrixNode node;
-    
-    public AbstractNodeAction(Context context, BrixNode node)
-    {
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public AbstractNodeAction(Context context, BrixNode node) {
         super(context);
         this.node = node;
     }
-    
-    public BrixNode getNode()
-    {
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public BrixNode getNode() {
         return node;
     }
-    
-    public Workspace getWorkspace()
-    {
-        if (node == null)
-        {
-            return null;
-        }
-        else
-        {
-            String id = node.getSession().getWorkspace().getName();            
-            return node.getBrix().getWorkspaceManager().getWorkspace(id);
-        }
-    }
+
+// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "AbstractNodeAction{" + "node=" + node + "} " + super.toString();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Workspace getWorkspace() {
+        if (node == null) {
+            return null;
+        } else {
+            String id = node.getSession().getWorkspace().getName();
+            return node.getBrix().getWorkspaceManager().getWorkspace(id);
+        }
     }
 }

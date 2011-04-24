@@ -17,18 +17,17 @@ package org.brixcms.web.nodepage.toolbar;
 import org.brixcms.auth.Action;
 
 /**
- * Action that determines whether or not a user can see the workspace switching toolbar when
- * viewing a site.
- * 
+ * Action that determines whether or not a user can see the workspace switching toolbar when viewing a site.
+ *
  * @author igor.vaynberg
- * 
  */
-public class AccessWorkspaceSwitcherToolbarAction implements Action
-{
+public class AccessWorkspaceSwitcherToolbarAction implements Action {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public Context getContext()
-    {
+
+// --------------------- Interface Action ---------------------
+
+    public Context getContext() {
         return Context.PRESENTATION;
     }
-
 }

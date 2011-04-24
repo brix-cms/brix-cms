@@ -27,93 +27,75 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class VariableTransformer extends MarkupSourceTransformer
-{
-	private final BrixNode pageNode;
+public class VariableTransformer extends MarkupSourceTransformer {
+// ------------------------------ FIELDS ------------------------------
 
-	public VariableTransformer(MarkupSource delegate, BrixNode pageNode)
-	{
-		super(delegate);
-		this.pageNode = pageNode;
-	}
-	
-	int skipLevel = 0;
+    private static final String VAR_TAG_NAME = Brix.NS_PREFIX + "var";
 
-	@Override
-	protected List<Item> transform(List<Item> originalItems)
-	{
-		List<Item> result = new ArrayList<Item>(originalItems.size());
-		for (Item i : originalItems)
-		{
-			if (i instanceof Tag)
-			{
-				Item item = processTag((Tag) i);
-				if (item != null)
-				{
-					result.add(item);	
-				}				
-			}
-			else if (skipLevel == 0)
-			{
-				result.add(i);
-			}
-		}
-		return result;
-	}
+    int skipLevel = 0;
+    private final BrixNode pageNode;
 
-	private static final String VAR_TAG_NAME = Brix.NS_PREFIX + "var";
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	private Item processTag(Tag tag)
-	{
-		if (skipLevel > 0)
-		{
-			if (tag.getType() == Tag.Type.OPEN)
-				++skipLevel;
-			else if (tag.getType() == Tag.Type.CLOSE)
-				--skipLevel;
-			return null;
-		}
-		
-		String name = tag.getName();
-		if (VAR_TAG_NAME.equals(name))
-		{
-			if (tag.getType() == Tag.Type.OPEN)
-			{
-				++skipLevel;
-			}
-			String key = tag.getAttributeMap().get("key");
-			return new VariableText(pageNode, key);
-		}
-		else if (tag.getClass().equals(SimpleTag.class))
-		{
-			// simple tag is guaranteed to be "static" so we will only wrap it
-			// if really needed
-			return processSimpleTag(tag);
-		}
-		else if (tag instanceof ComponentTag)
-		{
-			return new VariableComponentTag(pageNode, (ComponentTag) tag);
-		}
-		else
-		{
-			return new VariableTag(pageNode, tag);
-		}
-	}
+    public VariableTransformer(MarkupSource delegate, BrixNode pageNode) {
+        super(delegate);
+        this.pageNode = pageNode;
+    }
 
-	private Item processSimpleTag(Tag tag)
-	{
-		Map<String, String> attributes = tag.getAttributeMap();
-		if (attributes != null)
-		{
-			for (String s : attributes.values())
-			{
-				if (VariableTag.getKey(s) != null)
-				{
-					return new VariableTag(pageNode, tag);
-				}
-			}
-		}
-		return tag;
-	}
+// -------------------------- OTHER METHODS --------------------------
 
+    @Override
+    protected List<Item> transform(List<Item> originalItems) {
+        List<Item> result = new ArrayList<Item>(originalItems.size());
+        for (Item i : originalItems) {
+            if (i instanceof Tag) {
+                Item item = processTag((Tag) i);
+                if (item != null) {
+                    result.add(item);
+                }
+            } else if (skipLevel == 0) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    private Item processTag(Tag tag) {
+        if (skipLevel > 0) {
+            if (tag.getType() == Tag.Type.OPEN)
+                ++skipLevel;
+            else if (tag.getType() == Tag.Type.CLOSE)
+                --skipLevel;
+            return null;
+        }
+
+        String name = tag.getName();
+        if (VAR_TAG_NAME.equals(name)) {
+            if (tag.getType() == Tag.Type.OPEN) {
+                ++skipLevel;
+            }
+            String key = tag.getAttributeMap().get("key");
+            return new VariableText(pageNode, key);
+        } else if (tag.getClass().equals(SimpleTag.class)) {
+            // simple tag is guaranteed to be "static" so we will only wrap it
+            // if really needed
+            return processSimpleTag(tag);
+        } else if (tag instanceof ComponentTag) {
+            return new VariableComponentTag(pageNode, (ComponentTag) tag);
+        } else {
+            return new VariableTag(pageNode, tag);
+        }
+    }
+
+    private Item processSimpleTag(Tag tag) {
+        Map<String, String> attributes = tag.getAttributeMap();
+        if (attributes != null) {
+            for (String s : attributes.values()) {
+                if (VariableTag.getKey(s) != null) {
+                    return new VariableTag(pageNode, tag);
+                }
+            }
+        }
+        return tag;
+    }
 }

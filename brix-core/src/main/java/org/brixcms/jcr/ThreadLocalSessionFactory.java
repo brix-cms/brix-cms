@@ -22,38 +22,37 @@ import javax.jcr.Repository;
 
 public class ThreadLocalSessionFactory extends AbstractThreadLocalSessionFactory
         implements
-            JcrSessionFactory
-{
+        JcrSessionFactory {
+// ------------------------------ FIELDS ------------------------------
+
     static final Logger logger = LoggerFactory.getLogger(ThreadLocalSessionFactory.class);
 
     private final Repository repository;
     private final Credentials credentials;
 
-    public ThreadLocalSessionFactory(Repository repository, Credentials credentials)
-    {
-        if (repository == null)
-        {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ThreadLocalSessionFactory(Repository repository, Credentials credentials) {
+        if (repository == null) {
             throw new IllegalArgumentException("repository cannot be null");
         }
 
-        if (credentials == null)
-        {
+        if (credentials == null) {
             throw new IllegalArgumentException("credentials cannot be null");
         }
         this.credentials = credentials;
         this.repository = repository;
     }
 
-    @Override
-    protected Repository getRepository()
-    {
-        return repository;
-    }
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Override
-    protected Credentials getCredentials()
-    {
+    protected Credentials getCredentials() {
         return credentials;
     }
 
+    @Override
+    protected Repository getRepository() {
+        return repository;
+    }
 }

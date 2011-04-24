@@ -27,58 +27,46 @@ import org.brixcms.web.tab.IBrixTab;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageFolderNodeTabFactory implements ManageNodeTabFactory
-{
+public class ManageFolderNodeTabFactory implements ManageNodeTabFactory {
+// -------------------------- STATIC METHODS --------------------------
 
-	public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
-	{
-		if (nodeModel.getObject().isFolder())
-		{
-			return getTabs(nodeModel);
-		}
-		else
-		{
-			return null;
-		}
-	}
+    public static List<IBrixTab> getTabs(final IModel<BrixNode> folderModel) {
+        List<IBrixTab> tabs = new ArrayList<IBrixTab>(2);
+        tabs.add(new CachingAbstractTab(new ResourceModel("listing", "Listing"), 100) {
+            @Override
+            public Panel newPanel(String panelId) {
+                return new ListFolderNodesTab(panelId, folderModel);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return SitePlugin.get().canViewNodeChildren(folderModel.getObject(), Context.ADMINISTRATION);
+            }
+        });
+        tabs.add(new CachingAbstractTab(new ResourceModel("properties", "Properties")) {
+            @Override
+            public Panel newPanel(String panelId) {
+                return new PropertiesTab(panelId, folderModel);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return SitePlugin.get().canEditNode(folderModel.getObject(), Context.ADMINISTRATION);
+            }
+        });
+        return tabs;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
 
 
-	public static List<IBrixTab> getTabs(final IModel<BrixNode> folderModel)
-	{
-		List<IBrixTab> tabs = new ArrayList<IBrixTab>(2);
-		tabs.add(new CachingAbstractTab(new ResourceModel("listing", "Listing"), 100)
-		{
+// --------------------- Interface ManageNodeTabFactory ---------------------
 
-			@Override
-			public Panel newPanel(String panelId)
-			{
-				return new ListFolderNodesTab(panelId, folderModel);
-			}
-
-			@Override
-			public boolean isVisible()
-			{
-				return SitePlugin.get().canViewNodeChildren(folderModel.getObject(), Context.ADMINISTRATION);
-			}
-
-		});
-		tabs.add(new CachingAbstractTab(new ResourceModel("properties", "Properties"))
-		{
-
-			@Override
-			public Panel newPanel(String panelId)
-			{
-				return new PropertiesTab(panelId, folderModel);
-			}
-
-			@Override
-			public boolean isVisible()
-			{
-				return SitePlugin.get().canEditNode(folderModel.getObject(), Context.ADMINISTRATION);
-			}
-
-		});
-		return tabs;
-	}
-
+    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
+        if (nodeModel.getObject().isFolder()) {
+            return getTabs(nodeModel);
+        } else {
+            return null;
+        }
+    }
 }

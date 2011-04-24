@@ -29,57 +29,55 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import java.util.Collection;
 
-public class SessionBehavior implements Behavior
-{
+public class SessionBehavior implements Behavior {
+// ------------------------------ FIELDS ------------------------------
+
     private final Brix brix;
 
-    public SessionBehavior(Brix brix)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public SessionBehavior(Brix brix) {
         this.brix = brix;
     }
 
-    public void handleException(Exception e)
-    {
-        if (e instanceof RepositoryException)
-        {
-            throw new JcrException((RepositoryException)e);
-        }
-        else
-        {
-            throw new BrixException(e);
-        }
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public void nodeSaved(JcrNode node)
-    {
-        EventUtil.raiseSaveEvent(node);
-    }
 
-    public JcrNode wrap(Node node, JcrSession session)
-    {
-    	if (node instanceof JcrNode)
-    	{
-    		return (JcrNode) node;
-    	}
-    	
+// --------------------- Interface Behavior ---------------------
+
+
+    public JcrNode wrap(Node node, JcrSession session) {
+        if (node instanceof JcrNode) {
+            return (JcrNode) node;
+        }
+
         JcrNode n = new NodeWrapper(node, session);
 
         Collection<JcrNodeWrapperFactory> factories = brix.getConfig().getRegistry().lookupCollection(
-            JcrNodeWrapperFactory.POINT);
+                JcrNodeWrapperFactory.POINT);
 
-        for (JcrNodeWrapperFactory factory : factories)
-        {
-            if (factory.canWrap(brix, n))
-            {
+        for (JcrNodeWrapperFactory factory : factories) {
+            if (factory.canWrap(brix, n)) {
                 return factory.wrap(brix, node, session);
             }
         }
 
-        if (ResourceNode.FACTORY.canWrap(brix, n))
-        {
+        if (ResourceNode.FACTORY.canWrap(brix, n)) {
             return ResourceNode.FACTORY.wrap(brix, node, session);
         }
 
         return new BrixNode(node, session);
+    }
+
+    public void nodeSaved(JcrNode node) {
+        EventUtil.raiseSaveEvent(node);
+    }
+
+    public void handleException(Exception e) {
+        if (e instanceof RepositoryException) {
+            throw new JcrException((RepositoryException) e);
+        } else {
+            throw new BrixException(e);
+        }
     }
 }

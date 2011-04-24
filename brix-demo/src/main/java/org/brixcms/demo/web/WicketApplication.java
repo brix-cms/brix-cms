@@ -36,65 +36,58 @@ import org.slf4j.LoggerFactory;
 import javax.jcr.ImportUUIDBehavior;
 
 /**
- * Application object for your web application. If you want to run this application without
- * deploying, run the Start class.
- * 
+ * Application object for your web application. If you want to run this application without deploying, run the Start
+ * class.
+ *
  * @see wicket.myproject.Start#main(String[])
  */
-public final class WicketApplication extends AbstractWicketApplication
-{
+public final class WicketApplication extends AbstractWicketApplication {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger log = LoggerFactory.getLogger(WicketApplication.class);
 
-    /** brix instance */
+    /**
+     * brix instance
+     */
     private Brix brix;
 
-    public Brix getBrix()
-    {
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public Brix getBrix() {
         return brix;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    protected IRequestCycleProcessor newRequestCycleProcessor()
-    {
-        /*
-         * install brix request cycle processor
-         * 
-         * this will allow brix to take over part of wicket's url space and handle requests
-         */
-        return new BrixRequestCycleProcessor(brix);
-    }
+// -------------------------- OTHER METHODS --------------------------
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Class< ? extends Page> getHomePage()
-    {
+    public Class<? extends Page> getHomePage() {
         // use special class so that the URL coding strategy knows we want to go home
         // it is not possible to just return null here because some pages (e.g. expired page)
         // rely on knowing the home page
         return BrixNodePageUrlCodingStrategy.HomePage.class;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected void init()
-    {
+    protected void init() {
         super.init();
 
         final JcrSessionFactory sf = getJcrSessionFactory();
         final WorkspaceManager wm = getWorkspaceManager();
 
         getDebugSettings().setOutputMarkupContainerClassName(true);
-        
-        try
-        {
+
+        try {
             // create uri mapper for the cms
             // we are mounting the cms on the root, and getting the workspace name from the
             // application properties
-            UriMapper mapper = new PrefixUriMapper(Path.ROOT)
-            {
-                public Workspace getWorkspaceForRequest(WebRequestCycle requestCycle, Brix brix)
-                {
+            UriMapper mapper = new PrefixUriMapper(Path.ROOT) {
+                public Workspace getWorkspaceForRequest(WebRequestCycle requestCycle, Brix brix) {
                     final String name = getProperties().getJcrDefaultWorkspace();
                     SitePlugin sitePlugin = SitePlugin.get(brix);
                     return sitePlugin.getSiteWorkspace(name, getProperties().getWorkspaceDefaultState());
@@ -111,12 +104,9 @@ public final class WicketApplication extends AbstractWicketApplication
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Exception in WicketApplication init()", e);
-        }
-        finally
-        {
+        } finally {
             // since we accessed session factory we also have to perform cleanup
             cleanupSessionFactory();
         }
@@ -129,17 +119,26 @@ public final class WicketApplication extends AbstractWicketApplication
         // mountBookmarkablePage("/Forbiden", ForbiddenPage.class);
     }
 
-    private void initDefaultWorkspace()
-    {
-        try
-        {
+    /**
+     * Allow Brix to perform repository initialization
+     */
+    private void initializeRepository() {
+        try {
+            brix.initRepository();
+        } finally {
+            // cleanup any sessions we might have created
+            cleanupSessionFactory();
+        }
+    }
+
+    private void initDefaultWorkspace() {
+        try {
             final String defaultState = getProperties().getWorkspaceDefaultState();
             final String wn = getProperties().getJcrDefaultWorkspace();
             final SitePlugin sp = SitePlugin.get(brix);
 
 
-            if (!sp.siteExists(wn, defaultState))
-            {
+            if (!sp.siteExists(wn, defaultState)) {
                 Workspace w = sp.createSite(wn, defaultState);
                 JcrSession session = brix.getCurrentSession(w.getId());
 
@@ -150,28 +149,21 @@ public final class WicketApplication extends AbstractWicketApplication
 
                 session.save();
             }
-
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException("Could not initialize jackrabbit workspace with Brix", e);
         }
     }
 
     /**
-     * Allow Brix to perform repository initialization
+     * {@inheritDoc}
      */
-    private void initializeRepository()
-    {
-        try
-        {
-            brix.initRepository();
-        }
-        finally
-        {
-            // cleanup any sessions we might have created
-            cleanupSessionFactory();
-        }
+    @Override
+    protected IRequestCycleProcessor newRequestCycleProcessor() {
+        /*
+         * install brix request cycle processor
+         * 
+         * this will allow brix to take over part of wicket's url space and handle requests
+         */
+        return new BrixRequestCycleProcessor(brix);
     }
-   
 }

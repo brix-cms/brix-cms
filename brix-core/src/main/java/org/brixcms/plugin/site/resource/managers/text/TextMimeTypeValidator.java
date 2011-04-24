@@ -19,20 +19,19 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.brixcms.jcr.wrapper.BrixFileNode;
 
-public class TextMimeTypeValidator implements IValidator<String>
-{
+public class TextMimeTypeValidator implements IValidator<String> {
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public void validate(IValidatable<String> validatable)
-	{
-		final String value = validatable.getValue();
-		if (!BrixFileNode.isText(value))
-		{
-			ValidationError error = new ValidationError();
-			error.setMessage("Only text mime types are allowed (text/* or application/xml)");
-			error.addMessageKey(getClass().getSimpleName());
-			validatable.error(error);
-		}
 
-	}
+// --------------------- Interface IValidator ---------------------
 
+    public void validate(IValidatable<String> validatable) {
+        final String value = validatable.getValue();
+        if (!BrixFileNode.isText(value)) {
+            ValidationError error = new ValidationError();
+            error.setMessage("Only text mime types are allowed (text/* or application/xml)");
+            error.addMessageKey(getClass().getSimpleName());
+            validatable.error(error);
+        }
+    }
 }

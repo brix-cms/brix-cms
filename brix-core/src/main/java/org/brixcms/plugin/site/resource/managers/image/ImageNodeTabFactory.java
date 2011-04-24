@@ -30,46 +30,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ImageNodeTabFactory implements ManageNodeTabFactory
-{
-	public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
-	{
-		List<IBrixTab> result = new ArrayList<IBrixTab>();
+public class ImageNodeTabFactory implements ManageNodeTabFactory {
+// -------------------------- STATIC METHODS --------------------------
 
-		BrixNode node = nodeModel.getObject();
-		if (node instanceof ResourceNode && hasViewPermission(nodeModel)) 
-		{
-			String mime = ((BrixFileNode) node).getMimeType();
-			if (canHandleMimeType(mime))
-			{
-				result.add(getViewTab(nodeModel));
-			}
-		}
+    private static boolean canHandleMimeType(String mimeType) {
+        List<String> types = Arrays.asList(new String[]{"image/jpeg", "image/gif", "image/png"});
+        return mimeType != null && types.contains(mimeType.toLowerCase());
+    }
 
-		return result;
-	}
+    private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel) {
+        return new CachingAbstractTab(new ResourceModel("view", "View"), 100) {
+            @Override
+            public Panel newPanel(String panelId) {
+                return new ViewImagePanel(panelId, nodeModel);
+            }
+        };
+    }
 
-	private static boolean canHandleMimeType(String mimeType)
-	{
-		List<String> types = Arrays.asList(new String[] { "image/jpeg", "image/gif", "image/png" });
-		return mimeType != null && types.contains(mimeType.toLowerCase());
-	}
+    private static boolean hasViewPermission(IModel<BrixNode> model) {
+        return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
+    }
 
-	private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel)
-	{
-		return new CachingAbstractTab(new ResourceModel("view", "View"), 100)
-		{
-			@Override
-			public Panel newPanel(String panelId)
-			{
-				return new ViewImagePanel(panelId, nodeModel);
-			}
-		};
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	private static boolean hasViewPermission(IModel<BrixNode> model)
-	{
-		return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
-	}
 
+// --------------------- Interface ManageNodeTabFactory ---------------------
+
+    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
+        List<IBrixTab> result = new ArrayList<IBrixTab>();
+
+        BrixNode node = nodeModel.getObject();
+        if (node instanceof ResourceNode && hasViewPermission(nodeModel)) {
+            String mime = ((BrixFileNode) node).getMimeType();
+            if (canHandleMimeType(mime)) {
+                result.add(getViewTab(nodeModel));
+            }
+        }
+
+        return result;
+    }
 }

@@ -21,83 +21,40 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
 
 /**
- * Base class that knows how to recursively collect parameters from child nodes that implement {@link PageParametersAware}.
- * Child nodes contribute parameters that they need for future instantiation, allowing a stateful URL to be composed from
- * the dynamic closure of the page and it's tiles.
+ * Base class that knows how to recursively collect parameters from child nodes that implement {@link
+ * PageParametersAware}. Child nodes contribute parameters that they need for future instantiation, allowing a stateful
+ * URL to be composed from the dynamic closure of the page and it's tiles.
  *
  * @author Igor Vaynberg
  */
-public abstract class AbstractPageParametersLink extends AbstractLink
-{
+public abstract class AbstractPageParametersLink extends AbstractLink {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public AbstractPageParametersLink(String id, IModel< ? > model)
-    {
-        super(id, model);
-    }
-
-    public AbstractPageParametersLink(String id)
-    {
+    public AbstractPageParametersLink(String id) {
         super(id);
     }
 
-    protected abstract String constructUrl(BrixPageParameters params);
-
-    protected String buildUrl()
-    {
-        final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
-        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component>()
-        {
-            public Object component(Component component)
-            {
-                ((PageParametersAware)component).contributeToPageParameters(parameters);
-                return IVisitor.CONTINUE_TRAVERSAL;
-            }
-        });
-        contributeToPageParameters(parameters);
-        return constructUrl(parameters);
+    public AbstractPageParametersLink(String id, IModel<?> model) {
+        super(id, model);
     }
 
-    /**
-     * Allows to change {@link BrixPageParameters} after all other components have contributed their
-     * state to it. This method can be used to postprocess the link URL.
-     */
-    protected void contributeToPageParameters(BrixPageParameters parameters)
-    {
-
-    }
-
-    /**
-     * Returns the initial {@link BrixPageParameters} used to build the URL.
-     *
-     * @return
-     */
-    protected BrixPageParameters getInitialParameters()
-    {
-        return new BrixPageParameters();
-    }
+// -------------------------- OTHER METHODS --------------------------
 
     @Override
-    protected void onComponentTag(ComponentTag tag)
-    {
+    protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
 
         // If we're disabled
-        if (!isLinkEnabled())
-        {
+        if (!isLinkEnabled()) {
             disableLink(tag);
-        }
-        else
-        {
+        } else {
             String url = buildUrl();
 
             if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link") ||
-                    tag.getName().equalsIgnoreCase("area"))
-            {
+                    tag.getName().equalsIgnoreCase("area")) {
                 // generate the href attribute
                 tag.put("href", Strings.replaceAll(url, "&", "&amp;"));
-            }
-            else
-            {
+            } else {
                 // or generate an onclick JS handler directly
                 // in firefox when the element is quickly clicked 3 times a
                 // second request is
@@ -112,7 +69,36 @@ public abstract class AbstractPageParametersLink extends AbstractLink
                                         "'; } ;return false");
             }
         }
+    }
+
+    protected String buildUrl() {
+        final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
+        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component>() {
+            public Object component(Component component) {
+                ((PageParametersAware) component).contributeToPageParameters(parameters);
+                return IVisitor.CONTINUE_TRAVERSAL;
+            }
+        });
+        contributeToPageParameters(parameters);
+        return constructUrl(parameters);
+    }
+
+    /**
+     * Returns the initial {@link BrixPageParameters} used to build the URL.
+     *
+     * @return
+     */
+    protected BrixPageParameters getInitialParameters() {
+        return new BrixPageParameters();
+    }
+
+    /**
+     * Allows to change {@link BrixPageParameters} after all other components have contributed their state to it. This
+     * method can be used to postprocess the link URL.
+     */
+    protected void contributeToPageParameters(BrixPageParameters parameters) {
 
     }
 
+    protected abstract String constructUrl(BrixPageParameters params);
 }

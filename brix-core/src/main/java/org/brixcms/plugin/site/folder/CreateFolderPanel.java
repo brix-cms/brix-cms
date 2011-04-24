@@ -33,70 +33,63 @@ import org.brixcms.web.util.validators.NodeNameValidator;
 
 import java.io.Serializable;
 
-public class CreateFolderPanel extends BrixGenericPanel<BrixNode>
-{
-	private String name;
+public class CreateFolderPanel extends BrixGenericPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-	public CreateFolderPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack)
-	{
-		super(id, model);
+    private String name;
 
-		Form<?> form = new Form<CreateFolderPanel>("form", new CompoundPropertyModel<CreateFolderPanel>(this));
-		add(form);
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		form.add(new ContainerFeedbackPanel("feedback", this));
+    public CreateFolderPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack) {
+        super(id, model);
 
-		form.add(new SubmitLink("create")
-		{
-			@Override
-			public void onSubmit()
-			{
-				createFolder();
-			}
-		});
+        Form<?> form = new Form<CreateFolderPanel>("form", new CompoundPropertyModel<CreateFolderPanel>(this));
+        add(form);
 
-		form.add(new Link<Void>("cancel")
-		{
-			@Override
-			public void onClick()
-			{
-				goBack.execute();
-			}
-		});
+        form.add(new ContainerFeedbackPanel("feedback", this));
 
-		final TextField<String> tf;
-		form.add(tf = new TextField<String>("name"));
-		tf.setRequired(true);
-		tf.add(NodeNameValidator.getInstance());
-	}
+        form.add(new SubmitLink("create") {
+            @Override
+            public void onSubmit() {
+                createFolder();
+            }
+        });
 
-	private void createFolder()
-	{
-		final JcrNode parent = (JcrNode) getModelObject();
+        form.add(new Link<Void>("cancel") {
+            @Override
+            public void onClick() {
+                goBack.execute();
+            }
+        });
 
-		final Path path = new Path(parent.getPath());
-		final Path newPath = path.append(new Path(name));
+        final TextField<String> tf;
+        form.add(tf = new TextField<String>("name"));
+        tf.setRequired(true);
+        tf.add(NodeNameValidator.getInstance());
+    }
 
-		final JcrSession session = parent.getSession();
+    private void createFolder() {
+        final JcrNode parent = (JcrNode) getModelObject();
 
-		if (session.itemExists(newPath.toString()))
-		{
-			class ModelObject implements Serializable
-			{
-				@SuppressWarnings("unused")
-				public String path = SitePlugin.get().fromRealWebNodePath(newPath.toString());
-			}
-			;
-			String error = getString("resourceExists", new Model<ModelObject>(new ModelObject()));
-			error(error);
-		}
-		else
-		{
-			FolderNode node = (FolderNode) parent.addNode(name, "nt:folder");
-			parent.save();
+        final Path path = new Path(parent.getPath());
+        final Path newPath = path.append(new Path(name));
 
-			SitePlugin.get().selectNode(this, node, true);
-		}
-	}
+        final JcrSession session = parent.getSession();
 
+        if (session.itemExists(newPath.toString())) {
+            class ModelObject implements Serializable {
+                @SuppressWarnings("unused")
+                public String path = SitePlugin.get().fromRealWebNodePath(newPath.toString());
+            }
+
+            ;
+            String error = getString("resourceExists", new Model<ModelObject>(new ModelObject()));
+            error(error);
+        } else {
+            FolderNode node = (FolderNode) parent.addNode(name, "nt:folder");
+            parent.save();
+
+            SitePlugin.get().selectNode(this, node, true);
+        }
+    }
 }

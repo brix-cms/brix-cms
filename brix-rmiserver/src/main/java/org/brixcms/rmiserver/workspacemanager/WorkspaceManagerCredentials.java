@@ -16,17 +16,20 @@ package org.brixcms.rmiserver.workspacemanager;
 
 import javax.jcr.Credentials;
 
-public class WorkspaceManagerCredentials implements Credentials
-{
+public class WorkspaceManagerCredentials implements Credentials {
+// ------------------------------ FIELDS ------------------------------
+
     static Credentials INSTANCE = new WorkspaceManagerCredentials();
 
-    WorkspaceManagerCredentials()
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    WorkspaceManagerCredentials() {
 
     }
 
-    public String getUserId()
-    {
+// -------------------------- OTHER METHODS --------------------------
+
+    public String getUserId() {
         return "workspacemanager";
     }
 }

@@ -14,14 +14,17 @@
 
 package org.brixcms.registry;
 
-public interface ExtensionPoint<T>
-{
-    public static enum Multiplicity {
-        SINGLETON,
-        COLLECTION;
-    }
+public interface ExtensionPoint<T> {
+// -------------------------- OTHER METHODS --------------------------
 
     Multiplicity getMultiplicity();
 
     String getUuid();
+
+// -------------------------- ENUMERATIONS --------------------------
+
+    public static enum Multiplicity {
+        SINGLETON,
+        COLLECTION;
+    }
 }

@@ -16,26 +16,21 @@ package org.brixcms.plugin.site.page.exception;
 
 import org.brixcms.exception.BrixException;
 
-public class TileAlreadyRegisteredException extends BrixException
-{
+public class TileAlreadyRegisteredException extends BrixException {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public TileAlreadyRegisteredException()
-    {
+    public TileAlreadyRegisteredException() {
     }
 
-    public TileAlreadyRegisteredException(String message)
-    {
+    public TileAlreadyRegisteredException(String message) {
         super(message);
     }
 
-    public TileAlreadyRegisteredException(Throwable cause)
-    {
+    public TileAlreadyRegisteredException(Throwable cause) {
         super(cause);
     }
 
-    public TileAlreadyRegisteredException(String message, Throwable cause)
-    {
+    public TileAlreadyRegisteredException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

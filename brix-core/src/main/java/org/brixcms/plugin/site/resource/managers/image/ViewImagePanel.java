@@ -23,47 +23,41 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.resource.ResourceRequestTarget;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-public class ViewImagePanel extends BrixGenericPanel<BrixNode>
-{
+public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public ViewImagePanel(String id, IModel<BrixNode> model)
-	{
+    public ViewImagePanel(String id, IModel<BrixNode> model) {
+        super(id, model);
 
-		super(id, model);
-		
-        final ResourceBehavior behavior = new ResourceBehavior()
-        {
+        final ResourceBehavior behavior = new ResourceBehavior() {
             @Override
-            IModel<BrixNode> getNodeModel()
-            {
+            IModel<BrixNode> getNodeModel() {
                 return ViewImagePanel.this.getModel();
             }
         };
 
-        add(new WebMarkupContainer("image")
-        {
+        add(new WebMarkupContainer("image") {
             @Override
-            protected void onComponentTag(ComponentTag tag)
-            {
+            protected void onComponentTag(ComponentTag tag) {
                 CharSequence url = getRequestCycle().urlFor(this, behavior,
                         IBehaviorListener.INTERFACE);
                 tag.put("src", url);
                 super.onComponentTag(tag);
             }
-        }.add(behavior));    
-	}
+        }.add(behavior));
+    }
+
+// -------------------------- INNER CLASSES --------------------------
 
     private abstract class ResourceBehavior extends AbstractBehavior
             implements
-                IBehaviorListener
-    {
-        public void onRequest()
-        {
+            IBehaviorListener {
+        public void onRequest() {
             getRequestCycle().setRequestTarget(new ResourceRequestTarget(getNodeModel()));
         }
 
         abstract IModel<BrixNode> getNodeModel();
-    };
+    }
 
-    
+    ;
 }

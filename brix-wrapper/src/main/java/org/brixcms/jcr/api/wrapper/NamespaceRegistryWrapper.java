@@ -20,76 +20,86 @@ import org.brixcms.jcr.api.JcrSession;
 import javax.jcr.NamespaceRegistry;
 
 /**
- * 
  * @author Matej Knopp
  */
 class NamespaceRegistryWrapper extends AbstractWrapper implements
-		JcrNamespaceRegistry {
+        JcrNamespaceRegistry {
+// -------------------------- STATIC METHODS --------------------------
 
-	private NamespaceRegistryWrapper(NamespaceRegistry delegate,
-			JcrSession session) {
-		super(delegate, session);
-	}
+    public static JcrNamespaceRegistry wrap(NamespaceRegistry delegate,
+                                            JcrSession session) {
+        if (delegate == null) {
+            return null;
+        } else {
+            return new NamespaceRegistryWrapper(delegate, session);
+        }
+    }
 
-	@Override
-	public NamespaceRegistry getDelegate() {
-		return (NamespaceRegistry) super.getDelegate();
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public static JcrNamespaceRegistry wrap(NamespaceRegistry delegate,
-			JcrSession session) {
-		if (delegate == null) {
-			return null;
-		} else {
-			return new NamespaceRegistryWrapper(delegate, session);
-		}
-	}
+    private NamespaceRegistryWrapper(NamespaceRegistry delegate,
+                                     JcrSession session) {
+        super(delegate, session);
+    }
 
-	public String getPrefix(final String uri) {
-		return executeCallback(new Callback<String>() {
-			public String execute() throws Exception {
-				return getDelegate().getPrefix(uri);
-			}
-		});
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public String[] getPrefixes() {
-		return executeCallback(new Callback<String[]>() {
-			public String[] execute() throws Exception {
-				return getDelegate().getPrefixes();
-			}
-		});
-	}
 
-	public String getURI(final String prefix) {
-		return executeCallback(new Callback<String>() {
-			public String execute() throws Exception {
-				return getDelegate().getURI(prefix);
-			}
-		});
-	}
+// --------------------- Interface NamespaceRegistry ---------------------
 
-	public String[] getURIs() {
-		return executeCallback(new Callback<String[]>() {
-			public String[] execute() throws Exception {
-				return getDelegate().getURIs();
-			}
-		});
-	}
 
-	public void registerNamespace(final String prefix, final String uri) {
-		executeCallback(new VoidCallback() {
-			public void execute() throws Exception {
-				getDelegate().registerNamespace(prefix, uri);
-			}
-		});
-	}
+    public void registerNamespace(final String prefix, final String uri) {
+        executeCallback(new VoidCallback() {
+            public void execute() throws Exception {
+                getDelegate().registerNamespace(prefix, uri);
+            }
+        });
+    }
 
-	public void unregisterNamespace(final String prefix) {
-		executeCallback(new VoidCallback() {
-			public void execute() throws Exception {
-				getDelegate().unregisterNamespace(prefix);
-			}
-		});
-	}
+    public void unregisterNamespace(final String prefix) {
+        executeCallback(new VoidCallback() {
+            public void execute() throws Exception {
+                getDelegate().unregisterNamespace(prefix);
+            }
+        });
+    }
+
+    public String[] getPrefixes() {
+        return executeCallback(new Callback<String[]>() {
+            public String[] execute() throws Exception {
+                return getDelegate().getPrefixes();
+            }
+        });
+    }
+
+    public String[] getURIs() {
+        return executeCallback(new Callback<String[]>() {
+            public String[] execute() throws Exception {
+                return getDelegate().getURIs();
+            }
+        });
+    }
+
+    public String getURI(final String prefix) {
+        return executeCallback(new Callback<String>() {
+            public String execute() throws Exception {
+                return getDelegate().getURI(prefix);
+            }
+        });
+    }
+
+    public String getPrefix(final String uri) {
+        return executeCallback(new Callback<String>() {
+            public String execute() throws Exception {
+                return getDelegate().getPrefix(uri);
+            }
+        });
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public NamespaceRegistry getDelegate() {
+        return (NamespaceRegistry) super.getDelegate();
+    }
 }

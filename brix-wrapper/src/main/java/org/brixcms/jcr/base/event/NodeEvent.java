@@ -20,43 +20,44 @@ import javax.jcr.RepositoryException;
 
 /**
  * Abstract event for events with node.
- * 
+ *
  * @author Matej Knopp
  */
-abstract class NodeEvent extends Event
-{
-	final Node node;
+abstract class NodeEvent extends Event {
+// ------------------------------ FIELDS ------------------------------
 
-	NodeEvent(Node node)
-	{
-		this.node = node;
-	}
+    final Node node;
 
-	Node getNode()
-	{
-		return node;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	Event onNewEvent(Event event, QueueCallback queueCallback) throws RepositoryException
-	{
-		// if this event's node or some of it's parent is being removed this
-		// event should be removed as well
-		if (event instanceof BeforeRemoveNodeEvent)
-		{
-			BeforeRemoveNodeEvent e = (BeforeRemoveNodeEvent) event;
-			if (getNode().getPath().startsWith(e.getNode().getPath()))
-			{
-				return null;
-			}
-		}
-		return this;
-	}
+    NodeEvent(Node node) {
+        this.node = node;
+    }
 
-	@Override
-	boolean isAffected(String path) throws RepositoryException
-	{
-		String currentPath = getNode().getPath();
-		return currentPath.startsWith(path);
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    Node getNode() {
+        return node;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    boolean isAffected(String path) throws RepositoryException {
+        String currentPath = getNode().getPath();
+        return currentPath.startsWith(path);
+    }
+
+    @Override
+    Event onNewEvent(Event event, QueueCallback queueCallback) throws RepositoryException {
+        // if this event's node or some of it's parent is being removed this
+        // event should be removed as well
+        if (event instanceof BeforeRemoveNodeEvent) {
+            BeforeRemoveNodeEvent e = (BeforeRemoveNodeEvent) event;
+            if (getNode().getPath().startsWith(e.getNode().getPath())) {
+                return null;
+            }
+        }
+        return this;
+    }
 }

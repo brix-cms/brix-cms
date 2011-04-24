@@ -24,79 +24,67 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionManager;
 import java.io.IOException;
 
-public class VersionedDefaultHandler extends DefaultHandler
-{
+public class VersionedDefaultHandler extends DefaultHandler {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public VersionedDefaultHandler()
-    {
+    public VersionedDefaultHandler() {
     }
 
-    public VersionedDefaultHandler(IOManager ioManager)
-    {
+    public VersionedDefaultHandler(IOManager ioManager) {
         super(ioManager);
     }
 
     public VersionedDefaultHandler(IOManager ioManager, String collectionNodetype,
-            String defaultNodetype, String contentNodetype)
-    {
+                                   String defaultNodetype, String contentNodetype) {
         super(ioManager, collectionNodetype, defaultNodetype, contentNodetype);
     }
 
-    private Node getNode(ImportContext context, boolean isCollection) throws RepositoryException
-    {
-        Node parentNode = (Node)context.getImportRoot();
-        String name = context.getSystemId();
-        if (parentNode.hasNode(name))
-        {
-            parentNode = parentNode.getNode(name);
-        }
-        else
-        {
-            String ntName = (isCollection) ? getCollectionNodeType() : getNodeType();
-            parentNode = parentNode.addNode(name, ntName);
-        }
-        return parentNode;
-    }
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IOHandler ---------------------
 
     @Override
-    public boolean importContent(ImportContext context, boolean isCollection) throws IOException
-    {
-
-        if (!canImport(context, isCollection))
-        {
+    public boolean importContent(ImportContext context, boolean isCollection) throws IOException {
+        if (!canImport(context, isCollection)) {
             throw new IOException(getName() + ": Cannot import " + context.getSystemId());
         }
 
-        try
-        {
-
+        try {
             Node node = getNode(context, isCollection);
 
             boolean needToCheckIn = false;
             VersionManager vm = node.getSession().getWorkspace().getVersionManager();
 
-            if (node instanceof Version && node.isCheckedOut() == false)
-            {
+            if (node instanceof Version && node.isCheckedOut() == false) {
                 vm.checkout(node.getPath());
                 needToCheckIn = true;
             }
 
             boolean result = super.importContent(context, isCollection);
 
-            if (needToCheckIn)
-            {
+            if (needToCheckIn) {
                 node.getSession().save();
                 vm.checkin(node.getPath());
             }
 
             return result;
-
-        }
-        catch (RepositoryException e)
-        {
+        } catch (RepositoryException e) {
             throw new IOException(e.getMessage());
         }
+    }
 
+// -------------------------- OTHER METHODS --------------------------
 
+    private Node getNode(ImportContext context, boolean isCollection) throws RepositoryException {
+        Node parentNode = (Node) context.getImportRoot();
+        String name = context.getSystemId();
+        if (parentNode.hasNode(name)) {
+            parentNode = parentNode.getNode(name);
+        } else {
+            String ntName = (isCollection) ? getCollectionNodeType() : getNodeType();
+            parentNode = parentNode.addNode(name, ntName);
+        }
+        return parentNode;
     }
 }

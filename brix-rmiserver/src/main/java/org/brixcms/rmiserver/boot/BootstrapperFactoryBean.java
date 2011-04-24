@@ -27,8 +27,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-public class BootstrapperFactoryBean implements ApplicationContextAware, InitializingBean
-{
+public class BootstrapperFactoryBean implements ApplicationContextAware, InitializingBean {
+// ------------------------------ FIELDS ------------------------------
+
     private ApplicationContext ctx;
 
     private SessionFactory sessionFactory;
@@ -40,56 +41,56 @@ public class BootstrapperFactoryBean implements ApplicationContextAware, Initial
     private String workspaceManagerLogin;
     private String workspaceManagerPassword;
 
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
-    public void setSessionFactory(SessionFactory sessionFactory)
-    {
-        this.sessionFactory = sessionFactory;
-    }
-
-    @Required
-    public void setUserService(UserService userService)
-    {
-        this.userService = userService;
-    }
-
-    @Required
-    public void setTransactionManager(PlatformTransactionManager transactionManager)
-    {
-        this.transactionManager = transactionManager;
-    }
-
-    @Required
-    public void setDataSource(DataSource dataSource)
-    {
+    public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Required
-    public void setWorkspaceManagerLogin(String workspaceManagerLogin)
-    {
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    @Required
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
+    @Required
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Required
+    public void setWorkspaceManagerLogin(String workspaceManagerLogin) {
         this.workspaceManagerLogin = workspaceManagerLogin;
     }
 
     @Required
-    public void setWorkspaceManagerPassword(String workspaceManagerPassword)
-    {
+    public void setWorkspaceManagerPassword(String workspaceManagerPassword) {
         this.workspaceManagerPassword = workspaceManagerPassword;
     }
 
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface ApplicationContextAware ---------------------
+
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.ctx = applicationContext;
     }
 
-    public void afterPropertiesSet() throws Exception
-    {
-        LocalSessionFactoryBean hsf = (LocalSessionFactoryBean)BeanFactoryUtils
+// --------------------- Interface InitializingBean ---------------------
+
+
+    public void afterPropertiesSet() throws Exception {
+        LocalSessionFactoryBean hsf = (LocalSessionFactoryBean) BeanFactoryUtils
                 .beanOfTypeIncludingAncestors(ctx, LocalSessionFactoryBean.class);
         Bootstrapper bootstrapper = new Bootstrapper(dataSource, transactionManager, hsf
                 .getConfiguration(), sessionFactory, userService, workspaceManagerLogin,
                 workspaceManagerPassword);
         bootstrapper.bootstrap();
     }
-
 }

@@ -31,9 +31,12 @@ import java.rmi.RemoteException;
  */
 
 public class RmiRepositoryFactory {
+// ------------------------------ FIELDS ------------------------------
+
     @SuppressWarnings("unused")
     private static final Logger log = LoggerFactory.getLogger(RmiRepositoryFactory.class);
 
+// -------------------------- STATIC METHODS --------------------------
 
     static Repository getRmiRepository(String url) throws MalformedURLException, NotBoundException, RemoteException {
         ClientRepositoryFactory factory = new ClientRepositoryFactory(new ClientAdapterFactory());

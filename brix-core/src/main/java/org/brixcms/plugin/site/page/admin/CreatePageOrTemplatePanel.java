@@ -34,90 +34,78 @@ import org.brixcms.plugin.site.page.TemplateNode;
 import org.brixcms.web.ContainerFeedbackPanel;
 import org.brixcms.web.util.validators.NodeNameValidator;
 
-public class CreatePageOrTemplatePanel extends NodeManagerPanel
-{
+public class CreatePageOrTemplatePanel extends NodeManagerPanel {
+// ------------------------------ FIELDS ------------------------------
 
-	private String name;
+    private String name;
 
-	public CreatePageOrTemplatePanel(String id, IModel<BrixNode> containerNodeModel, final String type,
-			final SimpleCallback goBack)
-	{
-		super(id, containerNodeModel);
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		String typeName = SitePlugin.get().getNodePluginForType(type).getName();
-		add(new Label("typeName", typeName));
-	
-		Form<?> form = new Form<CreatePageOrTemplatePanel>("form",
-				new CompoundPropertyModel<CreatePageOrTemplatePanel>(this));
-		add(form);
+    public CreatePageOrTemplatePanel(String id, IModel<BrixNode> containerNodeModel, final String type,
+                                     final SimpleCallback goBack) {
+        super(id, containerNodeModel);
 
-		form.add(new ContainerFeedbackPanel("feedback", this));
-		
-		form.add(new SubmitLink("create")
-		{
-			@Override
-			public void onSubmit()
-			{
-				createPage(type);
-			}
-		});
+        String typeName = SitePlugin.get().getNodePluginForType(type).getName();
+        add(new Label("typeName", typeName));
 
-		form.add(new Link<Void>("cancel")
-		{
-			@Override
-			public void onClick()
-			{
-				goBack.execute();
-			}
-		});
+        Form<?> form = new Form<CreatePageOrTemplatePanel>("form",
+                new CompoundPropertyModel<CreatePageOrTemplatePanel>(this));
+        add(form);
 
-		final TextField<String> tf;
-		form.add(tf = new TextField<String>("name"));
-		tf.setRequired(true);
-		tf.add(NodeNameValidator.getInstance());
+        form.add(new ContainerFeedbackPanel("feedback", this));
 
-	}
+        form.add(new SubmitLink("create") {
+            @Override
+            public void onSubmit() {
+                createPage(type);
+            }
+        });
 
-	private void createPage(String type)
-	{
-		final JcrNode parent = getModelObject();
+        form.add(new Link<Void>("cancel") {
+            @Override
+            public void onClick() {
+                goBack.execute();
+            }
+        });
 
-		if (parent.hasNode(name))
-		{
-			String error = getString("resourceExists", new Model<CreatePageOrTemplatePanel>(
-					CreatePageOrTemplatePanel.this));
-			error(error);
-		}
-		else
-		{
-			JcrNode page = parent.addNode(name, "nt:file");
+        final TextField<String> tf;
+        form.add(tf = new TextField<String>("name"));
+        tf.setRequired(true);
+        tf.add(NodeNameValidator.getInstance());
+    }
 
-			AbstractContainer node;
+    private void createPage(String type) {
+        final JcrNode parent = getModelObject();
 
-			node = initializePage(type, page);
-			
-			node.setTitle(name);
+        if (parent.hasNode(name)) {
+            String error = getString("resourceExists", new Model<CreatePageOrTemplatePanel>(
+                    CreatePageOrTemplatePanel.this));
+            error(error);
+        } else {
+            JcrNode page = parent.addNode(name, "nt:file");
 
-			node.setData("");
-			name = null;
+            AbstractContainer node;
 
-			parent.save();
+            node = initializePage(type, page);
 
-			SitePlugin.get().selectNode(this, node, true);
-		}
-	}
+            node.setTitle(name);
 
-	protected AbstractContainer initializePage(String type, JcrNode page) {
-		AbstractContainer node;
-		if (type.equals(PageSiteNodePlugin.TYPE))
-		{
-			node = PageNode.initialize(page);
-		}
-		else
-		{
-			node = TemplateNode.initialize(page);
-		}
-		return node;
-	}
+            node.setData("");
+            name = null;
 
+            parent.save();
+
+            SitePlugin.get().selectNode(this, node, true);
+        }
+    }
+
+    protected AbstractContainer initializePage(String type, JcrNode page) {
+        AbstractContainer node;
+        if (type.equals(PageSiteNodePlugin.TYPE)) {
+            node = PageNode.initialize(page);
+        } else {
+            node = TemplateNode.initialize(page);
+        }
+        return node;
+    }
 }

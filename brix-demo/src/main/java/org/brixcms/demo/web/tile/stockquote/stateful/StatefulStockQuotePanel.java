@@ -23,41 +23,43 @@ import org.brixcms.demo.web.tile.stockquote.StockQuoteRequest;
 
 /**
  * {@link StatefulStockQuoteTile} panel.
- * 
- * @see StatefulStockQuoteTile
- * 
+ *
  * @author igor.vaynberg
- * 
+ * @see StatefulStockQuoteTile
  */
-public class StatefulStockQuotePanel extends Panel
-{
+public class StatefulStockQuotePanel extends Panel {
+// ------------------------------ FIELDS ------------------------------
+
     private static final long serialVersionUID = 1L;
 
-    /** stock symbol */
+    /**
+     * stock symbol
+     */
     private String symbol;
 
-    /** symbol value */
+    /**
+     * symbol value
+     */
     private String value;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
-     * 
+     *
      * @param id
      */
-    public StatefulStockQuotePanel(String id)
-    {
+    public StatefulStockQuotePanel(String id) {
         super(id);
 
         // label to display symbol value
         add(new Label("value", new PropertyModel<String>(this, "value")));
 
-        Form<Void> form = new Form<Void>("form")
-        {
+        Form<Void> form = new Form<Void>("form") {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit()
-            {
+            protected void onSubmit() {
                 // form is submitted, update symbol value
                 value = new StockQuoteRequest(symbol).getQuote();
             }
@@ -67,5 +69,4 @@ public class StatefulStockQuotePanel extends Panel
         // symbol name textfield
         form.add(new TextField<String>("symbol", new PropertyModel<String>(this, "symbol")));
     }
-
 }

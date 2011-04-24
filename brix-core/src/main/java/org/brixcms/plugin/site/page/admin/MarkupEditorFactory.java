@@ -19,46 +19,41 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.registry.ExtensionPoint;
 
 /**
- * A factory that can create an editor to edit markup. The user can then chose from the list of
- * available editors when editing markup throught he web interface.
- * 
+ * A factory that can create an editor to edit markup. The user can then chose from the list of available editors when
+ * editing markup throught he web interface.
+ *
  * @author igor.vaynberg
- * 
  */
-public interface MarkupEditorFactory
-{
+public interface MarkupEditorFactory {
+// ------------------------------ FIELDS ------------------------------
+
     /**
      * Extension point used to register repository initializers
      */
-    public static final ExtensionPoint<MarkupEditorFactory> POINT = new ExtensionPoint<MarkupEditorFactory>()
-    {
-
-        public Multiplicity getMultiplicity()
-        {
+    public static final ExtensionPoint<MarkupEditorFactory> POINT = new ExtensionPoint<MarkupEditorFactory>() {
+        public Multiplicity getMultiplicity() {
             return Multiplicity.COLLECTION;
         }
 
-        public String getUuid()
-        {
+        public String getUuid() {
             return MarkupEditorFactory.class.getName();
         }
-
     };
+
+// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Create the textarea component that will represent the editor
-     * 
-     * @param id
-     *            component id
-     * @param markup
-     *            markup model
+     *
+     * @param id     component id
+     * @param markup markup model
      * @return editor component
      */
     TextArea<String> newEditor(String id, IModel<String> markup);
 
     /**
      * Create a model that will display the editor name in the menu
-     * 
+     *
      * @return
      */
     IModel<String> newLabel();

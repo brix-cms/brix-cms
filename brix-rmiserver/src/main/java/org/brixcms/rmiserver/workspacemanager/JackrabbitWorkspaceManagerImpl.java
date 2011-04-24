@@ -27,80 +27,68 @@ import java.util.List;
 
 /**
  * Implementation of Jackrabbit {@link WorkspaceManager}
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class JackrabbitWorkspaceManagerImpl extends AbstractSimpleWorkspaceManager
-{
-	private final RepositoryImpl repository;
-	private final Credentials credentials;
+public class JackrabbitWorkspaceManagerImpl extends AbstractSimpleWorkspaceManager {
+// ------------------------------ FIELDS ------------------------------
 
-	/**
-	 * Constructor
-	 * 
-	 * @param repository
-	 *            repository
-	 * @param credentials
-	 *            repository credentials
-	 */
-	public JackrabbitWorkspaceManagerImpl(RepositoryImpl repository, Credentials credentials)
-	{
-		this.repository = repository;
-		this.credentials = credentials;
-	}
+    private final RepositoryImpl repository;
+    private final Credentials credentials;
 
-	/** {@inheritDoc} */
-	@Override
-	protected void createWorkspace(String workspaceName)
-	{
-		Session session = createSession(null);
-		try
-		{
-			org.apache.jackrabbit.core.WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl) session
-					.getWorkspace();
-			workspace.createWorkspace(workspaceName);
-		}
-		catch (RepositoryException e)
-		{
-			throw new JcrException(e);
-		}
-		finally
-		{
-			closeSession(session, false);
-		}
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	/** {@inheritDoc} */
-	@Override
-	protected List<String> getAccessibleWorkspaceNames()
-	{
-		Session session = createSession(null);
-		try
-		{
-			return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
-		}
-		catch (RepositoryException e)
-		{
-			throw new JcrException(e);
-		}
-		finally
-		{
-			closeSession(session, false);
-		}
-	}
+    /**
+     * Constructor
+     *
+     * @param repository  repository
+     * @param credentials repository credentials
+     */
+    public JackrabbitWorkspaceManagerImpl(RepositoryImpl repository, Credentials credentials) {
+        this.repository = repository;
+        this.credentials = credentials;
+    }
 
-	@Override
-	protected Session createSession(String workspaceName)
-	{
-		try
-		{
-			return repository.login(credentials, workspaceName);
-		}
-		catch (Exception e)
-		{
-			throw new RuntimeException("Could not login into repository", e);
-		}
-	}
+// -------------------------- OTHER METHODS --------------------------
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void createWorkspace(String workspaceName) {
+        Session session = createSession(null);
+        try {
+            org.apache.jackrabbit.core.WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl) session
+                    .getWorkspace();
+            workspace.createWorkspace(workspaceName);
+        } catch (RepositoryException e) {
+            throw new JcrException(e);
+        } finally {
+            closeSession(session, false);
+        }
+    }
+
+    @Override
+    protected Session createSession(String workspaceName) {
+        try {
+            return repository.login(credentials, workspaceName);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not login into repository", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<String> getAccessibleWorkspaceNames() {
+        Session session = createSession(null);
+        try {
+            return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
+        } catch (RepositoryException e) {
+            throw new JcrException(e);
+        } finally {
+            closeSession(session, false);
+        }
+    }
 }

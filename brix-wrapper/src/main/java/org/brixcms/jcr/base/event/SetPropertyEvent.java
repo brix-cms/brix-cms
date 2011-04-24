@@ -20,18 +20,19 @@ import javax.jcr.RepositoryException;
 
 /**
  * Event for node property having changed.
- * 
+ *
  * @author Matej Knopp
  */
-public class SetPropertyEvent extends PropertyEvent
-{
-	SetPropertyEvent(Property property) throws RepositoryException
-	{
-		super(property);
-	}
+public class SetPropertyEvent extends PropertyEvent {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public Property getProperty() throws RepositoryException
-	{
-		return getNode().getProperty(getPropertyName());
-	}	
+    SetPropertyEvent(Property property) throws RepositoryException {
+        super(property);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Property getProperty() throws RepositoryException {
+        return getNode().getProperty(getPropertyName());
+    }
 }

@@ -30,33 +30,32 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PublishingPanel extends BrixGenericPanel<Workspace>
-{
-    public PublishingPanel(String id, IModel<Workspace> model)
-    {
+public class PublishingPanel extends BrixGenericPanel<Workspace> {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PublishingPanel(String id, IModel<Workspace> model) {
         super(id, model);
-        
+
         add(new FeedbackPanel("feedback"));
-        
+
         add(new PublishLink("toStaging", PublishingPlugin.STATE_DEVELOPMENT, PublishingPlugin.STATE_STAGING));
         add(new PublishLink("toProduction", PublishingPlugin.STATE_STAGING, PublishingPlugin.STATE_PRODUCTION));
     }
 
-    private class PublishLink extends Link<Void>
-    {
+// -------------------------- INNER CLASSES --------------------------
+
+    private class PublishLink extends Link<Void> {
         private final String targetState;
         private final String requiredState;
 
-        public PublishLink(String id, String requiredState, String targetState)
-        {
+        public PublishLink(String id, String requiredState, String targetState) {
             super(id);
             this.targetState = targetState;
             this.requiredState = requiredState;
         }
 
         @Override
-        public void onClick()
-        {
+        public void onClick() {
             Workspace workspace = PublishingPanel.this.getModelObject();
             PublishingPlugin.get().publish(workspace, targetState);
             Map<String, String> map = new HashMap<String, String>();
@@ -65,17 +64,17 @@ public class PublishingPanel extends BrixGenericPanel<Workspace>
         }
 
         @Override
-        public boolean isVisible()
-        {
+        public boolean isVisible() {
             Workspace workspace = PublishingPanel.this.getModelObject();
             String state = SitePlugin.get().getWorkspaceState(workspace);
             Action action = new PublishWorkspaceAction(Context.ADMINISTRATION, workspace,
-                targetState);
-            
-            return requiredState.equals(state) &&
-                Brix.get().getAuthorizationStrategy().isActionAuthorized(
-                    action);
-        }
+                    targetState);
 
-    };
+            return requiredState.equals(state) &&
+                    Brix.get().getAuthorizationStrategy().isActionAuthorized(
+                            action);
+        }
+    }
+
+    ;
 }

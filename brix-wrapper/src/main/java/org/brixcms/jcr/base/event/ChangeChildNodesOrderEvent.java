@@ -19,35 +19,32 @@ import javax.jcr.RepositoryException;
 
 /**
  * Event for node children order having changed.
- * 
+ *
  * @author Matej Knopp
  */
-public class ChangeChildNodesOrderEvent extends NodeEvent
-{
+public class ChangeChildNodesOrderEvent extends NodeEvent {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	ChangeChildNodesOrderEvent(Node node)
-	{
-		super(node);
-	}
+    ChangeChildNodesOrderEvent(Node node) {
+        super(node);
+    }
 
-	@Override
-	Event onNewEvent(Event event, QueueCallback callback) throws RepositoryException
-	{
-		if (event instanceof ChangeChildNodesOrderEvent)
-		{
-			ChangeChildNodesOrderEvent e = (ChangeChildNodesOrderEvent) event;
-			if (e.getNode().getPath().equals(getNode().getPath()))
-			{
-				// remove current event, will get replaced by the new one
-				return null;
-			}
-		}
-		return super.onNewEvent(event, callback);
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	@Override
-	public Node getNode()
-	{
-		return super.getNode();
-	}
+    @Override
+    public Node getNode() {
+        return super.getNode();
+    }
+
+    @Override
+    Event onNewEvent(Event event, QueueCallback callback) throws RepositoryException {
+        if (event instanceof ChangeChildNodesOrderEvent) {
+            ChangeChildNodesOrderEvent e = (ChangeChildNodesOrderEvent) event;
+            if (e.getNode().getPath().equals(getNode().getPath())) {
+                // remove current event, will get replaced by the new one
+                return null;
+            }
+        }
+        return super.onNewEvent(event, callback);
+    }
 }

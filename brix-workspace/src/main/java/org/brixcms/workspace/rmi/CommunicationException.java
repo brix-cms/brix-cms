@@ -16,14 +16,13 @@ package org.brixcms.workspace.rmi;
 
 import java.rmi.RemoteException;
 
-public class CommunicationException extends RuntimeException
-{
-    public CommunicationException(RemoteException cause)
-    {
+public class CommunicationException extends RuntimeException {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public CommunicationException(RemoteException cause) {
         super("Error communicating with RMI server", cause);
     }
 
     {
-
     }
 }

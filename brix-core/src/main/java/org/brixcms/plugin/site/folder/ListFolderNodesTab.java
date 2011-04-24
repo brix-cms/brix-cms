@@ -44,196 +44,169 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ListFolderNodesTab extends BrixGenericPanel<BrixNode>
-{
-	public ListFolderNodesTab(String id, IModel<BrixNode> folderModel)
-	{
-		super(id, folderModel);
+public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		List<IGridColumn> columns = new ArrayList<IGridColumn>();
-		columns.add(new NameColumn(new ResourceModel("name")).setInitialSize(180));
-		columns.add(new TypePropertyColumn(new ResourceModel("type")).setInitialSize(80));
-		columns.add(new SizeColumn(new ResourceModel("size")).setInitialSize(100));
-		columns.add(new MimeTypeColumn(new ResourceModel("mimeType")).setInitialSize(80));
-		columns.add(new DatePropertyColumn(new ResourceModel("created"), "created", FolderDataSource.PROPERTY_CREATED)
-				.setInitialSize(120));
-		columns.add(new PropertyColumn(new ResourceModel("createdBy"), "createdBy",
-				FolderDataSource.PROPERTY_CREATED_BY).setInitialSize(90));
-		columns.add(new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified",
-				FolderDataSource.PROPERTY_LAST_MODIFIED).setInitialSize(120));
-		columns.add(new PropertyColumn(new ResourceModel("lastModifiedBy"), "lastModifiedBy",
-				FolderDataSource.PROPERTY_LAST_MODIFIED_BY).setInitialSize(110));
+    public ListFolderNodesTab(String id, IModel<BrixNode> folderModel) {
+        super(id, folderModel);
 
-		FolderDataSource source = new FolderDataSource()
-		{
-			@Override
-			BrixNode getFolderNode()
-			{
-				return getNode();
-			}
-		};
+        List<IGridColumn> columns = new ArrayList<IGridColumn>();
+        columns.add(new NameColumn(new ResourceModel("name")).setInitialSize(180));
+        columns.add(new TypePropertyColumn(new ResourceModel("type")).setInitialSize(80));
+        columns.add(new SizeColumn(new ResourceModel("size")).setInitialSize(100));
+        columns.add(new MimeTypeColumn(new ResourceModel("mimeType")).setInitialSize(80));
+        columns.add(new DatePropertyColumn(new ResourceModel("created"), "created", FolderDataSource.PROPERTY_CREATED)
+                .setInitialSize(120));
+        columns.add(new PropertyColumn(new ResourceModel("createdBy"), "createdBy",
+                FolderDataSource.PROPERTY_CREATED_BY).setInitialSize(90));
+        columns.add(new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified",
+                FolderDataSource.PROPERTY_LAST_MODIFIED).setInitialSize(120));
+        columns.add(new PropertyColumn(new ResourceModel("lastModifiedBy"), "lastModifiedBy",
+                FolderDataSource.PROPERTY_LAST_MODIFIED_BY).setInitialSize(110));
 
-		DataGrid grid = new DataGrid("grid", source, columns)
-		{
-			@Override
-			protected void onRowClicked(AjaxRequestTarget target, IModel rowModel)
-			{
-				//((ServletWebRequest) getRequest()).setForceNewVersion(true);
+        FolderDataSource source = new FolderDataSource() {
+            @Override
+            BrixNode getFolderNode() {
+                return getNode();
+            }
+        };
 
-				BrixNode node = (BrixNode) rowModel.getObject();
-				Page page = getPage();
-				SitePlugin.get().selectNode(this, node);
-				getRequestCycle().setResponsePage(page);
-			}
-		};
-		grid.setContentHeight(30, SizeUnit.EM);
+        DataGrid grid = new DataGrid("grid", source, columns) {
+            @Override
+            protected void onRowClicked(AjaxRequestTarget target, IModel rowModel) {
+                //((ServletWebRequest) getRequest()).setForceNewVersion(true);
 
-		add(grid);
-	}
+                BrixNode node = (BrixNode) rowModel.getObject();
+                Page page = getPage();
+                SitePlugin.get().selectNode(this, node);
+                getRequestCycle().setResponsePage(page);
+            }
+        };
+        grid.setContentHeight(30, SizeUnit.EM);
 
-	private class NameColumn extends AbstractColumn
-	{
-		public NameColumn(IModel<String> headerModel)
-		{
-			super("name", headerModel, FolderDataSource.PROPERTY_NAME);
-		}
+        add(grid);
+    }
 
-		@Override
-		public Component newCell(WebMarkupContainer parent, String componentId, IModel rowModel)
-		{
-			return new NamePanel(componentId, rowModel);
-		}
-	};
+    ;
 
-	private class NamePanel extends BrixGenericPanel<BrixNode>
-	{
+    private BrixNode getNode() {
+        return (BrixNode) getModelObject();
+    }
 
-		public NamePanel(String id, final IModel<BrixNode> model)
-		{
-			super(id, model);
+// -------------------------- INNER CLASSES --------------------------
 
-			Link<?> link;
-			add(link = new Link<Void>("select")
-			{
-				@Override
-				public void onClick()
-				{
-					BrixNode node = model.getObject();
-					SitePlugin.get().selectNode(this, node);
-				}
+    private class NameColumn extends AbstractColumn {
+        public NameColumn(IModel<String> headerModel) {
+            super("name", headerModel, FolderDataSource.PROPERTY_NAME);
+        }
 
-				@Override
-				protected void onComponentTag(ComponentTag tag)
-				{
-					if (model.getObject().isFolder())
-					{
-						tag.put("class", "brix-site-folder-node");
-					}
-					super.onComponentTag(tag);
-				}
-			});
+        @Override
+        public Component newCell(WebMarkupContainer parent, String componentId, IModel rowModel) {
+            return new NamePanel(componentId, rowModel);
+        }
+    }
 
-			IModel<String> labelModel;
-			if (model.getObject().getDepth() < ListFolderNodesTab.this.getModelObject().getDepth())
-			{
-				labelModel = new Model<String>("..");
-			}
-			else
-			{
-				labelModel = new PropertyModel<String>(model, "userVisibleName");
-			}
-			link.add(new Label("label", labelModel));
-		}
-	};
+    ;
 
-	private static class TypePropertyColumn extends PropertyColumn
-	{
-		public TypePropertyColumn(IModel<String> headerModel)
-		{
-			super("type", headerModel, "userVisibleType", FolderDataSource.PROPERTY_TYPE);
-		}
-	};
+    private class NamePanel extends BrixGenericPanel<BrixNode> {
+        public NamePanel(String id, final IModel<BrixNode> model) {
+            super(id, model);
 
-	private class MimeTypeColumn extends AbstractLightWeightColumn
-	{
+            Link<?> link;
+            add(link = new Link<Void>("select") {
+                @Override
+                public void onClick() {
+                    BrixNode node = model.getObject();
+                    SitePlugin.get().selectNode(this, node);
+                }
 
-		public MimeTypeColumn(IModel<String> headerModel)
-		{
-			super("mimeType", headerModel, FolderDataSource.PROPERTY_MIME_TYPE);
-		}
+                @Override
+                protected void onComponentTag(ComponentTag tag) {
+                    if (model.getObject().isFolder()) {
+                        tag.put("class", "brix-site-folder-node");
+                    }
+                    super.onComponentTag(tag);
+                }
+            });
 
-		@Override
-		public IRenderable newCell(IModel rowModel)
-		{
-			return new IRenderable()
-			{
-				public void render(IModel rowModel, Response response)
-				{
-					BrixNode node = (BrixNode) rowModel.getObject();
-					if (node instanceof BrixFileNode)
-					{
-						String mime = ((BrixFileNode) node).getMimeType();
-						if (mime != null)
-							response.write(Strings.escapeMarkup(mime));
-					}
-				}
-			};
-		}
-	};
+            IModel<String> labelModel;
+            if (model.getObject().getDepth() < ListFolderNodesTab.this.getModelObject().getDepth()) {
+                labelModel = new Model<String>("..");
+            } else {
+                labelModel = new PropertyModel<String>(model, "userVisibleName");
+            }
+            link.add(new Label("label", labelModel));
+        }
+    }
 
-	private class SizeColumn extends AbstractLightWeightColumn
-	{
+    ;
 
-		public SizeColumn(IModel<String> headerModel)
-		{
-			super("size", headerModel, FolderDataSource.PROPERTY_SIZE);
-		}
+    private static class TypePropertyColumn extends PropertyColumn {
+        public TypePropertyColumn(IModel<String> headerModel) {
+            super("type", headerModel, "userVisibleType", FolderDataSource.PROPERTY_TYPE);
+        }
+    }
 
-		@Override
-		public IRenderable newCell(IModel rowModel)
-		{
-			return new IRenderable()
-			{
-				public void render(IModel rowModel, Response response)
-				{
-					BrixNode node = (BrixNode) rowModel.getObject();
-					if (node instanceof BrixFileNode)
-					{
-						Long size = ((BrixFileNode) node).getContentLength();
+    ;
 
-						response.write(size.toString());
-						response.write(" bytes");
-					}
-				}
-			};
-		}
-	};
+    private class MimeTypeColumn extends AbstractLightWeightColumn {
+        public MimeTypeColumn(IModel<String> headerModel) {
+            super("mimeType", headerModel, FolderDataSource.PROPERTY_MIME_TYPE);
+        }
 
-	private static class DatePropertyColumn extends PropertyColumn
-	{
-		public DatePropertyColumn(IModel<String> headerModel, String propertyExpression, String sortProperty)
-		{
-			super(headerModel, propertyExpression, sortProperty);
-		}
+        @Override
+        public IRenderable newCell(IModel rowModel) {
+            return new IRenderable() {
+                public void render(IModel rowModel, Response response) {
+                    BrixNode node = (BrixNode) rowModel.getObject();
+                    if (node instanceof BrixFileNode) {
+                        String mime = ((BrixFileNode) node).getMimeType();
+                        if (mime != null)
+                            response.write(Strings.escapeMarkup(mime));
+                    }
+                }
+            };
+        }
+    }
 
-		@Override
-		protected CharSequence convertToString(Object object)
-		{
-			if (object == null)
-			{
-				return "";
-			}
-			else
-			{
-				DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-				return df.format((Date) object);
-			}
-		}
-	};
+    ;
 
-	private BrixNode getNode()
-	{
-		return (BrixNode) getModelObject();
-	}
+    private class SizeColumn extends AbstractLightWeightColumn {
+        public SizeColumn(IModel<String> headerModel) {
+            super("size", headerModel, FolderDataSource.PROPERTY_SIZE);
+        }
 
+        @Override
+        public IRenderable newCell(IModel rowModel) {
+            return new IRenderable() {
+                public void render(IModel rowModel, Response response) {
+                    BrixNode node = (BrixNode) rowModel.getObject();
+                    if (node instanceof BrixFileNode) {
+                        Long size = ((BrixFileNode) node).getContentLength();
+
+                        response.write(size.toString());
+                        response.write(" bytes");
+                    }
+                }
+            };
+        }
+    }
+
+    ;
+
+    private static class DatePropertyColumn extends PropertyColumn {
+        public DatePropertyColumn(IModel<String> headerModel, String propertyExpression, String sortProperty) {
+            super(headerModel, propertyExpression, sortProperty);
+        }
+
+        @Override
+        protected CharSequence convertToString(Object object) {
+            if (object == null) {
+                return "";
+            } else {
+                DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+                return df.format((Date) object);
+            }
+        }
+    }
 }

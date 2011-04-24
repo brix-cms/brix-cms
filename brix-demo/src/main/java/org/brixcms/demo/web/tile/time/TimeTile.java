@@ -21,32 +21,30 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
-public class TimeTile implements Tile
-{
+public class TimeTile implements Tile {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public Component newViewer(String id, IModel<BrixNode> tileNode)
-    {
-        return new TimeLabel(id, tileNode).setRenderBodyOnly(true);
-    }
 
-    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
-    {
-        return new TimeTileEditor(id, tileContainerNode);
-    }
+// --------------------- Interface Tile ---------------------
 
-    public String getDisplayName()
-    {
+
+    public String getDisplayName() {
         return "Current Time Tile";
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return "brix.web.TimeTile";
     }
 
-    public boolean requiresSSL(IModel<BrixNode> tileNode)
-    {
-        return false;
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
+        return new TimeTileEditor(id, tileContainerNode);
     }
 
+    public Component newViewer(String id, IModel<BrixNode> tileNode) {
+        return new TimeLabel(id, tileNode).setRenderBodyOnly(true);
+    }
+
+    public boolean requiresSSL(IModel<BrixNode> tileNode) {
+        return false;
+    }
 }

@@ -21,31 +21,29 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.EmptyTileEditorPanel;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
-public class GuestBookTile implements Tile
-{
-    public String getDisplayName()
-    {
+public class GuestBookTile implements Tile {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Tile ---------------------
+
+    public String getDisplayName() {
         return "Guest Book";
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return "brix.tile.GuestBook";
     }
 
-    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
-    {
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
         return new EmptyTileEditorPanel(id);
     }
 
-    public Component newViewer(String id, IModel<BrixNode> tileNode)
-    {
+    public Component newViewer(String id, IModel<BrixNode> tileNode) {
         return new GuestBookPanel(id, tileNode);
     }
 
-    public boolean requiresSSL(IModel<BrixNode> tileNode)
-    {
+    public boolean requiresSSL(IModel<BrixNode> tileNode) {
         return false;
     }
-
 }

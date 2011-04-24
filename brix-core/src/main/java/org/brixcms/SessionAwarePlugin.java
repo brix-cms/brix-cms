@@ -16,9 +16,8 @@ package org.brixcms;
 
 import org.brixcms.jcr.base.BrixSession;
 
-public interface SessionAwarePlugin extends Plugin
-{
+public interface SessionAwarePlugin extends Plugin {
+// -------------------------- OTHER METHODS --------------------------
 
-	public void onWebDavSession(BrixSession session);
-	
+    public void onWebDavSession(BrixSession session);
 }

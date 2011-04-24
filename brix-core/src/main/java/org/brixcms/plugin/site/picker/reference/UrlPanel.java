@@ -20,23 +20,19 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-public class UrlPanel extends BrixGenericPanel<String>
-{
+public class UrlPanel extends BrixGenericPanel<String> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public UrlPanel(String id, IModel<String> urlModel)
-    {
+    public UrlPanel(String id, IModel<String> urlModel) {
         super(id);
 
         TextField<String> tf;
         add(tf = new TextField<String>("url", urlModel));
-        tf.add(new AjaxFormComponentUpdatingBehavior("onblur")
-        {
+        tf.add(new AjaxFormComponentUpdatingBehavior("onblur") {
             @Override
-            protected void onUpdate(AjaxRequestTarget target)
-            {
+            protected void onUpdate(AjaxRequestTarget target) {
 
             }
         });
     }
-
 }

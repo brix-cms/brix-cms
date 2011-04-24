@@ -20,49 +20,52 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
 
-public abstract class AbstractWorkspaceTab extends CachingAbstractTab implements IDetachable
-{
+public abstract class AbstractWorkspaceTab extends CachingAbstractTab implements IDetachable {
+// ------------------------------ FIELDS ------------------------------
 
     private final IModel<Workspace> workspaceModel;
 
-    public void detach()
-    {
-        workspaceModel.detach();
-    }
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public AbstractWorkspaceTab(IModel<String> title, Workspace workspace, int priority)
-    {
-        this(title, new WorkspaceModel(workspace), priority);
-    }
-
-    public AbstractWorkspaceTab(IModel<String> title, IModel<Workspace> workspaceModel, int priority)
-    {
-        super(title, priority);
-        this.workspaceModel = workspaceModel;
-    }
-
-    public AbstractWorkspaceTab(IModel<String> title, Workspace workspace)
-    {
+    public AbstractWorkspaceTab(IModel<String> title, Workspace workspace) {
         this(title, new WorkspaceModel(workspace), 0);
     }
 
-    public AbstractWorkspaceTab(IModel<String> title, IModel<Workspace> workspaceModel)
-    {
+    public AbstractWorkspaceTab(IModel<String> title, IModel<Workspace> workspaceModel) {
         super(title, 0);
         this.workspaceModel = workspaceModel;
     }
 
-    public IModel<Workspace> getWorkspaceModel()
-    {
+    public AbstractWorkspaceTab(IModel<String> title, Workspace workspace, int priority) {
+        this(title, new WorkspaceModel(workspace), priority);
+    }
+
+    public AbstractWorkspaceTab(IModel<String> title, IModel<Workspace> workspaceModel, int priority) {
+        super(title, priority);
+        this.workspaceModel = workspaceModel;
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public IModel<Workspace> getWorkspaceModel() {
         return workspaceModel;
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IDetachable ---------------------
+
+    public void detach() {
+        workspaceModel.detach();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    public Panel newPanel(String panelId)
-    {
+    public Panel newPanel(String panelId) {
         return newPanel(panelId, workspaceModel);
     }
 
     public abstract Panel newPanel(String panelId, IModel<Workspace> workspaceModel);
-
 }

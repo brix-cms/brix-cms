@@ -24,40 +24,38 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 
-public abstract class AbstractGlobalPanel extends BrixGenericPanel<BrixNode> 
-{
-	IModel<Workspace> workspaceModel;
+public abstract class AbstractGlobalPanel extends BrixGenericPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-	private static BrixNode getContainerNode(Workspace workspace)
-	{
-		JcrSession session = Brix.get().getCurrentSession(workspace.getId());
-		return SitePlugin.get().getGlobalContainer(session);
-	}
-	
-	public AbstractGlobalPanel(String id, IModel<Workspace> workspaceModel)
-	{
-		super(id, new BrixNodeModel(getContainerNode(workspaceModel.getObject())));
-		
-		this.workspaceModel = workspaceModel;
-	}
-	
-	protected abstract Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel);
-	
-	private static final String PANEL_ID = "managePanel";
+    private static final String PANEL_ID = "managePanel";
+    IModel<Workspace> workspaceModel;
 
-	@Override
-	protected void onBeforeRender()
-	{
-		boolean isInvalidWorkspace = !getModelObject().getSession().getWorkspace().getName().equals(workspaceModel.getObject().getId()); 		
-		if (!hasBeenRendered())
-		{
-			add(newManagePanel(PANEL_ID, getModel()));
-		}
-		else if (isInvalidWorkspace)
-		{
-			setModelObject(getContainerNode(workspaceModel.getObject()));
-			get(PANEL_ID).replaceWith(newManagePanel(PANEL_ID, getModel()));
-		}
-		super.onBeforeRender();
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public AbstractGlobalPanel(String id, IModel<Workspace> workspaceModel) {
+        super(id, new BrixNodeModel(getContainerNode(workspaceModel.getObject())));
+
+        this.workspaceModel = workspaceModel;
+    }
+
+    private static BrixNode getContainerNode(Workspace workspace) {
+        JcrSession session = Brix.get().getCurrentSession(workspace.getId());
+        return SitePlugin.get().getGlobalContainer(session);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected void onBeforeRender() {
+        boolean isInvalidWorkspace = !getModelObject().getSession().getWorkspace().getName().equals(workspaceModel.getObject().getId());
+        if (!hasBeenRendered()) {
+            add(newManagePanel(PANEL_ID, getModel()));
+        } else if (isInvalidWorkspace) {
+            setModelObject(getContainerNode(workspaceModel.getObject()));
+            get(PANEL_ID).replaceWith(newManagePanel(PANEL_ID, getModel()));
+        }
+        super.onBeforeRender();
+    }
+
+    protected abstract Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel);
 }

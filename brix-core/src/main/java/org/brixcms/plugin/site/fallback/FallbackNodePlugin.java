@@ -24,47 +24,44 @@ import org.brixcms.plugin.site.NodeConverter;
 import org.brixcms.plugin.site.SimpleCallback;
 import org.brixcms.plugin.site.SiteNodePlugin;
 
-public class FallbackNodePlugin implements SiteNodePlugin
-{
+public class FallbackNodePlugin implements SiteNodePlugin {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public NodeConverter getConverterForNode(BrixNode node)
-    {
+
+// --------------------- Interface SiteNodePlugin ---------------------
+
+
+    public String getNodeType() {
         return null;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return "Unknown";
     }
 
-    public String getNodeType()
-    {
-        return null;
-    }
-
-
-    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
-    {
-        return new EmptyPanel(id);
-    }
-
-    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
-    {
+    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters) {
         return EmptyRequestTarget.getInstance();
     }
 
-    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
-    {
-    	return null;
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode) {
+        return null;
     }
-    
-    private class EmptyPanel extends Panel
-    {
 
-        public EmptyPanel(String id)
-        {
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack) {
+        return new EmptyPanel(id);
+    }
+
+    public NodeConverter getConverterForNode(BrixNode node) {
+        return null;
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private class EmptyPanel extends Panel {
+        public EmptyPanel(String id) {
             super(id);
         }
+    }
 
-    };
+    ;
 }

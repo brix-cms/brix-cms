@@ -19,34 +19,37 @@ import org.brixcms.jcr.api.JcrNode;
 
 /**
  * Action used to filter the list of available node types upon node creation.
- * 
+ *
  * @author Matej Knopp
  */
-public class SelectNewNodeTypeAction extends AbstractAction
-{
+public class SelectNewNodeTypeAction extends AbstractAction {
+// ------------------------------ FIELDS ------------------------------
+
     private final JcrNode parentNode;
     private final String nodeType;
 
-    public SelectNewNodeTypeAction(Context context, JcrNode parentNode, String nodeType)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public SelectNewNodeTypeAction(Context context, JcrNode parentNode, String nodeType) {
         super(context);
         this.parentNode = parentNode;
         this.nodeType = nodeType;
     }
 
-    public String getNodeType()
-    {
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public String getNodeType() {
         return nodeType;
     }
 
-    public JcrNode getParentNode()
-    {
+    public JcrNode getParentNode() {
         return parentNode;
     }
 
+// ------------------------ CANONICAL METHODS ------------------------
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "SelectNewNodeTypeAction{" + "nodeType='" + nodeType + '\'' + ", parentNode=" + parentNode + "} " + super.toString();
     }
 }

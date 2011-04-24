@@ -16,10 +16,11 @@ package org.brixcms.markup.tag;
 
 /**
  * Represents HTML text (text between tags/comments).
- * @author Matej Knopp
  *
+ * @author Matej Knopp
  */
-public interface Text extends Item
-{
-	public String getText();
+public interface Text extends Item {
+// -------------------------- OTHER METHODS --------------------------
+
+    public String getText();
 }

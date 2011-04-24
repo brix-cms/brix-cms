@@ -22,31 +22,31 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 /**
- * Application object for your web application. If you want to run this application without
- * deploying, run the Start class.
- * 
+ * Application object for your web application. If you want to run this application without deploying, run the Start
+ * class.
+ *
  * @see wicket.myproject.StartJackrabbitServer#main(String[])
  */
-public class AdminApplication extends WebApplication
-{
+public class AdminApplication extends WebApplication {
+// --------------------------- CONSTRUCTORS ---------------------------
+
     /**
      * Constructor
      */
-    public AdminApplication()
-    {
+    public AdminApplication() {
     }
+
+// -------------------------- OTHER METHODS --------------------------
 
     /**
      * @see wicket.Application#getHomePage()
      */
-    public Class< ? extends Page> getHomePage()
-    {
+    public Class<? extends Page> getHomePage() {
         return HomePage.class;
     }
 
     @Override
-    protected void init()
-    {
+    protected void init() {
         addComponentInstantiationListener(new SpringComponentInjector(this));
         getSecuritySettings().setAuthorizationStrategy(new AdminAuthorizationStrategy());
 
@@ -54,10 +54,7 @@ public class AdminApplication extends WebApplication
     }
 
     @Override
-    public Session newSession(Request request, Response response)
-    {
+    public Session newSession(Request request, Response response) {
         return new AdminSession(request);
     }
-
-
 }

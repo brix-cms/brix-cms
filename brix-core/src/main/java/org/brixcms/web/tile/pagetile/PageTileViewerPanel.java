@@ -23,71 +23,55 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.PageRenderingPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-public class PageTileViewerPanel extends BrixGenericPanel<BrixNode>
-{
+public class PageTileViewerPanel extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public PageTileViewerPanel(String id, IModel<BrixNode> tileNode)
-	{
-		super(id, tileNode);
-	}
+    public PageTileViewerPanel(String id, IModel<BrixNode> tileNode) {
+        super(id, tileNode);
+    }
 
-	@Override
-	protected void onBeforeRender()
-	{
-		if (!hasBeenRendered())
-		{
-			init();
-		}
+// -------------------------- OTHER METHODS --------------------------
 
-		super.onBeforeRender();
-	}
+    @Override
+    protected void onBeforeRender() {
+        if (!hasBeenRendered()) {
+            init();
+        }
 
-	private void init()
-	{
+        super.onBeforeRender();
+    }
 
-		JcrNode tileNode = (JcrNode) getModelObject();
+    private void init() {
+        JcrNode tileNode = (JcrNode) getModelObject();
 
-		if (checkLoop(getModel()) == true)
-		{
-			add(new Label("view", "Loop detected."));
-		}
-		else
-		{
+        if (checkLoop(getModel()) == true) {
+            add(new Label("view", "Loop detected."));
+        } else {
+            BrixNode pageNode = (BrixNode) (tileNode.hasProperty("pageNode") ? tileNode.getProperty("pageNode")
+                    .getNode() : null);
 
-			BrixNode pageNode = (BrixNode) (tileNode.hasProperty("pageNode") ? tileNode.getProperty("pageNode")
-					.getNode() : null);
+            if (pageNode != null) {
+                add(new PageRenderingPanel("view", new BrixNodeModel(pageNode)));
+            } else {
+                add(new Label("view", "Page not found."));
+            }
+        }
+    }
 
-			if (pageNode != null)
-			{
-				add(new PageRenderingPanel("view", new BrixNodeModel(pageNode)));
-			}
-			else
-			{
-				add(new Label("view", "Page not found."));
-			}
-		}
+    private boolean checkLoop(final IModel<BrixNode> model) {
+        final boolean loop[] = {false};
 
-	}
+        visitParents(PageTileViewerPanel.class, new IVisitor<Component>() {
+            public Object component(Component component) {
+                // found parent with same model, this indicates a loop
+                if (component != PageTileViewerPanel.this && component.getDefaultModel().equals(model)) {
+                    loop[0] = true;
+                    return STOP_TRAVERSAL;
+                }
+                return CONTINUE_TRAVERSAL;
+            }
+        });
 
-	private boolean checkLoop(final IModel<BrixNode> model)
-	{
-		final boolean loop[] = { false };
-
-		visitParents(PageTileViewerPanel.class, new IVisitor<Component>()
-		{
-
-			public Object component(Component component)
-			{
-				// found parent with same model, this indicates a loop
-				if (component != PageTileViewerPanel.this && component.getDefaultModel().equals(model))
-				{
-					loop[0] = true;
-					return STOP_TRAVERSAL;
-				}
-				return CONTINUE_TRAVERSAL;
-			}
-		});
-
-		return loop[0];
-	}
+        return loop[0];
+    }
 }

@@ -23,64 +23,54 @@ import javax.jcr.SimpleCredentials;
 
 /**
  * Authorizes {@link Credentials} for given {@link Role}
- * 
+ *
  * @author ivaynberg
- * 
  */
-public class Authorizer
-{
+public class Authorizer {
+// ------------------------------ FIELDS ------------------------------
+
     private final UserService users;
 
-    public Authorizer(UserService users)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public Authorizer(UserService users) {
         this.users = users;
     }
 
-    public User authorize(Credentials creds, Role... requiredRoles) throws AuthorizationException
-    {
-        if (creds instanceof SimpleCredentials)
-        {
+// -------------------------- OTHER METHODS --------------------------
+
+    public User authorize(Credentials creds, Role... requiredRoles) throws AuthorizationException {
+        if (creds instanceof SimpleCredentials) {
             User user = null;
 
             // authenticate
-            SimpleCredentials sc = (SimpleCredentials)creds;
+            SimpleCredentials sc = (SimpleCredentials) creds;
             user = users.query(sc.getUserID(), new String(sc.getPassword()));
 
             // authorize
-            if (user != null)
-            {
+            if (user != null) {
                 boolean authorized = false;
-                for (Role requiredRole : requiredRoles)
-                {
-                    if (user.getRoles().contains(requiredRole))
-                    {
+                for (Role requiredRole : requiredRoles) {
+                    if (user.getRoles().contains(requiredRole)) {
                         authorized = true;
                         break;
                     }
                 }
-                if (!authorized)
-                {
+                if (!authorized) {
                     user = null;
                 }
             }
 
             // return
-            if (user != null)
-            {
+            if (user != null) {
                 return user;
-            }
-            else
-            {
+            } else {
                 throw new AuthorizationException("User: " + sc.getUserID() + " is not authorized");
             }
-        }
-        else
-        {
+        } else {
             throw new AuthorizationException("Unsupported type of credentials: " +
-                creds.getClass().getName() + ". Only supporting: " +
-                SimpleCredentials.class.getName());
+                    creds.getClass().getName() + ". Only supporting: " +
+                    SimpleCredentials.class.getName());
         }
-
-
     }
 }

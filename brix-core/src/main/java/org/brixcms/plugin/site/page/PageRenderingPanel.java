@@ -24,27 +24,31 @@ import org.brixcms.markup.variable.VariableTransformer;
 import org.brixcms.markup.web.BrixMarkupNodePanel;
 import org.brixcms.plugin.site.SitePlugin;
 
-public class PageRenderingPanel extends BrixMarkupNodePanel
-{
-    public PageRenderingPanel(String id, IModel<BrixNode> nodeModel)
-    {
+public class PageRenderingPanel extends BrixMarkupNodePanel {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PageRenderingPanel(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
     }
 
-    @Override
-    public boolean isVisible()
-    {
-        BrixNode node = getModelObject();
-        return SitePlugin.get().canViewNode(node, Context.PRESENTATION);
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public MarkupSource getMarkupSource()
-    {
-        MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());
+
+// --------------------- Interface MarkupSourceProvider ---------------------
+
+    public MarkupSource getMarkupSource() {
+        MarkupSource source = new PageMarkupSource((AbstractContainer) getModelObject());
         source = new PanelTransformer(source);
         source = new VariableTransformer(source, getModelObject());
         source = new TitleTransformer(source, (AbstractContainer) getModelObject());
         return source;
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public boolean isVisible() {
+        BrixNode node = getModelObject();
+        return SitePlugin.get().canViewNode(node, Context.PRESENTATION);
+    }
 }

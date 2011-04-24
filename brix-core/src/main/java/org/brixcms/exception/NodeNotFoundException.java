@@ -14,26 +14,21 @@
 
 package org.brixcms.exception;
 
-public class NodeNotFoundException extends BrixException
-{
+public class NodeNotFoundException extends BrixException {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public NodeNotFoundException()
-    {
+    public NodeNotFoundException() {
     }
 
-    public NodeNotFoundException(String message)
-    {
+    public NodeNotFoundException(String message) {
         super(message);
     }
 
-    public NodeNotFoundException(Throwable cause)
-    {
+    public NodeNotFoundException(Throwable cause) {
         super(cause);
     }
 
-    public NodeNotFoundException(String message, Throwable cause)
-    {
+    public NodeNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

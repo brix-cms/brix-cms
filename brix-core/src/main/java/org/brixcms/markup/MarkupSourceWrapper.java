@@ -17,42 +17,46 @@ package org.brixcms.markup;
 import org.brixcms.markup.tag.Item;
 
 /**
- * Simple wrapper for {@link MarkupSource} that forwards all calls to delegate
- * instance.
- * 
+ * Simple wrapper for {@link MarkupSource} that forwards all calls to delegate instance.
+ *
  * @author Matej Knopp
  */
-public class MarkupSourceWrapper implements MarkupSource
-{
-	private final MarkupSource delegate;
+public class MarkupSourceWrapper implements MarkupSource {
+// ------------------------------ FIELDS ------------------------------
 
-	public MarkupSourceWrapper(MarkupSource delegate)
-	{
-		this.delegate = delegate;
-	}
+    private final MarkupSource delegate;
 
-	public MarkupSource getDelegate()
-	{
-		return delegate;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public Object getExpirationToken()
-	{
-		return delegate.getExpirationToken();
-	}
+    public MarkupSourceWrapper(MarkupSource delegate) {
+        this.delegate = delegate;
+    }
 
-	public boolean isMarkupExpired(Object expirationToken)
-	{
-		return delegate.isMarkupExpired(expirationToken);
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	public Item nextMarkupItem()
-	{
-		return delegate.nextMarkupItem();
-	}
+    public MarkupSource getDelegate() {
+        return delegate;
+    }
 
-	public String getDoctype()
-	{
-		return delegate.getDoctype();
-	}
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface MarkupSource ---------------------
+
+
+    public String getDoctype() {
+        return delegate.getDoctype();
+    }
+
+    public Object getExpirationToken() {
+        return delegate.getExpirationToken();
+    }
+
+    public boolean isMarkupExpired(Object expirationToken) {
+        return delegate.isMarkupExpired(expirationToken);
+    }
+
+    public Item nextMarkupItem() {
+        return delegate.nextMarkupItem();
+    }
 }

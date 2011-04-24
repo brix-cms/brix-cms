@@ -20,23 +20,29 @@ import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.BrixRequestCycleProcessor;
 
-public class BrixNodeRequestTarget implements IPageRequestTarget
-{
+public class BrixNodeRequestTarget implements IPageRequestTarget {
+// ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> nodeModel;
     private final BrixNodeWebPage page;
     private BrixPageParameters parameters;
 
-    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel, BrixPageParameters parameters)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-        if (nodeModel == null)
-        {
+    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel) {
+        this(nodeModel, new BrixPageParameters());
+    }
+
+    public BrixNodeRequestTarget(BrixNodeWebPage page) {
+        this(page, page.getBrixPageParameters());
+    }
+
+    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel, BrixPageParameters parameters) {
+        if (nodeModel == null) {
             throw new IllegalArgumentException("Argument 'nodeModel' may not be null.");
         }
 
-        if (parameters == null)
-        {
+        if (parameters == null) {
             throw new IllegalArgumentException("Argument 'parameters' may not be null.");
         }
 
@@ -45,20 +51,12 @@ public class BrixNodeRequestTarget implements IPageRequestTarget
         this.page = null;
     }
 
-    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel)
-    {
-        this(nodeModel, new BrixPageParameters());
-    }
-
-    public BrixNodeRequestTarget(BrixNodeWebPage page, BrixPageParameters parameters)
-    {
-        if (page == null)
-        {
+    public BrixNodeRequestTarget(BrixNodeWebPage page, BrixPageParameters parameters) {
+        if (page == null) {
             throw new IllegalArgumentException("Argument 'page' may not be null.");
         }
 
-        if (parameters == null)
-        {
+        if (parameters == null) {
             throw new IllegalArgumentException("Argument 'parameters' may not be null.");
         }
 
@@ -67,45 +65,41 @@ public class BrixNodeRequestTarget implements IPageRequestTarget
         this.parameters = parameters;
     }
 
-    public String getNodeURL()
-    {
-        try
-        {
-            return ((BrixRequestCycleProcessor)RequestCycle.get().getProcessor())
-                .getUriPathForNode(
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-                nodeModel.getObject()).toString();
-        }
-        finally
-        {
-            nodeModel.detach();
-        }
-    }
-
-    public BrixNodeWebPage getPage()
-    {
+    public BrixNodeWebPage getPage() {
         return page;
     }
 
-    public BrixPageParameters getParameters()
-    {
+    public BrixPageParameters getParameters() {
         return parameters;
     }
 
-    public BrixNodeRequestTarget(BrixNodeWebPage page)
-    {
-        this(page, page.getBrixPageParameters());
-    }
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public void detach(RequestCycle requestCycle)
-    {
 
-    }
+// --------------------- Interface IRequestTarget ---------------------
 
-    public void respond(RequestCycle requestCycle)
-    {
+
+    public void respond(RequestCycle requestCycle) {
         CharSequence url = requestCycle.urlFor(this);
         requestCycle.getResponse().redirect(url.toString());
     }
 
+    public void detach(RequestCycle requestCycle) {
+
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public String getNodeURL() {
+        try {
+            return ((BrixRequestCycleProcessor) RequestCycle.get().getProcessor())
+                    .getUriPathForNode(
+
+                            nodeModel.getObject()).toString();
+        } finally {
+            nodeModel.detach();
+        }
+    }
 }

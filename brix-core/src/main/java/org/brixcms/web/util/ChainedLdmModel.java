@@ -17,30 +17,30 @@ package org.brixcms.web.util;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-public abstract class ChainedLdmModel extends LoadableDetachableModel
-{
+public abstract class ChainedLdmModel extends LoadableDetachableModel {
+// ------------------------------ FIELDS ------------------------------
 
     private final IModel chained;
 
-    public ChainedLdmModel(IModel model)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ChainedLdmModel(IModel model) {
         super();
         this.chained = model;
     }
 
-    @Override
-    protected Object load()
-    {
-        return load(chained);
-    }
+// -------------------------- OTHER METHODS --------------------------
 
     @Override
-    protected void onDetach()
-    {
-        chained.detach();
-        super.onDetach();
+    protected Object load() {
+        return load(chained);
     }
 
     protected abstract Object load(IModel chained);
 
+    @Override
+    protected void onDetach() {
+        chained.detach();
+        super.onDetach();
+    }
 }

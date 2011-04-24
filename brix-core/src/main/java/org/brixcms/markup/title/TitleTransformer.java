@@ -24,58 +24,53 @@ import org.brixcms.plugin.site.page.AbstractContainer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TitleTransformer extends MarkupSourceTransformer
-{
-	private final AbstractContainer container;
-	
-	public TitleTransformer(MarkupSource delegate, AbstractContainer container)
-	{
-		super(delegate);
-		this.container = container;
-	}
+public class TitleTransformer extends MarkupSourceTransformer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final String TAG_NAME = Brix.NS_PREFIX + "title";
-	
-	@Override
-	protected List<Item> transform(List<Item> originalItems)
-	{
-		List<Item> result = new ArrayList<Item>(originalItems.size());
-	
-		int skipLevel = 0;
-		
-		for (Item i : originalItems)
-		{				
-			if (skipLevel > 0)
-			{
-				if (i instanceof Tag)
-				{
-					Tag tag = (Tag) i;
-					if (tag.getType() == Tag.Type.OPEN)
-						++skipLevel;
-					else if (tag.getType() == Tag.Type.CLOSE)
-						--skipLevel;
-						
-				}
-				continue;
-			}
-						
-			if (i instanceof Tag)
-			{
-				Tag tag = (Tag) i;
-				if (TAG_NAME.equals(tag.getName()))
-				{
-					result.add(new TitleText(container));
-					
-					if (tag.getType() == Tag.Type.OPEN)
-						++skipLevel;
-					
-					continue;
-				}
-			}
-			result.add(i);
-		}
-		
-		return result;
-	}
+    private static final String TAG_NAME = Brix.NS_PREFIX + "title";
+    private final AbstractContainer container;
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public TitleTransformer(MarkupSource delegate, AbstractContainer container) {
+        super(delegate);
+        this.container = container;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected List<Item> transform(List<Item> originalItems) {
+        List<Item> result = new ArrayList<Item>(originalItems.size());
+
+        int skipLevel = 0;
+
+        for (Item i : originalItems) {
+            if (skipLevel > 0) {
+                if (i instanceof Tag) {
+                    Tag tag = (Tag) i;
+                    if (tag.getType() == Tag.Type.OPEN)
+                        ++skipLevel;
+                    else if (tag.getType() == Tag.Type.CLOSE)
+                        --skipLevel;
+                }
+                continue;
+            }
+
+            if (i instanceof Tag) {
+                Tag tag = (Tag) i;
+                if (TAG_NAME.equals(tag.getName())) {
+                    result.add(new TitleText(container));
+
+                    if (tag.getType() == Tag.Type.OPEN)
+                        ++skipLevel;
+
+                    continue;
+                }
+            }
+            result.add(i);
+        }
+
+        return result;
+    }
 }

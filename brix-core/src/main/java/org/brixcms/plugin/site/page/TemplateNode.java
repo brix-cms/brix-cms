@@ -25,54 +25,51 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-public class TemplateNode extends AbstractContainer
-{
-    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-    {
+public class TemplateNode extends AbstractContainer {
+// ------------------------------ FIELDS ------------------------------
+
+    public static final String CONTENT_TAG = Brix.NS_PREFIX + "content";
+    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
-        public boolean canWrap(Brix brix, JcrNode node)
-        {
+        public boolean canWrap(Brix brix, JcrNode node) {
             return TemplateSiteNodePlugin.TYPE.equals(getNodeType(node));
         }
 
         @Override
-        public JcrNode wrap(Brix brix, Node node, JcrSession session)
-        {
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
             return new TemplateNode(node, session);
         }
 
         @Override
-        public void initializeRepository(Brix brix, Session session)
-        {
+        public void initializeRepository(Brix brix, Session session) {
             RepositoryUtil.registerNodeType(session.getWorkspace(), TemplateSiteNodePlugin.TYPE, false, false, true);
         }
     };
 
+// -------------------------- STATIC METHODS --------------------------
 
-    public static final String CONTENT_TAG = Brix.NS_PREFIX + "content";
-
-    public TemplateNode(Node delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static boolean canHandle(JcrNode node)
-    {
+    public static boolean canHandle(JcrNode node) {
         return TemplateSiteNodePlugin.TYPE.equals(getNodeType(node));
     }
 
-    public static TemplateNode initialize(JcrNode node)
-    {
-        BrixNode brixNode = (BrixNode)node;
+    public static TemplateNode initialize(JcrNode node) {
+        BrixNode brixNode = (BrixNode) node;
         BrixFileNode.initialize(node, "text/html");
         brixNode.setNodeType(TemplateSiteNodePlugin.TYPE);
 
         return new TemplateNode(node.getDelegate(), node.getSession());
     }
-    
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public TemplateNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    public String getUserVisibleType()
-    {
-    	return "Template";
+    public String getUserVisibleType() {
+        return "Template";
     }
 }

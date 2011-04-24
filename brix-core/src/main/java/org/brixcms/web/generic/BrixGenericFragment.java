@@ -18,38 +18,37 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
-public class BrixGenericFragment<T> extends Fragment implements IGenericComponent<T>
-{
+public class BrixGenericFragment<T> extends Fragment implements IGenericComponent<T> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public BrixGenericFragment(String id, String markupId, MarkupContainer markupProvider)
-	{
-		super(id, markupId, markupProvider);
-	}
+    public BrixGenericFragment(String id, String markupId, MarkupContainer markupProvider) {
+        super(id, markupId, markupProvider);
+    }
 
-	public BrixGenericFragment(String id, String markupId, MarkupContainer markupProvider, IModel<T> model)
-	{
-		super(id, markupId, markupProvider, model);
-	}
+    public BrixGenericFragment(String id, String markupId, MarkupContainer markupProvider, IModel<T> model) {
+        super(id, markupId, markupProvider, model);
+    }
 
-	@SuppressWarnings("unchecked")
-	public final IModel<T> getModel()
-	{
-		return (IModel<T>) getDefaultModel();
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	@SuppressWarnings("unchecked")
-	public final T getModelObject()
-	{
-		return (T) getDefaultModelObject();
-	}
 
-	public final void setModel(IModel<T> model)
-	{
-		setDefaultModel(model);
-	}
+// --------------------- Interface IGenericComponent ---------------------
 
-	public final void setModelObject(T object)
-	{
-		setDefaultModelObject(object);
-	}
+    @SuppressWarnings("unchecked")
+    public final IModel<T> getModel() {
+        return (IModel<T>) getDefaultModel();
+    }
+
+    public final void setModel(IModel<T> model) {
+        setDefaultModel(model);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final T getModelObject() {
+        return (T) getDefaultModelObject();
+    }
+
+    public final void setModelObject(T object) {
+        setDefaultModelObject(object);
+    }
 }

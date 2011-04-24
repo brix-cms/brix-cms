@@ -18,17 +18,17 @@ import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 
 import java.util.List;
 
-public class BrixAjaxTabbedPanel extends AjaxTabbedPanel
-{
+public class BrixAjaxTabbedPanel extends AjaxTabbedPanel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public BrixAjaxTabbedPanel(String id, List<IBrixTab> tabs)
-	{
-		super(id, BrixTabbedPanel.sort(tabs));	
-	}
+    public BrixAjaxTabbedPanel(String id, List<IBrixTab> tabs) {
+        super(id, BrixTabbedPanel.sort(tabs));
+    }
 
-	@Override
-	protected String getTabContainerCssClass()
-	{
-		return "brix-tab-row";
-	}
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected String getTabContainerCssClass() {
+        return "brix-tab-row";
+    }
 }

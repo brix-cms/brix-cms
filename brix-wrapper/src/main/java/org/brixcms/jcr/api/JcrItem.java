@@ -20,51 +20,57 @@ import javax.jcr.Item;
 import javax.jcr.ItemVisitor;
 
 /**
- * 
  * @author Matej Knopp
  */
-public interface JcrItem extends Item
-{
+public interface JcrItem extends Item {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrItem wrap(Item delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrItemWrapper.wrap(delegate, session);
-        }
-    };
 
-    public Item getDelegate();
+// --------------------- Interface Item ---------------------
 
-    public void accept(ItemVisitor visitor);
-
-    public JcrItem getAncestor(int depth);
-
-    public int getDepth();
-
-    public String getName();
-
-    public JcrNode getParent();
 
     public String getPath();
 
+    public String getName();
+
+    public JcrItem getAncestor(int depth);
+
+    public JcrNode getParent();
+
+    public int getDepth();
+
     public JcrSession getSession();
-
-    public boolean isModified();
-
-    public boolean isNew();
 
     public boolean isNode();
 
+    public boolean isNew();
+
+    public boolean isModified();
+
     public boolean isSame(Item otherItem);
 
-    public void refresh(boolean keepChanges);
-
-    public void remove();
+    public void accept(ItemVisitor visitor);
 
     /**
      * @deprecated, see {@link Item#save()}
      */
     @Deprecated
     public void save();
+
+    public void refresh(boolean keepChanges);
+
+    public void remove();
+
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public Item getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrItem wrap(Item delegate, JcrSession session) {
+            return WrapperAccessor.JcrItemWrapper.wrap(delegate, session);
+        }
+    }
 }

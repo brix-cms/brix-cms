@@ -22,50 +22,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ServerWorkspaceManager implements RemoteWorkspaceManager
-{
+public class ServerWorkspaceManager implements RemoteWorkspaceManager {
+// ------------------------------ FIELDS ------------------------------
+
     private final WorkspaceManager delegate;
 
-    public ServerWorkspaceManager(WorkspaceManager delegate)
-    {
-        this.delegate = delegate;
-    }
-
-    public RemoteWorkspace createWorkspace() throws RemoteException
-    {
-        return new ServerWorkspace(delegate.createWorkspace());
-    }
-
-    public RemoteWorkspace getWorkspace(String workspaceId) throws RemoteException
-    {
-        return new ServerWorkspace(delegate.getWorkspace(workspaceId));
-    }
-
-    public List<RemoteWorkspace> getWorkspaces() throws RemoteException
-    {
-        return localToRemote(delegate.getWorkspaces());
-    }
-
-    public List<RemoteWorkspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes)
-            throws RemoteException
-    {
-        return localToRemote(delegate.getWorkspacesFiltered(workspaceAttributes));
-    }
-    
-    public boolean workspaceExists(String workspaceId) throws RemoteException
-    {
-    	return delegate.workspaceExists(workspaceId);
-    }
+// -------------------------- STATIC METHODS --------------------------
 
     private static List<RemoteWorkspace> localToRemote(List<Workspace> local)
-            throws RemoteException
-    {
+            throws RemoteException {
         ArrayList<RemoteWorkspace> remote = new ArrayList<RemoteWorkspace>(local.size());
-        for (Workspace workspace : local)
-        {
+        for (Workspace workspace : local) {
             remote.add(new ServerWorkspace(workspace));
         }
         return remote;
     }
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ServerWorkspaceManager(WorkspaceManager delegate) {
+        this.delegate = delegate;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface RemoteWorkspaceManager ---------------------
+
+    public RemoteWorkspace createWorkspace() throws RemoteException {
+        return new ServerWorkspace(delegate.createWorkspace());
+    }
+
+    public RemoteWorkspace getWorkspace(String workspaceId) throws RemoteException {
+        return new ServerWorkspace(delegate.getWorkspace(workspaceId));
+    }
+
+    public List<RemoteWorkspace> getWorkspaces() throws RemoteException {
+        return localToRemote(delegate.getWorkspaces());
+    }
+
+    public List<RemoteWorkspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes)
+            throws RemoteException {
+        return localToRemote(delegate.getWorkspacesFiltered(workspaceAttributes));
+    }
+
+    public boolean workspaceExists(String workspaceId) throws RemoteException {
+        return delegate.workspaceExists(workspaceId);
+    }
 }

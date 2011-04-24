@@ -24,148 +24,133 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.brixcms.web.reference.Reference;
 
-public class ReferenceEditorPanel extends FormComponentPanel<Reference>
-{
+public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
+// ------------------------------ FIELDS ------------------------------
 
-	public ReferenceEditorPanel(String id)
-	{
-		super(id);
-	}
+    protected static final String MODAL_WINDOW_ID = "modalWindow";
 
-	public ReferenceEditorPanel(String id, IModel<Reference> model)
-	{
-		super(id, model);
-	}
+    private ReferenceEditorConfiguration configuration;
 
-	@Override
-	protected void onBeforeRender()
-	{
-		super.onBeforeRender();
-		if (!hasBeenRendered())
-		{
-			init();
-		}
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	protected static final String MODAL_WINDOW_ID = "modalWindow";
+    public ReferenceEditorPanel(String id) {
+        super(id);
+    }
 
-	@Override
-	public void updateModel()
-	{
-		// don't you dare!
-	}
+    public ReferenceEditorPanel(String id, IModel<Reference> model) {
+        super(id, model);
+    }
 
-	private void init()
-	{
-		add(newModalWindow(MODAL_WINDOW_ID));
-		final Label label = new Label("label", newLabelModel())
-		{
-			@Override
-			public boolean isVisible()
-			{
-				Reference ref = ReferenceEditorPanel.this.getModelObject();
-				return ref != null && !ref.isEmpty();
-			}
-		};
-		setOutputMarkupId(true);
-		add(label);
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-		add(new AjaxLink<Void>("edit")
-		{
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				getModalWindow().setModel(ReferenceEditorPanel.this.getModel());
-				getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback()
-				{
-					public void onClose(AjaxRequestTarget target)
-					{
-						target.addComponent(ReferenceEditorPanel.this);
-						ReferenceEditorPanel.this.onUpdate(target);
-					}
-				});
-				getModalWindow().show(target);
-			}
-		});
+    public ReferenceEditorConfiguration getConfiguration() {
+        return configuration;
+    }
 
-		add(new AjaxLink<Void>("clear")
-		{
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				Reference ref = ReferenceEditorPanel.this.getModelObject();
-				ref.makeEmpty();
-				// indicate that reference was changed (might be needed if the
-				// model is buffered)
-				ReferenceEditorPanel.this.setModelObject(ref);
-				target.addComponent(ReferenceEditorPanel.this);
-				ReferenceEditorPanel.this.onUpdate(target);
-			}
+// ------------------------ INTERFACE METHODS ------------------------
 
-			@Override
-			public boolean isEnabled()
-			{
-				Reference ref = ReferenceEditorPanel.this.getModelObject();
-				return ref != null && !ref.isEmpty();
-			}
-		});
-	}
 
-	protected void onUpdate(AjaxRequestTarget target)
-	{
+// --------------------- Interface IFormModelUpdateListener ---------------------
 
-	}
+    @Override
+    public void updateModel() {
+        // don't you dare!
+    }
 
-	protected ReferenceEditorModalWindow getModalWindow()
-	{
-		return (ReferenceEditorModalWindow) get(MODAL_WINDOW_ID);
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	protected IModel<String> newLabelModel()
-	{
-		return new PropertyModel<String>(getModel(), "generateUrl");
-	}
+    @Override
+    public boolean checkRequired() {
+        if (isRequired()) {
+            Reference ref = (Reference) getModelObject();
+            if (ref == null || ref.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	private ReferenceEditorConfiguration configuration;
+    protected ReferenceEditorModalWindow getModalWindow() {
+        return (ReferenceEditorModalWindow) get(MODAL_WINDOW_ID);
+    }
 
-	public ReferenceEditorPanel setConfiguration(ReferenceEditorConfiguration configuration)
-	{
-		this.configuration = configuration;
-		return this;
-	}
+    @Override
+    public boolean isInputNullable() {
+        return false;
+    }
 
-	public ReferenceEditorConfiguration getConfiguration()
-	{
-		return configuration;
-	}
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        if (!hasBeenRendered()) {
+            init();
+        }
+    }
 
-	protected Component newModalWindow(String id)
-	{
-		ReferenceEditorConfiguration conf = getConfiguration();
-		if (conf == null)
-		{
-			throw new IllegalStateException("ReferenceEditorPanel must have configuration.");
-		}
-		return new ReferenceEditorModalWindow(id, getModel(), getConfiguration());
-	}
+    private void init() {
+        add(newModalWindow(MODAL_WINDOW_ID));
+        final Label label = new Label("label", newLabelModel()) {
+            @Override
+            public boolean isVisible() {
+                Reference ref = ReferenceEditorPanel.this.getModelObject();
+                return ref != null && !ref.isEmpty();
+            }
+        };
+        setOutputMarkupId(true);
+        add(label);
 
-	@Override
-	public boolean checkRequired()
-	{
-		if (isRequired())
-		{
-			Reference ref = (Reference) getModelObject();
-			if (ref == null || ref.isEmpty())
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+        add(new AjaxLink<Void>("edit") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getModalWindow().setModel(ReferenceEditorPanel.this.getModel());
+                getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+                    public void onClose(AjaxRequestTarget target) {
+                        target.addComponent(ReferenceEditorPanel.this);
+                        ReferenceEditorPanel.this.onUpdate(target);
+                    }
+                });
+                getModalWindow().show(target);
+            }
+        });
 
-	@Override
-	public boolean isInputNullable()
-	{
-		return false;
-	}
+        add(new AjaxLink<Void>("clear") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                Reference ref = ReferenceEditorPanel.this.getModelObject();
+                ref.makeEmpty();
+                // indicate that reference was changed (might be needed if the
+                // model is buffered)
+                ReferenceEditorPanel.this.setModelObject(ref);
+                target.addComponent(ReferenceEditorPanel.this);
+                ReferenceEditorPanel.this.onUpdate(target);
+            }
+
+            @Override
+            public boolean isEnabled() {
+                Reference ref = ReferenceEditorPanel.this.getModelObject();
+                return ref != null && !ref.isEmpty();
+            }
+        });
+    }
+
+    protected Component newModalWindow(String id) {
+        ReferenceEditorConfiguration conf = getConfiguration();
+        if (conf == null) {
+            throw new IllegalStateException("ReferenceEditorPanel must have configuration.");
+        }
+        return new ReferenceEditorModalWindow(id, getModel(), getConfiguration());
+    }
+
+    protected IModel<String> newLabelModel() {
+        return new PropertyModel<String>(getModel(), "generateUrl");
+    }
+
+    protected void onUpdate(AjaxRequestTarget target) {
+
+    }
+
+    public ReferenceEditorPanel setConfiguration(ReferenceEditorConfiguration configuration) {
+        this.configuration = configuration;
+        return this;
+    }
 }

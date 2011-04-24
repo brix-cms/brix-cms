@@ -15,7 +15,13 @@
 package org.brixcms.rmiserver.web.admin;
 
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -32,9 +38,68 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class UserDtoEditor extends GenericPanel<UserDto>
-{
+public abstract class UserDtoEditor extends GenericPanel<UserDto> {
+// ------------------------------ FIELDS ------------------------------
+
     private static final long serialVersionUID = 1L;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public UserDtoEditor(String id, IModel<UserDto> model, Mode mode) {
+        super(id, model);
+
+        add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(this)));
+
+        Form<?> form = new Form<Void>("form");
+        add(form);
+
+        FormComponent<?> login = new TextField<String>("login", new PropertyModel<String>(model,
+                "login")).setRequired(true).add(StringValidator.lengthBetween(4, 32));
+        login.setLabel(new Model<String>("Login"));
+        login.setVisible(mode == Mode.CREATE || mode == Mode.EDIT);
+        form.add(login);
+
+
+        FormComponent<?> roles = new CheckBoxMultipleChoice<Role>("roles",
+                new PropertyModel<Collection<Role>>(model, "roles"), new RoleCollection(),
+                new RoleRenderer());
+        roles.setVisible(mode == Mode.CREATE || mode == Mode.EDIT);
+        form.add(roles);
+
+        FormComponent<?> password1 = new PasswordTextField("password1",
+                new PropertyModel<String>(model, "password")).setRequired(true).add(
+                StringValidator.lengthBetween(4, 32)).setLabel(new Model<String>("Password"));
+        password1.setVisible(mode == Mode.CREATE || mode == Mode.CHANGE_PASSWORD);
+        FormComponent<?> password2 = new PasswordTextField("password2", new Model<String>());
+        password2.setLabel(new Model<String>("Confirm Password"));
+        form.add(password1, password2);
+        password2.setVisible(mode == Mode.CREATE || mode == Mode.CHANGE_PASSWORD);
+        form.add(new EqualPasswordInputValidator(password1, password2));
+
+        form.add(new Button("ok") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onSubmit() {
+                onOk(UserDtoEditor.this.getModelObject());
+            }
+        });
+
+        form.add(new Link<Void>("cancel") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                onCancel();
+            }
+        });
+    }
+
+    protected abstract void onOk(UserDto dto);
+
+    protected abstract void onCancel();
+
+// -------------------------- ENUMERATIONS --------------------------
 
     public static enum Mode {
         CREATE,
@@ -42,93 +107,26 @@ public abstract class UserDtoEditor extends GenericPanel<UserDto>
         CHANGE_PASSWORD
     }
 
-    public UserDtoEditor(String id, IModel<UserDto> model, Mode mode)
-    {
-        super(id, model);
+// -------------------------- INNER CLASSES --------------------------
 
-        add(new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(this)));
-
-        Form< ? > form = new Form<Void>("form");
-        add(form);
-
-        FormComponent< ? > login = new TextField<String>("login", new PropertyModel<String>(model,
-                "login")).setRequired(true).add(StringValidator.lengthBetween(4, 32));
-        login.setLabel(new Model<String>("Login"));
-        login.setVisible(mode == Mode.CREATE || mode == Mode.EDIT);
-        form.add(login);
-
-
-        FormComponent< ? > roles = new CheckBoxMultipleChoice<Role>("roles",
-                new PropertyModel<Collection<Role>>(model, "roles"), new RoleCollection(),
-                new RoleRenderer());
-        roles.setVisible(mode == Mode.CREATE || mode == Mode.EDIT);
-        form.add(roles);
-
-        FormComponent< ? > password1 = new PasswordTextField("password1",
-                new PropertyModel<String>(model, "password")).setRequired(true).add(
-                StringValidator.lengthBetween(4, 32)).setLabel(new Model<String>("Password"));
-        password1.setVisible(mode == Mode.CREATE || mode == Mode.CHANGE_PASSWORD);
-        FormComponent< ? > password2 = new PasswordTextField("password2", new Model<String>());
-        password2.setLabel(new Model<String>("Confirm Password"));
-        form.add(password1, password2);
-        password2.setVisible(mode == Mode.CREATE || mode == Mode.CHANGE_PASSWORD);
-        form.add(new EqualPasswordInputValidator(password1, password2));
-
-        form.add(new Button("ok")
-        {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onSubmit()
-            {
-                onOk(UserDtoEditor.this.getModelObject());
-            }
-        });
-
-        form.add(new Link<Void>("cancel")
-        {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick()
-            {
-                onCancel();
-            }
-
-        });
-    }
-
-    protected abstract void onCancel();
-
-    protected abstract void onOk(UserDto dto);
-
-    private class RoleRenderer implements IChoiceRenderer<Role>
-    {
+    private class RoleRenderer implements IChoiceRenderer<Role> {
         private static final long serialVersionUID = 1L;
 
-        public Object getDisplayValue(Role object)
-        {
+        public Object getDisplayValue(Role object) {
             return getString(Role.class.getName() + "." + object.name());
         }
 
-        public String getIdValue(Role object, int index)
-        {
+        public String getIdValue(Role object, int index) {
             return object.name();
         }
-
     }
 
-    private static class RoleCollection extends LoadableDetachableModel<List< ? extends Role>>
-    {
-
+    private static class RoleCollection extends LoadableDetachableModel<List<? extends Role>> {
         private static final long serialVersionUID = 1L;
 
         @Override
-        protected List< ? extends Role> load()
-        {
+        protected List<? extends Role> load() {
             return new ArrayList<Role>(Arrays.asList(Role.values()));
         }
-
     }
-
 }

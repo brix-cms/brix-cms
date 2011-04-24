@@ -20,39 +20,43 @@ import org.apache.wicket.model.IModel;
 import java.util.Arrays;
 
 public class ProtocolSelector extends DropDownChoice<Boolean> {
-	public ProtocolSelector(String id, IModel<Boolean> model) {
-		super(id);
-		
-		setModel(model);
-		
-		setChoices(Arrays.asList(new Boolean[] { new Boolean(true),
-				new Boolean(false) }));
-		
-		setChoiceRenderer(new IChoiceRenderer<Boolean>() {
-			private static final long serialVersionUID = 1L;
+// --------------------------- CONSTRUCTORS ---------------------------
 
-			public Object getDisplayValue(Boolean object) {
-				if (object == null) {
-					return "";
-				}
-				return getLocalizer().getString(
-						(object ? "protocol.ssl" : "protocol.nossl"),
-						ProtocolSelector.this);
-			}
+    public ProtocolSelector(String id, IModel<Boolean> model) {
+        super(id);
 
-			public String getIdValue(Boolean object, int index) {
-				return object == null ? "" : object.toString();
-			}
-		});
-	}
+        setModel(model);
 
-	@Override
-	public boolean isNullValid() {
-		return true;
-	}
+        setChoices(Arrays.asList(new Boolean[]{new Boolean(true),
+                new Boolean(false)}));
 
-	@Override
-	protected String getNullValidKey() {
-		return "protocol.existing";
-	}
+        setChoiceRenderer(new IChoiceRenderer<Boolean>() {
+            private static final long serialVersionUID = 1L;
+
+            public Object getDisplayValue(Boolean object) {
+                if (object == null) {
+                    return "";
+                }
+                return getLocalizer().getString(
+                        (object ? "protocol.ssl" : "protocol.nossl"),
+                        ProtocolSelector.this);
+            }
+
+            public String getIdValue(Boolean object, int index) {
+                return object == null ? "" : object.toString();
+            }
+        });
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected String getNullValidKey() {
+        return "protocol.existing";
+    }
+
+    @Override
+    public boolean isNullValid() {
+        return true;
+    }
 }

@@ -22,131 +22,99 @@ import org.brixcms.jcr.api.JcrValue;
 import javax.jcr.query.Row;
 
 /**
- * 
  * @author Matej Knopp
  */
-class RowWrapper extends AbstractWrapper implements JcrRow
-{
+class RowWrapper extends AbstractWrapper implements JcrRow {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected RowWrapper(Row delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrRow wrap(Row delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrRow wrap(Row delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new RowWrapper(delegate, session);
         }
     }
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected RowWrapper(Row delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface JcrRow ---------------------
+
     @Override
-    public Row getDelegate()
-    {
-        return (Row)super.getDelegate();
+    public Row getDelegate() {
+        return (Row) super.getDelegate();
     }
 
-    public JcrValue getValue(final String propertyName)
-    {
-        return executeCallback(new Callback<JcrValue>()
-        {
-            public JcrValue execute() throws Exception
-            {
-                return JcrValue.Wrapper.wrap(getDelegate().getValue(propertyName), getJcrSession());
-            }
-        });
-    }
+// --------------------- Interface Row ---------------------
 
-    public JcrValue[] getValues()
-    {
-        return executeCallback(new Callback<JcrValue[]>()
-        {
-            public JcrValue[] execute() throws Exception
-            {
+
+    public JcrValue[] getValues() {
+        return executeCallback(new Callback<JcrValue[]>() {
+            public JcrValue[] execute() throws Exception {
                 return JcrValue.Wrapper.wrap(getDelegate().getValues(), getJcrSession());
             }
         });
     }
 
-    public JcrNode getNode()
-    {
-        return executeCallback(new Callback<JcrNode>()
-        {
+    public JcrValue getValue(final String propertyName) {
+        return executeCallback(new Callback<JcrValue>() {
+            public JcrValue execute() throws Exception {
+                return JcrValue.Wrapper.wrap(getDelegate().getValue(propertyName), getJcrSession());
+            }
+        });
+    }
 
-            public JcrNode execute() throws Exception
-            {
+    public JcrNode getNode() {
+        return executeCallback(new Callback<JcrNode>() {
+            public JcrNode execute() throws Exception {
                 return JcrNode.Wrapper.wrap(getDelegate().getNode(), getJcrSession());
             }
-
         });
     }
 
-    public JcrNode getNode(final String selectorName)
-    {
-        return executeCallback(new Callback<JcrNode>()
-        {
-
-            public JcrNode execute() throws Exception
-            {
+    public JcrNode getNode(final String selectorName) {
+        return executeCallback(new Callback<JcrNode>() {
+            public JcrNode execute() throws Exception {
                 return JcrNode.Wrapper.wrap(getDelegate().getNode(selectorName), getJcrSession());
             }
-
         });
     }
 
-    public String getPath()
-    {
-        return executeCallback(new Callback<String>()
-        {
-
-            public String execute() throws Exception
-            {
+    public String getPath() {
+        return executeCallback(new Callback<String>() {
+            public String execute() throws Exception {
                 return getDelegate().getPath();
             }
-
         });
     }
 
-    public String getPath(final String selectorName)
-    {
-        return executeCallback(new Callback<String>()
-        {
-
-            public String execute() throws Exception
-            {
+    public String getPath(final String selectorName) {
+        return executeCallback(new Callback<String>() {
+            public String execute() throws Exception {
                 return getDelegate().getPath(selectorName);
             }
         });
     }
 
-    public double getScore()
-    {
-        return executeCallback(new Callback<Double>()
-        {
-
-            public Double execute() throws Exception
-            {
+    public double getScore() {
+        return executeCallback(new Callback<Double>() {
+            public Double execute() throws Exception {
                 return getDelegate().getScore();
             }
         });
     }
 
-    public double getScore(final String selectorName)
-    {
-        return executeCallback(new Callback<Double>()
-        {
-
-            public Double execute() throws Exception
-            {
+    public double getScore(final String selectorName) {
+        return executeCallback(new Callback<Double>() {
+            public Double execute() throws Exception {
                 return getDelegate().getScore(selectorName);
             }
         });
     }
-
-
 }

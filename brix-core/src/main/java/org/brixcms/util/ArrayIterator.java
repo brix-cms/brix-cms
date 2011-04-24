@@ -16,31 +16,33 @@ package org.brixcms.util;
 
 import java.util.Iterator;
 
-public class ArrayIterator<T> implements Iterator<T>
-{
+public class ArrayIterator<T> implements Iterator<T> {
+// ------------------------------ FIELDS ------------------------------
+
     private int index = 0;
     private final T[] array;
 
-    public ArrayIterator(T[] array)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ArrayIterator(T[] array) {
         super();
         this.array = array;
     }
 
-    public boolean hasNext()
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Iterator ---------------------
+
+    public boolean hasNext() {
         return index < array.length;
     }
 
-    public T next()
-    {
+    public T next() {
         return array[index++];
     }
 
-    public void remove()
-    {
+    public void remove() {
         throw new UnsupportedOperationException();
-
     }
-
 }

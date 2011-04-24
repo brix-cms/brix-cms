@@ -40,7 +40,8 @@
                     <instructions>
                         <Export-Package/>
                         <Import-Package>
-                            org.osgi*,org.brixcms, org.brixcms.auth, org.brixcms.jcr.api, org.brixcms.plugin.site, org.brixcms.web.generic, org.brixcms.web.tab,
+                            org.osgi*,org.brixcms, org.brixcms.auth, org.brixcms.jcr.api, org.brixcms.plugin.site,
+                            org.brixcms.web.generic, org.brixcms.web.tab,
                             org.brixcms.workspace, org.apache.wicket, org.apache.wicket.markup.html.link,
                             org.apache.wicket.markup.html.panel, org.apache.wicket.model
                         </Import-Package>

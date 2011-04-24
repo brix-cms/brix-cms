@@ -19,42 +19,43 @@ import javax.jcr.RepositoryException;
 
 /**
  * Event for node being moved.
- * 
+ *
  * @author Matej Knopp
  */
-public class MoveNodeEvent extends NodeEvent
-{
-	private final String originalPath;
+public class MoveNodeEvent extends NodeEvent {
+// ------------------------------ FIELDS ------------------------------
 
-	MoveNodeEvent(Node node, String originalPath)
-	{
-		super(node);
-		this.originalPath = originalPath;
-	}
+    private final String originalPath;
 
-	@Override
-	Event onNewEvent(Event event, QueueCallback callback) throws RepositoryException
-	{
-		if (event instanceof MoveNodeEvent)
-		{
-			MoveNodeEvent e = (MoveNodeEvent) event;
-			if (e.getNode().getPath().equals(getNode().getPath()))
-			{
-				callback.blockAddingEvent();
-				return this;
-			}
-		}
-		return super.onNewEvent(event, callback);
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	public Node getNode()
-	{
-		return super.getNode();
-	}
+    MoveNodeEvent(Node node, String originalPath) {
+        super(node);
+        this.originalPath = originalPath;
+    }
 
-	public String getOriginalPath()
-	{
-		return originalPath;
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public String getOriginalPath() {
+        return originalPath;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public Node getNode() {
+        return super.getNode();
+    }
+
+    @Override
+    Event onNewEvent(Event event, QueueCallback callback) throws RepositoryException {
+        if (event instanceof MoveNodeEvent) {
+            MoveNodeEvent e = (MoveNodeEvent) event;
+            if (e.getNode().getPath().equals(getNode().getPath())) {
+                callback.blockAddingEvent();
+                return this;
+            }
+        }
+        return super.onNewEvent(event, callback);
+    }
 }

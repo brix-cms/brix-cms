@@ -14,26 +14,21 @@
 
 package org.brixcms.exception;
 
-public class InvalidNodeTypeException extends BrixException
-{
+public class InvalidNodeTypeException extends BrixException {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public InvalidNodeTypeException()
-    {
+    public InvalidNodeTypeException() {
     }
 
-    public InvalidNodeTypeException(String message)
-    {
+    public InvalidNodeTypeException(String message) {
         super(message);
     }
 
-    public InvalidNodeTypeException(Throwable cause)
-    {
+    public InvalidNodeTypeException(Throwable cause) {
         super(cause);
     }
 
-    public InvalidNodeTypeException(String message, Throwable cause)
-    {
+    public InvalidNodeTypeException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

@@ -30,12 +30,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
+// ------------------------------ FIELDS ------------------------------
+
     Logger logger = LoggerFactory.getLogger(BrixUrlCodingStrategy.class);
 
     /**
      * request cycle processor
      */
     private final BrixRequestCycleProcessor brixRequestCycleProcessor;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -46,30 +50,49 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
         this.brixRequestCycleProcessor = brixRequestCycleProcessor;
     }
 
-    private Path decode(Path path) {
-        StringBuilder builder = new StringBuilder(path.toString().length());
-        boolean first = true;
-        for (String s : path) {
-            if (first) {
-                first = false;
-            } else {
-                builder.append("/");
-            }
-            builder.append(BrixNodePageUrlCodingStrategy.urlDecode(s));
-        }
-        if (builder.length() == 0) {
-            builder.append("/");
-        }
-        return new Path(builder.toString(), false);
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IRequestTargetUrlCodingStrategy ---------------------
+
+
+    public String getMountPath() {
+        throw new UnsupportedOperationException();
     }
 
-    private IRequestTarget getSwitchTarget(BrixNode node) {
-        if (node instanceof BrixNode) {
-            return SwitchProtocolRequestTarget.requireProtocol((node).getRequiredProtocol());
-        } else {
+    public CharSequence encode(IRequestTarget requestTarget) {
+        throw new UnsupportedOperationException();
+    }
+
+    public IRequestTarget decode(RequestParameters requestParameters) {
+        String pathStr = requestParameters.getPath();
+
+        IRequestTarget target = targetForPath(pathStr, requestParameters);
+
+        if (target == null) {
+            // 404 if node not found
+            // return new
+            // WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
+            // "Resource
+            // " + pathStr
+            // + " not found");
             return null;
+            // return new PageRequestTarget(new
+            // ResourceNotFoundPage(pathStr));
+        } else {
+            return target;
         }
     }
+
+    public boolean matches(IRequestTarget requestTarget) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean matches(String path, boolean caseSensitive) {
+        throw new UnsupportedOperationException();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
 
     public IRequestTarget targetForPath(String pathStr, RequestParameters requestParameters) {
         if (!pathStr.startsWith("/")) {
@@ -117,41 +140,28 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
         return target;
     }
 
-    public IRequestTarget decode(RequestParameters requestParameters) {
-        String pathStr = requestParameters.getPath();
-
-        IRequestTarget target = targetForPath(pathStr, requestParameters);
-
-        if (target == null) {
-            // 404 if node not found
-            // return new
-            // WebErrorCodeResponseTarget(HttpServletResponse.SC_NOT_FOUND,
-            // "Resource
-            // " + pathStr
-            // + " not found");
-            return null;
-            // return new PageRequestTarget(new
-            // ResourceNotFoundPage(pathStr));
-        } else {
-            return target;
+    private Path decode(Path path) {
+        StringBuilder builder = new StringBuilder(path.toString().length());
+        boolean first = true;
+        for (String s : path) {
+            if (first) {
+                first = false;
+            } else {
+                builder.append("/");
+            }
+            builder.append(BrixNodePageUrlCodingStrategy.urlDecode(s));
         }
-
+        if (builder.length() == 0) {
+            builder.append("/");
+        }
+        return new Path(builder.toString(), false);
     }
 
-    public CharSequence encode(IRequestTarget requestTarget) {
-        throw new UnsupportedOperationException();
+    private IRequestTarget getSwitchTarget(BrixNode node) {
+        if (node instanceof BrixNode) {
+            return SwitchProtocolRequestTarget.requireProtocol((node).getRequiredProtocol());
+        } else {
+            return null;
+        }
     }
-
-    public String getMountPath() {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean matches(IRequestTarget requestTarget) {
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean matches(String path, boolean caseSensitive) {
-        throw new UnsupportedOperationException();
-    }
-
 }

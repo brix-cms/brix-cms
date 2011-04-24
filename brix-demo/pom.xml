@@ -135,8 +135,8 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.brixcms</groupId>-->
-            <!--<artifactId>brix-modeshape</artifactId>-->
+        <!--<groupId>org.brixcms</groupId>-->
+        <!--<artifactId>brix-modeshape</artifactId>-->
         <!--</dependency>-->
 
         <dependency>

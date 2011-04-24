@@ -26,8 +26,9 @@ import java.rmi.registry.Registry;
 import java.rmi.server.RemoteStub;
 import java.rmi.server.UnicastRemoteObject;
 
-public abstract class AbstractRmiExporterBean implements InitializingBean, DisposableBean
-{
+public abstract class AbstractRmiExporterBean implements InitializingBean, DisposableBean {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory.getLogger(AbstractRmiExporterBean.class);
 
     private int registryPort;
@@ -36,31 +37,38 @@ public abstract class AbstractRmiExporterBean implements InitializingBean, Dispo
     private Registry registry;
     private Remote server;
 
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
-    public void setRegistryPort(int registryPort)
-    {
+    public void setRegistryPort(int registryPort) {
         this.registryPort = registryPort;
     }
 
     @Required
-    public void setServiceName(String serviceName)
-    {
+    public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
 
-    protected abstract Remote createServiceInstance();
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public void afterPropertiesSet() throws Exception
-    {
 
-        try
-        {
+// --------------------- Interface DisposableBean ---------------------
+
+
+    public void destroy() throws Exception {
+        logger.info("Unregistering " + server.getClass().getName() +
+                " remote repository with name: {}", serviceName);
+        registry.unbind(serviceName);
+        UnicastRemoteObject.unexportObject(server, true);
+    }
+
+// --------------------- Interface InitializingBean ---------------------
+
+    public void afterPropertiesSet() throws Exception {
+        try {
             registry = LocateRegistry.getRegistry(registryPort);
             registry.list();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             registry = LocateRegistry.createRegistry(registryPort);
             registry.list();
         }
@@ -68,18 +76,13 @@ public abstract class AbstractRmiExporterBean implements InitializingBean, Dispo
 
         server = createServiceInstance();
         logger.info("Exporting " + server.getClass().getName() + " under: {}/{}", serviceName,
-            registry);
+                registry);
         RemoteStub stub = UnicastRemoteObject.exportObject(server);
         registry.rebind(serviceName, stub);
         logger.info("Exported " + server.getClass().getName() + ": {}", stub);
     }
 
-    public void destroy() throws Exception
-    {
-        logger.info("Unregistering " + server.getClass().getName() +
-            " remote repository with name: {}", serviceName);
-        registry.unbind(serviceName);
-        UnicastRemoteObject.unexportObject(server, true);
-    }
+// -------------------------- OTHER METHODS --------------------------
 
+    protected abstract Remote createServiceInstance();
 }

@@ -21,42 +21,36 @@ import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-public class ItemFilter extends DefaultItemFilter
-{
+public class ItemFilter extends DefaultItemFilter {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public ItemFilter()
-	{
+    public ItemFilter() {
 
-	}
+    }
 
-	@Override
-	public boolean isFilteredItem(Item item)
-	{
-		try
-		{
-			if (item instanceof Node)
-			{
-				Node node = (Node) item;
-				if (node.isNodeType(BrixNode.JCR_MIXIN_BRIX_HIDDEN))
-				{
-					return true;
-				}
-			}
-			else
-			{
-				String name = item.getName();
-				if (name.startsWith("brix:"))
-				{
-					return true;
-				}
-			}
-		}
-		catch (RepositoryException e)
-		{
-			return true;
-		}
+// ------------------------ INTERFACE METHODS ------------------------
 
-		return super.isFilteredItem(item);
-	}
 
+// --------------------- Interface ItemFilter ---------------------
+
+    @Override
+    public boolean isFilteredItem(Item item) {
+        try {
+            if (item instanceof Node) {
+                Node node = (Node) item;
+                if (node.isNodeType(BrixNode.JCR_MIXIN_BRIX_HIDDEN)) {
+                    return true;
+                }
+            } else {
+                String name = item.getName();
+                if (name.startsWith("brix:")) {
+                    return true;
+                }
+            }
+        } catch (RepositoryException e) {
+            return true;
+        }
+
+        return super.isFilteredItem(item);
+    }
 }

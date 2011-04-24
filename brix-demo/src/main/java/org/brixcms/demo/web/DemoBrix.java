@@ -30,19 +30,18 @@ import org.brixcms.plugin.webdavurl.WebdavUrlPlugin;
 
 /**
  * Subclass of {@link Brix} that configures demo-specific settings such as plugins, tiles, etc.
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class DemoBrix extends Brix
-{
+public class DemoBrix extends Brix {
+// --------------------------- CONSTRUCTORS ---------------------------
+
     /**
      * Constructor
-     * 
+     *
      * @param config
      */
-    public DemoBrix(BrixConfig config)
-    {
+    public DemoBrix(BrixConfig config) {
         super(config);
 
         config.getRegistry().register(Tile.POINT, new GuestBookTile());
@@ -60,10 +59,13 @@ public class DemoBrix extends Brix
         config.getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
     }
 
-    /** {@inheritDoc} */
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public AuthorizationStrategy newAuthorizationStrategy()
-    {
+    public AuthorizationStrategy newAuthorizationStrategy() {
         // register our simple demo auth strategy
         return new DemoAuthorizationStrategy();
     }

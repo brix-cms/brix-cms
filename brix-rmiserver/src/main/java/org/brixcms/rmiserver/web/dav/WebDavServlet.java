@@ -25,15 +25,19 @@ import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.jcr.*;
+import javax.jcr.Credentials;
+import javax.jcr.LoginException;
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 
-public class WebDavServlet extends SimpleWebdavServlet
-{
+public class WebDavServlet extends SimpleWebdavServlet {
+// ------------------------------ FIELDS ------------------------------
 
     private static final long serialVersionUID = 1L;
 
@@ -41,44 +45,13 @@ public class WebDavServlet extends SimpleWebdavServlet
     private CredentialsProvider credentialsProvider;
     private Authorizer authorizer;
 
-    public WebDavServlet()
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public WebDavServlet() {
 
     }
 
-    @Override
-    public void init(ServletConfig config) throws ServletException
-    {
-        super.init(config);
-
-        final ServletContext sc = config.getServletContext();
-        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(sc);
-        if (context == null)
-        {
-            throw new IllegalStateException("Could not find application context");
-        }
-
-        repository = (Repository)BeanFactoryUtils.beanOfTypeIncludingAncestors(context,
-                Repository.class);
-        if (repository == null)
-        {
-            throw new IllegalStateException(
-                    "Could not find JackRabbit repository in spring context");
-        }
-
-
-        UserService users = (UserService)BeanFactoryUtils.beanOfTypeIncludingAncestors(context,
-                UserService.class);
-        if (repository == null)
-        {
-            throw new IllegalStateException(
-                    "Could not find UserService implementation in spring context");
-        }
-
-        authorizer = new Authorizer(users);
-        credentialsProvider = getCredentialsProvider();
-
-    }
+// --------------------- GETTER / SETTER METHODS ---------------------
 
 // FIXME look into this
 // @Override
@@ -110,51 +83,78 @@ public class WebDavServlet extends SimpleWebdavServlet
 // }
 
     @Override
-    public Repository getRepository()
-    {
+    public Repository getRepository() {
         return repository;
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Servlet ---------------------
+
     @Override
-    public synchronized SessionProvider getSessionProvider()
-    {
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        final ServletContext sc = config.getServletContext();
+        ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(sc);
+        if (context == null) {
+            throw new IllegalStateException("Could not find application context");
+        }
+
+        repository = (Repository) BeanFactoryUtils.beanOfTypeIncludingAncestors(context,
+                Repository.class);
+        if (repository == null) {
+            throw new IllegalStateException(
+                    "Could not find JackRabbit repository in spring context");
+        }
+
+
+        UserService users = (UserService) BeanFactoryUtils.beanOfTypeIncludingAncestors(context,
+                UserService.class);
+        if (repository == null) {
+            throw new IllegalStateException(
+                    "Could not find UserService implementation in spring context");
+        }
+
+        authorizer = new Authorizer(users);
+        credentialsProvider = getCredentialsProvider();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public synchronized SessionProvider getSessionProvider() {
         final SessionProvider provider = super.getSessionProvider();
         return new SecureSessionProvider(provider);
     }
 
+// -------------------------- INNER CLASSES --------------------------
+
     /**
      * Session provider decorator that authorizes the user
-     * 
+     *
      * @author ivaynberg
-     * 
      */
-    private final class SecureSessionProvider implements SessionProvider
-    {
+    private final class SecureSessionProvider implements SessionProvider {
         private final SessionProvider delegate;
 
-        private SecureSessionProvider(SessionProvider delegate)
-        {
+        private SecureSessionProvider(SessionProvider delegate) {
             this.delegate = delegate;
         }
 
         public Session getSession(HttpServletRequest request, Repository rep, String workspace)
-                throws LoginException, ServletException, RepositoryException
-        {
-
+                throws LoginException, ServletException, RepositoryException {
             Credentials creds = credentialsProvider.getCredentials(request);
-            try
-            {
+            try {
                 authorizer.authorize(creds, Role.WEBDAV);
-            }
-            catch (AuthorizationException e)
-            {
+            } catch (AuthorizationException e) {
                 throw new LoginException(e.getMessage(), e);
             }
             return delegate.getSession(request, rep, workspace);
         }
 
-        public void releaseSession(Session session)
-        {
+        public void releaseSession(Session session) {
             delegate.releaseSession(session);
         }
     }

@@ -19,28 +19,32 @@ import org.brixcms.plugin.menu.Menu.Entry;
 import org.brixcms.web.tree.AbstractTreeModel;
 import org.brixcms.web.tree.TreeNode;
 
-public class MenuTreeModel extends AbstractTreeModel implements IDetachable
-{
-    public MenuTreeModel(Entry root)
-    {
-        if (root == null)
-        {
+public class MenuTreeModel extends AbstractTreeModel implements IDetachable {
+// ------------------------------ FIELDS ------------------------------
+
+    private final MenuTreeNode root;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public MenuTreeModel(Entry root) {
+        if (root == null) {
             throw new IllegalArgumentException("Argument 'root' may not be null.");
         }
         this.root = new MenuTreeNode(root);
     }
 
-    private final MenuTreeNode root;
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-    public TreeNode getRoot()
-    {
+    public TreeNode getRoot() {
         return root;
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public void detach()
-    {
+
+// --------------------- Interface IDetachable ---------------------
+
+    public void detach() {
         root.detach();
     }
-
 }

@@ -31,85 +31,81 @@ import java.io.Serializable;
 
 /**
  * A base to build other renderers from.
- * 
+ *
  * @author Jeremy Thomerson
  */
-public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Serializable
-{
+public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Serializable {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public Component newNodeComponent(String id, LinkTree tree, IModel<Object> treeNodeModel)
-	{
-		JcrTreeNode node = (JcrTreeNode)treeNodeModel.getObject();
-		BrixNode bn = node.getNodeModel().getObject();
+// ------------------------ INTERFACE METHODS ------------------------
 
-		if (isForThisNode(bn))
-		{
-			return new NodeTreeRenderingComponent(id, treeNodeModel, tree);
-		}
 
-		return null;
-	}
+// --------------------- Interface NodeTreeRenderer ---------------------
 
-	/**
-	 * @param bn
-	 *            the brix node being rendered
-	 * @return whether you want to render it or not
-	 */
-	protected boolean isForThisNode(BrixNode bn)
-	{
-		return bn.getClass().isAssignableFrom(getNodeClass());
-	}
+    public Component newNodeComponent(String id, LinkTree tree, IModel<Object> treeNodeModel) {
+        JcrTreeNode node = (JcrTreeNode) treeNodeModel.getObject();
+        BrixNode bn = node.getNodeModel().getObject();
 
-	/**
-	 * @return the class of node that you want to render
-	 */
-	protected abstract Class<? extends BrixNode> getNodeClass();
+        if (isForThisNode(bn)) {
+            return new NodeTreeRenderingComponent(id, treeNodeModel, tree);
+        }
 
-	/**
-	 * @param tree
-	 *            the tree being rendered
-	 * @param node
-	 *            the JcrTreeNode being rendered
-	 * @return the resource reference to use as an icon for this node
-	 */
-	protected abstract ResourceReference getImageResourceReference(BaseTree tree, Object node);
+        return null;
+    }
 
-	private class NodeTreeRenderingComponent extends LinkIconPanel
-	{
-		private static final long serialVersionUID = 1L;
+// -------------------------- OTHER METHODS --------------------------
 
-		public NodeTreeRenderingComponent(String id, IModel<Object> model, BaseTree tree)
-		{
-			super(id, model, tree);
-			BrixNode bn = ((JcrTreeNode)model.getObject()).getNodeModel().getObject();
-			add(new SimpleAttributeModifier("class", bn.getNodeType()));
-		}
+    /**
+     * @param tree the tree being rendered
+     * @param node the JcrTreeNode being rendered
+     * @return the resource reference to use as an icon for this node
+     */
+    protected abstract ResourceReference getImageResourceReference(BaseTree tree, Object node);
 
-		@Override
-		protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-		{
-			return AbstractNodeTreeRenderer.this.getImageResourceReference(tree, node);
-		}
+    /**
+     * @param bn the brix node being rendered
+     * @return whether you want to render it or not
+     */
+    protected boolean isForThisNode(BrixNode bn) {
+        return bn.getClass().isAssignableFrom(getNodeClass());
+    }
 
-		@Override
-		protected Component newContentComponent(String componentId, BaseTree tree,
-				final IModel<Object> model)
-		{
-			return new Label(componentId, new AbstractModel<String>()
-			{
-				private static final long serialVersionUID = 1L;
+    /**
+     * @return the class of node that you want to render
+     */
+    protected abstract Class<? extends BrixNode> getNodeClass();
 
-				@Override
-				public String getObject()
-				{
-					JcrTreeNode node = (JcrTreeNode)model.getObject();
-					BrixNode n = node.getNodeModel().getObject();
-					return n.getUserVisibleName();
-				}
-			}).add(new SimpleAttributeModifier("style", "padding-left: 4px;"));
-		}
-	}
+// -------------------------- INNER CLASSES --------------------------
 
+    private class NodeTreeRenderingComponent extends LinkIconPanel {
+        private static final long serialVersionUID = 1L;
+
+        public NodeTreeRenderingComponent(String id, IModel<Object> model, BaseTree tree) {
+            super(id, model, tree);
+            BrixNode bn = ((JcrTreeNode) model.getObject()).getNodeModel().getObject();
+            add(new SimpleAttributeModifier("class", bn.getNodeType()));
+        }
+
+        @Override
+        protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+            return AbstractNodeTreeRenderer.this.getImageResourceReference(tree, node);
+        }
+
+        @Override
+        protected Component newContentComponent(String componentId, BaseTree tree,
+                                                final IModel<Object> model) {
+            return new Label(componentId, new AbstractModel<String>() {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public String getObject() {
+                    JcrTreeNode node = (JcrTreeNode) model.getObject();
+                    BrixNode n = node.getNodeModel().getObject();
+                    return n.getUserVisibleName();
+                }
+            }).add(new SimpleAttributeModifier("style", "padding-left: 4px;"));
+        }
+    }
 }

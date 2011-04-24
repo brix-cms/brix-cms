@@ -19,22 +19,26 @@ import org.brixcms.jcr.api.wrapper.WrapperAccessor;
 import javax.jcr.NodeIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-public interface JcrNodeIterator extends NodeIterator
-{
+public interface JcrNodeIterator extends NodeIterator {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrNodeIterator wrap(NodeIterator delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrNodeIteratorWrapper.wrap(delegate, session);
-        }
-    };
 
-    public NodeIterator getDelegate();
+// --------------------- Interface NodeIterator ---------------------
 
     public JcrNode nextNode();
 
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public NodeIterator getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrNodeIterator wrap(NodeIterator delegate, JcrSession session) {
+            return WrapperAccessor.JcrNodeIteratorWrapper.wrap(delegate, session);
+        }
+    }
 }

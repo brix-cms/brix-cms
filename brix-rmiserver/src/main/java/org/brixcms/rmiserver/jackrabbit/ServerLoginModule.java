@@ -31,34 +31,40 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ServerLoginModule implements LoginModule
-{
+public class ServerLoginModule implements LoginModule {
+// ------------------------------ FIELDS ------------------------------
+
     private Subject subject;
     private CallbackHandler callbackHandler;
 
     private final Authorizer authorizer;
 
-    /** local principals that were logged in */
+    /**
+     * local principals that were logged in
+     */
     private final Set<Principal> principals = new HashSet<Principal>();
 
+// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
-     * 
-     * @param authorizer
-     *            authorizer
+     *
+     * @param authorizer authorizer
      */
-    public ServerLoginModule(Authorizer authorizer)
-    {
+    public ServerLoginModule(Authorizer authorizer) {
         this.authorizer = authorizer;
     }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface LoginModule ---------------------
 
     /**
      * {@inheritDoc}
      */
     public void initialize(Subject subject, CallbackHandler callbackHandler,
-            Map<String, ? > sharedState, Map<String, ? > options)
-    {
+                           Map<String, ?> sharedState, Map<String, ?> options) {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
     }
@@ -66,10 +72,8 @@ public class ServerLoginModule implements LoginModule
     /**
      * {@inheritDoc}
      */
-    public boolean login() throws LoginException
-    {
-        try
-        {
+    public boolean login() throws LoginException {
+        try {
             // clear any existing principals
             principals.clear();
 
@@ -81,45 +85,32 @@ public class ServerLoginModule implements LoginModule
             principals.add(new UserPrincipal(user.getLogin()));
 
             return true;
-        }
-        catch (AuthorizationException e)
-        {
+        } catch (AuthorizationException e) {
             principals.clear();
             throw new FailedLoginException(e.getMessage());
         }
     }
 
-    private Credentials getCredentials() throws LoginException
-    {
-        if (callbackHandler == null)
-        {
-            throw new LoginException("Null callback handler");
+    /**
+     * {@inheritDoc}
+     */
+    public boolean commit() throws LoginException {
+        if (principals.isEmpty()) {
+            return false;
+        } else {
+            // add authenticated principals to the subject
+            subject.getPrincipals().addAll(principals);
+            return true;
         }
-
-        CredentialsCallback ccb = new CredentialsCallback();
-        try
-        {
-            callbackHandler.handle(new Callback[] { ccb });
-        }
-        catch (Exception e)
-        {
-            throw new LoginException("Failed to retrieve login credentials");
-        }
-        return ccb.getCredentials();
     }
-
 
     /**
      * {@inheritDoc}
      */
-    public boolean abort() throws LoginException
-    {
-        if (principals.isEmpty())
-        {
+    public boolean abort() throws LoginException {
+        if (principals.isEmpty()) {
             return false;
-        }
-        else
-        {
+        } else {
             logout();
         }
         return true;
@@ -128,27 +119,25 @@ public class ServerLoginModule implements LoginModule
     /**
      * {@inheritDoc}
      */
-    public boolean logout() throws LoginException
-    {
+    public boolean logout() throws LoginException {
         subject.getPrincipals().removeAll(principals);
         principals.clear();
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean commit() throws LoginException
-    {
-        if (principals.isEmpty())
-        {
-            return false;
+// -------------------------- OTHER METHODS --------------------------
+
+    private Credentials getCredentials() throws LoginException {
+        if (callbackHandler == null) {
+            throw new LoginException("Null callback handler");
         }
-        else
-        {
-            // add authenticated principals to the subject
-            subject.getPrincipals().addAll(principals);
-            return true;
+
+        CredentialsCallback ccb = new CredentialsCallback();
+        try {
+            callbackHandler.handle(new Callback[]{ccb});
+        } catch (Exception e) {
+            throw new LoginException("Failed to retrieve login credentials");
         }
+        return ccb.getCredentials();
     }
 }

@@ -30,87 +30,70 @@ import org.brixcms.web.tab.IBrixTab;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageTileNodeTabFactory implements ManageNodeTabFactory
-{
-    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel)
-    {
-        String type = nodeModel.getObject().getNodeType();
-        if (PageSiteNodePlugin.TYPE.equals(type) || TemplateSiteNodePlugin.TYPE.equals(type))
-        {
-            return getTabs(nodeModel);
-        }
-        else
-        {
-            return null;
-        }
-    }
+public class ManageTileNodeTabFactory implements ManageNodeTabFactory {
+// -------------------------- STATIC METHODS --------------------------
 
-    private static List<IBrixTab> getTabs(final IModel<BrixNode> nodeModel)
-    {
+    private static List<IBrixTab> getTabs(final IModel<BrixNode> nodeModel) {
         List<IBrixTab> tabs = new ArrayList<IBrixTab>();
-        
-        tabs.add(new CachingAbstractTab(new ResourceModel("view", "View"))
-        {
 
+        tabs.add(new CachingAbstractTab(new ResourceModel("view", "View")) {
             @Override
-            public Panel newPanel(String panelId)
-            {
+            public Panel newPanel(String panelId) {
                 return new ViewTab(panelId, nodeModel);
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return hasViewPermission(nodeModel);
             }
-
         });
 
-        tabs.add(new CachingAbstractTab(new ResourceModel("tiles", "Tiles"))
-        {
-
+        tabs.add(new CachingAbstractTab(new ResourceModel("tiles", "Tiles")) {
             @Override
-            public Panel newPanel(String panelId)
-            {
+            public Panel newPanel(String panelId) {
                 return new TilesPanel(panelId, nodeModel);
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return hasEditPermission(nodeModel);
             }
-
         });
-        
-        tabs.add(new CachingAbstractTab(new ResourceModel("variables", "Variables"))
-        {
 
+        tabs.add(new CachingAbstractTab(new ResourceModel("variables", "Variables")) {
             @Override
-            public Panel newPanel(String panelId)
-            {
+            public Panel newPanel(String panelId) {
                 return new VariablesPanel(panelId, nodeModel);
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return hasEditPermission(nodeModel);
             }
-
         });
 
         return tabs;
     }
 
-    private static boolean hasViewPermission(IModel<BrixNode> nodeModel)
-    {
-    	return SitePlugin.get().canViewNode(nodeModel.getObject(), Context.ADMINISTRATION);        
+    private static boolean hasViewPermission(IModel<BrixNode> nodeModel) {
+        return SitePlugin.get().canViewNode(nodeModel.getObject(), Context.ADMINISTRATION);
     }
 
-    private static boolean hasEditPermission(IModel<BrixNode> nodeModel)
-    {
-    	return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);
+    private static boolean hasEditPermission(IModel<BrixNode> nodeModel) {
+        return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface ManageNodeTabFactory ---------------------
+
+    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
+        String type = nodeModel.getObject().getNodeType();
+        if (PageSiteNodePlugin.TYPE.equals(type) || TemplateSiteNodePlugin.TYPE.equals(type)) {
+            return getTabs(nodeModel);
+        } else {
+            return null;
+        }
+    }
 }

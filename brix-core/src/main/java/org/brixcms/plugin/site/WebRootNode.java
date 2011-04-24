@@ -28,49 +28,52 @@ import javax.jcr.Node;
 
 /**
  * Node that can wrap the brix:root/brix:site node
- * 
+ *
  * @author Matej Knopp
  */
-public class WebRootNode extends FolderNode implements TreeAwareNode
-{
-	
-	public WebRootNode(Node delegate, JcrSession session)
-	{
-		super(delegate, session);
-	}
+public class WebRootNode extends FolderNode implements TreeAwareNode {
+// ------------------------------ FIELDS ------------------------------
 
-	public JcrTreeNode getTreeNode(BrixNode node)
-	{
-		return new SiteTreeNode(node);
-	}
+    public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
+        @Override
+        public boolean canWrap(Brix brix, JcrNode node) {
+            return node.getPath().equals(SitePlugin.get(brix).getWebRootPath());
+        }
 
-	private static class SiteTreeNode extends AbstractJcrTreeNode
-	{
-		public SiteTreeNode(BrixNode node)
-		{
-			super(node);
-		}
-	};
+        @Override
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
+            return new WebRootNode(node, session);
+        }
+    };
 
-	@Override
-	public String getUserVisibleName()
-	{
-		return "Web";
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-	{
+    public WebRootNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
 
-		@Override
-		public boolean canWrap(Brix brix, JcrNode node)
-		{
-			return node.getPath().equals(SitePlugin.get(brix).getWebRootPath());
-		}
+// ------------------------ INTERFACE METHODS ------------------------
 
-		@Override
-		public JcrNode wrap(Brix brix, Node node, JcrSession session)
-		{
-			return new WebRootNode(node, session);
-		}
-	};
+
+// --------------------- Interface TreeAwareNode ---------------------
+
+    public JcrTreeNode getTreeNode(BrixNode node) {
+        return new SiteTreeNode(node);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    @Override
+    public String getUserVisibleName() {
+        return "Web";
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private static class SiteTreeNode extends AbstractJcrTreeNode {
+        public SiteTreeNode(BrixNode node) {
+            super(node);
+        }
+    }
 }

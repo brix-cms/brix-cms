@@ -26,96 +26,81 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.resource.ResourceRequestTarget;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-public class ViewPropertiesTab extends BrixGenericPanel<BrixNode>
-{
+public class ViewPropertiesTab extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public ViewPropertiesTab(String id, final IModel<BrixNode> nodeModel)
-	{
-		super(id, nodeModel);
+    public ViewPropertiesTab(String id, final IModel<BrixNode> nodeModel) {
+        super(id, nodeModel);
 
-		add(new Label("mimeType", new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				BrixFileNode node = (BrixFileNode) nodeModel.getObject();
-				return node.getMimeType();
-			}
-		}));
+        add(new Label("mimeType", new Model<String>() {
+            @Override
+            public String getObject() {
+                BrixFileNode node = (BrixFileNode) nodeModel.getObject();
+                return node.getMimeType();
+            }
+        }));
 
-		add(new Label("size", new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				BrixFileNode node = (BrixFileNode) nodeModel.getObject();
-				return node.getContentLength() + " bytes";
-			}
-		}));
+        add(new Label("size", new Model<String>() {
+            @Override
+            public String getObject() {
+                BrixFileNode node = (BrixFileNode) nodeModel.getObject();
+                return node.getContentLength() + " bytes";
+            }
+        }));
 
-		add(new Label("requiredProtocol", new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				Protocol protocol = nodeModel.getObject().getRequiredProtocol();
-				return getString(protocol.toString());
-			}
-		}));
+        add(new Label("requiredProtocol", new Model<String>() {
+            @Override
+            public String getObject() {
+                Protocol protocol = nodeModel.getObject().getRequiredProtocol();
+                return getString(protocol.toString());
+            }
+        }));
 
-		add(new Link<Void>("download")
-		{
-			@Override
-			public void onClick()
-			{
-				getRequestCycle().setRequestTarget(new ResourceRequestTarget(nodeModel, true));
-			}
-		});
+        add(new Link<Void>("download") {
+            @Override
+            public void onClick() {
+                getRequestCycle().setRequestTarget(new ResourceRequestTarget(nodeModel, true));
+            }
+        });
 
-		add(new Link<Void>("edit")
-		{
-			@Override
-			public void onClick()
-			{
-				EditPropertiesPanel panel = new EditPropertiesPanel(ViewPropertiesTab.this.getId(),
-						ViewPropertiesTab.this.getModel())
-				{
-					@Override
-					void goBack()
-					{
-						replaceWith(ViewPropertiesTab.this);
-					}
-				};
-				ViewPropertiesTab.this.replaceWith(panel);
-			}
-			@Override
-			public boolean isVisible()
-			{
-				return hasEditPermission(ViewPropertiesTab.this.getModel());
-			}
-		});
+        add(new Link<Void>("edit") {
+            @Override
+            public void onClick() {
+                EditPropertiesPanel panel = new EditPropertiesPanel(ViewPropertiesTab.this.getId(),
+                        ViewPropertiesTab.this.getModel()) {
+                    @Override
+                    void goBack() {
+                        replaceWith(ViewPropertiesTab.this);
+                    }
+                };
+                ViewPropertiesTab.this.replaceWith(panel);
+            }
 
-		/*
-		 * List<Protocol> protocols = Arrays.asList(Protocol.values());
-		 * 
-		 * final ModelBuffer model = new ModelBuffer(nodeModel); Form<?> form =
-		 * new Form<Void>("form");
-		 * 
-		 * IModel<Protocol> protocolModel =
-		 * model.forProperty("requiredProtocol"); form.add(new DropDownChoice<Protocol>("protocol",
-		 * protocolModel, protocols).setNullValid(false));
-		 * 
-		 * form.add(new Button<Void>("save") { @Override public void onSubmit() {
-		 * BrixNode node = nodeModel.getObject(); node.checkout();
-		 * model.apply(); node.checkin(); node.save(); } });
-		 * 
-		 * add(form);
-		 */
-	}
+            @Override
+            public boolean isVisible() {
+                return hasEditPermission(ViewPropertiesTab.this.getModel());
+            }
+        });
 
-	private static boolean hasEditPermission(IModel<BrixNode> model)
-	{
-		return SitePlugin.get().canEditNode(model.getObject(), Context.ADMINISTRATION);
-	}
+        /*
+           * List<Protocol> protocols = Arrays.asList(Protocol.values());
+           *
+           * final ModelBuffer model = new ModelBuffer(nodeModel); Form<?> form =
+           * new Form<Void>("form");
+           *
+           * IModel<Protocol> protocolModel =
+           * model.forProperty("requiredProtocol"); form.add(new DropDownChoice<Protocol>("protocol",
+           * protocolModel, protocols).setNullValid(false));
+           *
+           * form.add(new Button<Void>("save") { @Override public void onSubmit() {
+           * BrixNode node = nodeModel.getObject(); node.checkout();
+           * model.apply(); node.checkin(); node.save(); } });
+           *
+           * add(form);
+           */
+    }
 
+    private static boolean hasEditPermission(IModel<BrixNode> model) {
+        return SitePlugin.get().canEditNode(model.getObject(), Context.ADMINISTRATION);
+    }
 }

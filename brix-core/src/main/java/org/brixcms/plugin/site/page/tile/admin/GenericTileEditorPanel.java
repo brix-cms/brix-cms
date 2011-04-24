@@ -17,39 +17,37 @@ package org.brixcms.plugin.site.page.tile.admin;
 import org.apache.wicket.model.IModel;
 import org.brixcms.web.generic.IGenericComponent;
 
-public abstract class GenericTileEditorPanel<T> extends TileEditorPanel implements IGenericComponent<T>
-{
+public abstract class GenericTileEditorPanel<T> extends TileEditorPanel implements IGenericComponent<T> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public GenericTileEditorPanel(String id)
-	{
-		super(id);
-	}
+    public GenericTileEditorPanel(String id) {
+        super(id);
+    }
 
-	public GenericTileEditorPanel(String id, IModel<?> model)
-	{
-		super(id, model);
-	}
+    public GenericTileEditorPanel(String id, IModel<?> model) {
+        super(id, model);
+    }
 
-	@SuppressWarnings("unchecked")
-	public final IModel<T> getModel()
-	{
-		return (IModel<T>) getDefaultModel();
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	@SuppressWarnings("unchecked")
-	public final T getModelObject()
-	{
-		return (T) getDefaultModelObject();
-	}
 
-	public final void setModel(IModel<T> model)
-	{
-		setDefaultModel(model);
-	}
+// --------------------- Interface IGenericComponent ---------------------
 
-	public final void setModelObject(T object)
-	{
-		setDefaultModelObject(object);
-	}
+    @SuppressWarnings("unchecked")
+    public final IModel<T> getModel() {
+        return (IModel<T>) getDefaultModel();
+    }
 
+    public final void setModel(IModel<T> model) {
+        setDefaultModel(model);
+    }
+
+    @SuppressWarnings("unchecked")
+    public final T getModelObject() {
+        return (T) getDefaultModelObject();
+    }
+
+    public final void setModelObject(T object) {
+        setDefaultModelObject(object);
+    }
 }

@@ -24,86 +24,80 @@ import org.apache.wicket.request.target.component.listener.IListenerInterfaceReq
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixNodePageListenerRequestTarget extends BrixNodePageRequestTarget
-		implements
-			IListenerInterfaceRequestTarget
-{
-	private final String iface;
+        implements
+        IListenerInterfaceRequestTarget {
+// ------------------------------ FIELDS ------------------------------
 
-	public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, BrixNodeWebPage page,
-			String iface)
-	{
-		super(node, page);
-		this.iface = iface;
-	}
+    private final String iface;
 
-	public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, PageFactory pageFactory,
-			String iface)
-	{
-		super(node, pageFactory);
-		this.iface = iface;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public RequestListenerInterface getRequestListenerInterface()
-	{
-		if (this.iface != null)
-		{
-			int separator = iface.lastIndexOf(':');
-			if (separator != -1)
-			{
-				String interfaceName = iface.substring(separator + 1);
-				RequestListenerInterface listenerInterface = RequestListenerInterface
-						.forName(interfaceName);
-				return listenerInterface;
-			}
-		}
-		return null;
-	}
+    public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, BrixNodeWebPage page,
+                                             String iface) {
+        super(node, page);
+        this.iface = iface;
+    }
 
-	public RequestParameters getRequestParameters()
-	{
-		return RequestCycle.get().getRequest().getRequestParameters();
-	}
+    public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, PageFactory pageFactory,
+                                             String iface) {
+        super(node, pageFactory);
+        this.iface = iface;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
 
 
-	public Component getTarget()
-	{
-		if (this.iface != null)
-		{
-			int separator = iface.lastIndexOf(':');
-			if (separator != -1)
-			{
+// --------------------- Interface IListenerInterfaceRequestTarget ---------------------
 
-				String componentPath = iface.substring(0, separator);
-				getPage().prepareForRender(false);
-				Component component = getPage().get(componentPath);
-				if (component == null)
-				{
-					throw new WicketRuntimeException(
-							"unable to find component with path "
-									+ componentPath
-									+ " on stateless page "
-									+ getPage()
-									+ " it could be that the component is inside a repeater make your component return false in getStatelessHint()");
-				}
-				return component;
-			}
-		}
-		return null;
-	}
+    public RequestParameters getRequestParameters() {
+        return RequestCycle.get().getRequest().getRequestParameters();
+    }
 
-	@Override
-	protected void respondWithInitialRedirectHandled(RequestCycle requestCycle)
-	{
-		int separator = iface.lastIndexOf(':');
-		if (separator != -1)
-		{
-			Component component = getTarget();
-			RequestListenerInterface listenerInterface = getRequestListenerInterface();
-			listenerInterface.invoke(getPage(), component);
-		}
+// -------------------------- OTHER METHODS --------------------------
 
-		super.respondWithInitialRedirectHandled(requestCycle);
-	}
+    @Override
+    protected void respondWithInitialRedirectHandled(RequestCycle requestCycle) {
+        int separator = iface.lastIndexOf(':');
+        if (separator != -1) {
+            Component component = getTarget();
+            RequestListenerInterface listenerInterface = getRequestListenerInterface();
+            listenerInterface.invoke(getPage(), component);
+        }
 
+        super.respondWithInitialRedirectHandled(requestCycle);
+    }
 
+    public Component getTarget() {
+        if (this.iface != null) {
+            int separator = iface.lastIndexOf(':');
+            if (separator != -1) {
+                String componentPath = iface.substring(0, separator);
+                getPage().prepareForRender(false);
+                Component component = getPage().get(componentPath);
+                if (component == null) {
+                    throw new WicketRuntimeException(
+                            "unable to find component with path "
+                                    + componentPath
+                                    + " on stateless page "
+                                    + getPage()
+                                    + " it could be that the component is inside a repeater make your component return false in getStatelessHint()");
+                }
+                return component;
+            }
+        }
+        return null;
+    }
+
+    public RequestListenerInterface getRequestListenerInterface() {
+        if (this.iface != null) {
+            int separator = iface.lastIndexOf(':');
+            if (separator != -1) {
+                String interfaceName = iface.substring(separator + 1);
+                RequestListenerInterface listenerInterface = RequestListenerInterface
+                        .forName(interfaceName);
+                return listenerInterface;
+            }
+        }
+        return null;
+    }
 }

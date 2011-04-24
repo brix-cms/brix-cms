@@ -27,29 +27,17 @@ import org.brixcms.workspace.Workspace;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SnapshotPlugin implements Plugin {
+// ------------------------------ FIELDS ------------------------------
 
     private static final String ID = SnapshotPlugin.class.getName();
-
-    private final Brix brix;
-
-    public SnapshotPlugin(Brix brix) {
-        this.brix = brix;
-    }
-
-    public String getId() {
-        return ID;
-    }
-
-    public static SnapshotPlugin get(Brix brix) {
-        return (SnapshotPlugin) brix.getPlugin(ID);
-    }
-
-    public static SnapshotPlugin get() {
-        return get(Brix.get());
-    }
 
     private static final String WORKSPACE_TYPE = "brix:snapshot";
 
@@ -59,19 +47,94 @@ public class SnapshotPlugin implements Plugin {
 
     private static final String WORKSPACE_COMMENT = "brix:snapshot-comment";
 
+    private final Brix brix;
 
-    public boolean isSnapshotWorkspace(Workspace workspace) {
-        return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
+// -------------------------- STATIC METHODS --------------------------
+
+    public static SnapshotPlugin get() {
+        return get(Brix.get());
     }
 
-    public String getSnapshotSiteName(Workspace workspace) {
-        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_SITE_NAME);
+    public static SnapshotPlugin get(Brix brix) {
+        return (SnapshotPlugin) brix.getPlugin(ID);
+    }
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public SnapshotPlugin(Brix brix) {
+        this.brix = brix;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Plugin ---------------------
+
+    public String getId() {
+        return ID;
+    }
+
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
+        return "Snapshot - " + getSnapshotSiteName(workspace) + " - " + df.format(getCreated(workspace));
+    }
+
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
+        if (isFrontend) {
+            return getSnapshotsForWorkspace(currentWorkspace);
+        } else {
+            return null;
+        }
+    }
+
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
+
+    }
+
+    public boolean isPluginWorkspace(Workspace workspace) {
+        return isSnapshotWorkspace(workspace);
+    }
+
+    public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel) {
+        IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("snapshots", "Snapshots"),
+                workspaceModel)};
+        return Arrays.asList(tabs);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public void createSnapshot(Workspace workspace, String comment) {
+        if (!SitePlugin.get().isSiteWorkspace(workspace)) {
+            throw new IllegalStateException("Workspace must be a Site workspace");
+        }
+
+        Workspace targetWorkspace = brix.getWorkspaceManager().createWorkspace();
+        targetWorkspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
+        targetWorkspace.setAttribute(WORKSPACE_ATTRIBUTE_SITE_NAME, SitePlugin.get().getWorkspaceName(workspace));
+        targetWorkspace.setAttribute(WORKSPACE_COMMENT, comment);
+
+        setCreated(targetWorkspace, new Date());
+
+        JcrSession originalSession = brix.getCurrentSession(workspace.getId());
+
+        JcrSession targetSession = brix.getCurrentSession(targetWorkspace.getId());
+        brix.clone(originalSession, targetSession);
     }
 
     public void setCreated(Workspace workspace, Date created) {
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
         String formatted = df.format(created);
         workspace.setAttribute(WORKSPACE_ATTRIBUTE_CREATED, formatted);
+    }
+
+    /**
+     * Gets the Comment for the Workspace
+     *
+     * @param workspace the comment holding Workspace
+     * @return the comment of the Workspace as String
+     */
+    public String getComment(Workspace workspace) {
+        return workspace.getAttribute(WORKSPACE_COMMENT);
     }
 
     public Date getCreated(Workspace workspace) {
@@ -84,31 +147,10 @@ public class SnapshotPlugin implements Plugin {
             try {
                 date = df.parse(formatted);
                 return date;
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
                 return null;
             }
         }
-    }
-
-    /**
-     * Sets the Comment for the Workspace
-     *
-     * @param workspace the comment holding Workspace
-     * @param comment   the comment for the Workspace
-     */
-    public void setComment(Workspace workspace, String comment) {
-        workspace.setAttribute(WORKSPACE_COMMENT, comment);
-    }
-
-    /**
-     * Gets the Comment for the Workspace
-     *
-     * @param workspace the comment holding Workspace
-     * @return the comment of the Workspace as String
-     */
-    public String getComment(Workspace workspace) {
-        return workspace.getAttribute(WORKSPACE_COMMENT);
     }
 
     public List<Workspace> getSnapshotsForWorkspace(Workspace workspace) {
@@ -130,22 +172,12 @@ public class SnapshotPlugin implements Plugin {
         }
     }
 
-    public void createSnapshot(Workspace workspace, String comment) {
-        if (!SitePlugin.get().isSiteWorkspace(workspace)) {
-            throw new IllegalStateException("Workspace must be a Site workspace");
-        }
+    public boolean isSnapshotWorkspace(Workspace workspace) {
+        return WORKSPACE_TYPE.equals(workspace.getAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE));
+    }
 
-        Workspace targetWorkspace = brix.getWorkspaceManager().createWorkspace();
-        targetWorkspace.setAttribute(Brix.WORKSPACE_ATTRIBUTE_TYPE, WORKSPACE_TYPE);
-        targetWorkspace.setAttribute(WORKSPACE_ATTRIBUTE_SITE_NAME, SitePlugin.get().getWorkspaceName(workspace));
-        targetWorkspace.setAttribute(WORKSPACE_COMMENT, comment);
-
-        setCreated(targetWorkspace, new Date());
-
-        JcrSession originalSession = brix.getCurrentSession(workspace.getId());
-
-        JcrSession targetSession = brix.getCurrentSession(targetWorkspace.getId());
-        brix.clone(originalSession, targetSession);
+    public String getSnapshotSiteName(Workspace workspace) {
+        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_SITE_NAME);
     }
 
     public void restoreSnapshot(Workspace snapshotWorkspace, Workspace targetWorkspace) {
@@ -155,11 +187,17 @@ public class SnapshotPlugin implements Plugin {
         brix.initWorkspace(targetWorkspace, brix.getCurrentSession(targetWorkspace.getId()));
     }
 
-    public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel) {
-        IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("snapshots", "Snapshots"),
-                workspaceModel)};
-        return Arrays.asList(tabs);
+    /**
+     * Sets the Comment for the Workspace
+     *
+     * @param workspace the comment holding Workspace
+     * @param comment   the comment for the Workspace
+     */
+    public void setComment(Workspace workspace, String comment) {
+        workspace.setAttribute(WORKSPACE_COMMENT, comment);
     }
+
+// -------------------------- INNER CLASSES --------------------------
 
     static class Tab extends AbstractWorkspaceTab {
         public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {
@@ -169,27 +207,6 @@ public class SnapshotPlugin implements Plugin {
         @Override
         public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
             return new ManageSnapshotsPanel(panelId, workspaceModel);
-        }
-    }
-
-    public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
-
-    }
-
-    public boolean isPluginWorkspace(Workspace workspace) {
-        return isSnapshotWorkspace(workspace);
-    }
-
-    public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
-        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-        return "Snapshot - " + getSnapshotSiteName(workspace) + " - " + df.format(getCreated(workspace));
-    }
-
-    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
-        if (isFrontend) {
-            return getSnapshotsForWorkspace(currentWorkspace);
-        } else {
-            return null;
         }
     }
 }

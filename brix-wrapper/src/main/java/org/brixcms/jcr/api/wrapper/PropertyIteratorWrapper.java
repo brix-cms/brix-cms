@@ -23,44 +23,47 @@ import javax.jcr.PropertyIterator;
 import javax.jcr.RangeIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-class PropertyIteratorWrapper extends RangeIteratorWrapper implements JcrPropertyIterator
-{
+class PropertyIteratorWrapper extends RangeIteratorWrapper implements JcrPropertyIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected PropertyIteratorWrapper(RangeIterator delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrPropertyIterator wrap(PropertyIterator delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrPropertyIterator wrap(PropertyIterator delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new PropertyIteratorWrapper(delegate, session);
         }
     }
 
-    @Override
-    public PropertyIterator getDelegate()
-    {
-        return (PropertyIterator)super.getDelegate();
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected PropertyIteratorWrapper(RangeIterator delegate, JcrSession session) {
+        super(delegate, session);
     }
 
-    public JcrProperty nextProperty()
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Iterator ---------------------
+
+
+    @Override
+    public Object next() {
+        return JcrProperty.Wrapper.wrap((Property) getDelegate().next(), getJcrSession());
+    }
+
+// --------------------- Interface JcrPropertyIterator ---------------------
+
+    @Override
+    public PropertyIterator getDelegate() {
+        return (PropertyIterator) super.getDelegate();
+    }
+
+// --------------------- Interface PropertyIterator ---------------------
+
+
+    public JcrProperty nextProperty() {
         return JcrProperty.Wrapper.wrap(getDelegate().nextProperty(), getJcrSession());
     }
-
-    @Override
-    public Object next()
-    {
-        return JcrProperty.Wrapper.wrap((Property)getDelegate().next(), getJcrSession());
-    }
-
 }

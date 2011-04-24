@@ -17,24 +17,28 @@ package org.brixcms.plugin.publishing.auth;
 import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
-public class PublishWorkspaceAction extends AbstractWorkspaceAction
-{
-    public PublishWorkspaceAction(Context context, Workspace workspace, String targetState)
-    {
+public class PublishWorkspaceAction extends AbstractWorkspaceAction {
+// ------------------------------ FIELDS ------------------------------
+
+    private final String targetState;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PublishWorkspaceAction(Context context, Workspace workspace, String targetState) {
         super(context, workspace);
         this.targetState = targetState;
     }
 
-    private final String targetState;
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-    public String getTargetState()
-    {
+    public String getTargetState() {
         return targetState;
     }
 
+// ------------------------ CANONICAL METHODS ------------------------
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "PublishWorkspaceAction{" + "targetState='" + targetState + '\'' + "} " + super.toString();
     }
 }

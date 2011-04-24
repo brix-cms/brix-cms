@@ -23,31 +23,29 @@ import java.util.List;
 
 /**
  * Factory for creating site node management tabs.
- * 
+ *
  * @author Matej Knopp
  */
-public interface ManageNodeTabFactory
-{
+public interface ManageNodeTabFactory {
+// ------------------------------ FIELDS ------------------------------
 
-	public static final ExtensionPoint<ManageNodeTabFactory> POINT = new ExtensionPoint<ManageNodeTabFactory>()
-	{
-		public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity()
-		{
-			return Multiplicity.COLLECTION;
-		}
+    public static final ExtensionPoint<ManageNodeTabFactory> POINT = new ExtensionPoint<ManageNodeTabFactory>() {
+        public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity() {
+            return Multiplicity.COLLECTION;
+        }
 
-		public String getUuid()
-		{
-			return ManageNodeTabFactory.class.getName();
-		}
-	};
+        public String getUuid() {
+            return ManageNodeTabFactory.class.getName();
+        }
+    };
 
-	/**
-	 * Returns list of node management tabs for given node. 
-	 * 
-	 * @param nodeModel
-	 * @return
-	 */
-	public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel);
+// -------------------------- OTHER METHODS --------------------------
 
+    /**
+     * Returns list of node management tabs for given node.
+     *
+     * @param nodeModel
+     * @return
+     */
+    public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel);
 }

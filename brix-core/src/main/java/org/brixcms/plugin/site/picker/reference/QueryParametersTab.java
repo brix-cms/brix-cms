@@ -30,262 +30,233 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.StringValue;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-public abstract class QueryParametersTab extends Panel
-{
+public abstract class QueryParametersTab extends Panel {
+// ------------------------------ FIELDS ------------------------------
 
-	AjaxLink<?> removeSelected;
-	
-	public QueryParametersTab(String id)
-	{
-		super(id);
-		setOutputMarkupId(true);
+    AjaxLink<?> removeSelected;
 
-		final FeedbackPanel feedback = new FeedbackPanel("feedback");
-		feedback.setOutputMarkupId(true);
-		add(feedback);
+    private Entry newEntry = new Entry();
+    ;
 
-		Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(
-				this, "newEntry")));
-		add(newForm);
+    private final DataSource dataSource = new DataSource();
 
-		newForm.add(new TextField<String>("key").setRequired(true));
-		newForm.add(new TextField<String>("value").setRequired(true));
-		newForm.add(new AjaxButton("add")
-		{
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form)
-			{
-				dataSource.addEntry(newEntry);
-				dataSource.storeToPageParameters();
-				target.addComponent(QueryParametersTab.this);
-				newEntry = new Entry();
-			}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.addComponent(feedback);
-			}
-		});
+    public QueryParametersTab(String id) {
+        super(id);
+        setOutputMarkupId(true);
 
-		List<IGridColumn> columns = new ArrayList<IGridColumn>();
-		columns.add(new CheckBoxColumn("checkbox"));
-		columns.add(new EditablePropertyColumn(new ResourceModel("key"), "key")
-		{
-			@Override
-			protected void addValidators(FormComponent component)
-			{
-				component.setRequired(true);
-			}
-		});
-		columns.add(new EditablePropertyColumn(new ResourceModel("value"), "value")
-		{
-			@Override
-			protected void addValidators(FormComponent component)
-			{
-				component.setRequired(true);
-			}
-		});
-		columns.add(new SubmitCancelColumn("submitCancel", new ResourceModel("edit"))
-		{
-			@Override
-			protected void onSubmitted(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent)
-			{
-				dataSource.storeToPageParameters();
-				super.onSubmitted(target, rowModel, rowComponent);
-				target.addComponent(feedback);
-			}
+        final FeedbackPanel feedback = new FeedbackPanel("feedback");
+        feedback.setOutputMarkupId(true);
+        add(feedback);
 
-			@Override
-			protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent)
-			{
-				target.addComponent(feedback);
-			}
-		});
+        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(
+                this, "newEntry")));
+        add(newForm);
 
-		final DataGrid grid = new DataGrid("grid", dataSource, columns)
-		{
-			@Override
-			public void onItemSelectionChanged(IModel item, boolean newValue)
-			{
-				AjaxRequestTarget target = AjaxRequestTarget.get();
-				if (target != null)
-				{
-					target.addComponent(removeSelected);
-				}
-				super.onItemSelectionChanged(item, newValue);
-			}
-		};
-		grid.setRowsPerPage(Integer.MAX_VALUE);
-		grid.setAllowSelectMultiple(true);
-		grid.setContentHeight(14, SizeUnit.EM);
-		grid.setSelectToEdit(false);
-		add(grid);
+        newForm.add(new TextField<String>("key").setRequired(true));
+        newForm.add(new TextField<String>("value").setRequired(true));
+        newForm.add(new AjaxButton("add") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                dataSource.addEntry(newEntry);
+                dataSource.storeToPageParameters();
+                target.addComponent(QueryParametersTab.this);
+                newEntry = new Entry();
+            }
 
-		add(removeSelected = new AjaxLink<Void>("removeSelected")
-		{
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				Collection<IModel> items = grid.getSelectedItems();
-				if (items.size() > 0)
-				{
-					for (IModel model : items)
-					{
-						Entry entry = (Entry) model.getObject();
-						dataSource.removeEntry(entry);
-					}
-					grid.resetSelectedItems();
-					dataSource.storeToPageParameters();
-					grid.markAllItemsDirty();
-					grid.update();
-				}
-				else
-				{
-					target.appendJavascript("alert('" + getString("noItemsSelected") + "');");
-				}
-			}
-			@Override
-			public boolean isEnabled()
-			{
-				return !grid.getSelectedItems().isEmpty();
-			}
-		});
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.addComponent(feedback);
+            }
+        });
 
-	}
+        List<IGridColumn> columns = new ArrayList<IGridColumn>();
+        columns.add(new CheckBoxColumn("checkbox"));
+        columns.add(new EditablePropertyColumn(new ResourceModel("key"), "key") {
+            @Override
+            protected void addValidators(FormComponent component) {
+                component.setRequired(true);
+            }
+        });
+        columns.add(new EditablePropertyColumn(new ResourceModel("value"), "value") {
+            @Override
+            protected void addValidators(FormComponent component) {
+                component.setRequired(true);
+            }
+        });
+        columns.add(new SubmitCancelColumn("submitCancel", new ResourceModel("edit")) {
+            @Override
+            protected void onSubmitted(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
+                dataSource.storeToPageParameters();
+                super.onSubmitted(target, rowModel, rowComponent);
+                target.addComponent(feedback);
+            }
 
-	private Entry newEntry = new Entry();
+            @Override
+            protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
+                target.addComponent(feedback);
+            }
+        });
 
-	protected abstract BrixPageParameters getPageParameters();
+        final DataGrid grid = new DataGrid("grid", dataSource, columns) {
+            @Override
+            public void onItemSelectionChanged(IModel item, boolean newValue) {
+                AjaxRequestTarget target = AjaxRequestTarget.get();
+                if (target != null) {
+                    target.addComponent(removeSelected);
+                }
+                super.onItemSelectionChanged(item, newValue);
+            }
+        };
+        grid.setRowsPerPage(Integer.MAX_VALUE);
+        grid.setAllowSelectMultiple(true);
+        grid.setContentHeight(14, SizeUnit.EM);
+        grid.setSelectToEdit(false);
+        add(grid);
 
-	private class DataSource implements IDataSource
-	{
-		public void detach()
-		{
-			entries = null;
-		}
+        add(removeSelected = new AjaxLink<Void>("removeSelected") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                Collection<IModel> items = grid.getSelectedItems();
+                if (items.size() > 0) {
+                    for (IModel model : items) {
+                        Entry entry = (Entry) model.getObject();
+                        dataSource.removeEntry(entry);
+                    }
+                    grid.resetSelectedItems();
+                    dataSource.storeToPageParameters();
+                    grid.markAllItemsDirty();
+                    grid.update();
+                } else {
+                    target.appendJavascript("alert('" + getString("noItemsSelected") + "');");
+                }
+            }
 
-		public IModel model(Object object)
-		{
-			return new Model<Serializable>((Serializable) object)
-			{
-				@Override
-				public boolean equals(Object obj)
-				{
-					if (this == obj)
-					{
-						return true;
-					}
-					if (obj instanceof Model == false)
-					{
-						return false;
-					}
-					Model that = (Model) obj;
-					return Objects.equal(getObject(), that.getObject());
-				}
+            @Override
+            public boolean isEnabled() {
+                return !grid.getSelectedItems().isEmpty();
+            }
+        });
+    }
 
-				@Override
-				public int hashCode()
-				{
-					return getObject().hashCode();
-				}
-			};
-		}
+// -------------------------- OTHER METHODS --------------------------
 
-		private Set<Entry> getEntries()
-		{
-			if (entries == null)
-			{
-				entries = new TreeSet<Entry>();
-				for (String s : getPageParameters().getQueryParamKeys())
-				{
-					for (StringValue v : getPageParameters().getQueryParams(s))
-					{
-						Entry e = new Entry();
-						e.key = s;
-						e.value = v.toString();
-						entries.add(e);
-					}
-				}
-			}
-			return entries;
-		}
+    protected abstract BrixPageParameters getPageParameters();
 
-		public void query(IQuery query, IQueryResult result)
-		{
-			result.setTotalCount(getEntries().size());
-			result.setItems(getEntries().iterator());
-		}
+// -------------------------- INNER CLASSES --------------------------
 
-		private void addEntry(Entry entry)
-		{
-			getEntries().add(entry);
-		}
+    private class DataSource implements IDataSource {
+        public void detach() {
+            entries = null;
+        }
 
-		private void removeEntry(Entry entry)
-		{
-			getEntries().remove(entry);
-		}
+        public IModel model(Object object) {
+            return new Model<Serializable>((Serializable) object) {
+                @Override
+                public boolean equals(Object obj) {
+                    if (this == obj) {
+                        return true;
+                    }
+                    if (obj instanceof Model == false) {
+                        return false;
+                    }
+                    Model that = (Model) obj;
+                    return Objects.equal(getObject(), that.getObject());
+                }
 
-		private void storeToPageParameters()
-		{
-			if (entries != null)
-			{
-				getPageParameters().clearQueryParams();
-				for (Entry entry : entries)
-				{
-					getPageParameters().addQueryParam(entry.key, entry.value);
-				}
+                @Override
+                public int hashCode() {
+                    return getObject().hashCode();
+                }
+            };
+        }
 
-			}
-		}
+        private Set<Entry> getEntries() {
+            if (entries == null) {
+                entries = new TreeSet<Entry>();
+                for (String s : getPageParameters().getQueryParamKeys()) {
+                    for (StringValue v : getPageParameters().getQueryParams(s)) {
+                        Entry e = new Entry();
+                        e.key = s;
+                        e.value = v.toString();
+                        entries.add(e);
+                    }
+                }
+            }
+            return entries;
+        }
 
-		private Set<Entry> entries = null;
-	};
+        public void query(IQuery query, IQueryResult result) {
+            result.setTotalCount(getEntries().size());
+            result.setItems(getEntries().iterator());
+        }
 
-	private final DataSource dataSource = new DataSource();
+        private void addEntry(Entry entry) {
+            getEntries().add(entry);
+        }
 
-	private static class Entry implements Serializable, Comparable<Entry>
-	{
-		private String key;
-		private String value;
+        private void removeEntry(Entry entry) {
+            getEntries().remove(entry);
+        }
 
-		@Override
-		public boolean equals(Object obj)
-		{
-			if (this == obj)
-			{
-				return true;
-			}
-			if (obj instanceof Entry == false)
-			{
-				return false;
-			}
-			Entry that = (Entry) obj;
-			return Objects.equal(key, that.key) && Objects.equal(value, that.value);
-		}
+        private void storeToPageParameters() {
+            if (entries != null) {
+                getPageParameters().clearQueryParams();
+                for (Entry entry : entries) {
+                    getPageParameters().addQueryParam(entry.key, entry.value);
+                }
+            }
+        }
 
-		public int compareTo(Entry o)
-		{
-			int v = key.compareTo(o.key);
-			if (v != 0)
-				return v;
-			else
-				return value.compareTo(o.value);
-		}
+        private Set<Entry> entries = null;
+    }
 
-		@Override
-		public int hashCode()
-		{
-			return Objects.hashCode(new Object[] { this.key, this.value });
-		}
-	};
+    private static class Entry implements Serializable, Comparable<Entry> {
+        private String key;
+        private String value;
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj instanceof Entry == false) {
+                return false;
+            }
+            Entry that = (Entry) obj;
+            return Objects.equal(key, that.key) && Objects.equal(value, that.value);
+        }
+
+        public int compareTo(Entry o) {
+            int v = key.compareTo(o.key);
+            if (v != 0)
+                return v;
+            else
+                return value.compareTo(o.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(new Object[]{this.key, this.value});
+        }
+    }
+
+    ;
 }

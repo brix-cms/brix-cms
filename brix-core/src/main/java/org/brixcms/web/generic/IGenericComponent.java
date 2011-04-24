@@ -16,14 +16,14 @@ package org.brixcms.web.generic;
 
 import org.apache.wicket.model.IModel;
 
-public interface IGenericComponent <T>
-{	
-	public IModel<T> getModel();
+public interface IGenericComponent<T> {
+// -------------------------- OTHER METHODS --------------------------
 
-	public void setModel(IModel<T> model);
+    public IModel<T> getModel();
 
-	public T getModelObject();
+    public T getModelObject();
 
-	public void setModelObject(T object);
-	
+    public void setModel(IModel<T> model);
+
+    public void setModelObject(T object);
 }

@@ -21,37 +21,33 @@ import org.brixcms.registry.ExtensionPoint;
 
 /**
  * Factory for rendering nodes in the site plugin tree view.
- * 
- * Allows plugins to register new renderers for different types
- * of nodes within the site tree
- * 
+ * <p/>
+ * Allows plugins to register new renderers for different types of nodes within the site tree
+ *
  * @author Jeremy Thomerson
  */
-public interface NodeTreeRenderer
-{
+public interface NodeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	public static final ExtensionPoint<NodeTreeRenderer> POINT = new ExtensionPoint<NodeTreeRenderer>()
-	{
-		public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity()
-		{
-			return Multiplicity.COLLECTION;
-		}
+    public static final ExtensionPoint<NodeTreeRenderer> POINT = new ExtensionPoint<NodeTreeRenderer>() {
+        public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity() {
+            return Multiplicity.COLLECTION;
+        }
 
-		public String getUuid()
-		{
-			return NodeTreeRenderer.class.getName();
-		}
-	};
+        public String getUuid() {
+            return NodeTreeRenderer.class.getName();
+        }
+    };
 
-	/**
-	 * Returns a component that renders this node in the site node browsing tree 
-	 * 
-	 * @param id the id to use for your component
-	 * @param tree the tree being rendered
-	 * @param treeNodeModel the model that contains the tree node you are rendering (JcrTreeNode)
-	 * 
-	 * @return a component if you want to render this node, or null if not
-	 */
-	public Component newNodeComponent(String id, LinkTree tree, IModel<Object> treeNodeModel);
+// -------------------------- OTHER METHODS --------------------------
 
+    /**
+     * Returns a component that renders this node in the site node browsing tree
+     *
+     * @param id            the id to use for your component
+     * @param tree          the tree being rendered
+     * @param treeNodeModel the model that contains the tree node you are rendering (JcrTreeNode)
+     * @return a component if you want to render this node, or null if not
+     */
+    public Component newNodeComponent(String id, LinkTree tree, IModel<Object> treeNodeModel);
 }

@@ -16,7 +16,8 @@ package org.brixcms.web.nodepage;
 
 import org.apache.wicket.IRequestTarget;
 
-public interface PageParametersRequestTarget extends IRequestTarget
-{
+public interface PageParametersRequestTarget extends IRequestTarget {
+// -------------------------- OTHER METHODS --------------------------
+
     BrixPageParameters getPageParameters();
 }

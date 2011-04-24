@@ -14,8 +14,7 @@
 
 package org.brixcms.config;
 
-public class AdminConfig
-{
+public class AdminConfig {
 // moved out into brix-cms-plugins project due to license incompatibility
 // private boolean enableCodePress = true;
 // private boolean enableWysiwyg = true;
@@ -39,6 +38,4 @@ public class AdminConfig
 // {
 // this.enableWysiwyg = enableWysiwyg;
 // }
-
-
 }

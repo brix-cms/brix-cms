@@ -23,46 +23,48 @@ import org.brixcms.web.generic.BrixGenericWebMarkupContainer;
 import org.brixcms.web.nodepage.BrixNodeRequestTarget;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
-public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode>
-{
+public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final String PREVIEW_PARAM = Brix.NS_PREFIX + "preview";
+    private static final String PREVIEW_PARAM = Brix.NS_PREFIX + "preview";
 
-	public static boolean isPreview()
-	{
-		BrixPageParameters params = BrixPageParameters.getCurrent();
-		if (params != null)
-		{
-			if (params.getQueryParam(PREVIEW_PARAM).toBoolean(false))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+// -------------------------- STATIC METHODS --------------------------
 
-	public PreviewNodeIFrame(String id, IModel<BrixNode> model)
-	{
-		super(id, model);
-		setOutputMarkupId(true);
-	}
+    public static boolean isPreview() {
+        BrixPageParameters params = BrixPageParameters.getCurrent();
+        if (params != null) {
+            if (params.getQueryParam(PREVIEW_PARAM).toBoolean(false)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	protected void onComponentTag(ComponentTag tag)
-	{
-		super.onComponentTag(tag);
-		tag.put("src", getUrl());
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	private CharSequence getUrl()
-	{
-		BrixPageParameters parameters = new BrixPageParameters();
-		IModel<BrixNode> nodeModel = getModel();
-		String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
-		parameters.setQueryParam(BrixRequestCycleProcessor.WORKSPACE_PARAM, workspace);
-		parameters.setQueryParam(PREVIEW_PARAM, "true");
-		StringBuilder url = new StringBuilder(getRequestCycle()
-				.urlFor(new BrixNodeRequestTarget(nodeModel, parameters)));
-		return url;
-	}
+    public PreviewNodeIFrame(String id, IModel<BrixNode> model) {
+        super(id, model);
+        setOutputMarkupId(true);
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    private CharSequence getUrl() {
+        BrixPageParameters parameters = new BrixPageParameters();
+        IModel<BrixNode> nodeModel = getModel();
+        String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
+        parameters.setQueryParam(BrixRequestCycleProcessor.WORKSPACE_PARAM, workspace);
+        parameters.setQueryParam(PREVIEW_PARAM, "true");
+        StringBuilder url = new StringBuilder(getRequestCycle()
+                .urlFor(new BrixNodeRequestTarget(nodeModel, parameters)));
+        return url;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+        tag.put("src", getUrl());
+    }
 }

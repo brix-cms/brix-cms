@@ -21,53 +21,53 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
-public class UnknownTile implements Tile
-{
+public class UnknownTile implements Tile {
+// ------------------------------ FIELDS ------------------------------
 
-    public String getDisplayName()
-    {
+    public static final UnknownTile INSTANCE = new UnknownTile();
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Tile ---------------------
+
+    public String getDisplayName() {
         return "Unknown";
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return UnknownTile.class.getName();
     }
 
-    private static class Editor extends TileEditorPanel
-    {
-        public Editor(String id)
-        {
+    ;
+
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
+        return new Editor(id);
+    }
+
+    public Component newViewer(String id, IModel<BrixNode> tileNode) {
+        return new Label(id, "Unknown Tile");
+    }
+
+    public boolean requiresSSL(IModel<BrixNode> tileNode) {
+        return false;
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private static class Editor extends TileEditorPanel {
+        public Editor(String id) {
             super(id);
         }
 
         @Override
-        public void load(BrixNode node)
-        {
+        public void load(BrixNode node) {
 
         }
 
         @Override
-        public void save(BrixNode node)
-        {
+        public void save(BrixNode node) {
 
         }
-    };
-
-    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
-    {
-        return new Editor(id);
     }
-
-    public Component newViewer(String id, IModel<BrixNode> tileNode)
-    {
-        return new Label(id, "Unknown Tile");
-    }
-
-    public boolean requiresSSL(IModel<BrixNode> tileNode)
-    {
-        return false;
-    }
-
-    public static final UnknownTile INSTANCE = new UnknownTile();
 }

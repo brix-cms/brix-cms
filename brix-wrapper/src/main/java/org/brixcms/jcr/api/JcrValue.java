@@ -25,67 +25,68 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 
 /**
- * 
  * @author Matej Knopp
  * @author igor.vaynberg
  */
-public interface JcrValue extends Value
-{
+public interface JcrValue extends Value {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrValue wrap(Value delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrValueWrapper.wrap(delegate, session);
-        }
 
-        public static JcrValue[] wrap(Value[] delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrValueWrapper.wrap(delegate, session);
-        }
-    };
+// --------------------- Interface Value ---------------------
 
-    public Value getDelegate();
-
-    public boolean getBoolean();
-
-    public Calendar getDate();
-
-    public double getDouble();
-
-    public long getLong();
-
-    /** @deprecated {@link #getBinary()} should be used instead. */
-    @Deprecated
-    public InputStream getStream();
 
     public String getString();
 
-    public int getType();
-    
     /**
-     * Returns a <code>Binary</code> representation of this value. The {@link
-     * Binary} object in turn provides methods to access the binary data itself.
-     * Uses the standard conversion to binary (see JCR specification).
+     * @deprecated {@link #getBinary()} should be used instead.
+     */
+    @Deprecated
+    public InputStream getStream();
+
+    /**
+     * Returns a <code>Binary</code> representation of this value. The {@link Binary} object in turn provides methods to
+     * access the binary data itself. Uses the standard conversion to binary (see JCR specification).
      *
      * @return A <code>Binary</code> representation of this value.
      * @throws RepositoryException if an error occurs.
      * @since JCR 2.0
      */
     public Binary getBinary();
-    
+
+    public long getLong();
+
+    public double getDouble();
+
     /**
      * Returns a <code>BigDecimal</code> representation of this value.
      *
      * @return A <code>BigDecimal</code> representation of this value.
-     * @throws ValueFormatException if conversion to a <code>BigDecimal</code>
-     *                              is not possible.
+     * @throws ValueFormatException if conversion to a <code>BigDecimal</code> is not possible.
      * @throws RepositoryException  if another error occurs.
      * @since JCR 2.0
      */
     public BigDecimal getDecimal() throws ValueFormatException, RepositoryException;
 
+    public Calendar getDate();
 
- 
+    public boolean getBoolean();
 
+    public int getType();
+
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public Value getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrValue wrap(Value delegate, JcrSession session) {
+            return WrapperAccessor.JcrValueWrapper.wrap(delegate, session);
+        }
+
+        public static JcrValue[] wrap(Value[] delegate, JcrSession session) {
+            return WrapperAccessor.JcrValueWrapper.wrap(delegate, session);
+        }
+    }
 }

@@ -31,92 +31,86 @@ import java.util.Set;
 
 /**
  * Component used to render the menu
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class MenuRenderer extends AbstractMenuRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class MenuRenderer extends AbstractMenuRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	/**
-	 * Constructor
-	 * 
-	 * @param id
-	 * @param model
-	 */
-	public MenuRenderer(String id, IModel<BrixNode> model)
-	{
-		super(id, model);
-	}
+    private static final long serialVersionUID = 1L;
 
-	/** {@inheritDoc} */
-	@Override
-	protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag)
-	{
-		NodeAdapter adapter = new NodeAdapter(getModelObject());
-		Menu menu = new Menu();
-		menu.load(adapter.getMenuNode());
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		final Response response = getResponse();
-		response.write("<ul");
-		if (!Strings.isEmpty(adapter.getOuterUlCssClass()))
-		{
-			response.write(" class=\"");
-			response.write(adapter.getOuterUlCssClass());
-			response.write("\"");
-		}
-		response.write(">");
+    /**
+     * Constructor
+     *
+     * @param id
+     * @param model
+     */
+    public MenuRenderer(String id, IModel<BrixNode> model) {
+        super(id, model);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+        NodeAdapter adapter = new NodeAdapter(getModelObject());
+        Menu menu = new Menu();
+        menu.load(adapter.getMenuNode());
+
+        final Response response = getResponse();
+        response.write("<ul");
+        if (!Strings.isEmpty(adapter.getOuterUlCssClass())) {
+            response.write(" class=\"");
+            response.write(adapter.getOuterUlCssClass());
+            response.write("\"");
+        }
+        response.write(">");
         List<ChildEntry> childEntryList = menu.getRoot().getChildren();
         ChildEntry firstEntry = childEntryList.get(0);
         ChildEntry lastEntry = childEntryList.get(childEntryList.size() - 1);
-        for (ChildEntry entry : childEntryList)
-		{
+        for (ChildEntry entry : childEntryList) {
             renderEntry(entry, adapter, response, getSelectedItems(menu), firstEntry.equals(entry), lastEntry.equals(entry));
-		}
-		response.write("</ul>");
-	}
+        }
+        response.write("</ul>");
+    }
 
-	private void renderEntry(ChildEntry entry, NodeAdapter adapter, Response response, Set<ChildEntry> selectedItems, boolean isFirst, boolean isLast)
-	{
-		// build css classes string
-		StringBuilder cssClasses = new StringBuilder();
-		if ((!Strings.isEmpty(adapter.getSelectedLiCssClass()) && isSelected(entry)) ||
-                (adapter.getSelectAllParentLi() && anyChildSelected(entry, selectedItems)))
-		{
-			cssClasses.append(adapter.getSelectedLiCssClass()).append(" ");
-		}
-        if (isFirst && !Strings.isEmpty(adapter.getFirstLiCssClass()))
-        {
+    private void renderEntry(ChildEntry entry, NodeAdapter adapter, Response response, Set<ChildEntry> selectedItems, boolean isFirst, boolean isLast) {
+        // build css classes string
+        StringBuilder cssClasses = new StringBuilder();
+        if ((!Strings.isEmpty(adapter.getSelectedLiCssClass()) && isSelected(entry)) ||
+                (adapter.getSelectAllParentLi() && anyChildSelected(entry, selectedItems))) {
+            cssClasses.append(adapter.getSelectedLiCssClass()).append(" ");
+        }
+        if (isFirst && !Strings.isEmpty(adapter.getFirstLiCssClass())) {
             cssClasses.append(adapter.getFirstLiCssClass()).append(" ");
         }
-        if (isLast && !Strings.isEmpty(adapter.getLastLiCssClass()))
-        {
+        if (isLast && !Strings.isEmpty(adapter.getLastLiCssClass())) {
             cssClasses.append(adapter.getLastLiCssClass()).append(" ");
         }
-		if (!Strings.isEmpty(entry.getCssClass()))
-		{
-			cssClasses.append(entry.getCssClass()).append(" ");
-		}
-		if (cssClasses.length() > 0)
-		{
-			cssClasses.deleteCharAt(cssClasses.length() - 1);
-		}
+        if (!Strings.isEmpty(entry.getCssClass())) {
+            cssClasses.append(entry.getCssClass()).append(" ");
+        }
+        if (cssClasses.length() > 0) {
+            cssClasses.deleteCharAt(cssClasses.length() - 1);
+        }
 
-		response.write("<li");
-		if (cssClasses.length() > 0)
-		{
-			response.write(" class=\"");
-			response.write(cssClasses);
-			response.write("\"");
-		}
-		response.write(">");
+        response.write("<li");
+        if (cssClasses.length() > 0) {
+            response.write(" class=\"");
+            response.write(cssClasses);
+            response.write("\"");
+        }
+        response.write(">");
 
         //Rendering for REFERENCE
-        if(entry.getMenuType() == ChildEntry.MenuType.REFERENCE) {
+        if (entry.getMenuType() == ChildEntry.MenuType.REFERENCE) {
             response.write("<a");
-            if (cssClasses.length() > 0)
-            {
+            if (cssClasses.length() > 0) {
                 response.write(" class=\"");
                 response.write(cssClasses);
                 response.write("\"");
@@ -129,20 +123,18 @@ public class MenuRenderer extends AbstractMenuRenderer
         }
 
         //Rendering for CODE
-        else if(entry.getMenuType() == ChildEntry.MenuType.CODE) {
+        else if (entry.getMenuType() == ChildEntry.MenuType.CODE) {
             response.write(entry.getLabelOrCode());
         }
         //Rendering for LABEL
-        else if(entry.getMenuType() == ChildEntry.MenuType.LABEL) {
+        else if (entry.getMenuType() == ChildEntry.MenuType.LABEL) {
             response.write(Strings.escapeMarkup(entry.getLabelOrCode(), false, true));
         }
 
 
-		if (anyChildren(entry))
-		{
+        if (anyChildren(entry)) {
             response.write("<ul");
-            if (!Strings.isEmpty(adapter.getInnerUlCssClass()))
-            {
+            if (!Strings.isEmpty(adapter.getInnerUlCssClass())) {
                 response.write(" class=\"");
                 response.write(adapter.getInnerUlCssClass());
                 response.write("\"");
@@ -151,16 +143,14 @@ public class MenuRenderer extends AbstractMenuRenderer
             List<ChildEntry> childEntryList = entry.getChildren();
             ChildEntry firstEntry = childEntryList.get(0);
             ChildEntry lastEntry = childEntryList.get(childEntryList.size() - 1);
-			for (ChildEntry e : childEntryList)
-			{
-				BrixNode node = getNode(e);
-				if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION))
-				{
-					renderEntry(e, adapter, response, selectedItems, firstEntry.equals(e), lastEntry.equals(e));
-				}
-			}
-			response.write("</ul>");
-		}
-		response.write("</li>");
-	}
+            for (ChildEntry e : childEntryList) {
+                BrixNode node = getNode(e);
+                if (node == null || SitePlugin.get().canViewNode(node, Context.PRESENTATION)) {
+                    renderEntry(e, adapter, response, selectedItems, firstEntry.equals(e), lastEntry.equals(e));
+                }
+            }
+            response.write("</ul>");
+        }
+        response.write("</li>");
+    }
 }

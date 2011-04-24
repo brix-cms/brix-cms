@@ -31,32 +31,36 @@ import javax.jcr.Workspace;
 
 /**
  * Initializes JCR Repository to be compatible with Brix
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class BrixRepositoryInitializer implements RepositoryInitializer
-{
+public class BrixRepositoryInitializer implements RepositoryInitializer {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory.getLogger(BrixRepositoryInitializer.class);
 
-    public BrixRepositoryInitializer()
-	{
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	}
-    
-    /** {@inheritDoc} */
-    public void initializeRepository(Brix brix, Session session) throws RepositoryException
-    {
+    public BrixRepositoryInitializer() {
+
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface RepositoryInitializer ---------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    public void initializeRepository(Brix brix, Session session) throws RepositoryException {
         final Workspace w = session.getWorkspace();
         NamespaceRegistry nr = w.getNamespaceRegistry();
 
-        try
-        {
+        try {
             logger.info("Registering Brix JCR Namespace: {}", Brix.NS);
             nr.registerNamespace(Brix.NS, "http://brix-cms.googlecode.com");
-        }
-        catch (Exception ignore)
-        {
+        } catch (Exception ignore) {
             // logger.warn("Error registering brix namespace, may already be registered",
             // ignore);
         }
@@ -72,5 +76,4 @@ public class BrixRepositoryInitializer implements RepositoryInitializer
 
         RepositoryUtil.registerNodeType(w, BrixNode.JCR_MIXIN_BRIX_HIDDEN, false, false, true);
     }
-
 }

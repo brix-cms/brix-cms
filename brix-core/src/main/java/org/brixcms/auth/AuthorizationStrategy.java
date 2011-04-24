@@ -14,7 +14,8 @@
 
 package org.brixcms.auth;
 
-public interface AuthorizationStrategy
-{
+public interface AuthorizationStrategy {
+// -------------------------- OTHER METHODS --------------------------
+
     public boolean isActionAuthorized(Action action);
 }

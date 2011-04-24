@@ -29,90 +29,84 @@ import org.brixcms.plugin.site.page.AbstractContainer;
 import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.web.generic.IGenericComponent;
 
-public abstract class TileEditorFragment extends Fragment implements IGenericComponent<BrixNode>
-{
+public abstract class TileEditorFragment extends Fragment implements IGenericComponent<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public TileEditorFragment(String id, String markupId, MarkupContainer markupProvider,
-			final IModel<BrixNode> nodeModel, final String tileId, boolean filterFeedback)
-	{
-		super(id, markupId, markupProvider, nodeModel);
+    public TileEditorFragment(String id, String markupId, MarkupContainer markupProvider,
+                              final IModel<BrixNode> nodeModel, final String tileId, boolean filterFeedback) {
+        super(id, markupId, markupProvider, nodeModel);
 
-		final Form<Void> form = new Form<Void>("form");
-		add(form);
+        final Form<Void> form = new Form<Void>("form");
+        add(form);
 
-		form.add(new FeedbackPanel("feedback", filterFeedback ? new ContainerFeedbackMessageFilter(form) : null));
+        form.add(new FeedbackPanel("feedback", filterFeedback ? new ContainerFeedbackMessageFilter(form) : null));
 
-		Brix brix = nodeModel.getObject().getBrix();
-		final String tileClassName = getTileContainerNode().tiles().getTileClassName(tileId);
-		final Tile tile = Tile.Helper.getTileOfType(tileClassName, brix);
+        Brix brix = nodeModel.getObject().getBrix();
+        final String tileClassName = getTileContainerNode().tiles().getTileClassName(tileId);
+        final Tile tile = Tile.Helper.getTileOfType(tileClassName, brix);
 
-		final TileEditorPanel editor;
+        final TileEditorPanel editor;
 
-		form.add(editor = tile.newEditor("editor", nodeModel));
+        form.add(editor = tile.newEditor("editor", nodeModel));
 
-		editor.load(getTileContainerNode().tiles().getTile(tileId));
+        editor.load(getTileContainerNode().tiles().getTile(tileId));
 
-		form.add(new SubmitLink("submit")
-		{
-			@Override
-			public void onSubmit()
-			{
-				BrixNode node = TileEditorFragment.this.getModelObject();
-				BrixNode tile = getTileContainerNode().tiles().getTile(tileId);
-				node.checkout();
-				editor.save(tile);
-				node.save();
-				node.checkin();
-				getSession().info(getString("tileSuccessfullySaved"));
-			}
-		});
+        form.add(new SubmitLink("submit") {
+            @Override
+            public void onSubmit() {
+                BrixNode node = TileEditorFragment.this.getModelObject();
+                BrixNode tile = getTileContainerNode().tiles().getTile(tileId);
+                node.checkout();
+                editor.save(tile);
+                node.save();
+                node.checkin();
+                getSession().info(getString("tileSuccessfullySaved"));
+            }
+        });
 
-		form.add(new Link<Void>("delete")
-		{
+        form.add(new Link<Void>("delete") {
+            @Override
+            public void onClick() {
+                onDelete(tileId);
+            }
 
-			@Override
-			public void onClick()
-			{
-				onDelete(tileId);
-			}
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                String confirm = TileEditorFragment.this.getString("deleteConfirmation");
+                tag.put("onclick", "if (!confirm('" + confirm + "')) return false; "
+                        + tag.getAttributes().get("onclick"));
+            }
+        });
+    }
 
-			@Override
-			protected void onComponentTag(ComponentTag tag)
-			{
-				super.onComponentTag(tag);
-				String confirm = TileEditorFragment.this.getString("deleteConfirmation");
-				tag.put("onclick", "if (!confirm('" + confirm + "')) return false; "
-						+ tag.getAttributes().get("onclick"));
-			}
+    public BrixNode getModelObject() {
+        return (BrixNode) getDefaultModelObject();
+    }
 
-		});
-	}
+    protected abstract void onDelete(String tileId);
 
-	protected abstract void onDelete(String tileId);
+// ------------------------ INTERFACE METHODS ------------------------
 
-	private AbstractContainer getTileContainerNode()
-	{
-		return (AbstractContainer) getModelObject();
-	}
 
-	@SuppressWarnings("unchecked")
-	public IModel<BrixNode> getModel()
-	{
-		return (IModel<BrixNode>) getDefaultModel();
-	}
+// --------------------- Interface IGenericComponent ---------------------
 
-	public BrixNode getModelObject()
-	{
-		return (BrixNode) getDefaultModelObject();
-	}
+    @SuppressWarnings("unchecked")
+    public IModel<BrixNode> getModel() {
+        return (IModel<BrixNode>) getDefaultModel();
+    }
 
-	public void setModel(IModel<BrixNode> model)
-	{
-		setDefaultModel(model);
-	}
+    public void setModel(IModel<BrixNode> model) {
+        setDefaultModel(model);
+    }
 
-	public void setModelObject(BrixNode object)
-	{
-		setDefaultModelObject(object);
-	}
+    public void setModelObject(BrixNode object) {
+        setDefaultModelObject(object);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    private AbstractContainer getTileContainerNode() {
+        return (AbstractContainer) getModelObject();
+    }
 }

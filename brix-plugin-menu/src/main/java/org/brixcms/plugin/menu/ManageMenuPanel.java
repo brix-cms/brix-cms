@@ -40,210 +40,182 @@ import org.brixcms.workspace.Workspace;
 import javax.jcr.ReferentialIntegrityException;
 import java.util.List;
 
-public class ManageMenuPanel extends BrixGenericPanel<Workspace>
-{
-	public ManageMenuPanel(String id, final IModel<Workspace> model)
-	{
-		super(id, model);
+public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
+// ------------------------------ FIELDS ------------------------------
+    ;
+    private Component editor;
 
-		IModel<List<BrixNode>> listViewModel = new LoadableDetachableModel<List<BrixNode>>()
-		{
-			@Override
-			protected List<BrixNode> load()
-			{
-				return MenuPlugin.get().getMenuNodes(ManageMenuPanel.this.getModelObject().getId());
-			}
-		};
+    private IModel<BrixNode> currentNode = new BrixNodeModel();
+    private Menu currentMenu = new Menu();
 
-		add(new MenuListView("listView", listViewModel));
-		setupEditor();
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		add(new Link<Object>("newMenu")
-		{
-			@Override
-			public void onClick()
-			{
-				currentMenu = new Menu();
-				currentNode.setObject(null);
-				setupEditor();
-			}
+    public ManageMenuPanel(String id, final IModel<Workspace> model) {
+        super(id, model);
 
-			@Override
-			public boolean isEnabled()
-			{
-				return currentNode.getObject() != null;
-			}
-		});
-	}
+        IModel<List<BrixNode>> listViewModel = new LoadableDetachableModel<List<BrixNode>>() {
+            @Override
+            protected List<BrixNode> load() {
+                return MenuPlugin.get().getMenuNodes(ManageMenuPanel.this.getModelObject().getId());
+            }
+        };
 
-	@Override
-	protected void onBeforeRender()
-	{
-		String workspaceId = getModelObject().getId();
-		BrixNode current = currentNode.getObject();
-		if (current != null
-				&& current.getSession().getWorkspace().getName().equals(workspaceId) == false)
-		{
-			currentNode.setObject(null);
-			currentMenu = new Menu();
-			setupEditor();
-		}
-		super.onBeforeRender();
-	}
+        add(new MenuListView("listView", listViewModel));
+        setupEditor();
 
-	private class MenuListView extends ListView<BrixNode>
-	{
-		public MenuListView(String id, IModel<List<BrixNode>> model)
-		{
-			super(id, model);
+        add(new Link<Object>("newMenu") {
+            @Override
+            public void onClick() {
+                currentMenu = new Menu();
+                currentNode.setObject(null);
+                setupEditor();
+            }
 
-		}
+            @Override
+            public boolean isEnabled() {
+                return currentNode.getObject() != null;
+            }
+        });
+    }
 
-		@Override
-		protected void populateItem(final ListItem<BrixNode> item)
-		{
-			Link<Object> select = new Link<Object>("select")
-			{
-				@Override
-				public void onClick()
-				{
-					onSelectLinkClicked(item.getModelObject());
-				}
+    private void setupEditor() {
+        Component editor = new EditorPanel("editor", new PropertyModel<Menu>(this, "currentMenu"));
+        if (this.editor == null) {
+            add(editor);
+        } else {
+            this.editor.replaceWith(editor);
+        }
+        this.editor = editor;
+    }
 
-				@Override
-				public boolean isEnabled()
-				{
-					BrixNode myNode = item.getModelObject();
-					BrixNode selectedNode = currentNode.getObject();
-					if (selectedNode!=null) {
-						return !Objects.equal(myNode.getIdentifier(), selectedNode.getIdentifier());
-					} else {
-						return true;
-					}
-				}
-			};
-			IModel<String> labelModel = new AbstractModel<String>()
-			{
-				@Override
-				public String getObject()
-				{
-					BrixNode node = item.getModelObject();
-					Menu menu = new Menu();
-					menu.loadName(node);
-					return menu.getName();
-				}
-			};
-			select.add(new Label("label", labelModel));
-			item.add(select);
-		}
+// -------------------------- OTHER METHODS --------------------------
 
-		@Override
-		protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel,
-				int index)
-		{
-			List<BrixNode> nodes = listViewModel.getObject();
-			return new BrixNodeModel(nodes.get(index));
-		}
-	};
+    @Override
+    protected void onBeforeRender() {
+        String workspaceId = getModelObject().getId();
+        BrixNode current = currentNode.getObject();
+        if (current != null
+                && current.getSession().getWorkspace().getName().equals(workspaceId) == false) {
+            currentNode.setObject(null);
+            currentMenu = new Menu();
+            setupEditor();
+        }
+        super.onBeforeRender();
+    }
 
-	private void onSelectLinkClicked(BrixNode node)
-	{
-		currentNode.setObject(node);
-		currentMenu = new Menu();
-		currentMenu.load(node);
-		setupEditor();
-	}
+    @Override
+    protected void onDetach() {
+        currentNode.detach();
+        currentMenu.detach();
+        super.onDetach();
+    }
 
-	private void setupEditor()
-	{
-		Component editor = new EditorPanel("editor", new PropertyModel<Menu>(this, "currentMenu"));
-		if (this.editor == null)
-		{
-			add(editor);
-		}
-		else
-		{
-			this.editor.replaceWith(editor);
-		}
-		this.editor = editor;
-	}
+    ;
 
-	private class EditorPanel extends BrixGenericPanel<Menu>
-	{
+    private void onSelectLinkClicked(BrixNode node) {
+        currentNode.setObject(node);
+        currentMenu = new Menu();
+        currentMenu.load(node);
+        setupEditor();
+    }
 
-		public EditorPanel(String id, final IModel<Menu> model)
-		{
-			super(id, model);
+// -------------------------- INNER CLASSES --------------------------
 
-			Form<Menu> form = new Form<Menu>("form", new CompoundPropertyModel<Menu>(model));
-			add(form);
+    private class MenuListView extends ListView<BrixNode> {
+        public MenuListView(String id, IModel<List<BrixNode>> model) {
+            super(id, model);
+        }
 
-			form.add(new TextField<String>("name").setRequired(true));
+        @Override
+        protected void populateItem(final ListItem<BrixNode> item) {
+            Link<Object> select = new Link<Object>("select") {
+                @Override
+                public void onClick() {
+                    onSelectLinkClicked(item.getModelObject());
+                }
 
-			form.add(new MenuEditor("editor", model));
+                @Override
+                public boolean isEnabled() {
+                    BrixNode myNode = item.getModelObject();
+                    BrixNode selectedNode = currentNode.getObject();
+                    if (selectedNode != null) {
+                        return !Objects.equal(myNode.getIdentifier(), selectedNode.getIdentifier());
+                    } else {
+                        return true;
+                    }
+                }
+            };
+            IModel<String> labelModel = new AbstractModel<String>() {
+                @Override
+                public String getObject() {
+                    BrixNode node = item.getModelObject();
+                    Menu menu = new Menu();
+                    menu.loadName(node);
+                    return menu.getName();
+                }
+            };
+            select.add(new Label("label", labelModel));
+            item.add(select);
+        }
 
-			form.add(new SubmitLink("save")
-			{
-				@Override
-				public void onSubmit()
-				{
-					MenuPlugin plugin = MenuPlugin.get();
-					currentNode.setObject(plugin.saveMenu(model.getObject(), ManageMenuPanel.this
-							.getModelObject().getId(), currentNode.getObject()));
-					getSession().info(ManageMenuPanel.this.getString("menuSaved"));
-				}
-			});
+        @Override
+        protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel,
+                                                    int index) {
+            List<BrixNode> nodes = listViewModel.getObject();
+            return new BrixNodeModel(nodes.get(index));
+        }
+    }
 
-			form.add(new SubmitLink("delete")
-			{
-				@Override
-				public void onSubmit()
-				{
-					try
-					{
-						JcrSession session = currentNode.getObject().getSession();
-						currentNode.getObject().remove();
-						session.save();
+    private class EditorPanel extends BrixGenericPanel<Menu> {
+        public EditorPanel(String id, final IModel<Menu> model) {
+            super(id, model);
 
-						currentNode.setObject(null);
-						currentMenu = new Menu();
-						setupEditor();
-					}
-					catch (JcrException e)
-					{
-						if (e.getCause() instanceof ReferentialIntegrityException)
-						{
-							currentNode.getObject().getSession().refresh(false);
-							currentNode.detach();
-							getSession().error(
-									"Couldn't delete menu, it is referenced from a tile(s).");
-						}
-					}
+            Form<Menu> form = new Form<Menu>("form", new CompoundPropertyModel<Menu>(model));
+            add(form);
 
-				}
+            form.add(new TextField<String>("name").setRequired(true));
 
-				@Override
-				public boolean isVisible()
-				{
-					return currentNode.getObject() != null;
-				}
-			}.setDefaultFormProcessing(false));
+            form.add(new MenuEditor("editor", model));
 
-			add(new FeedbackPanel("feedback"));
-		}
+            form.add(new SubmitLink("save") {
+                @Override
+                public void onSubmit() {
+                    MenuPlugin plugin = MenuPlugin.get();
+                    currentNode.setObject(plugin.saveMenu(model.getObject(), ManageMenuPanel.this
+                            .getModelObject().getId(), currentNode.getObject()));
+                    getSession().info(ManageMenuPanel.this.getString("menuSaved"));
+                }
+            });
 
-	};
+            form.add(new SubmitLink("delete") {
+                @Override
+                public void onSubmit() {
+                    try {
+                        JcrSession session = currentNode.getObject().getSession();
+                        currentNode.getObject().remove();
+                        session.save();
 
-	private Component editor;
+                        currentNode.setObject(null);
+                        currentMenu = new Menu();
+                        setupEditor();
+                    } catch (JcrException e) {
+                        if (e.getCause() instanceof ReferentialIntegrityException) {
+                            currentNode.getObject().getSession().refresh(false);
+                            currentNode.detach();
+                            getSession().error(
+                                    "Couldn't delete menu, it is referenced from a tile(s).");
+                        }
+                    }
 
-	private IModel<BrixNode> currentNode = new BrixNodeModel();
-	private Menu currentMenu = new Menu();
+                }
 
-	@Override
-	protected void onDetach()
-	{
-		currentNode.detach();
-		currentMenu.detach();
-		super.onDetach();
-	}
+                @Override
+                public boolean isVisible() {
+                    return currentNode.getObject() != null;
+                }
+            }.setDefaultFormProcessing(false));
+
+            add(new FeedbackPanel("feedback"));
+        }
+    }
 }

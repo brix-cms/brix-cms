@@ -22,82 +22,75 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.registry.ExtensionPoint;
 
 /**
- * Plugin that handles node of certain type. This is not a global plugin, the
- * scope if this plugin is {@link SitePlugin}. Main purpose of
- * {@link SiteNodePlugin} is to respond when an URL for site node is requested.
- * 
+ * Plugin that handles node of certain type. This is not a global plugin, the scope if this plugin is {@link
+ * SitePlugin}. Main purpose of {@link SiteNodePlugin} is to respond when an URL for site node is requested.
+ *
  * @author Matej Knopp
  */
-public interface SiteNodePlugin
-{
-	public static ExtensionPoint<SiteNodePlugin> POINT = new ExtensionPoint<SiteNodePlugin>()
-	{
-		public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity()
-		{
-			return Multiplicity.COLLECTION;
-		}
+public interface SiteNodePlugin {
+// ------------------------------ FIELDS ------------------------------
 
-		public String getUuid()
-		{
-			return SiteNodePlugin.class.getName();
-		}
-	};
+    public static ExtensionPoint<SiteNodePlugin> POINT = new ExtensionPoint<SiteNodePlugin>() {
+        public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity() {
+            return Multiplicity.COLLECTION;
+        }
 
-	/**
-	 * Returns the node type of nodes that this plugin can handle.
-	 * 
-	 * @see BrixNode#setNodeType(String)
-	 * @return
-	 */
-	String getNodeType();
+        public String getUuid() {
+            return SiteNodePlugin.class.getName();
+        }
+    };
 
-	/**
-	 * Returns the user readable name of this plugin.
-	 * 
-	 * @return
-	 */
-	String getName();
+// -------------------------- OTHER METHODS --------------------------
 
-	/**
-	 * Returns the request target if this plugin is capable of creating a
-	 * response for the node. Otherwise returns <code>null</code>
-	 * 
-	 * @param nodeModel
-	 * @param requestParameters
-	 * @return
-	 */
-	IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters);
+    /**
+     * This method returns a converter that is capable of converting the given node to a node this plugin can handle, or
+     * <code>null</code> if such converter does not exist.
+     *
+     * @param node
+     * @return
+     */
+    NodeConverter getConverterForNode(BrixNode node);
 
-	/**
-	 * Returns model caption of Create link for this plugin.
-	 * 
-	 * @param parentNode
-	 * @return
-	 */
-	public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode);
+    /**
+     * Returns the user readable name of this plugin.
+     *
+     * @return
+     */
+    String getName();
 
-	/**
-	 * Returns an instance of panel that should create node of type this plugin
-	 * can handle.
-	 * 
-	 * @param id
-	 *            panel component id
-	 * @param parentNode
-	 *            parent node of the new node
-	 * @param goBack
-	 *            simple callback that should be invoked after node creation or
-	 *            on cancel
-	 * @return panel instance
-	 */
-	Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
+    /**
+     * Returns the node type of nodes that this plugin can handle.
+     *
+     * @return
+     * @see BrixNode#setNodeType(String)
+     */
+    String getNodeType();
 
-	/**
-	 * This method returns a converter that is capable of converting the given node
-	 * to a node this plugin can handle, or <code>null</code> if such
-	 * converter does not exist.
-	 * 
-	 * @param node
-	 * @return
-	 */
-	NodeConverter getConverterForNode(BrixNode node);
+    /**
+     * Returns model caption of Create link for this plugin.
+     *
+     * @param parentNode
+     * @return
+     */
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode);
+
+    /**
+     * Returns an instance of panel that should create node of type this plugin can handle.
+     *
+     * @param id         panel component id
+     * @param parentNode parent node of the new node
+     * @param goBack     simple callback that should be invoked after node creation or on cancel
+     * @return panel instance
+     */
+    Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
+
+    /**
+     * Returns the request target if this plugin is capable of creating a response for the node. Otherwise returns
+     * <code>null</code>
+     *
+     * @param nodeModel
+     * @param requestParameters
+     * @return
+     */
+    IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters);
 }

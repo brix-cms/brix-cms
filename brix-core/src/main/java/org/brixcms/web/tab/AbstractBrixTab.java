@@ -17,24 +17,25 @@ package org.brixcms.web.tab;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.model.IModel;
 
-public abstract class AbstractBrixTab extends AbstractTab implements IBrixTab
-{
-	private final int priority;
-	
-	public AbstractBrixTab(IModel<String> title)
-	{
-		this(title, 0);
-	}
-	
-	public AbstractBrixTab(IModel<String> title, int priority)
-	{
-		super(title);
-		this.priority = priority;
-	}	
+public abstract class AbstractBrixTab extends AbstractTab implements IBrixTab {
+// ------------------------------ FIELDS ------------------------------
 
-	public int getPriority()
-	{
-		return priority;
-	}
+    private final int priority;
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public AbstractBrixTab(IModel<String> title) {
+        this(title, 0);
+    }
+
+    public AbstractBrixTab(IModel<String> title, int priority) {
+        super(title);
+        this.priority = priority;
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public int getPriority() {
+        return priority;
+    }
 }

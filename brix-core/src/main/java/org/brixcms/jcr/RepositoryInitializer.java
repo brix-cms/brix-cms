@@ -22,36 +22,31 @@ import javax.jcr.Session;
 
 /**
  * A repository initializer. Each initializer runs once upon system startup.
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public interface RepositoryInitializer
-{
+public interface RepositoryInitializer {
+// ------------------------------ FIELDS ------------------------------
+
     /**
      * Extension point used to register repository initializers
      */
-    public static final ExtensionPoint<RepositoryInitializer> POINT = new ExtensionPoint<RepositoryInitializer>()
-    {
-
-        public Multiplicity getMultiplicity()
-        {
+    public static final ExtensionPoint<RepositoryInitializer> POINT = new ExtensionPoint<RepositoryInitializer>() {
+        public Multiplicity getMultiplicity() {
             return Multiplicity.COLLECTION;
         }
 
-        public String getUuid()
-        {
+        public String getUuid() {
             return RepositoryInitializer.class.getName();
         }
-
     };
 
+// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Performs repository initialization.
-     * 
-     * @param session
-     *            session into the default repository workspace
+     *
+     * @param session session into the default repository workspace
      */
     public void initializeRepository(Brix brix, Session session) throws RepositoryException;
 }

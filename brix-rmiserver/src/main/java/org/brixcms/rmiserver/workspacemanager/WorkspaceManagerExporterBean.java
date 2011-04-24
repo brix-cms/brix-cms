@@ -27,10 +27,11 @@ import java.rmi.registry.Registry;
 import java.rmi.server.RemoteStub;
 import java.rmi.server.UnicastRemoteObject;
 
-public class WorkspaceManagerExporterBean implements InitializingBean, DisposableBean
-{
+public class WorkspaceManagerExporterBean implements InitializingBean, DisposableBean {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory
-        .getLogger(WorkspaceManagerExporterBean.class);
+            .getLogger(WorkspaceManagerExporterBean.class);
 
     private int registryPort;
     private String serviceName;
@@ -39,35 +40,42 @@ public class WorkspaceManagerExporterBean implements InitializingBean, Disposabl
     private Registry registry;
     private ServerWorkspaceManager server;
 
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
-    public void setWorkspaceManager(WorkspaceManager workspaceManager)
-    {
-        this.workspaceManager = workspaceManager;
-    }
-
-    @Required
-    public void setRegistryPort(int registryPort)
-    {
+    public void setRegistryPort(int registryPort) {
         this.registryPort = registryPort;
     }
 
     @Required
-    public void setServiceName(String serviceName)
-    {
+    public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
     }
 
-    public void afterPropertiesSet() throws Exception
-    {
+    @Required
+    public void setWorkspaceManager(WorkspaceManager workspaceManager) {
+        this.workspaceManager = workspaceManager;
+    }
 
-        try
-        {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface DisposableBean ---------------------
+
+
+    public void destroy() throws Exception {
+        logger.info("Unregistring Workspace Manager remote repository with name: {}", serviceName);
+        registry.unbind(serviceName);
+        UnicastRemoteObject.unexportObject(server, true);
+    }
+
+// --------------------- Interface InitializingBean ---------------------
+
+    public void afterPropertiesSet() throws Exception {
+        try {
             registry = LocateRegistry.getRegistry(registryPort);
             registry.list();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             registry = LocateRegistry.createRegistry(registryPort);
             registry.list();
         }
@@ -78,12 +86,4 @@ public class WorkspaceManagerExporterBean implements InitializingBean, Disposabl
         registry.rebind(serviceName, stub);
         logger.info("Exported Workspace Manager: {}", stub);
     }
-
-    public void destroy() throws Exception
-    {
-        logger.info("Unregistring Workspace Manager remote repository with name: {}", serviceName);
-        registry.unbind(serviceName);
-        UnicastRemoteObject.unexportObject(server, true);
-    }
-
 }

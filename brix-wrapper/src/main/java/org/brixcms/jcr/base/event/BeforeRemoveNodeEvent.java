@@ -19,31 +19,28 @@ import javax.jcr.RepositoryException;
 
 
 /**
- * This event is only passed to other event's {@link #onNewEvent(Event)}
- * method. Not that this event will never be added to the queue (because the
- * Node becomes invalid after deletion). Instead {@link RemoveNodeEvent}
- * will be added to the queue.
- * 
+ * This event is only passed to other event's {@link #onNewEvent(Event)} method. Not that this event will never be added
+ * to the queue (because the Node becomes invalid after deletion). Instead {@link RemoveNodeEvent} will be added to the
+ * queue.
+ *
  * @author Matej Knopp
  */
-public class BeforeRemoveNodeEvent extends NodeEvent
-{
+public class BeforeRemoveNodeEvent extends NodeEvent {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	BeforeRemoveNodeEvent(Node node)
-	{
-		super(node);
-	}
+    BeforeRemoveNodeEvent(Node node) {
+        super(node);
+    }
 
-	@Override
-	protected Node getNode()
-	{
-		return super.getNode();
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	@Override
-	public Event transformBeforeAddingToQueue() throws RepositoryException
-	{
-		return new RemoveNodeEvent(getNode());
-	}
+    @Override
+    public Event transformBeforeAddingToQueue() throws RepositoryException {
+        return new RemoveNodeEvent(getNode());
+    }
 
+    @Override
+    protected Node getNode() {
+        return super.getNode();
+    }
 }

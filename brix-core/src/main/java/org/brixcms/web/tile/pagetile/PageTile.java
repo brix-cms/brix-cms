@@ -28,46 +28,45 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PageTile implements Tile
-{
+public class PageTile implements Tile {
+// ------------------------------ FIELDS ------------------------------
+
     public static String TYPE_NAME = PageTile.class.getName();
 
-    public PageTile()
-    {
+    // needed to detect loop during #requiresSSL call
+    private static final MetaDataKey<Set<Path>> NODE_SET_KEY = new MetaDataKey<Set<Path>>() {
+    };
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PageTile() {
     }
 
-    public String getDisplayName()
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Tile ---------------------
+
+    public String getDisplayName() {
         return "Page Tile";
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return TYPE_NAME;
     }
 
-    public TileEditorPanel newEditor(String id, IModel<BrixNode> containerNode)
-    {
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> containerNode) {
         return new PageTileEditorPanel(id, containerNode);
     }
 
-    public Component newViewer(String id, IModel<BrixNode> tileNode)
-    {
+    public Component newViewer(String id, IModel<BrixNode> tileNode) {
         return new PageTileViewerPanel(id, tileNode);
     }
 
-    // needed to detect loop during #requiresSSL call
-    private static final MetaDataKey<Set<Path>> NODE_SET_KEY = new MetaDataKey<Set<Path>>()
-    {
-    };
-
-    public boolean requiresSSL(IModel<BrixNode> tileNode)
-    {
-
+    public boolean requiresSSL(IModel<BrixNode> tileNode) {
         // get or create set of paths that were already processed
-        Set<Path> set = (Set<Path>)RequestCycle.get().getMetaData(NODE_SET_KEY);
-        if (set == null)
-        {
+        Set<Path> set = (Set<Path>) RequestCycle.get().getMetaData(NODE_SET_KEY);
+        if (set == null) {
             set = new HashSet<Path>();
             RequestCycle.get().setMetaData(NODE_SET_KEY, set);
         }
@@ -75,8 +74,7 @@ public class PageTile implements Tile
 
         Path nodePath = new Path(tileNode.getObject().getParent().getPath());
 
-        if (set.contains(nodePath))
-        {
+        if (set.contains(nodePath)) {
             // this means we found a loop. However here we just return false,
             // PageTileViewerPanel is responsible for displaying the error
             return false;
@@ -85,24 +83,19 @@ public class PageTile implements Tile
 
         final boolean result;
 
-        if (tileNode.getObject().hasProperty("pageNode"))
-        {
+        if (tileNode.getObject().hasProperty("pageNode")) {
             JcrNode pageNode = tileNode.getObject().getProperty("pageNode").getNode();
-            result = ((AbstractContainer)pageNode).requiresSSL();
-        }
-        else
-        {
+            result = ((AbstractContainer) pageNode).requiresSSL();
+        } else {
             result = false;
         }
 
 
         set.remove(nodePath);
-        if (set.isEmpty())
-        {
+        if (set.isEmpty()) {
             RequestCycle.get().setMetaData(NODE_SET_KEY, null);
         }
 
         return result;
     }
-
 }

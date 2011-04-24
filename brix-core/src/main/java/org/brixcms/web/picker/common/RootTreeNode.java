@@ -26,67 +26,69 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class RootTreeNode implements JcrTreeNode
-{
+public class RootTreeNode implements JcrTreeNode {
+// ------------------------------ FIELDS ------------------------------
 
-	private final String workspaceId;
+    private final String workspaceId;
 
-	public RootTreeNode(String workpaceId)
-	{
-		this.workspaceId = workpaceId;
-	}
+    private List<JcrTreeNode> children = null;
 
-	private List<JcrTreeNode> children = null;
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	private void buildChildren()
-	{
-		children = new ArrayList<JcrTreeNode>();
-		JcrSession session = Brix.get().getCurrentSession(workspaceId);
-		BrixNode root = (BrixNode) session.getItem(Brix.get().getRootPath());
-		JcrNodeIterator iterator = root.getNodes();
-		while (iterator.hasNext())
-		{
-			BrixNode node = (BrixNode) iterator.nextNode();
-			if (node instanceof TreeAwareNode)
-			{
-				JcrTreeNode treeNode = ((TreeAwareNode) node).getTreeNode(node);
-				if (treeNode != null)
-				{
-					children.add(treeNode);
-				}
-			}
-		}
-		Collections.sort(children, new Comparator<JcrTreeNode>()
-		{
-			public int compare(JcrTreeNode o1, JcrTreeNode o2)
-			{
-				return o1.getClass().getName().compareTo(o2.getClass().getName());
-			}
-		});
-	}
+    public RootTreeNode(String workpaceId) {
+        this.workspaceId = workpaceId;
+    }
 
-	public List<? extends JcrTreeNode> getChildren()
-	{
-		if (children == null)
-		{
-			buildChildren();
-		}
-		return children;
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	public IModel<BrixNode> getNodeModel()
-	{
-		return null;
-	}
+    public List<? extends JcrTreeNode> getChildren() {
+        if (children == null) {
+            buildChildren();
+        }
+        return children;
+    }
 
-	public boolean isLeaf()
-	{
-		return false;
-	}
+    private void buildChildren() {
+        children = new ArrayList<JcrTreeNode>();
+        JcrSession session = Brix.get().getCurrentSession(workspaceId);
+        BrixNode root = (BrixNode) session.getItem(Brix.get().getRootPath());
+        JcrNodeIterator iterator = root.getNodes();
+        while (iterator.hasNext()) {
+            BrixNode node = (BrixNode) iterator.nextNode();
+            if (node instanceof TreeAwareNode) {
+                JcrTreeNode treeNode = ((TreeAwareNode) node).getTreeNode(node);
+                if (treeNode != null) {
+                    children.add(treeNode);
+                }
+            }
+        }
+        Collections.sort(children, new Comparator<JcrTreeNode>() {
+            public int compare(JcrTreeNode o1, JcrTreeNode o2) {
+                return o1.getClass().getName().compareTo(o2.getClass().getName());
+            }
+        });
+    }
 
-	public void detach()
-	{
-		children = null;
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
+
+// --------------------- Interface IDetachable ---------------------
+
+
+    public void detach() {
+        children = null;
+    }
+
+// --------------------- Interface JcrTreeNode ---------------------
+
+    public IModel<BrixNode> getNodeModel() {
+        return null;
+    }
+
+// --------------------- Interface TreeNode ---------------------
+
+
+    public boolean isLeaf() {
+        return false;
+    }
 }

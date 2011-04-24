@@ -28,165 +28,148 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
-public class NodePickerPanel extends FormComponentPanel<BrixNode>
-{
-	private final JcrTreeNode rootNode;
-	private final NodeFilter enabledFilter;
-	private final NodeFilter visibilityFilter;
+public class NodePickerPanel extends FormComponentPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-	public NodePickerPanel(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter,
-			NodeFilter enabledFilter)
-	{
-		super(id);
+    protected static final String MODAL_WINDOW_ID = "modalWindow";
+    private final JcrTreeNode rootNode;
+    private final NodeFilter enabledFilter;
+    private final NodeFilter visibilityFilter;
 
-		this.rootNode = rootNode;
-		this.enabledFilter = enabledFilter;
-		this.visibilityFilter = visibilityFilter;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public NodePickerPanel(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
-	{
-		super(id, model);
+    public NodePickerPanel(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter,
+                           NodeFilter enabledFilter) {
+        super(id);
 
-		this.rootNode = rootNode;
-		this.enabledFilter = enabledFilter;
-		this.visibilityFilter = visibilityFilter;
-	}
+        this.rootNode = rootNode;
+        this.enabledFilter = enabledFilter;
+        this.visibilityFilter = visibilityFilter;
+    }
 
-	public JcrTreeNode getRootNode()
-	{
-		return rootNode;
-	}
+    public NodePickerPanel(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
+        super(id, model);
 
-	public NodeFilter getEnabledFilter()
-	{
-		return enabledFilter;
-	}
+        this.rootNode = rootNode;
+        this.enabledFilter = enabledFilter;
+        this.visibilityFilter = visibilityFilter;
+    }
 
-	@Override
-	protected void onBeforeRender()
-	{
-		super.onBeforeRender();
-		if (!hasBeenRendered())
-		{
-			init();
-		}
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	protected static final String MODAL_WINDOW_ID = "modalWindow";
+    public NodeFilter getEnabledFilter() {
+        return enabledFilter;
+    }
 
-	@Override
-	public void updateModel()
-	{
-		// don't you dare!
-	}
+    public JcrTreeNode getRootNode() {
+        return rootNode;
+    }
 
-	private void init()
-	{
-		add(newModalWindow(MODAL_WINDOW_ID));
-		final Label label = new Label("label", newLabelModel())
-		{
-			@Override
-			public boolean isVisible()
-			{
-				return NodePickerPanel.this.getModelObject() != null;
-			}
-		};
-		setOutputMarkupId(true);
-		add(label);
+// ------------------------ INTERFACE METHODS ------------------------
 
-		add(new AjaxLink<Void>("edit")
-		{
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				getModalWindow().setModel(NodePickerPanel.this.getModel());
-				getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback()
-				{
-					public void onClose(AjaxRequestTarget target)
-					{
-						target.addComponent(NodePickerPanel.this);
-						NodePickerPanel.this.onUpdate(target);
-					}
-				});
-				getModalWindow().show(target);
-			}
-		});
 
-		add(new AjaxLink<Void>("clear")
-		{
-			@Override
-			public void onClick(AjaxRequestTarget target)
-			{
-				NodePickerPanel.this.setModelObject(null);
-				target.addComponent(NodePickerPanel.this);
-				NodePickerPanel.this.onUpdate(target);
-			}
+// --------------------- Interface IFormModelUpdateListener ---------------------
 
-			@Override
-			public boolean isEnabled()
-			{
-				return NodePickerPanel.this.getModelObject() != null;
-			}
-		});
-	}
+    @Override
+    public void updateModel() {
+        // don't you dare!
+    }
 
-	protected void onUpdate(AjaxRequestTarget target)
-	{
+// -------------------------- OTHER METHODS --------------------------
 
-	}
+    @Override
+    public boolean checkRequired() {
+        if (isRequired()) {
+            JcrNode node = (JcrNode) getModelObject();
+            if (node == null) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	protected NodePickerModalWindow getModalWindow()
-	{
-		return (NodePickerModalWindow) get(MODAL_WINDOW_ID);
-	}
+    protected NodePickerModalWindow getModalWindow() {
+        return (NodePickerModalWindow) get(MODAL_WINDOW_ID);
+    }
 
-	protected IModel<String> newLabelModel()
-	{
-		return new Model<String>()
-		{
-			@Override
-			public String getObject()
-			{
-				IModel<BrixNode> model = NodePickerPanel.this.getModel();
-				BrixNode node = (BrixNode) model.getObject();
-				// TODO: Don't use pathForNode here as it creates dependency on site plugin
-				// rather than that format the path as /Site/[path], etc.
-				return node != null ? SitePlugin.get().pathForNode(node) : "";
-			}
-		};
-	}
+    @Override
+    public boolean isInputNullable() {
+        return false;
+    }
 
-	protected Component newModalWindow(String id)
-	{
-		return new NodePickerModalWindow(id, getModel(), rootNode, visibilityFilter, enabledFilter);
-	}
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        if (!hasBeenRendered()) {
+            init();
+        }
+    }
 
-	@Override
-	public boolean checkRequired()
-	{
-		if (isRequired())
-		{
-			JcrNode node = (JcrNode) getModelObject();
-			if (node == null)
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+    private void init() {
+        add(newModalWindow(MODAL_WINDOW_ID));
+        final Label label = new Label("label", newLabelModel()) {
+            @Override
+            public boolean isVisible() {
+                return NodePickerPanel.this.getModelObject() != null;
+            }
+        };
+        setOutputMarkupId(true);
+        add(label);
 
-	@Override
-	public boolean isInputNullable()
-	{
-		return false;
-	}
-	
-	@Override
-	protected void onDetach()
-	{
-		if (rootNode != null)
-			rootNode.detach();
-		super.onDetach();
-	}
+        add(new AjaxLink<Void>("edit") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                getModalWindow().setModel(NodePickerPanel.this.getModel());
+                getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+                    public void onClose(AjaxRequestTarget target) {
+                        target.addComponent(NodePickerPanel.this);
+                        NodePickerPanel.this.onUpdate(target);
+                    }
+                });
+                getModalWindow().show(target);
+            }
+        });
+
+        add(new AjaxLink<Void>("clear") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NodePickerPanel.this.setModelObject(null);
+                target.addComponent(NodePickerPanel.this);
+                NodePickerPanel.this.onUpdate(target);
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return NodePickerPanel.this.getModelObject() != null;
+            }
+        });
+    }
+
+    protected Component newModalWindow(String id) {
+        return new NodePickerModalWindow(id, getModel(), rootNode, visibilityFilter, enabledFilter);
+    }
+
+    protected IModel<String> newLabelModel() {
+        return new Model<String>() {
+            @Override
+            public String getObject() {
+                IModel<BrixNode> model = NodePickerPanel.this.getModel();
+                BrixNode node = (BrixNode) model.getObject();
+                // TODO: Don't use pathForNode here as it creates dependency on site plugin
+                // rather than that format the path as /Site/[path], etc.
+                return node != null ? SitePlugin.get().pathForNode(node) : "";
+            }
+        };
+    }
+
+    protected void onUpdate(AjaxRequestTarget target) {
+
+    }
+
+    @Override
+    protected void onDetach() {
+        if (rootNode != null)
+            rootNode.detach();
+        super.onDetach();
+    }
 }

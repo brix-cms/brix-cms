@@ -42,7 +42,8 @@
                             org.brixcms.plugin.menu
                         </Export-Package>
                         <Import-Package>
-                            org.osgi*, org.brixcms.*, com.inmethod.grid.*, javax.jcr, javax.swing.tree, org.apache.wicket.*
+                            org.osgi*, org.brixcms.*, com.inmethod.grid.*, javax.jcr, javax.swing.tree,
+                            org.apache.wicket.*
                         </Import-Package>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
                         </Bundle-SymbolicName>

@@ -38,188 +38,56 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor
-{
+public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
+// ------------------------------ FIELDS ------------------------------
+
+    public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
+
+    private static final String COOKIE_NAME = "brix-revision";
+
+    private static final MetaDataKey<String> WORKSPACE_METADATA = new MetaDataKey<String>() {
+        private static final long serialVersionUID = 1L;
+    };
     final Brix brix;
     final BrixUrlCodingStrategy urlCodingStrategy;
     private boolean handleHomePage = true;
 
-    public BrixRequestCycleProcessor(Brix brix)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public BrixRequestCycleProcessor(Brix brix) {
         this(brix, new HttpsConfig());
     }
 
-    public BrixRequestCycleProcessor(Brix brix, HttpsConfig config)
-    {
+    public BrixRequestCycleProcessor(Brix brix, HttpsConfig config) {
         super(config);
         urlCodingStrategy = new BrixUrlCodingStrategy(this);
         this.brix = brix;
     }
 
-    /**
-     * Resolves uri path to a {@link BrixNode}. By default this method uses
-     * {@link BrixConfig#getMapper()} to map the uri to a node path.
-     * 
-     * @param uriPath
-     *            uri path
-     * @return node that maps to the <code>uriPath</code> or <code>null</code> if none
-     */
-    public BrixNode getNodeForUriPath(final Path uriPath)
-    {
-        BrixNode node = null;
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-        // create desired nodepath
-        final Path nodePath = brix.getConfig().getMapper().getNodePathForUriPath(
-                uriPath.toAbsolute(), brix);
-
-        if (nodePath != null)
-        {
-            // allow site plugin to translate the node path into an actual jcr path
-            final String jcrPath = SitePlugin.get().toRealWebNodePath(nodePath.toString());
-
-            // retrieve jcr session
-            final String workspace = getWorkspace();
-            final JcrSession session = brix.getCurrentSession(workspace);
-
-            if (session.itemExists(jcrPath))
-            {
-                // node exists, return it
-                node = (BrixNode)session.getItem(jcrPath);
-            }
-        }
-
-        return node;
-    }
-
-    /**
-     * Creates a uri path for the specified <code>node</code> By default this method uses
-     * {@link BrixConfig#getMapper()} to map node path to a uri path.
-     * 
-     * @param node
-     *            node to create uri path for
-     * @return uri path that represents the node
-     */
-    public Path getUriPathForNode(final BrixNode node)
-    {
-        // allow site plugin to translate jcr path into node path
-        final String jcrPath = SitePlugin.get().fromRealWebNodePath(node.getPath());
-        final Path nodePath = new Path(jcrPath);
-
-        // use urimapper to create the uri
-        return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
-    }
-
-    public final int getHttpPort()
-    {
-        return brix.getConfig().getHttpPort();
-    }
-
-    public final int getHttpsPort()
-    {
-        return brix.getConfig().getHttpsPort();
-    }
-
-    public BrixRequestCycleProcessor setHandleHomePage(boolean handleHomePage)
-    {
-        this.handleHomePage = handleHomePage;
-        return this;
-    }
-
-    private static final String COOKIE_NAME = "brix-revision";
-
-    private static final MetaDataKey<String> WORKSPACE_METADATA = new MetaDataKey<String>()
-    {
-        private static final long serialVersionUID = 1L;
-    };
-
-    private boolean checkSession(String workspaceId)
-    {
-        return brix.getWorkspaceManager().workspaceExists(workspaceId);
-    }
-
-    public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
-
-    private static String extractWorkspaceFromReferer(String refererURL)
-    {
-        int i = refererURL.indexOf('?');
-        if (i != -1 && i != refererURL.length() - 1)
-        {
-            String param = refererURL.substring(i + 1);
-            String params[] = Strings.split(param, '&');
-            for (String s : params)
-            {
-                try
-                {
-                    s = URLDecoder.decode(s, "utf-8");
-                }
-                catch (UnsupportedEncodingException e)
-                {
-                    // rrright
-                    throw new RuntimeException(e);
-                }
-                if (s.startsWith(WORKSPACE_PARAM + "="))
-                {
-                    String value = s.substring(WORKSPACE_PARAM.length() + 1);
-                    if (value.length() > 0)
-                    {
-                        return value;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private String getWorkspaceFromUrl()
-    {
-        HttpServletRequest request = ((WebRequest)RequestCycle.get().getRequest())
-                .getHttpServletRequest();
-
-        if (request.getParameter(WORKSPACE_PARAM) != null)
-        {
-            return request.getParameter(WORKSPACE_PARAM);
-        }
-
-        String referer = request.getHeader("referer");
-
-        if (!Strings.isEmpty(referer))
-        {
-            return extractWorkspaceFromReferer(referer);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public String getWorkspace()
-    {
+    public String getWorkspace() {
         String workspace = getWorkspaceFromUrl();
 
-        if (workspace != null)
-        {
+        if (workspace != null) {
             return workspace;
         }
 
         RequestCycle rc = RequestCycle.get();
         workspace = rc.getMetaData(WORKSPACE_METADATA);
-        if (workspace == null)
-        {
-            WebRequest req = (WebRequest)RequestCycle.get().getRequest();
-            WebResponse resp = (WebResponse)RequestCycle.get().getResponse();
+        if (workspace == null) {
+            WebRequest req = (WebRequest) RequestCycle.get().getRequest();
+            WebResponse resp = (WebResponse) RequestCycle.get().getResponse();
             Cookie cookie = req.getCookie(COOKIE_NAME);
             workspace = getDefaultWorkspaceName();
-            if (cookie != null)
-            {
+            if (cookie != null) {
                 if (cookie.getValue() != null)
                     workspace = cookie.getValue();
             }
-            if (!checkSession(workspace))
-            {
+            if (!checkSession(workspace)) {
                 workspace = getDefaultWorkspaceName();
             }
-            if (workspace == null)
-            {
+            if (workspace == null) {
                 throw new IllegalStateException(
                         "Could not resolve jcr workspace to use for this request");
             }
@@ -234,31 +102,130 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor
         return workspace;
     }
 
-    private String getDefaultWorkspaceName()
-    {
-        final WebRequestCycle rc = (WebRequestCycle)RequestCycle.get();
+    private String getWorkspaceFromUrl() {
+        HttpServletRequest request = ((WebRequest) RequestCycle.get().getRequest())
+                .getHttpServletRequest();
+
+        if (request.getParameter(WORKSPACE_PARAM) != null) {
+            return request.getParameter(WORKSPACE_PARAM);
+        }
+
+        String referer = request.getHeader("referer");
+
+        if (!Strings.isEmpty(referer)) {
+            return extractWorkspaceFromReferer(referer);
+        } else {
+            return null;
+        }
+    }
+
+    private static String extractWorkspaceFromReferer(String refererURL) {
+        int i = refererURL.indexOf('?');
+        if (i != -1 && i != refererURL.length() - 1) {
+            String param = refererURL.substring(i + 1);
+            String params[] = Strings.split(param, '&');
+            for (String s : params) {
+                try {
+                    s = URLDecoder.decode(s, "utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    // rrright
+                    throw new RuntimeException(e);
+                }
+                if (s.startsWith(WORKSPACE_PARAM + "=")) {
+                    String value = s.substring(WORKSPACE_PARAM.length() + 1);
+                    if (value.length() > 0) {
+                        return value;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean checkSession(String workspaceId) {
+        return brix.getWorkspaceManager().workspaceExists(workspaceId);
+    }
+
+    private String getDefaultWorkspaceName() {
+        final WebRequestCycle rc = (WebRequestCycle) RequestCycle.get();
         final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(rc, brix);
         return (workspace != null) ? workspace.getId() : null;
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
+    public final int getHttpPort() {
+        return brix.getConfig().getHttpPort();
+    }
+
+    public final int getHttpsPort() {
+        return brix.getConfig().getHttpsPort();
+    }
+
+    /**
+     * Resolves uri path to a {@link BrixNode}. By default this method uses {@link BrixConfig#getMapper()} to map the
+     * uri to a node path.
+     *
+     * @param uriPath uri path
+     * @return node that maps to the <code>uriPath</code> or <code>null</code> if none
+     */
+    public BrixNode getNodeForUriPath(final Path uriPath) {
+        BrixNode node = null;
+
+        // create desired nodepath
+        final Path nodePath = brix.getConfig().getMapper().getNodePathForUriPath(
+                uriPath.toAbsolute(), brix);
+
+        if (nodePath != null) {
+            // allow site plugin to translate the node path into an actual jcr path
+            final String jcrPath = SitePlugin.get().toRealWebNodePath(nodePath.toString());
+
+            // retrieve jcr session
+            final String workspace = getWorkspace();
+            final JcrSession session = brix.getCurrentSession(workspace);
+
+            if (session.itemExists(jcrPath)) {
+                // node exists, return it
+                node = (BrixNode) session.getItem(jcrPath);
+            }
+        }
+
+        return node;
+    }
+
+    /**
+     * Creates a uri path for the specified <code>node</code> By default this method uses {@link BrixConfig#getMapper()}
+     * to map node path to a uri path.
+     *
+     * @param node node to create uri path for
+     * @return uri path that represents the node
+     */
+    public Path getUriPathForNode(final BrixNode node) {
+        // allow site plugin to translate jcr path into node path
+        final String jcrPath = SitePlugin.get().fromRealWebNodePath(node.getPath());
+        final Path nodePath = new Path(jcrPath);
+
+        // use urimapper to create the uri
+        return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
+    }
+
     @Override
-    protected IRequestCodingStrategy newRequestCodingStrategy()
-    {
+    protected IRequestCodingStrategy newRequestCodingStrategy() {
         return new BrixRequestCodingStrategy(brix, urlCodingStrategy);
     }
 
     @Override
     protected IRequestTarget resolveHomePageTarget(RequestCycle requestCycle,
-            RequestParameters requestParameters)
-    {
-        if (handleHomePage)
-        {
+                                                   RequestParameters requestParameters) {
+        if (handleHomePage) {
             return urlCodingStrategy.decode(requestParameters);
-        }
-        else
-        {
+        } else {
             return super.resolveHomePageTarget(requestCycle, requestParameters);
         }
     }
 
+    public BrixRequestCycleProcessor setHandleHomePage(boolean handleHomePage) {
+        this.handleHomePage = handleHomePage;
+        return this;
+    }
 }

@@ -26,49 +26,49 @@ import org.brixcms.plugin.site.page.AbstractContainer;
 import javax.jcr.Node;
 import javax.jcr.Session;
 
-public class GlobalContainerNode extends AbstractContainer
-{
-	public static final String TYPE = Brix.NS_PREFIX + "globalContainer";
-	
-    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-    {
+public class GlobalContainerNode extends AbstractContainer {
+// ------------------------------ FIELDS ------------------------------
+
+    public static final String TYPE = Brix.NS_PREFIX + "globalContainer";
+
+    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
-        public boolean canWrap(Brix brix, JcrNode node)
-        {
+        public boolean canWrap(Brix brix, JcrNode node) {
             return TYPE.equals(getNodeType(node));
         }
 
         @Override
-        public JcrNode wrap(Brix brix, Node node, JcrSession session)
-        {
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
             return new GlobalContainerNode(node, session);
         }
 
         @Override
-        public void initializeRepository(Brix brix, Session session)
-        {
+        public void initializeRepository(Brix brix, Session session) {
             RepositoryUtil.registerNodeType(session.getWorkspace(), TYPE,
-                false, false, true);
-        }		
+                    false, false, true);
+        }
     };
 
-    public GlobalContainerNode(Node delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
+// -------------------------- STATIC METHODS --------------------------
 
-    public static GlobalContainerNode initialize(JcrNode node)
-    {
-        BrixNode brixNode = (BrixNode)node;
+    public static GlobalContainerNode initialize(JcrNode node) {
+        BrixNode brixNode = (BrixNode) node;
         BrixFileNode.initialize(node, "text/html");
         brixNode.setNodeType(TYPE);
 
         return new GlobalContainerNode(node.getDelegate(), node.getSession());
     }
-    
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public GlobalContainerNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    public String getUserVisibleName()
-    {
-    	return "Global Tiles and Variables";
+    public String getUserVisibleName() {
+        return "Global Tiles and Variables";
     }
 }

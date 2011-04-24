@@ -32,57 +32,49 @@ import org.brixcms.plugin.site.picker.node.SiteNodePickerPanel;
 import java.util.List;
 import java.util.Map;
 
-public class RestoreItemsPanel extends SelectItemsPanel<Void>
-{
+public class RestoreItemsPanel extends SelectItemsPanel<Void> {
+// ------------------------------ FIELDS ------------------------------
+
     private IModel<BrixNode> targetNode = new BrixNodeModel();
 
-    public RestoreItemsPanel(String id, String prototypeWorkspaceId, final String targetWorkspaceId)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public RestoreItemsPanel(String id, String prototypeWorkspaceId, final String targetWorkspaceId) {
         super(id, prototypeWorkspaceId);
 
         final Component message = new MultiLineLabel("message", new Model<String>(
-            ""));
+                ""));
         message.setOutputMarkupId(true);
         add(message);
 
 
         add(new SiteNodePickerPanel("picker", targetNode, targetWorkspaceId, true, null));
 
-        add(new AjaxLink<Void>("restore")
-        {
+        add(new AjaxLink<Void>("restore") {
             @Override
-            public void onClick(AjaxRequestTarget target)
-            {
+            public void onClick(AjaxRequestTarget target) {
                 List<JcrNode> nodes = getSelectedNodes();
-                if (!nodes.isEmpty())
-                {
-                	Brix brix = ((BrixNode)nodes.iterator().next()).getBrix();
+                if (!nodes.isEmpty()) {
+                    Brix brix = ((BrixNode) nodes.iterator().next()).getBrix();
                     JcrWorkspace targetWorkspace = brix.getCurrentSession(targetWorkspaceId).getWorkspace();
                     Map<JcrNode, List<JcrNode>> dependencies = JcrUtil.getUnsatisfiedDependencies(
-                        nodes, targetWorkspace);;
-                    if (!dependencies.isEmpty())
-                    {                        
-                        message.setDefaultModelObject(getDependenciesMessage(dependencies));                        
-                    }
-                    else
-                    {
+                            nodes, targetWorkspace);
+                    ;
+                    if (!dependencies.isEmpty()) {
+                        message.setDefaultModelObject(getDependenciesMessage(dependencies));
+                    } else {
                         JcrNode rootNode = targetNode.getObject();
-                        if (rootNode == null)
-                        {
+                        if (rootNode == null) {
                             rootNode = targetWorkspace.getSession().getRootNode();
                         }
                         PrototypePlugin.get().restoreNodes(nodes, rootNode);
                         findParent(ModalWindow.class).close(target);
-                    }                    
-                }
-                else
-                {
+                    }
+                } else {
                     message.setDefaultModelObject("You have to select at least one node.");
                 }
                 target.addComponent(message);
             }
         });
     }
-
-
 }

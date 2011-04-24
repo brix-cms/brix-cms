@@ -29,141 +29,137 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-public class PublishingPlugin implements Plugin
-{
-	public static final String STATE_DEVELOPMENT = "development";
-	public static final String STATE_STAGING = "staging";
-	public static final String STATE_PRODUCTION = "production";
+public class PublishingPlugin implements Plugin {
+// ------------------------------ FIELDS ------------------------------
 
-	private class StateComparator implements Comparator<String>
-	{
+    public static final String STATE_DEVELOPMENT = "development";
+    public static final String STATE_STAGING = "staging";
+    public static final String STATE_PRODUCTION = "production";
 
-		public int compare(String o1, String o2)
-		{
-			int i1 = Integer.MAX_VALUE;
-			if (STATE_DEVELOPMENT.equals(o1))
-				i1 = 1;
-			else if (STATE_STAGING.equals(o1))
-				i1 = 2;
-			else if (STATE_PRODUCTION.equals(o1))
-				i1 = 3;
+    private static String ID = PublishingPlugin.class.getName();
+    ;
 
-			int i2 = Integer.MAX_VALUE;
-			if (STATE_DEVELOPMENT.equals(o2))
-				i2 = 1;
-			else if (STATE_STAGING.equals(o2))
-				i2 = 2;
-			else if (STATE_PRODUCTION.equals(o2))
-				i2 = 3;
+    private StateComparator stateComparator = new StateComparator();
 
-			return i1 - i2;
-		}
-	};
+    private final Brix brix;
 
-	private StateComparator stateComparator = new StateComparator();
+// -------------------------- STATIC METHODS --------------------------
 
-	public StateComparator getStateComparator()
-	{
-		return stateComparator;
-	}
+    public static PublishingPlugin get() {
+        return get(Brix.get());
+    }
 
-	private final Brix brix;
+    public static PublishingPlugin get(Brix brix) {
+        return (PublishingPlugin) brix.getPlugin(ID);
+    }
 
-	public PublishingPlugin(Brix brix)
-	{
-		this.brix = brix;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public static PublishingPlugin get(Brix brix)
-	{
-		return (PublishingPlugin) brix.getPlugin(ID);
-	}
+    public PublishingPlugin(Brix brix) {
+        this.brix = brix;
+    }
 
-	public static PublishingPlugin get()
-	{
-		return get(Brix.get());
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	public void publish(Workspace workspace, String targetState)
-	{
-		if (workspace == null)
-		{
-			throw new IllegalArgumentException("Argument 'workspace' may not be null.");
-		}
-		if (targetState == null)
-		{
-			throw new IllegalArgumentException("Argument 'targetState' may not be null.");
-		}
+    public StateComparator getStateComparator() {
+        return stateComparator;
+    }
 
-		SitePlugin sitePlugin = SitePlugin.get();
+// ------------------------ INTERFACE METHODS ------------------------
 
-		if (!sitePlugin.isSiteWorkspace(workspace))
-		{
-			throw new IllegalStateException("Workspace must be a Site workspace.");
-		}
-		if (targetState.equals(sitePlugin.getWorkspaceState(workspace)))
-		{
-			throw new IllegalStateException("Cannot publish workspace to same state it is already.");
-		}
 
-		String name = sitePlugin.getWorkspaceName(workspace);
-		Workspace target = sitePlugin.getSiteWorkspace(name, targetState);
-		if (target == null)
-		{
-			target = sitePlugin.createSite(name, targetState);
-		}
+// --------------------- Interface Plugin ---------------------
 
-		JcrSession sourceSession = brix.getCurrentSession(workspace.getId());
-		JcrSession targetSession = brix.getCurrentSession(target.getId());
+    public String getId() {
+        return ID;
+    }
 
-		brix.clone(sourceSession, targetSession);
-	}
+    public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
+        return null;
+    }
 
-	private static String ID = PublishingPlugin.class.getName();
+    public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
+        return null;
+    }
 
-	public String getId()
-	{
-		return ID;
-	}
+    public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
+    }
 
-	public String getUserVisibleName(Workspace workspace, boolean isFrontend)
-	{
-		return null;
-	}
+    public boolean isPluginWorkspace(Workspace workspace) {
+        return false;
+    }
 
-	public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend)
-	{
-		return null;
-	}
-	
-	public boolean isPluginWorkspace(Workspace workspace)
-	{
-		return false;
-	}
+    public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel) {
+        IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("publishing", "Publishing"),
+                workspaceModel)};
+        return Arrays.asList(tabs);
+    }
 
-	public void initWorkspace(Workspace workspace, JcrSession workspaceSession)
-	{
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	public List<IBrixTab> newTabs(IModel<Workspace> workspaceModel)
-	{
-		IBrixTab tabs[] = new IBrixTab[] { new Tab(new ResourceModel("publishing", "Publishing"),
-                workspaceModel) };
-		return Arrays.asList(tabs);
-	}
-	
-	static class Tab extends AbstractWorkspaceTab
-	{
-		public Tab(IModel<String> title, IModel<Workspace> workspaceModel)
-		{
-			super(title, workspaceModel, 20);
-		}
+    public void publish(Workspace workspace, String targetState) {
+        if (workspace == null) {
+            throw new IllegalArgumentException("Argument 'workspace' may not be null.");
+        }
+        if (targetState == null) {
+            throw new IllegalArgumentException("Argument 'targetState' may not be null.");
+        }
 
-		@Override
-		public Panel newPanel(String panelId, IModel<Workspace> workspaceModel)
-		{
-			return new PublishingPanel(panelId, workspaceModel);
-		}
-	};
+        SitePlugin sitePlugin = SitePlugin.get();
 
+        if (!sitePlugin.isSiteWorkspace(workspace)) {
+            throw new IllegalStateException("Workspace must be a Site workspace.");
+        }
+        if (targetState.equals(sitePlugin.getWorkspaceState(workspace))) {
+            throw new IllegalStateException("Cannot publish workspace to same state it is already.");
+        }
+
+        String name = sitePlugin.getWorkspaceName(workspace);
+        Workspace target = sitePlugin.getSiteWorkspace(name, targetState);
+        if (target == null) {
+            target = sitePlugin.createSite(name, targetState);
+        }
+
+        JcrSession sourceSession = brix.getCurrentSession(workspace.getId());
+        JcrSession targetSession = brix.getCurrentSession(target.getId());
+
+        brix.clone(sourceSession, targetSession);
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private class StateComparator implements Comparator<String> {
+        public int compare(String o1, String o2) {
+            int i1 = Integer.MAX_VALUE;
+            if (STATE_DEVELOPMENT.equals(o1))
+                i1 = 1;
+            else if (STATE_STAGING.equals(o1))
+                i1 = 2;
+            else if (STATE_PRODUCTION.equals(o1))
+                i1 = 3;
+
+            int i2 = Integer.MAX_VALUE;
+            if (STATE_DEVELOPMENT.equals(o2))
+                i2 = 1;
+            else if (STATE_STAGING.equals(o2))
+                i2 = 2;
+            else if (STATE_PRODUCTION.equals(o2))
+                i2 = 3;
+
+            return i1 - i2;
+        }
+    }
+
+    static class Tab extends AbstractWorkspaceTab {
+        public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {
+            super(title, workspaceModel, 20);
+        }
+
+        @Override
+        public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
+            return new PublishingPanel(panelId, workspaceModel);
+        }
+    }
+
+    ;
 }

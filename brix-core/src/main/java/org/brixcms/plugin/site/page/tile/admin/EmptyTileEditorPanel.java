@@ -18,33 +18,35 @@ import org.brixcms.jcr.wrapper.BrixNode;
 
 /**
  * Provides a default empty editor panel for tiles that have no configuration options
- * 
+ *
  * @author igor.vaynberg
- * 
  */
-public class EmptyTileEditorPanel extends TileEditorPanel
-{
+public class EmptyTileEditorPanel extends TileEditorPanel {
+// --------------------------- CONSTRUCTORS ---------------------------
+
     /**
      * Constructor
-     * 
+     *
      * @param id
      */
-    public EmptyTileEditorPanel(String id)
-    {
+    public EmptyTileEditorPanel(String id) {
         super(id);
     }
 
-    /** {@inheritDoc} */
+// -------------------------- OTHER METHODS --------------------------
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void load(BrixNode node)
-    {
+    public void load(BrixNode node) {
         // noop
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void save(BrixNode node)
-    {// noop
+    public void save(BrixNode node) {// noop
     }
-
 }

@@ -20,37 +20,40 @@ import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 
 /**
- * 
  * @author Matej Knopp
  * @author igor.vaynberg
  */
-public interface JcrQueryResult extends QueryResult
-{
+public interface JcrQueryResult extends QueryResult {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrQueryResult wrap(QueryResult delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrQueryResultWrapper.wrap(delegate, session);
-        }
-    };
 
-    public QueryResult getDelegate();
+// --------------------- Interface QueryResult ---------------------
 
     public String[] getColumnNames();
 
+    public JcrRowIterator getRows();
+
     public JcrNodeIterator getNodes();
 
-    public JcrRowIterator getRows();
-    
     /**
-     * Returns an array of all the selector names that were used in the query
-     * that created this result. If the query did not have a selector name then
-     * an empty array is returned.
+     * Returns an array of all the selector names that were used in the query that created this result. If the query did
+     * not have a selector name then an empty array is returned.
      *
      * @return a <code>String</code> array holding the selector names.
      * @throws RepositoryException if an error occurs.
      */
-    public String[] getSelectorNames() ;
+    public String[] getSelectorNames();
 
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public QueryResult getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrQueryResult wrap(QueryResult delegate, JcrSession session) {
+            return WrapperAccessor.JcrQueryResultWrapper.wrap(delegate, session);
+        }
+    }
 }

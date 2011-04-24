@@ -16,26 +16,21 @@ package org.brixcms.plugin.site.page.exception;
 
 import org.brixcms.exception.BrixException;
 
-public class UnknownTagException extends BrixException
-{
+public class UnknownTagException extends BrixException {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public UnknownTagException()
-    {
+    public UnknownTagException() {
     }
 
-    public UnknownTagException(String message)
-    {
+    public UnknownTagException(String message) {
         super(message);
     }
 
-    public UnknownTagException(Throwable cause)
-    {
+    public UnknownTagException(Throwable cause) {
         super(cause);
     }
 
-    public UnknownTagException(String message, Throwable cause)
-    {
+    public UnknownTagException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

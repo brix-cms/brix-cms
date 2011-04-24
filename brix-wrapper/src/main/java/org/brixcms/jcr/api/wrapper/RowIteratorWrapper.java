@@ -22,43 +22,48 @@ import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-class RowIteratorWrapper extends RangeIteratorWrapper implements JcrRowIterator
-{
+class RowIteratorWrapper extends RangeIteratorWrapper implements JcrRowIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected RowIteratorWrapper(RowIterator delegate, JcrSession session)
-    {
+    public static JcrRowIterator wrap(RowIterator delegate, JcrSession session) {
+        if (delegate == null) {
+            return null;
+        } else {
+            return new RowIteratorWrapper(delegate, session);
+        }
+    }
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected RowIteratorWrapper(RowIterator delegate, JcrSession session) {
         super(delegate, session);
     }
 
-    public static JcrRowIterator wrap(RowIterator delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
-            return null;
-        }
-        else
-        {
-            return new RowIteratorWrapper(delegate, session);
-        }
-    };
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Iterator ---------------------
+
 
     @Override
-    public RowIterator getDelegate()
-    {
-        return (RowIterator)super.getDelegate();
+    public Object next() {
+        return JcrRow.Wrapper.wrap((Row) getDelegate().next(), getJcrSession());
     }
 
-    public JcrRow nextRow()
-    {
+// --------------------- Interface JcrRowIterator ---------------------
+    ;
+
+    @Override
+    public RowIterator getDelegate() {
+        return (RowIterator) super.getDelegate();
+    }
+
+// --------------------- Interface RowIterator ---------------------
+
+
+    public JcrRow nextRow() {
         return JcrRow.Wrapper.wrap(getDelegate().nextRow(), getJcrSession());
-    }
-
-    @Override
-    public Object next()
-    {
-        return JcrRow.Wrapper.wrap((Row)getDelegate().next(), getJcrSession());
     }
 }

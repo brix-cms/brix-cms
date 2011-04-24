@@ -24,134 +24,106 @@ import javax.jcr.version.Version;
 import java.util.Calendar;
 
 /**
- * 
  * @author Matej Knopp
  * @author igor.vaynberg
  */
-class VersionWrapper extends NodeWrapper implements JcrVersion
-{
+class VersionWrapper extends NodeWrapper implements JcrVersion {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected VersionWrapper(Version delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrVersion wrap(Version delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrVersion wrap(Version delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new VersionWrapper(delegate, session);
         }
     }
 
-    public static JcrVersion[] wrap(Version delegate[], JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrVersion[] wrap(Version delegate[], JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             JcrVersion res[] = new JcrVersion[delegate.length];
-            for (int i = 0; i < delegate.length; ++i)
-            {
+            for (int i = 0; i < delegate.length; ++i) {
                 res[i] = wrap(delegate[i], session);
             }
             return res;
         }
     }
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected VersionWrapper(Version delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface JcrItem ---------------------
+
     @Override
-    public Version getDelegate()
-    {
-        return (Version)super.getDelegate();
+    public Version getDelegate() {
+        return (Version) super.getDelegate();
     }
 
-    public JcrVersionHistory getContainingHistory()
-    {
-        return executeCallback(new Callback<JcrVersionHistory>()
-        {
-            public JcrVersionHistory execute() throws Exception
-            {
-                return JcrVersionHistory.Wrapper.wrap(getDelegate().getContainingHistory(),
-                        getJcrSession());
+// --------------------- Interface Version ---------------------
+
+
+    public JcrVersion getLinearSuccessor() throws RepositoryException {
+        return executeCallback(new Callback<JcrVersion>() {
+            public JcrVersion execute() throws Exception {
+                return JcrVersion.Wrapper.wrap(getDelegate().getLinearSuccessor(), getSession());
             }
         });
     }
 
-    public Calendar getCreated()
-    {
-        return executeCallback(new Callback<Calendar>()
-        {
-            public Calendar execute() throws Exception
-            {
-                return getDelegate().getCreated();
-            }
-        });
-    }
-
-    public JcrVersion[] getPredecessors()
-    {
-        return executeCallback(new Callback<JcrVersion[]>()
-        {
-            public JcrVersion[] execute() throws Exception
-            {
-                return JcrVersion.Wrapper.wrap(getDelegate().getPredecessors(), getJcrSession());
-            }
-        });
-    }
-
-    public JcrVersion[] getSuccessors()
-    {
-        return executeCallback(new Callback<JcrVersion[]>()
-        {
-            public JcrVersion[] execute() throws Exception
-            {
-                return JcrVersion.Wrapper.wrap(getDelegate().getSuccessors(), getJcrSession());
-            }
-        });
-    }
-
-    public JcrNode getFrozenNode()
-    {
-        return executeCallback(new Callback<JcrNode>()
-        {
-
-            public JcrNode execute() throws Exception
-            {
-                return JcrNode.Wrapper.wrap(getDelegate().getFrozenNode(), getJcrSession());
-            }
-        });
-    }
-
-    public JcrVersion getLinearPredecessor() throws RepositoryException
-    {
-        return executeCallback(new Callback<JcrVersion>()
-        {
-
-            public JcrVersion execute() throws Exception
-            {
+    public JcrVersion getLinearPredecessor() throws RepositoryException {
+        return executeCallback(new Callback<JcrVersion>() {
+            public JcrVersion execute() throws Exception {
                 return JcrVersion.Wrapper.wrap(getDelegate().getLinearPredecessor(),
                         getJcrSession());
             }
         });
     }
 
-    public JcrVersion getLinearSuccessor() throws RepositoryException
-    {
-        return executeCallback(new Callback<JcrVersion>()
-        {
-
-            public JcrVersion execute() throws Exception
-            {
-                return JcrVersion.Wrapper.wrap(getDelegate().getLinearSuccessor(), getSession());
+    public JcrVersionHistory getContainingHistory() {
+        return executeCallback(new Callback<JcrVersionHistory>() {
+            public JcrVersionHistory execute() throws Exception {
+                return JcrVersionHistory.Wrapper.wrap(getDelegate().getContainingHistory(),
+                        getJcrSession());
             }
         });
-
     }
 
+    public Calendar getCreated() {
+        return executeCallback(new Callback<Calendar>() {
+            public Calendar execute() throws Exception {
+                return getDelegate().getCreated();
+            }
+        });
+    }
+
+    public JcrVersion[] getSuccessors() {
+        return executeCallback(new Callback<JcrVersion[]>() {
+            public JcrVersion[] execute() throws Exception {
+                return JcrVersion.Wrapper.wrap(getDelegate().getSuccessors(), getJcrSession());
+            }
+        });
+    }
+
+    public JcrVersion[] getPredecessors() {
+        return executeCallback(new Callback<JcrVersion[]>() {
+            public JcrVersion[] execute() throws Exception {
+                return JcrVersion.Wrapper.wrap(getDelegate().getPredecessors(), getJcrSession());
+            }
+        });
+    }
+
+    public JcrNode getFrozenNode() {
+        return executeCallback(new Callback<JcrNode>() {
+            public JcrNode execute() throws Exception {
+                return JcrNode.Wrapper.wrap(getDelegate().getFrozenNode(), getJcrSession());
+            }
+        });
+    }
 }

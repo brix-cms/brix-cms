@@ -27,91 +27,68 @@ import org.brixcms.web.tab.IBrixTab;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReferenceEditor extends BrixGenericPanel<Reference>
-{
+public class ReferenceEditor extends BrixGenericPanel<Reference> {
+// ------------------------------ FIELDS ------------------------------
 
-    public ReferenceEditor(String id, ReferenceEditorConfiguration configuration)
-    {
+    private final ReferenceEditorConfiguration configuration;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ReferenceEditor(String id, ReferenceEditorConfiguration configuration) {
         super(id);
         this.configuration = configuration;
         init();
     }
 
-    public ReferenceEditor(String id, IModel<Reference> model, ReferenceEditorConfiguration configuration)
-    {
-        super(id, model);
-        this.configuration = configuration;
-        init();
-    }
-
-    private Reference getReference()
-    {
-        return (Reference)getModelObject();
-    }
-
-    private void init()
-    {
+    private void init() {
         List<IBrixTab> tabs = new ArrayList<IBrixTab>();
-        tabs.add(new CachingAbstractTab(new ResourceModel("reference"))
-        {
+        tabs.add(new CachingAbstractTab(new ResourceModel("reference")) {
             @Override
-            public Panel newPanel(String panelId)
-            {
-                return new NodeUrlTab(panelId, getModel())
-                {
+            public Panel newPanel(String panelId) {
+                return new NodeUrlTab(panelId, getModel()) {
                     @Override
-                    protected ReferenceEditorConfiguration getConfiguration()
-                    {
+                    protected ReferenceEditorConfiguration getConfiguration() {
                         return configuration;
                     }
                 };
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return configuration.isAllowNodePicker() || configuration.isAllowURLEdit();
             }
         });
-        tabs.add(new CachingAbstractTab(new ResourceModel("queryParameters"))
-        {
+        tabs.add(new CachingAbstractTab(new ResourceModel("queryParameters")) {
             @Override
-            public Panel newPanel(String panelId)
-            {
-                return new QueryParametersTab(panelId)
-                {
+            public Panel newPanel(String panelId) {
+                return new QueryParametersTab(panelId) {
                     @Override
-                    protected BrixPageParameters getPageParameters()
-                    {
+                    protected BrixPageParameters getPageParameters() {
                         return getReference().getParameters();
-                    };
+                    }
+
+                    ;
                 };
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return configuration.isAllowQueryParameters();
             }
         });
-        tabs.add(new CachingAbstractTab(new ResourceModel("indexedParameters"))
-        {
+        tabs.add(new CachingAbstractTab(new ResourceModel("indexedParameters")) {
             @Override
-            public Panel newPanel(String panelId)
-            {
-                return new IndexedParametersTab(panelId)
-                {
+            public Panel newPanel(String panelId) {
+                return new IndexedParametersTab(panelId) {
                     @Override
-                    protected BrixPageParameters getPageParameters()
-                    {
+                    protected BrixPageParameters getPageParameters() {
                         return getReference().getParameters();
                     }
                 };
             }
 
             @Override
-            public boolean isVisible()
-            {
+            public boolean isVisible() {
                 return configuration.isAllowIndexedParameters();
             }
         });
@@ -119,5 +96,15 @@ public class ReferenceEditor extends BrixGenericPanel<Reference>
         add(new BrixAjaxTabbedPanel("tabbedPanel", tabs));
     }
 
-    private final ReferenceEditorConfiguration configuration;
+    public ReferenceEditor(String id, IModel<Reference> model, ReferenceEditorConfiguration configuration) {
+        super(id, model);
+        this.configuration = configuration;
+        init();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    private Reference getReference() {
+        return (Reference) getModelObject();
+    }
 }

@@ -18,15 +18,13 @@ import org.brixcms.markup.MarkupSource;
 
 /**
  * Basic interface extended by markup items.
+ *
+ * @author Matej Knopp
  * @see Comment
  * @see Text
  * @see Tag
  * @see ComponentTag
  * @see MarkupSource
- * 
- * @author Matej Knopp
  */
-public interface Item
-{
-
+public interface Item {
 }

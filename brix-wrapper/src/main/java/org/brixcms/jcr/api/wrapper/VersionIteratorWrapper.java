@@ -22,39 +22,46 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-class VersionIteratorWrapper extends RangeIteratorWrapper implements JcrVersionIterator
-{
+class VersionIteratorWrapper extends RangeIteratorWrapper implements JcrVersionIterator {
+// -------------------------- STATIC METHODS --------------------------
 
-    public VersionIteratorWrapper(VersionIterator delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrVersionIterator wrap(VersionIterator delegate, JcrSession session)
-    {
+    public static JcrVersionIterator wrap(VersionIterator delegate, JcrSession session) {
         if (delegate == null)
             return null;
         else
             return new VersionIteratorWrapper(delegate, session);
     }
 
-    @Override
-    public VersionIterator getDelegate()
-    {
-        return (VersionIterator)super.getDelegate();
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public VersionIteratorWrapper(VersionIterator delegate, JcrSession session) {
+        super(delegate, session);
     }
 
-    public JcrVersion nextVersion()
-    {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Iterator ---------------------
+
+
+    @Override
+    public Object next() {
+        return JcrVersion.Wrapper.wrap((Version) getDelegate().next(), getJcrSession());
+    }
+
+// --------------------- Interface JcrVersionIterator ---------------------
+
+    @Override
+    public VersionIterator getDelegate() {
+        return (VersionIterator) super.getDelegate();
+    }
+
+// --------------------- Interface VersionIterator ---------------------
+
+
+    public JcrVersion nextVersion() {
         return JcrVersion.Wrapper.wrap(getDelegate().nextVersion(), getJcrSession());
-    }
-
-    @Override
-    public Object next()
-    {
-        return JcrVersion.Wrapper.wrap((Version)getDelegate().next(), getJcrSession());
     }
 }

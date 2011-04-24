@@ -24,96 +24,83 @@ import org.brixcms.web.picker.common.TreeAwareNode;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
-public class NodePicker extends BrixGenericPanel<BrixNode>
-{
-	private final JcrTreeNode rootNode;
-	private final NodePickerTreeGridPanel grid;
+public class NodePicker extends BrixGenericPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-	public NodePicker(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
-	{
-		super(id, model);
+    private final JcrTreeNode rootNode;
+    private final NodePickerTreeGridPanel grid;
 
-		this.rootNode = rootNode;
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		add(grid = new NodePickerTreeGridPanel("grid", visibilityFilter, enabledFilter)
-		{
-			@Override
-			protected JcrTreeNode getRootNode()
-			{
-				return NodePicker.this.rootNode;
-			}
+    public NodePicker(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
+        super(id, model);
 
-			@Override
-			protected void configureGrid(TreeGrid grid)
-			{
-				super.configureGrid(grid);
-				grid.setAllowSelectMultiple(false);
-				updateSelection();
-				NodePicker.this.configureGrid(grid);
-			}
+        this.rootNode = rootNode;
 
-			@Override
-			protected void onNodeSelected(BrixNode node)
-			{
-				NodePicker.this.setModelObject(node);
-			}
+        add(grid = new NodePickerTreeGridPanel("grid", visibilityFilter, enabledFilter) {
+            @Override
+            protected JcrTreeNode getRootNode() {
+                return NodePicker.this.rootNode;
+            }
 
-			@Override
-			protected void onNodeDeselected(BrixNode node)
-			{
-				NodePicker.this.setModelObject(null);
-			}
-		});
-	}
+            @Override
+            protected void configureGrid(TreeGrid grid) {
+                super.configureGrid(grid);
+                grid.setAllowSelectMultiple(false);
+                updateSelection();
+                NodePicker.this.configureGrid(grid);
+            }
 
-	@Override
-	protected void onBeforeRender()
-	{
-		// First time updateSelection has been rendered from within
-		// NodePickerTreePanel#configureGrid
+            @Override
+            protected void onNodeSelected(BrixNode node) {
+                NodePicker.this.setModelObject(node);
+            }
 
-		// In all subsequent renders it's called from here. It must be called
-		// before super.onBeforeRender so that the expanded tree items get
-		// chance to render
-		if (hasBeenRendered())
-		{
-			updateSelection();
-		}
+            @Override
+            protected void onNodeDeselected(BrixNode node) {
+                NodePicker.this.setModelObject(null);
+            }
+        });
+    }
 
-		super.onBeforeRender();
+    private void updateSelection() {
+        BrixNode current = getModelObject();
+        if (current == null) {
+            grid.getGrid().resetSelectedItems();
+        } else {
+            JcrTreeNode node = TreeAwareNode.Util.getTreeNode(getModelObject(), grid.getVisibilityFilter());
+            if (node == null) {
+                grid.getGrid().resetSelectedItems();
+            } else {
+                grid.getGrid().selectItem(new Model<JcrTreeNode>(node), true);
+            }
+        }
+    }
 
-	}
+    protected void configureGrid(TreeGrid grid) {
 
-	private void updateSelection()
-	{
-		BrixNode current = getModelObject();
-		if (current == null)
-		{
-			grid.getGrid().resetSelectedItems();
-		}
-		else
-		{
-			JcrTreeNode node = TreeAwareNode.Util.getTreeNode(getModelObject(), grid.getVisibilityFilter());
-			if (node == null)
-			{
-				grid.getGrid().resetSelectedItems();
-			}
-			else
-			{
-				grid.getGrid().selectItem(new Model<JcrTreeNode>(node), true);
-			}
-		}
-	}
+    }
 
-	protected void configureGrid(TreeGrid grid)
-	{
+// -------------------------- OTHER METHODS --------------------------
 
-	}
-	
-	@Override
-	protected void onDetach()
-	{
-		this.rootNode.detach();
-		super.onDetach();
-	}
+    @Override
+    protected void onBeforeRender() {
+        // First time updateSelection has been rendered from within
+        // NodePickerTreePanel#configureGrid
+
+        // In all subsequent renders it's called from here. It must be called
+        // before super.onBeforeRender so that the expanded tree items get
+        // chance to render
+        if (hasBeenRendered()) {
+            updateSelection();
+        }
+
+        super.onBeforeRender();
+    }
+
+    @Override
+    protected void onDetach() {
+        this.rootNode.detach();
+        super.onDetach();
+    }
 }

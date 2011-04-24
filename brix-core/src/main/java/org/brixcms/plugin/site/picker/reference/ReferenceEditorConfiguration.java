@@ -13,7 +13,7 @@
  */
 
 /**
- * 
+ *
  */
 package org.brixcms.plugin.site.picker.reference;
 
@@ -24,8 +24,8 @@ import org.brixcms.web.tree.NodeFilter;
 
 import java.io.Serializable;
 
-public class ReferenceEditorConfiguration implements Serializable
-{
+public class ReferenceEditorConfiguration implements Serializable {
+// ------------------------------ FIELDS ------------------------------
 
     private boolean allowNodePicker = true;
     private boolean allowURLEdit = true;
@@ -37,101 +37,86 @@ public class ReferenceEditorConfiguration implements Serializable
 
     private NodeFilter nodeFilter;
 
-    public IModel<BrixNode> getRootNode()
-	{
-		return rootNode;
-	}
-    
-    public void setRootNode(IModel<BrixNode> rootNode)
-	{
-		this.rootNode = rootNode;
-	}
-    
-    public boolean isAllowNodePicker()
-    {
-        return allowNodePicker;
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public NodeFilter getNodeFilter() {
+        return nodeFilter;
     }
 
-    public ReferenceEditorConfiguration setAllowNodePicker(boolean allowNodePicker)
-    {
-        this.allowNodePicker = allowNodePicker;
-        return this;
+    public IModel<BrixNode> getRootNode() {
+        return rootNode;
     }
 
-    public boolean isAllowURLEdit()
-    {
-        return allowURLEdit;
+    public void setRootNode(IModel<BrixNode> rootNode) {
+        this.rootNode = rootNode;
     }
 
-    public ReferenceEditorConfiguration setAllowURLEdit(boolean allowURLEdit)
-    {
-        this.allowURLEdit = allowURLEdit;
-        return this;
+    public String getWorkspaceName() {
+        return workspaceName;
     }
 
-    public boolean isAllowIndexedParameters()
-    {
+    public boolean isAllowIndexedParameters() {
         return allowIndexedParameters;
     }
 
-    public ReferenceEditorConfiguration setAllowIndexedParameters(boolean allowIndexedParameters)
-    {
+    public boolean isAllowNodePicker() {
+        return allowNodePicker;
+    }
+
+    public boolean isAllowQueryParameters() {
+        return allowQueryParameters;
+    }
+
+    public boolean isAllowURLEdit() {
+        return allowURLEdit;
+    }
+
+    public boolean isDisplayFiles() {
+        return displayFiles;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public ReferenceEditorConfiguration setAllowIndexedParameters(boolean allowIndexedParameters) {
         this.allowIndexedParameters = allowIndexedParameters;
         return this;
     }
 
-    public boolean isAllowQueryParameters()
-    {
-        return allowQueryParameters;
+    public ReferenceEditorConfiguration setAllowNodePicker(boolean allowNodePicker) {
+        this.allowNodePicker = allowNodePicker;
+        return this;
     }
 
-    public ReferenceEditorConfiguration setAllowQueryParameters(boolean allowQueryParameters)
-    {
+    public ReferenceEditorConfiguration setAllowQueryParameters(boolean allowQueryParameters) {
         this.allowQueryParameters = allowQueryParameters;
         return this;
     }
 
-    public NodeFilter getNodeFilter()
-    {
-        return nodeFilter;
-    }
-
-    public ReferenceEditorConfiguration setNodeFilter(NodeFilter nodeFilter)
-    {
-        this.nodeFilter = nodeFilter;
+    public ReferenceEditorConfiguration setAllowURLEdit(boolean allowURLEdit) {
+        this.allowURLEdit = allowURLEdit;
         return this;
     }
 
-    public ReferenceEditorConfiguration setDisplayFiles(boolean displayFiles)
-    {
+    public ReferenceEditorConfiguration setDisplayFiles(boolean displayFiles) {
         this.displayFiles = displayFiles;
         return this;
     }
 
-    public boolean isDisplayFiles()
-    {
-        return displayFiles;
-    }
-
-    public ReferenceEditorConfiguration setWorkspaceName(IModel<BrixNode> nodeModel)
-    {
-        return setWorkspaceName(nodeModel.getObject().getSession().getWorkspace().getName());
-    }
-
-    public ReferenceEditorConfiguration setWorkspaceName(JcrNode node)
-    {
-        return setWorkspaceName(node.getSession().getWorkspace().getName());
-    }
-
-
-    public ReferenceEditorConfiguration setWorkspaceName(String workspaceName)
-    {
-        this.workspaceName = workspaceName;
+    public ReferenceEditorConfiguration setNodeFilter(NodeFilter nodeFilter) {
+        this.nodeFilter = nodeFilter;
         return this;
     }
 
-    public String getWorkspaceName()
-    {
-        return workspaceName;
+    public ReferenceEditorConfiguration setWorkspaceName(IModel<BrixNode> nodeModel) {
+        return setWorkspaceName(nodeModel.getObject().getSession().getWorkspace().getName());
+    }
+
+    public ReferenceEditorConfiguration setWorkspaceName(JcrNode node) {
+        return setWorkspaceName(node.getSession().getWorkspace().getName());
+    }
+
+    public ReferenceEditorConfiguration setWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
+        return this;
     }
 }

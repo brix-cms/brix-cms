@@ -22,33 +22,30 @@ import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 
 import javax.servlet.http.HttpServletResponse;
 
-public class ForbiddenPage extends WebPage
-{
+public class ForbiddenPage extends WebPage {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public ForbiddenPage()
-    {
+    public ForbiddenPage() {
         this("");
     }
 
-    public ForbiddenPage(String name)
-    {
+    public ForbiddenPage(String name) {
         add(new Label("name", name));
         add(new ToolbarBehavior() {
             @Override
-            protected String getCurrentWorkspaceId()
-            {                
-                return ((BrixRequestCycleProcessor)getRequestCycle().getProcessor()).getWorkspace();
+            protected String getCurrentWorkspaceId() {
+                return ((BrixRequestCycleProcessor) getRequestCycle().getProcessor()).getWorkspace();
             }
         });
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    protected void configureResponse()
-    {
+    protected void configureResponse() {
         super.configureResponse();
 
-        WebResponse response = (WebResponse)getResponse();
+        WebResponse response = (WebResponse) getResponse();
         response.getHttpServletResponse().setStatus(HttpServletResponse.SC_FORBIDDEN);
     }
-
 }

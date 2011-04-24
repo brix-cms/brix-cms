@@ -34,8 +34,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Bootstrapper
-{
+public class Bootstrapper {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory.getLogger(Bootstrapper.class);
 
     private final DataSource datasource;
@@ -46,10 +47,11 @@ public class Bootstrapper
     private final String workspaceManagerLogin;
     private final String workspaceManagerPassword;
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
     public Bootstrapper(DataSource datasource, PlatformTransactionManager transactionManager,
-            Configuration configuration, SessionFactory sessionFactory, UserService userService,
-            String workspaceManagerLogin, String workspaceManagerPassword)
-    {
+                        Configuration configuration, SessionFactory sessionFactory, UserService userService,
+                        String workspaceManagerLogin, String workspaceManagerPassword) {
         this.datasource = datasource;
         this.configuration = configuration;
         this.sessionFactory = sessionFactory;
@@ -59,55 +61,70 @@ public class Bootstrapper
         this.workspaceManagerPassword = workspaceManagerPassword;
     }
 
+// -------------------------- OTHER METHODS --------------------------
 
-    public void bootstrap() throws Exception
-    {
+    public void bootstrap() throws Exception {
         logger.info("Bootstrapper executing");
 
         // create schema if necessary
         Session session = sessionFactory.openSession();
-        try
-        {
+        try {
             session.createCriteria(User.class).setMaxResults(1).list();
             logger.info("Bootstrapper found schema, skipping schema creation");
-        }
-        catch (HibernateException e)
-        {
+        } catch (HibernateException e) {
             logger.info("Bootstrapper did not find schema");
 
             TransactionStatus txn = transactionManager
-                .getTransaction(new DefaultTransactionDefinition());
-            try
-            {
+                    .getTransaction(new DefaultTransactionDefinition());
+            try {
                 logger.info("creating schema...");
                 bootstrapSchema();
                 logger.info("creating default admin user...");
                 bootstrapUsers();
-            }
-            finally
-            {
-
-                if (txn.isRollbackOnly())
-                {
+            } finally {
+                if (txn.isRollbackOnly()) {
                     transactionManager.rollback(txn);
-                }
-                else
-                {
+                } else {
                     transactionManager.commit(txn);
                 }
             }
-        }
-        finally
-        {
+        } finally {
             session.close();
         }
 
         logger.info("Bootstrapper execution completed");
-
     }
 
-    private void bootstrapUsers()
-    {
+    /**
+     * @param sf
+     */
+    private void bootstrapSchema() {
+        Connection con = null;
+        try {
+            con = datasource.getConnection();
+            Dialect dialect = Dialect.getDialect(configuration.getProperties());
+            String[] schema = configuration.generateSchemaCreationScript(dialect);
+            for (String stmt : schema) {
+                Statement st = con.createStatement();
+                st.executeUpdate(stmt);
+                st.close();
+            }
+            con.commit();
+        } catch (SQLException e1) {
+            if (con != null) {
+                try {
+                    con.rollback();
+                } catch (SQLException e2) {
+                    try {
+                        con.close();
+                    } catch (SQLException e3) {
+                    }
+                }
+            }
+        }
+    }
+
+    private void bootstrapUsers() {
         UserDto dto = new UserDto();
         dto.login = "admin";
         dto.password = "admin";
@@ -121,48 +138,4 @@ public class Bootstrapper
         dto.roles.add(Role.RMI);
         userService.create(dto);
     }
-
-    /**
-     * @param sf
-     */
-    private void bootstrapSchema()
-    {
-        Connection con = null;
-        try
-        {
-            con = datasource.getConnection();
-            Dialect dialect = Dialect.getDialect(configuration.getProperties());
-            String[] schema = configuration.generateSchemaCreationScript(dialect);
-            for (String stmt : schema)
-            {
-                Statement st = con.createStatement();
-                st.executeUpdate(stmt);
-                st.close();
-            }
-            con.commit();
-        }
-        catch (SQLException e1)
-        {
-            if (con != null)
-            {
-                try
-                {
-                    con.rollback();
-                }
-                catch (SQLException e2)
-                {
-                    try
-                    {
-                        con.close();
-                    }
-                    catch (SQLException e3)
-                    {
-                    }
-                }
-            }
-        }
-
-    }
-
-
 }

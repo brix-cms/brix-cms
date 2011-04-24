@@ -25,61 +25,57 @@ import org.brixcms.web.tree.JcrTreeNode;
 
 import javax.jcr.Node;
 
-public class MenuNode extends BrixNode implements TreeAwareNode
-{
-
-	public MenuNode(Node delegate, JcrSession session)
-	{
-		super(delegate, session);
-	}
-
-	@Override
-	public String getUserVisibleName()
-	{
-		if (hasProperty("name"))
-		{
-			return getProperty("name").getString();
-		}
-		else
-		{
-			return super.getUserVisibleName();
-		}
-	}
-	
-	@Override
-	public String getUserVisibleType()
-	{
-		return "Menu";
-	}
-	
-	public JcrTreeNode getTreeNode(BrixNode node)
-	{
-		return new MenuTreeNode(node);
-	}
-
-	private static class MenuTreeNode extends AbstractJcrTreeNode
-	{
-
-		public MenuTreeNode(BrixNode node)
-		{
-			super(node);
-		}		
-	};
-	
-	public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-    {
-
+public class MenuNode extends BrixNode implements TreeAwareNode {
+// ------------------------------ FIELDS ------------------------------
+    ;
+    public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
-        public boolean canWrap(Brix brix, JcrNode node)
-        {
+        public boolean canWrap(Brix brix, JcrNode node) {
             return node.getDepth() > 1 && node.getParent().getPath().equals(MenuPlugin.get(brix).getRootPath());
         }
 
         @Override
-        public JcrNode wrap(Brix brix, Node node, JcrSession session)
-        {
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
             return new MenuNode(node, session);
         }
     };
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public MenuNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface TreeAwareNode ---------------------
+
+    public JcrTreeNode getTreeNode(BrixNode node) {
+        return new MenuTreeNode(node);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public String getUserVisibleName() {
+        if (hasProperty("name")) {
+            return getProperty("name").getString();
+        } else {
+            return super.getUserVisibleName();
+        }
+    }
+
+    @Override
+    public String getUserVisibleType() {
+        return "Menu";
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private static class MenuTreeNode extends AbstractJcrTreeNode {
+        public MenuTreeNode(BrixNode node) {
+            super(node);
+        }
+    }
 }

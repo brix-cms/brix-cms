@@ -17,35 +17,40 @@ package org.brixcms.web.tab;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
-public abstract class CachingAbstractTab extends AbstractBrixTab 
-{
-
-    public CachingAbstractTab(IModel<String> title)
-    {
-        super(title);
-    }
-
-    public CachingAbstractTab(IModel<String> title, int priority)
-    {
-        super(title, priority);
-    }
-
-    public boolean isVisible()
-    {
-        return true;
-    }
-
-    public abstract Panel newPanel(String panelId);
+public abstract class CachingAbstractTab extends AbstractBrixTab {
+// ------------------------------ FIELDS ------------------------------
 
     private Panel panel = null;
 
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public CachingAbstractTab(IModel<String> title) {
+        super(title);
+    }
+
+    public CachingAbstractTab(IModel<String> title, int priority) {
+        super(title, priority);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface ITab ---------------------
+
+
     @Override
-    public Panel getPanel(String panelId)
-    {
-        if (panel == null)
-        {
+    public Panel getPanel(String panelId) {
+        if (panel == null) {
             panel = newPanel(panelId);
         }
         return panel;
     }
+
+    public boolean isVisible() {
+        return true;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public abstract Panel newPanel(String panelId);
 }

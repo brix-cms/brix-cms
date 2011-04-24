@@ -33,95 +33,91 @@ import org.brixcms.plugin.site.resource.managers.text.TextNodeTabFactory;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ResourceNodePlugin implements SiteNodePlugin
-{
+public class ResourceNodePlugin implements SiteNodePlugin {
+// ------------------------------ FIELDS ------------------------------
 
-	public static final String TYPE = Brix.NS_PREFIX + "resource";
+    public static final String TYPE = Brix.NS_PREFIX + "resource";
 
-	public ResourceNodePlugin(SitePlugin sp)
-	{
-		registerDefaultMimeTypes();
-		sp.registerManageNodeTabFactory(new ManageResourceNodeTabFactory());
-		sp.registerManageNodeTabFactory(new ImageNodeTabFactory());
-		sp.registerManageNodeTabFactory(new TextNodeTabFactory());
-	}
+    private Map<String /* extension */, String /* mime-type */> mimeTypes = new ConcurrentHashMap<String, String>();
 
-	public String getNodeType()
-	{
-		return TYPE;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public String getName()
-	{
-		return (new ResourceModel("resource", "Resource")).getObject();
-	}
+    public ResourceNodePlugin(SitePlugin sp) {
+        registerDefaultMimeTypes();
+        sp.registerManageNodeTabFactory(new ManageResourceNodeTabFactory());
+        sp.registerManageNodeTabFactory(new ImageNodeTabFactory());
+        sp.registerManageNodeTabFactory(new TextNodeTabFactory());
+    }
 
-	public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
-	{
-		// IRequestTarget switchTarget =
-		// SwitchProtocolRequestTarget.requireProtocol(Protocol.HTTP);
-		// if (switchTarget != null)
-		// {
-		// return switchTarget;
-		// }
-		// else
-		// {
-		return new ResourceRequestTarget(nodeModel);
-		// }
-	}
+    private void registerDefaultMimeTypes() {
+        registerMimeType("application/xml", "xml");
+        registerMimeType("text/html", "html", "htm", "dwt");
+        registerMimeType("text/plain", "txt");
+        registerMimeType("text/css", "css");
+        registerMimeType("text/javascript", "js");
+        registerMimeType("image/jpeg", "jpg", "jpeg");
+        registerMimeType("image/png", "png");
+        registerMimeType("image/gif", "gif");
+        registerMimeType("application/octet-stream", "exe");
+        registerMimeType("application/octet-stream", "dmg");
+    }
 
-	public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
-	{
-		return new CreateResourcePanel(id, parentNode, goBack);
-	}
+    public void registerMimeType(String mimeType, String... extensions) {
+        for (String s : extensions) {
+            mimeTypes.put(s, mimeType);
+        }
+    }
 
-	public NodeConverter getConverterForNode(BrixNode node)
-	{
-		return null;
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public String resolveMimeTypeFromFileName(String fileName)
-	{
-		int last = fileName.lastIndexOf(".");
-		if (last != -1)
-		{
-			String ext = fileName.substring(last + 1).toLowerCase();
-			return mimeTypeFromExtension(ext);
-		}
-		return null;
-	}
 
-	private String mimeTypeFromExtension(String ext)
-	{
-		return mimeTypes.get(ext);
-	}
+// --------------------- Interface SiteNodePlugin ---------------------
 
-	private Map<String /* extension */, String /* mime-type */> mimeTypes = new ConcurrentHashMap<String, String>();
+    public String getNodeType() {
+        return TYPE;
+    }
 
-	public void registerMimeType(String mimeType, String... extensions)
-	{
-		for (String s : extensions)
-		{
-			mimeTypes.put(s, mimeType);
-		}
-	}
+    public String getName() {
+        return (new ResourceModel("resource", "Resource")).getObject();
+    }
 
-	private void registerDefaultMimeTypes()
-	{
-		registerMimeType("application/xml", "xml");
-		registerMimeType("text/html", "html", "htm", "dwt");
-		registerMimeType("text/plain", "txt");
-		registerMimeType("text/css", "css");
-		registerMimeType("text/javascript", "js");
-		registerMimeType("image/jpeg", "jpg", "jpeg");
-		registerMimeType("image/png", "png");
-		registerMimeType("image/gif", "gif");
-		registerMimeType("application/octet-stream", "exe");
-		registerMimeType("application/octet-stream", "dmg");
-	}
+    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters) {
+        // IRequestTarget switchTarget =
+        // SwitchProtocolRequestTarget.requireProtocol(Protocol.HTTP);
+        // if (switchTarget != null)
+        // {
+        // return switchTarget;
+        // }
+        // else
+        // {
+        return new ResourceRequestTarget(nodeModel);
+        // }
+    }
 
-	public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
-	{
-		return new ResourceModel("create");
-	}
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode) {
+        return new ResourceModel("create");
+    }
+
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack) {
+        return new CreateResourcePanel(id, parentNode, goBack);
+    }
+
+    public NodeConverter getConverterForNode(BrixNode node) {
+        return null;
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public String resolveMimeTypeFromFileName(String fileName) {
+        int last = fileName.lastIndexOf(".");
+        if (last != -1) {
+            String ext = fileName.substring(last + 1).toLowerCase();
+            return mimeTypeFromExtension(ext);
+        }
+        return null;
+    }
+
+    private String mimeTypeFromExtension(String ext) {
+        return mimeTypes.get(ext);
+    }
 }

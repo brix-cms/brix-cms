@@ -23,68 +23,60 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.reference.Reference;
 import org.brixcms.web.util.AbstractModel;
 
-public abstract class ReferenceColumnPanel extends BrixGenericPanel<Reference>
-{
+public abstract class ReferenceColumnPanel extends BrixGenericPanel<Reference> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public ReferenceColumnPanel(String id, IModel<Reference> model)
-	{
-		super(id, model);
-		
-		IModel<String> labelModel = new AbstractModel<String>() {
-			@Override
-			public String getObject()
-			{
-				Reference reference = ReferenceColumnPanel.this.getModelObject();
-				if (reference != null && !reference.isEmpty())
-				{
-					return reference.generateUrl();
-				}
-				else
-				{
-					return "";
-				}
-			}
-		};
-		final Label label = new Label("label", labelModel);			
-		add(label);
-		label.setOutputMarkupId(true);
-		
-		ReferenceEditorPanel editor = new ReferenceEditorPanel("editor", model) {
-			@Override
-			public ReferenceEditorConfiguration getConfiguration()
-			{
-				return ReferenceColumnPanel.this.getConfiguration();
-			}
-			@Override
-			public boolean isVisible()
-			{
-				return isEditing();
-			}			
-			@Override
-			protected IModel<String> newLabelModel()
-			{
-				return new AbstractModel<String>() {
-					@Override
-					public String getObject()
-					{
-						return "";
-					}
-				};
-			}
-			
-			@Override
-			protected void onUpdate(AjaxRequestTarget target)
-			{				
-				super.onUpdate(target);
-				target.addComponent(label);
-			}
-		};
-		
-		editor.setOutputMarkupPlaceholderTag(true);
-		add(editor);				
-	}
+    public ReferenceColumnPanel(String id, IModel<Reference> model) {
+        super(id, model);
 
-	protected abstract ReferenceEditorConfiguration getConfiguration();
+        IModel<String> labelModel = new AbstractModel<String>() {
+            @Override
+            public String getObject() {
+                Reference reference = ReferenceColumnPanel.this.getModelObject();
+                if (reference != null && !reference.isEmpty()) {
+                    return reference.generateUrl();
+                } else {
+                    return "";
+                }
+            }
+        };
+        final Label label = new Label("label", labelModel);
+        add(label);
+        label.setOutputMarkupId(true);
 
-	protected abstract boolean isEditing();
+        ReferenceEditorPanel editor = new ReferenceEditorPanel("editor", model) {
+            @Override
+            public ReferenceEditorConfiguration getConfiguration() {
+                return ReferenceColumnPanel.this.getConfiguration();
+            }
+
+            @Override
+            public boolean isVisible() {
+                return isEditing();
+            }
+
+            @Override
+            protected IModel<String> newLabelModel() {
+                return new AbstractModel<String>() {
+                    @Override
+                    public String getObject() {
+                        return "";
+                    }
+                };
+            }
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                super.onUpdate(target);
+                target.addComponent(label);
+            }
+        };
+
+        editor.setOutputMarkupPlaceholderTag(true);
+        add(editor);
+    }
+
+    protected abstract ReferenceEditorConfiguration getConfiguration();
+
+    protected abstract boolean isEditing();
 }

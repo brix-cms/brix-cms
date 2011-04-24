@@ -23,52 +23,52 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.jcr.*;
+import javax.jcr.Credentials;
+import javax.jcr.NamespaceRegistry;
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
-public class WorkspaceManagerTest
-{
+public class WorkspaceManagerTest {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceManagerTest.class);
 
     private Repository repo;
     private WorkspaceManager manager;
 
-	private File home;
+    private File home;
 
-    private static void delete(File file)
-    {
-        if (!file.exists())
-        {
-            return;
-        }
-        if (file.isDirectory())
-        {
-            for (File child : file.listFiles())
-            {
-                delete(child);
-            }
-        }
-        if (!file.delete())
-        {
-            throw new RuntimeException("Could not delete file: " + file.getAbsolutePath());
-        }
+// -------------------------- OTHER METHODS --------------------------
+
+    @After
+    public void destroyManager() {
+        ((JackrabbitRepository) repo).shutdown();
+
+        delete(home);
     }
 
     @Before
-    public void setupManager() throws IOException, RepositoryException
-    {
+    public void setupManager() throws IOException, RepositoryException {
         String temp = System.getProperty("java.io.tmpdir");
         home = new File(temp, getClass().getName());
         delete(home);
         home.deleteOnExit();
-        
-        if (!home.mkdirs())
-        {
+
+        if (!home.mkdirs()) {
             throw new RuntimeException("Could not create directory: " + home.getAbsolutePath());
         }
 
@@ -88,75 +88,22 @@ public class WorkspaceManagerTest
         manager = new LocalWorkspaceManager(repo).initialize();
     }
 
-    @After
-    public void destroyManager()
-    {
-        ((JackrabbitRepository)repo).shutdown();
-        
-        delete(home);
-    }
-
-	@Test
-	public void testWorkspaceIdLength() {
-		// some database systems do not allow table names over 30 characters
-		// (oracle), make sure we do not cross that limit
-		for (int i = 0; i < 10; i++) {
-			Workspace w = manager.createWorkspace();
-			assertNotNull(w);
-			System.out.println(w.getId() + " " + w.getId().length());
-			assertTrue(30 >= w.getId().length());
-		}
-	}
-    
-    @Test
-    public void testWorkspaceCreation() throws RepositoryException
-    {
-        assertEquals(0, manager.getWorkspaces().size());
-
-        Workspace w1 = manager.createWorkspace();
-        assertNotNull(w1);
-        assertEquals(1, manager.getWorkspaces().size());
-
-        Workspace w2 = manager.createWorkspace();
-        assertNotNull(w2);
-        assertEquals(2, manager.getWorkspaces().size());
-        
-        // test retrieval of created workspaces
-        Workspace w11 = manager.getWorkspace(w1.getId());
-        assertNotNull(w11);
-        assertEquals(w1.getId(), w11.getId());
+    private static void delete(File file) {
+        if (!file.exists()) {
+            return;
+        }
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                delete(child);
+            }
+        }
+        if (!file.delete()) {
+            throw new RuntimeException("Could not delete file: " + file.getAbsolutePath());
+        }
     }
 
     @Test
-    public void testWorkspaceDeletion() throws RepositoryException
-    {
-        assertEquals(0, manager.getWorkspaces().size());
-
-        Workspace w1 = manager.createWorkspace();
-        Workspace w2 = manager.createWorkspace();
-        assertEquals(2, manager.getWorkspaces().size());
-
-        w1.delete();
-
-        // assert w1 is not listed
-        assertEquals(1, manager.getWorkspaces().size());
-        assertEquals(w2.getId(), manager.getWorkspaces().get(0).getId());
-
-        // assert w1 can no longer be retrieved
-        assertNull(manager.getWorkspace(w1.getId()));
-
-        w2.delete();
-
-        // assert w2 is not listed
-        assertEquals(0, manager.getWorkspaces().size());
-
-        // assert w2 cannot be retrieved
-        assertNull(manager.getWorkspace(w2.getId()));
-    }
-
-    @Test
-    public void testAttributes() throws RepositoryException
-    {
+    public void testAttributes() throws RepositoryException {
         // set up test workspaces
         final String w1name;
         final String w2name;
@@ -169,7 +116,6 @@ public class WorkspaceManagerTest
             w2name = w2.getId();
             w2.setAttribute("color", "green");
             w2.setAttribute("background", "transparent");
-
         }
 
         // test workspace 1
@@ -191,11 +137,10 @@ public class WorkspaceManagerTest
 
             Iterator<String> it = w.getAttributeKeys();
             Set<String> keys = new HashSet<String>();
-            while (it.hasNext())
-            {
+            while (it.hasNext()) {
                 keys.add(it.next());
             }
-            Collection<String> expected = Arrays.asList(new String[] { "color", "background" });
+            Collection<String> expected = Arrays.asList(new String[]{"color", "background"});
             assertTrue(keys.containsAll(expected));
             assertTrue(expected.containsAll(keys));
 
@@ -205,42 +150,7 @@ public class WorkspaceManagerTest
     }
 
     @Test
-    public void testWorkspaceFiltering() throws RepositoryException
-    {
-        // set up test workspaces
-        Workspace w1 = manager.createWorkspace();
-        w1.setAttribute("color", "green");
-        w1.setAttribute("foo", "bar");
-
-        Workspace w2 = manager.createWorkspace();
-        w2.setAttribute("color", "green");
-        w2.setAttribute("background", "transparent");
-        w2.setAttribute("foo", "baz");
-
-        // test non-existent match
-        HashMap<String, String> attrs = new HashMap<String, String>();
-        attrs.put("color", "green");
-        attrs.put("foo", "boo"); // no workspace has this attr
-        assertEquals(0, manager.getWorkspacesFiltered(attrs).size());
-
-        // test single match
-        attrs.clear();
-        attrs.put("color", "green");
-        attrs.put("foo", "baz");
-        List<Workspace> result = manager.getWorkspacesFiltered(attrs);
-        assertEquals(1, result.size());
-        assertEquals(w2.getId(), result.get(0).getId());
-
-        // test multiple match
-        attrs.clear();
-        attrs.put("color", "green");
-        result = manager.getWorkspacesFiltered(attrs);
-        assertEquals(2, result.size());
-    }
-
-    @Test
-    public void testInitialization() throws RepositoryException
-    {
+    public void testInitialization() throws RepositoryException {
         // set up test workspaces
         Workspace w1 = manager.createWorkspace();
         w1.setAttribute("color", "green");
@@ -279,79 +189,150 @@ public class WorkspaceManagerTest
         assertEquals(2, result.size());
         assertTrue(result.contains(w1));
         assertTrue(result.contains(w3));
-
     }
 
-    private static class LocalWorkspaceManager extends AbstractSimpleWorkspaceManager
-    {
+    @Test
+    public void testWorkspaceCreation() throws RepositoryException {
+        assertEquals(0, manager.getWorkspaces().size());
+
+        Workspace w1 = manager.createWorkspace();
+        assertNotNull(w1);
+        assertEquals(1, manager.getWorkspaces().size());
+
+        Workspace w2 = manager.createWorkspace();
+        assertNotNull(w2);
+        assertEquals(2, manager.getWorkspaces().size());
+
+        // test retrieval of created workspaces
+        Workspace w11 = manager.getWorkspace(w1.getId());
+        assertNotNull(w11);
+        assertEquals(w1.getId(), w11.getId());
+    }
+
+    @Test
+    public void testWorkspaceDeletion() throws RepositoryException {
+        assertEquals(0, manager.getWorkspaces().size());
+
+        Workspace w1 = manager.createWorkspace();
+        Workspace w2 = manager.createWorkspace();
+        assertEquals(2, manager.getWorkspaces().size());
+
+        w1.delete();
+
+        // assert w1 is not listed
+        assertEquals(1, manager.getWorkspaces().size());
+        assertEquals(w2.getId(), manager.getWorkspaces().get(0).getId());
+
+        // assert w1 can no longer be retrieved
+        assertNull(manager.getWorkspace(w1.getId()));
+
+        w2.delete();
+
+        // assert w2 is not listed
+        assertEquals(0, manager.getWorkspaces().size());
+
+        // assert w2 cannot be retrieved
+        assertNull(manager.getWorkspace(w2.getId()));
+    }
+
+    @Test
+    public void testWorkspaceFiltering() throws RepositoryException {
+        // set up test workspaces
+        Workspace w1 = manager.createWorkspace();
+        w1.setAttribute("color", "green");
+        w1.setAttribute("foo", "bar");
+
+        Workspace w2 = manager.createWorkspace();
+        w2.setAttribute("color", "green");
+        w2.setAttribute("background", "transparent");
+        w2.setAttribute("foo", "baz");
+
+        // test non-existent match
+        HashMap<String, String> attrs = new HashMap<String, String>();
+        attrs.put("color", "green");
+        attrs.put("foo", "boo"); // no workspace has this attr
+        assertEquals(0, manager.getWorkspacesFiltered(attrs).size());
+
+        // test single match
+        attrs.clear();
+        attrs.put("color", "green");
+        attrs.put("foo", "baz");
+        List<Workspace> result = manager.getWorkspacesFiltered(attrs);
+        assertEquals(1, result.size());
+        assertEquals(w2.getId(), result.get(0).getId());
+
+        // test multiple match
+        attrs.clear();
+        attrs.put("color", "green");
+        result = manager.getWorkspacesFiltered(attrs);
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    public void testWorkspaceIdLength() {
+        // some database systems do not allow table names over 30 characters
+        // (oracle), make sure we do not cross that limit
+        for (int i = 0; i < 10; i++) {
+            Workspace w = manager.createWorkspace();
+            assertNotNull(w);
+            System.out.println(w.getId() + " " + w.getId().length());
+            assertTrue(30 >= w.getId().length());
+        }
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private static class LocalWorkspaceManager extends AbstractSimpleWorkspaceManager {
         private final Repository repo;
 
-        private LocalWorkspaceManager(Repository repo)
-        {
+        private LocalWorkspaceManager(Repository repo) {
             this.repo = repo;
         }
 
-        public Repository getRepo()
-        {
+        public Repository getRepo() {
             return repo;
         }
 
         @Override
-        protected Session createSession(String workspaceName)
-        {
+        protected Session createSession(String workspaceName) {
             Credentials credentials = new SimpleCredentials("admin", "admin".toCharArray());
-            try
-            {
+            try {
                 return repo.login(credentials, workspaceName);
-            }
-            catch (RepositoryException e)
-            {
+            } catch (RepositoryException e) {
                 throw new JcrException(e);
             }
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        protected void createWorkspace(String workspaceName)
-        {
+        protected void createWorkspace(String workspaceName) {
             Session session = createSession(null);
-            try
-            {
-                org.apache.jackrabbit.core.WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl)session
+            try {
+                org.apache.jackrabbit.core.WorkspaceImpl workspace = (org.apache.jackrabbit.core.WorkspaceImpl) session
                         .getWorkspace();
                 workspace.createWorkspace(workspaceName);
-            }
-            catch (RepositoryException e)
-            {
+            } catch (RepositoryException e) {
                 throw new JcrException(e);
-            }
-            finally
-            {
+            } finally {
                 closeSession(session, false);
             }
         }
 
-        /** {@inheritDoc} */
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        protected List<String> getAccessibleWorkspaceNames()
-        {
+        protected List<String> getAccessibleWorkspaceNames() {
             Session session = createSession(null);
-            try
-            {
+            try {
                 return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
-            }
-            catch (RepositoryException e)
-            {
+            } catch (RepositoryException e) {
                 throw new JcrException(e);
-            }
-            finally
-            {
+            } finally {
                 closeSession(session, false);
             }
         }
-
-
     }
-
-
 }

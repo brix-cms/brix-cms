@@ -21,85 +21,80 @@ import org.apache.wicket.model.ResourceModel;
 import org.brixcms.web.generic.IGenericComponent;
 import org.brixcms.web.reference.Reference;
 
-public class ReferenceEditorModalWindow extends ModalWindow implements IGenericComponent<Reference>
-{
+public class ReferenceEditorModalWindow extends ModalWindow implements IGenericComponent<Reference> {
+// ------------------------------ FIELDS ------------------------------
 
-	private final ReferenceEditorConfiguration configuration;
+    private final ReferenceEditorConfiguration configuration;
 
-	public ReferenceEditorModalWindow(String id, IModel<Reference> model, ReferenceEditorConfiguration configuration)
-	{
-		super(id);
-		setModel(model);
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		this.configuration = configuration;
+    public ReferenceEditorModalWindow(String id, IModel<Reference> model, ReferenceEditorConfiguration configuration) {
+        super(id);
+        setModel(model);
 
-		setWidthUnit("em");
-		setInitialWidth(64);
-		setUseInitialHeight(false);
-		setResizable(false);
-		setCookieName("reference-editor");
-		setTitle(new ResourceModel("title"));
-	}
+        this.configuration = configuration;
 
-	private void initContent()
-	{
-		setContent(new ReferenceEditorWithButtons(getContentId(), getModel(), configuration)
-		{
-			@Override
-			protected void onCancel(AjaxRequestTarget target)
-			{
-				super.onCancel(target);
-				ReferenceEditorModalWindow.this.onCancel(target);
-			}
+        setWidthUnit("em");
+        setInitialWidth(64);
+        setUseInitialHeight(false);
+        setResizable(false);
+        setCookieName("reference-editor");
+        setTitle(new ResourceModel("title"));
+    }
 
-			@Override
-			protected void onOk(AjaxRequestTarget target)
-			{
-				super.onOk(target);
-				ReferenceEditorModalWindow.this.onOk(target);
-			}
-		});
-	}
+    public void setModel(IModel<Reference> model) {
+        setDefaultModel(model);
+    }
 
-	@Override
-	public void show(AjaxRequestTarget target)
-	{
-		if (isShown() == false)
-		{
-			initContent();
-		}
-		super.show(target);
-	}
+// ------------------------ INTERFACE METHODS ------------------------
 
-	protected void onCancel(AjaxRequestTarget target)
-	{
-		close(target);
-	}
 
-	protected void onOk(AjaxRequestTarget target)
-	{
-		close(target);
-	}
+// --------------------- Interface IGenericComponent ---------------------
 
-	@SuppressWarnings("unchecked")
-	public IModel<Reference> getModel()
-	{
-		return (IModel<Reference>) getDefaultModel();
-	}
+    public Reference getModelObject() {
+        return (Reference) getDefaultModelObject();
+    }
 
-	public Reference getModelObject()
-	{
-		return (Reference) getDefaultModelObject();
-	}
+    public void setModelObject(Reference object) {
+        setDefaultModelObject(object);
+    }
 
-	public void setModel(IModel<Reference> model)
-	{
-		setDefaultModel(model);
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	public void setModelObject(Reference object)
-	{
-		setDefaultModelObject(object);
-	}
+    @Override
+    public void show(AjaxRequestTarget target) {
+        if (isShown() == false) {
+            initContent();
+        }
+        super.show(target);
+    }
 
+    private void initContent() {
+        setContent(new ReferenceEditorWithButtons(getContentId(), getModel(), configuration) {
+            @Override
+            protected void onCancel(AjaxRequestTarget target) {
+                super.onCancel(target);
+                ReferenceEditorModalWindow.this.onCancel(target);
+            }
+
+            @Override
+            protected void onOk(AjaxRequestTarget target) {
+                super.onOk(target);
+                ReferenceEditorModalWindow.this.onOk(target);
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public IModel<Reference> getModel() {
+        return (IModel<Reference>) getDefaultModel();
+    }
+
+    protected void onCancel(AjaxRequestTarget target) {
+        close(target);
+    }
+
+    protected void onOk(AjaxRequestTarget target) {
+        close(target);
+    }
 }

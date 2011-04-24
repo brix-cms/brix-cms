@@ -23,59 +23,52 @@ import javax.jcr.Node;
 
 /**
  * Wrapper for file nodes that are not wrapped by any other wrapper.
- * 
+ *
  * @author Matej Knopp
  */
-public class ResourceNode extends BrixFileNode
-{
+public class ResourceNode extends BrixFileNode {
+// ------------------------------ FIELDS ------------------------------
 
-	public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory()
-	{
-		@Override
-		public boolean canWrap(Brix brix, JcrNode node)
-		{
-			return isFileNode(node);
-		}
+    public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
+        @Override
+        public boolean canWrap(Brix brix, JcrNode node) {
+            return isFileNode(node);
+        }
 
-		@Override
-		public JcrNode wrap(Brix brix, Node node, JcrSession session)
-		{
-			return new ResourceNode(node, session);
-		}
-	};
+        @Override
+        public JcrNode wrap(Brix brix, Node node, JcrSession session) {
+            return new ResourceNode(node, session);
+        }
+    };
 
-	public ResourceNode(Node delegate, JcrSession session)
-	{
-		super(delegate, session);
-	}
+    private static final String REQUIRED_PROTOCOL = "brix:requiredProtocol";
 
-	private static final String REQUIRED_PROTOCOL = "brix:requiredProtocol";
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	public Protocol getRequiredProtocol()
-	{
-		if (!hasProperty(REQUIRED_PROTOCOL))
-		{
-			return Protocol.PRESERVE_CURRENT;
-		}
-		else
-		{
-			return Protocol.valueOf(getProperty(REQUIRED_PROTOCOL).getString());
-		}
-	}
+    public ResourceNode(Node delegate, JcrSession session) {
+        super(delegate, session);
+    }
 
-	public void setRequiredProtocol(Protocol protocol)
-	{
-		if (protocol == null)
-		{
-			throw new IllegalArgumentException("Argument 'protocol' may not be null.");
-		}
-		setProperty(REQUIRED_PROTOCOL, protocol.toString());
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	@Override
-	public String getUserVisibleType()
-	{
-		return "Resource";
-	}
+    @Override
+    public Protocol getRequiredProtocol() {
+        if (!hasProperty(REQUIRED_PROTOCOL)) {
+            return Protocol.PRESERVE_CURRENT;
+        } else {
+            return Protocol.valueOf(getProperty(REQUIRED_PROTOCOL).getString());
+        }
+    }
+
+    @Override
+    public String getUserVisibleType() {
+        return "Resource";
+    }
+
+    public void setRequiredProtocol(Protocol protocol) {
+        if (protocol == null) {
+            throw new IllegalArgumentException("Argument 'protocol' may not be null.");
+        }
+        setProperty(REQUIRED_PROTOCOL, protocol.toString());
+    }
 }

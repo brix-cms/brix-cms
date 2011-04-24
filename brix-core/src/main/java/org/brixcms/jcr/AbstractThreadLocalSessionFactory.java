@@ -24,47 +24,59 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public abstract class AbstractThreadLocalSessionFactory
-{
+public abstract class AbstractThreadLocalSessionFactory {
+// ------------------------------ FIELDS ------------------------------
+
     static final Logger logger = LoggerFactory.getLogger(AbstractThreadLocalSessionFactory.class);
 
-    ThreadLocal<Map<String, Session>> container = new ThreadLocal<Map<String, Session>>()
-    {
+    ThreadLocal<Map<String, Session>> container = new ThreadLocal<Map<String, Session>>() {
         @Override
-        protected Map<String, Session> initialValue()
-        {
+        protected Map<String, Session> initialValue() {
             return new HashMap<String, Session>();
         }
     };
 
-    public AbstractThreadLocalSessionFactory()
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public AbstractThreadLocalSessionFactory() {
         super();
     }
 
-    protected abstract Credentials getCredentials();
+// -------------------------- OTHER METHODS --------------------------
 
-    protected abstract Repository getRepository();
+    public void cleanup() {
+        for (Session session : container.get().values()) {
+            if (session.isLive()) {
+                session.logout();
+            }
+        }
+        container.get().clear();
+    }
 
-    public Session getCurrentSession(String workspace)
-    {
+    public Session createSession(String workspace) throws CannotOpenJcrSessionException {
+        try {
+            final Credentials credentials = getCredentials();
+            logger.debug("Opening unmanaged jcr session to workspace: {} with credentials: {}",
+                    workspace, credentials);
+            return getRepository().login(null, workspace);
+        } catch (Exception e) {
+            throw new CannotOpenJcrSessionException(workspace, e);
+        }
+    }
+
+    public Session getCurrentSession(String workspace) {
         final Map<String, Session> map = container.get();
         Session session = map.get(workspace);
-        if (session != null && !session.isLive())
-        {
+        if (session != null && !session.isLive()) {
             session = null;
         }
-        if (session == null)
-        {
-            try
-            {
-                final Credentials credentials=getCredentials();
+        if (session == null) {
+            try {
+                final Credentials credentials = getCredentials();
                 logger.debug("Opening managed jcr session to workspace: {} with credentials: {}",
-                    workspace, credentials);
+                        workspace, credentials);
                 session = getRepository().login(null, workspace);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new CannotOpenJcrSessionException(workspace, e);
             }
             map.put(workspace, session);
@@ -73,31 +85,7 @@ public abstract class AbstractThreadLocalSessionFactory
         return session;
     }
 
-    public void cleanup()
-    {
-        for (Session session : container.get().values())
-        {
-            if (session.isLive())
-            {
-                session.logout();
-            }
-        }
-        container.get().clear();
-    }
+    protected abstract Credentials getCredentials();
 
-    public Session createSession(String workspace) throws CannotOpenJcrSessionException
-    {
-        try
-        {
-            final Credentials credentials=getCredentials();
-            logger.debug("Opening unmanaged jcr session to workspace: {} with credentials: {}",
-                workspace, credentials);
-            return getRepository().login(null, workspace);
-        }
-        catch (Exception e)
-        {
-            throw new CannotOpenJcrSessionException(workspace, e);
-        }
-    }
-
+    protected abstract Repository getRepository();
 }

@@ -23,80 +23,69 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.qom.QueryObjectModelFactory;
 
 /**
- * 
  * @author Matej Knopp
  * @author igor.vaynberg
  */
-class QueryManagerWrapper extends AbstractWrapper implements JcrQueryManager
-{
+class QueryManagerWrapper extends AbstractWrapper implements JcrQueryManager {
+// -------------------------- STATIC METHODS --------------------------
 
-    protected QueryManagerWrapper(QueryManager delegate, JcrSession session)
-    {
-        super(delegate, session);
-    }
-
-    public static JcrQueryManager wrap(QueryManager delegate, JcrSession session)
-    {
-        if (delegate == null)
-        {
+    public static JcrQueryManager wrap(QueryManager delegate, JcrSession session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new QueryManagerWrapper(delegate, session);
         }
     }
 
-    @Override
-    public QueryManager getDelegate()
-    {
-        return (QueryManager)super.getDelegate();
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    protected QueryManagerWrapper(QueryManager delegate, JcrSession session) {
+        super(delegate, session);
     }
 
-    public JcrQuery createQuery(final String statement, final String language)
-    {
-        return executeCallback(new Callback<JcrQuery>()
-        {
-            public JcrQuery execute() throws Exception
-            {
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface JcrQueryManager ---------------------
+
+    @Override
+    public QueryManager getDelegate() {
+        return (QueryManager) super.getDelegate();
+    }
+
+// --------------------- Interface QueryManager ---------------------
+
+
+    public JcrQuery createQuery(final String statement, final String language) {
+        return executeCallback(new Callback<JcrQuery>() {
+            public JcrQuery execute() throws Exception {
                 return JcrQuery.Wrapper.wrap(getDelegate().createQuery(statement, language),
                         getJcrSession());
             }
         });
     }
 
-    public JcrQuery getQuery(final Node node)
-    {
-        return executeCallback(new Callback<JcrQuery>()
-        {
-            public JcrQuery execute() throws Exception
-            {
-                return JcrQuery.Wrapper.wrap(getDelegate().getQuery(unwrap(node)), getJcrSession());
-            }
-        });
-    }
-
-    public String[] getSupportedQueryLanguages()
-    {
-        return executeCallback(new Callback<String[]>()
-        {
-            public String[] execute() throws Exception
-            {
-                return getDelegate().getSupportedQueryLanguages();
-            }
-        });
-    }
-
-    public QueryObjectModelFactory getQOMFactory()
-    {
-        return executeCallback(new Callback<QueryObjectModelFactory>()
-        {
-
-            public QueryObjectModelFactory execute() throws Exception
-            {
+    public QueryObjectModelFactory getQOMFactory() {
+        return executeCallback(new Callback<QueryObjectModelFactory>() {
+            public QueryObjectModelFactory execute() throws Exception {
                 return getDelegate().getQOMFactory();
             }
         });
     }
 
+    public JcrQuery getQuery(final Node node) {
+        return executeCallback(new Callback<JcrQuery>() {
+            public JcrQuery execute() throws Exception {
+                return JcrQuery.Wrapper.wrap(getDelegate().getQuery(unwrap(node)), getJcrSession());
+            }
+        });
+    }
+
+    public String[] getSupportedQueryLanguages() {
+        return executeCallback(new Callback<String[]>() {
+            public String[] execute() throws Exception {
+                return getDelegate().getSupportedQueryLanguages();
+            }
+        });
+    }
 }

@@ -24,25 +24,23 @@ import javax.jcr.nodetype.NodeTypeManager;
 import java.io.StringReader;
 
 /**
- * 
  * @author igor.vaynberg
- * 
  */
-public class RepositoryUtil
-{
+public class RepositoryUtil {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory.getLogger(Brix.class);
 
+// -------------------------- STATIC METHODS --------------------------
+
     public static void registerNodeType(Workspace workspace, String typeName,
-            boolean referenceable, boolean orderable, boolean mixin)
-    {
-        try
-        {
+                                        boolean referenceable, boolean orderable, boolean mixin) {
+        try {
             NodeTypeManager manager = workspace.getNodeTypeManager();
 
-            if (manager.hasNodeType(typeName) == false)
-            {
+            if (manager.hasNodeType(typeName) == false) {
                 logger.info("Registering node type: {} in workspace {}", typeName, workspace
-                    .getName());
+                        .getName());
 
                 String type = "[" + typeName + "] > nt:unstructured ";
 
@@ -53,22 +51,16 @@ public class RepositoryUtil
                     type += "orderable ";
 
                 if (mixin)
-                	type += " mixin";
+                    type += " mixin";
 
                 CndImporter.registerNodeTypes(new StringReader(type), workspace.getSession());
-
-            }
-            else
-            {
+            } else {
                 logger.info("Type: {} already registered in workspace {}", typeName, workspace
-                    .getName());
+                        .getName());
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             // TODO should use a well know exception subclass
             throw new RuntimeException("Could not register type: " + typeName, e);
         }
     }
-
 }

@@ -16,7 +16,8 @@ package org.brixcms.plugin.site;
 
 import java.io.Serializable;
 
-public interface SimpleCallback extends Serializable
-{
-	public void execute();
+public interface SimpleCallback extends Serializable {
+// -------------------------- OTHER METHODS --------------------------
+
+    public void execute();
 }

@@ -20,33 +20,39 @@ import org.apache.wicket.validation.ValidationError;
 
 import java.util.Arrays;
 
-public class NodeNameValidator implements IValidator<String>
-{
+public class NodeNameValidator implements IValidator<String> {
+// ------------------------------ FIELDS ------------------------------
 
-    public static final char[] forbidden = new char[] { '\\', '/', ':', '?', '<', '>' };
+    public static final char[] forbidden = new char[]{'\\', '/', ':', '?', '<', '>'};
 
-    public static boolean isForbidden(char c)
-    {
-        for (int i = 0; i < forbidden.length; ++i)
-        {
-            if (c == forbidden[i])
-            {
+    private static final NodeNameValidator INSTANCE = new NodeNameValidator();
+
+// -------------------------- STATIC METHODS --------------------------
+
+    public static boolean isForbidden(char c) {
+        for (int i = 0; i < forbidden.length; ++i) {
+            if (c == forbidden[i]) {
                 return true;
             }
         }
         return false;
     }
 
-    @SuppressWarnings("unchecked")
-    public void validate(IValidatable validatable)
-    {
+    public static final NodeNameValidator getInstance() {
+        return INSTANCE;
+    }
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IValidator ---------------------
+
+    @SuppressWarnings("unchecked")
+    public void validate(IValidatable validatable) {
         String s = validatable.getValue().toString();
-        for (int i = 0; i < s.length(); ++i)
-        {
+        for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
-            if (isForbidden(c))
-            {
+            if (isForbidden(c)) {
                 String forbiddenStr = Arrays.toString(forbidden);
                 forbiddenStr = forbiddenStr.substring(1, forbiddenStr.length() - 1);
                 ValidationError error = new ValidationError();
@@ -59,12 +65,4 @@ public class NodeNameValidator implements IValidator<String>
             }
         }
     }
-
-    private static final NodeNameValidator INSTANCE = new NodeNameValidator();
-
-    public static final NodeNameValidator getInstance()
-    {
-        return INSTANCE;
-    }
-
 }

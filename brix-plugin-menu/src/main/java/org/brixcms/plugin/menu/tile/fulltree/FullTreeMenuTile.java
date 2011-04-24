@@ -20,32 +20,29 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
-public class FullTreeMenuTile implements Tile
-{
+public class FullTreeMenuTile implements Tile {
+// ------------------------ INTERFACE METHODS ------------------------
 
-	public String getDisplayName()
-	{
-		return "Menu - Full Tree";
-	}
 
-	public String getTypeName()
-	{
-		return "brix:plugin:menu:tile:fulltree";
-	}
+// --------------------- Interface Tile ---------------------
 
-	public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode)
-	{
-		return new FullTreeMenuEditor(id, tileContainerNode);
-	}
+    public String getDisplayName() {
+        return "Menu - Full Tree";
+    }
 
-	public Component newViewer(String id, IModel<BrixNode> tileNode)
-	{
-		return new MenuRenderer(id, tileNode);
-	}
+    public String getTypeName() {
+        return "brix:plugin:menu:tile:fulltree";
+    }
 
-	public boolean requiresSSL(IModel<BrixNode> tileNode)
-	{
-		return false;
-	}
+    public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
+        return new FullTreeMenuEditor(id, tileContainerNode);
+    }
 
+    public Component newViewer(String id, IModel<BrixNode> tileNode) {
+        return new MenuRenderer(id, tileNode);
+    }
+
+    public boolean requiresSSL(IModel<BrixNode> tileNode) {
+        return false;
+    }
 }

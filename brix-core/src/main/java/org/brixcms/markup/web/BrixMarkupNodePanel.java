@@ -28,49 +28,58 @@ import org.brixcms.web.generic.BrixGenericPanel;
 
 /**
  * Panel that uses {@link MarkupSource} for it's markup and child components.
- * 
+ *
  * @author Matej Knopp
  */
 public abstract class BrixMarkupNodePanel extends BrixGenericPanel<BrixNode> implements IMarkupResourceStreamProvider,
-		IMarkupCacheKeyProvider, MarkupSourceProvider
-{
-	public BrixMarkupNodePanel(String id, IModel<BrixNode> model)
-	{
-		super(id, model);
-	}
+        IMarkupCacheKeyProvider, MarkupSourceProvider {
+// ------------------------------ FIELDS ------------------------------
 
-	public BrixMarkupNodePanel(String id)
-	{
-		super(id);
-	}
+    private MarkupHelper markupHelper;
 
-	public String getCacheKey(MarkupContainer container, Class<?> containerClass)
-	{
-		return null;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	@Override
-	protected void onBeforeRender()
-	{
-		this.markupHelper = new MarkupHelper(this);
-		super.onBeforeRender();
-	}
+    public BrixMarkupNodePanel(String id) {
+        super(id);
+    }
 
-	public MarkupHelper getMarkupHelper() {
-		return markupHelper;
-	}
+    public BrixMarkupNodePanel(String id, IModel<BrixNode> model) {
+        super(id, model);
+    }
 
-	private MarkupHelper markupHelper;
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	@Override
-	protected void onDetach()
-	{
-		super.onDetach();
-		markupHelper = null;
-	}
+    public MarkupHelper getMarkupHelper() {
+        return markupHelper;
+    }
 
-	public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass)
-	{
-		return new StringResourceStream(markupHelper.getMarkup(), "text/html");
-	}
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IMarkupCacheKeyProvider ---------------------
+
+    public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
+        return null;
+    }
+
+// --------------------- Interface IMarkupResourceStreamProvider ---------------------
+
+
+    public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
+        return new StringResourceStream(markupHelper.getMarkup(), "text/html");
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected void onBeforeRender() {
+        this.markupHelper = new MarkupHelper(this);
+        super.onBeforeRender();
+    }
+
+    @Override
+    protected void onDetach() {
+        super.onDetach();
+        markupHelper = null;
+    }
 }

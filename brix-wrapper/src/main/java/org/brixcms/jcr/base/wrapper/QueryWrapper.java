@@ -20,71 +20,62 @@ import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
-class QueryWrapper extends BaseWrapper<Query> implements Query
-{
+class QueryWrapper extends BaseWrapper<Query> implements Query {
+// -------------------------- STATIC METHODS --------------------------
 
-    private QueryWrapper(Query delegate, SessionWrapper session)
-    {
-        super(delegate, session);
-    }
-
-    public static QueryWrapper wrap(Query delegate, SessionWrapper session)
-    {
-        if (delegate == null)
-        {
+    public static QueryWrapper wrap(Query delegate, SessionWrapper session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new QueryWrapper(delegate, session);
         }
     }
 
-    public QueryResult execute() throws RepositoryException
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    private QueryWrapper(Query delegate, SessionWrapper session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface Query ---------------------
+
+    public QueryResult execute() throws RepositoryException {
         return QueryResultWrapper.wrap(getDelegate().execute(), getSessionWrapper());
     }
 
-    public String getLanguage()
-    {
-        return getDelegate().getLanguage();
+    public void setLimit(long limit) {
+        getDelegate().setLimit(limit);
     }
 
-    public String getStatement()
-    {
+    public void setOffset(long offset) {
+        getDelegate().setOffset(offset);
+    }
+
+    public String getStatement() {
         return getDelegate().getStatement();
     }
 
-    public String getStoredQueryPath() throws RepositoryException
-    {
+    public String getLanguage() {
+        return getDelegate().getLanguage();
+    }
+
+    public String getStoredQueryPath() throws RepositoryException {
         return getDelegate().getStoredQueryPath();
     }
 
-    public Node storeAsNode(String absPath) throws RepositoryException
-    {
+    public Node storeAsNode(String absPath) throws RepositoryException {
         return NodeWrapper.wrap(getDelegate().storeAsNode(absPath), getSessionWrapper());
     }
 
     public void bindValue(String varName, Value value) throws IllegalArgumentException,
-            RepositoryException
-    {
+            RepositoryException {
         getDelegate().bindValue(varName, value);
     }
 
-    public String[] getBindVariableNames() throws RepositoryException
-    {
+    public String[] getBindVariableNames() throws RepositoryException {
         return getDelegate().getBindVariableNames();
     }
-
-    public void setLimit(long limit)
-    {
-        getDelegate().setLimit(limit);
-
-    }
-
-    public void setOffset(long offset)
-    {
-        getDelegate().setOffset(offset);
-    }
-
 }

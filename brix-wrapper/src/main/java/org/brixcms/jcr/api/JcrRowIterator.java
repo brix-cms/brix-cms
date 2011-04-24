@@ -19,22 +19,28 @@ import org.brixcms.jcr.api.wrapper.WrapperAccessor;
 import javax.jcr.query.RowIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-public interface JcrRowIterator extends RowIterator
-{
+public interface JcrRowIterator extends RowIterator {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrRowIterator wrap(RowIterator delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrRowIteratorWrapper.wrap(delegate, session);
-        };
-    };
 
-    public RowIterator getDelegate();
+// --------------------- Interface RowIterator ---------------------
 
     public JcrRow nextRow();
 
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public RowIterator getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrRowIterator wrap(RowIterator delegate, JcrSession session) {
+            return WrapperAccessor.JcrRowIteratorWrapper.wrap(delegate, session);
+        }
+
+        ;
+    }
 }

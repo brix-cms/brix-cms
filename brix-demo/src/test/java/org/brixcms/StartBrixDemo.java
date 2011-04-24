@@ -23,12 +23,14 @@ import org.mortbay.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StartBrixDemo
-{
+public class StartBrixDemo {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory.getLogger(StartBrixDemo.class);
 
-    public static void main(String[] args) throws Exception
-    {
+// --------------------------- main() method ---------------------------
+
+    public static void main(String[] args) throws Exception {
         ApplicationProperties properties = new ApplicationProperties("brix.demo");
 
         Server server = new Server();
@@ -52,7 +54,7 @@ public class StartBrixDemo
         sslConnector.setPort(port);
 
 
-        server.setConnectors(new Connector[] { connector, sslConnector });
+        server.setConnectors(new Connector[]{connector, sslConnector});
 
         WebAppContext bb = new WebAppContext();
         bb.setServer(server);
@@ -68,19 +70,15 @@ public class StartBrixDemo
 
         server.addHandler(bb);
 
-        try
-        {
+        try {
             System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
             server.start();
-            while (System.in.available() == 0)
-            {
+            while (System.in.available() == 0) {
                 Thread.sleep(5000);
             }
             server.stop();
             server.join();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             System.exit(100);
         }

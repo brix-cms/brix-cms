@@ -27,56 +27,55 @@ import org.brixcms.web.model.ModelBuffer;
 import java.util.Arrays;
 import java.util.List;
 
-public class TextResourceEditor extends Panel
-{
+public class TextResourceEditor extends Panel {
+// ------------------------------ FIELDS ------------------------------
 
+    private DropDownChoice<Protocol> requiredProtocol;
 
-	private DropDownChoice<Protocol> requiredProtocol;
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public TextResourceEditor(String id, ModelBuffer model)
-	{
-		super(id);
+    public TextResourceEditor(String id, ModelBuffer model) {
+        super(id);
 
-		// protocol field
-		List<Protocol> protocols = Arrays.asList(Protocol.values());
-		IChoiceRenderer<Protocol> renderer = new ProtocolRenderer();
-		IModel<Protocol> protocolModel = model.forProperty("requiredProtocol");
-		requiredProtocol = new DropDownChoice<Protocol>("requiredProtocol", protocolModel,
-				protocols, renderer);
-		add(requiredProtocol.setNullValid(false));
+        // protocol field
+        List<Protocol> protocols = Arrays.asList(Protocol.values());
+        IChoiceRenderer<Protocol> renderer = new ProtocolRenderer();
+        IModel<Protocol> protocolModel = model.forProperty("requiredProtocol");
+        requiredProtocol = new DropDownChoice<Protocol>("requiredProtocol", protocolModel,
+                protocols, renderer);
+        add(requiredProtocol.setNullValid(false));
 
-		// mimetype field
-		IModel<String> mimeTypeModel = model.forProperty("mimeType");
-		add(new TextField<String>("mimeType", mimeTypeModel).add(new TextMimeTypeValidator())
-				.setLabel(new ResourceModel("mimeType")));
+        // mimetype field
+        IModel<String> mimeTypeModel = model.forProperty("mimeType");
+        add(new TextField<String>("mimeType", mimeTypeModel).add(new TextMimeTypeValidator())
+                .setLabel(new ResourceModel("mimeType")));
 
-		// content field
-		IModel<String> contentModel = model.forProperty("dataAsString");
-		add(new TextArea<String>("content", contentModel));
-	}
+        // content field
+        IModel<String> contentModel = model.forProperty("dataAsString");
+        add(new TextArea<String>("content", contentModel));
+    }
 
-	@Override
-	protected void onBeforeRender()
-	{
-		// default require protocol to preserve
-		if (requiredProtocol.getModelObject() == null)
-		{
-			requiredProtocol.setModelObject(Protocol.PRESERVE_CURRENT);
-		}
+// -------------------------- OTHER METHODS --------------------------
 
-		super.onBeforeRender();
-	}
+    @Override
+    protected void onBeforeRender() {
+        // default require protocol to preserve
+        if (requiredProtocol.getModelObject() == null) {
+            requiredProtocol.setModelObject(Protocol.PRESERVE_CURRENT);
+        }
 
-	private final class ProtocolRenderer implements IChoiceRenderer<Protocol>
-	{
-		public Object getDisplayValue(Protocol object)
-		{
-			return getString(object.toString());
-		}
+        super.onBeforeRender();
+    }
 
-		public String getIdValue(Protocol object, int index)
-		{
-			return object.toString();
-		}
-	}
+// -------------------------- INNER CLASSES --------------------------
+
+    private final class ProtocolRenderer implements IChoiceRenderer<Protocol> {
+        public Object getDisplayValue(Protocol object) {
+            return getString(object.toString());
+        }
+
+        public String getIdValue(Protocol object, int index) {
+            return object.toString();
+        }
+    }
 }

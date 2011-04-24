@@ -27,81 +27,70 @@ import org.brixcms.web.util.AbstractModel;
 
 import java.util.List;
 
-public class MenuPicker extends Panel
-{
+public class MenuPicker extends Panel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	/**
-	 * @param id
-	 * @param selection
-	 *            model containing selected menu node
-	 * @param workspaceNode
-	 *            model containing any existing node in the repository - used to
-	 *            retrieve the workspace name. Usually this is the node that
-	 *            represents the tile's parent.
-	 */
-	public MenuPicker(String id, IModel<BrixNode> selection, IModel<BrixNode> workspaceNode)
-	{
-		super(id, selection);
-		add(new MenuListView("menues", selection, workspaceNode));
-	}
+    /**
+     * @param id
+     * @param selection     model containing selected menu node
+     * @param workspaceNode model containing any existing node in the repository - used to retrieve the workspace name.
+     *                      Usually this is the node that represents the tile's parent.
+     */
+    public MenuPicker(String id, IModel<BrixNode> selection, IModel<BrixNode> workspaceNode) {
+        super(id, selection);
+        add(new MenuListView("menues", selection, workspaceNode));
+    }
 
-	private static class MenuListView extends ListView<BrixNode>
-	{
-		private final IModel<BrixNode> selection;
-		
-		public MenuListView(String id, IModel<BrixNode> selection, IModel<BrixNode> workspaceNode)
-		{
-			super(id, new MenuNodesListModel(workspaceNode));
-			this.selection = selection;
-		}
+// -------------------------- INNER CLASSES --------------------------
 
-		@Override
-		protected void populateItem(final ListItem<BrixNode> item)
-		{
-			Link<Object> select = new Link<Object>("select")
-			{
-				@Override
-				public void onClick()
-				{
-					selection.setObject(item.getModelObject());
-				}
+    private static class MenuListView extends ListView<BrixNode> {
+        private final IModel<BrixNode> selection;
 
-				@Override
-				public boolean isEnabled()
-				{
-					BrixNode current = selection.getObject();
-					return current == null || !item.getModelObject().isSame(current);
-				}
-			};
-			IModel<String> labelModel = new AbstractModel<String>()
-			{
-				@Override
-				public String getObject()
-				{
-					BrixNode node = item.getModelObject();
-					Menu menu = new Menu();
-					menu.loadName(node);
-					return menu.getName();
-				}
-			};
-			select.add(new Label("label", labelModel));
-			item.add(select);
-		}
+        public MenuListView(String id, IModel<BrixNode> selection, IModel<BrixNode> workspaceNode) {
+            super(id, new MenuNodesListModel(workspaceNode));
+            this.selection = selection;
+        }
 
-		@Override
-		protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel,
-				int index)
-		{
-			List<BrixNode> nodes = listViewModel.getObject();
-			return new BrixNodeModel(nodes.get(index));
-		}
+        @Override
+        protected void populateItem(final ListItem<BrixNode> item) {
+            Link<Object> select = new Link<Object>("select") {
+                @Override
+                public void onClick() {
+                    selection.setObject(item.getModelObject());
+                }
 
-		@Override
-		protected void detachModel()
-		{
-			super.detachModel();
-			selection.detach();
-		}
-	};
+                @Override
+                public boolean isEnabled() {
+                    BrixNode current = selection.getObject();
+                    return current == null || !item.getModelObject().isSame(current);
+                }
+            };
+            IModel<String> labelModel = new AbstractModel<String>() {
+                @Override
+                public String getObject() {
+                    BrixNode node = item.getModelObject();
+                    Menu menu = new Menu();
+                    menu.loadName(node);
+                    return menu.getName();
+                }
+            };
+            select.add(new Label("label", labelModel));
+            item.add(select);
+        }
 
+        @Override
+        protected IModel<BrixNode> getListItemModel(IModel<? extends List<BrixNode>> listViewModel,
+                                                    int index) {
+            List<BrixNode> nodes = listViewModel.getObject();
+            return new BrixNodeModel(nodes.get(index));
+        }
+
+        @Override
+        protected void detachModel() {
+            super.detachModel();
+            selection.detach();
+        }
+    }
+
+    ;
 }

@@ -24,61 +24,61 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.menu.tile.MenuPicker;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
-class FullTreeMenuEditor extends TileEditorPanel
-{
-	private BrixNodeModel menu = new BrixNodeModel();
-	private String selectedLiCssClass;
-	private String firstLiCssClass;
-	private String lastLiCssClass;
-	private Boolean selectAllParentLi;
-	private String outerUlCssClass;
-	private String innerUlCssClass;
+class FullTreeMenuEditor extends TileEditorPanel {
+// ------------------------------ FIELDS ------------------------------
 
-	public FullTreeMenuEditor(String id, IModel<BrixNode> tileParent)
-	{
-		super(id);
-		add(new MenuPicker("menuPicker", menu, tileParent));
-		Form<?> form = new Form<Void>("form");
-		add(form);
-		form.add(new TextField<String>("selectedLiCssClass", new PropertyModel<String>(this,
-				"selectedLiCssClass")));
+    private BrixNodeModel menu = new BrixNodeModel();
+    private String selectedLiCssClass;
+    private String firstLiCssClass;
+    private String lastLiCssClass;
+    private Boolean selectAllParentLi;
+    private String outerUlCssClass;
+    private String innerUlCssClass;
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public FullTreeMenuEditor(String id, IModel<BrixNode> tileParent) {
+        super(id);
+        add(new MenuPicker("menuPicker", menu, tileParent));
+        Form<?> form = new Form<Void>("form");
+        add(form);
+        form.add(new TextField<String>("selectedLiCssClass", new PropertyModel<String>(this,
+                "selectedLiCssClass")));
         form.add(new CheckBox("selectAllParentLi", new PropertyModel<Boolean>(this,
-				"selectAllParentLi")));
+                "selectAllParentLi")));
         form.add(new TextField<String>("firstLiCssClass", new PropertyModel<String>(this,
                 "firstLiCssClass")));
         form.add(new TextField<String>("lastLiCssClass", new PropertyModel<String>(this,
                 "lastLiCssClass")));
-		form.add(new TextField<String>("outerUlCssClass", new PropertyModel<String>(this,
-				"outerUlCssClass")));
-		form.add(new TextField<String>("innerUlCssClass", new PropertyModel<String>(this,
-				"innerUlCssClass")));
-	}
+        form.add(new TextField<String>("outerUlCssClass", new PropertyModel<String>(this,
+                "outerUlCssClass")));
+        form.add(new TextField<String>("innerUlCssClass", new PropertyModel<String>(this,
+                "innerUlCssClass")));
+    }
 
-	@Override
-	public void load(BrixNode node)
-	{
-		NodeAdapter adapter = new NodeAdapter(node);
-		menu.setObject(adapter.getMenuNode());
-		selectedLiCssClass = adapter.getSelectedLiCssClass();
-		firstLiCssClass = adapter.getFirstLiCssClass();
-		lastLiCssClass = adapter.getLastLiCssClass();
-		outerUlCssClass = adapter.getOuterUlCssClass();
-		innerUlCssClass = adapter.getInnerUlCssClass();
-		selectAllParentLi = adapter.getSelectAllParentLi();
-	}
+// -------------------------- OTHER METHODS --------------------------
 
-	@Override
-	public void save(BrixNode node)
-	{
-		NodeAdapter adapter = new NodeAdapter(node);
-		adapter.setMenuNode(menu.getObject());
-		adapter.setSelectedLiCssClass(selectedLiCssClass);
-		adapter.setFirstLiCssClass(firstLiCssClass);
-		adapter.setLastLiCssClass(lastLiCssClass);
-		adapter.setOuterUlCssClass(outerUlCssClass);
-		adapter.setInnerUlCssClass(innerUlCssClass);
+    @Override
+    public void load(BrixNode node) {
+        NodeAdapter adapter = new NodeAdapter(node);
+        menu.setObject(adapter.getMenuNode());
+        selectedLiCssClass = adapter.getSelectedLiCssClass();
+        firstLiCssClass = adapter.getFirstLiCssClass();
+        lastLiCssClass = adapter.getLastLiCssClass();
+        outerUlCssClass = adapter.getOuterUlCssClass();
+        innerUlCssClass = adapter.getInnerUlCssClass();
+        selectAllParentLi = adapter.getSelectAllParentLi();
+    }
+
+    @Override
+    public void save(BrixNode node) {
+        NodeAdapter adapter = new NodeAdapter(node);
+        adapter.setMenuNode(menu.getObject());
+        adapter.setSelectedLiCssClass(selectedLiCssClass);
+        adapter.setFirstLiCssClass(firstLiCssClass);
+        adapter.setLastLiCssClass(lastLiCssClass);
+        adapter.setOuterUlCssClass(outerUlCssClass);
+        adapter.setInnerUlCssClass(innerUlCssClass);
         adapter.setSelectAllParentLi(selectAllParentLi);
-	}
-
-
+    }
 }

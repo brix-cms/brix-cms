@@ -32,81 +32,75 @@ import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.nodepage.ForbiddenPage;
 import org.brixcms.web.reference.Reference;
 
-public class FolderNodePlugin implements SiteNodePlugin
-{
+public class FolderNodePlugin implements SiteNodePlugin {
+// ------------------------------ FIELDS ------------------------------
 
-	public static final String TYPE = Brix.NS_PREFIX + "folder";
+    public static final String TYPE = Brix.NS_PREFIX + "folder";
 
-	public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters)
-	{
-		BrixNode node = nodeModel.getObject();
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		String path = requestParameters.getPath();
-		if (!path.startsWith("/"))
-			path = "/" + path;
+    public FolderNodePlugin(SitePlugin sp) {
+        sp.registerManageNodeTabFactory(new ManageFolderNodeTabFactory());
+    }
 
-		BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get().getProcessor();
-		Path uriPath = processor.getUriPathForNode(node);
+// ------------------------ INTERFACE METHODS ------------------------
 
-		// check if the exact request path matches the node path
-		if (new Path(path).equals(uriPath) == false)
-		{
-			return null;
-		}
 
-		FolderNode folder = (FolderNode) node;
-		Reference redirect = folder.getRedirectReference();
+// --------------------- Interface SiteNodePlugin ---------------------
 
-		if (redirect != null && !redirect.isEmpty())
-		{
-			IRequestTarget target = redirect.getRequestTarget();
-			final CharSequence url = RequestCycle.get().urlFor(target);
-			return new IRequestTarget()
-			{
-				public void detach(RequestCycle requestCycle)
-				{
-				
-				}
 
-				public void respond(RequestCycle requestCycle)
-				{
-					requestCycle.getResponse().redirect(url.toString());
-				}
-			};
-		}
-		else
-		{
-			return new PageRequestTarget(new ForbiddenPage(path));
-		}
-	}
+    public String getNodeType() {
+        return TYPE;
+    }
 
-	public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack)
-	{
-		return new CreateFolderPanel(id, parentNode, goBack);
-	}
+    public String getName() {
+        return "Folder";
+    }
 
-	public NodeConverter getConverterForNode(BrixNode node)
-	{
-		return null;
-	}
+    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters) {
+        BrixNode node = nodeModel.getObject();
 
-	public String getNodeType()
-	{
-		return TYPE;
-	}
+        String path = requestParameters.getPath();
+        if (!path.startsWith("/"))
+            path = "/" + path;
 
-	public String getName()
-	{
-		return "Folder";
-	}
+        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get().getProcessor();
+        Path uriPath = processor.getUriPathForNode(node);
 
-	public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode)
-	{
-		return new ResourceModel("createFolder", "Create New Folder");
-	}
+        // check if the exact request path matches the node path
+        if (new Path(path).equals(uriPath) == false) {
+            return null;
+        }
 
-	public FolderNodePlugin(SitePlugin sp)
-	{
-		sp.registerManageNodeTabFactory(new ManageFolderNodeTabFactory());
-	}
+        FolderNode folder = (FolderNode) node;
+        Reference redirect = folder.getRedirectReference();
+
+        if (redirect != null && !redirect.isEmpty()) {
+            IRequestTarget target = redirect.getRequestTarget();
+            final CharSequence url = RequestCycle.get().urlFor(target);
+            return new IRequestTarget() {
+                public void detach(RequestCycle requestCycle) {
+
+                }
+
+                public void respond(RequestCycle requestCycle) {
+                    requestCycle.getResponse().redirect(url.toString());
+                }
+            };
+        } else {
+            return new PageRequestTarget(new ForbiddenPage(path));
+        }
+    }
+
+    public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode) {
+        return new ResourceModel("createFolder", "Create New Folder");
+    }
+
+    public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack) {
+        return new CreateFolderPanel(id, parentNode, goBack);
+    }
+
+    public NodeConverter getConverterForNode(BrixNode node) {
+        return null;
+    }
 }

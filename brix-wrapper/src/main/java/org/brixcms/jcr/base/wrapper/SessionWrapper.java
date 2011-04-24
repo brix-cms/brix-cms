@@ -24,7 +24,19 @@ import org.brixcms.jcr.base.filter.ValueFilter;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-import javax.jcr.*;
+import javax.jcr.AccessDeniedException;
+import javax.jcr.Credentials;
+import javax.jcr.Item;
+import javax.jcr.ItemNotFoundException;
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.UnsupportedRepositoryOperationException;
+import javax.jcr.ValueFactory;
+import javax.jcr.Workspace;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.retention.RetentionManager;
@@ -39,311 +51,279 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-class SessionWrapper extends BaseWrapper<Session> implements BrixSession
-{
+class SessionWrapper extends BaseWrapper<Session> implements BrixSession {
+// ------------------------------ FIELDS ------------------------------
 
-	private SessionWrapper(Session session)
-	{
-		super(session, null);
+    final Set<Node> raisedSaveEvent = new HashSet<Node>();
 
-		changeLogActionHandler = new ChangeLogActionHandler(new ChangeLog(), this);
-		actionHandler.addHandler(changeLogActionHandler);
-	}
+    private final CompoundActionHandler actionHandler = new CompoundActionHandler();
 
-	public static SessionWrapper wrap(Session session)
-	{
-		if (session == null)
-		{
-			return null;
-		}
-		else
-		{
-			return new SessionWrapper(session);
-		}
-	}
+    private final ChangeLogActionHandler changeLogActionHandler;
 
-	/** @deprecated */
-	@Deprecated
-	public void addLockToken(String lt)
-	{
-		getDelegate().addLockToken(lt);
-	}
+    private final Map<String, Object> attributesMap = new HashMap<String, Object>();
 
-	public void checkPermission(String absPath, String actions) throws AccessControlException,
-			RepositoryException
-	{
-		getDelegate().checkPermission(absPath, actions);
-	}
+    private ValueFilter valueFilter = new ValueFilter();
 
-	public void exportDocumentView(String absPath, ContentHandler contentHandler,
-			boolean skipBinary, boolean noRecurse) throws SAXException, RepositoryException
-	{
-		getDelegate().exportDocumentView(absPath, contentHandler, skipBinary, noRecurse);
-	}
+// -------------------------- STATIC METHODS --------------------------
 
-	public void exportDocumentView(String absPath, OutputStream out, boolean skipBinary,
-			boolean noRecurse) throws IOException, RepositoryException
-	{
-		getDelegate().exportDocumentView(absPath, out, skipBinary, noRecurse);
-	}
+    public static SessionWrapper wrap(Session session) {
+        if (session == null) {
+            return null;
+        } else {
+            return new SessionWrapper(session);
+        }
+    }
 
-	public void exportSystemView(String absPath, ContentHandler contentHandler, boolean skipBinary,
-			boolean noRecurse) throws SAXException, RepositoryException
-	{
-		getDelegate().exportSystemView(absPath, contentHandler, skipBinary, noRecurse);
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public void exportSystemView(String absPath, OutputStream out, boolean skipBinary,
-			boolean noRecurse) throws IOException, RepositoryException
-	{
-		getDelegate().exportSystemView(absPath, out, skipBinary, noRecurse);
-	}
+    private SessionWrapper(Session session) {
+        super(session, null);
 
-	public Object getAttribute(String name)
-	{
-		return getDelegate().getAttribute(name);
-	}
+        changeLogActionHandler = new ChangeLogActionHandler(new ChangeLog(), this);
+        actionHandler.addHandler(changeLogActionHandler);
+    }
 
-	public String[] getAttributeNames()
-	{
-		return getDelegate().getAttributeNames();
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	public ContentHandler getImportContentHandler(String parentAbsPath, int uuidBehavior)
-			throws RepositoryException
-	{
-		return getDelegate().getImportContentHandler(parentAbsPath, uuidBehavior);
-	}
+    public CompoundActionHandler getActionHandler() {
+        return actionHandler;
+    }
 
-	public Item getItem(String absPath) throws RepositoryException
-	{
-		return ItemWrapper.wrap(getDelegate().getItem(absPath), this);
-	}
+    public Map<String, Object> getAttributesMap() {
+        return attributesMap;
+    }
 
-	/** @deprecated */
-	@Deprecated
-	public String[] getLockTokens()
-	{
-		return getDelegate().getLockTokens();
-	}
+    public ValueFilter getValueFilter() {
+        return valueFilter;
+    }
 
-	public String getNamespacePrefix(String uri) throws RepositoryException
-	{
-		return getDelegate().getNamespacePrefix(uri);
-	}
+    public void setValueFilter(ValueFilter valueFilter) {
+        if (valueFilter == null) {
+            throw new IllegalArgumentException("Argument 'valueFilter' may not be null.");
+        }
+        this.valueFilter = valueFilter;
+    }
 
-	public String[] getNamespacePrefixes() throws RepositoryException
-	{
-		return getDelegate().getNamespacePrefixes();
-	}
-
-	public String getNamespaceURI(String prefix) throws RepositoryException
-	{
-		return getDelegate().getNamespaceURI(prefix);
-	}
-
-	public Node getNodeByIdentifier(String id) throws ItemNotFoundException, RepositoryException
-	{
-		return NodeWrapper.wrap(getDelegate().getNodeByIdentifier(id), this);
-	}
-
-	/** @deprecated */
-	@Deprecated
-	public Node getNodeByUUID(String uuid) throws RepositoryException
-	{
-		return NodeWrapper.wrap(getDelegate().getNodeByUUID(uuid), this);
-	}
-
-	public Repository getRepository()
-	{
-		return getDelegate().getRepository();
-	}
-
-	public Node getRootNode() throws RepositoryException
-	{
-		return NodeWrapper.wrap(getDelegate().getRootNode(), this);
-	}
-
-	public String getUserID()
-	{
-		return getDelegate().getUserID();
-	}
-
-	public ValueFactory getValueFactory() throws RepositoryException
-	{
-		return ValueFactoryWrapper.wrap(getDelegate().getValueFactory(), this);
-	}
-
-	public Workspace getWorkspace()
-	{
-		return WorkspaceWrapper.wrap(getDelegate().getWorkspace(), this);
-	}
-
-	public boolean hasPendingChanges() throws RepositoryException
-	{
-		return getDelegate().hasPendingChanges();
-	}
-
-	public Session impersonate(Credentials credentials) throws RepositoryException
-	{
-		return SessionWrapper.wrap(getDelegate().impersonate(credentials));
-	}
-
-	public void importXML(String parentAbsPath, InputStream in, int uuidBehavior)
-			throws IOException, RepositoryException
-	{
-		getActionHandler().beforeSessionImportXML(parentAbsPath);
-		getDelegate().importXML(parentAbsPath, in, uuidBehavior);
-		getActionHandler().afterSessionImportXML(parentAbsPath);
-	}
-
-	public boolean isLive()
-	{
-		return getDelegate().isLive();
-	}
-
-	public boolean itemExists(String absPath) throws RepositoryException
-	{
-		return getDelegate().itemExists(absPath);
-	}
-
-	public void logout()
-	{
-		getDelegate().logout();
-	}
-
-	public void move(String srcAbsPath, String destAbsPath) throws RepositoryException
-	{
-		getActionHandler().beforeSessionNodeMove(srcAbsPath, destAbsPath);
-		getDelegate().move(srcAbsPath, destAbsPath);
-		getActionHandler().afterSessionNodeMove(srcAbsPath, destAbsPath);
-	}
-
-	public void refresh(boolean keepChanges) throws RepositoryException
-	{
-		getActionHandler().beforeSessionRefresh(keepChanges);
-		getDelegate().refresh(keepChanges);
-		getActionHandler().afterSessionRefresh(keepChanges);
-	}
-
-	/** @deprecated */
-	@Deprecated
-	public void removeLockToken(String lt)
-	{
-		getDelegate().removeLockToken(lt);
-	}
-
-	public void save() throws RepositoryException
-	{
-		getActionHandler().beforeSessionSave();
-		getDelegate().save();
-		getActionHandler().afterSessionSave();
-	}
-
-	public void setNamespacePrefix(String prefix, String uri) throws RepositoryException
-	{
-		getDelegate().setNamespacePrefix(prefix, uri);
-	}
-
-	final Set<Node> raisedSaveEvent = new HashSet<Node>();
-
-	private final CompoundActionHandler actionHandler = new CompoundActionHandler();
-
-	public CompoundActionHandler getActionHandler()
-	{
-		return actionHandler;
-	}
-
-	private final ChangeLogActionHandler changeLogActionHandler;
+// ------------------------ INTERFACE METHODS ------------------------
 
 
-	public void addActionHandler(AbstractActionHandler handler)
-	{
-		actionHandler.addHandler(handler);
-
-	}
-
-	public void addEventsListener(EventsListener listener)
-	{
-		changeLogActionHandler.registerEventsListener(listener);
-	}
-
-	private final Map<String, Object> attributesMap = new HashMap<String, Object>();
-
-	public Map<String, Object> getAttributesMap()
-	{
-		return attributesMap;
-	}
-
-	private ValueFilter valueFilter = new ValueFilter();
-
-	public void setValueFilter(ValueFilter valueFilter)
-	{
-		if (valueFilter == null)
-		{
-			throw new IllegalArgumentException("Argument 'valueFilter' may not be null.");
-		}
-		this.valueFilter = valueFilter;
-	}
-
-	public ValueFilter getValueFilter()
-	{
-		return valueFilter;
-	}
-
-	public AccessControlManager getAccessControlManager()
-			throws UnsupportedRepositoryOperationException, RepositoryException
-	{
-		return getDelegate().getAccessControlManager();
-	}
-
-	public Node getNode(String absPath) throws PathNotFoundException, RepositoryException
-	{
-		return NodeWrapper.wrap(getDelegate().getNode(absPath), this);
-	}
+// --------------------- Interface BrixSession ---------------------
 
 
-	public Property getProperty(String absPath) throws PathNotFoundException, RepositoryException
-	{
-		return PropertyWrapper.wrap(getDelegate().getProperty(absPath), this);
-	}
+    public void addActionHandler(AbstractActionHandler handler) {
+        actionHandler.addHandler(handler);
+    }
 
-	public RetentionManager getRetentionManager() throws UnsupportedRepositoryOperationException,
-			RepositoryException
-	{
-		return getDelegate().getRetentionManager();
-	}
+    public void addEventsListener(EventsListener listener) {
+        changeLogActionHandler.registerEventsListener(listener);
+    }
 
-	public boolean hasCapability(String methodName, Object target, Object[] arguments)
-			throws RepositoryException
-	{
-		return getDelegate().hasCapability(methodName, target, arguments);
-	}
+// --------------------- Interface Session ---------------------
 
-	public boolean hasPermission(String absPath, String actions) throws RepositoryException
-	{
-		return getDelegate().hasPermission(absPath, actions);
-	}
 
-	public boolean nodeExists(String absPath) throws RepositoryException
-	{
-		return getDelegate().nodeExists(absPath);
-	}
+    public Repository getRepository() {
+        return getDelegate().getRepository();
+    }
 
-	public boolean propertyExists(String absPath) throws RepositoryException
-	{
-		return getDelegate().propertyExists(absPath);
-	}
+    public String getUserID() {
+        return getDelegate().getUserID();
+    }
 
-	public void removeItem(String absPath) throws VersionException, LockException,
-			ConstraintViolationException, AccessDeniedException, RepositoryException
-	{
-		getDelegate().removeItem(absPath);
-	}
+    public String[] getAttributeNames() {
+        return getDelegate().getAttributeNames();
+    }
 
-	@Override
-	public SessionWrapper getSessionWrapper()
-	{
-		return this;
-	}
+    public Object getAttribute(String name) {
+        return getDelegate().getAttribute(name);
+    }
+
+    public Workspace getWorkspace() {
+        return WorkspaceWrapper.wrap(getDelegate().getWorkspace(), this);
+    }
+
+    public Node getRootNode() throws RepositoryException {
+        return NodeWrapper.wrap(getDelegate().getRootNode(), this);
+    }
+
+    public Session impersonate(Credentials credentials) throws RepositoryException {
+        return SessionWrapper.wrap(getDelegate().impersonate(credentials));
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public Node getNodeByUUID(String uuid) throws RepositoryException {
+        return NodeWrapper.wrap(getDelegate().getNodeByUUID(uuid), this);
+    }
+
+    public Node getNodeByIdentifier(String id) throws ItemNotFoundException, RepositoryException {
+        return NodeWrapper.wrap(getDelegate().getNodeByIdentifier(id), this);
+    }
+
+    public Item getItem(String absPath) throws RepositoryException {
+        return ItemWrapper.wrap(getDelegate().getItem(absPath), this);
+    }
+
+    public Node getNode(String absPath) throws PathNotFoundException, RepositoryException {
+        return NodeWrapper.wrap(getDelegate().getNode(absPath), this);
+    }
+
+    public Property getProperty(String absPath) throws PathNotFoundException, RepositoryException {
+        return PropertyWrapper.wrap(getDelegate().getProperty(absPath), this);
+    }
+
+    public boolean itemExists(String absPath) throws RepositoryException {
+        return getDelegate().itemExists(absPath);
+    }
+
+    public boolean nodeExists(String absPath) throws RepositoryException {
+        return getDelegate().nodeExists(absPath);
+    }
+
+    public boolean propertyExists(String absPath) throws RepositoryException {
+        return getDelegate().propertyExists(absPath);
+    }
+
+    public void move(String srcAbsPath, String destAbsPath) throws RepositoryException {
+        getActionHandler().beforeSessionNodeMove(srcAbsPath, destAbsPath);
+        getDelegate().move(srcAbsPath, destAbsPath);
+        getActionHandler().afterSessionNodeMove(srcAbsPath, destAbsPath);
+    }
+
+    public void removeItem(String absPath) throws VersionException, LockException,
+            ConstraintViolationException, AccessDeniedException, RepositoryException {
+        getDelegate().removeItem(absPath);
+    }
+
+    public void save() throws RepositoryException {
+        getActionHandler().beforeSessionSave();
+        getDelegate().save();
+        getActionHandler().afterSessionSave();
+    }
+
+    public void refresh(boolean keepChanges) throws RepositoryException {
+        getActionHandler().beforeSessionRefresh(keepChanges);
+        getDelegate().refresh(keepChanges);
+        getActionHandler().afterSessionRefresh(keepChanges);
+    }
+
+    public boolean hasPendingChanges() throws RepositoryException {
+        return getDelegate().hasPendingChanges();
+    }
+
+    public ValueFactory getValueFactory() throws RepositoryException {
+        return ValueFactoryWrapper.wrap(getDelegate().getValueFactory(), this);
+    }
+
+    public boolean hasPermission(String absPath, String actions) throws RepositoryException {
+        return getDelegate().hasPermission(absPath, actions);
+    }
+
+    public void checkPermission(String absPath, String actions) throws AccessControlException,
+            RepositoryException {
+        getDelegate().checkPermission(absPath, actions);
+    }
+
+    public boolean hasCapability(String methodName, Object target, Object[] arguments)
+            throws RepositoryException {
+        return getDelegate().hasCapability(methodName, target, arguments);
+    }
+
+    public ContentHandler getImportContentHandler(String parentAbsPath, int uuidBehavior)
+            throws RepositoryException {
+        return getDelegate().getImportContentHandler(parentAbsPath, uuidBehavior);
+    }
+
+    public void importXML(String parentAbsPath, InputStream in, int uuidBehavior)
+            throws IOException, RepositoryException {
+        getActionHandler().beforeSessionImportXML(parentAbsPath);
+        getDelegate().importXML(parentAbsPath, in, uuidBehavior);
+        getActionHandler().afterSessionImportXML(parentAbsPath);
+    }
+
+    public void exportSystemView(String absPath, ContentHandler contentHandler, boolean skipBinary,
+                                 boolean noRecurse) throws SAXException, RepositoryException {
+        getDelegate().exportSystemView(absPath, contentHandler, skipBinary, noRecurse);
+    }
+
+    public void exportSystemView(String absPath, OutputStream out, boolean skipBinary,
+                                 boolean noRecurse) throws IOException, RepositoryException {
+        getDelegate().exportSystemView(absPath, out, skipBinary, noRecurse);
+    }
+
+    public void exportDocumentView(String absPath, ContentHandler contentHandler,
+                                   boolean skipBinary, boolean noRecurse) throws SAXException, RepositoryException {
+        getDelegate().exportDocumentView(absPath, contentHandler, skipBinary, noRecurse);
+    }
+
+    public void exportDocumentView(String absPath, OutputStream out, boolean skipBinary,
+                                   boolean noRecurse) throws IOException, RepositoryException {
+        getDelegate().exportDocumentView(absPath, out, skipBinary, noRecurse);
+    }
+
+    public void setNamespacePrefix(String prefix, String uri) throws RepositoryException {
+        getDelegate().setNamespacePrefix(prefix, uri);
+    }
+
+    public String[] getNamespacePrefixes() throws RepositoryException {
+        return getDelegate().getNamespacePrefixes();
+    }
+
+    public String getNamespaceURI(String prefix) throws RepositoryException {
+        return getDelegate().getNamespaceURI(prefix);
+    }
+
+    public String getNamespacePrefix(String uri) throws RepositoryException {
+        return getDelegate().getNamespacePrefix(uri);
+    }
+
+    public void logout() {
+        getDelegate().logout();
+    }
+
+    public boolean isLive() {
+        return getDelegate().isLive();
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public void addLockToken(String lt) {
+        getDelegate().addLockToken(lt);
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public String[] getLockTokens() {
+        return getDelegate().getLockTokens();
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public void removeLockToken(String lt) {
+        getDelegate().removeLockToken(lt);
+    }
+
+    public AccessControlManager getAccessControlManager()
+            throws UnsupportedRepositoryOperationException, RepositoryException {
+        return getDelegate().getAccessControlManager();
+    }
+
+    public RetentionManager getRetentionManager() throws UnsupportedRepositoryOperationException,
+            RepositoryException {
+        return getDelegate().getRetentionManager();
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    public SessionWrapper getSessionWrapper() {
+        return this;
+    }
 }

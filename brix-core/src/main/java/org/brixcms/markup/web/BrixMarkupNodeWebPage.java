@@ -29,56 +29,62 @@ import org.brixcms.web.nodepage.BrixPageParameters;
 
 /**
  * Page that uses {@link MarkupSource} for it's markup and child components.
- * 
+ *
  * @author Matej Knopp
  */
 
 public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements IMarkupResourceStreamProvider,
-		IMarkupCacheKeyProvider, MarkupSourceProvider
-{
+        IMarkupCacheKeyProvider, MarkupSourceProvider {
+// ------------------------------ FIELDS ------------------------------
 
-	public BrixMarkupNodeWebPage(IModel<BrixNode> nodeModel)
-	{
-		super(nodeModel);
-	}
+    private transient MarkupHelper markupHelper;
 
-	public BrixMarkupNodeWebPage(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters)
-	{
-		super(nodeModel, pageParameters);
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public String getCacheKey(MarkupContainer container, Class<?> containerClass)
-	{
-		return null;
-	}	
-	
-	@Override
-	protected void onBeforeRender()
-	{		
-		getMarkupHelper();
-		super.onBeforeRender();		
-	}
-	
-	private transient MarkupHelper markupHelper;
-	
-	private MarkupHelper getMarkupHelper()
-	{
-		if (markupHelper == null)
-		{
-			markupHelper = new MarkupHelper(this);		
-		}
-		return markupHelper;
-	}
-	
-	@Override
-	protected void onDetach()
-	{		
-		super.onDetach();
-		markupHelper = null;
-	}
-	
-	public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass)
-	{
-		return new StringResourceStream(getMarkupHelper().getMarkup(), "text/html");
-	}
+    public BrixMarkupNodeWebPage(IModel<BrixNode> nodeModel) {
+        super(nodeModel);
+    }
+
+    public BrixMarkupNodeWebPage(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters) {
+        super(nodeModel, pageParameters);
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    private MarkupHelper getMarkupHelper() {
+        if (markupHelper == null) {
+            markupHelper = new MarkupHelper(this);
+        }
+        return markupHelper;
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IMarkupCacheKeyProvider ---------------------
+
+    public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
+        return null;
+    }
+
+// --------------------- Interface IMarkupResourceStreamProvider ---------------------
+
+
+    public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
+        return new StringResourceStream(getMarkupHelper().getMarkup(), "text/html");
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected void onBeforeRender() {
+        getMarkupHelper();
+        super.onBeforeRender();
+    }
+
+    @Override
+    protected void onDetach() {
+        super.onDetach();
+        markupHelper = null;
+    }
 }

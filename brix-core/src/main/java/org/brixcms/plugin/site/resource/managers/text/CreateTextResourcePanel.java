@@ -34,76 +34,71 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
 import org.brixcms.web.util.validators.NodeNameValidator;
 
-public class CreateTextResourcePanel extends BrixGenericPanel<BrixNode>
-{
-	private String fileName;
+public class CreateTextResourcePanel extends BrixGenericPanel<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
 
-	public CreateTextResourcePanel(String id, IModel<BrixNode> container, final SimpleCallback back)
-	{
-		super(id, container);
+    private String fileName;
 
-		add(new FeedbackPanel("feedback"));
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		Form<?> form = new Form<Void>("form");
-		add(form);
+    public CreateTextResourcePanel(String id, IModel<BrixNode> container, final SimpleCallback back) {
+        super(id, container);
 
-		form.add(new TextField<String>("fileName", new PropertyModel<String>(this, "fileName"))
-				.setRequired(true).add(NodeNameValidator.getInstance()).setLabel(
-						new ResourceModel("fileName")));
+        add(new FeedbackPanel("feedback"));
 
-		final ModelBuffer model = new ModelBuffer();
+        Form<?> form = new Form<Void>("form");
+        add(form);
 
-		form.add(new TextResourceEditor("editor", model));
+        form.add(new TextField<String>("fileName", new PropertyModel<String>(this, "fileName"))
+                .setRequired(true).add(NodeNameValidator.getInstance()).setLabel(
+                        new ResourceModel("fileName")));
 
-		form.add(new SubmitLink("save")
-		{
-			@Override
-			public void onSubmit()
-			{
-				if (getContainer().hasNode(fileName))
-				{
-					error(getString("fileExists", Model.ofMap(new MicroMap<String, String>(
-							"fileName", fileName))));
-					return;
-				}
+        final ModelBuffer model = new ModelBuffer();
 
-				// create initial node skeleton
-				BrixNode node = (BrixNode)getContainer().addNode(fileName, "nt:file");
-				BrixFileNode file = BrixFileNode.initialize(node, "text"); // temp-mime
+        form.add(new TextResourceEditor("editor", model));
 
-				// save the node so brix assigns the correct jcr type to it
-				getContainer().save();
+        form.add(new SubmitLink("save") {
+            @Override
+            public void onSubmit() {
+                if (getContainer().hasNode(fileName)) {
+                    error(getString("fileExists", Model.ofMap(new MicroMap<String, String>(
+                            "fileName", fileName))));
+                    return;
+                }
 
-				// populate node
-				ResourceNode resource = (ResourceNode)getContainer().getSession().getItem(
-						node.getPath());
-				model.setObject(new BrixNodeModel(resource));
-				model.apply();
+                // create initial node skeleton
+                BrixNode node = (BrixNode) getContainer().addNode(fileName, "nt:file");
+                BrixFileNode file = BrixFileNode.initialize(node, "text"); // temp-mime
 
-				getContainer().save();
+                // save the node so brix assigns the correct jcr type to it
+                getContainer().save();
 
-				// done
-				getSession().info(getString("saved"));
-				SitePlugin.get().selectNode(this, resource, true);
-			}
-		});
+                // populate node
+                ResourceNode resource = (ResourceNode) getContainer().getSession().getItem(
+                        node.getPath());
+                model.setObject(new BrixNodeModel(resource));
+                model.apply();
 
-		form.add(new Link<Void>("cancel")
-		{
-			@Override
-			public void onClick()
-			{
-				getSession().info(getString("cancelled"));
-				back.execute();
-			}
-		});
+                getContainer().save();
 
+                // done
+                getSession().info(getString("saved"));
+                SitePlugin.get().selectNode(this, resource, true);
+            }
+        });
 
-	}
+        form.add(new Link<Void>("cancel") {
+            @Override
+            public void onClick() {
+                getSession().info(getString("cancelled"));
+                back.execute();
+            }
+        });
+    }
 
+// -------------------------- OTHER METHODS --------------------------
 
-	protected BrixNode getContainer()
-	{
-		return getModelObject();
-	}
+    protected BrixNode getContainer() {
+        return getModelObject();
+    }
 }

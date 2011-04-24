@@ -49,10 +49,7 @@ import java.io.InputStream;
 import java.util.List;
 
 public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
-    private Brix getBrix() {
-        // TODO: We don't really have a node here
-        return Brix.get();
-    }
+// --------------------------- CONSTRUCTORS ---------------------------
 
     public ManageSnapshotsPanel(String id, final IModel<Workspace> model) {
         super(id, model);
@@ -66,7 +63,6 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
                         getModelObject());
                 return getBrix().filterVisibleWorkspaces(list, Context.ADMINISTRATION);
             }
-
         };
 
         add(new ListView<Workspace>("snapshots", snapshotsModel) {
@@ -146,7 +142,6 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
                 item.add(new Label("label", name));
 
                 item.add(new Label("commentlabel", comment));
-
             }
         });
 
@@ -155,7 +150,6 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
             @Override
             public void onClick() {
                 getRequestCycle().setRequestTarget(new IRequestTarget() {
-
                     public void detach(RequestCycle requestCycle) {
                     }
 
@@ -168,7 +162,6 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
                         session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
                                 false);
                     }
-
                 });
             }
         });
@@ -177,7 +170,6 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
          * Form to create a new Snapshot and put any comment to it
          */
         Form<Object> commentForm = new Form<Object>("commentForm") {
-
             @Override
             public boolean isVisible() {
                 Workspace target = ManageSnapshotsPanel.this.getModelObject();
@@ -236,8 +228,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
                         brix.initWorkspace(ManageSnapshotsPanel.this.getModelObject(), session);
 
                         getSession().info(ManageSnapshotsPanel.this.getString("restoreSuccessful"));
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         throw new BrixException(e);
                     }
                 }
@@ -247,4 +238,8 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
         add(uploadForm);
     }
 
+    private Brix getBrix() {
+        // TODO: We don't really have a node here
+        return Brix.get();
+    }
 }

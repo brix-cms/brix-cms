@@ -17,10 +17,10 @@ package org.brixcms.plugin.prototype.auth;
 import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
-public class CreatePrototypeAction extends AbstractWorkspaceAction
-{
-    public CreatePrototypeAction(Context context, Workspace workspace)
-    {
+public class CreatePrototypeAction extends AbstractWorkspaceAction {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public CreatePrototypeAction(Context context, Workspace workspace) {
         super(context, workspace);
     }
 }

@@ -46,172 +46,151 @@ import org.brixcms.workspace.WorkspaceModel;
 
 import java.util.List;
 
-public class ManagePrototypesPanel extends BrixGenericPanel<Workspace>
-{
+public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
+// ------------------------------ FIELDS ------------------------------
 
-	private Brix getBrix()
-	{
-		// TODO: We don't really have a node here
-		return Brix.get();
-	}
-	
-	public ManagePrototypesPanel(String id, final IModel<Workspace> model)
-	{
-		super(id, model);
-		setOutputMarkupId(true);
+    private String prototypeName;
 
-		IModel<List<Workspace>> prototypesModel = new LoadableDetachableModel<List<Workspace>>()
-		{
-			@Override
-			protected List<Workspace> load()
-			{
-				List<Workspace> list = PrototypePlugin.get().getPrototypes();
-				return getBrix().filterVisibleWorkspaces(list, Context.ADMINISTRATION);
-			}
-		};
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		Form<Void> modalWindowForm = new Form<Void>("modalWindowForm");
-		add(modalWindowForm);
+    public ManagePrototypesPanel(String id, final IModel<Workspace> model) {
+        super(id, model);
+        setOutputMarkupId(true);
 
-		final ModalWindow modalWindow = new ModalWindow("modalWindow");
-		modalWindow.setInitialWidth(64);
-		modalWindow.setWidthUnit("em");
-		modalWindow.setUseInitialHeight(false);
-		modalWindow.setResizable(false);
-		modalWindow.setTitle(new ResourceModel("selectItems"));
-		modalWindowForm.add(modalWindow);
+        IModel<List<Workspace>> prototypesModel = new LoadableDetachableModel<List<Workspace>>() {
+            @Override
+            protected List<Workspace> load() {
+                List<Workspace> list = PrototypePlugin.get().getPrototypes();
+                return getBrix().filterVisibleWorkspaces(list, Context.ADMINISTRATION);
+            }
+        };
 
-		add(new ListView<Workspace>("prototypes", prototypesModel)
-		{
-			@Override
-			protected IModel<Workspace> getListItemModel(IModel<? extends List<Workspace>> listViewModel, int index)
-			{
-				return new WorkspaceModel(listViewModel.getObject().get(index));
-			}
+        Form<Void> modalWindowForm = new Form<Void>("modalWindowForm");
+        add(modalWindowForm);
 
-			@Override
-			protected void populateItem(final ListItem<Workspace> item)
-			{
-				PrototypePlugin plugin = PrototypePlugin.get();
-				final String name = plugin.getUserVisibleName(item.getModelObject(), false);
+        final ModalWindow modalWindow = new ModalWindow("modalWindow");
+        modalWindow.setInitialWidth(64);
+        modalWindow.setWidthUnit("em");
+        modalWindow.setUseInitialHeight(false);
+        modalWindow.setResizable(false);
+        modalWindow.setTitle(new ResourceModel("selectItems"));
+        modalWindowForm.add(modalWindow);
 
-				item.add(new Label("label", name));
-				item.add(new Link<Void>("browse")
-				{
-					@Override
-					public void onClick()
-					{
-						model.setObject(item.getModelObject());
-					}
-				});
+        add(new ListView<Workspace>("prototypes", prototypesModel) {
+            @Override
+            protected IModel<Workspace> getListItemModel(IModel<? extends List<Workspace>> listViewModel, int index) {
+                return new WorkspaceModel(listViewModel.getObject().get(index));
+            }
 
-				item.add(new AjaxLink<Void>("restoreItems")
-				{
-					@Override
-					public void onClick(AjaxRequestTarget target)
-					{
-						String prototypeId = item.getModelObject().getId();
-						String targetId = ManagePrototypesPanel.this.getModelObject().getId();
-						Panel panel = new RestoreItemsPanel(modalWindow.getContentId(), prototypeId, targetId);
-						modalWindow.setTitle(new ResourceModel("selectItems"));
-						modalWindow.setContent(panel);
-						modalWindow.show(target);
-					}
+            @Override
+            protected void populateItem(final ListItem<Workspace> item) {
+                PrototypePlugin plugin = PrototypePlugin.get();
+                final String name = plugin.getUserVisibleName(item.getModelObject(), false);
 
-					@Override
-					public boolean isVisible()
-					{
-						Workspace target = ManagePrototypesPanel.this.getModelObject();
-						Action action = new RestorePrototypeAction(Context.ADMINISTRATION, item.getModelObject(), target);
-						return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
-					}
-				});
+                item.add(new Label("label", name));
+                item.add(new Link<Void>("browse") {
+                    @Override
+                    public void onClick() {
+                        model.setObject(item.getModelObject());
+                    }
+                });
 
-				item.add(new Link<Void>("delete")
-				{
-					@Override
-					public void onClick()
-					{
-						Workspace prototype = item.getModelObject();
-						prototype.delete();
-					}
+                item.add(new AjaxLink<Void>("restoreItems") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        String prototypeId = item.getModelObject().getId();
+                        String targetId = ManagePrototypesPanel.this.getModelObject().getId();
+                        Panel panel = new RestoreItemsPanel(modalWindow.getContentId(), prototypeId, targetId);
+                        modalWindow.setTitle(new ResourceModel("selectItems"));
+                        modalWindow.setContent(panel);
+                        modalWindow.show(target);
+                    }
 
-					@Override
-					public boolean isVisible()
-					{
-						Action action = new DeletePrototypeAction(Context.ADMINISTRATION, item.getModelObject());
-						return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
-					}
-				});
-			}
-		});
+                    @Override
+                    public boolean isVisible() {
+                        Workspace target = ManagePrototypesPanel.this.getModelObject();
+                        Action action = new RestorePrototypeAction(Context.ADMINISTRATION, item.getModelObject(), target);
+                        return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                    }
+                });
 
-		Form<Object> form = new Form<Object>("form")
-		{
-			@Override
-			public boolean isVisible()
-			{
-				Workspace current = ManagePrototypesPanel.this.getModelObject();
-				Action action = new CreatePrototypeAction(Context.ADMINISTRATION, current);
-				return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
-			}
-		};
+                item.add(new Link<Void>("delete") {
+                    @Override
+                    public void onClick() {
+                        Workspace prototype = item.getModelObject();
+                        prototype.delete();
+                    }
 
-		TextField<String> prototypeName = new TextField<String>("prototypeName", new PropertyModel<String>(this,
-				"prototypeName"));
-		form.add(prototypeName);
+                    @Override
+                    public boolean isVisible() {
+                        Action action = new DeletePrototypeAction(Context.ADMINISTRATION, item.getModelObject());
+                        return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+                    }
+                });
+            }
+        });
 
-		prototypeName.setRequired(true);
-		prototypeName.add(new UniquePrototypeNameValidator());
+        Form<Object> form = new Form<Object>("form") {
+            @Override
+            public boolean isVisible() {
+                Workspace current = ManagePrototypesPanel.this.getModelObject();
+                Action action = new CreatePrototypeAction(Context.ADMINISTRATION, current);
+                return getBrix().getAuthorizationStrategy().isActionAuthorized(action);
+            }
+        };
 
-		final FeedbackPanel feedback;
+        TextField<String> prototypeName = new TextField<String>("prototypeName", new PropertyModel<String>(this,
+                "prototypeName"));
+        form.add(prototypeName);
 
-		add(feedback = new FeedbackPanel("feedback"));
-		feedback.setOutputMarkupId(true);
+        prototypeName.setRequired(true);
+        prototypeName.add(new UniquePrototypeNameValidator());
 
-		form.add(new AjaxButton("submit")
-		{
-			@Override
-			public void onSubmit(AjaxRequestTarget target, Form<?> form)
-			{
-				String workspaceId = ManagePrototypesPanel.this.getModelObject().getId();
-				CreatePrototypePanel panel = new CreatePrototypePanel(modalWindow.getContentId(), workspaceId,
-						ManagePrototypesPanel.this.prototypeName);
-				modalWindow.setContent(panel);
-				modalWindow.setTitle(new ResourceModel("selectItemsToCreate"));
-				modalWindow.setWindowClosedCallback(new WindowClosedCallback()
-				{
-					public void onClose(AjaxRequestTarget target)
-					{
-						target.addComponent(ManagePrototypesPanel.this);
-					}
-				});
-				modalWindow.show(target);
-			}
+        final FeedbackPanel feedback;
 
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form)
-			{
-				target.addComponent(feedback);
-			}
-		});
+        add(feedback = new FeedbackPanel("feedback"));
+        feedback.setOutputMarkupId(true);
 
-		add(form);
+        form.add(new AjaxButton("submit") {
+            @Override
+            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                String workspaceId = ManagePrototypesPanel.this.getModelObject().getId();
+                CreatePrototypePanel panel = new CreatePrototypePanel(modalWindow.getContentId(), workspaceId,
+                        ManagePrototypesPanel.this.prototypeName);
+                modalWindow.setContent(panel);
+                modalWindow.setTitle(new ResourceModel("selectItemsToCreate"));
+                modalWindow.setWindowClosedCallback(new WindowClosedCallback() {
+                    public void onClose(AjaxRequestTarget target) {
+                        target.addComponent(ManagePrototypesPanel.this);
+                    }
+                });
+                modalWindow.show(target);
+            }
 
-	}
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.addComponent(feedback);
+            }
+        });
 
-	private String prototypeName;
+        add(form);
+    }
 
-	private class UniquePrototypeNameValidator implements IValidator
-	{
-		public void validate(IValidatable validatable)
-		{
-			String name = (String) validatable.getValue();
-			if (PrototypePlugin.get().prototypeExists(name))
-			{
-				validatable.error(new ValidationError().addMessageKey("UniquePrototypeNameValidator"));
-			}
-		}
-	}
+// -------------------------- OTHER METHODS --------------------------
 
+    private Brix getBrix() {
+        // TODO: We don't really have a node here
+        return Brix.get();
+    }
+
+// -------------------------- INNER CLASSES --------------------------
+
+    private class UniquePrototypeNameValidator implements IValidator {
+        public void validate(IValidatable validatable) {
+            String name = (String) validatable.getValue();
+            if (PrototypePlugin.get().prototypeExists(name)) {
+                validatable.error(new ValidationError().addMessageKey("UniquePrototypeNameValidator"));
+            }
+        }
+    }
 }

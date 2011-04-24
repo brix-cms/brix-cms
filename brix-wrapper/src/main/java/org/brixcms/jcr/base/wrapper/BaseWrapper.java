@@ -16,88 +16,81 @@ package org.brixcms.jcr.base.wrapper;
 
 import org.brixcms.jcr.base.action.AbstractActionHandler;
 
-class BaseWrapper<T>
-{
+class BaseWrapper<T> {
+// ------------------------------ FIELDS ------------------------------
 
-	private final T delegate;
-	private final SessionWrapper session;
+    Integer hashCode;
 
-	public BaseWrapper(T delegate, SessionWrapper session)
-	{
-		this.delegate = delegate;
-		this.session = session;
-	}
+    private final T delegate;
+    private final SessionWrapper session;
 
-	public T getDelegate()
-	{
-		return delegate;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public SessionWrapper getSessionWrapper()
-	{
-		return session;
-	}
+    public BaseWrapper(T delegate, SessionWrapper session) {
+        this.delegate = delegate;
+        this.session = session;
+    }
 
-	Integer hashCode;
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	@Override
-	public int hashCode()
-	{
-		return getDelegate().hashCode();
-		// optimization, is it really needed? used in equals...
+    public T getDelegate() {
+        return delegate;
+    }
+
+// ------------------------ CANONICAL METHODS ------------------------
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof BaseWrapper) {
+            return false;
+        }
+        BaseWrapper wrapper = (BaseWrapper) obj;
+
+        // optimization - check for hash code (if we know it)
+        if (hashCode != null && wrapper.hashCode != null && hashCode != wrapper.hashCode()) {
+            return false;
+        } else {
+            return getDelegate() == wrapper.getDelegate() || getDelegate().equals(wrapper.getDelegate());
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return getDelegate().hashCode();
+        // optimization, is it really needed? used in equals...
 //		if (hashCode == null)
 //		{
 //			hashCode = getDelegate().hashCode();
 //		}
 //		return hashCode;
-	}
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		if (obj instanceof BaseWrapper)
-		{
-			return false;
-		}
-		BaseWrapper wrapper = (BaseWrapper) obj;
+// -------------------------- OTHER METHODS --------------------------
 
-		// optimization - check for hash code (if we know it)
-		if (hashCode != null && wrapper.hashCode != null && hashCode != wrapper.hashCode())
-		{
-			return false;
-		}
-		else
-		{
-			return getDelegate() == wrapper.getDelegate() || getDelegate().equals(wrapper.getDelegate());
-		}
-	}
+    public AbstractActionHandler getActionHandler() {
+        return getSessionWrapper().getActionHandler();
+    }
 
-	@SuppressWarnings("unchecked")
-	protected <TYPE> TYPE unwrap(TYPE wrapper)
-	{
-		while (wrapper instanceof BaseWrapper)
-		{
-			wrapper = (TYPE) ((BaseWrapper) wrapper).getDelegate();
-		}
-		return wrapper;
-	}
+    public SessionWrapper getSessionWrapper() {
+        return session;
+    }
 
-	public <TYPE> TYPE[] unwrap(TYPE original[], TYPE newArray[])
-	{
-		for (int i = 0; i < original.length; ++i)
-		{
-			newArray[i] = unwrap(original[i]);
-		}
-		return newArray;
-	}
+    @SuppressWarnings("unchecked")
+    protected <TYPE> TYPE unwrap(TYPE wrapper) {
+        while (wrapper instanceof BaseWrapper) {
+            wrapper = (TYPE) ((BaseWrapper) wrapper).getDelegate();
+        }
+        return wrapper;
+    }
 
-	public AbstractActionHandler getActionHandler()
-	{
-		return getSessionWrapper().getActionHandler();
-	}
+    public <TYPE> TYPE[] unwrap(TYPE original[], TYPE newArray[]) {
+        for (int i = 0; i < original.length; ++i) {
+            newArray[i] = unwrap(original[i]);
+        }
+        return newArray;
+    }
 }

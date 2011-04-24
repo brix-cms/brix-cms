@@ -20,64 +20,63 @@ import java.util.Properties;
 
 /**
  * Brix build properties
- * 
+ *
  * @author ivaynberg
- * 
  */
-public class BrixBuild
-{
+public class BrixBuild {
+// ------------------------------ FIELDS ------------------------------
+
     private static final String NUMBER = "brix-build.number";
     private static final String FILE = "META-INF/brix-build.properties";
 
-    /** build number */
+    /**
+     * singleton instance
+     */
+    private static BrixBuild instance;
+
+    /**
+     * build number
+     */
     private String number;
 
-    /** singleton instance */
-    private static BrixBuild instance;
+// -------------------------- STATIC METHODS --------------------------
 
     /**
      * @return instance of {@link BrixBuild} singleton
      */
-    public static synchronized BrixBuild instance()
-    {
-        if (instance == null)
-        {
+    public static synchronized BrixBuild instance() {
+        if (instance == null) {
             instance = new BrixBuild();
         }
         return instance;
     }
 
-    private BrixBuild()
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    private BrixBuild() {
         InputStream is = getClass().getClassLoader().getResourceAsStream(FILE);
-        if (is != null)
-        {
+        if (is != null) {
             Properties props = new Properties();
-            try
-            {
+            try {
                 props.load(is);
                 is.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 throw new RuntimeException("Could not read " + FILE);
             }
 
             number = props.getProperty(NUMBER);
-            if (number == null || NUMBER.equals(number))
-            {
+            if (number == null || NUMBER.equals(number)) {
                 number = "unknown";
             }
         }
     }
 
+// --------------------- GETTER / SETTER METHODS ---------------------
+
     /**
      * @return build number
      */
-    public String getNumber()
-    {
+    public String getNumber() {
         return number;
     }
-
-
 }

@@ -22,33 +22,30 @@ import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 
 import javax.servlet.http.HttpServletResponse;
 
-public class ResourceNotFoundPage extends WebPage
-{
+public class ResourceNotFoundPage extends WebPage {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public ResourceNotFoundPage()
-    {
+    public ResourceNotFoundPage() {
         this("");
     }
 
-    public ResourceNotFoundPage(String name)
-    {
+    public ResourceNotFoundPage(String name) {
         add(new Label("name", name));
         add(new ToolbarBehavior() {
             @Override
-            protected String getCurrentWorkspaceId()
-            {                
-                return ((BrixRequestCycleProcessor)getRequestCycle().getProcessor()).getWorkspace();
+            protected String getCurrentWorkspaceId() {
+                return ((BrixRequestCycleProcessor) getRequestCycle().getProcessor()).getWorkspace();
             }
         });
     }
 
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    protected void configureResponse()
-    {
+    protected void configureResponse() {
         super.configureResponse();
 
-        WebResponse response = (WebResponse)getResponse();
+        WebResponse response = (WebResponse) getResponse();
         response.getHttpServletResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
-
 }

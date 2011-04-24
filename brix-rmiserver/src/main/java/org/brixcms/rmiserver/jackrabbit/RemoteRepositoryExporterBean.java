@@ -29,16 +29,16 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
- * A spring bean that creates {@link RemoteRepository} from the {@link RepositoryImpl} instance and
- * exports it using RMI.
- * 
+ * A spring bean that creates {@link RemoteRepository} from the {@link RepositoryImpl} instance and exports it using
+ * RMI.
+ *
  * @author ivaynberg
- * 
  */
-public class RemoteRepositoryExporterBean implements InitializingBean, DisposableBean
-{
+public class RemoteRepositoryExporterBean implements InitializingBean, DisposableBean {
+// ------------------------------ FIELDS ------------------------------
+
     private static final Logger logger = LoggerFactory
-        .getLogger(RemoteRepositoryExporterBean.class);
+            .getLogger(RemoteRepositoryExporterBean.class);
 
     private Repository repository;
     private String serviceName;
@@ -47,58 +47,54 @@ public class RemoteRepositoryExporterBean implements InitializingBean, Disposabl
     private Registry registry;
     private RemoteRepository remote;
 
-    @Required
-    public void setServiceName(String serviceName)
-    {
-        this.serviceName = serviceName;
-    }
-
+// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
-    public void setRegistryPort(int registryPort)
-    {
+    public void setRegistryPort(int registryPort) {
         this.registryPort = registryPort;
     }
 
-
     @Required
-    public void setRepository(Repository repository)
-    {
+    public void setRepository(Repository repository) {
         this.repository = repository;
     }
 
-
-    public void afterPropertiesSet() throws Exception
-    {
-
-        ServerAdapterFactory factory = new ServerAdapterFactory();
-        remote = factory.getRemoteRepository(repository);
-
-        registry = LocateRegistry.getRegistry(registryPort);
-        try
-        {
-            registry.list(); // test registry
-        }
-        catch (Exception e)
-        {
-            registry = LocateRegistry.createRegistry(registryPort);
-            registry.list(); // test registry
-        }
-
-        logger.info("Registring JackRabbit remote repository with name: {} and registry: {} ",
-            serviceName, registry);
-
-        registry.rebind(serviceName, remote);
-
-        logger.info("JackRabbit remote server registered: " + remote);
+    @Required
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public void destroy() throws Exception
-    {
+
+// --------------------- Interface DisposableBean ---------------------
+
+
+    public void destroy() throws Exception {
         logger.info("Unregistering JackRabbit remote repository with name: {}", serviceName);
         registry.unbind(serviceName);
         UnicastRemoteObject.unexportObject(remote, false);
     }
 
+// --------------------- Interface InitializingBean ---------------------
+
+    public void afterPropertiesSet() throws Exception {
+        ServerAdapterFactory factory = new ServerAdapterFactory();
+        remote = factory.getRemoteRepository(repository);
+
+        registry = LocateRegistry.getRegistry(registryPort);
+        try {
+            registry.list(); // test registry
+        } catch (Exception e) {
+            registry = LocateRegistry.createRegistry(registryPort);
+            registry.list(); // test registry
+        }
+
+        logger.info("Registring JackRabbit remote repository with name: {} and registry: {} ",
+                serviceName, registry);
+
+        registry.rebind(serviceName, remote);
+
+        logger.info("JackRabbit remote server registered: " + remote);
+    }
 }

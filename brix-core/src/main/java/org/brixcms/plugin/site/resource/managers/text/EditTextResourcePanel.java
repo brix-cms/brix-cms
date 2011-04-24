@@ -23,49 +23,46 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
 
-public abstract class EditTextResourcePanel extends BrixGenericPanel<BrixNode>
-{
-	public EditTextResourcePanel(String id, IModel<BrixNode> node)
-	{
-		super(id, node);
+public abstract class EditTextResourcePanel extends BrixGenericPanel<BrixNode> {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		add(new FeedbackPanel("feedback"));
+    public EditTextResourcePanel(String id, IModel<BrixNode> node) {
+        super(id, node);
 
-		Form<?> form = new Form<Void>("form");
-		add(form);
+        add(new FeedbackPanel("feedback"));
 
-		final ModelBuffer model = new ModelBuffer(node);
+        Form<?> form = new Form<Void>("form");
+        add(form);
 
-		form.add(new TextResourceEditor("editor", model));
+        final ModelBuffer model = new ModelBuffer(node);
 
-		form.add(new SubmitLink("save")
-		{
-			@Override
-			public void onSubmit()
-			{
-				model.apply();
-				getNode().save();
-				// done
-				getSession().info(getString("saved"));
-				done();
-			}
-		});
+        form.add(new TextResourceEditor("editor", model));
 
-		form.add(new Link<Void>("cancel")
-		{
-			@Override
-			public void onClick()
-			{
-				getSession().info(getString("cancelled"));
-				done();
-			}
-		});
-	}
+        form.add(new SubmitLink("save") {
+            @Override
+            public void onSubmit() {
+                model.apply();
+                getNode().save();
+                // done
+                getSession().info(getString("saved"));
+                done();
+            }
+        });
 
-	protected abstract void done();
+        form.add(new Link<Void>("cancel") {
+            @Override
+            public void onClick() {
+                getSession().info(getString("cancelled"));
+                done();
+            }
+        });
+    }
 
-	protected BrixNode getNode()
-	{
-		return getModelObject();
-	}
+    protected abstract void done();
+
+// -------------------------- OTHER METHODS --------------------------
+
+    protected BrixNode getNode() {
+        return getModelObject();
+    }
 }

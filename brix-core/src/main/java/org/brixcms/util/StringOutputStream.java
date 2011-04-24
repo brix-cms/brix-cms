@@ -16,40 +16,39 @@ package org.brixcms.util;
 
 import java.io.IOException;
 
-public class StringOutputStream extends java.io.OutputStream
-{
+public class StringOutputStream extends java.io.OutputStream {
+// ------------------------------ FIELDS ------------------------------
 
     private final StringBuilder buffer;
 
-    public StringOutputStream()
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public StringOutputStream() {
         buffer = new StringBuilder();
     }
 
-    public StringOutputStream(int size)
-    {
+    public StringOutputStream(int size) {
         buffer = new StringBuilder(size);
     }
 
-    @Override
-    public void write(int b) throws IOException
-    {
-        buffer.append((char)b);
-    }
+// ------------------------ CANONICAL METHODS ------------------------
 
-    public String toString()
-    {
+    public String toString() {
         return buffer.toString();
     }
 
-    public int length()
-    {
+// -------------------------- OTHER METHODS --------------------------
+
+    public int length() {
         return buffer.length();
     }
 
-    public void setLength(int l)
-    {
+    public void setLength(int l) {
         buffer.setLength(l);
     }
 
+    @Override
+    public void write(int b) throws IOException {
+        buffer.append((char) b);
+    }
 }

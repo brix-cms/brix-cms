@@ -14,26 +14,21 @@
 
 package org.brixcms.exception;
 
-public class BrixException extends RuntimeException
-{
+public class BrixException extends RuntimeException {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public BrixException()
-    {
+    public BrixException() {
     }
 
-    public BrixException(String message)
-    {
+    public BrixException(String message) {
         super(message);
     }
 
-    public BrixException(Throwable cause)
-    {
+    public BrixException(Throwable cause) {
         super(cause);
     }
 
-    public BrixException(String message, Throwable cause)
-    {
+    public BrixException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

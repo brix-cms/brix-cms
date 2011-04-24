@@ -24,34 +24,36 @@ import org.brixcms.markup.web.BrixMarkupNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
 import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 
-public class PageRenderingPage extends BrixMarkupNodeWebPage
-{
+public class PageRenderingPage extends BrixMarkupNodeWebPage {
+// -------------------------- STATIC METHODS --------------------------
 
+    public static MarkupSource transform(MarkupSource source, AbstractContainer container) {
+        source = new HeadTransformer(source);
+        source = new VariableTransformer(source, container);
+        source = new TitleTransformer(source, container);
+        return source;
+    }
 
-    public PageRenderingPage(final IModel<BrixNode> node, BrixPageParameters pageParameters)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public PageRenderingPage(final IModel<BrixNode> node, BrixPageParameters pageParameters) {
         super(node, pageParameters);
-      //  add(new TilePageRenderPanel("view", node, this));
+        //  add(new TilePageRenderPanel("view", node, this));
         add(new ToolbarBehavior() {
             @Override
-            protected String getCurrentWorkspaceId()
-            {
+            protected String getCurrentWorkspaceId() {
                 return node.getObject().getSession().getWorkspace().getName();
             }
         });
     }
 
-    public MarkupSource getMarkupSource()
-    {
-    	MarkupSource source = new PageMarkupSource((AbstractContainer)getModelObject());    	
-    	return transform(source, (AbstractContainer) getModelObject());
-    }
-    
-    public static MarkupSource transform(MarkupSource source, AbstractContainer container)
-    {
-    	source = new HeadTransformer(source);
-    	source = new VariableTransformer(source, container);
-    	source = new TitleTransformer(source, container);
-    	return source;
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface MarkupSourceProvider ---------------------
+
+    public MarkupSource getMarkupSource() {
+        MarkupSource source = new PageMarkupSource((AbstractContainer) getModelObject());
+        return transform(source, (AbstractContainer) getModelObject());
     }
 }

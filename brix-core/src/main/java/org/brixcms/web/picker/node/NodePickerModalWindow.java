@@ -23,113 +23,105 @@ import org.brixcms.web.generic.IGenericComponent;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
-public class NodePickerModalWindow extends ModalWindow implements IGenericComponent<BrixNode>
-{
+public class NodePickerModalWindow extends ModalWindow implements IGenericComponent<BrixNode> {
+// ------------------------------ FIELDS ------------------------------
+
     private final JcrTreeNode rootNode;
     private final NodeFilter enabledFilter;
     private final NodeFilter visibilityFilter;
 
-    public NodePickerModalWindow(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
-    {
-        super(id, model);
-        
-        this.rootNode = rootNode; 
-        this.enabledFilter = enabledFilter;
-        this.visibilityFilter = visibilityFilter;
-        
-        init();     
-    }
-    
-    public NodePickerModalWindow(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter)
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public NodePickerModalWindow(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
         super(id);
-        
-        this.rootNode = rootNode; 
+
+        this.rootNode = rootNode;
         this.enabledFilter = enabledFilter;
         this.visibilityFilter = visibilityFilter;
-        
-        init();     
+
+        init();
     }
-    
-    private void init()
-    {
-    	setWidthUnit("em");
+
+    public NodePickerModalWindow(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
+        super(id, model);
+
+        this.rootNode = rootNode;
+        this.enabledFilter = enabledFilter;
+        this.visibilityFilter = visibilityFilter;
+
+        init();
+    }
+
+    private void init() {
+        setWidthUnit("em");
         setInitialWidth(64);
         setUseInitialHeight(false);
         setResizable(false);
         setTitle(new ResourceModel("node-picker-title"));
     }
-    
-    private void initContent()
-    {
-        setContent(new NodePickerWithButtons(getContentId(), getModel(), rootNode, visibilityFilter, enabledFilter)
-        {
-            @Override
-            protected void onCancel(AjaxRequestTarget target)
-            {
-                super.onCancel(target);
-                NodePickerModalWindow.this.onCancel(target);
-            }
 
-            @Override
-            protected void onOk(AjaxRequestTarget target)
-            {
-                super.onOk(target);
-                NodePickerModalWindow.this.onOk(target);
-            }
-            
-            @Override
-            public boolean isDisplayFiles()
-            {
-                return NodePickerModalWindow.this.isDisplayFiles();
-            }
-        });
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IGenericComponent ---------------------
+
+    public BrixNode getModelObject() {
+        return (BrixNode) getDefaultModelObject();
     }
 
-    public boolean isDisplayFiles()
-    {
-        return true;
+    public void setModel(IModel<BrixNode> model) {
+        setDefaultModel(model);
     }
-    
+
+    public void setModelObject(BrixNode object) {
+        setDefaultModelObject(object);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
     @Override
-    public void show(AjaxRequestTarget target)
-    {
-        if (isShown() == false)
-        {
+    public void show(AjaxRequestTarget target) {
+        if (isShown() == false) {
             initContent();
         }
         super.show(target);
     }
 
-    protected void onCancel(AjaxRequestTarget target)
-    {
+    private void initContent() {
+        setContent(new NodePickerWithButtons(getContentId(), getModel(), rootNode, visibilityFilter, enabledFilter) {
+            @Override
+            protected void onCancel(AjaxRequestTarget target) {
+                super.onCancel(target);
+                NodePickerModalWindow.this.onCancel(target);
+            }
+
+            @Override
+            protected void onOk(AjaxRequestTarget target) {
+                super.onOk(target);
+                NodePickerModalWindow.this.onOk(target);
+            }
+
+            @Override
+            public boolean isDisplayFiles() {
+                return NodePickerModalWindow.this.isDisplayFiles();
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public IModel<BrixNode> getModel() {
+        return (IModel<BrixNode>) getDefaultModel();
+    }
+
+    protected void onCancel(AjaxRequestTarget target) {
         close(target);
     }
 
-    protected void onOk(AjaxRequestTarget target)
-    {
+    protected void onOk(AjaxRequestTarget target) {
         close(target);
     }
 
-	@SuppressWarnings("unchecked")
-	public IModel<BrixNode> getModel()
-	{
-		return (IModel<BrixNode>) getDefaultModel();
-	}
-
-	public BrixNode getModelObject()
-	{
-		return (BrixNode) getDefaultModelObject();
-	}
-
-	public void setModel(IModel<BrixNode> model)
-	{
-		setDefaultModel(model);
-	}
-
-	public void setModelObject(BrixNode object)
-	{
-		setDefaultModelObject(object);
-	}
-
+    public boolean isDisplayFiles() {
+        return true;
+    }
 }

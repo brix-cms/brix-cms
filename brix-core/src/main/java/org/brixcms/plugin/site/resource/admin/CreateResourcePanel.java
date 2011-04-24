@@ -27,44 +27,35 @@ import org.brixcms.web.tab.AbstractBrixTab;
 
 import java.util.ArrayList;
 
-public class CreateResourcePanel extends NodeManagerPanel
-{
+public class CreateResourcePanel extends NodeManagerPanel {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public CreateResourcePanel(String id, final IModel<BrixNode> container,
-			final SimpleCallback back)
-	{
-		super(id, container);
+    public CreateResourcePanel(String id, final IModel<BrixNode> container,
+                               final SimpleCallback back) {
+        super(id, container);
 
-		ArrayList<ITab> tabs = new ArrayList<ITab>();
+        ArrayList<ITab> tabs = new ArrayList<ITab>();
 
-		tabs.add(new AbstractBrixTab(new ResourceModel("upload"))
-		{
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new UploadResourcesPanel(panelId, container, back);
-			}
-		});
+        tabs.add(new AbstractBrixTab(new ResourceModel("upload")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                return new UploadResourcesPanel(panelId, container, back);
+            }
+        });
 
-		tabs.add(new AbstractBrixTab(new ResourceModel("createText"))
-		{
-			@Override
-			public Panel getPanel(String panelId)
-			{
-				return new CreateTextResourcePanel(panelId, container, back);
-			}
-		});
+        tabs.add(new AbstractBrixTab(new ResourceModel("createText")) {
+            @Override
+            public Panel getPanel(String panelId) {
+                return new CreateTextResourcePanel(panelId, container, back);
+            }
+        });
 
-		tabs.trimToSize();
-		add(new TabbedPanel("tabs", tabs)
-		{
-			@Override
-			protected String getTabContainerCssClass()
-			{
-				return "brix-site-manager-tab-row";
-			}
-		});
-
-	}
-
+        tabs.trimToSize();
+        add(new TabbedPanel("tabs", tabs) {
+            @Override
+            protected String getTabContainerCssClass() {
+                return "brix-site-manager-tab-row";
+            }
+        });
+    }
 }

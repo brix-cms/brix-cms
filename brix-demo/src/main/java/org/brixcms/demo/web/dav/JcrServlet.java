@@ -20,19 +20,18 @@ import org.brixcms.demo.web.WicketApplication;
 
 import javax.jcr.Repository;
 
-public class JcrServlet extends JCRWebdavServerServlet
-{
+public class JcrServlet extends JCRWebdavServerServlet {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public JcrServlet()
-    {
+    public JcrServlet() {
 
     }
+
+// -------------------------- OTHER METHODS --------------------------
 
     @Override
-    protected Repository getRepository()
-    {
-        WicketApplication app = (WicketApplication)Application.get("wicket.brix-demo");
+    protected Repository getRepository() {
+        WicketApplication app = (WicketApplication) Application.get("wicket.brix-demo");
         return app.getRepository();
     }
-
 }

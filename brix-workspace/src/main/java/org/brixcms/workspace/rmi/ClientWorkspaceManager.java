@@ -23,107 +23,92 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ClientWorkspaceManager implements WorkspaceManager
-{
+public class ClientWorkspaceManager implements WorkspaceManager {
+// ------------------------------ FIELDS ------------------------------
+
     private RemoteWorkspaceManager delegate;
     private String url;
 
-    public ClientWorkspaceManager(String url)
-    {
-        this.url = url;
-    }
+// -------------------------- STATIC METHODS --------------------------
 
-    private static RemoteWorkspaceManager lookup(String url)
-    {
-        try
-        {
-            return (RemoteWorkspaceManager)Naming.lookup(url);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Could not connect to remote url: " + url, e);
-        }
-    }
-
-    public ClientWorkspaceManager(RemoteWorkspaceManager delegate)
-    {
-        this.delegate = delegate;
-    }
-
-    public Workspace createWorkspace()
-    {
-        try
-        {
-            return new ClientWorkspace(getDelegate().createWorkspace());
-        }
-        catch (RemoteException e)
-        {
-            delegate = null;
-            throw new CommunicationException(e);
-        }
-    }
-
-    public Workspace getWorkspace(String workspaceId)
-    {
-        return new ClientWorkspace(workspaceId, getDelegate());
-    }
-
-    public List<Workspace> getWorkspaces()
-    {
-        try
-        {
-            return remoteToLocal(getDelegate().getWorkspaces());
-        }
-        catch (RemoteException e)
-        {
-            delegate = null;
-            throw new CommunicationException(e);
-        }
-
-    }
-
-    public boolean workspaceExists(String workspaceId)
-    {
-        try
-        {
-            return getDelegate().workspaceExists(workspaceId);
-        }
-        catch (RemoteException e)
-        {
-            delegate = null;
-            throw new CommunicationException(e);
-        }
-    }
-
-    public List<Workspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes)
-    {
-        try
-        {
-            return remoteToLocal(getDelegate().getWorkspacesFiltered(workspaceAttributes));
-        }
-        catch (RemoteException e)
-        {
-            delegate = null;
-            throw new CommunicationException(e);
-        }
-    }
-
-    private static List<Workspace> remoteToLocal(List<RemoteWorkspace> remote)
-    {
+    private static List<Workspace> remoteToLocal(List<RemoteWorkspace> remote) {
         ArrayList<Workspace> local = new ArrayList<Workspace>(remote.size());
-        for (RemoteWorkspace workspace : remote)
-        {
+        for (RemoteWorkspace workspace : remote) {
             local.add(new ClientWorkspace(workspace));
         }
         return local;
     }
 
-    public RemoteWorkspaceManager getDelegate()
-    {
-        if (delegate == null)
-        {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public ClientWorkspaceManager(String url) {
+        this.url = url;
+    }
+
+    public ClientWorkspaceManager(RemoteWorkspaceManager delegate) {
+        this.delegate = delegate;
+    }
+
+// --------------------- GETTER / SETTER METHODS ---------------------
+
+    public RemoteWorkspaceManager getDelegate() {
+        if (delegate == null) {
             delegate = lookup(url);
         }
         return delegate;
+    }
+
+    private static RemoteWorkspaceManager lookup(String url) {
+        try {
+            return (RemoteWorkspaceManager) Naming.lookup(url);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not connect to remote url: " + url, e);
+        }
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface WorkspaceManager ---------------------
+
+
+    public List<Workspace> getWorkspaces() {
+        try {
+            return remoteToLocal(getDelegate().getWorkspaces());
+        } catch (RemoteException e) {
+            delegate = null;
+            throw new CommunicationException(e);
+        }
+    }
+
+    public List<Workspace> getWorkspacesFiltered(Map<String, String> workspaceAttributes) {
+        try {
+            return remoteToLocal(getDelegate().getWorkspacesFiltered(workspaceAttributes));
+        } catch (RemoteException e) {
+            delegate = null;
+            throw new CommunicationException(e);
+        }
+    }
+
+    public Workspace createWorkspace() {
+        try {
+            return new ClientWorkspace(getDelegate().createWorkspace());
+        } catch (RemoteException e) {
+            delegate = null;
+            throw new CommunicationException(e);
+        }
+    }
+
+    public Workspace getWorkspace(String workspaceId) {
+        return new ClientWorkspace(workspaceId, getDelegate());
+    }
+
+    public boolean workspaceExists(String workspaceId) {
+        try {
+            return getDelegate().workspaceExists(workspaceId);
+        } catch (RemoteException e) {
+            delegate = null;
+            throw new CommunicationException(e);
+        }
     }
 }

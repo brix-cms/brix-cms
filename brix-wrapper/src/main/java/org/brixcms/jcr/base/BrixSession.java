@@ -21,15 +21,16 @@ import org.brixcms.jcr.base.filter.ValueFilter;
 import javax.jcr.Session;
 import java.util.Map;
 
-public interface BrixSession extends Session
-{
-	public Map<String, Object> getAttributesMap();
-	
-	public void addActionHandler(AbstractActionHandler handler);
-	
-	public void addEventsListener(EventsListener listener);
-	
-	public void setValueFilter(ValueFilter valueFilter);
-	
-	public ValueFilter getValueFilter();
+public interface BrixSession extends Session {
+// -------------------------- OTHER METHODS --------------------------
+
+    public void addActionHandler(AbstractActionHandler handler);
+
+    public void addEventsListener(EventsListener listener);
+
+    public Map<String, Object> getAttributesMap();
+
+    public ValueFilter getValueFilter();
+
+    public void setValueFilter(ValueFilter valueFilter);
 }

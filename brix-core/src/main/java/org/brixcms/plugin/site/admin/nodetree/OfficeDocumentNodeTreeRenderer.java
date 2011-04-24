@@ -19,25 +19,27 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 
 /**
  * Renderer for office document nodes
- * 
+ *
  * @author Jeremy Thomerson
  */
-public class OfficeDocumentNodeTreeRenderer extends AbstractMimeTypeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class OfficeDocumentNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final ResourceReference RESOURCE = new ResourceReference(
-			PageNodeTreeRenderer.class, "resources/x-office-document.png");
+    private static final long serialVersionUID = 1L;
 
-	public OfficeDocumentNodeTreeRenderer()
-	{
-		super(new String[] { "application/msword", "application/vnd.sun.xml.writer" });
-	}
+    private static final ResourceReference RESOURCE = new ResourceReference(
+            PageNodeTreeRenderer.class, "resources/x-office-document.png");
 
-	@Override
-	protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-	{
-		return RESOURCE;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
+    public OfficeDocumentNodeTreeRenderer() {
+        super(new String[]{"application/msword", "application/vnd.sun.xml.writer"});
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    @Override
+    protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+        return RESOURCE;
+    }
 }

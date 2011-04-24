@@ -22,57 +22,50 @@ import org.brixcms.web.generic.BrixGenericPanel;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class WebdavUrlPanel extends BrixGenericPanel<String>
-{
+public class WebdavUrlPanel extends BrixGenericPanel<String> {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public WebdavUrlPanel(String id, IModel<String> model)
-	{
-		super(id, model);
+// --------------------------- CONSTRUCTORS ---------------------------
 
-		add(new WebMarkupContainer("webdav")
-		{
-			@Override
-			protected void onComponentTag(ComponentTag tag)
-			{
-				tag.put("href", getWorkspaceUrl("webdav", getWorkspaceId()));
-			}
-		});
+    public WebdavUrlPanel(String id, IModel<String> model) {
+        super(id, model);
 
-		add(new WebMarkupContainer("jcrwebdav")
-		{
-			@Override
-			protected void onComponentTag(ComponentTag tag)
-			{
-				tag.put("href", getWorkspaceUrl("jcrwebdav", getWorkspaceId()));
-			}
-		});
+        add(new WebMarkupContainer("webdav") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                tag.put("href", getWorkspaceUrl("webdav", getWorkspaceId()));
+            }
+        });
 
-	}
+        add(new WebMarkupContainer("jcrwebdav") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                tag.put("href", getWorkspaceUrl("jcrwebdav", getWorkspaceId()));
+            }
+        });
+    }
 
-	private String getWorkspaceUrl(String type, String workspaceId)
-	{
-		HttpServletRequest request = ((WebRequest) getRequest()).getHttpServletRequest();
-		StringBuilder url = new StringBuilder();
-		url.append("http://");
-		url.append(request.getServerName());
-		if (request.getServerPort() != 80)
-		{
-			url.append(":");
-			url.append(request.getServerPort());
-		}
-		url.append(request.getContextPath());
-		url.append("/");
-		url.append(type);
-		url.append("/");
-		url.append(workspaceId);
+    private String getWorkspaceUrl(String type, String workspaceId) {
+        HttpServletRequest request = ((WebRequest) getRequest()).getHttpServletRequest();
+        StringBuilder url = new StringBuilder();
+        url.append("http://");
+        url.append(request.getServerName());
+        if (request.getServerPort() != 80) {
+            url.append(":");
+            url.append(request.getServerPort());
+        }
+        url.append(request.getContextPath());
+        url.append("/");
+        url.append(type);
+        url.append("/");
+        url.append(workspaceId);
 
-		return url.toString();
-	}
+        return url.toString();
+    }
 
-	private String getWorkspaceId()
-	{
-		return getModelObject();
-	}
+    private String getWorkspaceId() {
+        return getModelObject();
+    }
 }

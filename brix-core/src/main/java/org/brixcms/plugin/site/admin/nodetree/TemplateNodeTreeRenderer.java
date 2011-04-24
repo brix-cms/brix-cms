@@ -21,26 +21,26 @@ import org.brixcms.plugin.site.page.PageNode;
 
 /**
  * Renderer for template nodes
- * 
+ *
  * @author Jeremy Thomerson
  */
-public class TemplateNodeTreeRenderer extends AbstractNodeTreeRenderer
-{
-	private static final long serialVersionUID = 1L;
+public class TemplateNodeTreeRenderer extends AbstractNodeTreeRenderer {
+// ------------------------------ FIELDS ------------------------------
 
-	private static final ResourceReference RESOURCE = new ResourceReference(
-			TemplateNodeTreeRenderer.class, "resources/text-x-generic-template.png");
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected ResourceReference getImageResourceReference(BaseTree tree, Object node)
-	{
-		return RESOURCE;
-	}
+    private static final ResourceReference RESOURCE = new ResourceReference(
+            TemplateNodeTreeRenderer.class, "resources/text-x-generic-template.png");
 
-	@Override
-	protected Class<? extends BrixNode> getNodeClass()
-	{
-		return PageNode.class;
-	}
+// -------------------------- OTHER METHODS --------------------------
 
+    @Override
+    protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {
+        return RESOURCE;
+    }
+
+    @Override
+    protected Class<? extends BrixNode> getNodeClass() {
+        return PageNode.class;
+    }
 }

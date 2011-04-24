@@ -23,8 +23,9 @@ import org.brixcms.rmiserver.AuthenticationException;
 import org.brixcms.rmiserver.User;
 import org.brixcms.rmiserver.UserService;
 
-public class AdminSession extends WebSession
-{
+public class AdminSession extends WebSession {
+// ------------------------------ FIELDS ------------------------------
+
     private static final long serialVersionUID = 1L;
 
     @SpringBean
@@ -32,43 +33,39 @@ public class AdminSession extends WebSession
 
     private Long userId;
 
-    public AdminSession(Request request)
-    {
+// -------------------------- STATIC METHODS --------------------------
+
+    public static AdminSession get() {
+        return (AdminSession) Session.get();
+    }
+
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    public AdminSession(Request request) {
         super(request);
         InjectorHolder.getInjector().inject(this);
     }
 
-    public boolean isUserLoggedIn()
-    {
+// -------------------------- OTHER METHODS --------------------------
+
+    public boolean isUserLoggedIn() {
         return userId != null;
     }
 
-    public User loginUser(String login, String password) throws AuthenticationException
-    {
+    public User loggedinUser() {
+        return (userId == null) ? null : users.load(userId);
+    }
+
+    public Long loggedinUserId() {
+        return userId;
+    }
+
+    public User loginUser(String login, String password) throws AuthenticationException {
         User user = users.query(login, password);
-        if (user == null)
-        {
+        if (user == null) {
             throw new AuthenticationException();
         }
         userId = user.getId();
         return user;
     }
-
-    public Long loggedinUserId()
-    {
-        return userId;
-    }
-
-    public User loggedinUser()
-    {
-
-        return (userId == null) ? null : users.load(userId);
-    }
-
-    public static AdminSession get()
-    {
-        return (AdminSession)Session.get();
-    }
-
-
 }

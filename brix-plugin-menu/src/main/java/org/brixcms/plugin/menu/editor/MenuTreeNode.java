@@ -21,66 +21,68 @@ import org.brixcms.web.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuTreeNode implements TreeNode
-{
-	private final Entry entry;
+public class MenuTreeNode implements TreeNode {
+// ------------------------------ FIELDS ------------------------------
 
-	public Entry getEntry()
-	{
-		return entry;
-	}
+    private final Entry entry;
 
-	public MenuTreeNode(Entry entry)
-	{
-		if (entry == null)
-		{
-			throw new IllegalArgumentException("Argument 'entry' may not be null.");
-		}
-		this.entry = entry;
-	}
+// --------------------------- CONSTRUCTORS ---------------------------
 
-	public void detach()
-	{
-	}
+    public MenuTreeNode(Entry entry) {
+        if (entry == null) {
+            throw new IllegalArgumentException("Argument 'entry' may not be null.");
+        }
+        this.entry = entry;
+    }
 
-	public List<? extends TreeNode> getChildren()
-	{
-		List<MenuTreeNode> children = new ArrayList<MenuTreeNode>();
-		for (Entry e : entry.getChildren())
-		{
-			children.add(new MenuTreeNode(e));
-		}
-		return children;
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
-	public boolean isLeaf()
-	{
-		return entry.getChildren().isEmpty();
-	}
+    public List<? extends TreeNode> getChildren() {
+        List<MenuTreeNode> children = new ArrayList<MenuTreeNode>();
+        for (Entry e : entry.getChildren()) {
+            children.add(new MenuTreeNode(e));
+        }
+        return children;
+    }
 
-	@Override
-	public String toString()
-	{
-		return entry.toString();
-	}
+    public Entry getEntry() {
+        return entry;
+    }
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj)
-		{
-			return true;
-		}
-		else if (obj instanceof MenuTreeNode == false)
-		{
-			return false;
-		}
-		return Objects.equal(entry, ((MenuTreeNode) obj).entry);
-	}
+// ------------------------ CANONICAL METHODS ------------------------
 
-	@Override
-	public int hashCode()
-	{
-		return entry.hashCode();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (obj instanceof MenuTreeNode == false) {
+            return false;
+        }
+        return Objects.equal(entry, ((MenuTreeNode) obj).entry);
+    }
+
+    @Override
+    public int hashCode() {
+        return entry.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return entry.toString();
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IDetachable ---------------------
+
+    public void detach() {
+    }
+
+// --------------------- Interface TreeNode ---------------------
+
+
+    public boolean isLeaf() {
+        return entry.getChildren().isEmpty();
+    }
 }

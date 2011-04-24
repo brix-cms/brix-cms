@@ -19,22 +19,26 @@ import org.brixcms.jcr.api.wrapper.WrapperAccessor;
 import javax.jcr.PropertyIterator;
 
 /**
- * 
  * @author Matej Knopp
  */
-public interface JcrPropertyIterator extends PropertyIterator
-{
+public interface JcrPropertyIterator extends PropertyIterator {
+// ------------------------ INTERFACE METHODS ------------------------
 
-    public static class Wrapper
-    {
-        public static JcrPropertyIterator wrap(PropertyIterator delegate, JcrSession session)
-        {
-            return WrapperAccessor.JcrPropertyIteratorWrapper.wrap(delegate, session);
-        }
-    };
 
-    public PropertyIterator getDelegate();
+// --------------------- Interface PropertyIterator ---------------------
 
     public JcrProperty nextProperty();
 
+// -------------------------- OTHER METHODS --------------------------
+    ;
+
+    public PropertyIterator getDelegate();
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static class Wrapper {
+        public static JcrPropertyIterator wrap(PropertyIterator delegate, JcrSession session) {
+            return WrapperAccessor.JcrPropertyIteratorWrapper.wrap(delegate, session);
+        }
+    }
 }

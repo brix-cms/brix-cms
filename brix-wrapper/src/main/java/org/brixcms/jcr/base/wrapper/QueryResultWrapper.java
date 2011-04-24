@@ -19,44 +19,41 @@ import javax.jcr.RepositoryException;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
 
-class QueryResultWrapper extends BaseWrapper<QueryResult> implements QueryResult
-{
+class QueryResultWrapper extends BaseWrapper<QueryResult> implements QueryResult {
+// -------------------------- STATIC METHODS --------------------------
 
-    private QueryResultWrapper(QueryResult delegate, SessionWrapper session)
-    {
-        super(delegate, session);
-    }
-
-    public static QueryResultWrapper wrap(QueryResult delegate, SessionWrapper session)
-    {
-        if (delegate == null)
-        {
+    public static QueryResultWrapper wrap(QueryResult delegate, SessionWrapper session) {
+        if (delegate == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return new QueryResultWrapper(delegate, session);
         }
     }
 
-    public String[] getColumnNames() throws RepositoryException
-    {
+// --------------------------- CONSTRUCTORS ---------------------------
+
+    private QueryResultWrapper(QueryResult delegate, SessionWrapper session) {
+        super(delegate, session);
+    }
+
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface QueryResult ---------------------
+
+    public String[] getColumnNames() throws RepositoryException {
         return getDelegate().getColumnNames();
     }
 
-    public NodeIterator getNodes() throws RepositoryException
-    {
-        return NodeIteratorWrapper.wrap(getDelegate().getNodes(), getSessionWrapper());
-    }
-
-    public RowIterator getRows() throws RepositoryException
-    {
+    public RowIterator getRows() throws RepositoryException {
         return getDelegate().getRows();
     }
 
-    public String[] getSelectorNames() throws RepositoryException
-    {
-        return getDelegate().getSelectorNames();
+    public NodeIterator getNodes() throws RepositoryException {
+        return NodeIteratorWrapper.wrap(getDelegate().getNodes(), getSessionWrapper());
     }
 
+    public String[] getSelectorNames() throws RepositoryException {
+        return getDelegate().getSelectorNames();
+    }
 }

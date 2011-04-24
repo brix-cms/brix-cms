@@ -16,26 +16,21 @@ package org.brixcms.plugin.site.page.exception;
 
 import org.brixcms.exception.BrixException;
 
-public class LoopException extends BrixException
-{
+public class LoopException extends BrixException {
+// --------------------------- CONSTRUCTORS ---------------------------
 
-    public LoopException()
-    {
+    public LoopException() {
     }
 
-    public LoopException(String message)
-    {
+    public LoopException(String message) {
         super(message);
     }
 
-    public LoopException(Throwable cause)
-    {
+    public LoopException(Throwable cause) {
         super(cause);
     }
 
-    public LoopException(String message, Throwable cause)
-    {
+    public LoopException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }
