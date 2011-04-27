@@ -48,7 +48,7 @@
         <inmethod.grid.version>1.4.17</inmethod.grid.version>
         <htmllexer.version>2.0-SNAPSHOT</htmllexer.version>
         <jackrabbit.version>2.2.4</jackrabbit.version>
-        <lucene.version>3.0.2</lucene.version>
+        <lucene.version>2.4.1</lucene.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
