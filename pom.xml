@@ -48,6 +48,7 @@
         <inmethod.grid.version>1.4.17</inmethod.grid.version>
         <htmllexer.version>2.0-SNAPSHOT</htmllexer.version>
         <jackrabbit.version>2.2.4</jackrabbit.version>
+        <lucene.version>3.0.2</lucene.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -216,6 +217,32 @@
                 <artifactId>log4j</artifactId>
                 <version>1.2.14</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-analyzers</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-core</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-misc</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-regex</artifactId>
+                <version>${lucene.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.lucene</groupId>
+                <artifactId>lucene-snowball</artifactId>
+                <version>${lucene.version}</version>
             </dependency>
             <!--+
                    | JETTY
