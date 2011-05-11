@@ -55,8 +55,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-core</artifactId>
+            <groupId>org.brixcms</groupId>
+            <artifactId>brix-jackrabbit-testdeps</artifactId>
             <scope>test</scope>
         </dependency>
 

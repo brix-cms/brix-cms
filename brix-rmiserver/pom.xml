@@ -76,6 +76,10 @@
             <groupId>org.brixcms</groupId>
             <artifactId>brix-workspace</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.brixcms</groupId>
+            <artifactId>brix-jackrabbit</artifactId>
+        </dependency>
         <!--+
         | JCR AND JACKRABBIT
         +-->
@@ -85,23 +89,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-jcr-commons</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-jcr-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-jcr-rmi</artifactId>
+            <version>${jackrabbit.commons.version}</version>
         </dependency>
         <!--+
         | JETTY
