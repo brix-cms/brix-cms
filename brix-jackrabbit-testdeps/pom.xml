@@ -1,39 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>org.brixcms</groupId>
         <artifactId>brix</artifactId>
+        <groupId>org.brixcms</groupId>
         <version>1.3.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.brixcms</groupId>
-    <artifactId>brix-jackrabbit</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
-
-    <name>Brix Jackrabbit Module</name>
-    <description>
-        This module is for using Jackrabbit as the backing JCR layer.
-    </description>
+    <artifactId>brix-jackrabbit-testdeps</artifactId>
 
     <properties>
         <jackrabbit.version>2.2.4</jackrabbit.version>
     </properties>
 
-    <!--+
-    | JACKRABBIT
-    +-->
     <dependencies>
-        <dependency>
-            <groupId>org.brixcms</groupId>
-            <artifactId>brix-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.jcr</groupId>
-            <artifactId>jcr</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-api</artifactId>
@@ -44,6 +26,7 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>

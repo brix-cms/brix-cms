@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>org.brixcms</groupId>
-            <artifactId>brix-jackrabbit</artifactId>
+            <artifactId>brix-jackrabbit-testdeps</artifactId>
             <scope>test</scope>
         </dependency>
 
