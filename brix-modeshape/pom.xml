@@ -27,17 +27,28 @@
         <dependency>
             <groupId>org.modeshape</groupId>
             <artifactId>modeshape-jcr</artifactId>
-            <version>2.4.0.Final</version>
+            <version>2.5.0.Beta2</version>
         </dependency>
         <dependency>
             <groupId>org.modeshape</groupId>
             <artifactId>modeshape-connector-filesystem</artifactId>
-            <version>2.4.0.Final</version>
+            <version>2.5.0.Beta2</version>
         </dependency>
         <dependency>
             <groupId>org.modeshape</groupId>
             <artifactId>modeshape-sequencer-cnd</artifactId>
-            <version>2.4.0.Final</version>
+            <version>2.5.0.Beta2</version>
         </dependency>
     </dependencies>
+
+    <!--
+    Temporary till modeshape is no longer Beta; TODO: remove prior release and make sure ModeShape is 2.5 Final!
+    -->
+    <repositories>
+        <repository>
+            <id>jboss</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
 </project>
