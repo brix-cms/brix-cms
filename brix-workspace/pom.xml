@@ -59,11 +59,6 @@
             <artifactId>brix-jackrabbit</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.jackrabbit</groupId>-->
-            <!--<artifactId>jackrabbit-core</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
     </dependencies>
     <!--+

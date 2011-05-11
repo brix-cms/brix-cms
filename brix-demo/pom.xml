@@ -113,15 +113,15 @@
             <artifactId>brix-workspace</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.brixcms</groupId>
-            <artifactId>brix-jackrabbit</artifactId>
-        </dependency>
-
         <!--<dependency>-->
-        <!--<groupId>org.brixcms</groupId>-->
-        <!--<artifactId>brix-modeshape</artifactId>-->
+            <!--<groupId>org.brixcms</groupId>-->
+            <!--<artifactId>brix-jackrabbit</artifactId>-->
         <!--</dependency>-->
+
+        <dependency>
+        <groupId>org.brixcms</groupId>
+        <artifactId>brix-modeshape</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
