@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -40,6 +41,7 @@
         <module>brix-plugin-publish</module>
         <module>brix-jackrabbit</module>
         <module>brix-modeshape</module>
+        <module>brix-jackrabbit-testdeps</module>
     </modules>
 
     <properties>
@@ -47,8 +49,7 @@
         <jetty.version>6.1.11</jetty.version>
         <inmethod.grid.version>1.4.17</inmethod.grid.version>
         <htmllexer.version>2.0-SNAPSHOT</htmllexer.version>
-        <jackrabbit.version>2.2.4</jackrabbit.version>
-        <lucene.version>2.4.1</lucene.version>
+        <jackrabbit.commons.version>2.2.4</jackrabbit.commons.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -109,14 +110,19 @@
             </dependency>
             <dependency>
                 <groupId>org.brixcms</groupId>
+                <artifactId>brix-jackrabbit-testdeps</artifactId>
+                <version>1.3.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.brixcms</groupId>
                 <artifactId>brix-modeshape</artifactId>
                 <version>1.3.0-SNAPSHOT</version>
             </dependency>
 
 
             <!--+
-                   | JCR
-                   +-->
+            | JCR
+            +-->
             <dependency>
                 <groupId>javax.jcr</groupId>
                 <artifactId>jcr</artifactId>
@@ -127,28 +133,8 @@
                    +-->
             <dependency>
                 <groupId>org.apache.jackrabbit</groupId>
-                <artifactId>jackrabbit-api</artifactId>
-                <version>${jackrabbit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.jackrabbit</groupId>
-                <artifactId>jackrabbit-core</artifactId>
-                <version>${jackrabbit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>jackrabbit-jcr-commons</artifactId>
-                <version>${jackrabbit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.jackrabbit</groupId>
-                <artifactId>jackrabbit-jcr-server</artifactId>
-                <version>${jackrabbit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.jackrabbit</groupId>
-                <artifactId>jackrabbit-jcr-rmi</artifactId>
-                <version>${jackrabbit.version}</version>
+                <version>${jackrabbit.commons.version}</version>
             </dependency>
             <!--+
                    | HELPERS
@@ -222,31 +208,6 @@
                 <version>1.2.14</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-analyzers</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-core</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-misc</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-regex</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-snowball</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
             <!--+
                    | JETTY
                    +-->
