@@ -112,7 +112,6 @@
             <groupId>org.brixcms</groupId>
             <artifactId>brix-workspace</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.brixcms</groupId>
             <artifactId>brix-jackrabbit</artifactId>
