@@ -1,0 +1,14 @@
+div.brix-toolbar {
+    position: absolute;
+    z-index: 100000;
+    top: 10px;
+    left: 10px;
+    background-color: white;
+    cursor: default;
+    opacity: 0.9;
+}
+
+div.brix-toolbar1 {
+    border: 1px solid gray;
+    padding: 0.3em;
+}

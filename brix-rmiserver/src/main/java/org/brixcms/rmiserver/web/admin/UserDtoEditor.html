@@ -1,0 +1,21 @@
+<wicket:panel>
+    <div wicket:id="feedback"></div>
+    <form wicket:id="form">
+        <wicket:enclosure child="login">
+            login: <input wicket:id="login" type="text"/><br/>
+        </wicket:enclosure>
+        <wicket:enclosure child="roles">
+            roles:<br/>
+            <wicket:container wicket:id="roles"></wicket:container>
+            <br/>
+        </wicket:enclosure>
+        <wicket:enclosure child="password1">
+            password: <input wicket:id="password1" type="password"/><br/>
+        </wicket:enclosure>
+        <wicket:enclosure child="password1">
+            confirm: <input wicket:id="password2" type="password"/><br/>
+        </wicket:enclosure>
+        <button wicket:id="ok" type="submit">OK</button>
+        <button wicket:id="cancel">CANCEL</button>
+    </form>
+</wicket:panel>

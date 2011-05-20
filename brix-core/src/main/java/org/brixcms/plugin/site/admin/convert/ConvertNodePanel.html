@@ -1,0 +1,16 @@
+<wicket:extend>
+    <table class="brix-property-edit">
+        <tr>
+            <td class="brix-property-label">
+                <wicket:message key="convertTo"/>
+            </td>
+
+            <td class="brix-property-value">
+                <wicket:container wicket:id="converters">
+                    <a wicket:id="convert" class="brix-button"
+                       onclick="return confirm('Are you sure you want to convert this resource?');">[[ type name ]]</a>
+                </wicket:container>
+            </td>
+        </tr>
+    </table>
+</wicket:extend>

@@ -1,0 +1,52 @@
+<wicket:panel>
+
+    <div class="brix-site-variable-container">
+
+        <div wicket:id="grid">
+        </div>
+
+        <div class="brix-buttons-left">
+            <div class="brix-buttons-left1">
+                <a wicket:id="deleteSelected" class="brix-button" href="#">
+                    <wicket:message key="deleteSelected"/>
+                </a> <br/>
+            </div>
+        </div>
+
+
+        <div class="brix-site-add-variable">
+
+            <div wicket:id="feedback" class="brix-feedback"></div>
+
+            <form wicket:id="form">
+                <table class="brix-property-edit">
+                    <tr>
+                        <td class="brix-property-label">
+                            <wicket:message key="key"/>
+                        </td>
+                        <td class="brix-property-value">
+                            <input wicket:id="key"/>
+                            <select wicket:id="keySuggestions"></select>
+                        </td>
+                        <td rowspan="2">
+                            <a class="brix-button" wicket:id="submit" href="#">
+                                <wicket:message key="addVariable"/>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="brix-property-label">
+                            <wicket:message key="value"/>
+                        </td>
+                        <td class="brix-property-value">
+                            <input wicket:id="value"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+        </div>
+    </div>
+
+
+</wicket:panel>

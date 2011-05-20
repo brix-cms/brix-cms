@@ -1,27 +1,60 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- <parent>
-  <artifactId>brix</artifactId>
-  <groupId>brix</groupId>
-  <version>1.2.3-SNAPSHOT</version>
- </parent>
- <modelVersion>4.0.0</modelVersion>
- <groupId>brix</groupId>
- <artifactId>brix-plugin-snapshot</artifactId>
- <name>Brix Site Snapshot/Backup Plugin</name>
- <version>1.2.3-SNAPSHOT</version>
- <packaging>bundle</packaging>
- <url>http://maven.apache.org</url>
- <dependencies>
-  <dependency>
-   <groupId>brix</groupId>
-   <artifactId>brix-core</artifactId>
-   <version>1.2.3-SNAPSHOT</version>
-  </dependency>
-  <dependency>
-   <groupId>junit</groupId>
-   <artifactId>junit</artifactId>
-   <version>3.8.1</version>
-   <scope>test</scope>
-  </dependency>
- </dependencies>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.brixcms</groupId>
+        <artifactId>brix</artifactId>
+        <version>1.3.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.brixcms</groupId>
+    <artifactId>brix-plugin-snapshot</artifactId>
+    <version>1.3.0-SNAPSHOT</version>
+
+    <packaging>bundle</packaging>
+
+    <name>Brix Site Snapshot/Backup Plugin</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.brixcms</groupId>
+            <artifactId>brix-core</artifactId>
+            <version>1.3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.1.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            org.brixcms.plugin.snapshot
+                        </Export-Package>
+                        <Import-Package>
+                            org.osgi*,org.brixcms, org.brixcms.auth, org.brixcms.exception, org.brixcms.jcr.api,
+                            org.brixcms.plugin.site, org.brixcms.web.generic,
+                            org.brixcms.web.tab, org.brixcms.workspace, org.apache.wicket, org.apache.wicket.behavior,
+                            org.apache.wicket.markup.html.basic, org.apache.wicket.markup.html.form,
+                            org.apache.wicket.markup.html.form.upload, org.apache.wicket.markup.html.link,
+                            org.apache.wicket.markup.html.list, org.apache.wicket.markup.html.panel,
+                            org.apache.wicket.model, org.apache.wicket.protocol.http
+                        </Import-Package>
+                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
+                        </Bundle-SymbolicName>
+                        <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

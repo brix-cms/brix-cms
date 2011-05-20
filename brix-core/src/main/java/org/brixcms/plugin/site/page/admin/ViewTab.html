@@ -1,0 +1,43 @@
+<wicket:panel>
+
+    <div style="float: right; padding-top: 1em; padding-right: 1em;">
+        <a wicket:id="edit" class="brix-button">
+            <wicket:message key="edit"/>
+        </a>
+    </div>
+
+    <div style="margin-right: 6em">
+        <table class="brix-property-display">
+            <tr>
+                <td class="brix-property-label">
+                    <wicket:message key="title"/>
+                </td>
+                <td class="brix-property-value"><span wicket:id="title"></span></td>
+            </tr>
+            <tr class="brix-property-line">
+                <td class="brix-property-label">
+                    <wicket:message key="template"/>
+                </td>
+                <td class="brix-property-value"><span wicket:id="template"></span></td>
+            </tr>
+            <tr class="brix-property-line">
+                <td class="brix-property-label">
+                    <wicket:message key="protocol"/>
+                </td>
+                <td class="brix-property-value"><span wicket:id="requiresSSL"></span></td>
+            </tr>
+            <tr class="brix-property-line">
+                <td class="brix-property-label">
+                    <wicket:message key="mimeType"/>
+                </td>
+                <td class="brix-property-value"><span wicket:id="mimeType"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="padding-top: 0.3em">
+        <div wicket:id="previewTabbedPanel" class="brix-tabbed-panel2">
+        </div>
+    </div>
+
+</wicket:panel>

@@ -1,0 +1,36 @@
+<wicket:panel>
+    <br/>
+
+    <form wicket:id="form">
+
+        <table class="brix-property-edit">
+            <tr>
+                <td class="brix-property-label"></td>
+                <td class="brix-property-value">
+                    <input wicket:id="overwrite" type="checkbox" id="brix-upload-overwrite"/>
+                    <label for="brix-upload-overwrite">
+                        <wicket:message key="overwriteExistingFiles"/>
+                    </label>
+                </td>
+            </tr>
+        </table>
+
+
+        <div wicket:id="uploads" class="brix-site-upload-resources"></div>
+
+        <div wicket:id="feedback" class="brix-feedback"></div>
+
+        <div class="brix-buttons-right">
+            <div class="brix-buttons-right1">
+                <a wicket:id="upload" href="#" class="brix-button">
+                    <wicket:message key="upload"/>
+                </a>
+                <a wicket:id="cancel" href="#" class="brix-button">
+                    <wicket:message key="cancel"/>
+                </a>
+            </div>
+        </div>
+
+    </form>
+
+</wicket:panel>

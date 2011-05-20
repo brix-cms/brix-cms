@@ -1,0 +1,30 @@
+<wicket:panel>
+    <table class="brix-menu-container">
+        <tr>
+            <td class="brix-menu-selector">
+                <ul>
+                    <li>
+                        <a wicket:id="newMenu">
+                            <wicket:message key="createNew"/>
+                        </a>
+                    </li>
+                    <li wicket:id="listView"><a wicket:id="select"><span wicket:id="label"></span></a></li>
+                </ul>
+            </td>
+
+            <td class="brix-menu-editor">
+                <!-- this is a necessary workaround for IE not to overflow -->
+                <table style="table-layout: fixed; border-collapse: collapse; width: 100%; *width:auto; ">
+                    <tr>
+                        <td>
+
+                            <div wicket:id="editor" class="editor">
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</wicket:panel>

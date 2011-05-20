@@ -1,0 +1,59 @@
+<wicket:panel>
+
+    <table>
+        <tr>
+            <td style="vertical-align: top">
+                <wicket:message key="availableMenus"/>
+                <div class="brix-menu-tile-menu-list">
+                    <wicket:container wicket:id="menuPicker"></wicket:container>
+                </div>
+            </td>
+            <td>
+                <div class="brix-menu-tile-editor">
+                    <form wicket:id="form">
+                        <table class="brix-property-edit">
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="selectedLiCssClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="selectedLiCssClass"/></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="selectAllParentLi"/>
+                                </td>
+                                <td class="brix-property-value"><input type="checkbox" wicket:id="selectAllParentLi"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="firstLiCssClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="firstLiCssClass"/></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="lastLiCssClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="lastLiCssClass"/></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="outerUlCssClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="outerUlCssClass"/></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="innerUlCssClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="innerUlCssClass"/></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+</wicket:panel>

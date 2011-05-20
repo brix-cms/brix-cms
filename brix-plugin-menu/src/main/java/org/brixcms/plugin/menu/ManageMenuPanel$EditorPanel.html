@@ -1,0 +1,25 @@
+<wicket:panel>
+
+    <div wicket:id="feedback" class="brix-feedback"></div>
+
+    <form wicket:id="form">
+        <wicket:message key="name"/>
+        <input wicket:id="name"/>
+
+        <div wicket:id="editor" class="brix-menu-editor-panel">
+        </div>
+
+        <div class="brix-menu-editor-buttons">
+            <div class="brix-buttons-right">
+                <div class="brix-buttons-right1">
+                    <a class="brix-button" wicket:id="save" href="#">
+                        <wicket:message key="save"/>
+                    </a>
+                    <a class="brix-button" wicket:id="delete" href="#">
+                        <wicket:message key="delete"/>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</wicket:panel>

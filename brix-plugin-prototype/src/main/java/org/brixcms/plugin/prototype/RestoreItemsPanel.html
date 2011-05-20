@@ -1,0 +1,36 @@
+<wicket:head>
+    <style type="text/css">
+        div.message p {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        div.message {
+            border: 1px dotted #ddd;
+            padding: 0.5em;
+            margin-left: 1em;
+            margin-right: 1em;
+            height: 5em;
+            overflow: auto;
+            margin-bottom: 1em;
+        }
+    </style>
+</wicket:head>
+<wicket:panel>
+    <div class="brix-admin">
+        <div style="padding: 0.5em">
+            <div wicket:id="grid">
+            </div>
+            <div style="text-align: right; padding-top: 0.5em; padding-bottom: 0.5em;">
+		<span style="float: left">
+			<wicket:message key="targetLocation"/> <span wicket:id="picker"></span>
+		</span>
+                <a class="brix-button" wicket:id="restore">
+                    <wicket:message key="restoreSelectedItems"/>
+                </a>
+            </div>
+            <div wicket:id="message" class="message">
+            </div>
+        </div>
+    </div>
+</wicket:panel>

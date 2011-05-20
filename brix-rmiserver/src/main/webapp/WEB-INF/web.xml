@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-	version="2.4">
-	<display-name>brix-rmiserver</display-name>
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+    <display-name>org.brixcms-rmiserver</display-name>
 
-  <!--+
-      | SPRING CONFIG
-      +-->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:brix/rmiserver/spring.xml</param-value>
-	</context-param>
-	<listener>
-		<listener-class> org.springframework.web.context.ContextLoaderListener 
-		</listener-class>
-	</listener>
-  <!--+
-      | OPEN SESSION IN VIEW FILTER
-      +-->
-	<filter>
-		<filter-name>OSIV</filter-name>
-		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>OSIV</filter-name>
-		<url-pattern>/admin/*</url-pattern>
-	</filter-mapping>
-  <!--+
-      | WICKET
-      +-->
-	<filter>
-		<filter-name>wicket.rmiserver.admin</filter-name>
-		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
-		<init-param>
-			<param-name>applicationClassName</param-name>
-			<param-value>brix.rmiserver.web.admin.AdminApplication</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>wicket.rmiserver.admin</filter-name>
-		<url-pattern>/admin/*</url-pattern>
-	</filter-mapping>
-  <!--+
-	    | WEB DAV SUPPORT
-	    +-->
-	<servlet>
-		<servlet-name>webdav</servlet-name>
-		<servlet-class>brix.rmiserver.web.dav.WebDavServlet</servlet-class>
-		<init-param>
-			<param-name>resource-path-prefix</param-name>
-			<param-value>/webdav</param-value>
-		</init-param>
-		<init-param>
-			<param-name>resource-config</param-name>
-			<param-value>/WEB-INF/config.xml</param-value>
-		</init-param>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>webdav</servlet-name>
-		<url-pattern>/webdav/*</url-pattern>
-	</servlet-mapping>
+    <!--+
+    | SPRING CONFIG
+    +-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:brix/rmiserver/spring.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+    <!--+
+    | OPEN SESSION IN VIEW FILTER
+    +-->
+    <filter>
+        <filter-name>OSIV</filter-name>
+        <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OSIV</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+    <!--+
+    | WICKET
+    +-->
+    <filter>
+        <filter-name>wicket.rmiserver.admin</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+        <init-param>
+            <param-name>applicationClassName</param-name>
+            <param-value>org.brixcms.rmiserver.web.admin.AdminApplication</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>wicket.rmiserver.admin</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+    <!--+
+         | WEB DAV SUPPORT
+         +-->
+    <servlet>
+        <servlet-name>webdav</servlet-name>
+        <servlet-class>org.brixcms.rmiserver.web.dav.WebDavServlet</servlet-class>
+        <init-param>
+            <param-name>resource-path-prefix</param-name>
+            <param-value>/webdav</param-value>
+        </init-param>
+        <init-param>
+            <param-name>resource-config</param-name>
+            <param-value>/WEB-INF/config.xml</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>webdav</servlet-name>
+        <url-pattern>/webdav/*</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -1,0 +1,42 @@
+![Brix Logo](https://github.com/brix-cms/brix-cms/raw/master/brix-logo.jpg)
+
+Based on Wicket and JCR, it is the best Wicket-based CMS framework available today. BRIX is simple yet powerful and extensible, allowing designers the highest degree of freedom in developing a rich user experience.   
+
+Using Apache Wicket as the technology to serve the content makes it very easy to embed custom, stateful Wicket components into any CMS page, allowing rich integration with any existing Wicket web application.  Using Apache Jackrabbit allows Brix to easily integrate full text search, versioning, and WebDav access.
+
+Brix is business-friendly, open sourced under the Apache Software License version 2.0.
+
+Why Brix?
+---------
+- Most CMS are for building web sites. Brix CMS is for building web  applications.
+
+- Dynamic content is usually an afterthought for most CMS. It is central to Brix CMS. Brix allows for dynamic component-based tiles.
+
+Features
+--------
+
+- *Wicket-based CMS framework*:  With a refreshing lack of XML being just one of its many benefits, Apache Wicket makes developing web-apps simple and enjoyable. 
+- *Based on JCR (Java Content Repository)*:  Use an enterprise-standard data repository.
+- *Extensible Plug-in Architecture:*   Create and publicly code extensions without having to roll those changes into the BRIX core providing a hack-free way of extending and customizing Brix to suit an extremely diverse set of needs of its user base.
+- *Tiles*:  Easily incorporate configurable, reusable blocks of dynamic content into your CMS ranging from a simple Contact Us form to a complex Forum application.
+- *Templates*:  Easily create and reuse website skins and factor out “chrome” into a single location.
+- *Prototypes*:  User-defined, clone-able site structures provide additional ease of use.
+- *Support for WebDAV*:  Allows for a collaborative approach to document creation, editing, and distribution. Also edit using your favorite desktop HTML editor.
+- *Site Snapshots*:  Provide support for version control and backup.
+- *Raw or Rich Content Editing*:  Incorporate rich text and the associated formatting. 
+- *Ease of Use*:  Basic workflow/publishing support and flexible security infrastructure.  
+
+At its deepest abstraction, BRIX is not a standalone CMS, but rather a CMS framework which allows for easy integration of CMS functionality into existing Wicket-based applications.  This is its primary benefit and we are confident that it will become the CMS tool of choice for many organizations as a result.
+
+Getting Started
+---------------
+
+- How to [run the demo](http://code.google.com/p/brix-cms/wiki/RunningTheDemo)
+- How to [create a custom tile](http://code.google.com/p/brix-cms/wiki/TutorialGuestBookTile)
+
+Community
+---------
+- Mailing List/Google Group: http://groups.google.com/group/brix-cms-discuss
+- IRC: [##brix on freenode](irc://irc.freenode.net/##brix)
+- [Brix CMS Plugins](http://code.google.com/p/brix-cms-plugins) Repository Google Code Project - A place for developers to contribute and share their plugins for Brix.
+- Blog Articles: [1](http://mythinkpond.wordpress.com/2010/03/08/how-to-setup-brix-cms-with-apache-jackrabbit-as-a-cluster-part-1-of-3/) [2](http://www.xaloon.org/blog/vytautas.racelis/Wicket_based_BRIX_CMS_from_developer_point_of_view)

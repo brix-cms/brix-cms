@@ -1,0 +1,32 @@
+<wicket:panel>
+    <div class="brix-site-simple-panel">
+        <div class="brix-site-simple-panel1">
+            <div class="brix-site-simple-panel-caption">
+                <wicket:message key="renameNode"/>
+            </div>
+            <form wicket:id="form">
+                <table class="brix-property-edit">
+                    <tr>
+                        <td class="brix-property-label">
+                            <wicket:message key="newName"/>
+                        </td>
+                        <td class="brix-property-value"><input wicket:id="newName"/></td>
+                    </tr>
+                </table>
+                <div wicket:id="feedback" class="brix-feedback">
+                </div>
+
+                <div class="brix-buttons-right">
+                    <div class="brix-buttons-right1">
+                        <a wicket:id="rename" class="brix-button" href="#">
+                            <wicket:message key="rename"/>
+                        </a>
+                        <a wicket:id="cancel" class="brix-button" href="#">
+                            <wicket:message key="cancel"/>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</wicket:panel>

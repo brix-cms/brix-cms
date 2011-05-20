@@ -1,0 +1,68 @@
+<wicket:panel>
+
+    <table>
+        <tr>
+            <td style="vertical-align: top">
+                <wicket:message key="availableMenus"/>
+
+                <div class="brix-menu-tile-menu-list">
+                    <wicket:container wicket:id="menuPicker"></wicket:container>
+                </div>
+
+            </td>
+            <td>
+                <div class="brix-menu-tile-editor">
+                    <form wicket:id="form">
+                        <table class="brix-property-edit">
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="selectedItemCSSClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="selectedItemStyleClass"/></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="itemWithSelectedChildCSSClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="itemWithSelectedChildStyleClass"/>
+                                    <span class="menu-tile-editor-hint"><wicket:message
+                                            key="itemWithSelectedChildCSSClassHint"/></span></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="outerContainerCSSClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="outerContainerStyleClass"/></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="innerContainerCSSClass"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="innerContainerStyleClass"/> <span
+                                        class="menu-tile-editor-hint"><wicket:message key="forNestedMenus"/></span></td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="startAtLevel"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="startAtLevel"/> <span
+                                        class="menu-tile-editor-hint"><wicket:message key="startAtLevelDesc"/></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="brix-property-label">
+                                    <wicket:message key="renderLevels"/>
+                                </td>
+                                <td class="brix-property-value"><input wicket:id="renderLevels"/> <span
+                                        class="menu-tile-editor-hint"><wicket:message key="renderLevelsDesc"/></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+            </td>
+        </tr>
+    </table>
+
+</wicket:panel>

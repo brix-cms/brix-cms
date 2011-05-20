@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="no" xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+        >
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:brix/rmiserver/server.properties</value>
+                <value>classpath:org.brixcms/rmiserver/server.${user.name}.properties</value>
+            </list>
+        </property>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+    </bean>
+    <bean class="org.springframework.beans.factory.annotation.RequiredAnnotationBeanPostProcessor"/>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${datasource.driver}"/>
+        <property name="url" value="${datasource.url}"/>
+        <property name="username" value="${datasource.username}"/>
+        <property name="password" value="${datasource.password}"/>
+    </bean>
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.max_fetch_depth">3</prop>
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.brixcms.rmiserver.User</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="passwordEncoder" class="org.brixcms.rmiserver.PasswordEncoder"/>
+    <bean id="userService" class="org.brixcms.rmiserver.UserService">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="passwordEncoder" ref="passwordEncoder"/>
+    </bean>
+    <bean id="bootstrapper" class="org.brixcms.rmiserver.boot.BootstrapperFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="userService" ref="userService"/>
+        <property name="workspaceManagerLogin" value="${wm.login}"/>
+        <property name="workspaceManagerPassword" value="${wm.password}"/>
+    </bean>
+    <!--+
+    | JACKRABBIT REPOSITORY
+    +-->
+    <bean id="jackrabbit" class="org.brixcms.rmiserver.jackrabbit.RepositoryFactoryBean">
+        <property name="repositoryHomeDir" value="${jcr.location}"/>
+        <property name="userService" ref="userService"/>
+        <property name="repositoryConfig" value="${jcr.config}"/>
+    </bean>
+    <bean id="jackrabbit.remote" class="org.brixcms.rmiserver.jackrabbit.RemoteRepositoryExporterBean">
+        <property name="repository" ref="jackrabbit"/>
+        <property name="serviceName" value="${rmi.repository.name}"/>
+        <property name="registryPort" value="${rmi.registry.port}"/>
+    </bean>
+    <!--+
+         | WORKSPACE MANAGER
+         | (notice workspaceManager depends on bootstrapper because we need login/password
+         |  created before we can initialize workspace manager)
+         +-->
+    <bean id="workspaceManager" class="org.brixcms.rmiserver.workspacemanager.WorkspaceManagerFactoryBean"
+          depends-on="bootstrapper"
+            >
+        <property name="login" value="${wm.login}"/>
+        <property name="password" value="${wm.password}"/>
+        <property name="repository" ref="jackrabbit"/>
+    </bean>
+    <bean id="workspaceManager.remote" class="org.brixcms.rmiserver.workspacemanager.WorkspaceManagerExporterBean">
+        <property name="workspaceManager" ref="workspaceManager"/>
+        <property name="registryPort" value="${rmi.registry.port}"/>
+        <property name="serviceName" value="${rmi.wm.name}"/>
+    </bean>
+
+</beans>

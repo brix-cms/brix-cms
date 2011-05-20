@@ -1,0 +1,47 @@
+<wicket:panel>
+
+    <div class="brix-site-edit-resource-properties">
+
+        <div class="brix-site-simple-panel">
+            <div class="brix-site-simple-panel1">
+
+                <div class="brix-site-simple-panel-caption">
+                    <wicket:message key="editProperties"/>
+                </div>
+
+                <form wicket:id="form">
+
+                    <table class="brix-property-edit">
+                        <tr>
+                            <td class="brix-property-label">
+                                <wicket:message key="mimeType"/>
+                            </td>
+                            <td class="brix-property-value"><input wicket:id="mimeType" type="text" size="15"/></td>
+                        </tr>
+                        <tr>
+                            <td class="brix-property-label">
+                                <wicket:message key="requiredProtocol"/>
+                            </td>
+                            <td class="brix-property-value"><select wicket:id="requiredProtocol"></select></td>
+                        </tr>
+                    </table>
+
+                    <div class="brix-buttons-right">
+                        <div class="brix-buttons-right1">
+                            <a wicket:id="save" href="#" class="brix-button">
+                                <wicket:message key="save"/>
+                            </a>
+                            <a wicket:id="cancel" href="#" class="brix-button">
+                                <wicket:message key="cancel"/>
+                            </a>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+</wicket:panel>

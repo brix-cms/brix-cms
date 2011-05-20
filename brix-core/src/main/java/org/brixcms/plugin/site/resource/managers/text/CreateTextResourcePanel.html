@@ -1,0 +1,23 @@
+<wicket:panel>
+    <div wicket:id="feedback" class="brix-feedback"></div>
+    <form wicket:id="form">
+
+        <table class="brix-property-edit" style="width:100%;">
+            <tr>
+                <td class="brix-property-label">
+                    <wicket:message key="fileName"/>
+                </td>
+                <td class="brix-property-value"><input wicket:id="fileName" type="text" size="20"/></td>
+            </tr>
+            <wicket:container wicket:id="editor"></wicket:container>
+        </table>
+        <div style="float:right;">
+            <a class="brix-button" wicket:id="save">
+                <wicket:message key="save"/>
+            </a>
+            <a class="brix-button" wicket:id="cancel">
+                <wicket:message key="cancel"/>
+            </a>
+        </div>
+    </form>
+</wicket:panel>

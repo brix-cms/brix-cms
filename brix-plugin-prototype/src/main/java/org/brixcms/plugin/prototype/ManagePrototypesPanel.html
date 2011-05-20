@@ -1,0 +1,64 @@
+<wicket:panel>
+
+    <div class="brix-prototypes-container">
+        <div class="brix-prototypes-container1">
+
+            <div wicket:id="feedback" class="brix-feedback">
+            </div>
+
+            <table>
+                <tr>
+                    <td>
+                        <div class="brix-prototypes-caption">
+                            <wicket:message key="availablePrototypes"/>
+                        </div>
+
+                        <div wicket:id="prototypes" class="brix-prototypes-item">
+                            <span wicket:id="label"></span>
+
+                            <div class="brix-buttons-left">
+                                <div class="brix-buttons-left1">
+                                    <a class="brix-button-thin" wicket:id="browse">
+                                        <wicket:message key="browse"/>
+                                    </a>
+                                    <a class="brix-button-thin" wicket:id="restoreItems">
+                                        <wicket:message key="restoreSelectedItems"/>
+                                    </a>
+                                    <a class="brix-button-thin" wicket:id="delete"
+                                       wicket:message="onclick:deleteOnClick">
+                                        <wicket:message key="delete"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+
+                    <td class="brix-prototypes-actions">
+
+                        <div class="brix-prototypes-action">
+                            <form wicket:id="form">
+                                <wicket:message key="createNewPrototype"/>
+                                <br/>
+                                <wicket:message key="name"/>
+                                <input wicket:id="prototypeName"/> <br/>
+                                <a wicket:id="submit" href="#" class="brix-button">
+                                    <wicket:message key="create"/>
+                                </a>
+                            </form>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+
+    <form wicket:id="modalWindowForm">
+        <div wicket:id="modalWindow">
+        </div>
+    </form>
+
+</wicket:panel>

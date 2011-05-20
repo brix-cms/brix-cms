@@ -1,0 +1,28 @@
+<wicket:panel>
+
+    <div class="brix-reference-editor-parameters-tab">
+
+        <form wicket:id="newForm" class="brix-reference-editor-parameters-add">
+            <span><wicket:message key="key"/></span><input wicket:id="key"/>
+            <span><wicket:message key="value"/></span><input wicket:id="value"/>
+            <a href="#" class="brix-button" wicket:id="add">
+                <wicket:message key="add"/>
+            </a>
+        </form>
+
+        <div wicket:id="feedback" class="brix-feedback">
+        </div>
+
+        <div wicket:id="grid">
+        </div>
+
+        <div class="brix-buttons-left">
+            <div class="brix-buttons-left1">
+                <a wicket:id="removeSelected" href="#" class="brix-button">
+                    <wicket:message key="removeSelectedItems"/>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</wicket:panel>

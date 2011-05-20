@@ -1,0 +1,40 @@
+<wicket:panel>
+    <div class="brix-site-view-text-panel">
+        <div class="brix-site-view-text-top">
+            <a href="#" class="brix-button" style="float:right" wicket:id="edit">
+                <wicket:message key="edit"/>
+            </a>
+            <a class="brix-button" href="#" wicket:id="download" style="float:right; margin-right: 10px;">
+                <wicket:message key="downloadResource"/>
+            </a>
+        </div>
+
+        <table class="brix-property-display">
+            <tr>
+                <td class="brix-property-label">
+                    <wicket:message key="size"/>
+                </td>
+                <td class="brix-property-value"><span wicket:id="size"></span></td>
+            </tr>
+            <tr>
+                <td class="brix-property-label">
+                    <wicket:message key="mimeType"/>
+                </td>
+                <td class="brix-property-value"><span wicket:id="mimeType"></span></td>
+            </tr>
+            <tr>
+                <td class="brix-property-label">
+                    <wicket:message key="requiredProtocol"/>
+                </td>
+                <td class="brix-property-value"><span wicket:id="requiredProtocol"></span></td>
+            </tr>
+        </table>
+
+        <div class="brix-site-view-text-container">
+            <div>
+			<pre wicket:id="label">
+			</pre>
+            </div>
+        </div>
+    </div>
+</wicket:panel>	

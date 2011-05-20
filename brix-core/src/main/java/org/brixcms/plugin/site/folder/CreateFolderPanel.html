@@ -1,0 +1,33 @@
+<wicket:panel>
+    <div class="brix-site-simple-panel">
+        <div class="brix-site-simple-panel1">
+            <div class="brix-site-simple-panel-caption">
+                <wicket:message key="createNewFolder"/>
+            </div>
+
+            <form wicket:id="form">
+                <table class="brix-property-edit">
+                    <tr>
+                        <td class="brix-property-label">
+                            <wicket:message key="name"/>
+                        </td>
+                        <td class="brix-property-value"><input wicket:id="name" type="text" size="50"/></td>
+                    </tr>
+                </table>
+
+                <div wicket:id="feedback" class="brix-feedback"></div>
+
+                <div class="brix-buttons-right">
+                    <div class="brix-buttons-right1">
+                        <a wicket:id="create" href="#" class="brix-button">
+                            <wicket:message key="create"/>
+                        </a>
+                        <a wicket:id="cancel" href="#" class="brix-button">
+                            <wicket:message key="cancel"/>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</wicket:panel>

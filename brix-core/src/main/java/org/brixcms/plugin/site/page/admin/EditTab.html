@@ -1,0 +1,62 @@
+<wicket:panel>
+
+    <form wicket:id="form">
+        <fieldset>
+
+            <table class="brix-property-edit">
+                <tr>
+                    <td class="brix-property-label">
+                        <wicket:message key="title"></wicket:message>
+                    </td>
+                    <td class="brix-property-value"><input wicket:id="title" type="text" size="60"/></td>
+                </tr>
+                <tr>
+                    <td class="brix-property-label">
+                        <wicket:message key="template"></wicket:message>
+                    </td>
+                    <td class="brix-property-value"><span wicket:id="templatePicker"></span></td>
+                </tr>
+                <tr>
+                    <td class="brix-property-label">
+                        <wicket:message key="protocol"/>
+                    </td>
+                    <td class="brix-property-value"><select wicket:id="requiresSSL" id="requiresSSL"></select></td>
+                </tr>
+                <tr>
+                    <td class="brix-property-label">
+                        <wicket:message key="mimeType"/>
+                    </td>
+                    <td class="brix-property-value"><input wicket:id="mimeType" type="text" maxlength="254" size="60"/>
+                    </td>
+                </tr>
+            </table>
+
+            <div wicket:id="feedback" class="brix-feedback">
+            </div>
+
+            <div class="brix-site-page-editor-container">
+                <span><wicket:message key="content"/></span>
+
+                <input wicket:id="editors" type="submit"/>
+
+                <div class="brix-site-page-editor">
+                    <textarea wicket:id="content" class="brix-site-page-editor"></textarea>
+                </div>
+            </div>
+
+            <div class="brix-site-page-buttons">
+                <div class="brix-buttons-right">
+                    <div class="brix-buttons-right1">
+                        <button type="submit" class="brix-button" wicket:id="save">
+                            <wicket:message key="save"/>
+                        </button>
+                        <a class="brix-button" wicket:id="cancel">
+                            <wicket:message key="cancel"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</wicket:panel>

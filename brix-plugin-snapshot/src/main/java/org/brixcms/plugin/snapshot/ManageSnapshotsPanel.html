@@ -1,0 +1,70 @@
+<wicket:panel>
+
+    <div class="brix-snapshots-container">
+        <div class="brix-snapshots-container1">
+
+            <div wicket:id="feedback" class="brix-feedback">
+            </div>
+
+            <table>
+                <tr>
+                    <td>
+                        <div class="brix-snapshots-caption">
+                            <wicket:message key="availableSnapshots"/>
+                        </div>
+                        <div wicket:id="snapshots" class="brix-snapshots-item">
+                            <span wicket:id="label"></span>
+
+                            <div wicket:id="commentlabel" class="brix-snapshots-item">AnyComment</div>
+                            <div class="brix-buttons-left">
+                                <div class="brix-buttons-left1">
+                                    <a class="brix-button-thin" wicket:id="browse">
+                                        <wicket:message key="browse"/>
+                                    </a>
+                                    <a class="brix-button-thin" wicket:id="restore">
+                                        <wicket:message key="restore"/>
+                                    </a>
+                                    <a class="brix-button-thin" wicket:id="delete"
+                                       wicket:message="onclick:deleteOnClick">
+                                        <wicket:message key="delete"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+
+                    <td class="brix-snapshots-actions">
+                        <div class="brix-snapshots-action">
+                            <form wicket:id="commentForm">
+                                <wicket:message key="commentSnapshot"/>
+                                <br>
+                                <textarea rows="6" cols="24" wicket:id="area"></textarea><br>
+                                <a wicket:id="createSnapshot" class="brix-button">
+                                    <wicket:message key="createSnapshot"/>
+                                </a>
+                            </form>
+
+                        </div>
+                        <div class="brix-snapshots-action">
+                            <a wicket:id="downloadWorkspace" class="brix-button">
+                                <wicket:message key="downloadWorkspace"/>
+                            </a>
+                        </div>
+                        <div class="brix-snapshots-action">
+                            <form wicket:id="uploadForm">
+                                <wicket:message key="restoreWorkspace"/>
+                                <br/>
+                                <input wicket:id="upload" type="file"/> <br/>
+                                <a wicket:id="submit" class="brix-button">
+                                    <wicket:message key="submit"/>
+                                </a>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</wicket:panel>

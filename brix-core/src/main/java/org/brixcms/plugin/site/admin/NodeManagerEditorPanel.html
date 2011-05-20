@@ -1,0 +1,25 @@
+<wicket:panel>
+
+    <div class="brix-site-edit-node-top">
+        <div class="brix-node-path">
+            <div wicket:id="path2"></div>
+        </div>
+
+        <div class="brix-buttons">
+            <a wicket:id="rename">
+                <wicket:message key="rename"/>
+            </a>
+            <a wicket:id="makeVersionable">
+                <wicket:message key="makeVersionable"/>
+            </a>
+            <a wicket:id="delete" onclick="return confirm('Are you sure?');">
+                <wicket:message key="delete"/>
+            </a>
+        </div>
+    </div>
+
+    <div wicket:id="sessionFeedback" class="brix-site-session-feedback"></div>
+
+    <div wicket:id="tabbedPanel">
+    </div>
+</wicket:panel>

@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Biggie Jackrabbit RMI Server Admin</title>
+</head>
+<body>
+<a wicket:id="create">create new user</a>
+<br/>
+<br/>
+<table>
+    <tr>
+        <td>
+            <div wicket:id="pager"></div>
+            <table>
+                <tr>
+                    <th>Login</th>
+                    <th>Roles</th>
+                </tr>
+                <tr wicket:id="list">
+                    <td><span wicket:id="login">Bob</span></td>
+                    <td><span wicket:id="roles">ADMIN, RMI</span></td>
+                    <td>
+                        <div wicket:id="actions"></div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <div wicket:id="editor"></div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
+
+<wicket:fragment wicket:id="actions">
+    <a wicket:id="edit">edit</a> | <a wicket:id="password">change password</a>
+</wicket:fragment>
+<wicket:fragment wicket:id="locked">user is locked</wicket:fragment>
