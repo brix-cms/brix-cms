@@ -14,20 +14,22 @@
 
 package org.brixcms.web.nodepage;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.WebResponse;
-import org.apache.wicket.request.target.component.IPageRequestTarget;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.IPageRequestHandler;
+import org.apache.wicket.request.http.WebResponse;
 import org.brixcms.jcr.wrapper.BrixFileNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixNodePageRequestTarget
         implements
-        IRequestTarget,
-        IPageRequestTarget,
+        IRequestHandler,
+        IPageRequestHandler,
         PageParametersRequestTarget {
 // ------------------------------ FIELDS ------------------------------
 
@@ -61,10 +63,17 @@ public class BrixNodePageRequestTarget
 // ------------------------ INTERFACE METHODS ------------------------
 
 
-// --------------------- Interface IRequestTarget ---------------------
+// --------------------- Interface IPageClassRequestHandler ---------------------
 
+    @Override
+    public Class<? extends IRequestablePage> getPageClass() {
+        log.trace("Entering getPageClass");
+        return null;
+    }
 
-    public final void respond(RequestCycle requestCycle) {
+// --------------------- Interface IRequestHandler ---------------------
+
+    public final void respond(IRequestCycle requestCycle) {
         if (page == null) {
             page = pageFactory.newPage();
             if (page.initialRedirect()) {
@@ -81,7 +90,7 @@ public class BrixNodePageRequestTarget
         respondWithInitialRedirectHandled(requestCycle);
     }
 
-    public void detach(RequestCycle requestCycle) {
+    public void detach(IRequestCycle requestCycle) {
         if (getPage() != null) {
             getPage().detach();
         }
@@ -104,7 +113,7 @@ public class BrixNodePageRequestTarget
     protected void respondWithInitialRedirectHandled(RequestCycle requestCycle) {
         // check if the listener invocation or something else hasn't changed the
         // request target
-        if (RequestCycle.get().getRequestTarget() == this) {
+        if (RequestCycle.get().getActiveRequestHandler() == this) {
             WebResponse response = (WebResponse) requestCycle.getResponse();
 
             // TODO figure out how to handle last modified for pages.

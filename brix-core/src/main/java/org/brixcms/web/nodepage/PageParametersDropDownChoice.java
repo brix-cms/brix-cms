@@ -15,10 +15,12 @@
 package org.brixcms.web.nodepage;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 import java.util.List;
 
@@ -58,19 +60,19 @@ public class PageParametersDropDownChoice<T> extends DropDownChoice<T> {
 
     @Override
     protected void onSelectionChanged(Object newSelection) {
-        getRequestCycle().setRequestTarget(getRequestTarget());
+        getRequestCycle().replaceAllRequestHandlers(getRequestHandler());
     }
 
-    protected IRequestTarget getRequestTarget() {
+    protected IRequestHandler getRequestHandler() {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
-        getPage().visitChildren(PageParametersAware.class, new Component.IVisitor<Component>() {
-            public Object component(Component component) {
+        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
+            @Override
+            public void component(Component component, IVisit<PageParametersAware> pageParametersAwareIVisit) {
                 ((PageParametersAware) component).contributeToPageParameters(parameters);
-                return Component.IVisitor.CONTINUE_TRAVERSAL;
             }
         });
         contributeToPageParameters(parameters);
-        IRequestTarget target = new BrixNodeRequestTarget((BrixNodeWebPage) getPage(), parameters);
+        IRequestHandler target = new BrixNodeRequestTarget((BrixNodeWebPage) getPage(), parameters);
         return target;
     }
 

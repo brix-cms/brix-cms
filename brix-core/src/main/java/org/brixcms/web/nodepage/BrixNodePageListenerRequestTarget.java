@@ -15,17 +15,16 @@
 package org.brixcms.web.nodepage;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.RequestCycle;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.RequestListenerInterface;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.RequestParameters;
-import org.apache.wicket.request.target.component.listener.IListenerInterfaceRequestTarget;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixNodePageListenerRequestTarget extends BrixNodePageRequestTarget
-        implements
-        IListenerInterfaceRequestTarget {
+        implements IListenerInterfaceRequestTarget {
 // ------------------------------ FIELDS ------------------------------
 
     private final String iface;
@@ -49,7 +48,7 @@ public class BrixNodePageListenerRequestTarget extends BrixNodePageRequestTarget
 
 // --------------------- Interface IListenerInterfaceRequestTarget ---------------------
 
-    public RequestParameters getRequestParameters() {
+    public IRequestParameters getRequestParameters() {
         return RequestCycle.get().getRequest().getRequestParameters();
     }
 

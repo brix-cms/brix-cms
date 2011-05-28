@@ -17,17 +17,17 @@ package org.brixcms.web.nodepage;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.IRedirectListener;
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.RequestParameters;
-import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
-import org.apache.wicket.request.target.component.BookmarkableListenerInterfaceRequestTarget;
-import org.apache.wicket.request.target.component.IBookmarkablePageRequestTarget;
-import org.apache.wicket.request.target.component.listener.ListenerInterfaceRequestTarget;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -51,7 +51,7 @@ import java.util.Set;
 /**
  * @author Matej Knopp
  */
-public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
+public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
 // ------------------------------ FIELDS ------------------------------
 
     private static final Logger log = LoggerFactory.getLogger(BrixNodePageUrlCodingStrategy.class);
@@ -66,7 +66,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
         return "--brix-internal";
     }
 
-    public CharSequence encode(IRequestTarget requestTarget) {
+    public CharSequence encode(IRequestHandler requestTarget) {
         if (requestTarget instanceof BrixNodeRequestTarget) {
             BrixNodeRequestTarget target = (BrixNodeRequestTarget) requestTarget;
             PageInfo info = null;
@@ -104,11 +104,11 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
         }
     }
 
-    public IRequestTarget decode(RequestParameters requestParameters) {
+    public IRequestHandler decode(IRequestParameters requestParameters) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean matches(IRequestTarget requestTarget) {
+    public boolean matches(IRequestHandler requestTarget) {
         if (requestTarget instanceof ListenerInterfaceRequestTarget) {
             ListenerInterfaceRequestTarget target = (ListenerInterfaceRequestTarget) requestTarget;
             return isBrixPage(target.getPage())
@@ -128,7 +128,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 
 // -------------------------- OTHER METHODS --------------------------
 
-    public IRequestTarget decode(RequestParameters requestParameters,
+    public IRequestHandler decode(PageParameters requestParameters,
                                  final IModel<BrixNode> nodeModel) {
         PageInfo pageInfo = null;
         String query = requestParameters.getQueryString();
@@ -197,22 +197,20 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 
     @SuppressWarnings("unchecked")
     private String addQueryStringParameters(BrixPageParameters pageParameters, PageInfo pageInfo,
-                                            RequestParameters requestParameters) {
+                                            IRequestParameters requestParameters) {
         final String pageInfoString = pageInfo != null ? pageInfo.toString() : null;
 
         String iface = null;
 
-        for (Iterator i = requestParameters.getParameters().entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String p = (String) entry.getKey();
-            String v[] = (String[]) entry.getValue();
-            if (p.equals(getInterfaceParameter()) && v.length > 0) {
-                iface = v[0];
-            } else if (p.equals(pageInfoString) && v.length == 1 && "".equals(v[0])) {
+        for (String name : requestParameters.getParameterNames()) {
+            List<StringValue> values = requestParameters.getParameterValues(name);
+            if (name.equals(getInterfaceParameter()) && values.size() > 0) {
+                iface = values.get(0).toString();
+            } else if (name.equals(pageInfoString) && values.size() == 1 && "".equals(values.get(0).toString())) {
                 // don't add this to page parameters
             } else {
-                for (int j = 0; j < v.length; ++j) {
-                    pageParameters.addQueryParam(p, v[j]);
+                for (StringValue value : values) {
+                    pageParameters.addQueryParam(name, value);
                 }
             }
         }
@@ -595,5 +593,23 @@ public class BrixNodePageUrlCodingStrategy implements IRequestTargetUrlCodingStr
 
             return null;
         }
+    }
+
+    @Override
+    public int getCompatibilityScore(Request request) {
+        log.trace("Entering getCompatibilityScore");
+        return 0;
+    }
+
+    @Override
+    public IRequestHandler mapRequest(Request request) {
+        log.trace("Entering mapRequest");
+        return null;
+    }
+
+    @Override
+    public Url mapHandler(IRequestHandler iRequestHandler) {
+        log.trace("Entering mapHandler");
+        return null;
     }
 }

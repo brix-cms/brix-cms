@@ -14,13 +14,16 @@
 
 package org.brixcms.web.nodepage;
 
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.target.component.IPageRequestTarget;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.IPageRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.BrixRequestCycleProcessor;
 
-public class BrixNodeRequestTarget implements IPageRequestTarget {
+public class BrixNodeRequestTarget implements IPageRequestHandler {
 // ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> nodeModel;
@@ -101,5 +104,29 @@ public class BrixNodeRequestTarget implements IPageRequestTarget {
         } finally {
             nodeModel.detach();
         }
+    }
+
+    @Override
+    public Class<? extends IRequestablePage> getPageClass() {
+        log.trace("Entering getPageClass");
+        return null;
+    }
+
+    @Override
+    public PageParameters getPageParameters() {
+        log.trace("Entering getPageParameters");
+        return null;
+    }
+
+    @Override
+    public void respond(IRequestCycle requestCycle) {
+        log.trace("Entering respond");
+
+    }
+
+    @Override
+    public void detach(IRequestCycle requestCycle) {
+        log.trace("Entering detach");
+
     }
 }

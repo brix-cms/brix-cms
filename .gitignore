@@ -5,3 +5,6 @@ target
 .settings
 derby.log
 *.*.orig
+*.ipr
+*.iml
+*.iws

@@ -20,7 +20,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
-import org.brixcms.plugin.site.resource.ResourceRequestTarget;
+import org.brixcms.plugin.site.resource.BrixNodeResource;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
@@ -53,7 +53,7 @@ public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
             implements
             IBehaviorListener {
         public void onRequest() {
-            getRequestCycle().setRequestTarget(new ResourceRequestTarget(getNodeModel()));
+            getRequestCycle().setRequestTarget(new BrixNodeResource(getNodeModel()));
         }
 
         abstract IModel<BrixNode> getNodeModel();

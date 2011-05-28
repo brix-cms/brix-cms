@@ -14,11 +14,12 @@
 
 package org.brixcms.plugin.site.resource;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.request.RequestParameters;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.NodeConverter;
@@ -81,7 +82,7 @@ public class ResourceNodePlugin implements SiteNodePlugin {
         return (new ResourceModel("resource", "Resource")).getObject();
     }
 
-    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters) {
+    public IRequestHandler respond(IModel<BrixNode> nodeModel, PageParameters requestParameters) {
         // IRequestTarget switchTarget =
         // SwitchProtocolRequestTarget.requireProtocol(Protocol.HTTP);
         // if (switchTarget != null)
@@ -90,7 +91,7 @@ public class ResourceNodePlugin implements SiteNodePlugin {
         // }
         // else
         // {
-        return new ResourceRequestTarget(nodeModel);
+        return new ResourceRequestHandler(new BrixNodeResource(nodeModel), requestParameters);
         // }
     }
 

@@ -23,7 +23,10 @@ import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
 import org.apache.wicket.request.IRequestCodingStrategy;
+import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.RequestParameters;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
 import org.brixcms.Path;
@@ -38,7 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
+public class BrixRequestCycleProcessor implements IRequestCycleListener {
 // ------------------------------ FIELDS ------------------------------
 
     public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
@@ -227,5 +230,47 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
     public BrixRequestCycleProcessor setHandleHomePage(boolean handleHomePage) {
         this.handleHomePage = handleHomePage;
         return this;
+    }
+
+    @Override
+    public void onBeginRequest(RequestCycle cycle) {
+        log.trace("Entering onBeginRequest");
+
+    }
+
+    @Override
+    public void onEndRequest(RequestCycle cycle) {
+        log.trace("Entering onEndRequest");
+
+    }
+
+    @Override
+    public void onDetach(RequestCycle cycle) {
+        log.trace("Entering onDetach");
+
+    }
+
+    @Override
+    public void onRequestHandlerResolved(IRequestHandler handler) {
+        log.trace("Entering onRequestHandlerResolved");
+
+    }
+
+    @Override
+    public void onRequestHandlerScheduled(IRequestHandler handler) {
+        log.trace("Entering onRequestHandlerScheduled");
+
+    }
+
+    @Override
+    public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+        log.trace("Entering onException");
+        return null;
+    }
+
+    @Override
+    public void onExceptionRequestHandlerResolved(IRequestHandler handler, Exception exception) {
+        log.trace("Entering onExceptionRequestHandlerResolved");
+
     }
 }

@@ -15,7 +15,7 @@
 package org.brixcms.plugin.site.admin.nodetree;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.ResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.tree.BaseTree;
@@ -94,8 +94,7 @@ public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Seri
         }
 
         @Override
-        protected Component newContentComponent(String componentId, BaseTree tree,
-                                                final IModel<Object> model) {
+        protected Component newContentComponent(String componentId, BaseTree tree, final IModel<?> model) {
             return new Label(componentId, new AbstractModel<String>() {
                 private static final long serialVersionUID = 1L;
 
