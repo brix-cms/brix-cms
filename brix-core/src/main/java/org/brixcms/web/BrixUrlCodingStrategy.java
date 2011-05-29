@@ -158,7 +158,7 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
 
     private IRequestHandler getSwitchTarget(BrixNode node) {
         if (node instanceof BrixNode) {
-            return SwitchProtocolRequestTarget.requireProtocol((node).getRequiredProtocol());
+            return SwitchProtocolRequestHandler.requireProtocol((node).getRequiredProtocol());
         } else {
             return null;
         }

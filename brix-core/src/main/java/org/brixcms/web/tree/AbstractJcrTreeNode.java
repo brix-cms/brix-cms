@@ -23,6 +23,7 @@ import org.brixcms.jcr.api.JcrNodeIterator;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 
+import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -143,7 +144,6 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
 
 // --------------------- Interface IDetachable ---------------------
 
-
     public void detach() {
         children = null;
         nodeModel.detach();
@@ -151,11 +151,34 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
 
 // --------------------- Interface TreeNode ---------------------
 
-    public boolean isLeaf() {
-        return ((BrixNode) nodeModel.getObject()).isFolder() == false;
+    @Override
+    public javax.swing.tree.TreeNode getChildAt(int childIndex) {
+        return null;
     }
 
-// -------------------------- OTHER METHODS --------------------------
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return null;
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        return 0;
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return false;
+    }
+
+    public boolean isLeaf() {
+        return nodeModel.getObject().isFolder() == false;
+    }
 
     public Enumeration<?> children() {
         return Collections.enumeration(getChildren());

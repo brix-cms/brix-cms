@@ -72,7 +72,7 @@ public class PageParametersDropDownChoice<T> extends DropDownChoice<T> {
             }
         });
         contributeToPageParameters(parameters);
-        IRequestHandler target = new BrixNodeRequestTarget((BrixNodeWebPage) getPage(), parameters);
+        IRequestHandler target = new BrixNodeRequestHandler((BrixNodeWebPage) getPage(), parameters);
         return target;
     }
 

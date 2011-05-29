@@ -30,15 +30,15 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.brixcms.jcr.wrapper.BrixNode;
+import org.brixcms.web.picker.node.NodePickerTreeModel;
 import org.brixcms.web.tree.AbstractTreeModel;
 import org.brixcms.web.tree.FilteredJcrTreeNode;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 import org.brixcms.web.util.AbstractModel;
 
-import javax.swing.tree.TreeModel;
 import java.text.DateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +54,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     private final NodeFilter visibilityFilter;
     private final NodeFilter enabledFilter;
 
-    private TreeGrid grid;
+    private TreeGrid<NodePickerTreeModel, JcrTreeNode> grid;
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
@@ -73,7 +73,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
 
 // --------------------- GETTER / SETTER METHODS ---------------------
 
-    public TreeGrid getGrid() {
+    public TreeGrid<NodePickerTreeModel, JcrTreeNode> getGrid() {
         return grid;
     }
 
@@ -93,12 +93,12 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     }
 
     protected void initComponents() {
-        grid = new TreeGrid("grid", newTreeModel(), newGridColumns()) {
+        grid = new TreeGrid<NodePickerTreeModel, JcrTreeNode>("grid", (IModel<NodePickerTreeModel>) newTreeModel(), newGridColumns()) {
             @Override
-            protected void onItemSelectionChanged(IModel rowModel, boolean newValue) {
+            protected void onItemSelectionChanged(IModel<JcrTreeNode> rowModel, boolean newValue) {
                 BrixNode node = getNode(rowModel);
-                if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null) {
-                    if (isItemSelected(rowModel) == true) {
+                if (isNodeEnabled(rowModel.getObject()) && node != null) {
+                    if (isItemSelected(rowModel)) {
                         onNodeSelected(node);
                     } else {
                         onNodeDeselected(node);
@@ -109,9 +109,9 @@ public abstract class NodePickerTreeGridPanel extends Panel {
             }
 
             @Override
-            protected void onRowClicked(AjaxRequestTarget target, IModel rowModel) {
+            protected void onRowClicked(AjaxRequestTarget target, IModel<JcrTreeNode> rowModel) {
                 BrixNode node = getNode(rowModel);
-                if (isNodeEnabled((JcrTreeNode) rowModel.getObject()) && node != null) {
+                if (isNodeEnabled(rowModel.getObject()) && node != null) {
                     super.onRowClicked(target, rowModel);
                 }
             }
@@ -135,9 +135,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         add(grid);
     }
 
-    ;
-
-    protected TreeModel newTreeModel() {
+    protected AbstractTreeModel newTreeModel() {
         return new AbstractTreeModel() {
             public JcrTreeNode getRoot() {
                 return new FilteredJcrTreeNode(getRootNode(), visibilityFilter);
@@ -145,17 +143,16 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         };
     }
 
-    ;
-
     protected abstract JcrTreeNode getRootNode();
 
-    protected List<IGridColumn> newGridColumns() {
-        IGridColumn columns[] = {new NodePickerCheckBoxColumn("checkbox"),
-                new TreeColumn("name", new ResourceModel("name")).setInitialSize(300),
-                new NodePropertyColumn(new ResourceModel("type"), "userVisibleType"),
-                new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified"),
-                new NodePropertyColumn(new ResourceModel("lastModifiedBy"), "lastModifiedBy")};
-        return Arrays.asList(columns);
+    protected List<IGridColumn<NodePickerTreeModel,JcrTreeNode>> newGridColumns() {
+        List<IGridColumn<NodePickerTreeModel,JcrTreeNode>> columns = new ArrayList<IGridColumn<NodePickerTreeModel, JcrTreeNode>>();
+        columns.add(new NodePickerCheckBoxColumn("checkbox"));
+        columns.add(new TreeColumn("name", new ResourceModel("name")).setInitialSize(300));
+        columns.add(new NodePropertyColumn(new ResourceModel("type"), "userVisibleType"));
+        columns.add(new DatePropertyColumn(new ResourceModel("lastModified"), "lastModified"));
+        columns.add(new NodePropertyColumn(new ResourceModel("lastModifiedBy"), "lastModifiedBy"));
+        return columns;
     }
 
     protected void onNodeSelected(BrixNode node) {
@@ -179,7 +176,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         return enabledFilter.isNodeAllowed(n);
     }
 
-    protected void configureGrid(TreeGrid grid) {
+    protected void configureGrid(TreeGrid<NodePickerTreeModel, JcrTreeNode> grid) {
         grid.getTree().setRootLess(true);
         grid.setClickRowToSelect(true);
         grid.setContentHeight(18, SizeUnit.EM);
@@ -191,8 +188,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
             expandToNode(node);
         }
     }
-
-    ;
 
     private void expandToNode(JcrTreeNode node) {
         boolean first = true;
@@ -213,7 +208,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     }
 
 // -------------------------- INNER CLASSES --------------------------
-    ;
 
     private class TreeColumn extends AbstractTreeColumn {
         public TreeColumn(String columnId, IModel headerModel) {
@@ -243,8 +237,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         }
     }
 
-    ;
-
     private class NodePropertyColumn extends PropertyColumn {
         public NodePropertyColumn(IModel headerModel, String propertyExpression) {
             super(headerModel, propertyExpression);
@@ -268,8 +260,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         }
     }
 
-    ;
-
     protected class DatePropertyColumn extends NodePropertyColumn {
         public DatePropertyColumn(IModel<?> headerModel, String propertyExpression) {
             super(headerModel, propertyExpression);
@@ -285,6 +275,4 @@ public abstract class NodePickerTreeGridPanel extends Panel {
             }
         }
     }
-
-    ;
 }

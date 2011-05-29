@@ -43,7 +43,7 @@ public abstract class AbstractTreeModel implements Serializable, TreeModel {
     /**
      * Returns the root node of this tree. This is the only mandatory method to be implemented for custom tree models.
      */
-    public abstract TreeNode getRoot();
+    public abstract javax.swing.tree.TreeNode getRoot();
 
     public Object getChild(Object parent, int index) {
         List<?> children = ((TreeNode) parent).getChildren();

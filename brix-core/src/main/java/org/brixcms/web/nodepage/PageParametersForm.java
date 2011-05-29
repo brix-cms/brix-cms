@@ -58,7 +58,7 @@ public class PageParametersForm<T> extends StatelessForm<T> {
                 parameters.removeQueryParam(s);
             }
         }
-        tag.put("action", RequestCycle.get().urlFor(new BrixNodeRequestTarget(page, parameters)));
+        tag.put("action", RequestCycle.get().urlFor(new BrixNodeRequestHandler(page, parameters)));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class PageParametersForm<T> extends StatelessForm<T> {
             }
         });
         contributeToPageParameters(parameters);
-        IRequestHandler target = new BrixNodeRequestTarget((BrixNodeWebPage) getPage(), parameters);
+        IRequestHandler target = new BrixNodeRequestHandler((BrixNodeWebPage) getPage(), parameters);
         return target;
     }
 

@@ -30,7 +30,7 @@ public class BrixNodePageRequestHandler
         implements
         IRequestHandler,
         IPageRequestHandler,
-        PageParametersRequestTarget {
+        PageParametersRequestHandler {
 // ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> node;
@@ -67,7 +67,6 @@ public class BrixNodePageRequestHandler
 
     @Override
     public Class<? extends IRequestablePage> getPageClass() {
-        log.trace("Entering getPageClass");
         return null;
     }
 
@@ -82,7 +81,7 @@ public class BrixNodePageRequestHandler
                 page.setStatelessHint(false);
                 Session.get().bind();
                 Session.get().touch(page);
-                requestCycle.setRequestTarget(new BrixNodeRequestTarget(page));
+                requestCycle.setRequestTarget(new BrixNodeRequestHandler(page));
                 return;
             }
         }

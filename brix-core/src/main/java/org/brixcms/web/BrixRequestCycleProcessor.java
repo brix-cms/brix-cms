@@ -228,43 +228,36 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
 
     @Override
     public void onBeginRequest(RequestCycle cycle) {
-        log.trace("Entering onBeginRequest");
 
     }
 
     @Override
     public void onEndRequest(RequestCycle cycle) {
-        log.trace("Entering onEndRequest");
 
     }
 
     @Override
     public void onDetach(RequestCycle cycle) {
-        log.trace("Entering onDetach");
 
     }
 
     @Override
     public void onRequestHandlerResolved(IRequestHandler handler) {
-        log.trace("Entering onRequestHandlerResolved");
 
     }
 
     @Override
     public void onRequestHandlerScheduled(IRequestHandler handler) {
-        log.trace("Entering onRequestHandlerScheduled");
 
     }
 
     @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
-        log.trace("Entering onException");
         return null;
     }
 
     @Override
     public void onExceptionRequestHandlerResolved(IRequestHandler handler, Exception exception) {
-        log.trace("Entering onExceptionRequestHandlerResolved");
 
     }
 }

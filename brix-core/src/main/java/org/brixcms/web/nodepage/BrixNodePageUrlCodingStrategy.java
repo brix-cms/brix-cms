@@ -27,7 +27,6 @@ import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
-import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.request.handler.BookmarkablePageRequestHandler;
@@ -72,16 +71,15 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
     }
 
     public CharSequence encode(IRequestHandler requestTarget) {
-        if (requestTarget instanceof BrixNodeRequestTarget) {
-            BrixNodeRequestTarget target = (BrixNodeRequestTarget) requestTarget;
+        if (requestTarget instanceof BrixNodeRequestHandler) {
+            BrixNodeRequestHandler handler = (BrixNodeRequestHandler) requestTarget;
             PageInfo info = null;
-            Page page = target.getPage();
+            Page page = handler.getPage();
             if (page != null && !page.isPageStateless()) {
-                info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
-                        .getPageMapName());
+                info = new PageInfo(page.getPageId());
             }
-            String nodeURL = target.getNodeURL();
-            return encode(nodeURL, target.getParameters(), info, null);
+            String nodeURL = handler.getNodeURL();
+            return encode(nodeURL, handler.getParameters(), info, null);
         } else if (requestTarget instanceof ListenerInterfaceRequestHandler) {
             ListenerInterfaceRequestHandler target = (ListenerInterfaceRequestHandler) requestTarget;
             BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
@@ -90,8 +88,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
             BookmarkableListenerInterfaceRequestHandler target = (BookmarkableListenerInterfaceRequestHandler) requestTarget;
             BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
             BrixNode node = page.getModelObject();
-            PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
-                    .getPageMapName());
+            PageInfo info = new PageInfo(page.getPageId());
             String componentPath = target.getComponentPath();
 
             // remove the page id from component path, we don't really need it
@@ -103,7 +100,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
                 HomePage.class)) {
             BrixNode node = ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler())
                     .getNodeForUriPath(Path.ROOT);
-            return encode(new BrixNodeRequestTarget(new BrixNodeModel(node)));
+            return encode(new BrixNodeRequestHandler(new BrixNodeModel(node)));
         } else {
             return null;
         }
@@ -121,7 +118,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         } else if (requestTarget instanceof BookmarkableListenerInterfaceRequestHandler) {
             BookmarkableListenerInterfaceRequestHandler target = (BookmarkableListenerInterfaceRequestHandler) requestTarget;
             return isBrixPage(target.getPage());
-        } else if (requestTarget instanceof BrixNodeRequestTarget) {
+        } else if (requestTarget instanceof BrixNodeRequestHandler) {
             return true;
         }
         return false;
@@ -133,8 +130,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
 
 // -------------------------- OTHER METHODS --------------------------
 
-    public IRequestHandler decode(PageParameters requestParameters,
-                                 final IModel<BrixNode> nodeModel) {
+    public IRequestHandler decode(IRequestParameters requestParameters, final IModel<BrixNode> nodeModel) {
         PageInfo pageInfo = null;
         String query = requestParameters.getQueryString();
         final BrixPageParameters pageParameters = new BrixPageParameters();
@@ -293,9 +289,8 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
     }
 
     private CharSequence encode(BrixNodeWebPage page) {
-        BrixNode node = (BrixNode) page.getModelObject();
-        PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
-                .getPageMapName());
+        BrixNode node = page.getModelObject();
+        PageInfo info = new PageInfo(page.getPageId());
 
         // This is a URL for redirect. Allow components to contribute state to
         // URL if they want to
@@ -430,10 +425,9 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
          * Construct.
          *
          * @param pageId
-         * @param versionNumber
-         * @param pageMapName
+         *
          */
-        public PageInfo(Integer pageId, Integer versionNumber, String pageMapName) {
+        public PageInfo(Integer pageId) {
             if ((pageId == null && (versionNumber != null || pageMapName == null))
                     || (versionNumber == null && (pageId != null || pageMapName == null))) {
                 throw new IllegalArgumentException(
@@ -569,30 +563,30 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
 
             if (segments.length == 1 && isNumber(segments[0])) {
                 // pageId
-                return new PageInfo(Integer.valueOf(segments[0]), new Integer(0), null);
+                return new PageInfo(Integer.valueOf(segments[0]));
             } else if (segments.length == 2 && isNumber(segments[0]) && isNumber(segments[1])) {
                 // pageId:pageVersion
-                return new PageInfo(Integer.valueOf(segments[0]), Integer.valueOf(segments[1]),
-                        null);
+                return new PageInfo(Integer.valueOf(segments[0])
+                );
             } else if (segments.length == 1 && !isNumber(segments[0])) {
                 // pageMap (starts with letter)
-                return new PageInfo(null, null, segments[0]);
+                return new PageInfo(null);
             } else if (segments.length == 2 && segments[0].length() == 0) {
                 // .pageMap
-                return new PageInfo(null, null, segments[1]);
+                return new PageInfo(null);
             } else if (segments.length == 2 && !isNumber(segments[0]) && isNumber(segments[1])) {
                 // pageMap.pageId (pageMap starts with letter)
-                return new PageInfo(Integer.valueOf(segments[1]), new Integer(0), segments[0]);
+                return new PageInfo(Integer.valueOf(segments[1]));
             } else if (segments.length == 3) {
                 if (segments[2].length() == 0 && isNumber(segments[1])) {
                     // we don't encode it like this, but we still should be able
                     // to parse it
                     // pageMapName.pageId.
-                    return new PageInfo(Integer.valueOf(segments[1]), new Integer(0), segments[0]);
+                    return new PageInfo(Integer.valueOf(segments[1]));
                 } else if (isNumber(segments[1]) && isNumber(segments[2])) {
                     // pageMapName.pageId.pageVersion
-                    return new PageInfo(Integer.valueOf(segments[1]), Integer.valueOf(segments[2]),
-                            segments[0]);
+                    return new PageInfo(Integer.valueOf(segments[1])
+                    );
                 }
             }
 

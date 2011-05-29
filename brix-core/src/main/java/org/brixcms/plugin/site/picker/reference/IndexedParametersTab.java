@@ -158,7 +158,7 @@ public abstract class IndexedParametersTab extends Panel {
                     grid.markAllItemsDirty();
                     grid.update();
                 } else {
-                    target.appendJavascript("alert('" + getString("noItemsSelected") + "');");
+                    target.appendJavaScript("alert('" + getString("noItemsSelected") + "');");
                 }
             }
 

@@ -38,7 +38,7 @@ public abstract class TextLink<T> extends Link<T> {
 
 // -------------------------- OTHER METHODS --------------------------
 
-    protected void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
+    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         replaceComponentTagBody(markupStream, openTag, textModel.getObject());
     }
 

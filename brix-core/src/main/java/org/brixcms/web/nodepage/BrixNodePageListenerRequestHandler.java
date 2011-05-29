@@ -52,7 +52,6 @@ public class BrixNodePageListenerRequestHandler extends BrixNodePageRequestHandl
 
 // -------------------------- OTHER METHODS --------------------------
 
-    @Override
     protected void respondWithInitialRedirectHandled(RequestCycle requestCycle) {
         int separator = iface.lastIndexOf(':');
         if (separator != -1) {

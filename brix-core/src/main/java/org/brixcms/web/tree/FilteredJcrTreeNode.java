@@ -18,8 +18,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.lang.Objects;
 import org.brixcms.jcr.wrapper.BrixNode;
 
+import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 public class FilteredJcrTreeNode implements JcrTreeNode {
@@ -42,7 +44,6 @@ public class FilteredJcrTreeNode implements JcrTreeNode {
     }
 
 // --------------------- GETTER / SETTER METHODS ---------------------
-    ;
 
     public List<? extends JcrTreeNode> getChildren() {
         if (children == null) {
@@ -100,24 +101,51 @@ public class FilteredJcrTreeNode implements JcrTreeNode {
 // ------------------------ INTERFACE METHODS ------------------------
 
 
-// --------------------- Interface IDetachable ---------------------
-
-
-    public void detach() {
-        children = null;
-        delegate.detach();
-    }
-
 // --------------------- Interface JcrTreeNode ---------------------
 
     public IModel<BrixNode> getNodeModel() {
         return delegate.getNodeModel();
     }
 
+    public void detach() {
+        children = null;
+        delegate.detach();
+    }
+
 // --------------------- Interface TreeNode ---------------------
 
 
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+        return null;
+    }
+
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return null;
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        return 0;
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return false;
+    }
+
     public boolean isLeaf() {
         return delegate.isLeaf();
+    }
+
+    @Override
+    public Enumeration children() {
+        return null;
     }
 }

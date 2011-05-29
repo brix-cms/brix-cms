@@ -34,7 +34,7 @@ public class ForbiddenPage extends WebPage {
         add(new ToolbarBehavior() {
             @Override
             protected String getCurrentWorkspaceId() {
-                return ((BrixRequestCycleProcessor) getRequestCycle().getProcessor()).getWorkspace();
+                return ((BrixRequestCycleProcessor) getRequestCycle().getActiveRequestHandler()).getWorkspace();
             }
         });
     }

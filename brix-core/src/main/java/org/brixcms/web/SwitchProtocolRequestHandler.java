@@ -22,7 +22,7 @@ import org.brixcms.jcr.wrapper.BrixNode.Protocol;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SwitchProtocolRequestTarget implements IRequestHandler {
+public class SwitchProtocolRequestHandler implements IRequestHandler {
 // ------------------------------ FIELDS ------------------------------
 
     private final Protocol protocol;
@@ -37,13 +37,13 @@ public class SwitchProtocolRequestTarget implements IRequestHandler {
                 request.getScheme().equals(protocol.toString().toLowerCase())) {
             return null;
         } else {
-            return new SwitchProtocolRequestTarget(protocol);
+            return new SwitchProtocolRequestHandler(protocol);
         }
     }
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
-    public SwitchProtocolRequestTarget(Protocol protocol) {
+    public SwitchProtocolRequestHandler(Protocol protocol) {
         if (protocol == null) {
             throw new IllegalArgumentException("Argument 'protocol' may not be null.");
         }

@@ -66,8 +66,8 @@ public class BrixPageParameters extends PageParameters {
         IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
         // this is required for getting current page parameters from page constructor
         // (the actual page instance is not constructed yet.
-        if (target instanceof PageParametersRequestTarget) {
-            return ((PageParametersRequestTarget) target).getPageParameters();
+        if (target instanceof PageParametersRequestHandler) {
+            return ((PageParametersRequestHandler) target).getPageParameters();
         } else {
             return getCurrentPage().getBrixPageParameters();
         }
@@ -302,7 +302,7 @@ public class BrixPageParameters extends PageParameters {
      * @return url
      */
     public String urlFor(BrixNodeWebPage page) {
-        IRequestHandler target = new BrixNodeRequestTarget(page, this);
+        IRequestHandler target = new BrixNodeRequestHandler(page, this);
         return RequestCycle.get().urlFor(target).toString();
     }
 
@@ -329,7 +329,7 @@ public class BrixPageParameters extends PageParameters {
      * @return url
      */
     public String urlFor(IModel<BrixNode> node) {
-        IRequestHandler target = new BrixNodeRequestTarget(node, this);
+        IRequestHandler target = new BrixNodeRequestHandler(node, this);
         return RequestCycle.get().urlFor(target).toString();
     }
 

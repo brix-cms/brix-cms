@@ -145,7 +145,7 @@ public abstract class QueryParametersTab extends Panel {
                     grid.markAllItemsDirty();
                     grid.update();
                 } else {
-                    target.appendJavascript("alert('" + getString("noItemsSelected") + "');");
+                    target.appendJavaScript("alert('" + getString("noItemsSelected") + "');");
                 }
             }
 

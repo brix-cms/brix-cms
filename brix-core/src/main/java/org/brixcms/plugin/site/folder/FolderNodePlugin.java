@@ -18,11 +18,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.PageProvider;
 import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.NodeConverter;
@@ -57,7 +57,7 @@ public class FolderNodePlugin implements SiteNodePlugin {
         return "Folder";
     }
 
-    public IRequestHandler respond(IModel<BrixNode> nodeModel, PageParameters requestParameters) {
+    public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
         BrixNode node = nodeModel.getObject();
 
 //        String path = requestParameters.getPath();

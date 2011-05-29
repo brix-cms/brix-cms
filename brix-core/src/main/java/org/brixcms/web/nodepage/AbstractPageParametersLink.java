@@ -19,6 +19,8 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 /**
  * Base class that knows how to recursively collect parameters from child nodes that implement {@link
@@ -73,10 +75,10 @@ public abstract class AbstractPageParametersLink extends AbstractLink {
 
     protected String buildUrl() {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
-        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component>() {
-            public Object component(Component component) {
+        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
+            @Override
+            public void component(Component component, IVisit<PageParametersAware> pageParametersAwareIVisit) {
                 ((PageParametersAware) component).contributeToPageParameters(parameters);
-                return IVisitor.CONTINUE_TRAVERSAL;
             }
         });
         contributeToPageParameters(parameters);

@@ -20,7 +20,6 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.tree.AbstractJcrTreeNode;
 import org.brixcms.web.tree.AbstractTreeModel;
-import org.brixcms.web.tree.TreeNode;
 
 public abstract class NodePickerTreeModel extends AbstractTreeModel {
 // ------------------------------ FIELDS ------------------------------
@@ -37,7 +36,7 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel {
 
 // --------------------- GETTER / SETTER METHODS ---------------------
 
-    public TreeNode getRoot() {
+    public javax.swing.tree.TreeNode getRoot() {
         return root;
     }
 
@@ -69,7 +68,7 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel {
         }
 
         public BrixNode getNode() {
-            return (BrixNode) getNodeModel().getObject();
+            return getNodeModel().getObject();
         }
     }
 }

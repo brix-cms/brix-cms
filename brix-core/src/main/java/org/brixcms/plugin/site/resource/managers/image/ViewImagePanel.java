@@ -39,8 +39,7 @@ public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
         add(new WebMarkupContainer("image") {
             @Override
             protected void onComponentTag(ComponentTag tag) {
-                CharSequence url = getRequestCycle().urlFor(this, behavior,
-                        IBehaviorListener.INTERFACE);
+                CharSequence url = urlFor(behavior, IBehaviorListener.INTERFACE);
                 tag.put("src", url);
                 super.onComponentTag(tag);
             }

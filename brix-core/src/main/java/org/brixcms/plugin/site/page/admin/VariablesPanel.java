@@ -63,29 +63,29 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
     public VariablesPanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
-        List<IGridColumn> columns = new ArrayList<IGridColumn>();
-        columns.add(new CheckBoxColumn("checkbox"));
-        columns.add(new PropertyColumn(new ResourceModel("key"), "key"));
-        columns.add(new EditablePropertyColumn(new ResourceModel("value"), "value") {
+        List<IGridColumn<IDataSource<BrixNode>,BrixNode>> columns = new ArrayList<IGridColumn<IDataSource<BrixNode>,BrixNode>>();
+        columns.add(new CheckBoxColumn<IDataSource<BrixNode>,BrixNode>("checkbox"));
+        columns.add(new PropertyColumn<IDataSource<BrixNode>,BrixNode, String>(new ResourceModel("key"), "key"));
+        columns.add(new EditablePropertyColumn<IDataSource<BrixNode>,BrixNode, String>(new ResourceModel("value"), "value") {
             @Override
             protected void addValidators(FormComponent component) {
                 component.setRequired(true);
             }
         });
-        columns.add(new SubmitCancelColumn("submitcancel", new ResourceModel("edit")) {
+        columns.add(new SubmitCancelColumn<IDataSource<BrixNode>,BrixNode>("submitcancel", new ResourceModel("edit")) {
             @Override
             protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
                 target.addChildren(VariablesPanel.this, FeedbackPanel.class);
             }
 
             @Override
-            protected void onSubmitted(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
+            protected void onSubmitted(AjaxRequestTarget target, IModel<BrixNode> rowModel, WebMarkupContainer rowComponent) {
                 target.addChildren(VariablesPanel.this, FeedbackPanel.class);
                 super.onSubmitted(target, rowModel, rowComponent);
             }
         });
 
-        final DataGrid grid = new DefaultDataGrid("grid", new DataSource(), columns) {
+        final DataGrid<BrixNode> grid = new DefaultDataGrid<BrixNode>("grid", (IModel<IDataSource<BrixNode>>) new DataSource(), columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 AjaxRequestTarget target = AjaxRequestTarget.get();
@@ -135,12 +135,12 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
 // -------------------------- INNER CLASSES --------------------------
 
-    private class DataSource implements IDataSource {
-        public IModel model(Object object) {
-            return new Model((Serializable) object);
+    private class DataSource implements IDataSource<Entry> {
+        public IModel<Entry> model(Entry object) {
+            return new Model<Entry>(object);
         }
 
-        public void query(IQuery query, IQueryResult result) {
+        public void query(IQuery query, IQueryResult<Entry> result) {
             AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
             List<Entry> res = new ArrayList<Entry>();
             for (String s : node.getSavedVariableKeys()) {
@@ -162,8 +162,6 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
         public void detach() {
         }
     }
-
-    ;
 
     private class Entry implements Serializable {
         private final String key;
@@ -202,8 +200,6 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             return Objects.hashCode(key);
         }
     }
-
-    ;
 
     private abstract class InsertForm extends Form<Void> {
         public InsertForm(String id) {
@@ -265,7 +261,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                 }
             });
 
-            tf.add(new IValidator() {
+            tf.add(new IValidator<String>() {
                 public void validate(IValidatable validatable) {
                     String key = (String) validatable.getValue();
 
@@ -289,6 +285,4 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
         abstract protected void onItemAdded();
     }
-
-    ;
 }

@@ -23,7 +23,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.BrixRequestCycleProcessor;
 
-public class BrixNodeRequestTarget implements IPageRequestHandler {
+public class BrixNodeRequestHandler implements IPageRequestHandler {
 // ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> nodeModel;
@@ -32,15 +32,15 @@ public class BrixNodeRequestTarget implements IPageRequestHandler {
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
-    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel) {
+    public BrixNodeRequestHandler(IModel<BrixNode> nodeModel) {
         this(nodeModel, new BrixPageParameters());
     }
 
-    public BrixNodeRequestTarget(BrixNodeWebPage page) {
+    public BrixNodeRequestHandler(BrixNodeWebPage page) {
         this(page, page.getBrixPageParameters());
     }
 
-    public BrixNodeRequestTarget(IModel<BrixNode> nodeModel, BrixPageParameters parameters) {
+    public BrixNodeRequestHandler(IModel<BrixNode> nodeModel, BrixPageParameters parameters) {
         if (nodeModel == null) {
             throw new IllegalArgumentException("Argument 'nodeModel' may not be null.");
         }
@@ -54,7 +54,7 @@ public class BrixNodeRequestTarget implements IPageRequestHandler {
         this.page = null;
     }
 
-    public BrixNodeRequestTarget(BrixNodeWebPage page, BrixPageParameters parameters) {
+    public BrixNodeRequestHandler(BrixNodeWebPage page, BrixPageParameters parameters) {
         if (page == null) {
             throw new IllegalArgumentException("Argument 'page' may not be null.");
         }
@@ -74,22 +74,29 @@ public class BrixNodeRequestTarget implements IPageRequestHandler {
         return page;
     }
 
-    public BrixPageParameters getParameters() {
-        return parameters;
-    }
-
 // ------------------------ INTERFACE METHODS ------------------------
 
 
-// --------------------- Interface IRequestTarget ---------------------
+// --------------------- Interface IPageClassRequestHandler ---------------------
 
 
-    public void respond(RequestCycle requestCycle) {
+    @Override
+    public Class<? extends IRequestablePage> getPageClass() {
+        return page.getClass();
+    }
+
+    public PageParameters getPageParameters() {
+        return parameters;
+    }
+
+// --------------------- Interface IRequestHandler ---------------------
+
+    public void respond(IRequestCycle requestCycle) {
         CharSequence url = requestCycle.urlFor(this);
         requestCycle.getResponse().redirect(url.toString());
     }
 
-    public void detach(RequestCycle requestCycle) {
+    public void detach(IRequestCycle requestCycle) {
 
     }
 
@@ -97,36 +104,10 @@ public class BrixNodeRequestTarget implements IPageRequestHandler {
 
     public String getNodeURL() {
         try {
-            return ((BrixRequestCycleProcessor) RequestCycle.get().getProcessor())
-                    .getUriPathForNode(
-
-                            nodeModel.getObject()).toString();
+            return ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler())
+                    .getUriPathForNode(nodeModel.getObject()).toString();
         } finally {
             nodeModel.detach();
         }
-    }
-
-    @Override
-    public Class<? extends IRequestablePage> getPageClass() {
-        log.trace("Entering getPageClass");
-        return null;
-    }
-
-    @Override
-    public PageParameters getPageParameters() {
-        log.trace("Entering getPageParameters");
-        return null;
-    }
-
-    @Override
-    public void respond(IRequestCycle requestCycle) {
-        log.trace("Entering respond");
-
-    }
-
-    @Override
-    public void detach(IRequestCycle requestCycle) {
-        log.trace("Entering detach");
-
     }
 }
