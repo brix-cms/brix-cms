@@ -230,6 +230,7 @@
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket</artifactId>
                 <version>${wicket.version}</version>
+		<type>pom</type>
                 <exclusions>
                     <exclusion>
                         <groupId>log4j</groupId>
