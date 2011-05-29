@@ -19,6 +19,8 @@ import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.link.ILinkListener;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.UrlDecoder;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.value.ValueMap;
 import org.brixcms.Path;
@@ -47,7 +49,7 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
 //        if (path == null) {
 //            path = getRequestCycle().getPageParameters().getString("path");
 //        }
-        path = WicketURLDecoder.QUERY_INSTANCE.decode(path);
+        path = UrlDecoder.QUERY_INSTANCE.decode(path, getRequest().getCharset());
         onPathClicked(new Path(path));
     }
 
@@ -88,9 +90,9 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
     }
 
     private CharSequence createCallbackUrl(String subpath) {
-        ValueMap params = new ValueMap();
-        params.add("path", subpath);
-        return getRequestCycle().urlFor(this, ILinkListener.INTERFACE, params);
+        Url url=Url.parse(urlFor(ILinkListener.INTERFACE).toString());
+        url.addQueryParameter("path", subpath);
+        return url.toString(getRequest().getCharset());
     }
 
     protected abstract void onPathClicked(Path path);

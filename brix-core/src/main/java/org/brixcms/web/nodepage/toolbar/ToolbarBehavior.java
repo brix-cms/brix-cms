@@ -20,6 +20,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
@@ -36,7 +38,7 @@ import java.util.List;
 public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
 // ------------------------------ FIELDS ------------------------------
 
-    private static final CompressedResourceReference cssReference = new CompressedResourceReference(
+    private static final ResourceReference cssReference = new PackageResourceReference(
             ToolbarBehavior.class, "toolbar.css");
     private static final JavaScriptResourceReference javascriptReference = new JavaScriptResourceReference(
             ToolbarBehavior.class, "toolbar.js");
@@ -120,8 +122,8 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
 // --------------------- Interface IHeaderContributor ---------------------
 
     @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
+    public void renderHead(Component component, IHeaderResponse response) {
+        super.renderHead(component, response);
         response.renderCSSReference(cssReference);
         response.renderJavaScriptReference(javascriptReference);
 
