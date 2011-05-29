@@ -21,31 +21,36 @@ import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.page.IManageablePage;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.BookmarkableListenerInterfaceRequestHandler;
+import org.apache.wicket.request.handler.BookmarkablePageRequestHandler;
+import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.brixcms.Brix;
 import org.brixcms.BrixNodeModel;
 import org.brixcms.Path;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.BrixRequestCycleProcessor;
-import org.brixcms.web.nodepage.BrixNodePageRequestTarget.PageFactory;
+import org.brixcms.web.nodepage.BrixNodePageRequestHandler.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -77,12 +82,12 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
             }
             String nodeURL = target.getNodeURL();
             return encode(nodeURL, target.getParameters(), info, null);
-        } else if (requestTarget instanceof ListenerInterfaceRequestTarget) {
-            ListenerInterfaceRequestTarget target = (ListenerInterfaceRequestTarget) requestTarget;
+        } else if (requestTarget instanceof ListenerInterfaceRequestHandler) {
+            ListenerInterfaceRequestHandler target = (ListenerInterfaceRequestHandler) requestTarget;
             BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
             return encode(page);
-        } else if (requestTarget instanceof BookmarkableListenerInterfaceRequestTarget) {
-            BookmarkableListenerInterfaceRequestTarget target = (BookmarkableListenerInterfaceRequestTarget) requestTarget;
+        } else if (requestTarget instanceof BookmarkableListenerInterfaceRequestHandler) {
+            BookmarkableListenerInterfaceRequestHandler target = (BookmarkableListenerInterfaceRequestHandler) requestTarget;
             BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
             BrixNode node = page.getModelObject();
             PageInfo info = new PageInfo(page.getNumericId(), page.getCurrentVersionNumber(), page
@@ -93,10 +98,10 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
             componentPath = componentPath.substring(componentPath.indexOf(':') + 1);
             String iface = componentPath + ":" + target.getInterfaceName();
             return encode(node, page.getBrixPageParameters(), info, iface);
-        } else if (requestTarget instanceof IBookmarkablePageRequestTarget
-                && ((IBookmarkablePageRequestTarget) requestTarget).getPageClass().equals(
+        } else if (requestTarget instanceof BookmarkablePageRequestHandler
+                && ((BookmarkablePageRequestHandler) requestTarget).getPageClass().equals(
                 HomePage.class)) {
-            BrixNode node = ((BrixRequestCycleProcessor) RequestCycle.get().getProcessor())
+            BrixNode node = ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler())
                     .getNodeForUriPath(Path.ROOT);
             return encode(new BrixNodeRequestTarget(new BrixNodeModel(node)));
         } else {
@@ -109,12 +114,12 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
     }
 
     public boolean matches(IRequestHandler requestTarget) {
-        if (requestTarget instanceof ListenerInterfaceRequestTarget) {
-            ListenerInterfaceRequestTarget target = (ListenerInterfaceRequestTarget) requestTarget;
+        if (requestTarget instanceof ListenerInterfaceRequestHandler) {
+            ListenerInterfaceRequestHandler target = (ListenerInterfaceRequestHandler) requestTarget;
             return isBrixPage(target.getPage())
                     && target.getRequestListenerInterface().equals(IRedirectListener.INTERFACE);
-        } else if (requestTarget instanceof BookmarkableListenerInterfaceRequestTarget) {
-            BookmarkableListenerInterfaceRequestTarget target = (BookmarkableListenerInterfaceRequestTarget) requestTarget;
+        } else if (requestTarget instanceof BookmarkableListenerInterfaceRequestHandler) {
+            BookmarkableListenerInterfaceRequestHandler target = (BookmarkableListenerInterfaceRequestHandler) requestTarget;
             return isBrixPage(target.getPage());
         } else if (requestTarget instanceof BrixNodeRequestTarget) {
             return true;
@@ -167,15 +172,15 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
 
         if (factory == null) {
             if (iface == null) {
-                return new BrixNodePageRequestTarget(nodeModel, page);
+                return new BrixNodePageRequestHandler(nodeModel, page);
             } else {
-                return new BrixNodePageListenerRequestTarget(nodeModel, page, iface);
+                return new BrixNodePageListenerRequestHandler(nodeModel, page, iface);
             }
         } else {
             if (iface == null) {
-                return new BrixNodePageRequestTarget(nodeModel, factory);
+                return new BrixNodePageRequestHandler(nodeModel, factory);
             } else {
-                return new BrixNodePageListenerRequestTarget(nodeModel, factory, iface);
+                return new BrixNodePageListenerRequestHandler(nodeModel, factory, iface);
             }
         }
     }
@@ -229,7 +234,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
             requestPathString = "/" + requestPathString;
 
         BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get()
-                .getProcessor();
+                .getActiveRequestHandler();
         Path nodePath = processor.getUriPathForNode(nodeModel.getObject());
         Path requestPath = new Path(requestPathString, false);
 
@@ -259,16 +264,16 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         return value;
     }
 
-    private Page getPage(PageInfo info) {
-        Page page;
+    private IManageablePage getPage(PageInfo info) {
+        IManageablePage page;
 
         if (Strings.isEmpty(info.getPageMapName()) && Application.exists()
-                && Application.get().getSessionSettings().isPageIdUniquePerSession()) {
-            page = Session.get().getPage(info.getPageId().intValue(),
-                    info.getVersionNumber() != null ? info.getVersionNumber().intValue() : 0);
+                /*&& Application.get().getSessionSettings().isPageIdUniquePerSession()*/) {
+            page = Session.get().getPageManager().getPage(info.getPageId()/*,
+                    info.getVersionNumber() != null ? info.getVersionNumber() : 0*/);
         } else {
-            page = Session.get().getPage(info.getPageMapName(), "" + info.getPageId(),
-                    info.getVersionNumber() != null ? info.getVersionNumber().intValue() : 0);
+            page = Session.get().getPageManager().getPage(/*info.getPageMapName(), "" +*/ info.getPageId()/*,
+                    info.getVersionNumber() != null ? info.getVersionNumber() : 0*/);
         }
 
         if (page != null && isBrixPage(page)) {
@@ -278,7 +283,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         }
     }
 
-    private boolean isBrixPage(Page page) {
+    private boolean isBrixPage(IManageablePage page) {
         return page instanceof BrixNodeWebPage;
     }
 
@@ -295,10 +300,10 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         // This is a URL for redirect. Allow components to contribute state to
         // URL if they want to
         final BrixPageParameters parameters = page.getBrixPageParameters();
-        page.visitChildren(PageParametersAware.class, new Component.IVisitor<Component>() {
-            public Object component(Component component) {
+        page.visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
+            @Override
+            public void component(Component component, IVisit iVisit) {
                 ((PageParametersAware) component).contributeToPageParameters(parameters);
-                return Component.IVisitor.CONTINUE_TRAVERSAL;
             }
         });
 
@@ -308,7 +313,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
     private CharSequence encode(BrixNode node, BrixPageParameters parameters, PageInfo info,
                                 String iface) {
         BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get()
-                .getProcessor();
+                .getActiveRequestHandler();
         return encode(processor.getUriPathForNode(node).toString(), parameters, info, iface);
     }
 
@@ -474,7 +479,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
             // we don't need to encode the pageMapName when the pageId is unique
             // per session
             if (pageMapName != null && pageId != null && Application.exists()
-                    && Application.get().getSessionSettings().isPageIdUniquePerSession()) {
+                    /*&& Application.get().getSessionSettings().isPageIdUniquePerSession()*/) {
                 pageMapName = null;
             }
 

@@ -14,11 +14,11 @@
 
 package org.brixcms.web;
 
-import org.apache.wicket.request.target.basic.RedirectRequestTarget;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.web.reference.Reference;
 
-public class ReferenceRequestTarget extends RedirectRequestTarget {
+public class ReferenceRequestTarget extends RedirectRequestHandler {
 // --------------------------- CONSTRUCTORS ---------------------------
 
     public ReferenceRequestTarget(Reference reference) {

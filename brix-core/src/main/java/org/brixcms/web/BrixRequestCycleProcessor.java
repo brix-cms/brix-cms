@@ -14,19 +14,14 @@
 
 package org.brixcms.web;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.protocol.https.HttpsConfig;
-import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
-import org.apache.wicket.request.IRequestCodingStrategy;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.RequestParameters;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
 import org.brixcms.Path;
@@ -106,8 +101,8 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
     }
 
     private String getWorkspaceFromUrl() {
-        HttpServletRequest request = ((WebRequest) RequestCycle.get().getRequest())
-                .getHttpServletRequest();
+        HttpServletRequest request = (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest())
+                .getContainerRequest();
 
         if (request.getParameter(WORKSPACE_PARAM) != null) {
             return request.getParameter(WORKSPACE_PARAM);
@@ -150,8 +145,7 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
     }
 
     private String getDefaultWorkspaceName() {
-        final WebRequestCycle rc = (WebRequestCycle) RequestCycle.get();
-        final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(rc, brix);
+        final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(RequestCycle.get(), brix);
         return (workspace != null) ? workspace.getId() : null;
     }
 
@@ -218,8 +212,8 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
     }
 
     @Override
-    protected IRequestTarget resolveHomePageTarget(RequestCycle requestCycle,
-                                                   RequestParameters requestParameters) {
+    protected IRequestHandler resolveHomePageTarget(RequestCycle requestCycle,
+                                                   PageParameters requestParameters) {
         if (handleHomePage) {
             return urlCodingStrategy.decode(requestParameters);
         } else {

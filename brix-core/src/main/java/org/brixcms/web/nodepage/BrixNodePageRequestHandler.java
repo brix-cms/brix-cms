@@ -26,7 +26,7 @@ import org.apache.wicket.request.http.WebResponse;
 import org.brixcms.jcr.wrapper.BrixFileNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 
-public class BrixNodePageRequestTarget
+public class BrixNodePageRequestHandler
         implements
         IRequestHandler,
         IPageRequestHandler,
@@ -39,13 +39,13 @@ public class BrixNodePageRequestTarget
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
-    public BrixNodePageRequestTarget(IModel<BrixNode> node, BrixNodeWebPage page) {
+    public BrixNodePageRequestHandler(IModel<BrixNode> node, BrixNodeWebPage page) {
         this.node = node;
         this.page = page;
         this.pageFactory = null;
     }
 
-    public BrixNodePageRequestTarget(IModel<BrixNode> node, PageFactory pageFactory) {
+    public BrixNodePageRequestHandler(IModel<BrixNode> node, PageFactory pageFactory) {
         this.node = node;
         this.page = null;
         this.pageFactory = pageFactory;
@@ -110,7 +110,7 @@ public class BrixNodePageRequestTarget
 
 // -------------------------- OTHER METHODS --------------------------
 
-    protected void respondWithInitialRedirectHandled(RequestCycle requestCycle) {
+    protected void respondWithInitialRedirectHandled(IRequestCycle requestCycle) {
         // check if the listener invocation or something else hasn't changed the
         // request target
         if (RequestCycle.get().getActiveRequestHandler() == this) {

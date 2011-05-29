@@ -20,25 +20,23 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.RequestListenerInterface;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 
-public class BrixNodePageListenerRequestTarget extends BrixNodePageRequestTarget
-        implements IListenerInterfaceRequestTarget {
+public class BrixNodePageListenerRequestHandler extends BrixNodePageRequestHandler {
 // ------------------------------ FIELDS ------------------------------
 
     private final String iface;
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
-    public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, BrixNodeWebPage page,
-                                             String iface) {
+    public BrixNodePageListenerRequestHandler(IModel<BrixNode> node, BrixNodeWebPage page,
+                                              String iface) {
         super(node, page);
         this.iface = iface;
     }
 
-    public BrixNodePageListenerRequestTarget(IModel<BrixNode> node, PageFactory pageFactory,
-                                             String iface) {
+    public BrixNodePageListenerRequestHandler(IModel<BrixNode> node, PageFactory pageFactory,
+                                              String iface) {
         super(node, pageFactory);
         this.iface = iface;
     }
@@ -60,7 +58,7 @@ public class BrixNodePageListenerRequestTarget extends BrixNodePageRequestTarget
         if (separator != -1) {
             Component component = getTarget();
             RequestListenerInterface listenerInterface = getRequestListenerInterface();
-            listenerInterface.invoke(getPage(), component);
+            listenerInterface.invoke(/*getPage(),*/ component);
         }
 
         super.respondWithInitialRedirectHandled(requestCycle);
@@ -71,7 +69,7 @@ public class BrixNodePageListenerRequestTarget extends BrixNodePageRequestTarget
             int separator = iface.lastIndexOf(':');
             if (separator != -1) {
                 String componentPath = iface.substring(0, separator);
-                getPage().prepareForRender(false);
+                getPage().prepareForRender();
                 Component component = getPage().get(componentPath);
                 if (component == null) {
                     throw new WicketRuntimeException(

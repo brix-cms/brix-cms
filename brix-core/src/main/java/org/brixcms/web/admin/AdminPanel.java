@@ -14,15 +14,15 @@
 
 package org.brixcms.web.admin;
 
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.CssResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.brixcms.Brix;
 import org.brixcms.Plugin;
 import org.brixcms.auth.Action.Context;
@@ -39,7 +39,7 @@ import java.util.List;
 public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderContributor {
 // ------------------------------ FIELDS ------------------------------
 
-    private static final ResourceReference CSS = new CompressedResourceReference(AdminPanel.class,
+    private static final ResourceReference CSS = new CssResourceReference(AdminPanel.class,
             "res/style.css");
 
     private TabbedPanel tabbedPanel;

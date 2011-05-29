@@ -14,12 +14,11 @@
 
 package org.brixcms.web.util;
 
-import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.link.ILinkListener;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.WicketURLDecoder;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.value.ValueMap;
 import org.brixcms.Path;
@@ -44,10 +43,10 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
 // --------------------- Interface ILinkListener ---------------------
 
     public final void onLinkClicked() {
-        String path = getRequest().getParameter("path");
-        if (path == null) {
-            path = getRequestCycle().getPageParameters().getString("path");
-        }
+        String path = getRequest().getRequestParameters().getParameterValue("path").toString();
+//        if (path == null) {
+//            path = getRequestCycle().getPageParameters().getString("path");
+//        }
         path = WicketURLDecoder.QUERY_INSTANCE.decode(path);
         onPathClicked(new Path(path));
     }
@@ -55,7 +54,7 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
 // -------------------------- OTHER METHODS --------------------------
 
     @Override
-    protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+    public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
         PrependingStringBuffer b = new PrependingStringBuffer();
         BrixNode current = getModelObject();
 

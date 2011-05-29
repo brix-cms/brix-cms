@@ -17,9 +17,8 @@
  */
 package org.brixcms.web;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.request.RequestParameters;
-import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.BrixNodeModel;
 import org.brixcms.Path;
 import org.brixcms.jcr.exception.JcrException;
@@ -60,14 +59,14 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
         throw new UnsupportedOperationException();
     }
 
-    public CharSequence encode(IRequestTarget requestTarget) {
+    public CharSequence encode(IRequestHandler requestTarget) {
         throw new UnsupportedOperationException();
     }
 
-    public IRequestTarget decode(RequestParameters requestParameters) {
+    public IRequestHandler decode(PageParameters requestParameters) {
         String pathStr = requestParameters.getPath();
 
-        IRequestTarget target = targetForPath(pathStr, requestParameters);
+        IRequestHandler target = targetForPath(pathStr, requestParameters);
 
         if (target == null) {
             // 404 if node not found
@@ -84,7 +83,7 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
         }
     }
 
-    public boolean matches(IRequestTarget requestTarget) {
+    public boolean matches(IRequestHandler requestTarget) {
         throw new UnsupportedOperationException();
     }
 
@@ -94,7 +93,7 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
 
 // -------------------------- OTHER METHODS --------------------------
 
-    public IRequestTarget targetForPath(String pathStr, RequestParameters requestParameters) {
+    public IRequestHandler targetForPath(String pathStr, PageParameters requestParameters) {
         if (!pathStr.startsWith("/")) {
             pathStr = "/" + pathStr;
         }
@@ -106,7 +105,7 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
 
         Path path = decode(new Path(pathStr, false));
 
-        IRequestTarget target = null;
+        IRequestHandler target = null;
         try {
             while (target == null) {
                 final BrixNode node = this.brixRequestCycleProcessor.getNodeForUriPath(path);
@@ -157,7 +156,7 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
         return new Path(builder.toString(), false);
     }
 
-    private IRequestTarget getSwitchTarget(BrixNode node) {
+    private IRequestHandler getSwitchTarget(BrixNode node) {
         if (node instanceof BrixNode) {
             return SwitchProtocolRequestTarget.requireProtocol((node).getRequiredProtocol());
         } else {

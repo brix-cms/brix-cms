@@ -16,7 +16,7 @@ package org.brixcms.web.tile.pagetile;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.RequestCycle;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.model.IModel;
 import org.brixcms.Path;
 import org.brixcms.jcr.api.JcrNode;
