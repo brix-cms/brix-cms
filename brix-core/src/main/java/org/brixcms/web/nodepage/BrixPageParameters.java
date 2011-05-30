@@ -14,12 +14,12 @@
 
 package org.brixcms.web.nodepage;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.Page;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.target.component.IPageRequestTarget;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.IPageRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.StringValue;
 import org.brixcms.exception.BrixException;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class BrixPageParameters implements Serializable {
+public class BrixPageParameters extends PageParameters {
 // ------------------------------ FIELDS ------------------------------
 
     private static final long serialVersionUID = 1L;
@@ -63,11 +63,11 @@ public class BrixPageParameters implements Serializable {
     }
 
     public static BrixPageParameters getCurrent() {
-        IRequestTarget target = RequestCycle.get().getRequestTarget();
+        IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
         // this is required for getting current page parameters from page constructor
         // (the actual page instance is not constructed yet.
-        if (target instanceof PageParametersRequestTarget) {
-            return ((PageParametersRequestTarget) target).getPageParameters();
+        if (target instanceof PageParametersRequestHandler) {
+            return ((PageParametersRequestHandler) target).getPageParameters();
         } else {
             return getCurrentPage().getBrixPageParameters();
         }
@@ -81,7 +81,7 @@ public class BrixPageParameters implements Serializable {
 
     public BrixPageParameters(PageParameters params) {
         if (params != null) {
-            for (String name : params.keySet()) {
+            for (String name : params.getNamedKeys()) {
                 addQueryParam(name, params.get(name));
             }
         }
@@ -302,15 +302,15 @@ public class BrixPageParameters implements Serializable {
      * @return url
      */
     public String urlFor(BrixNodeWebPage page) {
-        IRequestTarget target = new BrixNodeRequestTarget(page, this);
+        IRequestHandler target = new BrixNodeRequestHandler(page, this);
         return RequestCycle.get().urlFor(target).toString();
     }
 
     static BrixNodeWebPage getCurrentPage() {
-        IRequestTarget target = RequestCycle.get().getRequestTarget();
+        IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
         BrixNodeWebPage page = null;
-        if (target != null && target instanceof IPageRequestTarget) {
-            Page p = ((IPageRequestTarget) target).getPage();
+        if (target != null) {
+            IRequestablePage p = ((IPageRequestHandler) target).getPage();
             if (p instanceof BrixNodeWebPage) {
                 page = (BrixNodeWebPage) p;
             }
@@ -329,7 +329,7 @@ public class BrixPageParameters implements Serializable {
      * @return url
      */
     public String urlFor(IModel<BrixNode> node) {
-        IRequestTarget target = new BrixNodeRequestTarget(node, this);
+        IRequestHandler target = new BrixNodeRequestHandler(node, this);
         return RequestCycle.get().urlFor(target).toString();
     }
 

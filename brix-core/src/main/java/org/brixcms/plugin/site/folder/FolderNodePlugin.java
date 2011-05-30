@@ -14,21 +14,21 @@
 
 package org.brixcms.plugin.site.folder;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.request.RequestParameters;
-import org.apache.wicket.request.target.component.PageRequestTarget;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.PageProvider;
+import org.apache.wicket.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.brixcms.Brix;
-import org.brixcms.Path;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.NodeConverter;
 import org.brixcms.plugin.site.SimpleCallback;
 import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
-import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.nodepage.ForbiddenPage;
 import org.brixcms.web.reference.Reference;
 
@@ -57,38 +57,30 @@ public class FolderNodePlugin implements SiteNodePlugin {
         return "Folder";
     }
 
-    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters) {
+    public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
         BrixNode node = nodeModel.getObject();
 
-        String path = requestParameters.getPath();
-        if (!path.startsWith("/"))
-            path = "/" + path;
-
-        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get().getProcessor();
-        Path uriPath = processor.getUriPathForNode(node);
-
-        // check if the exact request path matches the node path
-        if (new Path(path).equals(uriPath) == false) {
-            return null;
-        }
+//        String path = requestParameters.getPath();
+//        if (!path.startsWith("/"))
+//            path = "/" + path;
+//
+//        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get().getProcessor();
+//        Path uriPath = processor.getUriPathForNode(node);
+//
+//        // check if the exact request path matches the node path
+//        if (new Path(path).equals(uriPath) == false) {
+//            return null;
+//        }
 
         FolderNode folder = (FolderNode) node;
         Reference redirect = folder.getRedirectReference();
 
         if (redirect != null && !redirect.isEmpty()) {
-            IRequestTarget target = redirect.getRequestTarget();
+            IRequestHandler target = redirect.getRequestTarget();
             final CharSequence url = RequestCycle.get().urlFor(target);
-            return new IRequestTarget() {
-                public void detach(RequestCycle requestCycle) {
-
-                }
-
-                public void respond(RequestCycle requestCycle) {
-                    requestCycle.getResponse().redirect(url.toString());
-                }
-            };
+            return new RedirectRequestHandler(url.toString());
         } else {
-            return new PageRequestTarget(new ForbiddenPage(path));
+            return new RenderPageRequestHandler(new PageProvider(new ForbiddenPage(/*path*/)));
         }
     }
 

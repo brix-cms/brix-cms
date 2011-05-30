@@ -14,17 +14,17 @@
 
 package org.brixcms.web.reference;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.BrixNodeModel;
 import org.brixcms.jcr.api.JcrNodeIterator;
 import org.brixcms.jcr.api.JcrValue;
 import org.brixcms.jcr.wrapper.BrixNode;
-import org.brixcms.web.nodepage.BrixNodeRequestTarget;
+import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
 import java.io.Serializable;
@@ -218,9 +218,9 @@ public class Reference implements Serializable, IDetachable {
         }
     }
 
-    public IRequestTarget getRequestTarget() {
+    public IRequestHandler getRequestTarget() {
         final IModel<BrixNode> model = getNodeModel();
-        return new BrixNodeRequestTarget(model != null ? model : new BrixNodeModel("invalidId",
+        return new BrixNodeRequestHandler(model != null ? model : new BrixNodeModel("invalidId",
                 "invalidWorkspace"), parameters != null ? parameters : new BrixPageParameters()) {
             @Override
             public String getNodeURL() {

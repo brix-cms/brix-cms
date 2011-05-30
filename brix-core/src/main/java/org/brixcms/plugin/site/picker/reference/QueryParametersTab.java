@@ -145,7 +145,7 @@ public abstract class QueryParametersTab extends Panel {
                     grid.markAllItemsDirty();
                     grid.update();
                 } else {
-                    target.appendJavascript("alert('" + getString("noItemsSelected") + "');");
+                    target.appendJavaScript("alert('" + getString("noItemsSelected") + "');");
                 }
             }
 
@@ -246,10 +246,11 @@ public abstract class QueryParametersTab extends Panel {
 
         public int compareTo(Entry o) {
             int v = key.compareTo(o.key);
-            if (v != 0)
+            if (v != 0) {
                 return v;
-            else
+            } else {
                 return value.compareTo(o.value);
+            }
         }
 
         @Override

@@ -15,12 +15,14 @@
 package org.brixcms.web.nodepage;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.AppendingStringBuffer;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 
 /**
  * Stateless form that allows {@link PageParametersAware} components to contribute state to URL after form submission.
@@ -56,25 +58,24 @@ public class PageParametersForm<T> extends StatelessForm<T> {
                 parameters.removeQueryParam(s);
             }
         }
-        tag.put("action", RequestCycle.get().urlFor(new BrixNodeRequestTarget(page, parameters)));
+        tag.put("action", RequestCycle.get().urlFor(new BrixNodeRequestHandler(page, parameters)));
     }
 
     @Override
     protected void onSubmit() {
         super.onSubmit();
-        getRequestCycle().setRequestTarget(getRequestTarget());
+        getRequestCycle().replaceAllRequestHandlers(getRequestHandler());
     }
 
-    protected IRequestTarget getRequestTarget() {
+    protected IRequestHandler getRequestHandler() {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
-        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component>() {
-            public Object component(Component component) {
-                ((PageParametersAware) component).contributeToPageParameters(parameters);
-                return IVisitor.CONTINUE_TRAVERSAL;
+        getPage().visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
+            public void component(Component component, IVisit<PageParametersAware> pageParametersAwareIVisit) {
+                component.contributeToPageParameters(parameters);
             }
         });
         contributeToPageParameters(parameters);
-        IRequestTarget target = new BrixNodeRequestTarget((BrixNodeWebPage) getPage(), parameters);
+        IRequestHandler target = new BrixNodeRequestHandler((BrixNodeWebPage) getPage(), parameters);
         return target;
     }
 

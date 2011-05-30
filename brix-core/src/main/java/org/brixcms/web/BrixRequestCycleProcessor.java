@@ -14,16 +14,14 @@
 
 package org.brixcms.web;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.protocol.http.WebRequest;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.protocol.http.WebResponse;
 import org.apache.wicket.protocol.https.HttpsConfig;
-import org.apache.wicket.protocol.https.HttpsRequestCycleProcessor;
-import org.apache.wicket.request.IRequestCodingStrategy;
-import org.apache.wicket.request.RequestParameters;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
 import org.brixcms.Path;
@@ -38,7 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
+public class BrixRequestCycleProcessor implements IRequestCycleListener {
 // ------------------------------ FIELDS ------------------------------
 
     public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
@@ -103,8 +101,8 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
     }
 
     private String getWorkspaceFromUrl() {
-        HttpServletRequest request = ((WebRequest) RequestCycle.get().getRequest())
-                .getHttpServletRequest();
+        HttpServletRequest request = (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest())
+                .getContainerRequest();
 
         if (request.getParameter(WORKSPACE_PARAM) != null) {
             return request.getParameter(WORKSPACE_PARAM);
@@ -147,8 +145,7 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
     }
 
     private String getDefaultWorkspaceName() {
-        final WebRequestCycle rc = (WebRequestCycle) RequestCycle.get();
-        final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(rc, brix);
+        final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(RequestCycle.get(), brix);
         return (workspace != null) ? workspace.getId() : null;
     }
 
@@ -215,8 +212,8 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
     }
 
     @Override
-    protected IRequestTarget resolveHomePageTarget(RequestCycle requestCycle,
-                                                   RequestParameters requestParameters) {
+    protected IRequestHandler resolveHomePageTarget(RequestCycle requestCycle,
+                                                   PageParameters requestParameters) {
         if (handleHomePage) {
             return urlCodingStrategy.decode(requestParameters);
         } else {
@@ -227,5 +224,40 @@ public class BrixRequestCycleProcessor extends HttpsRequestCycleProcessor {
     public BrixRequestCycleProcessor setHandleHomePage(boolean handleHomePage) {
         this.handleHomePage = handleHomePage;
         return this;
+    }
+
+    @Override
+    public void onBeginRequest(RequestCycle cycle) {
+
+    }
+
+    @Override
+    public void onEndRequest(RequestCycle cycle) {
+
+    }
+
+    @Override
+    public void onDetach(RequestCycle cycle) {
+
+    }
+
+    @Override
+    public void onRequestHandlerResolved(IRequestHandler handler) {
+
+    }
+
+    @Override
+    public void onRequestHandlerScheduled(IRequestHandler handler) {
+
+    }
+
+    @Override
+    public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+        return null;
+    }
+
+    @Override
+    public void onExceptionRequestHandlerResolved(IRequestHandler handler, Exception exception) {
+
     }
 }

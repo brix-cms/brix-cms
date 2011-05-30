@@ -46,7 +46,6 @@ import org.brixcms.plugin.site.tree.SiteNodeFilter;
 import org.brixcms.web.picker.common.TreeAwareNode;
 import org.brixcms.web.tree.AbstractTreeModel;
 import org.brixcms.web.tree.JcrTreeNode;
-import org.brixcms.web.tree.TreeNode;
 import org.brixcms.web.util.AbstractModel;
 import org.brixcms.workspace.Workspace;
 
@@ -208,7 +207,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         BrixNode node;
         try {
             node = getModelObject();
-        } catch (JcrException e) {
+        }
+        catch (JcrException e) {
             if (e.getCause() instanceof ItemNotFoundException) {
                 node = SitePlugin.get().getSiteRootNode(workspace.getId());
                 getModel().setObject(null);
@@ -375,7 +375,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
     }
 
     private class TreeModel extends AbstractTreeModel {
-        public TreeNode getRoot() {
+        @Override
+        public javax.swing.tree.TreeNode getRoot() {
             Workspace workspace = workspaceModel.getObject();
             return getTreeNode(SitePlugin.get().getSiteRootNode(workspace.getId()));
         }

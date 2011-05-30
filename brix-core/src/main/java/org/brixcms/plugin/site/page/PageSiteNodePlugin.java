@@ -42,31 +42,30 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin {
 
 
     @Override
-    public String getNodeType() {
-        return TYPE;
+    public NodeConverter getConverterForNode(BrixNode node) {
+        if (TemplateSiteNodePlugin.TYPE.equals(((BrixNode) node).getNodeType())) {
+            return new FromTemplateConverter(getNodeType());
+        } else {
+            return super.getConverterForNode(node);
+        }
     }
 
     public String getName() {
         return (new ResourceModel("page", "Page")).getObject();
     }
 
+    @Override
+    public String getNodeType() {
+        return TYPE;
+    }
+
     public IModel<String> newCreateNodeCaptionModel(IModel<BrixNode> parentNode) {
         return new ResourceModel("newPage", "Create New Page");
     }
 
-    ;
-
     @Override
     public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack) {
         return new CreatePageOrTemplatePanel(id, parentNode, getNodeType(), goBack);
-    }
-
-    @Override
-    public NodeConverter getConverterForNode(BrixNode node) {
-        if (TemplateSiteNodePlugin.TYPE.equals(((BrixNode) node).getNodeType()))
-            return new FromTemplateConverter(getNodeType());
-        else
-            return super.getConverterForNode(node);
     }
 
 // -------------------------- INNER CLASSES --------------------------

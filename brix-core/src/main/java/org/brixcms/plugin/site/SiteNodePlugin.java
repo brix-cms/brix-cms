@@ -14,10 +14,10 @@
 
 package org.brixcms.plugin.site;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.RequestParameters;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.registry.ExtensionPoint;
 
@@ -92,5 +92,5 @@ public interface SiteNodePlugin {
      * @param requestParameters
      * @return
      */
-    IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters);
+    IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters);
 }

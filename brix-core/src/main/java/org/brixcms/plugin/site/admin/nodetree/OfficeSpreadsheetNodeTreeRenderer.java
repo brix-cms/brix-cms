@@ -14,8 +14,9 @@
 
 package org.brixcms.plugin.site.admin.nodetree;
 
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.tree.BaseTree;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.SharedResourceReference;
 
 /**
  * Renderer for office spreadsheet nodes
@@ -27,7 +28,7 @@ public class OfficeSpreadsheetNodeTreeRenderer extends AbstractMimeTypeTreeRende
 
     private static final long serialVersionUID = 1L;
 
-    private static final ResourceReference RESOURCE = new ResourceReference(
+    private static final ResourceReference RESOURCE = new SharedResourceReference(
             PageNodeTreeRenderer.class, "resources/x-office-spreadsheet.png");
 
 // --------------------------- CONSTRUCTORS ---------------------------

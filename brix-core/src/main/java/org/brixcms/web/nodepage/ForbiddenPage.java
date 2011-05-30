@@ -16,7 +16,7 @@ package org.brixcms.web.nodepage;
 
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.protocol.http.WebResponse;
+import org.apache.wicket.request.http.WebResponse;
 import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 
@@ -34,7 +34,7 @@ public class ForbiddenPage extends WebPage {
         add(new ToolbarBehavior() {
             @Override
             protected String getCurrentWorkspaceId() {
-                return ((BrixRequestCycleProcessor) getRequestCycle().getProcessor()).getWorkspace();
+                return ((BrixRequestCycleProcessor) getRequestCycle().getActiveRequestHandler()).getWorkspace();
             }
         });
     }
@@ -46,6 +46,6 @@ public class ForbiddenPage extends WebPage {
         super.configureResponse();
 
         WebResponse response = (WebResponse) getResponse();
-        response.getHttpServletResponse().setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
     }
 }

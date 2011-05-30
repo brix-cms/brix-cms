@@ -14,8 +14,9 @@
 
 package org.brixcms.plugin.site.admin.nodetree;
 
-import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.tree.BaseTree;
+import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.request.resource.SharedResourceReference;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.PageNode;
 
@@ -29,7 +30,7 @@ public class PageNodeTreeRenderer extends AbstractNodeTreeRenderer {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ResourceReference RESOURCE = new ResourceReference(
+    private static final ResourceReference RESOURCE = new SharedResourceReference(
             PageNodeTreeRenderer.class, "resources/text-html.png");
 
 // -------------------------- OTHER METHODS --------------------------

@@ -47,7 +47,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 // ------------------------------ FIELDS ------------------------------
     ;
     private Component feedback;
-    private DataGrid dataGrid;
+    private DataGrid<Rule> dataGrid;
     private AjaxLink<?> removeSelected;
 
 // --------------------------- CONSTRUCTORS ---------------------------
@@ -58,7 +58,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
 
-        List<IGridColumn> columns = new ArrayList<IGridColumn>();
+        List<IGridColumn<IDataSource<Rule>,Rule>> columns = new ArrayList<IGridColumn<IDataSource<Rule>,Rule>>();
 
         columns.add(new CheckBoxColumn("checkbox"));
         columns.add(new PriorityColumn(new ResourceModel("priority"), "priority").setInitialSize(60));
@@ -69,7 +69,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         columns.add(new SubmitColumn("edit", new ResourceModel("edit")));
 
-        dataGrid = new DataGrid("grid", new DataSource(), columns) {
+        dataGrid = new DataGrid<Rule>("grid", new DataSource(), columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
@@ -89,8 +89,8 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                for (IModel model : dataGrid.getSelectedItems()) {
-                    Rule rule = (Rule) model.getObject();
+                for (IModel<Rule> model : dataGrid.getSelectedItems()) {
+                    Rule rule = model.getObject();
                     RulesPanel.this.getModelObject().removeRule(rule);
                 }
                 dataGrid.resetSelectedItems();

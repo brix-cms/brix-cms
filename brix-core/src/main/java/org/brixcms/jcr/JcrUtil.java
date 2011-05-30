@@ -49,9 +49,9 @@ public class JcrUtil {
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
      * <p/>
      * If a node being cloned is referenceable and there is already node with same UUID in the target workspace, the
-     * location of the node in target workspace determines the result. If node being cloned would become child of the same
-     * parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node being cloned
-     * will get a new UUID.
+     * location of the node in target workspace determines the result. If node being cloned would become child of the
+     * same parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node
+     * being cloned will get a new UUID.
      *
      * @param nodes          list of nodes to clone
      * @param targetRootNode parent for clones
@@ -66,14 +66,14 @@ public class JcrUtil {
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
      * <p/>
      * If a node being cloned is referenceable and there is already node with same UUID in the target workspace, the
-     * location of the node in target workspace determines the result. If node being cloned would become child of the same
-     * parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node being cloned
-     * will get a new UUID.
+     * location of the node in target workspace determines the result. If node being cloned would become child of the
+     * same parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node
+     * being cloned will get a new UUID.
      *
      * @param nodes                  list of nodes to clone
      * @param targetRootNodeProvider provider for parents for clones
-     * @param parentLimiter          (non mandatory) allows to skip certain nodes when creating parent hierarchy for cloned
-     *                               nodes
+     * @param parentLimiter          (non mandatory) allows to skip certain nodes when creating parent hierarchy for
+     *                               cloned nodes
      */
     public static void cloneNodes(List<JcrNode> nodes, TargetRootNodeProvider targetRootNodeProvider,
                                   ParentLimiter parentLimiter) {
@@ -145,8 +145,8 @@ public class JcrUtil {
 
     /**
      * Creates a copy of originalNode (without setting the properties). The node position will be concatenation of
-     * targetRootNode path and originalNode path. If the targetRootNode path doesn't contains the appropriate child nodes,
-     * they will be created.
+     * targetRootNode path and originalNode path. If the targetRootNode path doesn't contains the appropriate child
+     * nodes, they will be created.
      *
      * @param originalNode
      * @param targetRootNode
@@ -262,7 +262,8 @@ public class JcrUtil {
         InputStream stream = null;
         try {
             stream = new ByteArrayInputStream(xml.toString().getBytes("utf-8"));
-        } catch (UnsupportedEncodingException e) {
+        }
+        catch (UnsupportedEncodingException e) {
             // retarded
         }
 
@@ -272,7 +273,8 @@ public class JcrUtil {
             // such node in workspace
             // except trying to get it and then catching the exception
             existing = session.getNodeByIdentifier(uuid);
-        } catch (JcrException e) {
+        }
+        catch (JcrException e) {
         }
 
         int uuidBehavior;
@@ -328,8 +330,8 @@ public class JcrUtil {
      * @param xmlns        string containing the xmlns attributes of sv:node element
      * @param uuidMap      map that is used to track mapping from old uuid to new one (in case new UUIDs have been
      *                     created.
-     * @param nodes        list of pair <originalNode, targetNode). used to track added nodes so that the properties can be
-     *                     set after all nodes are created.
+     * @param nodes        list of pair <originalNode, targetNode). used to track added nodes so that the properties can
+     *                     be set after all nodes are created.
      */
     private static void createNodeAndChildren(JcrNode originalNode, JcrNode targetParent, String xmlns,
                                               Map<String, String> uuidMap, List<NodePair> nodes) {
@@ -381,8 +383,8 @@ public class JcrUtil {
     }
 
     /**
-     * Method checks if given value is of type reference and references node with UUID that has been remapped (can happen
-     * with {@link ImportUUIDBehavior#IMPORT_UUID_CREATE_NEW} being set.
+     * Method checks if given value is of type reference and references node with UUID that has been remapped (can
+     * happen with {@link ImportUUIDBehavior#IMPORT_UUID_CREATE_NEW} being set.
      *
      * @param value
      * @param uuidMap
@@ -405,13 +407,14 @@ public class JcrUtil {
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
      * <p/>
      * If a node being cloned is referenceable and there is already node with same UUID in the target workspace, the
-     * location of the node in target workspace determines the result. If node being cloned would become child of the same
-     * parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node being cloned
-     * will get a new UUID.
+     * location of the node in target workspace determines the result. If node being cloned would become child of the
+     * same parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node
+     * being cloned will get a new UUID.
      *
      * @param nodes          list of nodes to clone
      * @param targetRootNode parent for clones
-     * @param parentLimiter  (non mandatory) allows to skip certain nodes when creating parent hierarchy for cloned nodes
+     * @param parentLimiter  (non mandatory) allows to skip certain nodes when creating parent hierarchy for cloned
+     *                       nodes
      */
     public static void cloneNodes(List<JcrNode> nodes, final JcrNode targetRootNode, ParentLimiter parentLimiter) {
         TargetRootNodeProvider provider = new TargetRootNodeProvider() {
@@ -424,9 +427,9 @@ public class JcrUtil {
     }
 
     /**
-     * Scans the given list of nodes and their children for references that target nodes outside subtrees of the nodes in
-     * the list. Alternatively, if the referenced node is not part of any subtree and targetWorkspace is not null, the
-     * targetWorkspace is checked for node with same uuid as the referenced node.
+     * Scans the given list of nodes and their children for references that target nodes outside subtrees of the nodes
+     * in the list. Alternatively, if the referenced node is not part of any subtree and targetWorkspace is not null,
+     * the targetWorkspace is checked for node with same uuid as the referenced node.
      *
      * @param nodes
      * @param targetWorkspace
@@ -516,7 +519,8 @@ public class JcrUtil {
             try {
                 targetWorkspace.getSession().getNodeByIdentifier(value.getString());
                 found = true;
-            } catch (JcrException ignore) {
+            }
+            catch (JcrException ignore) {
             }
         }
 
@@ -544,7 +548,8 @@ public class JcrUtil {
         try {
             BrixNode node = (BrixNode) session.getNodeByIdentifier(uuid);
             return node;
-        } catch (JcrException e) {
+        }
+        catch (JcrException e) {
             if (e.getCause() instanceof ItemNotFoundException) {
                 return null;
             }

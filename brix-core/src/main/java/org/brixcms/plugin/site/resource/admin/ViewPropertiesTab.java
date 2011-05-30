@@ -23,7 +23,7 @@ import org.brixcms.jcr.wrapper.BrixFileNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.jcr.wrapper.BrixNode.Protocol;
 import org.brixcms.plugin.site.SitePlugin;
-import org.brixcms.plugin.site.resource.ResourceRequestTarget;
+import org.brixcms.plugin.site.resource.ResourceNodeHandler;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class ViewPropertiesTab extends BrixGenericPanel<BrixNode> {
@@ -59,7 +59,7 @@ public class ViewPropertiesTab extends BrixGenericPanel<BrixNode> {
         add(new Link<Void>("download") {
             @Override
             public void onClick() {
-                getRequestCycle().setRequestTarget(new ResourceRequestTarget(nodeModel, true));
+                getRequestCycle().setRequestTarget(new ResourceNodeHandler(nodeModel, true));
             }
         });
 

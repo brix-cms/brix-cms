@@ -37,8 +37,8 @@ public class MarkupCache {
 
     /**
      * Returns the {@link GeneratedMarkup} instance for given container. The container must implement {@link
-     * MarkupSourceProvider}. If the {@link GeneratedMarkup} instance is expired or not found, new {@link GeneratedMarkup}
-     * instance is generated and stored in the cache.
+     * MarkupSourceProvider}. If the {@link GeneratedMarkup} instance is expired or not found, new {@link
+     * GeneratedMarkup} instance is generated and stored in the cache.
      *
      * @param container
      * @return

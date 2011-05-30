@@ -13,6 +13,7 @@
  */
 package org.brixcms.markup.transform;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.parser.filter.EnclosureHandler;
 import org.brixcms.markup.MarkupHelper;
@@ -42,19 +43,19 @@ import java.util.Map;
  * @author James McIntosh
  */
 public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
-// ------------------------------ FIELDS ------------------------------
-
-    public static final String ENCLOSURE = org.apache.wicket.markup.ComponentTag.DEFAULT_WICKET_NAMESPACE + ":enclosure";
-
-    public static final String WICKET_ID = org.apache.wicket.markup.ComponentTag.DEFAULT_WICKET_NAMESPACE + ":id";
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public EnclosureMarkupSourceTransformer(MarkupSource delegate) {
         super(delegate);
     }
 
-// -------------------------- OTHER METHODS --------------------------
+    private String getEnclosureTag() {
+        return Application.get().getMapperContext().getNamespace()
+                + ":enclosure";
+    }
+
+    private String getIdAttribute() {
+        return Application.get().getMapperContext().getNamespace() + ":id";
+    }
 
     @Override
     protected List<Item> transform(List<Item> items) {
@@ -72,14 +73,16 @@ public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
                         enclosureChildTags = new ArrayList<Tag>();
                     } else if (tag.getType() == Tag.Type.CLOSE) {
                         // tidy up on close tag
-                        updateEnclosureChildId(enclosure, children, enclosureChildTags);
+                        updateEnclosureChildId(enclosure, children,
+                                enclosureChildTags);
                         enclosure = null;
                         children = null;
                         enclosureChildTags = null;
                     }
                 } else if (enclosure != null && !children.isEmpty()) {
                     // if we have open enclosure tag and children to find
-                    int index = checkIfTagIsChild(tag, children, enclosureChildTags);
+                    int index = checkIfTagIsChild(tag, children,
+                            enclosureChildTags);
                     if (index != -1) {
                         onChildFound(tag, children, enclosureChildTags, index);
                     }
@@ -90,7 +93,7 @@ public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
     }
 
     private boolean isEnclosure(Tag tag) {
-        return ENCLOSURE.equals(tag.getName());
+        return getEnclosureTag().equals(tag.getName());
     }
 
     /**
@@ -104,7 +107,9 @@ public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
         if (attributes != null) {
             if (attributes.containsKey(EnclosureHandler.CHILD_ATTRIBUTE)) {
                 // split for nested components
-                String[] children = attributes.get(EnclosureHandler.CHILD_ATTRIBUTE).split("" + Component.PATH_SEPARATOR);
+                String[] children = attributes.get(
+                        EnclosureHandler.CHILD_ATTRIBUTE).split(
+                        "" + Component.PATH_SEPARATOR);
                 ArrayList<String> list = new ArrayList<String>();
                 for (String child : children) {
                     list.add(child);
@@ -122,20 +127,23 @@ public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
      * @param children
      * @param enclosureChildTags
      */
-    private void updateEnclosureChildId(Tag enclosure, List<String> children, List<Tag> enclosureChildTags) {
+    private void updateEnclosureChildId(Tag enclosure, List<String> children,
+                                        List<Tag> enclosureChildTags) {
         Map<String, String> attributes = enclosure.getAttributeMap();
         if (attributes != null) {
             String child = "";
             for (int i = 0; i < children.size(); i++) {
                 String childid = children.get(i);
                 if (childid != null) {
-                    child += (child.length() > 0 ? Component.PATH_SEPARATOR : "") + childid;
+                    child += (child.length() > 0 ? Component.PATH_SEPARATOR
+                            : "") + childid;
                 } else {
                     Tag tag = enclosureChildTags.get(i);
                     String id = getGeneratedTagId(tag);
                     if (id != null) {
                         // nested children are delimited by commas
-                        child += (child.length() > 0 ? Component.PATH_SEPARATOR : "") + id;
+                        child += (child.length() > 0 ? Component.PATH_SEPARATOR
+                                : "") + id;
                     }
                 }
             }
@@ -164,7 +172,8 @@ public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
      * @param enclosureChildTags
      * @return
      */
-    private int checkIfTagIsChild(Tag tag, List<String> children, List<Tag> enclosureChildTags) {
+    private int checkIfTagIsChild(Tag tag, List<String> children,
+                                  List<Tag> enclosureChildTags) {
         String id = getTagId(tag);
         if (id != null) {
             for (String child : children) {
@@ -202,10 +211,12 @@ public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
     }
 
     private String getWicketIdAttributeName(Tag tag) {
-        // TODO: this reference possibly could be smarter by somehow using ComponentTag.getId()
-        // ComponentTag comments indicate that wicket:id is the default and that this could
+        // TODO: this reference possibly could be smarter by somehow using
+        // ComponentTag.getId()
+        // ComponentTag comments indicate that wicket:id is the default and that
+        // this could
         // potentially be different in cases such as auto-tags
-        return WICKET_ID;
+        return getIdAttribute();
     }
 
     /**
@@ -216,7 +227,8 @@ public class EnclosureMarkupSourceTransformer extends MarkupSourceTransformer {
      * @param enclosureChildTags
      * @param index
      */
-    private void onChildFound(Tag tag, List<String> children, List<Tag> enclosureChildTags, int index) {
+    private void onChildFound(Tag tag, List<String> children,
+                              List<Tag> enclosureChildTags, int index) {
         if (index != -1) {
             children.remove(index);
             children.add(index, null);

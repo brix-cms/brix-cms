@@ -14,8 +14,7 @@
 
 package org.brixcms.config;
 
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.request.IRequestCodingStrategy;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Brix;
 import org.brixcms.Path;
 import org.brixcms.workspace.Workspace;
@@ -52,7 +51,7 @@ public interface UriMapper {
      * @param requestCycle
      * @return JCR workspace or <code>null</code> if no suitable one is found
      */
-    public Workspace getWorkspaceForRequest(WebRequestCycle requestCycle, Brix brix);
+    public Workspace getWorkspaceForRequest(RequestCycle requestCycle, Brix brix);
 
     /**
      * Rewrites relative urls found in static markup to be context-relative.

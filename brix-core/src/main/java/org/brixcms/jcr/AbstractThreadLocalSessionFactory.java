@@ -59,7 +59,8 @@ public abstract class AbstractThreadLocalSessionFactory {
             logger.debug("Opening unmanaged jcr session to workspace: {} with credentials: {}",
                     workspace, credentials);
             return getRepository().login(credentials, workspace);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new CannotOpenJcrSessionException(workspace, e);
         }
     }
@@ -76,7 +77,8 @@ public abstract class AbstractThreadLocalSessionFactory {
                 logger.debug("Opening managed jcr session to workspace: {} with credentials: {}",
                         workspace, credentials);
                 session = getRepository().login(credentials, workspace);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 throw new CannotOpenJcrSessionException(workspace, e);
             }
             map.put(workspace, session);

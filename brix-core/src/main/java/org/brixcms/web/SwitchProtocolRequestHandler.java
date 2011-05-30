@@ -14,35 +14,36 @@
 
 package org.brixcms.web;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
 import org.brixcms.jcr.wrapper.BrixNode.Protocol;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SwitchProtocolRequestTarget implements IRequestTarget {
+public class SwitchProtocolRequestHandler implements IRequestHandler {
 // ------------------------------ FIELDS ------------------------------
 
     private final Protocol protocol;
 
 // -------------------------- STATIC METHODS --------------------------
 
-    public static IRequestTarget requireProtocol(Protocol protocol) {
+    public static IRequestHandler requireProtocol(Protocol protocol) {
         RequestCycle requestCycle = RequestCycle.get();
         WebRequest webRequest = (WebRequest) requestCycle.getRequest();
-        HttpServletRequest request = webRequest.getHttpServletRequest();
+        HttpServletRequest request = (HttpServletRequest) webRequest.getContainerRequest();
         if (protocol == null || protocol == Protocol.PRESERVE_CURRENT ||
                 request.getScheme().equals(protocol.toString().toLowerCase())) {
             return null;
         } else {
-            return new SwitchProtocolRequestTarget(protocol);
+            return new SwitchProtocolRequestHandler(protocol);
         }
     }
 
 // --------------------------- CONSTRUCTORS ---------------------------
 
-    public SwitchProtocolRequestTarget(Protocol protocol) {
+    public SwitchProtocolRequestHandler(Protocol protocol) {
         if (protocol == null) {
             throw new IllegalArgumentException("Argument 'protocol' may not be null.");
         }
@@ -58,29 +59,29 @@ public class SwitchProtocolRequestTarget implements IRequestTarget {
 // --------------------- Interface IRequestTarget ---------------------
 
 
-    public void respond(RequestCycle requestCycle) {
-        WebRequest webRequest = (WebRequest) requestCycle.getRequest();
-        HttpServletRequest request = webRequest.getHttpServletRequest();
-
-        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) requestCycle
-                .getProcessor();
-        Integer port = null;
-        if (protocol == Protocol.HTTP) {
-            if (processor.getHttpPort() != 80) {
-                port = processor.getHttpPort();
-            }
-        } else if (protocol == Protocol.HTTPS) {
-            if (processor.getHttpsPort() != 443) {
-                port = processor.getHttpsPort();
-            }
-        }
-
-        String url = getUrl(protocol.toString().toLowerCase(), port, request);
-
-        requestCycle.getResponse().redirect(url);
+    public void respond(IRequestCycle requestCycle) {
+        // BT 2011-5-28: commented out because there's some new foo with redirects that I don't understand
+//        WebRequest webRequest = (WebRequest) requestCycle.getRequest();
+//        HttpServletRequest request = (HttpServletRequest) webRequest.getContainerRequest();
+//
+//        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) requestCycle.getProcessor();
+//        Integer port = null;
+//        if (protocol == Protocol.HTTP) {
+//            if (processor.getHttpPort() != 80) {
+//                port = processor.getHttpPort();
+//            }
+//        } else if (protocol == Protocol.HTTPS) {
+//            if (processor.getHttpsPort() != 443) {
+//                port = processor.getHttpsPort();
+//            }
+//        }
+//
+//        String url = getUrl(protocol.toString().toLowerCase(), port, request);
+//
+//        requestCycle.getResponse().redirect(url);
     }
 
-    public void detach(RequestCycle requestCycle) {
+    public void detach(IRequestCycle requestCycle) {
 
     }
 

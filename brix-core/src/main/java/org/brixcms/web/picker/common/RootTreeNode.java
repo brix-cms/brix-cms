@@ -21,9 +21,11 @@ import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.tree.JcrTreeNode;
 
+import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.List;
 
 public class RootTreeNode implements JcrTreeNode {
@@ -72,23 +74,49 @@ public class RootTreeNode implements JcrTreeNode {
 // ------------------------ INTERFACE METHODS ------------------------
 
 
-// --------------------- Interface IDetachable ---------------------
-
-
-    public void detach() {
-        children = null;
-    }
-
 // --------------------- Interface JcrTreeNode ---------------------
 
     public IModel<BrixNode> getNodeModel() {
         return null;
     }
 
+    public void detach() {
+        children = null;
+    }
+
 // --------------------- Interface TreeNode ---------------------
 
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+        return null;
+    }
+
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return null;
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        return 0;
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return false;
+    }
 
     public boolean isLeaf() {
         return false;
+    }
+
+    @Override
+    public Enumeration children() {
+        return null;
     }
 }

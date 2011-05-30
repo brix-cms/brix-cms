@@ -20,7 +20,7 @@ import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.generic.BrixGenericWebMarkupContainer;
-import org.brixcms.web.nodepage.BrixNodeRequestTarget;
+import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
 public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
@@ -56,7 +56,7 @@ public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
         parameters.setQueryParam(BrixRequestCycleProcessor.WORKSPACE_PARAM, workspace);
         parameters.setQueryParam(PREVIEW_PARAM, "true");
         StringBuilder url = new StringBuilder(getRequestCycle()
-                .urlFor(new BrixNodeRequestTarget(nodeModel, parameters)));
+                .urlFor(new BrixNodeRequestHandler(nodeModel, parameters)));
         return url;
     }
 

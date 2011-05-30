@@ -2,6 +2,8 @@ target
 *.*~
 .project
 .classpath
-.settings
 derby.log
 *.*.orig
+*.ipr
+*.iml
+*.iws

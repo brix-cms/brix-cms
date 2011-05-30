@@ -14,10 +14,10 @@
 
 package org.brixcms.plugin.site.page;
 
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.RequestParameters;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.IRequestParameters;
 import org.brixcms.jcr.wrapper.BrixFileNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.ManageNodeTabFactory;
@@ -72,7 +72,7 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
 
     public abstract String getNodeType();
 
-    public IRequestTarget respond(IModel<BrixNode> nodeModel, RequestParameters requestParameters) {
+    public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
         return urlCodingStrategy.decode(requestParameters, nodeModel);
     }
 
@@ -85,8 +85,9 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
             if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType())) {
                 String mimeType = fileNode.getMimeType();
                 if (mimeType != null &&
-                        (mimeType.startsWith("text/") || mimeType.equals("application/xml")))
+                        (mimeType.startsWith("text/") || mimeType.equals("application/xml"))) {
                     return new FromResourceConverter(getNodeType());
+                }
             }
         }
 

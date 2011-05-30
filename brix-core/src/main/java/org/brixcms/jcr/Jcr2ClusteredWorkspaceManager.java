@@ -57,9 +57,11 @@ public class Jcr2ClusteredWorkspaceManager extends AbstractClusteredWorkspaceMan
         Session session = createSession(null);
         try {
             session.getWorkspace().createWorkspace(workspaceName);
-        } catch (RepositoryException e) {
+        }
+        catch (RepositoryException e) {
             throw new JcrException(e);
-        } finally {
+        }
+        finally {
             session.logout();
         }
     }
@@ -80,9 +82,11 @@ public class Jcr2ClusteredWorkspaceManager extends AbstractClusteredWorkspaceMan
         Session session = createSession(null);
         try {
             return Arrays.asList(session.getWorkspace().getAccessibleWorkspaceNames());
-        } catch (RepositoryException e) {
+        }
+        catch (RepositoryException e) {
             throw new JcrException(e);
-        } finally {
+        }
+        finally {
             session.logout();
         }
     }

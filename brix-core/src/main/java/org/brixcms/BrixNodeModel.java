@@ -71,10 +71,12 @@ public class BrixNodeModel implements IModel<BrixNode> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj instanceof BrixNodeModel == false)
+        }
+        if (obj instanceof BrixNodeModel == false) {
             return false;
+        }
 
         BrixNodeModel that = (BrixNodeModel) obj;
 
@@ -124,10 +126,11 @@ public class BrixNodeModel implements IModel<BrixNode> {
     private BrixNode loadNode(String id) {
         if (id != null) {
             JcrSession session = Brix.get().getCurrentSession(workspaceName);
-            if (id.startsWith("/"))
+            if (id.startsWith("/")) {
                 return (BrixNode) session.getItem(id);
-            else
+            } else {
                 return (BrixNode) session.getNodeByIdentifier(id);
+            }
         } else {
             return null;
         }

@@ -15,12 +15,13 @@
 package org.brixcms.web.nodepage.toolbar;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.resources.CompressedResourceReference;
-import org.apache.wicket.markup.html.resources.JavascriptResourceReference;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
@@ -37,9 +38,9 @@ import java.util.List;
 public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
 // ------------------------------ FIELDS ------------------------------
 
-    private static final CompressedResourceReference cssReference = new CompressedResourceReference(
+    private static final ResourceReference cssReference = new PackageResourceReference(
             ToolbarBehavior.class, "toolbar.css");
-    private static final JavascriptResourceReference javascriptReference = new JavascriptResourceReference(
+    private static final JavaScriptResourceReference javascriptReference = new JavaScriptResourceReference(
             ToolbarBehavior.class, "toolbar.js");
 
     private List<WorkspaceEntry> workspaces;
@@ -108,7 +109,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
         }
 
         RequestCycle requestCycle = RequestCycle.get();
-        if (requestCycle.getRequest().getParameter(BrixRequestCycleProcessor.WORKSPACE_PARAM) != null) {
+        if (requestCycle.getRequest().getRequestParameters().getParameterValue(BrixRequestCycleProcessor.WORKSPACE_PARAM) != null) {
             return false;
         } else {
             List<WorkspaceEntry> workspaces = getWorkspaces();
@@ -121,10 +122,10 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
 // --------------------- Interface IHeaderContributor ---------------------
 
     @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
+    public void renderHead(Component component, IHeaderResponse response) {
+        super.renderHead(component, response);
         response.renderCSSReference(cssReference);
-        response.renderJavascriptReference(javascriptReference);
+        response.renderJavaScriptReference(javascriptReference);
 
         String defaultWorkspace = getCurrentWorkspaceId();
         List<WorkspaceEntry> workspaces = getWorkspaces();
@@ -141,7 +142,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
             defaultWorkspace = "'" + defaultWorkspace + "'";
         }
 
-        response.renderJavascript("BrixToolbarInit(" + Arrays.toString(workspaceArray) + ", " +
+        response.renderJavaScript("BrixToolbarInit(" + Arrays.toString(workspaceArray) + ", " +
                 defaultWorkspace + ");", "brix-toolbar-init");
     }
 

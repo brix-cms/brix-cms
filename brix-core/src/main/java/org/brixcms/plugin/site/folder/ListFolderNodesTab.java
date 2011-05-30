@@ -23,7 +23,6 @@ import com.inmethod.grid.column.PropertyColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
-import org.apache.wicket.Response;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -33,6 +32,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.jcr.wrapper.BrixFileNode;
 import org.brixcms.jcr.wrapper.BrixNode;
@@ -161,8 +161,9 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
                     BrixNode node = (BrixNode) rowModel.getObject();
                     if (node instanceof BrixFileNode) {
                         String mime = ((BrixFileNode) node).getMimeType();
-                        if (mime != null)
+                        if (mime != null) {
                             response.write(Strings.escapeMarkup(mime));
+                        }
                     }
                 }
             };

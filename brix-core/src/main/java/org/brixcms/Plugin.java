@@ -55,9 +55,9 @@ public interface Plugin {
     String getId();
 
     /**
-     * Returns user visible name for given workspace. The name will be shown in workspace selector. This method will only
-     * be called for workspaces returned from {@link #getWorkspaces(Workspace, boolean)} or for workspaces for which {@link
-     * #isPluginWorkspace(Workspace)} returns true.
+     * Returns user visible name for given workspace. The name will be shown in workspace selector. This method will
+     * only be called for workspaces returned from {@link #getWorkspaces(Workspace, boolean)} or for workspaces for
+     * which {@link #isPluginWorkspace(Workspace)} returns true.
      *
      * @param workspace
      * @param isFrontend whether the workspace selector is part of frontend or administration interface
@@ -66,8 +66,8 @@ public interface Plugin {
     public String getUserVisibleName(Workspace workspace, boolean isFrontend);
 
     /**
-     * Returns the list of workspaces this plugin is responsible for and which should be shown in the workspace selector.
-     * The returned list can vary according to the currently selected workspace.
+     * Returns the list of workspaces this plugin is responsible for and which should be shown in the workspace
+     * selector. The returned list can vary according to the currently selected workspace.
      *
      * @param currentWorkspace Currently selected workspace
      * @param isFrontend       whether the workspace selector is part of frontend or administration interface
@@ -90,9 +90,9 @@ public interface Plugin {
      * Returns <code>true</code> if the plugin is responsible for the given workspace. E.g. for snapshot workspaces the
      * SnapshotPlugin should return <code>true</code>, all other plugins should return <code>false</code>.
      * <p/>
-     * Returning <code>true</code> here is not the same as returning non-empty list from {@link #newTabs(IModel)}. Even if
-     * plugin contributes tabs for certain workspace, it doesn't make it responsible for it. Plugin is usually responsible
-     * only for workspace that it creates.
+     * Returning <code>true</code> here is not the same as returning non-empty list from {@link #newTabs(IModel)}. Even
+     * if plugin contributes tabs for certain workspace, it doesn't make it responsible for it. Plugin is usually
+     * responsible only for workspace that it creates.
      *
      * @param workspace
      * @return
@@ -101,9 +101,9 @@ public interface Plugin {
 
     /**
      * Create and return list of administration tabs for this plugin. This method is invoked only once per admin panel
-     * instance. When the selected workspace changes, the workspaceModel.getObject() will return newly selected workspace,
-     * however this method will not be called again. Each panel in tab is responsible for updating itself when workspace
-     * changed.
+     * instance. When the selected workspace changes, the workspaceModel.getObject() will return newly selected
+     * workspace, however this method will not be called again. Each panel in tab is responsible for updating itself
+     * when workspace changed.
      *
      * @param workspaceModel model providing currently selected workspace
      * @return list of {@link ITab} instances or null if this plugin doesn't contribute any tabs

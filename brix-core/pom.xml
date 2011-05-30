@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -15,8 +16,7 @@
 
     <!-- TODO project name  -->
     <name>Brix Core</name>
-    <description>Brix Core module provides the bulk of CMS
-        functionality
+    <description>Brix Core module provides the bulk of CMS functionality
     </description>
 
     <dependencies>
@@ -56,6 +56,7 @@
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket</artifactId>
+            <type>pom</type>
         </dependency>
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -156,13 +157,10 @@
                         </Export-Package>
                         <Import-Package>
                             org.osgi*, org.brixcms.jcr.api, org.brixcms.jcr.*, com.inmethod.grid.*, javax.jcr.*,
-                            javax.servlet,
-                            javax.servlet.http,
-                            javax.swing.event, javax.swing.tree, org.apache.jackrabbit.api, org.apache.jackrabbit.spi.*,
-                            org.apache.jackrabbit.core, org.apache.jackrabbit.server.io, org.apache.wicket.*,
-                            org.htmlparser,
-                            org.htmlparser.lexer, org.htmlparser.util, org.slf4j, brix.workspace.rmi,
-                            org.apache.jackrabbit.commons.cnd
+                            javax.servlet, javax.servlet.http, javax.swing.event, javax.swing.tree,
+                            org.apache.jackrabbit.api, org.apache.jackrabbit.spi.*, org.apache.jackrabbit.core,
+                            org.apache.jackrabbit.server.io, org.apache.wicket.*, org.htmlparser, org.htmlparser.lexer,
+                            org.htmlparser.util, org.slf4j, brix.workspace.rmi, org.apache.jackrabbit.commons.cnd
                         </Import-Package>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
                         </Bundle-SymbolicName>

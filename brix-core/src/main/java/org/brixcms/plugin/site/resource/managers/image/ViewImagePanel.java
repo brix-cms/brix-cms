@@ -20,7 +20,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
-import org.brixcms.plugin.site.resource.ResourceRequestTarget;
+import org.brixcms.plugin.site.resource.ResourceNodeHandler;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
@@ -39,8 +39,7 @@ public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
         add(new WebMarkupContainer("image") {
             @Override
             protected void onComponentTag(ComponentTag tag) {
-                CharSequence url = getRequestCycle().urlFor(this, behavior,
-                        IBehaviorListener.INTERFACE);
+                CharSequence url = urlFor(behavior, IBehaviorListener.INTERFACE);
                 tag.put("src", url);
                 super.onComponentTag(tag);
             }
@@ -53,7 +52,7 @@ public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
             implements
             IBehaviorListener {
         public void onRequest() {
-            getRequestCycle().setRequestTarget(new ResourceRequestTarget(getNodeModel()));
+            getRequestCycle().setRequestTarget(new ResourceNodeHandler(getNodeModel()));
         }
 
         abstract IModel<BrixNode> getNodeModel();

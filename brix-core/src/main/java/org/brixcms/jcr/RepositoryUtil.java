@@ -44,21 +44,25 @@ public class RepositoryUtil {
 
                 String type = "[" + typeName + "] > nt:unstructured ";
 
-                if (referenceable)
+                if (referenceable) {
                     type += ", mix:referenceable ";
+                }
 
-                if (orderable)
+                if (orderable) {
                     type += "orderable ";
+                }
 
-                if (mixin)
+                if (mixin) {
                     type += " mixin";
+                }
 
                 CndImporter.registerNodeTypes(new StringReader(type), workspace.getSession());
             } else {
                 logger.info("Type: {} already registered in workspace {}", typeName, workspace
                         .getName());
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // TODO should use a well know exception subclass
             throw new RuntimeException("Could not register type: " + typeName, e);
         }

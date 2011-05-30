@@ -17,13 +17,13 @@
  */
 package org.brixcms.web;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.Page;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.protocol.http.request.WebRequestCodingStrategy;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.component.IRequestablePage;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.BookmarkablePageRequestHandler;
+import org.apache.wicket.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.target.coding.IRequestTargetUrlCodingStrategy;
-import org.apache.wicket.request.target.component.IBookmarkablePageRequestTarget;
-import org.apache.wicket.request.target.component.IPageRequestTarget;
 import org.apache.wicket.util.string.UrlUtils;
 import org.brixcms.Brix;
 import org.brixcms.plugin.site.page.PageRenderingPage;
@@ -52,10 +52,10 @@ public class BrixRequestCodingStrategy extends WebRequestCodingStrategy {
     @Override
     public String rewriteStaticRelativeUrl(String url) {
         boolean insideBrixPage = false;
-        IRequestTarget target = RequestCycle.get().getRequestTarget();
-        if (target instanceof IPageRequestTarget) {
-            IPageRequestTarget pageTarget = (IPageRequestTarget) target;
-            Page page = pageTarget.getPage();
+        IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
+        if (target instanceof IPageRequestHandler) {
+            IPageRequestHandler pageTarget = (IPageRequestHandler) target;
+            IRequestablePage page = pageTarget.getPage();
             if (page instanceof BrixNodeWebPage) {
                 insideBrixPage = true;
             }
@@ -85,15 +85,15 @@ public class BrixRequestCodingStrategy extends WebRequestCodingStrategy {
 // -------------------------- OTHER METHODS --------------------------
 
     @Override
-    protected CharSequence encode(RequestCycle rc, IBookmarkablePageRequestTarget target) {
+    protected CharSequence encode(RequestCycle rc, BookmarkablePageRequestHandler target) {
         boolean selfReferentialBookmarkableUrl = false;
 
         if (PageRenderingPage.class.equals(target.getPageClass())) {
             // target of the url is brix's internal page rendering page, check if we are in a brix
             // page right now...
-            IRequestTarget crt = rc.getRequestTarget();
-            if (crt instanceof IPageRequestTarget) {
-                IPageRequestTarget cprt = (IPageRequestTarget) crt;
+            IRequestHandler crt = rc.getActiveRequestHandler();
+            if (crt instanceof IPageRequestHandler) {
+                IPageRequestHandler cprt = (IPageRequestHandler) crt;
                 if (cprt.getPage() instanceof PageRenderingPage) {
                     // we are currently on the page rendering page
                     selfReferentialBookmarkableUrl = true;
@@ -107,8 +107,8 @@ public class BrixRequestCodingStrategy extends WebRequestCodingStrategy {
 
         // we are on a self referential bookmarkable url, rewrite it
 
-        PageRenderingPage currentPage = (PageRenderingPage) ((IPageRequestTarget) rc
-                .getRequestTarget()).getPage();
+        PageRenderingPage currentPage = (PageRenderingPage) ((IPageRequestHandler) rc
+                .getActiveRequestHandler()).getPage();
 
         BrixPageParameters params = new BrixPageParameters(target.getPageParameters());
 

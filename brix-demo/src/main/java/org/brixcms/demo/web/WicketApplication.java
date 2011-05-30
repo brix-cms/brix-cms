@@ -15,14 +15,12 @@
 package org.brixcms.demo.web;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.protocol.http.WebRequestCycle;
-import org.apache.wicket.request.IRequestCycleProcessor;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Brix;
 import org.brixcms.Path;
 import org.brixcms.config.BrixConfig;
 import org.brixcms.config.PrefixUriMapper;
 import org.brixcms.config.UriMapper;
-import org.brixcms.demo.web.admin.AdminPage;
 import org.brixcms.jcr.JcrSessionFactory;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
@@ -87,7 +85,7 @@ public final class WicketApplication extends AbstractWicketApplication {
             // we are mounting the cms on the root, and getting the workspace name from the
             // application properties
             UriMapper mapper = new PrefixUriMapper(Path.ROOT) {
-                public Workspace getWorkspaceForRequest(WebRequestCycle requestCycle, Brix brix) {
+                public Workspace getWorkspaceForRequest(RequestCycle requestCycle, Brix brix) {
                     final String name = getProperties().getJcrDefaultWorkspace();
                     SitePlugin sitePlugin = SitePlugin.get(brix);
                     return sitePlugin.getSiteWorkspace(name, getProperties().getWorkspaceDefaultState());
@@ -104,6 +102,7 @@ public final class WicketApplication extends AbstractWicketApplication {
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
+            getRequestCycleListeners().add(new BrixRequestCycleProcessor(brix));
         } catch (Exception e) {
             log.error("Exception in WicketApplication init()", e);
         } finally {
@@ -112,7 +111,7 @@ public final class WicketApplication extends AbstractWicketApplication {
         }
 
         // mount admin page
-        mount(new QueryStringHybridUrlCodingStrategy("/admin", AdminPage.class));
+//        mount(new QueryStringHybridUrlCodingStrategy("/admin", AdminPage.class));
 
         // FIXME matej: do we need this?
         // mountBookmarkablePage("/NotFound", ResourceNotFoundPage.class);
@@ -154,16 +153,16 @@ public final class WicketApplication extends AbstractWicketApplication {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected IRequestCycleProcessor newRequestCycleProcessor() {
-        /*
-         * install brix request cycle processor
-         * 
-         * this will allow brix to take over part of wicket's url space and handle requests
-         */
-        return new BrixRequestCycleProcessor(brix);
-    }
+//    /**
+//     * {@inheritDoc}
+//     */
+//    @Override
+//    protected IRequestCycleProcessor newRequestCycleProcessor() {
+//        /*
+//         * install brix request cycle processor
+//         *
+//         * this will allow brix to take over part of wicket's url space and handle requests
+//         */
+//        return new BrixRequestCycleProcessor(brix);
+//    }
 }

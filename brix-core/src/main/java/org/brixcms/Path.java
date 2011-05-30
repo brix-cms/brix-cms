@@ -112,11 +112,13 @@ public final class Path implements Iterable<String>, Serializable {
         boolean text = false;
 
         // until empty paths are supported
-        if (path.equals("."))
+        if (path.equals(".")) {
             return true;
+        }
 
-        if (!isRoot() && path.endsWith("/"))
+        if (!isRoot() && path.endsWith("/")) {
             return false;
+        }
 
         while (offset < path.length()) {
             String sub = path.substring(offset);
@@ -189,14 +191,16 @@ public final class Path implements Iterable<String>, Serializable {
 
         for (int i = 0; i < segments.size(); ++i) {
             res.append(segments.get(i));
-            if (i != segments.size() - 1)
+            if (i != segments.size() - 1) {
                 res.append("/");
+            }
         }
 
-        if (res.length() == 0)
+        if (res.length() == 0) {
             return new Path(".");
-        else
+        } else {
             return new Path(res.toString());
+        }
     }
 
     public boolean isAbsolute() {
@@ -207,12 +211,15 @@ public final class Path implements Iterable<String>, Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         final Path other = (Path) obj;
         if (path == null) {
             if (other.path != null) {

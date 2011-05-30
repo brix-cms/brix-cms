@@ -60,7 +60,8 @@ public class BrixBuild {
             try {
                 props.load(is);
                 is.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 throw new RuntimeException("Could not read " + FILE);
             }
 

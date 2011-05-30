@@ -17,9 +17,10 @@ package org.brixcms.web.tree;
 import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface JcrTreeNode extends TreeNode {
+public interface JcrTreeNode extends javax.swing.tree.TreeNode, Serializable{
 // ------------------------ INTERFACE METHODS ------------------------
 
 
@@ -35,4 +36,6 @@ public interface JcrTreeNode extends TreeNode {
      * @return
      */
     public IModel<BrixNode> getNodeModel();
+
+    void detach();
 }

@@ -17,6 +17,8 @@ package org.brixcms.web.tile.pagetile;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.brixcms.BrixNodeModel;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
@@ -61,14 +63,12 @@ public class PageTileViewerPanel extends BrixGenericPanel<BrixNode> {
     private boolean checkLoop(final IModel<BrixNode> model) {
         final boolean loop[] = {false};
 
-        visitParents(PageTileViewerPanel.class, new IVisitor<Component>() {
-            public Object component(Component component) {
+        visitParents(PageTileViewerPanel.class, new IVisitor<Component, BrixNode>() {
+            public void component(Component component, IVisit iVisit) {
                 // found parent with same model, this indicates a loop
                 if (component != PageTileViewerPanel.this && component.getDefaultModel().equals(model)) {
                     loop[0] = true;
-                    return STOP_TRAVERSAL;
                 }
-                return CONTINUE_TRAVERSAL;
             }
         });
 
