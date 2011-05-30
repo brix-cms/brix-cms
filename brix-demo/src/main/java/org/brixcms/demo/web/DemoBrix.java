@@ -25,8 +25,6 @@ import org.brixcms.demo.web.tile.time.TimeTile;
 import org.brixcms.plugin.menu.MenuPlugin;
 import org.brixcms.plugin.prototype.PrototypePlugin;
 import org.brixcms.plugin.site.page.tile.Tile;
-import org.brixcms.plugin.snapshot.SnapshotPlugin;
-import org.brixcms.plugin.webdavurl.WebdavUrlPlugin;
 
 /**
  * Subclass of {@link Brix} that configures demo-specific settings such as plugins, tiles, etc.
@@ -48,9 +46,9 @@ public class DemoBrix extends Brix {
 
         // register plugins
         config.getRegistry().register(Plugin.POINT, new MenuPlugin(this));
-        config.getRegistry().register(Plugin.POINT, new SnapshotPlugin(this));
+//        config.getRegistry().register(Plugin.POINT, new SnapshotPlugin(this));
         config.getRegistry().register(Plugin.POINT, new PrototypePlugin(this));
-        config.getRegistry().register(Plugin.POINT, new WebdavUrlPlugin());
+//        config.getRegistry().register(Plugin.POINT, new WebdavUrlPlugin());
 
 
         // register tiles

@@ -128,7 +128,7 @@ public abstract class AbstractMenuRenderer extends WebComponent implements IGene
     }
 
     protected boolean isSelected(ChildEntry entry) {
-        final String url = "/" + getRequest().getPath();
+        final String url = "/" + getRequest().getContextPath();
         Reference ref = entry.getReference();
         if (ref == null) {
             return false;

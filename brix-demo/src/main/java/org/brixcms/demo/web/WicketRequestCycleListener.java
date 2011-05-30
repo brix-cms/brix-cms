@@ -12,17 +12,26 @@
  * limitations under the License.
  */
 
-package org.brixcms.web.tree;
+package org.brixcms.demo.web;
 
-import org.apache.wicket.model.IDetachable;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 
-import java.io.Serializable;
-import java.util.List;
+import javax.jcr.Session;
 
-public interface TreeNode extends javax.swing.tree.TreeNode, IDetachable, Serializable {
+/**
+ * Subclass of {@link AbstractRequestCycleListener} that cleans any open Jcr {@link Session}s at the end of request
+ *
+ * @author igor.vaynberg
+ */
+public class WicketRequestCycleListener extends AbstractRequestCycleListener {
+
 // -------------------------- OTHER METHODS --------------------------
 
-    public List<? extends TreeNode> getChildren();
 
-    public boolean isLeaf();
+    @Override
+    public void onEndRequest(RequestCycle cycle) {
+        super.onEndRequest(cycle);
+        AbstractWicketApplication.get().cleanupSessionFactory();
+    }
 }

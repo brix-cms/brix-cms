@@ -52,7 +52,7 @@ public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
             implements
             IBehaviorListener {
         public void onRequest() {
-            getRequestCycle().setRequestTarget(new ResourceNodeHandler(getNodeModel()));
+            getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceNodeHandler(getNodeModel()));
         }
 
         abstract IModel<BrixNode> getNodeModel();

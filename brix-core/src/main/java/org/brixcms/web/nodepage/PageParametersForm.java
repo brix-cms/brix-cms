@@ -71,7 +71,8 @@ public class PageParametersForm<T> extends StatelessForm<T> {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
         getPage().visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
             public void component(Component component, IVisit<PageParametersAware> pageParametersAwareIVisit) {
-                component.contributeToPageParameters(parameters);
+                throw new UnsupportedOperationException();
+//                component.contributeToPageParameters(parameters);
             }
         });
         contributeToPageParameters(parameters);

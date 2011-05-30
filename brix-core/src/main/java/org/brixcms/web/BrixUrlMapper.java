@@ -18,20 +18,23 @@
 package org.brixcms.web;
 
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Url;
 import org.brixcms.BrixNodeModel;
 import org.brixcms.Path;
 import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
-import org.brixcms.web.nodepage.BrixNodePageUrlCodingStrategy;
+import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
+public class BrixUrlMapper implements IRequestMapper {
 // ------------------------------ FIELDS ------------------------------
 
-    Logger logger = LoggerFactory.getLogger(BrixUrlCodingStrategy.class);
+    Logger logger = LoggerFactory.getLogger(BrixUrlMapper.class);
 
     /**
      * request cycle processor
@@ -45,28 +48,19 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
      *
      * @param brixRequestCycleProcessor
      */
-    public BrixUrlCodingStrategy(BrixRequestCycleProcessor brixRequestCycleProcessor) {
+    public BrixUrlMapper(BrixRequestCycleProcessor brixRequestCycleProcessor) {
         this.brixRequestCycleProcessor = brixRequestCycleProcessor;
     }
 
 // ------------------------ INTERFACE METHODS ------------------------
 
 
-// --------------------- Interface IRequestTargetUrlCodingStrategy ---------------------
+// --------------------- Interface IRequestMapper ---------------------
 
+    public IRequestHandler mapRequest(Request request) {
+        String pathStr = request.getContextPath();
 
-    public String getMountPath() {
-        throw new UnsupportedOperationException();
-    }
-
-    public CharSequence encode(IRequestHandler requestTarget) {
-        throw new UnsupportedOperationException();
-    }
-
-    public IRequestHandler decode(PageParameters requestParameters) {
-        String pathStr = requestParameters.getPath();
-
-        IRequestHandler target = targetForPath(pathStr, requestParameters);
+        IRequestHandler target = targetForPath(pathStr, request.getRequestParameters());
 
         if (target == null) {
             // 404 if node not found
@@ -83,17 +77,19 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
         }
     }
 
-    public boolean matches(IRequestHandler requestTarget) {
-        throw new UnsupportedOperationException();
+    @Override
+    public int getCompatibilityScore(Request request) {
+        return 0;
     }
 
-    public boolean matches(String path, boolean caseSensitive) {
-        throw new UnsupportedOperationException();
+    @Override
+    public Url mapHandler(IRequestHandler requestHandler) {
+        return null;
     }
 
 // -------------------------- OTHER METHODS --------------------------
 
-    public IRequestHandler targetForPath(String pathStr, PageParameters requestParameters) {
+    public IRequestHandler targetForPath(String pathStr, IRequestParameters requestParameters) {
         if (!pathStr.startsWith("/")) {
             pathStr = "/" + pathStr;
         }
@@ -148,7 +144,7 @@ public class BrixUrlCodingStrategy implements IRequestTargetUrlCodingStrategy {
             } else {
                 builder.append("/");
             }
-            builder.append(BrixNodePageUrlCodingStrategy.urlDecode(s));
+            builder.append(BrixNodePageUrlMapper.urlDecode(s));
         }
         if (builder.length() == 0) {
             builder.append("/");

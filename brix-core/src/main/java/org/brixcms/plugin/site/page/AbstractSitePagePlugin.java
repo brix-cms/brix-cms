@@ -27,7 +27,7 @@ import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.admin.ManageTileNodeTabFactory;
 import org.brixcms.plugin.site.resource.ResourceNodePlugin;
-import org.brixcms.web.nodepage.BrixNodePageUrlCodingStrategy;
+import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
@@ -36,7 +36,7 @@ import java.util.Collection;
 public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
 // ------------------------------ FIELDS ------------------------------
 
-    private final BrixNodePageUrlCodingStrategy urlCodingStrategy = new BrixNodePageUrlCodingStrategy() {
+    private final BrixNodePageUrlMapper urlMapper = new BrixNodePageUrlMapper() {
         @Override
         protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
                                                   BrixPageParameters pageParameters) {
@@ -73,7 +73,7 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
     public abstract String getNodeType();
 
     public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
-        return urlCodingStrategy.decode(requestParameters, nodeModel);
+        return urlMapper.decode(requestParameters, nodeModel);
     }
 
     public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode,

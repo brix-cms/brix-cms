@@ -14,6 +14,7 @@
 
 package org.brixcms.web.nodepage;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
@@ -80,8 +81,8 @@ public class BrixNodePageRequestHandler
                 // need to redirect to a hybrid URL
                 page.setStatelessHint(false);
                 Session.get().bind();
-                Session.get().touch(page);
-                requestCycle.setRequestTarget(new BrixNodeRequestHandler(page));
+//                Session.get().touch(page);
+                requestCycle.scheduleRequestHandlerAfterCurrent(new BrixNodeRequestHandler(page));
                 return;
             }
         }
@@ -125,7 +126,7 @@ public class BrixNodePageRequestHandler
             // must be after render page because Page.configureResponse() sets
             // response.setContentType("text/" + getMarkupType() + "; charset=" + encoding);
             String mimeType = getMimeType(node.getObject());
-            String encoding = requestCycle.getApplication().getRequestCycleSettings().getResponseRequestEncoding();
+            String encoding = Application.get().getRequestCycleSettings().getResponseRequestEncoding();
             response.setContentType(mimeType + "; charset=" + encoding);
         }
     }

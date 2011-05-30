@@ -25,7 +25,8 @@ import org.brixcms.jcr.JcrSessionFactory;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.BrixRequestCycleProcessor;
-import org.brixcms.web.nodepage.BrixNodePageUrlCodingStrategy;
+import org.brixcms.web.BrixRequestMapper;
+import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ public final class WicketApplication extends AbstractWicketApplication {
         // use special class so that the URL coding strategy knows we want to go home
         // it is not possible to just return null here because some pages (e.g. expired page)
         // rely on knowing the home page
-        return BrixNodePageUrlCodingStrategy.HomePage.class;
+        return BrixNodePageUrlMapper.HomePage.class;
     }
 
     /**
@@ -102,6 +103,7 @@ public final class WicketApplication extends AbstractWicketApplication {
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
+            getRootRequestMapperAsCompound().add(new BrixRequestMapper(brix));
             getRequestCycleListeners().add(new BrixRequestCycleProcessor(brix));
         } catch (Exception e) {
             log.error("Exception in WicketApplication init()", e);

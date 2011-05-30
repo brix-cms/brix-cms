@@ -15,11 +15,7 @@
 package org.brixcms.demo.web;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
-import org.apache.wicket.Request;
-import org.apache.wicket.RequestCycle;
-import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.protocol.http.WebRequest;
 import org.brixcms.demo.ApplicationProperties;
 import org.brixcms.jcr.ThreadLocalSessionFactory;
 import org.brixcms.util.JcrUtils;
@@ -53,7 +49,7 @@ public abstract class AbstractWicketApplication extends WebApplication {
     private Repository repository;
 
     /**
-     * jcr session factory. sessions created by this factory are cleaned up by {@link WicketRequestCycle}
+     * jcr session factory. sessions created by this factory are cleaned up by {@link WicketRequestCycleListener}
      */
     private ThreadLocalSessionFactory sessionFactory;
 
@@ -128,6 +124,7 @@ public abstract class AbstractWicketApplication extends WebApplication {
         }
 
         getMarkupSettings().setStripWicketTags(true);
+        getRequestCycleListeners().add(new WicketRequestCycleListener());
     }
 
     /**
@@ -137,14 +134,14 @@ public abstract class AbstractWicketApplication extends WebApplication {
         sessionFactory.cleanup();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final RequestCycle newRequestCycle(Request request, Response response) {
-        // install request cycle that will cleanup #sessionFactory at the end of request
-        return new WicketRequestCycle(this, (WebRequest) request, response);
-    }
+//    /**
+//     * {@inheritDoc}
+//     */
+//    @Override
+//    public final RequestCycle newRequestCycle(Request request, Response response) {
+//        // install request cycle that will cleanup #sessionFactory at the end of request
+//        return new WicketRequestCycle(this, (WebRequest) request, response);
+//    }
 
     /**
      * {@inheritDoc}

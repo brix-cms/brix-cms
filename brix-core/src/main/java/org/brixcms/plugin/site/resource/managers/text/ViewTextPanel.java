@@ -68,7 +68,7 @@ public class ViewTextPanel extends BrixGenericPanel<BrixNode> {
         add(new Link<Void>("download") {
             @Override
             public void onClick() {
-                getRequestCycle().setRequestTarget(new ResourceNodeHandler(model, true));
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceNodeHandler(model, true));
             }
         });
 

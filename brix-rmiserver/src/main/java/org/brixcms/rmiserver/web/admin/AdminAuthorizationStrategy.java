@@ -14,15 +14,15 @@
 
 package org.brixcms.rmiserver.web.admin;
 
-import org.apache.wicket.AbstractRestartResponseException;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.IRequestTarget;
 import org.apache.wicket.Page;
-import org.apache.wicket.RequestCycle;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.component.IRequestableComponent;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.authorization.Action;
 import org.apache.wicket.authorization.IAuthorizationStrategy;
-import org.apache.wicket.protocol.http.WebRequestCycle;
 import org.brixcms.rmiserver.AuthenticationException;
 import org.brixcms.rmiserver.Role;
 
@@ -36,7 +36,7 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
 // --------------------- Interface IAuthorizationStrategy ---------------------
 
 
-    public <T extends Component> boolean isInstantiationAuthorized(Class<T> componentClass) {
+    public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
         boolean authorized = false;
         if (Page.class.isAssignableFrom(componentClass)) {
             if (Application.get().getApplicationSettings().getAccessDeniedPage().isAssignableFrom(
@@ -46,8 +46,7 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
 
 
             AdminSession session = AdminSession.get();
-            HttpServletRequest req = ((WebRequestCycle) RequestCycle.get()).getWebRequest()
-                    .getHttpServletRequest();
+            HttpServletRequest req = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
 
 
             if (!session.isUserLoggedIn()) {
@@ -64,7 +63,7 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
                 }
 
                 if (authenticated == false) {
-                    RequestCycle.get().setRequestTarget(new IRequestTarget() {
+                    RequestCycle.get().setRequestTarget(new IRequestHandler() {
                         public void detach(RequestCycle requestCycle) {
                         }
 
@@ -74,6 +73,18 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
 
                             res.setHeader("WWW-Authenticate", "BASIC");
                             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        }
+
+                        @Override
+                        public void respond(IRequestCycle requestCycle) {
+                            log.trace("Entering respond");
+
+                        }
+
+                        @Override
+                        public void detach(IRequestCycle requestCycle) {
+                            log.trace("Entering detach");
+
                         }
                     });
 

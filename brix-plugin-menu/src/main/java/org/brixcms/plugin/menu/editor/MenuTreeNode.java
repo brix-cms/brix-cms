@@ -19,6 +19,7 @@ import org.brixcms.plugin.menu.Menu.Entry;
 import org.brixcms.web.tree.TreeNode;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 public class MenuTreeNode implements TreeNode {
@@ -82,7 +83,37 @@ public class MenuTreeNode implements TreeNode {
 // --------------------- Interface TreeNode ---------------------
 
 
+    @Override
+    public javax.swing.tree.TreeNode getChildAt(int childIndex) {
+        return null;
+    }
+
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public javax.swing.tree.TreeNode getParent() {
+        return null;
+    }
+
+    @Override
+    public int getIndex(javax.swing.tree.TreeNode node) {
+        return 0;
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return false;
+    }
+
     public boolean isLeaf() {
         return entry.getChildren().isEmpty();
+    }
+
+    @Override
+    public Enumeration children() {
+        return null;
     }
 }

@@ -14,8 +14,6 @@
 
 package org.brixcms.plugin.snapshot;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,7 +28,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WebResponse;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebResponse;
 import org.brixcms.Brix;
 import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
@@ -149,18 +150,17 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
         add(new Link<Object>("downloadWorkspace") {
             @Override
             public void onClick() {
-                getRequestCycle().setRequestTarget(new IRequestTarget() {
-                    public void detach(RequestCycle requestCycle) {
+                getRequestCycle().setRequestTarget(new IRequestHandler() {
+                    public void detach(IRequestCycle requestCycle) {
                     }
 
-                    public void respond(RequestCycle requestCycle) {
+                    public void respond(IRequestCycle requestCycle) {
                         WebResponse resp = (WebResponse) requestCycle.getResponse();
                         resp.setAttachmentHeader("workspace.xml");
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
                         Brix brix = getBrix();
                         JcrSession session = brix.getCurrentSession(id);
-                        session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
-                                false);
+                        session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false, false);
                     }
                 });
             }

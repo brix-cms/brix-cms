@@ -92,8 +92,9 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
 // --------------------- Interface IRequestHandler ---------------------
 
     public void respond(IRequestCycle requestCycle) {
-        CharSequence url = requestCycle.urlFor(this);
-        requestCycle.getResponse().redirect(url.toString());
+        CharSequence url = ((RequestCycle) requestCycle).urlFor(this);
+//        requestCycle.redirect(url.toString());
+        throw new UnsupportedOperationException();
     }
 
     public void detach(IRequestCycle requestCycle) {
