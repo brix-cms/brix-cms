@@ -14,12 +14,14 @@
 
 package org.brixcms.plugin.site.resource;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
 import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.NodeConverter;
@@ -30,9 +32,6 @@ import org.brixcms.plugin.site.resource.admin.CreateResourcePanel;
 import org.brixcms.plugin.site.resource.admin.ManageResourceNodeTabFactory;
 import org.brixcms.plugin.site.resource.managers.image.ImageNodeTabFactory;
 import org.brixcms.plugin.site.resource.managers.text.TextNodeTabFactory;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ResourceNodePlugin implements SiteNodePlugin {
 // ------------------------------ FIELDS ------------------------------
@@ -91,7 +90,7 @@ public class ResourceNodePlugin implements SiteNodePlugin {
         // }
         // else
         // {
-        return new ResourceRequestHandler(new BrixNodeResource(nodeModel), requestParameters);
+		return new ResourceNodeHandler(nodeModel);
         // }
     }
 
