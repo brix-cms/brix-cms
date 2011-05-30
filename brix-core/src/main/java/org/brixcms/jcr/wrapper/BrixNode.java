@@ -77,8 +77,8 @@ public class BrixNode extends NodeWrapper {
     /**
      * Returns the type of given node.
      * <p/>
-     * TODO: There are two special cases (resource, type) that create special dependency on the site plugin. The folder and
-     * Resource nodes should be moved away from site plugin.
+     * TODO: There are two special cases (resource, type) that create special dependency on the site plugin. The folder
+     * and Resource nodes should be moved away from site plugin.
      *
      * @param node
      * @return
@@ -209,8 +209,8 @@ public class BrixNode extends NodeWrapper {
     }
 
     /**
-     * Returns the required protocol for this node. If the required protocol is not {@link Protocol#PRESERVE_CURRENT} and
-     * current page protocol is different, Brix will redirect to required protocol.
+     * Returns the required protocol for this node. If the required protocol is not {@link Protocol#PRESERVE_CURRENT}
+     * and current page protocol is different, Brix will redirect to required protocol.
      *
      * @return
      */
@@ -219,8 +219,8 @@ public class BrixNode extends NodeWrapper {
     }
 
     /**
-     * Returns the user visible node name. In most cases, this would be the same as node name, but it can be overridden by
-     * the wrapper.
+     * Returns the user visible node name. In most cases, this would be the same as node name, but it can be overridden
+     * by the wrapper.
      *
      * @return user visible node name
      */
@@ -242,8 +242,8 @@ public class BrixNode extends NodeWrapper {
     }
 
     /**
-     * Sets the hidden state of this node. Hidden node is usually considered part of parent node and should not be visible
-     * to user on it's own.
+     * Sets the hidden state of this node. Hidden node is usually considered part of parent node and should not be
+     * visible to user on it's own.
      *
      * @param hidden
      */
@@ -280,10 +280,10 @@ public class BrixNode extends NodeWrapper {
     }
 
     /**
-     * Touches this node. Touch updates the created, createdBy, lastModified, lastModifiedBy properties. In order for these
-     * properties to reflect the actual state {@link #touch()} must be invoked every time node is being saved. This happens
-     * automatically when {@link Node#save()} is invoked, however, if only session is saved {@link #touch()} must be called
-     * explicitly.
+     * Touches this node. Touch updates the created, createdBy, lastModified, lastModifiedBy properties. In order for
+     * these properties to reflect the actual state {@link #touch()} must be invoked every time node is being saved.
+     * This happens automatically when {@link Node#save()} is invoked, however, if only session is saved {@link
+     * #touch()} must be called explicitly.
      */
     public void touch() {
         if (!isNodeType(JCR_TYPE_BRIX_NODE)) {

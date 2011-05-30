@@ -161,8 +161,9 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
                     BrixNode node = (BrixNode) rowModel.getObject();
                     if (node instanceof BrixFileNode) {
                         String mime = ((BrixFileNode) node).getMimeType();
-                        if (mime != null)
+                        if (mime != null) {
                             response.write(Strings.escapeMarkup(mime));
+                        }
                     }
                 }
             };

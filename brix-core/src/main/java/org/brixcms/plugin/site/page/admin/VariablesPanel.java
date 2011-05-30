@@ -63,16 +63,16 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
     public VariablesPanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
-        List<IGridColumn<IDataSource<BrixNode>,BrixNode>> columns = new ArrayList<IGridColumn<IDataSource<BrixNode>,BrixNode>>();
-        columns.add(new CheckBoxColumn<IDataSource<BrixNode>,BrixNode>("checkbox"));
-        columns.add(new PropertyColumn<IDataSource<BrixNode>,BrixNode, String>(new ResourceModel("key"), "key"));
-        columns.add(new EditablePropertyColumn<IDataSource<BrixNode>,BrixNode, String>(new ResourceModel("value"), "value") {
+        List<IGridColumn<IDataSource<BrixNode>, BrixNode>> columns = new ArrayList<IGridColumn<IDataSource<BrixNode>, BrixNode>>();
+        columns.add(new CheckBoxColumn<IDataSource<BrixNode>, BrixNode>("checkbox"));
+        columns.add(new PropertyColumn<IDataSource<BrixNode>, BrixNode, String>(new ResourceModel("key"), "key"));
+        columns.add(new EditablePropertyColumn<IDataSource<BrixNode>, BrixNode, String>(new ResourceModel("value"), "value") {
             @Override
             protected void addValidators(FormComponent component) {
                 component.setRequired(true);
             }
         });
-        columns.add(new SubmitCancelColumn<IDataSource<BrixNode>,BrixNode>("submitcancel", new ResourceModel("edit")) {
+        columns.add(new SubmitCancelColumn<IDataSource<BrixNode>, BrixNode>("submitcancel", new ResourceModel("edit")) {
             @Override
             protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
                 target.addChildren(VariablesPanel.this, FeedbackPanel.class);
@@ -187,10 +187,12 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
+            if (this == obj) {
                 return true;
-            if (obj instanceof Entry == false)
+            }
+            if (obj instanceof Entry == false) {
                 return false;
+            }
             Entry that = (Entry) obj;
             return Objects.equal(key, that.key);
         }

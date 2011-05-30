@@ -329,7 +329,8 @@ public abstract class Brix {
             }
             s.save();
             s.logout();
-        } catch (RepositoryException e) {
+        }
+        catch (RepositoryException e) {
             throw new RuntimeException("Couldn't initialize repository", e);
         }
 

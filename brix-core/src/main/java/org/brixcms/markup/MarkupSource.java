@@ -33,8 +33,8 @@ public interface MarkupSource {
     public String getDoctype();
 
     /**
-     * Returns expiration token for the markup. The token will be remembered alongside the markup items and will be used to
-     * determine whether the generated markup is not yet expired (by being passed as argument to the {@link
+     * Returns expiration token for the markup. The token will be remembered alongside the markup items and will be used
+     * to determine whether the generated markup is not yet expired (by being passed as argument to the {@link
      * #isMarkupExpired(Object)} method.
      * <p/>
      * This method is called when generating the markup before the first invocation of {@link #nextMarkupItem()}

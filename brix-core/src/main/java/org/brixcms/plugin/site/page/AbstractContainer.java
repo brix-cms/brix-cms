@@ -196,10 +196,11 @@ public abstract class AbstractContainer extends BrixFileNode
     }
 
     public String getTitle() {
-        if (hasProperty(Properties.TITLE))
+        if (hasProperty(Properties.TITLE)) {
             return getProperty(Properties.TITLE).getString();
-        else
+        } else {
             return null;
+        }
     }
 
     public String getVariableValue(String key, boolean followTemplate) {

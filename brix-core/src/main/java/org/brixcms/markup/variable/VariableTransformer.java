@@ -62,10 +62,11 @@ public class VariableTransformer extends MarkupSourceTransformer {
 
     private Item processTag(Tag tag) {
         if (skipLevel > 0) {
-            if (tag.getType() == Tag.Type.OPEN)
+            if (tag.getType() == Tag.Type.OPEN) {
                 ++skipLevel;
-            else if (tag.getType() == Tag.Type.CLOSE)
+            } else if (tag.getType() == Tag.Type.CLOSE) {
                 --skipLevel;
+            }
             return null;
         }
 

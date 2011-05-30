@@ -49,10 +49,11 @@ public class TitleTransformer extends MarkupSourceTransformer {
             if (skipLevel > 0) {
                 if (i instanceof Tag) {
                     Tag tag = (Tag) i;
-                    if (tag.getType() == Tag.Type.OPEN)
+                    if (tag.getType() == Tag.Type.OPEN) {
                         ++skipLevel;
-                    else if (tag.getType() == Tag.Type.CLOSE)
+                    } else if (tag.getType() == Tag.Type.CLOSE) {
                         --skipLevel;
+                    }
                 }
                 continue;
             }
@@ -62,8 +63,9 @@ public class TitleTransformer extends MarkupSourceTransformer {
                 if (TAG_NAME.equals(tag.getName())) {
                     result.add(new TitleText(container));
 
-                    if (tag.getType() == Tag.Type.OPEN)
+                    if (tag.getType() == Tag.Type.OPEN) {
                         ++skipLevel;
+                    }
 
                     continue;
                 }

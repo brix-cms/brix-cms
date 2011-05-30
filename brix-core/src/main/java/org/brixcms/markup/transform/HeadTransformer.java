@@ -88,8 +88,8 @@ public class HeadTransformer extends MarkupSourceTransformer {
 
     /**
      * Transform the given list of original items. If headContent is not null, the items from head content are placed in
-     * the first head section of originalItems. All other head sections are removed. If head content is null, this method
-     * removes all head sections from original items. This method also removes duplicate &lt;body&gt; tags.
+     * the first head section of originalItems. All other head sections are removed. If head content is null, this
+     * method removes all head sections from original items. This method also removes duplicate &lt;body&gt; tags.
      *
      * @param originalItems
      * @param headContent

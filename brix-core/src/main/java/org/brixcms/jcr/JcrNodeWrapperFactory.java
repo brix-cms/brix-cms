@@ -72,8 +72,8 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer {
     /**
      * {@inheritDoc}
      * <p/>
-     * Called when the repository is initialized. For example, this call can be used to register any node types for nodes
-     * this factory can wrap.
+     * Called when the repository is initialized. For example, this call can be used to register any node types for
+     * nodes this factory can wrap.
      *
      * @param session
      */
@@ -84,8 +84,8 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer {
 // -------------------------- OTHER METHODS --------------------------
 
     /**
-     * Checks if this factory can wrap the node. The node instance is a simple {@link JcrNode} wrapper around the original
-     * {@link Node}
+     * Checks if this factory can wrap the node. The node instance is a simple {@link JcrNode} wrapper around the
+     * original {@link Node}
      *
      * @param node
      * @return true if this factory can wrap the node
@@ -96,9 +96,9 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer {
      * Wraps the node with a subclass.
      * <p/>
      * <p/>
-     * Passed as the argument is the "original" {@link Node} instance. This is to make sure that each instance is wrapped
-     * at most once. Wrapping a single {@link Node} instance with multiple nested wrappers might lead to problems with
-     * exceptions translating.
+     * Passed as the argument is the "original" {@link Node} instance. This is to make sure that each instance is
+     * wrapped at most once. Wrapping a single {@link Node} instance with multiple nested wrappers might lead to
+     * problems with exceptions translating.
      *
      * @param node
      * @param session

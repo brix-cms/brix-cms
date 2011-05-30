@@ -85,8 +85,9 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
             if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType())) {
                 String mimeType = fileNode.getMimeType();
                 if (mimeType != null &&
-                        (mimeType.startsWith("text/") || mimeType.equals("application/xml")))
+                        (mimeType.startsWith("text/") || mimeType.equals("application/xml"))) {
                     return new FromResourceConverter(getNodeType());
+                }
             }
         }
 

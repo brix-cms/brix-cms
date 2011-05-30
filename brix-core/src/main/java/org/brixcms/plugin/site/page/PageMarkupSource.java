@@ -160,7 +160,8 @@ public class PageMarkupSource implements MarkupSource {
                     throw new BrixException("Unknown node type " + cursor.getClass().getName());
                 }
             }
-        } catch (ParserException e) {
+        }
+        catch (ParserException e) {
             throw new BrixException("Couldn't parse node content: '" + node.getPath() + "'", e);
         }
     }

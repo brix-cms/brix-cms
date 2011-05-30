@@ -235,7 +235,8 @@ public class BrixFileNode extends BrixNode {
     public InputStream getDataAsStream() {
         try {
             return getContent().getProperty("jcr:data").getBinary().getStream();
-        } catch (RepositoryException e) {
+        }
+        catch (RepositoryException e) {
             throw new RuntimeException(e);
         }
     }

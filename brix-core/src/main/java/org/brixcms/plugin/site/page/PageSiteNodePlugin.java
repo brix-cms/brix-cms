@@ -43,10 +43,11 @@ public class PageSiteNodePlugin extends AbstractSitePagePlugin {
 
     @Override
     public NodeConverter getConverterForNode(BrixNode node) {
-        if (TemplateSiteNodePlugin.TYPE.equals(((BrixNode) node).getNodeType()))
+        if (TemplateSiteNodePlugin.TYPE.equals(((BrixNode) node).getNodeType())) {
             return new FromTemplateConverter(getNodeType());
-        else
+        } else {
             return super.getConverterForNode(node);
+        }
     }
 
     public String getName() {

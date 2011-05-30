@@ -207,7 +207,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         BrixNode node;
         try {
             node = getModelObject();
-        } catch (JcrException e) {
+        }
+        catch (JcrException e) {
             if (e.getCause() instanceof ItemNotFoundException) {
                 node = SitePlugin.get().getSiteRootNode(workspace.getId());
                 getModel().setObject(null);

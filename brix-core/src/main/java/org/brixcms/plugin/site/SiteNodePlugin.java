@@ -18,7 +18,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.registry.ExtensionPoint;
 
@@ -88,7 +87,6 @@ public interface SiteNodePlugin {
     /**
      * Returns the request target if this plugin is capable of creating a response for the node. Otherwise returns
      * <code>null</code>
-     *
      *
      * @param nodeModel
      * @param requestParameters

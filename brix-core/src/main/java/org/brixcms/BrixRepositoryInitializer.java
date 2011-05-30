@@ -60,7 +60,8 @@ public class BrixRepositoryInitializer implements RepositoryInitializer {
         try {
             logger.info("Registering Brix JCR Namespace: {}", Brix.NS);
             nr.registerNamespace(Brix.NS, "http://brix-cms.googlecode.com");
-        } catch (Exception ignore) {
+        }
+        catch (Exception ignore) {
             // logger.warn("Error registering brix namespace, may already be registered",
             // ignore);
         }

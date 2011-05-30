@@ -108,7 +108,8 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode> {
                 try {
                     parent.save();
                     selectNode(parent, true);
-                } catch (JcrException e) {
+                }
+                catch (JcrException e) {
                     if (e.getCause() instanceof ReferentialIntegrityException) {
                         parent.getSession().refresh(false);
                         NodeManagerEditorPanel.this.getModel().detach();
@@ -161,8 +162,9 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode> {
             List<IBrixTab> result = new ArrayList<IBrixTab>();
             for (ManageNodeTabFactory f : factories) {
                 List<IBrixTab> tabs = f.getManageNodeTabs(nodeModel);
-                if (tabs != null)
+                if (tabs != null) {
                     result.addAll(tabs);
+                }
             }
             return result;
         } else {

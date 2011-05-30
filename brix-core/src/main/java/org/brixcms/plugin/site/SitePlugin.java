@@ -630,7 +630,8 @@ public class SitePlugin implements SessionAwarePlugin {
         try {
             session = brix.wrapSession(node.getSession());
             return (BrixNode) NodeWrapper.wrap(node, session);
-        } catch (RepositoryException e) {
+        }
+        catch (RepositoryException e) {
             throw new JcrException(e);
         }
     }
