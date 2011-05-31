@@ -1,11 +1,5 @@
 package org.brixcms.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.request.IRequestHandler;
@@ -27,6 +21,11 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.workspace.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class BrixRequestMapper implements IRequestMapper {
 
@@ -89,7 +88,7 @@ public class BrixRequestMapper implements IRequestMapper {
 			}
 		}
 		// bluff we can parse all segments - makes sure we run first
-		return request.getUrl().getSegments().size();
+		return request.getUrl().getSegments().size() + 1;
 	}
 
 	@Override

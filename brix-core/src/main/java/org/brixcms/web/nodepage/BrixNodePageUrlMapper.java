@@ -607,6 +607,6 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
     @Override
     public Url mapHandler(IRequestHandler iRequestHandler) {
         log.trace("Entering mapHandler");
-        return null;
+        return Url.parse(((BrixNodeRequestHandler) iRequestHandler).getNodeURL());
     }
 }
