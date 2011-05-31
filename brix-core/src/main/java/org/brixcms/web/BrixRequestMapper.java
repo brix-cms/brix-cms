@@ -94,9 +94,9 @@ public class BrixRequestMapper implements IRequestMapper {
 
 	@Override
 	public Url mapHandler(IRequestHandler requestHandler) {
-		// this mapper does not support generating urls - they are generated
-		// based on the directory structure
-		return null;
+        // TODO move code from BrixNodePageUrlMapper#encode here
+        // at least as far as handling BrixNodeRequestHandler
+        return null;
 	}
 
 	public String getWorkspace() {
