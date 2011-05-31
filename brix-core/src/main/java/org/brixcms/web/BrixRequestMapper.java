@@ -1,21 +1,25 @@
 package org.brixcms.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.wicket.Application;
+import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.BookmarkableListenerInterfaceRequestHandler;
+import org.apache.wicket.request.handler.BookmarkablePageRequestHandler;
+import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
-import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.request.mapper.info.PageInfo;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.brixcms.Brix;
 import org.brixcms.BrixNodeModel;
 import org.brixcms.Path;
@@ -24,6 +28,10 @@ import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
+import org.brixcms.web.nodepage.BrixNodeRequestHandler;
+import org.brixcms.web.nodepage.BrixNodeWebPage;
+import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.web.nodepage.PageParametersAware;
 import org.brixcms.workspace.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,77 +40,33 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Set;
 
 public class BrixRequestMapper implements IRequestMapper {
-
-	private static final Logger logger = LoggerFactory.getLogger(BrixRequestMapper.class);
+// ------------------------------ FIELDS ------------------------------
 
 	public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
+
+	private static final Logger logger = LoggerFactory.getLogger(BrixRequestMapper.class);
 
 	private static final String COOKIE_NAME = "brix-revision";
 
 	private static final MetaDataKey<String> WORKSPACE_METADATA = new MetaDataKey<String>() {
 		private static final long serialVersionUID = 1L;
 	};
+    private static final Logger log = LoggerFactory.getLogger(BrixRequestMapper.class);
 	final Brix brix;
 	private boolean handleHomePage = true;
+
+// --------------------------- CONSTRUCTORS ---------------------------
 
 	public BrixRequestMapper(Brix brix) {
 		this.brix = brix;
 	}
 
-	@Override
-	public IRequestHandler mapRequest(Request request) {
-
-		final Url url = request.getClientUrl();
-
-		// TODO: This is just a quick fix
-		if (url.getSegments().size() > 0) {
-			if (url.getSegments().get(0).equals("webdav") || url.getSegments().get(0).equals("jcrwebdav")) {
-				return null;
-			}
-		}
-
-		Path path = new Path("/" + url.toString());
-
-		IRequestHandler handler = null;
-		try {
-			while (handler == null) {
-				final BrixNode node = getNodeForUriPath(path);
-				if (node != null) {
-					handler = SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), request.getRequestParameters());
-				}
-				if (handler != null || path.isRoot() || path.toString().equals(".")) {
-					break;
-				}
-				path = path.parent();
-			}
-		} catch (JcrException e) {
-			logger.warn("JcrException caught due to incorrect url", e);
-		}
-
-		return handler;
-	}
-
-	@Override
-	public int getCompatibilityScore(Request request) {
-		Url url = request.getUrl();
-		if (url.getSegments().size() > 0) {
-			if (url.getSegments().get(0).equals((Application.get().getMapperContext().getNamespace()))) {
-				// starts with wicket namespace - is an internal wicket url
-				return 0;
-			}
-		}
-		// bluff we can parse all segments - makes sure we run first
-		return request.getUrl().getSegments().size();
-	}
-
-	@Override
-	public Url mapHandler(IRequestHandler requestHandler) {
-        // TODO move code from BrixNodePageUrlMapper#encode here
-        // at least as far as handling BrixNodeRequestHandler
-        return null;
-	}
+// --------------------- GETTER / SETTER METHODS ---------------------
 
 	public String getWorkspace() {
 		String workspace = getWorkspaceFromUrl();
@@ -187,6 +151,204 @@ public class BrixRequestMapper implements IRequestMapper {
 		return (workspace != null) ? workspace.getId() : null;
 	}
 
+// ------------------------ INTERFACE METHODS ------------------------
+
+
+// --------------------- Interface IRequestMapper ---------------------
+
+	@Override
+	public IRequestHandler mapRequest(Request request) {
+		final Url url = request.getClientUrl();
+
+		// TODO: This is just a quick fix
+		if (url.getSegments().size() > 0) {
+			if (url.getSegments().get(0).equals("webdav") || url.getSegments().get(0).equals("jcrwebdav")) {
+				return null;
+			}
+		}
+
+		Path path = new Path("/" + url.toString());
+
+		IRequestHandler handler = null;
+		try {
+			while (handler == null) {
+				final BrixNode node = getNodeForUriPath(path);
+				if (node != null) {
+					handler = SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), request.getRequestParameters());
+				}
+				if (handler != null || path.isRoot() || path.toString().equals(".")) {
+					break;
+				}
+				path = path.parent();
+			}
+		} catch (JcrException e) {
+			logger.warn("JcrException caught due to incorrect url", e);
+		}
+
+		return handler;
+	}    
+
+	@Override
+	public int getCompatibilityScore(Request request) {
+		Url url = request.getUrl();
+		if (url.getSegments().size() > 0) {
+			if (url.getSegments().get(0).equals((Application.get().getMapperContext().getNamespace()))) {
+				// starts with wicket namespace - is an internal wicket url
+				return 0;
+			}
+		}
+		// bluff we can parse all segments - makes sure we run first
+		return request.getUrl().getSegments().size();
+	}
+
+	@Override
+	public Url mapHandler(IRequestHandler requestHandler) {
+        return encode(requestHandler);
+    }
+
+// -------------------------- OTHER METHODS --------------------------
+
+    public Url encode(IRequestHandler requestHandler) {    
+        if (requestHandler instanceof BrixNodeRequestHandler) {
+            BrixNodeRequestHandler handler = (BrixNodeRequestHandler) requestHandler;
+            PageInfo info = null;
+            Page page = handler.getPage();
+            if (page != null && !page.isPageStateless()) {
+                info = new PageInfo(page.getPageId());
+            }
+            String nodeURL = handler.getNodeURL();
+            return encode(nodeURL, handler.getPageParameters(), info);
+        } else if (requestHandler instanceof ListenerInterfaceRequestHandler) {
+            ListenerInterfaceRequestHandler target = (ListenerInterfaceRequestHandler) requestHandler;
+            BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
+            return encode(page);
+        } else if (requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
+            BookmarkableListenerInterfaceRequestHandler target = (BookmarkableListenerInterfaceRequestHandler) requestHandler;
+            BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
+            BrixNode node = page.getModelObject();
+            PageInfo info = new PageInfo(page.getPageId());
+            String componentPath = target.getComponent().getPageRelativePath();
+
+            // remove the page id from component path, we don't really need it
+            componentPath = componentPath.substring(componentPath.indexOf(':') + 1);
+            String iface = componentPath; // + ":" + target.getInterfaceName();
+            return encode(node, page.getBrixPageParameters(), info);
+        } else if (requestHandler instanceof BookmarkablePageRequestHandler
+                && ((BookmarkablePageRequestHandler) requestHandler).getPageClass().equals(
+                HomePage.class)) {
+            BrixNode node = ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler())
+                    .getNodeForUriPath(Path.ROOT);
+            return encode(new BrixNodeRequestHandler(new BrixNodeModel(node)));
+        } else {
+            return null;
+        }
+	}
+
+    private Url encode(BrixNodeWebPage page) {
+        BrixNode node = page.getModelObject();
+        PageInfo info = new PageInfo(page.getPageId());
+
+        // This is a URL for redirect. Allow components to contribute state to
+        // URL if they want to
+        final BrixPageParameters parameters = page.getBrixPageParameters();
+        page.visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
+            @Override
+            public void component(Component component, IVisit iVisit) {
+                ((PageParametersAware) component).contributeToPageParameters(parameters);
+            }
+        });
+
+        return encode(node, parameters, info);
+    }
+
+    private Url encode(BrixNode node, PageParameters parameters, PageInfo info) {
+        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get()
+                .getActiveRequestHandler();
+        return encode(processor.getUriPathForNode(node).toString(), parameters, info);
+    }
+
+    private Url encode(String nodeURL, PageParameters parameters, PageInfo info) {
+        StringBuilder builder = new StringBuilder();
+
+        if (nodeURL.startsWith("/")) {
+            nodeURL = nodeURL.substring(1);
+        }
+
+        builder.append(urlEncodePath(new Path(nodeURL, false)));
+
+        boolean skipFirstSlash = builder.charAt(builder.length() - 1) == '/';
+
+        for (int i = 0; i < parameters.getIndexedCount(); ++i) {
+            if (!skipFirstSlash)
+                builder.append('/');
+            else
+                skipFirstSlash = false;
+
+            final StringValue value = parameters.get(i);
+            final String s = value.toString();
+
+            if (s != null)
+                builder.append(urlEncode(s));
+        }
+
+        Set<String> keys = parameters.getNamedKeys();
+        if (info != null || !keys.isEmpty()) {
+            builder.append("?");
+        }
+
+        if (info != null) {
+            builder.append(info.toString());
+        }
+
+        boolean first = (info == null);
+
+        for (String key : keys) {
+            List<StringValue> values = parameters.getValues(key);
+            for (StringValue value : values) {
+                if (first) {
+                    first = false;
+                } else {
+                    builder.append("&");
+                }
+                builder.append(urlEncode(key));
+                builder.append("=");
+                builder.append(urlEncode(value.toString()));
+            }
+        }
+
+        return Url.parse(builder.toString());
+    }
+
+    private String urlEncodePath(Path path) {
+        StringBuilder res = new StringBuilder(path.size());
+        boolean first = true;
+        for (String s : path) {
+            if (first) {
+                first = false;
+            } else {
+                res.append("/");
+            }
+            res.append(urlEncode(s));
+        }
+        return res.toString();
+    }
+
+    /**
+     * Url encodes a string
+     *
+     * @param string string to be encoded
+     * @return encoded string
+     */
+    public static String urlEncode(String string) {
+        try {
+            return URLEncoder.encode(string, Application.get().getRequestCycleSettings()
+                    .getResponseRequestEncoding());
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage(), e);
+            return string;
+        }
+    }
+    
 	/**
 	 * Resolves uri path to a {@link BrixNode}. By default this method uses
 	 * {@link BrixConfig#getMapper()} to map the uri to a node path.
@@ -237,4 +399,9 @@ public class BrixRequestMapper implements IRequestMapper {
 		// use urimapper to create the uri
 		return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
 	}
+
+// -------------------------- INNER CLASSES --------------------------
+
+    public static final class HomePage extends WebPage {
+    }
 }
