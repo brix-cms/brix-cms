@@ -1,5 +1,11 @@
 package org.brixcms.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.request.IRequestHandler;
@@ -88,14 +94,14 @@ public class BrixRequestMapper implements IRequestMapper {
 			}
 		}
 		// bluff we can parse all segments - makes sure we run first
-		return request.getUrl().getSegments().size() + 1;
+		return request.getUrl().getSegments().size();
 	}
 
 	@Override
 	public Url mapHandler(IRequestHandler requestHandler) {
-		// this mapper does not support generating urls - they are generated
-		// based on the directory structure
-		return null;
+        // TODO move code from BrixNodePageUrlMapper#encode here
+        // at least as far as handling BrixNodeRequestHandler
+        return null;
 	}
 
 	public String getWorkspace() {
