@@ -20,7 +20,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import java.io.Serializable;
 import java.util.List;
 
-public interface JcrTreeNode extends javax.swing.tree.TreeNode, Serializable{
+public interface JcrTreeNode extends TreeNode, Serializable{
 
     public List<? extends JcrTreeNode> getChildren();
 

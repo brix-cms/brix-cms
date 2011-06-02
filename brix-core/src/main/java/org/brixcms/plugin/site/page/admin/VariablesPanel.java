@@ -81,9 +81,9 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        final DataGrid<BrixNode> grid = new DefaultDataGrid<BrixNode>("grid", (IModel<IDataSource<BrixNode>>) new DataSource(), columns) {
+        final DataGrid<BrixNode> grid = new DefaultDataGrid<BrixNode>("grid",  new Model(new DataSource()), columns) {
             @Override
-            public void onItemSelectionChanged(IModel item, boolean newValue) {
+            public void onItemSelectionChanged(IModel<BrixNode> item, boolean newValue) {
                 AjaxRequestTarget target = AjaxRequestTarget.get();
                 if (target != null) {
                     target.addComponent(delete);
