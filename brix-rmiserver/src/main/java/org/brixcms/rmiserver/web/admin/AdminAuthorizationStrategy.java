@@ -59,13 +59,12 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
                 }
 
                 if (authenticated == false) {
-                    RequestCycle.get().setRequestTarget(new IRequestHandler() {
+                    RequestCycle.get().scheduleRequestHandlerAfterCurrent(new IRequestHandler() {
                         public void detach(RequestCycle requestCycle) {
                         }
 
                         public void respond(RequestCycle rc) {
-                            HttpServletResponse res = ((WebRequestCycle) rc).getWebResponse()
-                                    .getHttpServletResponse();
+                            HttpServletResponse res = (HttpServletResponse) rc.getResponse().getContainerResponse();
 
                             res.setHeader("WWW-Authenticate", "BASIC");
                             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -73,20 +72,16 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
 
                         @Override
                         public void respond(IRequestCycle requestCycle) {
-                            log.trace("Entering respond");
-
                         }
 
                         @Override
                         public void detach(IRequestCycle requestCycle) {
-                            log.trace("Entering detach");
-
                         }
                     });
 
-                    throw new AbstractRestartResponseException() {
-                        private static final long serialVersionUID = 1L;
-                    };
+//                    throw new AbstractRestartResponseException() {
+//                        private static final long serialVersionUID = 1L;
+//                    };
                 }
             }
 

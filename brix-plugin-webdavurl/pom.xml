@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -46,10 +47,8 @@
                         </Export-Package>
                         <Import-Package>
                             org.osgi*,org.brixcms, org.brixcms.auth, org.brixcms.jcr.api, org.brixcms.web.generic,
-                            org.brixcms.web.tab, org.brixcms.web.util,
-                            org.brixcms.workspace, javax.servlet.http, org.apache.wicket, org.apache.wicket.markup,
-                            org.apache.wicket.markup.html, org.apache.wicket.markup.html.panel, org.apache.wicket.model,
-                            org.apache.wicket.protocol.http
+                            org.brixcms.web.tab, org.brixcms.web.util, org.brixcms.workspace, javax.servlet.http,
+                            org.apache.wicket*
                         </Import-Package>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
                         </Bundle-SymbolicName>
