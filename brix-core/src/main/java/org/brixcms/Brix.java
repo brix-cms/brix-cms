@@ -14,6 +14,14 @@
 
 package org.brixcms;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RestartResponseException;
@@ -40,19 +48,11 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.webdav.RulesNode;
 import org.brixcms.registry.ExtensionPointRegistry;
 import org.brixcms.web.BrixExtensionStringResourceLoader;
-import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.web.nodepage.ForbiddenPage;
 import org.brixcms.web.nodepage.PageParametersAwareEnabler;
 import org.brixcms.web.tile.pagetile.PageTile;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
-
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * TODO doc
@@ -235,7 +235,8 @@ public abstract class Brix {
 
 
         // allow brix to handle any url that wicket cant
-        application.mount(new BrixNodePageUrlMapper());
+        // in wicket 1.5 this is done by installing brixrequestmapper as root
+        // application.mount(new BrixNodePageUrlMapper());
 
         // register a string resource loader that allows any object that acts as
         // an extension supply its own resource bundle for the UI

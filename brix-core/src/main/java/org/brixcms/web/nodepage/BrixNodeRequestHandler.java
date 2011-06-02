@@ -21,7 +21,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
-import org.brixcms.web.BrixRequestCycleProcessor;
+import org.brixcms.plugin.site.SitePlugin;
 
 public class BrixNodeRequestHandler implements IPageRequestHandler {
 // ------------------------------ FIELDS ------------------------------
@@ -105,8 +105,7 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
 
     public String getNodeURL() {
         try {
-            return ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler())
-                    .getUriPathForNode(nodeModel.getObject()).toString();
+            return SitePlugin.get().getUriPathForNode(nodeModel.getObject()).toString();
         } finally {
             nodeModel.detach();
         }

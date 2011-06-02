@@ -14,6 +14,12 @@
 
 package org.brixcms.web.nodepage;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -43,12 +49,6 @@ import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.nodepage.BrixNodePageRequestHandler.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author Matej Knopp

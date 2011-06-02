@@ -14,6 +14,22 @@
 
 package org.brixcms.plugin.site;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.jcr.Item;
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -24,6 +40,7 @@ import org.brixcms.Path;
 import org.brixcms.SessionAwarePlugin;
 import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
+import org.brixcms.config.BrixConfig;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.api.JcrNodeIterator;
 import org.brixcms.jcr.api.JcrSession;
@@ -72,21 +89,6 @@ import org.brixcms.web.tab.AbstractWorkspaceTab;
 import org.brixcms.web.tab.IBrixTab;
 import org.brixcms.workspace.JcrException;
 import org.brixcms.workspace.Workspace;
-
-import javax.jcr.Item;
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class SitePlugin implements SessionAwarePlugin {
 // ------------------------------ FIELDS ------------------------------
@@ -538,6 +540,24 @@ public class SitePlugin implements SessionAwarePlugin {
         } else {
             return ((JcrNode) baseNode.getSession().getItem(strPath));
         }
+    }
+
+    /**
+     * Creates a uri path for the specified <code>node</code> By default this
+     * method uses {@link BrixConfig#getMapper()} to map node path to a uri
+     * path.
+     * 
+     * @param node
+     *            node to create uri path for
+     * @return uri path that represents the node
+     */
+    public Path getUriPathForNode(final BrixNode node) {
+        // allow site plugin to translate jcr path into node path
+        final String jcrPath = SitePlugin.get().fromRealWebNodePath(node.getPath());
+        final Path nodePath = new Path(jcrPath);
+
+        // use urimapper to create the uri
+        return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
     }
 
     public String toRealWebNodePath(String nodePath) {

@@ -14,10 +14,13 @@
 
 package org.brixcms.web.nodepage;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.http.WebResponse;
 import org.brixcms.Brix;
 import org.brixcms.auth.Action.Context;
+import org.brixcms.jcr.wrapper.BrixFileNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.generic.IGenericComponent;
@@ -93,5 +96,31 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
 
     public BrixNode getModelObject() {
         return (BrixNode) getDefaultModelObject();
+    }
+
+    @Override
+    protected void configureResponse() {
+        super.configureResponse();
+        String mimeType = getMimeType(getModelObject());
+        String encoding = Application.get().getRequestCycleSettings().getResponseRequestEncoding();
+        ((WebResponse) getResponse()).setContentType(mimeType + "; charset=" + encoding);
+
+        // TODO figure out how to handle last modified for pages.
+        // lastmodified depends on both the page and the tiles, maybe tiles
+        // can contribute lastmodified dates and we take the latest...
+        // response.setLastModifiedTime(Time.valueOf(node.getObject().getLastModified()));
+
+    }
+
+    protected static String getMimeType(BrixNode brixNode) {
+        BrixFileNode brixFileNode = new BrixFileNode(brixNode.getDelegate(), brixNode.getSession());
+
+        String mimeType = null;
+        mimeType = brixFileNode.getMimeType();
+
+        if (mimeType == null || mimeType.trim().isEmpty()) {
+            mimeType = "text/html";
+        }
+        return mimeType;
     }
 }

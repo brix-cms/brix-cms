@@ -1,5 +1,14 @@
 package org.brixcms.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
@@ -17,7 +26,8 @@ import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.info.PageInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.brixcms.Brix;
@@ -36,16 +46,8 @@ import org.brixcms.workspace.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Set;
-
 public class BrixRequestMapper implements IRequestMapper {
-// ------------------------------ FIELDS ------------------------------
+    // ------------------------------ FIELDS ------------------------------
 
 	public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
 
@@ -54,161 +56,174 @@ public class BrixRequestMapper implements IRequestMapper {
 	private static final String COOKIE_NAME = "brix-revision";
 
 	private static final MetaDataKey<String> WORKSPACE_METADATA = new MetaDataKey<String>() {
-		private static final long serialVersionUID = 1L;
-	};
+        private static final long serialVersionUID = 1L;
+    };
     private static final Logger log = LoggerFactory.getLogger(BrixRequestMapper.class);
-	final Brix brix;
-	private boolean handleHomePage = true;
+    final Brix brix;
+    private boolean handleHomePage = true;
 
-// --------------------------- CONSTRUCTORS ---------------------------
+    // --------------------------- CONSTRUCTORS ---------------------------
 
 	public BrixRequestMapper(Brix brix) {
-		this.brix = brix;
-	}
+        this.brix = brix;
+    }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
+    // --------------------- GETTER / SETTER METHODS ---------------------
 
 	public String getWorkspace() {
-		String workspace = getWorkspaceFromUrl();
+        String workspace = getWorkspaceFromUrl();
 
 		if (workspace != null) {
-			return workspace;
-		}
+            return workspace;
+        }
 
 		RequestCycle rc = RequestCycle.get();
-		workspace = rc.getMetaData(WORKSPACE_METADATA);
-		if (workspace == null) {
-			WebRequest req = (WebRequest) RequestCycle.get().getRequest();
-			WebResponse resp = (WebResponse) RequestCycle.get().getResponse();
-			Cookie cookie = req.getCookie(COOKIE_NAME);
-			workspace = getDefaultWorkspaceName();
-			if (cookie != null) {
-				if (cookie.getValue() != null)
-					workspace = cookie.getValue();
-			}
-			if (!checkSession(workspace)) {
-				workspace = getDefaultWorkspaceName();
-			}
-			if (workspace == null) {
-				throw new IllegalStateException("Could not resolve jcr workspace to use for this request");
-			}
-			Cookie c = new Cookie(COOKIE_NAME, workspace);
-			c.setPath("/");
-			if (workspace.toString().equals(getDefaultWorkspaceName()) == false)
-				resp.addCookie(c);
-			else if (cookie != null)
-				resp.clearCookie(cookie);
-			rc.setMetaData(WORKSPACE_METADATA, workspace);
-		}
-		return workspace;
-	}
+        workspace = rc.getMetaData(WORKSPACE_METADATA);
+        if (workspace == null) {
+            WebRequest req = (WebRequest) RequestCycle.get().getRequest();
+            WebResponse resp = (WebResponse) RequestCycle.get().getResponse();
+            Cookie cookie = req.getCookie(COOKIE_NAME);
+            workspace = getDefaultWorkspaceName();
+            if (cookie != null) {
+                if (cookie.getValue() != null)
+                    workspace = cookie.getValue();
+            }
+            if (!checkSession(workspace)) {
+                workspace = getDefaultWorkspaceName();
+            }
+            if (workspace == null) {
+                throw new IllegalStateException("Could not resolve jcr workspace to use for this request");
+            }
+            Cookie c = new Cookie(COOKIE_NAME, workspace);
+            c.setPath("/");
+            if (workspace.toString().equals(getDefaultWorkspaceName()) == false)
+                resp.addCookie(c);
+            else if (cookie != null)
+                resp.clearCookie(cookie);
+            rc.setMetaData(WORKSPACE_METADATA, workspace);
+        }
+        return workspace;
+    }
 
 	private String getWorkspaceFromUrl() {
-		HttpServletRequest request = (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest()).getContainerRequest();
+        HttpServletRequest request = (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest()).getContainerRequest();
 
 		if (request.getParameter(WORKSPACE_PARAM) != null) {
-			return request.getParameter(WORKSPACE_PARAM);
-		}
+            return request.getParameter(WORKSPACE_PARAM);
+        }
 
 		String referer = request.getHeader("referer");
 
 		if (!Strings.isEmpty(referer)) {
-			return extractWorkspaceFromReferer(referer);
-		} else {
-			return null;
-		}
-	}
+            return extractWorkspaceFromReferer(referer);
+        } else {
+            return null;
+        }
+    }
 
 	private static String extractWorkspaceFromReferer(String refererURL) {
-		int i = refererURL.indexOf('?');
-		if (i != -1 && i != refererURL.length() - 1) {
-			String param = refererURL.substring(i + 1);
-			String params[] = Strings.split(param, '&');
-			for (String s : params) {
-				try {
-					s = URLDecoder.decode(s, "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					// rrright
-					throw new RuntimeException(e);
-				}
-				if (s.startsWith(WORKSPACE_PARAM + "=")) {
-					String value = s.substring(WORKSPACE_PARAM.length() + 1);
-					if (value.length() > 0) {
-						return value;
-					}
-				}
-			}
-		}
-		return null;
-	}
+        int i = refererURL.indexOf('?');
+        if (i != -1 && i != refererURL.length() - 1) {
+            String param = refererURL.substring(i + 1);
+            String params[] = Strings.split(param, '&');
+            for (String s : params) {
+                try {
+                    s = URLDecoder.decode(s, "utf-8");
+                } catch (UnsupportedEncodingException e) {
+                    // rrright
+                    throw new RuntimeException(e);
+                }
+                if (s.startsWith(WORKSPACE_PARAM + "=")) {
+                    String value = s.substring(WORKSPACE_PARAM.length() + 1);
+                    if (value.length() > 0) {
+                        return value;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
 	private boolean checkSession(String workspaceId) {
-		return brix.getWorkspaceManager().workspaceExists(workspaceId);
-	}
+        return brix.getWorkspaceManager().workspaceExists(workspaceId);
+    }
 
 	private String getDefaultWorkspaceName() {
-		final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(RequestCycle.get(), brix);
-		return (workspace != null) ? workspace.getId() : null;
-	}
+        final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(RequestCycle.get(), brix);
+        return (workspace != null) ? workspace.getId() : null;
+    }
 
-// ------------------------ INTERFACE METHODS ------------------------
+    // ------------------------ INTERFACE METHODS ------------------------
 
 
 // --------------------- Interface IRequestMapper ---------------------
 
 	@Override
-	public IRequestHandler mapRequest(Request request) {
-		final Url url = request.getClientUrl();
+    public IRequestHandler mapRequest(Request request) {
+        final Url url = request.getClientUrl();
 
 		// TODO: This is just a quick fix
-		if (url.getSegments().size() > 0) {
-			if (url.getSegments().get(0).equals("webdav") || url.getSegments().get(0).equals("jcrwebdav")) {
-				return null;
-			}
-		}
+        if (url.getSegments().size() > 0) {
+            if (url.getSegments().get(0).equals("webdav") || url.getSegments().get(0).equals("jcrwebdav")) {
+                return null;
+            }
+        }
 
 		Path path = new Path("/" + url.toString());
 
+        // root path handling
+        if (path.isRoot()) {
+            if (handleHomePage) {
+                final BrixNode node = getNodeForUriPath(path);
+                return SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), request.getRequestParameters());
+            } else {
+                return null;
+            }
+        }
+
 		IRequestHandler handler = null;
-		try {
-			while (handler == null) {
-				final BrixNode node = getNodeForUriPath(path);
-				if (node != null) {
-					handler = SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), request.getRequestParameters());
-				}
-				if (handler != null || path.isRoot() || path.toString().equals(".")) {
-					break;
-				}
-				path = path.parent();
-			}
-		} catch (JcrException e) {
-			logger.warn("JcrException caught due to incorrect url", e);
-		}
+        try {
+            while (handler == null) {
+                final BrixNode node = getNodeForUriPath(path);
+                if (node != null) {
+                    handler = SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), request.getRequestParameters());
+                }
+                if (handler != null || path.toString().equals(".")) {
+                    break;
+                }
+                path = path.parent();
+                if (path.isRoot()) {
+                    break;
+                }
+            }
+        } catch (JcrException e) {
+            logger.warn("JcrException caught due to incorrect url", e);
+        }
 
 		return handler;
-	}    
+    }
 
 	@Override
-	public int getCompatibilityScore(Request request) {
-		Url url = request.getUrl();
-		if (url.getSegments().size() > 0) {
-			if (url.getSegments().get(0).equals((Application.get().getMapperContext().getNamespace()))) {
-				// starts with wicket namespace - is an internal wicket url
-				return 0;
-			}
-		}
-		// bluff we can parse all segments - makes sure we run first
-		return request.getUrl().getSegments().size();
-	}
+    public int getCompatibilityScore(Request request) {
+        Url url = request.getUrl();
+        if (url.getSegments().size() > 0) {
+            if (url.getSegments().get(0).equals((Application.get().getMapperContext().getNamespace()))) {
+                // starts with wicket namespace - is an internal wicket url
+                return 0;
+            }
+        }
+        // bluff we can parse all segments - makes sure we run first
+        return request.getUrl().getSegments().size();
+    }
 
 	@Override
-	public Url mapHandler(IRequestHandler requestHandler) {
+    public Url mapHandler(IRequestHandler requestHandler) {
         return encode(requestHandler);
     }
 
-// -------------------------- OTHER METHODS --------------------------
+    // -------------------------- OTHER METHODS --------------------------
 
-    public Url encode(IRequestHandler requestHandler) {    
+    public Url encode(IRequestHandler requestHandler) {
         if (requestHandler instanceof BrixNodeRequestHandler) {
             BrixNodeRequestHandler handler = (BrixNodeRequestHandler) requestHandler;
             PageInfo info = null;
@@ -234,15 +249,13 @@ public class BrixRequestMapper implements IRequestMapper {
             String iface = componentPath; // + ":" + target.getInterfaceName();
             return encode(node, page.getBrixPageParameters(), info);
         } else if (requestHandler instanceof BookmarkablePageRequestHandler
-                && ((BookmarkablePageRequestHandler) requestHandler).getPageClass().equals(
-                HomePage.class)) {
-            BrixNode node = ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler())
-                    .getNodeForUriPath(Path.ROOT);
+                && ((BookmarkablePageRequestHandler) requestHandler).getPageClass().equals(HomePage.class)) {
+            BrixNode node = ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler()).getNodeForUriPath(Path.ROOT);
             return encode(new BrixNodeRequestHandler(new BrixNodeModel(node)));
         } else {
             return null;
         }
-	}
+    }
 
     private Url encode(BrixNodeWebPage page) {
         BrixNode node = page.getModelObject();
@@ -262,8 +275,7 @@ public class BrixRequestMapper implements IRequestMapper {
     }
 
     private Url encode(BrixNode node, PageParameters parameters, PageInfo info) {
-        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get()
-                .getActiveRequestHandler();
+        BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler();
         return encode(processor.getUriPathForNode(node).toString(), parameters, info);
     }
 
@@ -335,72 +347,72 @@ public class BrixRequestMapper implements IRequestMapper {
 
     /**
      * Url encodes a string
-     *
-     * @param string string to be encoded
+     * 
+     * @param string
+     *            string to be encoded
      * @return encoded string
      */
     public static String urlEncode(String string) {
         try {
-            return URLEncoder.encode(string, Application.get().getRequestCycleSettings()
-                    .getResponseRequestEncoding());
+            return URLEncoder.encode(string, Application.get().getRequestCycleSettings().getResponseRequestEncoding());
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);
             return string;
         }
     }
-    
-	/**
-	 * Resolves uri path to a {@link BrixNode}. By default this method uses
-	 * {@link BrixConfig#getMapper()} to map the uri to a node path.
-	 * 
-	 * @param uriPath
-	 *            uri path
-	 * @return node that maps to the <code>uriPath</code> or <code>null</code>
-	 *         if none
-	 */
-	public BrixNode getNodeForUriPath(final Path uriPath) {
-		BrixNode node = null;
+
+    /**
+     * Resolves uri path to a {@link BrixNode}. By default this method uses
+     * {@link BrixConfig#getMapper()} to map the uri to a node path.
+     * 
+     * @param uriPath
+     *            uri path
+     * @return node that maps to the <code>uriPath</code> or <code>null</code>
+     *         if none
+     */
+    public BrixNode getNodeForUriPath(final Path uriPath) {
+        BrixNode node = null;
 
 		// create desired nodepath
-		final Path nodePath = brix.getConfig().getMapper().getNodePathForUriPath(uriPath.toAbsolute(), brix);
+        final Path nodePath = brix.getConfig().getMapper().getNodePathForUriPath(uriPath.toAbsolute(), brix);
 
 		if (nodePath != null) {
-			// allow site plugin to translate the node path into an actual jcr
-			// path
-			final String jcrPath = SitePlugin.get().toRealWebNodePath(nodePath.toString());
+            // allow site plugin to translate the node path into an actual jcr
+            // path
+            final String jcrPath = SitePlugin.get().toRealWebNodePath(nodePath.toString());
 
 			// retrieve jcr session
-			final String workspace = getWorkspace();
-			final JcrSession session = brix.getCurrentSession(workspace);
+            final String workspace = getWorkspace();
+            final JcrSession session = brix.getCurrentSession(workspace);
 
 			if (session.itemExists(jcrPath)) {
-				// node exists, return it
-				node = (BrixNode) session.getItem(jcrPath);
-			}
-		}
+                // node exists, return it
+                node = (BrixNode) session.getItem(jcrPath);
+            }
+        }
 
 		return node;
-	}
+    }
 
 	/**
-	 * Creates a uri path for the specified <code>node</code> By default this
-	 * method uses {@link BrixConfig#getMapper()} to map node path to a uri
-	 * path.
-	 * 
-	 * @param node
-	 *            node to create uri path for
-	 * @return uri path that represents the node
-	 */
-	public Path getUriPathForNode(final BrixNode node) {
-		// allow site plugin to translate jcr path into node path
-		final String jcrPath = SitePlugin.get().fromRealWebNodePath(node.getPath());
-		final Path nodePath = new Path(jcrPath);
+     * Creates a uri path for the specified <code>node</code> By default this
+     * method uses {@link BrixConfig#getMapper()} to map node path to a uri
+     * path.
+     * 
+     * @param node
+     *            node to create uri path for
+     * @return uri path that represents the node
+     */
+    public Path getUriPathForNode(final BrixNode node) {
+        // allow site plugin to translate jcr path into node path
+        final String jcrPath = SitePlugin.get().fromRealWebNodePath(node.getPath());
+        final Path nodePath = new Path(jcrPath);
 
 		// use urimapper to create the uri
-		return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
-	}
+        return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
+    }
 
-// -------------------------- INNER CLASSES --------------------------
+    // -------------------------- INNER CLASSES --------------------------
 
     public static final class HomePage extends WebPage {
     }

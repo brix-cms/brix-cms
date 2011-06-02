@@ -19,6 +19,7 @@ package org.brixcms.demo.web;
  *
  * @author igor.vaynberg
  */
+//@Deprecated
 //public class QueryStringHybridUrlCodingStrategy extends HybridUrlCodingStrategy {
 //// --------------------------- CONSTRUCTORS ---------------------------
 //

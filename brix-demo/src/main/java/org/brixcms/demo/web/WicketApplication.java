@@ -14,6 +14,8 @@
 
 package org.brixcms.demo.web;
 
+import javax.jcr.ImportUUIDBehavior;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Brix;
@@ -21,6 +23,7 @@ import org.brixcms.Path;
 import org.brixcms.config.BrixConfig;
 import org.brixcms.config.PrefixUriMapper;
 import org.brixcms.config.UriMapper;
+import org.brixcms.demo.web.admin.AdminPage;
 import org.brixcms.jcr.JcrSessionFactory;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
@@ -31,8 +34,6 @@ import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.jcr.ImportUUIDBehavior;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start
@@ -113,7 +114,7 @@ public final class WicketApplication extends AbstractWicketApplication {
         }
 
         // mount admin page
-//        mount(new QueryStringHybridUrlCodingStrategy("/admin", AdminPage.class));
+        mountPage("/admin", AdminPage.class);
 
         // FIXME matej: do we need this?
         // mountBookmarkablePage("/NotFound", ResourceNotFoundPage.class);
