@@ -37,21 +37,15 @@ import javax.servlet.http.HttpServletRequest;
 
 
 public class WebDavServlet extends SimpleWebdavServlet {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private Repository repository;
     private CredentialsProvider credentialsProvider;
     private Authorizer authorizer;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public WebDavServlet() {
 
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
 // FIXME look into this
 // @Override
@@ -87,10 +81,6 @@ public class WebDavServlet extends SimpleWebdavServlet {
         return repository;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Servlet ---------------------
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -121,15 +111,11 @@ public class WebDavServlet extends SimpleWebdavServlet {
         credentialsProvider = getCredentialsProvider();
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     @Override
     public synchronized SessionProvider getSessionProvider() {
         final SessionProvider provider = super.getSessionProvider();
         return new SecureSessionProvider(provider);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     /**
      * Session provider decorator that authorizes the user

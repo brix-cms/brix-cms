@@ -14,10 +14,10 @@
 
 package org.brixcms.plugin.menu.tile.fulltree;
 
-import org.apache.wicket.Response;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.auth.Action.Context;
 import org.brixcms.jcr.wrapper.BrixNode;
@@ -35,11 +35,7 @@ import java.util.Set;
  * @author igor.vaynberg
  */
 public class MenuRenderer extends AbstractMenuRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -51,13 +47,11 @@ public class MenuRenderer extends AbstractMenuRenderer {
         super(id, model);
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
+    public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
         NodeAdapter adapter = new NodeAdapter(getModelObject());
         Menu menu = new Menu();
         menu.load(adapter.getMenuNode());

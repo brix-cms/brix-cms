@@ -17,7 +17,5 @@ package org.brixcms.markup.variable;
 import java.util.Collection;
 
 public interface VariableKeyProvider {
-// -------------------------- OTHER METHODS --------------------------
-
     public Collection<String> getVariableKeys();
 }

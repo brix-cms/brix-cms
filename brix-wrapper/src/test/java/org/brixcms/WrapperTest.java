@@ -39,16 +39,12 @@ import java.util.List;
 import static org.junit.Assert.assertNotNull;
 
 public class WrapperTest {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(WrapperTest.class);
 
     private Repository repo;
     private List<JcrSession> sessions;
 
     private File home;
-
-// -------------------------- OTHER METHODS --------------------------
 
     @After
     public void cleanup() {

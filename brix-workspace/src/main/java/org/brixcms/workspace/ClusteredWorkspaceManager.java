@@ -20,8 +20,6 @@ package org.brixcms.workspace;
  * @author Matej Knopp
  */
 public interface ClusteredWorkspaceManager extends WorkspaceManager {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Notification that a workspace has been created externally (e.g. on different node).
      *

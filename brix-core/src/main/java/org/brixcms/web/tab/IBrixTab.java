@@ -23,8 +23,6 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
  * @author Matej Knopp
  */
 public interface IBrixTab extends ITab {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Returns the priority of this tab. Tabs with bigger priority go before tabs with lower priority.
      *

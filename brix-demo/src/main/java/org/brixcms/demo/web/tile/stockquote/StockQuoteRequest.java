@@ -46,8 +46,6 @@ import java.net.URLConnection;
  * http://www.devx.com/Java/Article/27559/0/page/2
  */
 public class StockQuoteRequest {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * We used to use the www.xmethods.com demo webservice for stockquotes. We now use webservicex, as xmethods was
      * really overloaded and unreliable.
@@ -58,8 +56,6 @@ public class StockQuoteRequest {
      * the symbol to get the quote for.
      */
     private String symbol;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Default constructor.
@@ -75,8 +71,6 @@ public class StockQuoteRequest {
     public StockQuoteRequest(String symbol) {
         this.symbol = symbol;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     /**
      * Gets the symbol.
@@ -95,8 +89,6 @@ public class StockQuoteRequest {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Gets a stock quote for the given symbol

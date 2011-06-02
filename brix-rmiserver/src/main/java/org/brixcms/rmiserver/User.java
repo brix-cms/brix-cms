@@ -39,8 +39,6 @@ import java.util.Set;
 @Entity
 @Table(name = "rmiserver_user")
 public class User {
-// ------------------------------ FIELDS ------------------------------
-
     @Id
     @GeneratedValue
     @Column(name = "u_id")
@@ -62,8 +60,6 @@ public class User {
     @Column(name = "u_locked")
     private boolean locked = false;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Hibernate constructor
      */
@@ -80,8 +76,6 @@ public class User {
     public User(String login, String passwordHash, Role... roles) {
         this(login, passwordHash, Arrays.asList(roles));
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public Long getId() {
         return id;

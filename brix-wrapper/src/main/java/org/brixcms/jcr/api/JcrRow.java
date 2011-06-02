@@ -26,10 +26,6 @@ import javax.jcr.query.Row;
  * @author igor.vaynberg
  */
 public interface JcrRow extends Row {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Row ---------------------
 
 
     public Value[] getValues();
@@ -126,11 +122,7 @@ public interface JcrRow extends Row {
     public double getScore(String selectorName);
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Row getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrRow wrap(Row delegate, JcrSession session) {

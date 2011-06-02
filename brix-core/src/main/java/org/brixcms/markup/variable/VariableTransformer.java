@@ -28,21 +28,15 @@ import java.util.List;
 import java.util.Map;
 
 public class VariableTransformer extends MarkupSourceTransformer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String VAR_TAG_NAME = Brix.NS_PREFIX + "var";
 
     int skipLevel = 0;
     private final BrixNode pageNode;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public VariableTransformer(MarkupSource delegate, BrixNode pageNode) {
         super(delegate);
         this.pageNode = pageNode;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected List<Item> transform(List<Item> originalItems) {

@@ -25,11 +25,7 @@ import org.brixcms.web.picker.node.NodeTypeFilter;
 import org.brixcms.web.tree.NodeFilter;
 
 public class PageTileEditorPanel extends GenericTileEditorPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private IModel<BrixNode> targetNodeModel = new BrixNodeModel();
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public PageTileEditorPanel(String id, IModel<BrixNode> tileContainerNode) {
         this(id, tileContainerNode, new NodeTypeFilter(PageSiteNodePlugin.TYPE));
@@ -44,8 +40,6 @@ public class PageTileEditorPanel extends GenericTileEditorPanel<BrixNode> {
         picker.setRequired(true);
         add(picker);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void detachModel() {

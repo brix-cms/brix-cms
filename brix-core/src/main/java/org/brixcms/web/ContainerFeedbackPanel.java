@@ -19,8 +19,6 @@ import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 public class ContainerFeedbackPanel extends FeedbackPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ContainerFeedbackPanel(String id, MarkupContainer container) {
         super(id, new ContainerFeedbackMessageFilter(container));
     }

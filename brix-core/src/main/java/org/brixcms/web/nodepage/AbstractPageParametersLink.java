@@ -30,8 +30,6 @@ import org.apache.wicket.util.visit.IVisitor;
  * @author Igor Vaynberg
  */
 public abstract class AbstractPageParametersLink extends AbstractLink {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public AbstractPageParametersLink(String id) {
         super(id);
     }
@@ -39,8 +37,6 @@ public abstract class AbstractPageParametersLink extends AbstractLink {
     public AbstractPageParametersLink(String id, IModel<?> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onComponentTag(ComponentTag tag) {

@@ -34,8 +34,6 @@ import org.brixcms.plugin.webdavurl.WebdavUrlPlugin;
  * @author igor.vaynberg
  */
 public class DemoBrix extends Brix {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      *
@@ -58,8 +56,6 @@ public class DemoBrix extends Brix {
         config.getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
         config.getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

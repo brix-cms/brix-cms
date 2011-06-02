@@ -26,8 +26,6 @@ import org.brixcms.web.model.ModelBuffer;
 import org.brixcms.web.reference.Reference;
 
 public class PropertiesTab extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PropertiesTab(String id, final IModel<BrixNode> folderNodeModel) {
         super(id, folderNodeModel);
 

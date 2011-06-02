@@ -19,8 +19,6 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class ConvertTab extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ConvertTab(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
 

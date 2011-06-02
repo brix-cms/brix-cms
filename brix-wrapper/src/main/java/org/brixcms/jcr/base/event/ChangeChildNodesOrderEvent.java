@@ -23,13 +23,9 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public class ChangeChildNodesOrderEvent extends NodeEvent {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     ChangeChildNodesOrderEvent(Node node) {
         super(node);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Node getNode() {

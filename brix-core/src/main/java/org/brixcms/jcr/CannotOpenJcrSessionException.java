@@ -15,8 +15,6 @@
 package org.brixcms.jcr;
 
 public class CannotOpenJcrSessionException extends RuntimeException {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public CannotOpenJcrSessionException(String workspace, Exception cause) {
         super("Could not open jcr session for workspace: " + workspace, cause);
     }

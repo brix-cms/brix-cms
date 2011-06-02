@@ -23,8 +23,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class BrixTabbedPanel extends TabbedPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixTabbedPanel(String id, List<IBrixTab> tabs) {
         super(id, sort(tabs));
     }
@@ -44,8 +42,6 @@ public class BrixTabbedPanel extends TabbedPanel {
 
         return result;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected String getTabContainerCssClass() {

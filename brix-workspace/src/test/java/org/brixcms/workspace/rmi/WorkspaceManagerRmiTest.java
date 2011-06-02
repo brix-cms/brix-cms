@@ -29,8 +29,6 @@ import java.rmi.server.UnicastRemoteObject;
 // FIXME figure out why this is failing on teamcity
 @Ignore
 public class WorkspaceManagerRmiTest {
-// -------------------------- OTHER METHODS --------------------------
-
     @Test
     public void test() throws Exception {
         WorkspaceManager remote = EasyMock.createMock(WorkspaceManager.class);

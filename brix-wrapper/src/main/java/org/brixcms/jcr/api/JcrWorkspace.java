@@ -34,10 +34,6 @@ import java.io.InputStream;
  * @author igor.vaynberg
  */
 public interface JcrWorkspace extends Workspace {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Workspace ---------------------
 
 
     public JcrSession getSession();
@@ -147,11 +143,7 @@ public interface JcrWorkspace extends Workspace {
     public void deleteWorkspace(String name);
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Workspace getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrWorkspace wrap(Workspace delegate, JcrSession session) {

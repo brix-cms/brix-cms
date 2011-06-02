@@ -17,27 +17,19 @@ package org.brixcms.jcr.base.wrapper;
 import org.brixcms.jcr.base.action.AbstractActionHandler;
 
 class BaseWrapper<T> {
-// ------------------------------ FIELDS ------------------------------
-
     Integer hashCode;
 
     private final T delegate;
     private final SessionWrapper session;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BaseWrapper(T delegate, SessionWrapper session) {
         this.delegate = delegate;
         this.session = session;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public T getDelegate() {
         return delegate;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @SuppressWarnings("unchecked")
     @Override
@@ -68,8 +60,6 @@ class BaseWrapper<T> {
 //		}
 //		return hashCode;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public AbstractActionHandler getActionHandler() {
         return getSessionWrapper().getActionHandler();

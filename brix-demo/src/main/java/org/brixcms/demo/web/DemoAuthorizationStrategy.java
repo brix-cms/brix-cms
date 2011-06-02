@@ -23,10 +23,6 @@ import org.brixcms.auth.AuthorizationStrategy;
  * @author ivaynberg
  */
 public class DemoAuthorizationStrategy implements AuthorizationStrategy {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface AuthorizationStrategy ---------------------
 
     /**
      * {@inheritDoc}

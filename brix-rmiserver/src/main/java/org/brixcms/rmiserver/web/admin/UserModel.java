@@ -14,15 +14,13 @@
 
 package org.brixcms.rmiserver.web.admin;
 
-import org.apache.wicket.injection.web.InjectorHolder;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.brixcms.rmiserver.User;
 import org.brixcms.rmiserver.UserService;
 
 public class UserModel extends LoadableDetachableModel<User> {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     @SpringBean
@@ -30,15 +28,11 @@ public class UserModel extends LoadableDetachableModel<User> {
 
     private final Long id;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public UserModel(User user) {
         super(user);
-        InjectorHolder.getInjector().inject(this);
+        Injector.get().inject(this);
         this.id = user.getId();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected User load() {

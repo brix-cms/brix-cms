@@ -17,17 +17,14 @@ package org.brixcms.plugin.webdavurl;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class WebdavUrlPanel extends BrixGenericPanel<String> {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public WebdavUrlPanel(String id, IModel<String> model) {
         super(id, model);
@@ -48,15 +45,16 @@ public class WebdavUrlPanel extends BrixGenericPanel<String> {
     }
 
     private String getWorkspaceUrl(String type, String workspaceId) {
-        HttpServletRequest request = ((WebRequest) getRequest()).getHttpServletRequest();
+        Request request = RequestCycle.get().getRequest();
+        HttpServletRequest servletRequest = (HttpServletRequest) request.getContainerRequest();
         StringBuilder url = new StringBuilder();
         url.append("http://");
-        url.append(request.getServerName());
-        if (request.getServerPort() != 80) {
+        url.append(servletRequest.getServerName());
+        if (servletRequest.getServerPort() != 80) {
             url.append(":");
-            url.append(request.getServerPort());
+            url.append(servletRequest.getServerPort());
         }
-        url.append(request.getContextPath());
+        url.append(servletRequest.getContextPath());
         url.append("/");
         url.append(type);
         url.append("/");

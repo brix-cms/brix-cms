@@ -15,11 +15,7 @@
 package org.brixcms.auth;
 
 public interface Action {
-// -------------------------- OTHER METHODS --------------------------
-
     public Context getContext();
-
-// -------------------------- ENUMERATIONS --------------------------
 
     public enum Context {
         ADMINISTRATION,

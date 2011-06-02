@@ -35,20 +35,12 @@ import javax.jcr.Workspace;
  * @author igor.vaynberg
  */
 public class BrixRepositoryInitializer implements RepositoryInitializer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(BrixRepositoryInitializer.class);
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixRepositoryInitializer() {
 
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface RepositoryInitializer ---------------------
 
     /**
      * {@inheritDoc}

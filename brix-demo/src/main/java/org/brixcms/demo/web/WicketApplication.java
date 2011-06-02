@@ -14,6 +14,8 @@
 
 package org.brixcms.demo.web;
 
+import javax.jcr.ImportUUIDBehavior;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Brix;
@@ -21,17 +23,17 @@ import org.brixcms.Path;
 import org.brixcms.config.BrixConfig;
 import org.brixcms.config.PrefixUriMapper;
 import org.brixcms.config.UriMapper;
+import org.brixcms.demo.web.admin.AdminPage;
 import org.brixcms.jcr.JcrSessionFactory;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.BrixRequestCycleProcessor;
-import org.brixcms.web.nodepage.BrixNodePageUrlCodingStrategy;
+import org.brixcms.web.BrixRequestMapper;
+import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.jcr.ImportUUIDBehavior;
 
 /**
  * Application object for your web application. If you want to run this application without deploying, run the Start
@@ -40,8 +42,6 @@ import javax.jcr.ImportUUIDBehavior;
  * @see wicket.myproject.Start#main(String[])
  */
 public final class WicketApplication extends AbstractWicketApplication {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger log = LoggerFactory.getLogger(WicketApplication.class);
 
     /**
@@ -49,13 +49,9 @@ public final class WicketApplication extends AbstractWicketApplication {
      */
     private Brix brix;
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Brix getBrix() {
         return brix;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}
@@ -65,7 +61,7 @@ public final class WicketApplication extends AbstractWicketApplication {
         // use special class so that the URL coding strategy knows we want to go home
         // it is not possible to just return null here because some pages (e.g. expired page)
         // rely on knowing the home page
-        return BrixNodePageUrlCodingStrategy.HomePage.class;
+        return BrixNodePageUrlMapper.HomePage.class;
     }
 
     /**
@@ -102,6 +98,7 @@ public final class WicketApplication extends AbstractWicketApplication {
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
+            getRootRequestMapperAsCompound().add(new BrixRequestMapper(brix));
             getRequestCycleListeners().add(new BrixRequestCycleProcessor(brix));
         } catch (Exception e) {
             log.error("Exception in WicketApplication init()", e);
@@ -111,7 +108,7 @@ public final class WicketApplication extends AbstractWicketApplication {
         }
 
         // mount admin page
-//        mount(new QueryStringHybridUrlCodingStrategy("/admin", AdminPage.class));
+        mountPage("/admin", AdminPage.class);
 
         // FIXME matej: do we need this?
         // mountBookmarkablePage("/NotFound", ResourceNotFoundPage.class);

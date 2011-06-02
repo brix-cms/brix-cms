@@ -46,8 +46,6 @@ import java.util.Map;
  * @author Matej Knopp
  */
 public class PageMarkupSource implements MarkupSource {
-// ------------------------------ FIELDS ------------------------------
-
     List<Item> items = null;
     private final AbstractContainer node;
 
@@ -55,22 +53,14 @@ public class PageMarkupSource implements MarkupSource {
 
     private String doctype = null;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageMarkupSource(AbstractContainer node) {
         this.node = node;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getDoctype() {
         return doctype;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface MarkupSource ---------------------
 
     public Object getExpirationToken() {
         return getMostRecentLastModifiedDate();
@@ -101,8 +91,6 @@ public class PageMarkupSource implements MarkupSource {
             return null;
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns the most recent date of last modification of tile page and it's templates. The date is then used as

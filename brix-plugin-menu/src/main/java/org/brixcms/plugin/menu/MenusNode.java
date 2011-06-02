@@ -26,8 +26,6 @@ import org.brixcms.web.tree.JcrTreeNode;
 import javax.jcr.Node;
 
 public class MenusNode extends BrixNode implements TreeAwareNode {
-// ------------------------------ FIELDS ------------------------------
-
     public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
         public boolean canWrap(Brix brix, JcrNode node) {
@@ -40,22 +38,14 @@ public class MenusNode extends BrixNode implements TreeAwareNode {
         }
     };
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public MenusNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface TreeAwareNode ---------------------
 
     public JcrTreeNode getTreeNode(BrixNode node) {
         return new MenusTreeNode(node);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public String getUserVisibleName() {
@@ -67,14 +57,10 @@ public class MenusNode extends BrixNode implements TreeAwareNode {
         return "";
     }
 
-    ;
-
     @Override
     public boolean isFolder() {
         return true;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class MenusTreeNode extends AbstractJcrTreeNode {
         public MenusTreeNode(BrixNode node) {

@@ -22,18 +22,12 @@ import javax.security.auth.spi.LoginModule;
 import java.util.Properties;
 
 abstract class ExtendedLoginModuleConfig extends LoginModuleConfig {
-// ------------------------------ FIELDS ------------------------------
-
     private final LoginModuleConfig delegate;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ExtendedLoginModuleConfig(LoginModuleConfig delegate) {
         super(new BeanConfig("java.lang.String", new Properties()));
         this.delegate = delegate;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     public boolean equals(Object arg0) {
         return delegate.equals(arg0);
@@ -46,8 +40,6 @@ abstract class ExtendedLoginModuleConfig extends LoginModuleConfig {
     public String toString() {
         return delegate.toString();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public ClassLoader getClassLoader() {
         return delegate.getClassLoader();

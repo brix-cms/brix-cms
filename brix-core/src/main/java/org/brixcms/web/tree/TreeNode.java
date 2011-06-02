@@ -19,9 +19,7 @@ import org.apache.wicket.model.IDetachable;
 import java.io.Serializable;
 import java.util.List;
 
-public interface TreeNode extends IDetachable, Serializable {
-// -------------------------- OTHER METHODS --------------------------
-
+public interface TreeNode extends javax.swing.tree.TreeNode, IDetachable, Serializable {
     public List<? extends TreeNode> getChildren();
 
     public boolean isLeaf();

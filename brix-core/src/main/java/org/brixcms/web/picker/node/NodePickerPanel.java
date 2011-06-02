@@ -29,14 +29,10 @@ import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
 public class NodePickerPanel extends FormComponentPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     protected static final String MODAL_WINDOW_ID = "modalWindow";
     private final JcrTreeNode rootNode;
     private final NodeFilter enabledFilter;
     private final NodeFilter visibilityFilter;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodePickerPanel(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter,
                            NodeFilter enabledFilter) {
@@ -55,8 +51,6 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
         this.visibilityFilter = visibilityFilter;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public NodeFilter getEnabledFilter() {
         return enabledFilter;
     }
@@ -65,17 +59,11 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
         return rootNode;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IFormModelUpdateListener ---------------------
 
     @Override
     public void updateModel() {
         // don't you dare!
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public boolean checkRequired() {

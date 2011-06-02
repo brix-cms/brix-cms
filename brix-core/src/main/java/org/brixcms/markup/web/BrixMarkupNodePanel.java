@@ -33,11 +33,7 @@ import org.brixcms.web.generic.BrixGenericPanel;
  */
 public abstract class BrixMarkupNodePanel extends BrixGenericPanel<BrixNode> implements IMarkupResourceStreamProvider,
         IMarkupCacheKeyProvider, MarkupSourceProvider {
-// ------------------------------ FIELDS ------------------------------
-
     private MarkupHelper markupHelper;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixMarkupNodePanel(String id) {
         super(id);
@@ -47,29 +43,19 @@ public abstract class BrixMarkupNodePanel extends BrixGenericPanel<BrixNode> imp
         super(id, model);
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public MarkupHelper getMarkupHelper() {
         return markupHelper;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IMarkupCacheKeyProvider ---------------------
 
     public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
         return null;
     }
 
-// --------------------- Interface IMarkupResourceStreamProvider ---------------------
-
 
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         return new StringResourceStream(markupHelper.getMarkup(), "text/html");
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onBeforeRender() {

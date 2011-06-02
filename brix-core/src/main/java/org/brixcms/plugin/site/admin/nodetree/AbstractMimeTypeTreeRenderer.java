@@ -26,14 +26,10 @@ import java.util.List;
  * @author Jeremy Thomerson
  */
 public abstract class AbstractMimeTypeTreeRenderer extends AbstractNodeTreeRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private final List<String> mimeTypes;
     private final List<String> mimeTypePrefixes;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     protected AbstractMimeTypeTreeRenderer(String[] mimeTypes) {
         this(mimeTypes, new String[0]);
@@ -43,8 +39,6 @@ public abstract class AbstractMimeTypeTreeRenderer extends AbstractNodeTreeRende
         this.mimeTypes = Arrays.asList(mimeTypes);
         this.mimeTypePrefixes = Arrays.asList(mimeTypePrefixes);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected final Class<? extends BrixNode> getNodeClass() {

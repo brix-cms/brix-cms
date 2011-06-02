@@ -18,8 +18,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
 class NodeIteratorWrapper extends BaseWrapper<NodeIterator> implements NodeIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static NodeIteratorWrapper wrap(NodeIterator delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -28,16 +26,10 @@ class NodeIteratorWrapper extends BaseWrapper<NodeIterator> implements NodeItera
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private NodeIteratorWrapper(NodeIterator delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     public boolean hasNext() {
@@ -52,13 +44,9 @@ class NodeIteratorWrapper extends BaseWrapper<NodeIterator> implements NodeItera
         getDelegate().remove();
     }
 
-// --------------------- Interface NodeIterator ---------------------
-
     public Node nextNode() {
         return NodeWrapper.wrap(getDelegate().nextNode(), getSessionWrapper());
     }
-
-// --------------------- Interface RangeIterator ---------------------
 
 
     public void skip(long skipNum) {

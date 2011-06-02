@@ -25,8 +25,6 @@ import javax.jcr.version.VersionManager;
 import java.io.IOException;
 
 public class VersionedDefaultHandler extends DefaultHandler {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public VersionedDefaultHandler() {
     }
 
@@ -39,10 +37,6 @@ public class VersionedDefaultHandler extends DefaultHandler {
         super(ioManager, collectionNodetype, defaultNodetype, contentNodetype);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IOHandler ---------------------
 
     @Override
     public boolean importContent(ImportContext context, boolean isCollection) throws IOException {
@@ -73,8 +67,6 @@ public class VersionedDefaultHandler extends DefaultHandler {
             throw new IOException(e.getMessage());
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private Node getNode(ImportContext context, boolean isCollection) throws RepositoryException {
         Node parentNode = (Node) context.getImportRoot();

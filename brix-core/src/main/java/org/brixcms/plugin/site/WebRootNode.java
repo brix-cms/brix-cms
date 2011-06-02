@@ -32,8 +32,6 @@ import javax.jcr.Node;
  * @author Matej Knopp
  */
 public class WebRootNode extends FolderNode implements TreeAwareNode {
-// ------------------------------ FIELDS ------------------------------
-
     public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
         public boolean canWrap(Brix brix, JcrNode node) {
@@ -46,30 +44,20 @@ public class WebRootNode extends FolderNode implements TreeAwareNode {
         }
     };
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public WebRootNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface TreeAwareNode ---------------------
 
     public JcrTreeNode getTreeNode(BrixNode node) {
         return new SiteTreeNode(node);
     }
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     @Override
     public String getUserVisibleName() {
         return "Web";
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class SiteTreeNode extends AbstractJcrTreeNode {
         public SiteTreeNode(BrixNode node) {

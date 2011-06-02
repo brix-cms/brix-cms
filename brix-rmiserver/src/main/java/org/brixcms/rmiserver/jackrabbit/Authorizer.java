@@ -27,17 +27,11 @@ import javax.jcr.SimpleCredentials;
  * @author ivaynberg
  */
 public class Authorizer {
-// ------------------------------ FIELDS ------------------------------
-
     private final UserService users;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public Authorizer(UserService users) {
         this.users = users;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public User authorize(Credentials creds, Role... requiredRoles) throws AuthorizationException {
         if (creds instanceof SimpleCredentials) {

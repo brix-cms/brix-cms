@@ -44,19 +44,13 @@ import java.util.Collection;
  * @author igor.vaynberg
  */
 public abstract class ExtendedRepositoryConfig extends RepositoryConfig {
-// ------------------------------ FIELDS ------------------------------
-
     private final RepositoryConfig delegate;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ExtendedRepositoryConfig(RepositoryConfig delegate) {
         super(null, null, null, null, null, null, 0, null, null, null, null, null, null, null,
                 null, null);
         this.delegate = delegate;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     public boolean equals(Object obj) {
         return delegate.equals(obj);
@@ -70,17 +64,11 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig {
         return delegate.toString();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface DataStoreFactory ---------------------
 
     @Override
     public DataStore getDataStore() throws RepositoryException {
         return delegate.getDataStore();
     }
-
-// --------------------- Interface FileSystemFactory ---------------------
 
 
     @Override
@@ -88,15 +76,11 @@ public abstract class ExtendedRepositoryConfig extends RepositoryConfig {
         return delegate.getFileSystem();
     }
 
-// --------------------- Interface QueryHandlerFactory ---------------------
-
 
     @Override
     public QueryHandler getQueryHandler(QueryHandlerContext context) throws RepositoryException {
         return delegate.getQueryHandler(context);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public WorkspaceConfig createWorkspaceConfig(String name, InputSource template)

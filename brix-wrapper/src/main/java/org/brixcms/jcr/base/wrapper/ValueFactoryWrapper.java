@@ -25,8 +25,6 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 
 class ValueFactoryWrapper extends BaseWrapper<ValueFactory> implements ValueFactory {
-// -------------------------- STATIC METHODS --------------------------
-
     public static ValueFactory wrap(ValueFactory delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -35,16 +33,10 @@ class ValueFactoryWrapper extends BaseWrapper<ValueFactory> implements ValueFact
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private ValueFactoryWrapper(ValueFactory delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ValueFactory ---------------------
 
     public Value createValue(String value) {
         return getDelegate().createValue(value);

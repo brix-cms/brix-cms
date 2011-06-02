@@ -21,8 +21,6 @@ import org.brixcms.web.tab.IBrixTab;
 import java.util.List;
 
 public class NodeManagerTabbedPanel extends Panel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public NodeManagerTabbedPanel(String id, List<IBrixTab> tabs) {
         super(id);
 

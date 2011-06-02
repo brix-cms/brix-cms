@@ -31,18 +31,12 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Reference implements Serializable, IDetachable {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private IModel<BrixNode> nodeModel;
     private String url;
     private BrixPageParameters parameters;
-    ;
-
     private Type type = Type.NODE;
-
-// -------------------------- STATIC METHODS --------------------------
 
     /**
      * Saves the reference in the parent node. If {@code null} is passed in for the reference any existing one will be
@@ -112,8 +106,6 @@ public class Reference implements Serializable, IDetachable {
         return ref;
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public Reference() {
 
     }
@@ -127,8 +119,6 @@ public class Reference implements Serializable, IDetachable {
         if (copy.parameters != null)
             this.parameters = new BrixPageParameters(copy.parameters);
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public IModel<BrixNode> getNodeModel() {
         if (nodeModel == null) {
@@ -171,18 +161,12 @@ public class Reference implements Serializable, IDetachable {
         this.url = url;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
         if (nodeModel != null) {
             nodeModel.detach();
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Generates a url that points to the resource this reference is holding.
@@ -301,8 +285,6 @@ public class Reference implements Serializable, IDetachable {
             return false;
         }
     }
-
-// -------------------------- ENUMERATIONS --------------------------
 
     public static enum Type {
         NODE, URL

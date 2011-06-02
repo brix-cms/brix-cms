@@ -35,14 +35,8 @@ import java.io.Serializable;
  * @author Jeremy Thomerson
  */
 public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Serializable {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NodeTreeRenderer ---------------------
 
     public Component newNodeComponent(String id, LinkTree tree, IModel<Object> treeNodeModel) {
         JcrTreeNode node = (JcrTreeNode) treeNodeModel.getObject();
@@ -54,8 +48,6 @@ public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Seri
 
         return null;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * @param tree the tree being rendered
@@ -76,8 +68,6 @@ public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Seri
      * @return the class of node that you want to render
      */
     protected abstract Class<? extends BrixNode> getNodeClass();
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class NodeTreeRenderingComponent extends LinkIconPanel {
         private static final long serialVersionUID = 1L;

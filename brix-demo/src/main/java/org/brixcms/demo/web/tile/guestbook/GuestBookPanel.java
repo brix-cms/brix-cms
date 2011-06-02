@@ -35,11 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 public class GuestBookPanel extends Panel {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public GuestBookPanel(String id, IModel<BrixNode> model) {
         super(id, model);
@@ -57,8 +53,6 @@ public class GuestBookPanel extends Panel {
         });
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     protected void onMessage(Entry message) {
         JcrNode tile = (JcrNode) getDefaultModelObject();
 
@@ -69,8 +63,6 @@ public class GuestBookPanel extends Panel {
 
         tile.getSession().save();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class MessageForm extends Form<Entry> {
         private static final long serialVersionUID = 1L;

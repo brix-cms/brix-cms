@@ -25,8 +25,6 @@ import javax.jcr.version.VersionIterator;
  * @author Matej Knopp
  */
 class VersionIteratorWrapper extends RangeIteratorWrapper implements JcrVersionIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrVersionIterator wrap(VersionIterator delegate, JcrSession session) {
         if (delegate == null)
             return null;
@@ -34,16 +32,10 @@ class VersionIteratorWrapper extends RangeIteratorWrapper implements JcrVersionI
             return new VersionIteratorWrapper(delegate, session);
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public VersionIteratorWrapper(VersionIterator delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     @Override
@@ -51,14 +43,10 @@ class VersionIteratorWrapper extends RangeIteratorWrapper implements JcrVersionI
         return JcrVersion.Wrapper.wrap((Version) getDelegate().next(), getJcrSession());
     }
 
-// --------------------- Interface JcrVersionIterator ---------------------
-
     @Override
     public VersionIterator getDelegate() {
         return (VersionIterator) super.getDelegate();
     }
-
-// --------------------- Interface VersionIterator ---------------------
 
 
     public JcrVersion nextVersion() {

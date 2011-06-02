@@ -21,8 +21,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.qom.QueryObjectModelFactory;
 
 class QueryManagerWrapper extends BaseWrapper<QueryManager> implements QueryManager {
-// -------------------------- STATIC METHODS --------------------------
-
     public static QueryManagerWrapper wrap(QueryManager delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -31,16 +29,10 @@ class QueryManagerWrapper extends BaseWrapper<QueryManager> implements QueryMana
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private QueryManagerWrapper(QueryManager delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface QueryManager ---------------------
 
     public Query createQuery(String statement, String language) throws RepositoryException {
         return QueryWrapper.wrap(getDelegate().createQuery(statement, language),

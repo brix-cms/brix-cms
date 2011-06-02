@@ -34,13 +34,9 @@ import org.brixcms.plugin.site.resource.managers.image.ImageNodeTabFactory;
 import org.brixcms.plugin.site.resource.managers.text.TextNodeTabFactory;
 
 public class ResourceNodePlugin implements SiteNodePlugin {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String TYPE = Brix.NS_PREFIX + "resource";
 
     private Map<String /* extension */, String /* mime-type */> mimeTypes = new ConcurrentHashMap<String, String>();
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ResourceNodePlugin(SitePlugin sp) {
         registerDefaultMimeTypes();
@@ -68,10 +64,6 @@ public class ResourceNodePlugin implements SiteNodePlugin {
         }
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface SiteNodePlugin ---------------------
 
     public String getNodeType() {
         return TYPE;
@@ -105,8 +97,6 @@ public class ResourceNodePlugin implements SiteNodePlugin {
     public NodeConverter getConverterForNode(BrixNode node) {
         return null;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public String resolveMimeTypeFromFileName(String fileName) {
         int last = fileName.lastIndexOf(".");

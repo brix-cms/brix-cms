@@ -33,8 +33,6 @@ import java.util.List;
  * @author Matej Knopp
  */
 public interface Plugin {
-// ------------------------------ FIELDS ------------------------------
-
     public static final ExtensionPoint<Plugin> POINT = new ExtensionPoint<Plugin>() {
         public Multiplicity getMultiplicity() {
             return Multiplicity.COLLECTION;
@@ -44,8 +42,6 @@ public interface Plugin {
             return Plugin.class.getName();
         }
     };
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns the plugin Id. Each plugin must have unique ID.

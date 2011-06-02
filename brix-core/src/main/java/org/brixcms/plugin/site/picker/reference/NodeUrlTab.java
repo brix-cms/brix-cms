@@ -33,8 +33,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class NodeUrlTab extends BrixGenericPanel<Reference> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public NodeUrlTab(String id, IModel<Reference> model) {
         super(id, model);
 
@@ -92,8 +90,6 @@ public abstract class NodeUrlTab extends BrixGenericPanel<Reference> {
             }
         });
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected abstract ReferenceEditorConfiguration getConfiguration();
 

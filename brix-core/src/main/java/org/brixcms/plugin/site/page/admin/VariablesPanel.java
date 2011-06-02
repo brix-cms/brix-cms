@@ -54,11 +54,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class VariablesPanel extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private AjaxLink<?> delete;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public VariablesPanel(String id, IModel<BrixNode> model) {
         super(id, model);
@@ -85,9 +81,9 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        final DataGrid<BrixNode> grid = new DefaultDataGrid<BrixNode>("grid", (IModel<IDataSource<BrixNode>>) new DataSource(), columns) {
+        final DataGrid<BrixNode> grid = new DefaultDataGrid<BrixNode>("grid",  new Model(new DataSource()), columns) {
             @Override
-            public void onItemSelectionChanged(IModel item, boolean newValue) {
+            public void onItemSelectionChanged(IModel<BrixNode> item, boolean newValue) {
                 AjaxRequestTarget target = AjaxRequestTarget.get();
                 if (target != null) {
                     target.addComponent(delete);
@@ -132,8 +128,6 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
         add(new FeedbackPanel("feedback").setOutputMarkupId(true));
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class DataSource implements IDataSource<Entry> {
         public IModel<Entry> model(Entry object) {

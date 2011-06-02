@@ -34,16 +34,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class BrixPageParameters extends PageParameters {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private List<String> indexedParameters = null;
-    ;
-
     private List<QueryStringParameter> queryStringParameters = null;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static boolean equals(BrixPageParameters p1, BrixPageParameters p2) {
         if (Objects.equal(p1, p2)) {
@@ -73,8 +67,6 @@ public class BrixPageParameters extends PageParameters {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixPageParameters() {
 
     }
@@ -102,8 +94,6 @@ public class BrixPageParameters extends PageParameters {
             this.queryStringParameters = new ArrayList<QueryStringParameter>(
                     copy.queryStringParameters);
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public boolean equals(Object obj) {
@@ -174,8 +164,6 @@ public class BrixPageParameters extends PageParameters {
         }
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     public void addQueryParam(String name, Object value, int index) {
         if (name == null) {
             throw new IllegalArgumentException("Parameter name may not be null.");
@@ -242,8 +230,6 @@ public class BrixPageParameters extends PageParameters {
                     queryStringParameters));
         }
     }
-
-    ;
 
     public void removeIndexedParam(int index) {
         if (indexedParameters != null) {
@@ -332,8 +318,6 @@ public class BrixPageParameters extends PageParameters {
         IRequestHandler target = new BrixNodeRequestHandler(node, this);
         return RequestCycle.get().urlFor(target).toString();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class QueryStringParameter implements Serializable {
         private static final long serialVersionUID = 1L;

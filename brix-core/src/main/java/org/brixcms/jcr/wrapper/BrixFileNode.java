@@ -36,8 +36,6 @@ import java.util.Calendar;
  * @see #initialize(JcrNode, String)
  */
 public class BrixFileNode extends BrixNode {
-// -------------------------- STATIC METHODS --------------------------
-
     /**
      * Returns if the node is a file node,
      *
@@ -112,8 +110,6 @@ public class BrixFileNode extends BrixNode {
         return getMimeType(true);
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Wraps the given delegate node using provided {@link JcrSession}.
      *
@@ -123,8 +119,6 @@ public class BrixFileNode extends BrixNode {
     public BrixFileNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private JcrNode getContent() {
         return (JcrNode) getPrimaryItem();

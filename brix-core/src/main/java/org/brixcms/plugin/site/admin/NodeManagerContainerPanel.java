@@ -57,8 +57,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeTreeContainer {
-// ------------------------------ FIELDS ------------------------------
-
     private static MetaDataKey<String> EDITOR_NODE_TYPE = new MetaDataKey<String>() {
     };
 
@@ -91,8 +89,6 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
             return result;
         }
     };
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodeManagerContainerPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, new BrixNodeModel(getRootNode(workspaceModel)));
@@ -171,17 +167,11 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         }.setReuseItems(false));
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NodeTreeContainer ---------------------
 
     public void updateTree() {
         tree.invalidateAll();
         tree.updateTree();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private Component getEditor() {
         return get(EDITOR_ID);
@@ -278,8 +268,6 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
     public void selectNode(BrixNode node) {
         tree.getTreeState().selectNode(getTreeNode(node), true);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class SiteNodePluginEntry implements Serializable {
         private final String nodeType;

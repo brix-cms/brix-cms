@@ -21,7 +21,6 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
 import org.brixcms.Path;
@@ -37,8 +36,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 public class BrixRequestCycleProcessor implements IRequestCycleListener {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
 
     private static final String COOKIE_NAME = "brix-revision";
@@ -47,22 +44,18 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
         private static final long serialVersionUID = 1L;
     };
     final Brix brix;
-    final BrixUrlCodingStrategy urlCodingStrategy;
+    final BrixUrlMapper urlMapper;
     private boolean handleHomePage = true;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixRequestCycleProcessor(Brix brix) {
         this(brix, new HttpsConfig());
     }
 
     public BrixRequestCycleProcessor(Brix brix, HttpsConfig config) {
-        super(config);
-        urlCodingStrategy = new BrixUrlCodingStrategy(this);
+//        super(config);
+        urlMapper = new BrixUrlMapper(this);
         this.brix = brix;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getWorkspace() {
         String workspace = getWorkspaceFromUrl();
@@ -149,8 +142,6 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
         return (workspace != null) ? workspace.getId() : null;
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     public final int getHttpPort() {
         return brix.getConfig().getHttpPort();
     }
@@ -206,20 +197,20 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
         return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
     }
 
-    @Override
-    protected IRequestCodingStrategy newRequestCodingStrategy() {
-        return new BrixRequestCodingStrategy(brix, urlCodingStrategy);
-    }
-
-    @Override
-    protected IRequestHandler resolveHomePageTarget(RequestCycle requestCycle,
-                                                   PageParameters requestParameters) {
-        if (handleHomePage) {
-            return urlCodingStrategy.decode(requestParameters);
-        } else {
-            return super.resolveHomePageTarget(requestCycle, requestParameters);
-        }
-    }
+//    @Override
+//    protected IRequestCodingStrategy newRequestCodingStrategy() {
+//        return new BrixRequestCodingStrategy(brix, urlMapper);
+//    }
+//
+//    @Override
+//    protected IRequestHandler resolveHomePageTarget(RequestCycle requestCycle,
+//                                                   PageParameters requestParameters) {
+//        if (handleHomePage) {
+//            return urlMapper.decode(requestParameters);
+//        } else {
+//            return super.resolveHomePageTarget(requestCycle, requestParameters);
+//        }
+//    }
 
     public BrixRequestCycleProcessor setHandleHomePage(boolean handleHomePage) {
         this.handleHomePage = handleHomePage;

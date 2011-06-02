@@ -12,29 +12,24 @@
  * limitations under the License.
  */
 
-package org.brixcms.plugin.webdavurl;
+package org.brixcms.demo.web;
 
-import org.brixcms.auth.Action;
-import org.brixcms.workspace.Workspace;
+import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.request.cycle.RequestCycle;
 
-public class AccessWebDavUrlPluginAction implements Action {
-    private final Workspace workspace;
+import javax.jcr.Session;
 
-    public AccessWebDavUrlPluginAction(Workspace workspace) {
-        this.workspace = workspace;
-    }
+/**
+ * Subclass of {@link AbstractRequestCycleListener} that cleans any open Jcr {@link Session}s at the end of request
+ *
+ * @author igor.vaynberg
+ */
+public class WicketRequestCycleListener extends AbstractRequestCycleListener {
 
-    public Workspace getWorkspace() {
-        return workspace;
-    }
 
     @Override
-    public String toString() {
-        return "AccessWebDavUrlPluginAction{" + "workspace=" + workspace + '}';
-    }
-
-
-    public Context getContext() {
-        return Context.ADMINISTRATION;
+    public void onEndRequest(RequestCycle cycle) {
+        super.onEndRequest(cycle);
+        AbstractWicketApplication.get().cleanupSessionFactory();
     }
 }

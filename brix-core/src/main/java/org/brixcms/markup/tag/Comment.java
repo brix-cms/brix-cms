@@ -20,7 +20,5 @@ package org.brixcms.markup.tag;
  * @author Matej Knopp
  */
 public interface Comment extends Item {
-// -------------------------- OTHER METHODS --------------------------
-
     public String getText();
 }

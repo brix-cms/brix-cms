@@ -21,8 +21,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 public class PropertyUtils {
-// -------------------------- STATIC METHODS --------------------------
-
     /**
      * Loads properties from a classpath resource
      *
@@ -86,8 +84,6 @@ public class PropertyUtils {
         }
         return props;
     }
-
-// -------------------------- ENUMERATIONS --------------------------
 
     /**
      * Merge mode

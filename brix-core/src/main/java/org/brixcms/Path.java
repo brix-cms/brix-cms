@@ -28,8 +28,6 @@ import java.util.List;
  * @author igor.vaynberg
  */
 public final class Path implements Iterable<String>, Serializable {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String SEPARATOR = "/";
     public static final Path ROOT = new Path(SEPARATOR);
 
@@ -74,8 +72,6 @@ public final class Path implements Iterable<String>, Serializable {
 
     };
     private final String path;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public Path(String path) {
         this(path, true);
@@ -207,8 +203,6 @@ public final class Path implements Iterable<String>, Serializable {
         return path.startsWith("/");
     }
 
-// ------------------------ CANONICAL METHODS ------------------------
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -244,10 +238,6 @@ public final class Path implements Iterable<String>, Serializable {
         return path;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterable ---------------------
 
     public Iterator<String> iterator() {
         return new Iterator<String>() {
@@ -266,8 +256,6 @@ public final class Path implements Iterable<String>, Serializable {
             }
         };
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public String getName() {
         if (path.equals(SEPARATOR)) {

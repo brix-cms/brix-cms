@@ -14,9 +14,14 @@
 
 package org.brixcms.web.nodepage;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.IRedirectListener;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
@@ -32,7 +37,6 @@ import org.apache.wicket.request.handler.BookmarkableListenerInterfaceRequestHan
 import org.apache.wicket.request.handler.BookmarkablePageRequestHandler;
 import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
@@ -46,24 +50,12 @@ import org.brixcms.web.nodepage.BrixNodePageRequestHandler.PageFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Set;
-
 /**
  * @author Matej Knopp
  */
-public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
-// ------------------------------ FIELDS ------------------------------
+public class BrixNodePageUrlMapper implements IRequestMapper {
+    private static final Logger log = LoggerFactory.getLogger(BrixNodePageUrlMapper.class);
 
-    private static final Logger log = LoggerFactory.getLogger(BrixNodePageUrlCodingStrategy.class);
-
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IRequestTargetUrlCodingStrategy ---------------------
 
 
     public String getMountPath() {
@@ -79,7 +71,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
                 info = new PageInfo(page.getPageId());
             }
             String nodeURL = handler.getNodeURL();
-            return encode(nodeURL, handler.getParameters(), info, null);
+            return encode(nodeURL, handler.getPageParameters(), info, null);
         } else if (requestTarget instanceof ListenerInterfaceRequestHandler) {
             ListenerInterfaceRequestHandler target = (ListenerInterfaceRequestHandler) requestTarget;
             BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
@@ -89,11 +81,11 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
             BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
             BrixNode node = page.getModelObject();
             PageInfo info = new PageInfo(page.getPageId());
-            String componentPath = target.getComponentPath();
+            String componentPath = target.getComponent().getPageRelativePath();
 
             // remove the page id from component path, we don't really need it
             componentPath = componentPath.substring(componentPath.indexOf(':') + 1);
-            String iface = componentPath + ":" + target.getInterfaceName();
+            String iface = componentPath; // + ":" + target.getInterfaceName();
             return encode(node, page.getBrixPageParameters(), info, iface);
         } else if (requestTarget instanceof BookmarkablePageRequestHandler
                 && ((BookmarkablePageRequestHandler) requestTarget).getPageClass().equals(
@@ -114,7 +106,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         if (requestTarget instanceof ListenerInterfaceRequestHandler) {
             ListenerInterfaceRequestHandler target = (ListenerInterfaceRequestHandler) requestTarget;
             return isBrixPage(target.getPage())
-                    && target.getRequestListenerInterface().equals(IRedirectListener.INTERFACE);
+                    /*&& target.getRequestListenerInterface().equals(IRedirectListener.INTERFACE)*/;
         } else if (requestTarget instanceof BookmarkableListenerInterfaceRequestHandler) {
             BookmarkableListenerInterfaceRequestHandler target = (BookmarkableListenerInterfaceRequestHandler) requestTarget;
             return isBrixPage(target.getPage());
@@ -128,21 +120,19 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         return false;
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     public IRequestHandler decode(IRequestParameters requestParameters, final IModel<BrixNode> nodeModel) {
         PageInfo pageInfo = null;
-        String query = requestParameters.getQueryString();
+//        String query = requestParameters.getQueryString();
         final BrixPageParameters pageParameters = new BrixPageParameters();
 
         String iface = null;
 
-        if (query != null) {
-            pageInfo = extractPageInfo(query);
-        }
+//        if (query != null) {
+//            pageInfo = extractPageInfo(query);
+//        }
         iface = addQueryStringParameters(pageParameters, pageInfo, requestParameters);
 
-        addIndexedParameters(requestParameters.getPath(), pageParameters, nodeModel);
+//        addIndexedParameters(requestParameters.getPath(), pageParameters, nodeModel);
 
         BrixNodeWebPage page = null;
         PageFactory factory = null;
@@ -219,8 +209,6 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         return iface;
     }
 
-    ;
-
     private String getInterfaceParameter() {
         return Brix.NS_PREFIX + "i";
     }
@@ -263,7 +251,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
     private IManageablePage getPage(PageInfo info) {
         IManageablePage page;
 
-        if (Strings.isEmpty(info.getPageMapName()) && Application.exists()
+        if (/*Strings.isEmpty(info.getPageMapName()) &&*/ Application.exists()
                 /*&& Application.get().getSessionSettings().isPageIdUniquePerSession()*/) {
             page = Session.get().getPageManager().getPage(info.getPageId()/*,
                     info.getVersionNumber() != null ? info.getVersionNumber() : 0*/);
@@ -305,14 +293,14 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         return encode(node, parameters, info, null);
     }
 
-    private CharSequence encode(BrixNode node, BrixPageParameters parameters, PageInfo info,
+    private CharSequence encode(BrixNode node, PageParameters parameters, PageInfo info,
                                 String iface) {
         BrixRequestCycleProcessor processor = (BrixRequestCycleProcessor) RequestCycle.get()
                 .getActiveRequestHandler();
         return encode(processor.getUriPathForNode(node).toString(), parameters, info, iface);
     }
 
-    private CharSequence encode(String nodeURL, BrixPageParameters parameters, PageInfo info,
+    private CharSequence encode(String nodeURL, PageParameters parameters, PageInfo info,
                                 String iface) {
         StringBuilder builder = new StringBuilder();
 
@@ -324,20 +312,20 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
 
         boolean skipFirstSlash = builder.charAt(builder.length() - 1) == '/';
 
-        for (int i = 0; i < parameters.getIndexedParamsCount(); ++i) {
+        for (int i = 0; i < parameters.getIndexedCount(); ++i) {
             if (!skipFirstSlash)
                 builder.append('/');
             else
                 skipFirstSlash = false;
 
-            final StringValue value = parameters.getIndexedParam(i);
+            final StringValue value = parameters.get(i);
             final String s = value.toString();
 
             if (s != null)
                 builder.append(urlEncode(s));
         }
 
-        Set<String> keys = parameters.getQueryParamKeys();
+        Set<String> keys = parameters.getNamedKeys();
         if (info != null || !keys.isEmpty()) {
             builder.append("?");
         }
@@ -349,7 +337,7 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         boolean first = (info == null);
 
         for (String key : keys) {
-            List<StringValue> values = parameters.getQueryParams(key);
+            List<StringValue> values = parameters.getValues(key);
             for (StringValue value : values) {
                 if (first) {
                     first = false;
@@ -404,8 +392,6 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
         }
     }
 
-// -------------------------- INNER CLASSES --------------------------
-
     public static final class HomePage extends WebPage {
     }
 
@@ -418,8 +404,8 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
      */
     protected static class PageInfo {
         private final Integer pageId;
-        private final Integer versionNumber;
-        private final String pageMapName;
+//        private final Integer versionNumber;
+//        private final String pageMapName;
 
         /**
          * Construct.
@@ -428,14 +414,14 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
          *
          */
         public PageInfo(Integer pageId) {
-            if ((pageId == null && (versionNumber != null || pageMapName == null))
-                    || (versionNumber == null && (pageId != null || pageMapName == null))) {
+            if ((pageId == null /*&& (versionNumber != null || pageMapName == null))
+                    || (versionNumber == null && (pageId != null || pageMapName == null)*/)) {
                 throw new IllegalArgumentException(
                         "Either both pageId and versionNumber must be null or none of them.");
             }
             this.pageId = pageId;
-            this.versionNumber = versionNumber;
-            this.pageMapName = pageMapName;
+//            this.versionNumber = versionNumber;
+//            this.pageMapName = pageMapName;
         }
 
         /**
@@ -445,19 +431,19 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
             return pageId;
         }
 
-        /**
-         * @return
-         */
-        public Integer getVersionNumber() {
-            return versionNumber;
-        }
-
-        /**
-         * @return
-         */
-        public String getPageMapName() {
-            return pageMapName;
-        }
+//        /**
+//         * @return
+//         */
+//        public Integer getVersionNumber() {
+//            return versionNumber;
+//        }
+//
+//        /**
+//         * @return
+//         */
+//        public String getPageMapName() {
+//            return pageMapName;
+//        }
 
         private static char getPageInfoSeparator() {
             return '.';
@@ -467,52 +453,52 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
          * <ul> <li>pageId <li>pageId.version <li>pageMap (only in if pagemap starts with a letter) <li>.pageMap
          * <li>pageMap.pageId (only in if pageMap name starts with a letter) <li>pageMap.pageId.version </ul>
          */
-        public String toString() {
-            String pageMapName = this.pageMapName;
-
-            // we don't need to encode the pageMapName when the pageId is unique
-            // per session
-            if (pageMapName != null && pageId != null && Application.exists()
-                    /*&& Application.get().getSessionSettings().isPageIdUniquePerSession()*/) {
-                pageMapName = null;
-            }
-
-            AppendingStringBuffer buffer = new AppendingStringBuffer(5);
-
-            final boolean pmEmpty = Strings.isEmpty(pageMapName);
-            final boolean pmContainsLetter = !pmEmpty && !isNumber(pageMapName);
-
-            if (pageId != null && pmEmpty && versionNumber.intValue() == 0) {
-                // pageId
-                buffer.append(pageId);
-            } else if (pageId != null && pmEmpty && versionNumber.intValue() != 0) {
-                // pageId.version
-                buffer.append(pageId);
-                buffer.append(getPageInfoSeparator());
-                buffer.append(versionNumber);
-            } else if (pageId == null && pmContainsLetter) {
-                // pageMap (must start with letter)
-                buffer.append(pageMapName);
-            } else if (pageId == null && !pmEmpty && !pmContainsLetter) {
-                // .pageMap
-                buffer.append(getPageInfoSeparator());
-                buffer.append(pageMapName);
-            } else if (pmContainsLetter && pageId != null && versionNumber.intValue() == 0) {
-                // pageMap.pageId (pageMap must start with a letter)
-                buffer.append(pageMapName);
-                buffer.append(getPageInfoSeparator());
-                buffer.append(pageId);
-            } else if (!pmEmpty && pageId != null) {
-                // pageMap.pageId.pageVersion
-                buffer.append(pageMapName);
-                buffer.append(getPageInfoSeparator());
-                buffer.append(pageId);
-                buffer.append(getPageInfoSeparator());
-                buffer.append(versionNumber);
-            }
-
-            return buffer.toString();
-        }
+//        public String toString() {
+//            String pageMapName = this.pageMapName;
+//
+//            // we don't need to encode the pageMapName when the pageId is unique
+//            // per session
+//            if (pageMapName != null && pageId != null && Application.exists()
+//                    /*&& Application.get().getSessionSettings().isPageIdUniquePerSession()*/) {
+//                pageMapName = null;
+//            }
+//
+//            AppendingStringBuffer buffer = new AppendingStringBuffer(5);
+//
+//            final boolean pmEmpty = Strings.isEmpty(pageMapName);
+//            final boolean pmContainsLetter = !pmEmpty && !isNumber(pageMapName);
+//
+//            if (pageId != null && pmEmpty && versionNumber.intValue() == 0) {
+//                // pageId
+//                buffer.append(pageId);
+//            } else if (pageId != null && pmEmpty && versionNumber.intValue() != 0) {
+//                // pageId.version
+//                buffer.append(pageId);
+//                buffer.append(getPageInfoSeparator());
+//                buffer.append(versionNumber);
+//            } else if (pageId == null && pmContainsLetter) {
+//                // pageMap (must start with letter)
+//                buffer.append(pageMapName);
+//            } else if (pageId == null && !pmEmpty && !pmContainsLetter) {
+//                // .pageMap
+//                buffer.append(getPageInfoSeparator());
+//                buffer.append(pageMapName);
+//            } else if (pmContainsLetter && pageId != null && versionNumber.intValue() == 0) {
+//                // pageMap.pageId (pageMap must start with a letter)
+//                buffer.append(pageMapName);
+//                buffer.append(getPageInfoSeparator());
+//                buffer.append(pageId);
+//            } else if (!pmEmpty && pageId != null) {
+//                // pageMap.pageId.pageVersion
+//                buffer.append(pageMapName);
+//                buffer.append(getPageInfoSeparator());
+//                buffer.append(pageId);
+//                buffer.append(getPageInfoSeparator());
+//                buffer.append(versionNumber);
+//            }
+//
+//            return buffer.toString();
+//        }
 
         /**
          * Method that rigidly checks if the string consists of digits only.
@@ -609,6 +595,6 @@ public class BrixNodePageUrlCodingStrategy implements IRequestMapper {
     @Override
     public Url mapHandler(IRequestHandler iRequestHandler) {
         log.trace("Entering mapHandler");
-        return null;
+        return Url.parse(encode(iRequestHandler).toString());
     }
 }

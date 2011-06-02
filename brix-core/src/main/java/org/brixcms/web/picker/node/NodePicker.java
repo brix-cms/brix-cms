@@ -25,12 +25,8 @@ import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
 public class NodePicker extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private final JcrTreeNode rootNode;
     private final NodePickerTreeGridPanel grid;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodePicker(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
         super(id, model);
@@ -80,8 +76,6 @@ public class NodePicker extends BrixGenericPanel<BrixNode> {
     protected void configureGrid(TreeGrid grid) {
 
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onBeforeRender() {

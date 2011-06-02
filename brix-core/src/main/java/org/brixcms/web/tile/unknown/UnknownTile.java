@@ -22,14 +22,8 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class UnknownTile implements Tile {
-// ------------------------------ FIELDS ------------------------------
-
     public static final UnknownTile INSTANCE = new UnknownTile();
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tile ---------------------
 
     public String getDisplayName() {
         return "Unknown";
@@ -38,8 +32,6 @@ public class UnknownTile implements Tile {
     public String getTypeName() {
         return UnknownTile.class.getName();
     }
-
-    ;
 
     public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
         return new Editor(id);
@@ -52,8 +44,6 @@ public class UnknownTile implements Tile {
     public boolean requiresSSL(IModel<BrixNode> tileNode) {
         return false;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class Editor extends TileEditorPanel {
         public Editor(String id) {

@@ -33,11 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RestoreItemsPanel extends SelectItemsPanel<Void> {
-// ------------------------------ FIELDS ------------------------------
-
     private IModel<BrixNode> targetNode = new BrixNodeModel();
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public RestoreItemsPanel(String id, String prototypeWorkspaceId, final String targetWorkspaceId) {
         super(id, prototypeWorkspaceId);

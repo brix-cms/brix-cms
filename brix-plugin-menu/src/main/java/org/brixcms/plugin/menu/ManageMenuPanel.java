@@ -48,8 +48,6 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
     private IModel<BrixNode> currentNode = new BrixNodeModel();
     private Menu currentMenu = new Menu();
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ManageMenuPanel(String id, final IModel<Workspace> model) {
         super(id, model);
 
@@ -88,8 +86,6 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
         this.editor = editor;
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     @Override
     protected void onBeforeRender() {
         String workspaceId = getModelObject().getId();
@@ -110,16 +106,12 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
         super.onDetach();
     }
 
-    ;
-
     private void onSelectLinkClicked(BrixNode node) {
         currentNode.setObject(node);
         currentMenu = new Menu();
         currentMenu.load(node);
         setupEditor();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class MenuListView extends ListView<BrixNode> {
         public MenuListView(String id, IModel<List<BrixNode>> model) {

@@ -20,8 +20,6 @@ import javax.jcr.query.QueryResult;
 import javax.jcr.query.RowIterator;
 
 class QueryResultWrapper extends BaseWrapper<QueryResult> implements QueryResult {
-// -------------------------- STATIC METHODS --------------------------
-
     public static QueryResultWrapper wrap(QueryResult delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -30,16 +28,10 @@ class QueryResultWrapper extends BaseWrapper<QueryResult> implements QueryResult
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private QueryResultWrapper(QueryResult delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface QueryResult ---------------------
 
     public String[] getColumnNames() throws RepositoryException {
         return getDelegate().getColumnNames();

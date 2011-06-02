@@ -26,8 +26,6 @@ import javax.jcr.RangeIterator;
  * @author Matej Knopp
  */
 class PropertyIteratorWrapper extends RangeIteratorWrapper implements JcrPropertyIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrPropertyIterator wrap(PropertyIterator delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -36,16 +34,10 @@ class PropertyIteratorWrapper extends RangeIteratorWrapper implements JcrPropert
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected PropertyIteratorWrapper(RangeIterator delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     @Override
@@ -53,14 +45,10 @@ class PropertyIteratorWrapper extends RangeIteratorWrapper implements JcrPropert
         return JcrProperty.Wrapper.wrap((Property) getDelegate().next(), getJcrSession());
     }
 
-// --------------------- Interface JcrPropertyIterator ---------------------
-
     @Override
     public PropertyIterator getDelegate() {
         return (PropertyIterator) super.getDelegate();
     }
-
-// --------------------- Interface PropertyIterator ---------------------
 
 
     public JcrProperty nextProperty() {

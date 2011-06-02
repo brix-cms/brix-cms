@@ -24,8 +24,6 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
 
 public abstract class EditTextResourcePanel extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public EditTextResourcePanel(String id, IModel<BrixNode> node) {
         super(id, node);
 
@@ -59,8 +57,6 @@ public abstract class EditTextResourcePanel extends BrixGenericPanel<BrixNode> {
     }
 
     protected abstract void done();
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected BrixNode getNode() {
         return getModelObject();

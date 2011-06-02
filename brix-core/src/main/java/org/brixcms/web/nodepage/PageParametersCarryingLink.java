@@ -29,11 +29,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
  * @todo it's unclear how this is semantically distinguished from {@link PageParametersLink}
  */
 public class PageParametersCarryingLink extends AbstractPageParametersLink {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel<BrixNode> page;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -56,8 +52,6 @@ public class PageParametersCarryingLink extends AbstractPageParametersLink {
         super(id, model);
         this.page = page;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

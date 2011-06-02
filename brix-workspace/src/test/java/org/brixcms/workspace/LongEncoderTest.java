@@ -25,8 +25,6 @@ import java.util.Set;
  * @author igor
  */
 public class LongEncoderTest {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Tests the default alphabet included with the encoder
      */

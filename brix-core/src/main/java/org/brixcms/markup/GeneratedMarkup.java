@@ -27,15 +27,11 @@ import java.util.List;
  * @author Matej Knopp
  */
 class GeneratedMarkup {
-// ------------------------------ FIELDS ------------------------------
-
     final List<Item> items;
 
     final Object expirationToken;
 
     final String doctype;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Creates new {@link GeneratedMarkup} instance from given {@link MarkupSource}.

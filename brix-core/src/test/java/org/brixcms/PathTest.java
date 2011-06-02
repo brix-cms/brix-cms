@@ -23,8 +23,6 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 public class PathTest {
-// -------------------------- OTHER METHODS --------------------------
-
     @Test
     public void append() {
         assertEquals(new Path("/").append(new Path("foo")), new Path("/foo"));

@@ -50,8 +50,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
     private DataGrid<Rule> dataGrid;
     private AjaxLink<?> removeSelected;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public RulesPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, new RulesNodeModel(workspaceModel));
 
@@ -113,8 +111,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
         });
     }
 
-// -------------------------- INNER CLASSES --------------------------
-
     private final static class RulesNodeModel extends LoadableDetachableModel<RulesNode> {
         private final IModel<Workspace> workspaceModel;
 
@@ -128,8 +124,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
             return SitePlugin.get().getWebDavRules(session);
         }
     }
-
-    ;
 
     private class DataSource implements IDataSource {
         public void detach() {
@@ -146,8 +140,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
             result.setItems(rules.iterator());
         }
     }
-
-    ;
 
     private final class SubmitColumn extends SubmitCancelColumn {
         private SubmitColumn(String columnId, IModel headerModel) {

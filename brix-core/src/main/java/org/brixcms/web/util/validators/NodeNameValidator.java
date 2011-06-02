@@ -21,13 +21,9 @@ import org.apache.wicket.validation.ValidationError;
 import java.util.Arrays;
 
 public class NodeNameValidator implements IValidator<String> {
-// ------------------------------ FIELDS ------------------------------
-
     public static final char[] forbidden = new char[]{'\\', '/', ':', '?', '<', '>'};
 
     private static final NodeNameValidator INSTANCE = new NodeNameValidator();
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static boolean isForbidden(char c) {
         for (int i = 0; i < forbidden.length; ++i) {
@@ -42,10 +38,6 @@ public class NodeNameValidator implements IValidator<String> {
         return INSTANCE;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IValidator ---------------------
 
     @SuppressWarnings("unchecked")
     public void validate(IValidatable validatable) {

@@ -14,7 +14,6 @@
 
 package org.brixcms.rmiserver.web.admin;
 
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,6 +26,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.brixcms.rmiserver.Role;
 import org.brixcms.rmiserver.User;
@@ -41,14 +41,10 @@ import java.util.Iterator;
  */
 @AllowedRoles(Role.ADMIN)
 public class UsersPage extends WebPage {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     @SpringBean
     public UserService users;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor that is invoked when page is invoked without a session.
@@ -106,8 +102,6 @@ public class UsersPage extends WebPage {
         });
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     private void onChangePassword(final IModel<User> model) {
         final User user = model.getObject();
         IModel<UserDto> dto = new Model<UserDto>(users.dto(user));
@@ -149,8 +143,6 @@ public class UsersPage extends WebPage {
             }
         });
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class UsersDataProvider implements IDataProvider<User> {
         private static final long serialVersionUID = 1L;

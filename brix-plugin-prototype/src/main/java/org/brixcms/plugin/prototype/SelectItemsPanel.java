@@ -21,6 +21,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.picker.common.NodePickerTreeGridPanel;
 import org.brixcms.web.picker.common.RootTreeNode;
+import org.brixcms.web.picker.node.NodePickerTreeModel;
 import org.brixcms.web.tree.JcrTreeNode;
 
 import java.util.ArrayList;
@@ -29,11 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
-// ------------------------------ FIELDS ------------------------------
-
     private NodePickerTreeGridPanel treeGrid;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SelectItemsPanel(String id, String workspaceName) {
         super(id);
@@ -62,8 +59,6 @@ public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
 
         add(treeGrid);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected String getDependenciesMessage(Map<JcrNode, List<JcrNode>> dependencies) {
         StringBuilder b = new StringBuilder();
@@ -117,8 +112,8 @@ public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
     @SuppressWarnings("unchecked")
     protected List<JcrNode> getSelectedNodes() {
         List<JcrNode> nodes = new ArrayList<JcrNode>();
-        for (IModel model : getTreeGrid().getSelectedItems()) {
-            JcrTreeNode treeNode = (JcrTreeNode) model.getObject();
+        for (IModel<JcrTreeNode> model : getTreeGrid().getSelectedItems()) {
+            JcrTreeNode treeNode = model.getObject();
             JcrNode node = treeNode.getNodeModel() != null ? treeNode.getNodeModel().getObject() : null;
             if (node != null)
                 nodes.add(node);
@@ -127,7 +122,7 @@ public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
         return nodes;
     }
 
-    public TreeGrid getTreeGrid() {
+    public TreeGrid<NodePickerTreeModel, JcrTreeNode> getTreeGrid() {
         return treeGrid.getGrid();
     }
 }

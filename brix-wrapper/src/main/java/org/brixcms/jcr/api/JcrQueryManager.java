@@ -25,10 +25,6 @@ import javax.jcr.query.qom.QueryObjectModelFactory;
  * @author igor.vaynberg
  */
 public interface JcrQueryManager extends QueryManager {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface QueryManager ---------------------
 
     public JcrQuery createQuery(String statement, String language);
 
@@ -44,11 +40,7 @@ public interface JcrQueryManager extends QueryManager {
 
     public String[] getSupportedQueryLanguages();
 
-// -------------------------- OTHER METHODS --------------------------
-
     public QueryManager getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrQueryManager wrap(QueryManager delegate, JcrSession session) {

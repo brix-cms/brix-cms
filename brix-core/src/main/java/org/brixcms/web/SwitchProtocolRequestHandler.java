@@ -23,11 +23,7 @@ import org.brixcms.jcr.wrapper.BrixNode.Protocol;
 import javax.servlet.http.HttpServletRequest;
 
 public class SwitchProtocolRequestHandler implements IRequestHandler {
-// ------------------------------ FIELDS ------------------------------
-
     private final Protocol protocol;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static IRequestHandler requireProtocol(Protocol protocol) {
         RequestCycle requestCycle = RequestCycle.get();
@@ -41,8 +37,6 @@ public class SwitchProtocolRequestHandler implements IRequestHandler {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public SwitchProtocolRequestHandler(Protocol protocol) {
         if (protocol == null) {
             throw new IllegalArgumentException("Argument 'protocol' may not be null.");
@@ -53,10 +47,6 @@ public class SwitchProtocolRequestHandler implements IRequestHandler {
         this.protocol = protocol;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IRequestTarget ---------------------
 
 
     public void respond(IRequestCycle requestCycle) {
@@ -84,8 +74,6 @@ public class SwitchProtocolRequestHandler implements IRequestHandler {
     public void detach(IRequestCycle requestCycle) {
 
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private String getUrl(String protocol, Integer port, HttpServletRequest request) {
         StringBuilder result = new StringBuilder();

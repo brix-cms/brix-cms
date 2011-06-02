@@ -31,11 +31,7 @@ import java.util.List;
  * @author kbachl
  */
 public class Jcr2WorkspaceManager extends AbstractSimpleWorkspaceManager {
-// ------------------------------ FIELDS ------------------------------
-
     private final JcrSessionFactory sf;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Construction
@@ -46,8 +42,6 @@ public class Jcr2WorkspaceManager extends AbstractSimpleWorkspaceManager {
         super();
         this.sf = sf;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

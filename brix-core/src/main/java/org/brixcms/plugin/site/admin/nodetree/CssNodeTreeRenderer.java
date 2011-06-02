@@ -24,20 +24,14 @@ import org.apache.wicket.request.resource.SharedResourceReference;
  * @author Jeremy Thomerson
  */
 public class CssNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private static final ResourceReference RESOURCE = new SharedResourceReference(
             PageNodeTreeRenderer.class, "resources/gnome-mime-text-css.png");
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public CssNodeTreeRenderer() {
         super(new String[]{"text/css"});
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {

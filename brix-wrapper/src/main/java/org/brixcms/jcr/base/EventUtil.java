@@ -30,12 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 public class EventUtil {
-// ------------------------------ FIELDS ------------------------------
-
     private final static List<SaveEventListener> listeners = Collections
             .synchronizedList(new ArrayList<SaveEventListener>());
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static void raiseSaveEvent(Node node) {
         try {
@@ -75,8 +71,6 @@ public class EventUtil {
         return WrapperAccessor.unwrap(session);
     }
 
-// -------------------------- INNER CLASSES --------------------------
-
     private static class Iterator implements EventIterator {
         private Event event;
 
@@ -114,8 +108,6 @@ public class EventUtil {
             throw new UnsupportedOperationException();
         }
     }
-
-    ;
 
     private static class EventImpl implements SaveEvent {
         private final JcrNode node;

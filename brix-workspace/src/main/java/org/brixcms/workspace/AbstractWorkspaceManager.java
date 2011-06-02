@@ -33,8 +33,6 @@ import java.util.UUID;
  * @author Matej Knopp
  */
 public abstract class AbstractWorkspaceManager implements WorkspaceManager {
-// ------------------------------ FIELDS ------------------------------
-
     protected static final String NODE_NAME = "brix:workspace";
 
     protected static final String NODE_PATH = "/" + NODE_NAME;
@@ -53,10 +51,6 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager {
 
     private Map<String, Map<String, String>> workspaceToWorkspaceAttributesMap = new HashMap<String, Map<String, String>>();
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface WorkspaceManager ---------------------
 
     public synchronized List<Workspace> getWorkspacesFiltered(
             Map<String, String> workspaceAttributes) {
@@ -93,8 +87,6 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager {
             return null;
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     abstract protected void delete(String workspaceId) throws RepositoryException;
 
@@ -231,8 +223,6 @@ public abstract class AbstractWorkspaceManager implements WorkspaceManager {
             return null;
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class AttributeKeyAndValue {
         private final String key;

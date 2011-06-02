@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeLogActionHandler extends AbstractActionHandler {
-// ------------------------------ FIELDS ------------------------------
-
     private final ChangeLog changeLog;
     private final Session session;
 
@@ -36,14 +34,10 @@ public class ChangeLogActionHandler extends AbstractActionHandler {
 
     private List<EventsListener> eventsListeners = new ArrayList<EventsListener>();
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ChangeLogActionHandler(ChangeLog changeLog, Session session) {
         this.changeLog = changeLog;
         this.session = session;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public void afterItemRefresh(Item item, boolean keepChanges) throws RepositoryException {

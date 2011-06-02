@@ -21,8 +21,6 @@ import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 public class StartJackrabbitServer {
-// --------------------------- main() method ---------------------------
-
     public static void main(String[] args) throws Exception {
         final int port = Integer.parseInt(System.getProperty("jetty.port", "10000"));
 

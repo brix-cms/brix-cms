@@ -18,20 +18,14 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 public class ReferenceLink extends AbstractLink {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private final Reference reference;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ReferenceLink(String id, Reference reference) {
         super(id);
         this.reference = reference;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onComponentTag(ComponentTag tag) {

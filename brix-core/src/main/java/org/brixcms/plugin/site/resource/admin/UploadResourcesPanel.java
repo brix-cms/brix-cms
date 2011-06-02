@@ -42,12 +42,8 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class UploadResourcesPanel extends NodeManagerPanel {
-// ------------------------------ FIELDS ------------------------------
-
     private Collection<FileUpload> uploads = new ArrayList<FileUpload>();
     private boolean overwrite = false;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public UploadResourcesPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack) {
         super(id, model);
@@ -119,8 +115,6 @@ public class UploadResourcesPanel extends NodeManagerPanel {
 
         SitePlugin.get().selectNode(this, parentNode, true);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onDetach() {

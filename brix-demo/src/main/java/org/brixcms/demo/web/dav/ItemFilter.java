@@ -22,16 +22,10 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 public class ItemFilter extends DefaultItemFilter {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ItemFilter() {
 
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ItemFilter ---------------------
 
     @Override
     public boolean isFilteredItem(Item item) {

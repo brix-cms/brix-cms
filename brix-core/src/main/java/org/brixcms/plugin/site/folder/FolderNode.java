@@ -25,8 +25,6 @@ import org.brixcms.web.reference.Reference;
 import javax.jcr.Node;
 
 public class FolderNode extends BrixNode {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * NodeWrapperFactory that can create {@link FolderNode} wrappers
      */
@@ -55,13 +53,9 @@ public class FolderNode extends BrixNode {
 
     private static final String REDIRECT_REFERENCE = FolderNodePlugin.TYPE + "RedirectReference";
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public FolderNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Reference getRedirectReference() {
         return Reference.load(this, REDIRECT_REFERENCE);

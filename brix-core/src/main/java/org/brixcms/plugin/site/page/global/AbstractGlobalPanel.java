@@ -25,12 +25,8 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 
 public abstract class AbstractGlobalPanel extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String PANEL_ID = "managePanel";
     IModel<Workspace> workspaceModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractGlobalPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, new BrixNodeModel(getContainerNode(workspaceModel.getObject())));
@@ -42,8 +38,6 @@ public abstract class AbstractGlobalPanel extends BrixGenericPanel<BrixNode> {
         JcrSession session = Brix.get().getCurrentSession(workspace.getId());
         return SitePlugin.get().getGlobalContainer(session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onBeforeRender() {

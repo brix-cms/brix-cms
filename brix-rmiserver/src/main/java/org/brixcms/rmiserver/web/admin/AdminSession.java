@@ -14,18 +14,16 @@
 
 package org.brixcms.rmiserver.web.admin;
 
-import org.apache.wicket.Request;
 import org.apache.wicket.Session;
-import org.apache.wicket.injection.web.InjectorHolder;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.brixcms.rmiserver.AuthenticationException;
 import org.brixcms.rmiserver.User;
 import org.brixcms.rmiserver.UserService;
 
 public class AdminSession extends WebSession {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     @SpringBean
@@ -33,20 +31,14 @@ public class AdminSession extends WebSession {
 
     private Long userId;
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static AdminSession get() {
         return (AdminSession) Session.get();
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public AdminSession(Request request) {
         super(request);
-        InjectorHolder.getInjector().inject(this);
+        Injector.get().inject(this);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public boolean isUserLoggedIn() {
         return userId != null;

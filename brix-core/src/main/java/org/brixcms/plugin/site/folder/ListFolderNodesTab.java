@@ -45,8 +45,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ListFolderNodesTab(String id, IModel<BrixNode> folderModel) {
         super(id, folderModel);
 
@@ -87,13 +85,9 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
         add(grid);
     }
 
-    ;
-
     private BrixNode getNode() {
         return (BrixNode) getModelObject();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class NameColumn extends AbstractColumn {
         public NameColumn(IModel<String> headerModel) {
@@ -105,8 +99,6 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
             return new NamePanel(componentId, rowModel);
         }
     }
-
-    ;
 
     private class NamePanel extends BrixGenericPanel<BrixNode> {
         public NamePanel(String id, final IModel<BrixNode> model) {
@@ -139,15 +131,11 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
         }
     }
 
-    ;
-
     private static class TypePropertyColumn extends PropertyColumn {
         public TypePropertyColumn(IModel<String> headerModel) {
             super("type", headerModel, "userVisibleType", FolderDataSource.PROPERTY_TYPE);
         }
     }
-
-    ;
 
     private class MimeTypeColumn extends AbstractLightWeightColumn {
         public MimeTypeColumn(IModel<String> headerModel) {
@@ -170,8 +158,6 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
         }
     }
 
-    ;
-
     private class SizeColumn extends AbstractLightWeightColumn {
         public SizeColumn(IModel<String> headerModel) {
             super("size", headerModel, FolderDataSource.PROPERTY_SIZE);
@@ -192,8 +178,6 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
             };
         }
     }
-
-    ;
 
     private static class DatePropertyColumn extends PropertyColumn {
         public DatePropertyColumn(IModel<String> headerModel, String propertyExpression, String sortProperty) {

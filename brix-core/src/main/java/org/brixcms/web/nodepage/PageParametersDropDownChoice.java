@@ -32,8 +32,6 @@ import java.util.List;
  * @author Matej Knopp
  */
 public class PageParametersDropDownChoice<T> extends DropDownChoice<T> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageParametersDropDownChoice(String id, IModel<T> model, List<? extends T> choices) {
         super(id, model, choices);
     }
@@ -50,8 +48,6 @@ public class PageParametersDropDownChoice<T> extends DropDownChoice<T> {
                                         IChoiceRenderer<T> renderer) {
         super(id, model, choices, renderer);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected boolean getStatelessHint() {

@@ -19,21 +19,13 @@ import org.brixcms.markup.tag.Text;
 import org.brixcms.plugin.site.page.AbstractContainer;
 
 public class TitleText implements Text {
-// ------------------------------ FIELDS ------------------------------
-
     private final BrixNodeModel nodeModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TitleText(AbstractContainer container) {
         nodeModel = new BrixNodeModel(container);
         nodeModel.detach();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Text ---------------------
 
     public String getText() {
         AbstractContainer container = (AbstractContainer) new BrixNodeModel(nodeModel).getObject();

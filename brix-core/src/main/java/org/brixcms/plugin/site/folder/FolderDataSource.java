@@ -36,8 +36,6 @@ import java.util.Comparator;
 import java.util.List;
 
 abstract class FolderDataSource implements IDataSource {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_TYPE = "type";
     public static final String PROPERTY_CREATED = "created";
@@ -49,10 +47,6 @@ abstract class FolderDataSource implements IDataSource {
 
     private static final NodeFilter SITE_FILTER = new SiteNodeFilter(false, null);
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDataSource ---------------------
 
 
     public void query(IQuery query, IQueryResult result) {
@@ -79,13 +73,9 @@ abstract class FolderDataSource implements IDataSource {
         return new BrixNodeModel((BrixNode) object);
     }
 
-// --------------------- Interface IDetachable ---------------------
-
     public void detach() {
 
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     abstract BrixNode getFolderNode();
 
@@ -144,8 +134,6 @@ abstract class FolderDataSource implements IDataSource {
         }
         return 0;
     }
-
-    ;
 
     private <T> int compare(Comparable<T> c1, T c2) {
         if (c1 == null || c2 == null) {

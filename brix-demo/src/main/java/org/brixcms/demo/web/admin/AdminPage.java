@@ -23,8 +23,6 @@ import org.brixcms.web.admin.AdminPanel;
  * @author igor.vaynberg
  */
 public class AdminPage extends WebPage {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      */

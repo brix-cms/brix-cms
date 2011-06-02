@@ -37,16 +37,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderContributor {
-// ------------------------------ FIELDS ------------------------------
-
     private static final ResourceReference CSS = new CssResourceReference(AdminPanel.class,
             "res/style.css");
 
     private TabbedPanel tabbedPanel;
     private final WebMarkupContainer container;
     private WebMarkupContainer noWorkspacesContainer;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AdminPanel(String id, String workspace) {
         super(id);
@@ -59,8 +55,6 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
             }
         });
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     private List<Workspace> getWorkspaces() {
         Brix brix = getBrix();
@@ -86,16 +80,10 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
         return Brix.get();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IHeaderContributor ---------------------
 
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference(CSS);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private List<Workspace> getAvailableWorkspaces() {
         Brix brix = Brix.get();

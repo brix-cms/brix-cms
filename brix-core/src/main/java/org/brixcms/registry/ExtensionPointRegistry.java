@@ -27,13 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ExtensionPointRegistry {
-// ------------------------------ FIELDS ------------------------------
-
     private final Map<ExtensionPoint<?>, Collection<?>> registrations = new HashMap<ExtensionPoint<?>, Collection<?>>();
 
     private final List<Listener> listeners = new ArrayList<Listener>();
-
-// -------------------------- OTHER METHODS --------------------------
 
     public synchronized <T> Collection<T> lookupCollection(ExtensionPoint<T> point) {
         // check multiplicity
@@ -141,8 +137,6 @@ public class ExtensionPointRegistry {
     private <T> Collection<T> get(ExtensionPoint<T> point) {
         return (Collection<T>) registrations.get(point);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static interface Callback<T> {
         public static enum Status {

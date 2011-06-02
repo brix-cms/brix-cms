@@ -23,8 +23,6 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionHistory;
 
 abstract class ItemWrapper extends BaseWrapper<Item> implements Item {
-// -------------------------- STATIC METHODS --------------------------
-
     public static ItemWrapper wrap(Item item, SessionWrapper session) {
         if (item == null) {
             return null;
@@ -41,16 +39,10 @@ abstract class ItemWrapper extends BaseWrapper<Item> implements Item {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected ItemWrapper(Item delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Item ---------------------
 
 
     public String getPath() throws RepositoryException {

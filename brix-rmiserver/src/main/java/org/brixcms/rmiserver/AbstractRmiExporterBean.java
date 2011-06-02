@@ -27,8 +27,6 @@ import java.rmi.server.RemoteStub;
 import java.rmi.server.UnicastRemoteObject;
 
 public abstract class AbstractRmiExporterBean implements InitializingBean, DisposableBean {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(AbstractRmiExporterBean.class);
 
     private int registryPort;
@@ -36,8 +34,6 @@ public abstract class AbstractRmiExporterBean implements InitializingBean, Dispo
 
     private Registry registry;
     private Remote server;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
     public void setRegistryPort(int registryPort) {
@@ -49,10 +45,6 @@ public abstract class AbstractRmiExporterBean implements InitializingBean, Dispo
         this.serviceName = serviceName;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface DisposableBean ---------------------
 
 
     public void destroy() throws Exception {
@@ -61,8 +53,6 @@ public abstract class AbstractRmiExporterBean implements InitializingBean, Dispo
         registry.unbind(serviceName);
         UnicastRemoteObject.unexportObject(server, true);
     }
-
-// --------------------- Interface InitializingBean ---------------------
 
     public void afterPropertiesSet() throws Exception {
         try {
@@ -81,8 +71,6 @@ public abstract class AbstractRmiExporterBean implements InitializingBean, Dispo
         registry.rebind(serviceName, stub);
         logger.info("Exported " + server.getClass().getName() + ": {}", stub);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected abstract Remote createServiceInstance();
 }

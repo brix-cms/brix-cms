@@ -18,8 +18,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
 public class BrixGenericWebMarkupContainer<T> extends WebMarkupContainer implements IGenericComponent<T> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixGenericWebMarkupContainer(String id) {
         super(id);
     }
@@ -28,10 +26,6 @@ public class BrixGenericWebMarkupContainer<T> extends WebMarkupContainer impleme
         super(id, model);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     @SuppressWarnings("unchecked")
     public final IModel<T> getModel() {

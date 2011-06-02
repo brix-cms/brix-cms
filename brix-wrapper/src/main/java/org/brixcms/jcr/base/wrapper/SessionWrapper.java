@@ -52,8 +52,6 @@ import java.util.Map;
 import java.util.Set;
 
 class SessionWrapper extends BaseWrapper<Session> implements BrixSession {
-// ------------------------------ FIELDS ------------------------------
-
     final Set<Node> raisedSaveEvent = new HashSet<Node>();
 
     private final CompoundActionHandler actionHandler = new CompoundActionHandler();
@@ -64,8 +62,6 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession {
 
     private ValueFilter valueFilter = new ValueFilter();
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static SessionWrapper wrap(Session session) {
         if (session == null) {
             return null;
@@ -74,16 +70,12 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private SessionWrapper(Session session) {
         super(session, null);
 
         changeLogActionHandler = new ChangeLogActionHandler(new ChangeLog(), this);
         actionHandler.addHandler(changeLogActionHandler);
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public CompoundActionHandler getActionHandler() {
         return actionHandler;
@@ -104,10 +96,6 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession {
         this.valueFilter = valueFilter;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface BrixSession ---------------------
 
 
     public void addActionHandler(AbstractActionHandler handler) {
@@ -117,8 +105,6 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession {
     public void addEventsListener(EventsListener listener) {
         changeLogActionHandler.registerEventsListener(listener);
     }
-
-// --------------------- Interface Session ---------------------
 
 
     public Repository getRepository() {
@@ -319,8 +305,6 @@ class SessionWrapper extends BaseWrapper<Session> implements BrixSession {
             RepositoryException {
         return getDelegate().getRetentionManager();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public SessionWrapper getSessionWrapper() {

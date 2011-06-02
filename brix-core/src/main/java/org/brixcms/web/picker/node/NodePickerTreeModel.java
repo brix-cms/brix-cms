@@ -22,11 +22,7 @@ import org.brixcms.web.tree.AbstractJcrTreeNode;
 import org.brixcms.web.tree.AbstractTreeModel;
 
 public abstract class NodePickerTreeModel extends AbstractTreeModel {
-// ------------------------------ FIELDS ------------------------------
-
     private NodePickerTreeNode root;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodePickerTreeModel(String workspaceName) {
         JcrSession session = Brix.get().getCurrentSession(workspaceName);
@@ -34,23 +30,15 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel {
         root = new NodePickerTreeNode((BrixNode) session.getItem(SitePlugin.get().getSiteRootPath()));
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public javax.swing.tree.TreeNode getRoot() {
         return root;
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     protected abstract boolean displayFoldersOnly();
-
-    ;
 
     public NodePickerTreeNode treeNodeFor(BrixNode node) {
         return new NodePickerTreeNode(node);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     public class NodePickerTreeNode extends AbstractJcrTreeNode {
         public NodePickerTreeNode(BrixNode node) {

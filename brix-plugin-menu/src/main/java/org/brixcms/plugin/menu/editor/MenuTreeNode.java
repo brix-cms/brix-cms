@@ -19,14 +19,11 @@ import org.brixcms.plugin.menu.Menu.Entry;
 import org.brixcms.web.tree.TreeNode;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 public class MenuTreeNode implements TreeNode {
-// ------------------------------ FIELDS ------------------------------
-
     private final Entry entry;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MenuTreeNode(Entry entry) {
         if (entry == null) {
@@ -34,8 +31,6 @@ public class MenuTreeNode implements TreeNode {
         }
         this.entry = entry;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public List<? extends TreeNode> getChildren() {
         List<MenuTreeNode> children = new ArrayList<MenuTreeNode>();
@@ -48,8 +43,6 @@ public class MenuTreeNode implements TreeNode {
     public Entry getEntry() {
         return entry;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public boolean equals(Object obj) {
@@ -71,18 +64,42 @@ public class MenuTreeNode implements TreeNode {
         return entry.toString();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
     }
 
-// --------------------- Interface TreeNode ---------------------
 
+    @Override
+    public javax.swing.tree.TreeNode getChildAt(int childIndex) {
+        return null;
+    }
+
+    @Override
+    public int getChildCount() {
+        return 0;
+    }
+
+    @Override
+    public javax.swing.tree.TreeNode getParent() {
+        return null;
+    }
+
+    @Override
+    public int getIndex(javax.swing.tree.TreeNode node) {
+        return 0;
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return false;
+    }
 
     public boolean isLeaf() {
         return entry.getChildren().isEmpty();
+    }
+
+    @Override
+    public Enumeration children() {
+        return null;
     }
 }

@@ -31,12 +31,8 @@ import java.util.List;
  * @author igor.vaynberg
  */
 public class JackrabbitWorkspaceManagerImpl extends AbstractSimpleWorkspaceManager {
-// ------------------------------ FIELDS ------------------------------
-
     private final RepositoryImpl repository;
     private final Credentials credentials;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -48,8 +44,6 @@ public class JackrabbitWorkspaceManagerImpl extends AbstractSimpleWorkspaceManag
         this.repository = repository;
         this.credentials = credentials;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

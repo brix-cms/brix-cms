@@ -27,24 +27,20 @@ import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.admin.ManageTileNodeTabFactory;
 import org.brixcms.plugin.site.resource.ResourceNodePlugin;
-import org.brixcms.web.nodepage.BrixNodePageUrlCodingStrategy;
+import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
 import java.util.Collection;
 
 public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
-// ------------------------------ FIELDS ------------------------------
-
-    private final BrixNodePageUrlCodingStrategy urlCodingStrategy = new BrixNodePageUrlCodingStrategy() {
+    private final BrixNodePageUrlMapper urlMapper = new BrixNodePageUrlMapper() {
         @Override
         protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
                                                   BrixPageParameters pageParameters) {
             return new PageRenderingPage(nodeModel, pageParameters);
         }
     };
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractSitePagePlugin(SitePlugin sitePlugin) {
         registerManageNodeTabFactory(sitePlugin);
@@ -65,15 +61,11 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
         }
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface SiteNodePlugin ---------------------
 
     public abstract String getNodeType();
 
     public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
-        return urlCodingStrategy.decode(requestParameters, nodeModel);
+        return urlMapper.decode(requestParameters, nodeModel);
     }
 
     public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode,
@@ -94,15 +86,11 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
         return null;
     }
 
-// -------------------------- INNER CLASSES --------------------------
-
     private static class FromResourceConverter extends SetTypeConverter {
         public FromResourceConverter(String type) {
             super(type);
         }
     }
-
-    ;
 
     protected static class SetTypeConverter implements NodeConverter {
         private final String type;

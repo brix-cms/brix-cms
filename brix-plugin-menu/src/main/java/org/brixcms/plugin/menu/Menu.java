@@ -23,13 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu implements IDetachable {
-// ------------------------------ FIELDS ------------------------------
-
     private RootEntry root = new RootEntry();
 
     private String name;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getName() {
         return name;
@@ -43,16 +39,10 @@ public class Menu implements IDetachable {
         return root;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
         root.detach();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void load(BrixNode node) {
         loadName(node);
@@ -131,8 +121,6 @@ public class Menu implements IDetachable {
             saveEntry(child, e);
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Entry implements IDetachable {
         private final Entry parent;

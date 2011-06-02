@@ -30,20 +30,12 @@ import javax.jcr.RepositoryException;
 import java.util.Collection;
 
 public class SessionBehavior implements Behavior {
-// ------------------------------ FIELDS ------------------------------
-
     private final Brix brix;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SessionBehavior(Brix brix) {
         this.brix = brix;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Behavior ---------------------
 
 
     public JcrNode wrap(Node node, JcrSession session) {

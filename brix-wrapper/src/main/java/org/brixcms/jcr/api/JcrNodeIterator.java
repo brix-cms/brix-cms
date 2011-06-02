@@ -22,19 +22,11 @@ import javax.jcr.NodeIterator;
  * @author Matej Knopp
  */
 public interface JcrNodeIterator extends NodeIterator {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NodeIterator ---------------------
 
     public JcrNode nextNode();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public NodeIterator getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrNodeIterator wrap(NodeIterator delegate, JcrSession session) {

@@ -25,18 +25,12 @@ import javax.jcr.observation.Event;
 import javax.jcr.observation.EventIterator;
 
 public class JcrEventListener implements SaveEventListener {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface EventListener ---------------------
 
     public void onEvent(EventIterator events) {
         while (events.hasNext()) {
             handleEvent(events.nextEvent());
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private void handleEvent(Event event) {
         if (event instanceof SaveEvent) {

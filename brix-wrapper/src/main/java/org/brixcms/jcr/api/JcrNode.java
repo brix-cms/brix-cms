@@ -42,15 +42,9 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 public interface JcrNode extends JcrItem, Node {
-// ------------------------ INTERFACE METHODS ------------------------
-
 
 // --------------------- Interface JcrItem ---------------------
-    ;
-
     public Node getDelegate();
-
-// --------------------- Interface Node ---------------------
 
 
     public JcrNode addNode(String relPath);
@@ -543,8 +537,6 @@ public interface JcrNode extends JcrItem, Node {
      * @since JCR 2.0
      */
     public String[] getAllowedLifecycleTransistions();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrNode wrap(Node delegate, JcrSession session) {

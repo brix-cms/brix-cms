@@ -20,11 +20,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 
 public abstract class TextLink<T> extends Link<T> {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel<String> textModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TextLink(String id, IModel<String> textModel) {
         super(id);
@@ -35,8 +31,6 @@ public abstract class TextLink<T> extends Link<T> {
         super(id, model);
         this.textModel = wrap(textModel);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         replaceComponentTagBody(markupStream, openTag, textModel.getObject());

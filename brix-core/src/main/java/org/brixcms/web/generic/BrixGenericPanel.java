@@ -18,8 +18,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 public class BrixGenericPanel<T> extends Panel implements IGenericComponent<T> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixGenericPanel(String id) {
         super(id);
     }
@@ -28,10 +26,6 @@ public class BrixGenericPanel<T> extends Panel implements IGenericComponent<T> {
         super(id, model);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     @SuppressWarnings("unchecked")
     public final IModel<T> getModel() {

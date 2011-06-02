@@ -34,23 +34,15 @@ import java.util.Map;
  * @author Matej Knopp
  */
 public class PanelTransformer extends HeadTransformer {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PanelTransformer(MarkupSource delegate) {
         super(delegate);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface MarkupSource ---------------------
 
     @Override
     public String getDoctype() {
         return null;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected List<Item> transform(List<Item> originalItems) {

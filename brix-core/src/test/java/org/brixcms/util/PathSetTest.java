@@ -21,11 +21,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class PathSetTest {
-// ------------------------------ FIELDS ------------------------------
-
     private PathSet data;
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Test
     public void containsAncestor() {

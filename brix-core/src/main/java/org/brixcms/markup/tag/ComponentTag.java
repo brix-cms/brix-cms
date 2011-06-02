@@ -24,8 +24,6 @@ import org.brixcms.jcr.wrapper.BrixNode;
  * @author Matej Knopp
  */
 public interface ComponentTag extends Tag {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Creates wicket component for this tag. If there is no component returns null.
      *

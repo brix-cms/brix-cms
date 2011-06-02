@@ -20,10 +20,6 @@ import javax.jcr.NamespaceRegistry;
  * @author Matej Knopp
  */
 public interface JcrNamespaceRegistry extends NamespaceRegistry {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NamespaceRegistry ---------------------
 
 
     public void registerNamespace(String prefix, String uri);

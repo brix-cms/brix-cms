@@ -19,8 +19,6 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
 public class BrixGenericFragment<T> extends Fragment implements IGenericComponent<T> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixGenericFragment(String id, String markupId, MarkupContainer markupProvider) {
         super(id, markupId, markupProvider);
     }
@@ -29,10 +27,6 @@ public class BrixGenericFragment<T> extends Fragment implements IGenericComponen
         super(id, markupId, markupProvider, model);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     @SuppressWarnings("unchecked")
     public final IModel<T> getModel() {

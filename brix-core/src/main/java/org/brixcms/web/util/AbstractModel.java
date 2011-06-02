@@ -17,15 +17,9 @@ package org.brixcms.web.util;
 import org.apache.wicket.model.IModel;
 
 public abstract class AbstractModel<T> implements IModel<T> {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
     }
-
-// --------------------- Interface IModel ---------------------
 
 
     public T getObject() {

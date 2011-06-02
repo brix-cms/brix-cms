@@ -28,8 +28,6 @@ import java.rmi.server.RemoteStub;
 import java.rmi.server.UnicastRemoteObject;
 
 public class WorkspaceManagerExporterBean implements InitializingBean, DisposableBean {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory
             .getLogger(WorkspaceManagerExporterBean.class);
 
@@ -39,8 +37,6 @@ public class WorkspaceManagerExporterBean implements InitializingBean, Disposabl
 
     private Registry registry;
     private ServerWorkspaceManager server;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
     public void setRegistryPort(int registryPort) {
@@ -57,10 +53,6 @@ public class WorkspaceManagerExporterBean implements InitializingBean, Disposabl
         this.workspaceManager = workspaceManager;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface DisposableBean ---------------------
 
 
     public void destroy() throws Exception {
@@ -68,8 +60,6 @@ public class WorkspaceManagerExporterBean implements InitializingBean, Disposabl
         registry.unbind(serviceName);
         UnicastRemoteObject.unexportObject(server, true);
     }
-
-// --------------------- Interface InitializingBean ---------------------
 
     public void afterPropertiesSet() throws Exception {
         try {

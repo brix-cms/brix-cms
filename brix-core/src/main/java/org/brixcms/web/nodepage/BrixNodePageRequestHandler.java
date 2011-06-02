@@ -14,135 +14,101 @@
 
 package org.brixcms.web.nodepage;
 
-import org.apache.wicket.Page;
-import org.apache.wicket.Session;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.IPageProvider;
 import org.apache.wicket.request.handler.IPageRequestHandler;
-import org.apache.wicket.request.http.WebResponse;
-import org.brixcms.jcr.wrapper.BrixFileNode;
+import org.apache.wicket.request.handler.RenderPageRequestHandler;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 
-public class BrixNodePageRequestHandler
-        implements
-        IRequestHandler,
-        IPageRequestHandler,
+public class BrixNodePageRequestHandler extends RenderPageRequestHandler implements IRequestHandler, IPageRequestHandler,
         PageParametersRequestHandler {
-// ------------------------------ FIELDS ------------------------------
+    // ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> node;
     private BrixNodeWebPage page;
     private final PageFactory pageFactory;
 
-// --------------------------- CONSTRUCTORS ---------------------------
+    // --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixNodePageRequestHandler(IModel<BrixNode> node, BrixNodeWebPage page) {
+        super(new PageProviderAdapter(page), RedirectPolicy.NEVER_REDIRECT);
         this.node = node;
         this.page = page;
         this.pageFactory = null;
     }
 
     public BrixNodePageRequestHandler(IModel<BrixNode> node, PageFactory pageFactory) {
+        super(new PageProviderAdapter(pageFactory), RedirectPolicy.NEVER_REDIRECT);
         this.node = node;
         this.page = null;
         this.pageFactory = pageFactory;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
+    // --------------------- GETTER / SETTER METHODS ---------------------
 
-    public Page getPage() {
-        if (page == null && pageFactory != null) {
-            page = pageFactory.newPage();
-        }
-        return page;
+    public BrixNodeWebPage getPage() {
+        return (BrixNodeWebPage) super.getPage();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
+    // ------------------------ INTERFACE METHODS ------------------------
 
 
-// --------------------- Interface IPageClassRequestHandler ---------------------
-
-    @Override
-    public Class<? extends IRequestablePage> getPageClass() {
-        return null;
-    }
-
-// --------------------- Interface IRequestHandler ---------------------
+    // --------------------- Interface IRequestHandler ---------------------
 
     public final void respond(IRequestCycle requestCycle) {
-        if (page == null) {
-            page = pageFactory.newPage();
-            if (page.initialRedirect()) {
-                // if the page is newly created and initial redirect is set, we
-                // need to redirect to a hybrid URL
-                page.setStatelessHint(false);
-                Session.get().bind();
-                Session.get().touch(page);
-                requestCycle.setRequestTarget(new BrixNodeRequestHandler(page));
-                return;
-            }
-        }
+        // if (page == null) {
+        // page = pageFactory.newPage();
+        // if (page.initialRedirect()) {
+        // // if the page is newly created and initial redirect is set, we
+        // // need to redirect to a hybrid URL
+        // page.setStatelessHint(false);
+        // Session.get().bind();
+        // // Session.get().touch(page);
+        // requestCycle.scheduleRequestHandlerAfterCurrent(new
+        // BrixNodeRequestHandler(page));
+        // return;
+        // }
+        // }
 
         respondWithInitialRedirectHandled(requestCycle);
     }
 
     public void detach(IRequestCycle requestCycle) {
-        if (getPage() != null) {
-            getPage().detach();
-        }
+        super.detach(requestCycle);
         node.detach();
     }
 
-// --------------------- Interface PageParametersRequestTarget ---------------------
-
+    // --------------------- Interface PageParametersRequestTarget
+    // ---------------------
 
     public BrixPageParameters getPageParameters() {
         if (pageFactory != null) {
             return pageFactory.getPageParameters();
         } else {
-            return page.getBrixPageParameters();
+            return getPage().getBrixPageParameters();
         }
     }
 
-// -------------------------- OTHER METHODS --------------------------
+    // -------------------------- OTHER METHODS --------------------------
 
     protected void respondWithInitialRedirectHandled(IRequestCycle requestCycle) {
         // check if the listener invocation or something else hasn't changed the
         // request target
         if (RequestCycle.get().getActiveRequestHandler() == this) {
-            WebResponse response = (WebResponse) requestCycle.getResponse();
 
-            // TODO figure out how to handle last modified for pages.
-            // lastmodified depends on both the page and the tiles, maybe tiles
-            // can contribute lastmodified dates and we take the latest...
-            // response.setLastModifiedTime(Time.valueOf(node.getObject().getLastModified()));
+            super.respond(requestCycle);
 
-            getPage().renderPage();
-
-            // must be after render page because Page.configureResponse() sets
-            // response.setContentType("text/" + getMarkupType() + "; charset=" + encoding);
-            String mimeType = getMimeType(node.getObject());
-            String encoding = requestCycle.getApplication().getRequestCycleSettings().getResponseRequestEncoding();
-            response.setContentType(mimeType + "; charset=" + encoding);
         }
     }
 
-    protected static String getMimeType(BrixNode brixNode) {
-        BrixFileNode brixFileNode = new BrixFileNode(brixNode.getDelegate(), brixNode.getSession());
 
-        String mimeType = null;
-        mimeType = brixFileNode.getMimeType();
 
-        if (mimeType == null || mimeType.trim().isEmpty()) {
-            mimeType = "text/html";
-        }
-        return mimeType;
-    }
-
-// -------------------------- INNER CLASSES --------------------------
+    // -------------------------- INNER CLASSES --------------------------
 
     public static interface PageFactory {
         public BrixNodeWebPage newPage();
@@ -150,5 +116,50 @@ public class BrixNodePageRequestHandler
         public BrixPageParameters getPageParameters();
     }
 
-    ;
+
+    private static class PageProviderAdapter implements IPageProvider {
+        private BrixNodeWebPage page;
+        private PageFactory factory;
+
+        public PageProviderAdapter(PageFactory factory) {
+            this.factory = factory;
+        }
+
+        public PageProviderAdapter(BrixNodeWebPage page) {
+            page = page;
+        }
+
+        @Override
+        public IRequestablePage getPageInstance() {
+            if (page == null) {
+                page = factory.newPage();
+            }
+            return page;
+        }
+
+        @Override
+        public PageParameters getPageParameters() {
+            if (page != null) {
+                return page.getPageParameters();
+            } else {
+                return factory.getPageParameters();
+            }
+        }
+
+        @Override
+        public boolean isNewPageInstance() {
+            return page == null;
+        }
+
+        @Override
+        public Class<? extends IRequestablePage> getPageClass() {
+            return BrixNodeWebPage.class;
+        }
+
+        @Override
+        public void detach() {
+            if (page != null)
+                page.detach();
+        }
+    }
 }

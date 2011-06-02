@@ -27,8 +27,6 @@ import java.util.List;
  * @author Matej Knopp
  */
 public interface ManageNodeTabFactory {
-// ------------------------------ FIELDS ------------------------------
-
     public static final ExtensionPoint<ManageNodeTabFactory> POINT = new ExtensionPoint<ManageNodeTabFactory>() {
         public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity() {
             return Multiplicity.COLLECTION;
@@ -38,8 +36,6 @@ public interface ManageNodeTabFactory {
             return ManageNodeTabFactory.class.getName();
         }
     };
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns list of node management tabs for given node.

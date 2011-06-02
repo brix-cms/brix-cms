@@ -21,16 +21,12 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
-import org.brixcms.web.BrixRequestCycleProcessor;
+import org.brixcms.plugin.site.SitePlugin;
 
 public class BrixNodeRequestHandler implements IPageRequestHandler {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel<BrixNode> nodeModel;
     private final BrixNodeWebPage page;
     private BrixPageParameters parameters;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixNodeRequestHandler(IModel<BrixNode> nodeModel) {
         this(nodeModel, new BrixPageParameters());
@@ -68,16 +64,10 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
         this.parameters = parameters;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public BrixNodeWebPage getPage() {
         return page;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IPageClassRequestHandler ---------------------
 
 
     @Override
@@ -89,23 +79,19 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
         return parameters;
     }
 
-// --------------------- Interface IRequestHandler ---------------------
-
     public void respond(IRequestCycle requestCycle) {
-        CharSequence url = requestCycle.urlFor(this);
-        requestCycle.getResponse().redirect(url.toString());
+        CharSequence url = ((RequestCycle) requestCycle).urlFor(this);
+//        requestCycle.redirect(url.toString());
+        throw new UnsupportedOperationException();
     }
 
     public void detach(IRequestCycle requestCycle) {
 
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     public String getNodeURL() {
         try {
-            return ((BrixRequestCycleProcessor) RequestCycle.get().getActiveRequestHandler())
-                    .getUriPathForNode(nodeModel.getObject()).toString();
+            return SitePlugin.get().getUriPathForNode(nodeModel.getObject()).toString();
         } finally {
             nodeModel.detach();
         }

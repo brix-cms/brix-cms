@@ -30,8 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public EditPropertiesPanel(String id, final IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
 

@@ -25,14 +25,10 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class FilteredJcrTreeNode implements JcrTreeNode {
-// ------------------------------ FIELDS ------------------------------
-
     private final JcrTreeNode delegate;
     private final NodeFilter visibilityFilter;
 
     private List<JcrTreeNode> children = null;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public FilteredJcrTreeNode(final JcrTreeNode delegate, final NodeFilter visibilityFilter) {
         this.delegate = delegate;
@@ -42,8 +38,6 @@ public class FilteredJcrTreeNode implements JcrTreeNode {
             throw new IllegalArgumentException("Argument 'delegate' may not be null.");
         }
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public List<? extends JcrTreeNode> getChildren() {
         if (children == null) {
@@ -68,8 +62,6 @@ public class FilteredJcrTreeNode implements JcrTreeNode {
             children = new ArrayList<JcrTreeNode>(original);
         }
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public boolean equals(Object obj) {
@@ -98,10 +90,6 @@ public class FilteredJcrTreeNode implements JcrTreeNode {
         return delegate.toString();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrTreeNode ---------------------
 
     public IModel<BrixNode> getNodeModel() {
         return delegate.getNodeModel();
@@ -111,8 +99,6 @@ public class FilteredJcrTreeNode implements JcrTreeNode {
         children = null;
         delegate.detach();
     }
-
-// --------------------- Interface TreeNode ---------------------
 
 
     @Override

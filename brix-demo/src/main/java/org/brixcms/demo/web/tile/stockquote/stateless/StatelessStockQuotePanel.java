@@ -37,8 +37,6 @@ import org.brixcms.web.nodepage.PageParametersForm;
  * @author igor.vaynberg
  */
 public class StatelessStockQuotePanel extends Panel implements PageParametersAware {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -50,8 +48,6 @@ public class StatelessStockQuotePanel extends Panel implements PageParametersAwa
      * value of stock symbol
      */
     private String value;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -78,10 +74,6 @@ public class StatelessStockQuotePanel extends Panel implements PageParametersAwa
         form.add(new TextField<String>("symbol", new PropertyModel(this, "symbol")));
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface PageParametersAware ---------------------
 
     /**
      * {@inheritDoc}

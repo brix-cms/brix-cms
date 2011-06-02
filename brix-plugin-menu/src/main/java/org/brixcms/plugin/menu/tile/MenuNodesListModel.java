@@ -30,28 +30,18 @@ import java.util.List;
  * @author igor.vaynberg
  */
 public final class MenuNodesListModel extends LoadableDetachableModel<List<BrixNode>> {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel<BrixNode> workspaceNodeModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     MenuNodesListModel(IModel<BrixNode> workspaceNodeModel) {
         this.workspaceNodeModel = workspaceNodeModel;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     @Override
     public void detach() {
         super.detach();
         workspaceNodeModel.detach();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected List<BrixNode> load() {

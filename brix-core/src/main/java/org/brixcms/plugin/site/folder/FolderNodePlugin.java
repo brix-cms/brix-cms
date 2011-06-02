@@ -33,20 +33,12 @@ import org.brixcms.web.nodepage.ForbiddenPage;
 import org.brixcms.web.reference.Reference;
 
 public class FolderNodePlugin implements SiteNodePlugin {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String TYPE = Brix.NS_PREFIX + "folder";
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public FolderNodePlugin(SitePlugin sp) {
         sp.registerManageNodeTabFactory(new ManageFolderNodeTabFactory());
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface SiteNodePlugin ---------------------
 
 
     public String getNodeType() {

@@ -18,8 +18,6 @@ import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 
 class PropertyIteratorWrapper extends BaseWrapper<PropertyIterator> implements PropertyIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static PropertyIteratorWrapper wrap(PropertyIterator delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -28,16 +26,10 @@ class PropertyIteratorWrapper extends BaseWrapper<PropertyIterator> implements P
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private PropertyIteratorWrapper(PropertyIterator delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     public boolean hasNext() {
@@ -52,13 +44,9 @@ class PropertyIteratorWrapper extends BaseWrapper<PropertyIterator> implements P
         getDelegate().remove();
     }
 
-// --------------------- Interface PropertyIterator ---------------------
-
     public Property nextProperty() {
         return PropertyWrapper.wrap(getDelegate().nextProperty(), getSessionWrapper());
     }
-
-// --------------------- Interface RangeIterator ---------------------
 
 
     public void skip(long skipNum) {

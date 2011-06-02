@@ -14,8 +14,6 @@
 
 package org.brixcms.plugin.snapshot;
 
-import org.apache.wicket.IRequestTarget;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,7 +28,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.WebResponse;
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.http.WebResponse;
 import org.brixcms.Brix;
 import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
@@ -44,13 +44,13 @@ import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
 
 import javax.jcr.ImportUUIDBehavior;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ManageSnapshotsPanel(String id, final IModel<Workspace> model) {
         super(id, model);
 
@@ -149,18 +149,25 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
         add(new Link<Object>("downloadWorkspace") {
             @Override
             public void onClick() {
-                getRequestCycle().setRequestTarget(new IRequestTarget() {
-                    public void detach(RequestCycle requestCycle) {
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(new IRequestHandler() {
+                    public void detach(IRequestCycle requestCycle) {
                     }
 
-                    public void respond(RequestCycle requestCycle) {
+                    public void respond(IRequestCycle requestCycle) {
                         WebResponse resp = (WebResponse) requestCycle.getResponse();
                         resp.setAttachmentHeader("workspace.xml");
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
                         Brix brix = getBrix();
                         JcrSession session = brix.getCurrentSession(id);
-                        session.exportSystemView(brix.getRootPath(), resp.getOutputStream(), false,
-                                false);
+                        HttpServletResponse containerResponse = (HttpServletResponse) resp.getContainerResponse();
+                        ServletOutputStream containerResponseOutputStream = null;
+                        try {
+                            containerResponseOutputStream = containerResponse.getOutputStream();
+                        }
+                        catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        session.exportSystemView(brix.getRootPath(), containerResponseOutputStream, false, false);
                     }
                 });
             }
@@ -210,26 +217,28 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
         uploadForm.add(new SubmitLink("submit") {
             @Override
             public void onSubmit() {
-                FileUpload u = upload.getModelObject();
-                if (u != null) {
-                    try {
-                        InputStream s = u.getInputStream();
-                        String id = ManageSnapshotsPanel.this.getModelObject().getId();
-                        Brix brix = getBrix();
-                        JcrSession session = brix.getCurrentSession(id);
+                List<FileUpload> uploadList = upload.getModelObject();
+                if (uploadList != null) {
+                    for (FileUpload u : uploadList) {
+                        try {
+                            InputStream s = u.getInputStream();
+                            String id = ManageSnapshotsPanel.this.getModelObject().getId();
+                            Brix brix = getBrix();
+                            JcrSession session = brix.getCurrentSession(id);
 
-                        if (session.itemExists(brix.getRootPath())) {
-                            session.getItem(brix.getRootPath()).remove();
+                            if (session.itemExists(brix.getRootPath())) {
+                                session.getItem(brix.getRootPath()).remove();
+                            }
+                            session.importXML("/", s,
+                                    ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+                            session.save();
+
+                            brix.initWorkspace(ManageSnapshotsPanel.this.getModelObject(), session);
+
+                            getSession().info(ManageSnapshotsPanel.this.getString("restoreSuccessful"));
+                        } catch (IOException e) {
+                            throw new BrixException(e);
                         }
-                        session.importXML("/", s,
-                                ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-                        session.save();
-
-                        brix.initWorkspace(ManageSnapshotsPanel.this.getModelObject(), session);
-
-                        getSession().info(ManageSnapshotsPanel.this.getString("restoreSuccessful"));
-                    } catch (IOException e) {
-                        throw new BrixException(e);
                     }
                 }
             }

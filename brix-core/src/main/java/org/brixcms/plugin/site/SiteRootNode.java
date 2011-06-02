@@ -28,8 +28,6 @@ import javax.jcr.Node;
  * @author Matej Knopp
  */
 public class SiteRootNode extends FolderNode {
-// ------------------------------ FIELDS ------------------------------
-
     public static final JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
         public boolean canWrap(Brix brix, JcrNode node) {
@@ -42,13 +40,9 @@ public class SiteRootNode extends FolderNode {
         }
     };
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public SiteRootNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public String getUserVisibleName() {

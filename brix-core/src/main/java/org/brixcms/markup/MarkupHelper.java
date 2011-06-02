@@ -35,8 +35,6 @@ import java.util.Set;
  * @author Matej Knopp
  */
 public class MarkupHelper implements Serializable {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Each tag component ids prefixed by this.
      */
@@ -45,8 +43,6 @@ public class MarkupHelper implements Serializable {
     private final IGenericComponent<BrixNode> component;
 
     private String markup = null;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MarkupHelper(IGenericComponent<BrixNode> component) {
         this.component = component;
@@ -58,7 +54,6 @@ public class MarkupHelper implements Serializable {
      * ComponentTag}s in markup. Also removes components no longer present in markup.
      */
     private void initMarkup() {
-        final Set<String> existingComponents = getExistingComponents();
         final Set<String> components = new HashSet<String>();
         GeneratedMarkup markup = getMarkupCache().getMarkup(component);
 
@@ -71,7 +66,7 @@ public class MarkupHelper implements Serializable {
                     String id = getComponentID(componentTag);
 
                     // check if the component already is in hierarchy
-                    if (existingComponents.contains(id)) {
+                    if (getExistingComponents().contains(id)) {
                         // just put the wicket:id attribute to component tag
                         attributes.put("wicket:id", id);
                         components.add(id);
@@ -91,7 +86,7 @@ public class MarkupHelper implements Serializable {
 
         // go through existing components and remove those not present in
         // current markup
-        for (String s : existingComponents) {
+        for (String s : getExistingComponents()) {
             if (!components.contains(s)) {
                 ((MarkupContainer) component).get(s).remove();
             }
@@ -120,13 +115,9 @@ public class MarkupHelper implements Serializable {
         return COMPONENT_PREFIX + (uid != null ? uid.toString() : "");
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public String getMarkup() {
         return markup;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private MarkupCache getMarkupCache() {
         return SitePlugin.get().getMarkupCache();

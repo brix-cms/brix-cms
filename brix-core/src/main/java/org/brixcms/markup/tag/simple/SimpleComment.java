@@ -22,17 +22,11 @@ import org.brixcms.markup.tag.Comment;
  * @author Matej Knopp
  */
 public class SimpleComment implements Comment {
-// ------------------------------ FIELDS ------------------------------
-
     private final String text;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SimpleComment(String text) {
         this.text = text;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getText() {
         return text;

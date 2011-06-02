@@ -31,8 +31,6 @@ import org.apache.wicket.util.visit.IVisitor;
  * @author Matej Knopp
  */
 public class PageParametersForm<T> extends StatelessForm<T> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageParametersForm(String id) {
         super(id);
     }
@@ -40,8 +38,6 @@ public class PageParametersForm<T> extends StatelessForm<T> {
     public PageParametersForm(String id, IModel<T> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected boolean encodeUrlInHiddenFields() {
@@ -71,7 +67,8 @@ public class PageParametersForm<T> extends StatelessForm<T> {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
         getPage().visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
             public void component(Component component, IVisit<PageParametersAware> pageParametersAwareIVisit) {
-                component.contributeToPageParameters(parameters);
+                throw new UnsupportedOperationException();
+//                component.contributeToPageParameters(parameters);
             }
         });
         contributeToPageParameters(parameters);

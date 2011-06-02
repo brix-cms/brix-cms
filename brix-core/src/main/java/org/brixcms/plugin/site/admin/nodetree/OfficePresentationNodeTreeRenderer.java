@@ -24,20 +24,14 @@ import org.apache.wicket.request.resource.SharedResourceReference;
  * @author Jeremy Thomerson
  */
 public class OfficePresentationNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private static final ResourceReference RESOURCE = new SharedResourceReference(
             PageNodeTreeRenderer.class, "resources/x-office-presentation.png");
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public OfficePresentationNodeTreeRenderer() {
         super(new String[]{"application/vnd.ms-powerpoint", "application/vnd.sun.xml.impress"});
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {

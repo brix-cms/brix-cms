@@ -26,11 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CompoundActionHandler extends AbstractActionHandler {
-// ------------------------------ FIELDS ------------------------------
-
     private final List<AbstractActionHandler> handlers = new ArrayList<AbstractActionHandler>();
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void addHandler(AbstractActionHandler handler) {
         if (handler == null) {

@@ -15,10 +15,10 @@
 package org.brixcms.rmiserver.web.admin;
 
 import org.apache.wicket.Page;
-import org.apache.wicket.Request;
-import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 /**
@@ -28,15 +28,11 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
  * @see wicket.myproject.StartJackrabbitServer#main(String[])
  */
 public class AdminApplication extends WebApplication {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      */
     public AdminApplication() {
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * @see wicket.Application#getHomePage()
@@ -47,10 +43,10 @@ public class AdminApplication extends WebApplication {
 
     @Override
     protected void init() {
-        addComponentInstantiationListener(new SpringComponentInjector(this));
+        getComponentInstantiationListeners().add(new SpringComponentInjector(this));
         getSecuritySettings().setAuthorizationStrategy(new AdminAuthorizationStrategy());
 
-        mountBookmarkablePage("/users", UsersPage.class);
+        mountPage("/users", UsersPage.class);
     }
 
     @Override

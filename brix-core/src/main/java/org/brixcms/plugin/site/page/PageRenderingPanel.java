@@ -25,16 +25,10 @@ import org.brixcms.markup.web.BrixMarkupNodePanel;
 import org.brixcms.plugin.site.SitePlugin;
 
 public class PageRenderingPanel extends BrixMarkupNodePanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageRenderingPanel(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface MarkupSourceProvider ---------------------
 
     public MarkupSource getMarkupSource() {
         MarkupSource source = new PageMarkupSource((AbstractContainer) getModelObject());
@@ -43,8 +37,6 @@ public class PageRenderingPanel extends BrixMarkupNodePanel {
         source = new TitleTransformer(source, (AbstractContainer) getModelObject());
         return source;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public boolean isVisible() {

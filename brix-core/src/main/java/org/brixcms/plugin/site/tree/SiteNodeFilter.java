@@ -18,22 +18,14 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.tree.NodeFilter;
 
 public class SiteNodeFilter implements NodeFilter {
-// ------------------------------ FIELDS ------------------------------
-
     private final boolean foldersOnly;
     private final NodeFilter customFilter;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SiteNodeFilter(boolean foldersOnly, NodeFilter customFilter) {
         this.foldersOnly = foldersOnly;
         this.customFilter = customFilter;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NodeFilter ---------------------
 
     public boolean isNodeAllowed(BrixNode node) {
         if (node == null) {

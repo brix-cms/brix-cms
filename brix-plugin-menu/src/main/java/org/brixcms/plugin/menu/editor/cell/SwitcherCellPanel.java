@@ -36,15 +36,11 @@ import java.util.Arrays;
  * Created by IntelliJ IDEA. User: korbinianbachl Date: 08.09.2010 Time: 20:55:51
  */
 public abstract class SwitcherCellPanel extends Panel {
-// ------------------------------ FIELDS ------------------------------
-
     IModel<Menu.ChildEntry.MenuType> typeModel;
     IModel<Reference> referenceModel;
     IModel<String> labelOrCodeModel;
     ReferenceEditorConfiguration conf;
     WebMarkupContainer container;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * @param id               ComponentID

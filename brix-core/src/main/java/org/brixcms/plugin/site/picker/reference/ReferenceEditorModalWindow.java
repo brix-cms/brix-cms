@@ -22,11 +22,7 @@ import org.brixcms.web.generic.IGenericComponent;
 import org.brixcms.web.reference.Reference;
 
 public class ReferenceEditorModalWindow extends ModalWindow implements IGenericComponent<Reference> {
-// ------------------------------ FIELDS ------------------------------
-
     private final ReferenceEditorConfiguration configuration;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ReferenceEditorModalWindow(String id, IModel<Reference> model, ReferenceEditorConfiguration configuration) {
         super(id);
@@ -46,10 +42,6 @@ public class ReferenceEditorModalWindow extends ModalWindow implements IGenericC
         setDefaultModel(model);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     public Reference getModelObject() {
         return (Reference) getDefaultModelObject();
@@ -58,8 +50,6 @@ public class ReferenceEditorModalWindow extends ModalWindow implements IGenericC
     public void setModelObject(Reference object) {
         setDefaultModelObject(object);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public void show(AjaxRequestTarget target) {

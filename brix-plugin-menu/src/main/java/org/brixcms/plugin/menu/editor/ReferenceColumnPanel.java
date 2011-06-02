@@ -24,8 +24,6 @@ import org.brixcms.web.reference.Reference;
 import org.brixcms.web.util.AbstractModel;
 
 public abstract class ReferenceColumnPanel extends BrixGenericPanel<Reference> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ReferenceColumnPanel(String id, IModel<Reference> model) {
         super(id, model);
 

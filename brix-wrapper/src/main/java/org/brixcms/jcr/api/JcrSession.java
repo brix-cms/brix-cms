@@ -41,10 +41,6 @@ import java.io.OutputStream;
  * @author Matej Knopp
  */
 public interface JcrSession extends BrixSession {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Session ---------------------
 
 
     public Repository getRepository();
@@ -335,8 +331,6 @@ public interface JcrSession extends BrixSession {
     public RetentionManager getRetentionManager();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Behavior getBehavior();
 
     public Session getDelegate();
@@ -348,8 +342,6 @@ public interface JcrSession extends BrixSession {
      */
     public void nodeRemoved(JcrNode node);
 
-// -------------------------- INNER CLASSES --------------------------
-
     public static class Wrapper {
         public static JcrSession wrap(Session delegate, Behavior behavior) {
             return WrapperAccessor.JcrSessionWrapper.wrap(delegate, behavior);
@@ -359,8 +351,6 @@ public interface JcrSession extends BrixSession {
             return wrap(delegate, null);
         }
     }
-
-    ;
 
     /**
      * Allows to customize behavior for nodes within the session to which it was passed.

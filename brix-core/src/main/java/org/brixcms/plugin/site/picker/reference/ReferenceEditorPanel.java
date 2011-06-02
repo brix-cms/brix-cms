@@ -25,13 +25,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.brixcms.web.reference.Reference;
 
 public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
-// ------------------------------ FIELDS ------------------------------
-
     protected static final String MODAL_WINDOW_ID = "modalWindow";
 
     private ReferenceEditorConfiguration configuration;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ReferenceEditorPanel(String id) {
         super(id);
@@ -41,23 +37,15 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
         super(id, model);
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public ReferenceEditorConfiguration getConfiguration() {
         return configuration;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IFormModelUpdateListener ---------------------
 
     @Override
     public void updateModel() {
         // don't you dare!
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public boolean checkRequired() {

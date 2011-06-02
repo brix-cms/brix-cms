@@ -28,8 +28,6 @@ import org.brixcms.registry.ExtensionPoint;
  * @author Matej Knopp
  */
 public interface SiteNodePlugin {
-// ------------------------------ FIELDS ------------------------------
-
     public static ExtensionPoint<SiteNodePlugin> POINT = new ExtensionPoint<SiteNodePlugin>() {
         public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity() {
             return Multiplicity.COLLECTION;
@@ -39,8 +37,6 @@ public interface SiteNodePlugin {
             return SiteNodePlugin.class.getName();
         }
     };
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * This method returns a converter that is capable of converting the given node to a node this plugin can handle, or

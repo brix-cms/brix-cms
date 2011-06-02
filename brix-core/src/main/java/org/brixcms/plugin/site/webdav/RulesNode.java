@@ -30,8 +30,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RulesNode extends BrixNode {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String TYPE = Brix.NS_PREFIX + "webDavContainer";
 
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
@@ -53,20 +51,14 @@ public class RulesNode extends BrixNode {
 
     private static final String RULES = "rules";
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static RulesNode initialize(BrixNode node) {
         node.setNodeType(TYPE);
         return new RulesNode(node.getDelegate(), node.getSession());
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public RulesNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Rule getRule(String name) {
         if (!hasNode(RULES)) {

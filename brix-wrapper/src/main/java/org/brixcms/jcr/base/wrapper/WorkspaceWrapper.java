@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 class WorkspaceWrapper extends BaseWrapper<Workspace> implements Workspace {
-// -------------------------- STATIC METHODS --------------------------
-
     public static WorkspaceWrapper wrap(Workspace delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -43,16 +41,10 @@ class WorkspaceWrapper extends BaseWrapper<Workspace> implements Workspace {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private WorkspaceWrapper(Workspace delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Workspace ---------------------
 
 
     public Session getSession() {

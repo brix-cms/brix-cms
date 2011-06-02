@@ -27,11 +27,7 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 import java.text.SimpleDateFormat;
 
 public class TimeTileEditor extends TileEditorPanel {
-// ------------------------------ FIELDS ------------------------------
-
     private String format;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TimeTileEditor(String id, IModel<BrixNode> tileContainerNode) {
         super(id);
@@ -48,8 +44,6 @@ public class TimeTileEditor extends TileEditorPanel {
                     }
                 }));
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public void load(BrixNode node) {

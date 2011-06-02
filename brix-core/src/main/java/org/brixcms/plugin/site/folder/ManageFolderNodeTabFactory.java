@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ManageFolderNodeTabFactory implements ManageNodeTabFactory {
-// -------------------------- STATIC METHODS --------------------------
-
     public static List<IBrixTab> getTabs(final IModel<BrixNode> folderModel) {
         List<IBrixTab> tabs = new ArrayList<IBrixTab>(2);
         tabs.add(new CachingAbstractTab(new ResourceModel("listing", "Listing"), 100) {
@@ -57,10 +55,6 @@ public class ManageFolderNodeTabFactory implements ManageNodeTabFactory {
         return tabs;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ManageNodeTabFactory ---------------------
 
     public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
         if (nodeModel.getObject().isFolder()) {

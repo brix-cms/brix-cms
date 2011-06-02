@@ -22,26 +22,16 @@ import org.brixcms.markup.tag.Item;
  * @author Matej Knopp
  */
 public class MarkupSourceWrapper implements MarkupSource {
-// ------------------------------ FIELDS ------------------------------
-
     private final MarkupSource delegate;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MarkupSourceWrapper(MarkupSource delegate) {
         this.delegate = delegate;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public MarkupSource getDelegate() {
         return delegate;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface MarkupSource ---------------------
 
 
     public String getDoctype() {

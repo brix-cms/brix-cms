@@ -35,14 +35,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 public class SimpleServlet extends SimpleWebdavServlet {
-// ------------------------------ FIELDS ------------------------------
-
     // XXX NOTE only include leading /
     static final String WORKSPACE_ROOT_PATH = "/brix:root/brix:web/brix:site";
 
     private AbstractLocatorFactory locatorFactory;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -50,8 +46,6 @@ public class SimpleServlet extends SimpleWebdavServlet {
     public SimpleServlet() {
 
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     /**
      * Returns the <code>DavLocatorFactory</code>. If no locator factory has been set or created a new instance of
@@ -66,8 +60,6 @@ public class SimpleServlet extends SimpleWebdavServlet {
         }
         return locatorFactory;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private Brix getBrix() {
         WicketApplication app = (WicketApplication) Application.get("wicket.brix-demo");

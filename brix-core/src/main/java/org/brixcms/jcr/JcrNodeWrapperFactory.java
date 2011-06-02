@@ -47,8 +47,6 @@ import javax.jcr.Session;
  * @author igor.vaynberg
  */
 public abstract class JcrNodeWrapperFactory implements RepositoryInitializer {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Extension point for factory implementations
      *
@@ -64,10 +62,6 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer {
         }
     };
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface RepositoryInitializer ---------------------
 
     /**
      * {@inheritDoc}
@@ -80,8 +74,6 @@ public abstract class JcrNodeWrapperFactory implements RepositoryInitializer {
     public void initializeRepository(Brix brix, Session session) throws RepositoryException {
         // noop
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Checks if this factory can wrap the node. The node instance is a simple {@link JcrNode} wrapper around the

@@ -15,8 +15,6 @@
 package org.brixcms.exception;
 
 public class BrixException extends RuntimeException {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixException() {
     }
 

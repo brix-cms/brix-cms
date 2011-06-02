@@ -28,8 +28,6 @@ import java.util.Map;
 
 
 public class CreatePrototypePanel extends SelectItemsPanel<Void> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public CreatePrototypePanel(String id, String workspaceId, final String targetPrototypeName) {
         super(id, workspaceId);
 

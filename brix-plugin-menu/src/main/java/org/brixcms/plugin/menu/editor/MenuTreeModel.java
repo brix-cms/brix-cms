@@ -17,14 +17,9 @@ package org.brixcms.plugin.menu.editor;
 import org.apache.wicket.model.IDetachable;
 import org.brixcms.plugin.menu.Menu.Entry;
 import org.brixcms.web.tree.AbstractTreeModel;
-import org.brixcms.web.tree.TreeNode;
 
 public class MenuTreeModel extends AbstractTreeModel implements IDetachable {
-// ------------------------------ FIELDS ------------------------------
-
     private final MenuTreeNode root;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MenuTreeModel(Entry root) {
         if (root == null) {
@@ -33,16 +28,10 @@ public class MenuTreeModel extends AbstractTreeModel implements IDetachable {
         this.root = new MenuTreeNode(root);
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
-    public TreeNode getRoot() {
+    public javax.swing.tree.TreeNode getRoot() {
         return root;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
         root.detach();

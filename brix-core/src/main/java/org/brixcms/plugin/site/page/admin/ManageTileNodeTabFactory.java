@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ManageTileNodeTabFactory implements ManageNodeTabFactory {
-// -------------------------- STATIC METHODS --------------------------
-
     private static List<IBrixTab> getTabs(final IModel<BrixNode> nodeModel) {
         List<IBrixTab> tabs = new ArrayList<IBrixTab>();
 
@@ -83,10 +81,6 @@ public class ManageTileNodeTabFactory implements ManageNodeTabFactory {
         return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ManageNodeTabFactory ---------------------
 
     public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
         String type = nodeModel.getObject().getNodeType();

@@ -26,8 +26,6 @@ package org.brixcms.web.nodepage;
  * @see PageParametersLink
  */
 public interface PageParametersAware {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Called when new URL is being constructed. Component should contribute the state it wants to store in URL to the
      * <code>params</code> object

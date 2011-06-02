@@ -35,8 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 public class SnapshotPlugin implements Plugin {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String ID = SnapshotPlugin.class.getName();
 
     private static final String WORKSPACE_TYPE = "brix:snapshot";
@@ -49,8 +47,6 @@ public class SnapshotPlugin implements Plugin {
 
     private final Brix brix;
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static SnapshotPlugin get() {
         return get(Brix.get());
     }
@@ -59,16 +55,10 @@ public class SnapshotPlugin implements Plugin {
         return (SnapshotPlugin) brix.getPlugin(ID);
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public SnapshotPlugin(Brix brix) {
         this.brix = brix;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Plugin ---------------------
 
     public String getId() {
         return ID;
@@ -100,8 +90,6 @@ public class SnapshotPlugin implements Plugin {
                 workspaceModel)};
         return Arrays.asList(tabs);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void createSnapshot(Workspace workspace, String comment) {
         if (!SitePlugin.get().isSiteWorkspace(workspace)) {
@@ -196,8 +184,6 @@ public class SnapshotPlugin implements Plugin {
     public void setComment(Workspace workspace, String comment) {
         workspace.setAttribute(WORKSPACE_COMMENT, comment);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     static class Tab extends AbstractWorkspaceTab {
         public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {

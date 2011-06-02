@@ -21,8 +21,6 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.menu.Menu;
 
 class MenuContainer implements IDetachable {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String PROP_OUTER_CONTAINER_STYLE_CLASS = "outerContainerStyleClass";
 
     private static final String PROP_INNER_CONTAINER_STYLE_CLASS = "innerContainerStyleClass";
@@ -50,8 +48,6 @@ class MenuContainer implements IDetachable {
     private Integer startAtLevel;
 
     private Integer renderLevels;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getInnerContainerStyleClass() {
         return innerContainerStyleClass;
@@ -100,8 +96,6 @@ class MenuContainer implements IDetachable {
     public void setStartAtLevel(Integer startAtLevel) {
         this.startAtLevel = startAtLevel;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Menu getMenu() {
         if (cachedMenu == null && getMenuNode() != null) {

@@ -32,13 +32,9 @@ import java.util.List;
 
 
 public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel<BrixNode> nodeModel;
 
     private transient List<AbstractJcrTreeNode> children;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractJcrTreeNode(IModel<BrixNode> nodeModel) {
         if (nodeModel == null) {
@@ -53,8 +49,6 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
         }
         this.nodeModel = new BrixNodeModel(node);
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public List<AbstractJcrTreeNode> getChildren() {
         if (children == null) {
@@ -115,8 +109,6 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
         return nodeModel;
     }
 
-// ------------------------ CANONICAL METHODS ------------------------
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -139,17 +131,11 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
         return node != null ? node.toString() : "null";
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
         children = null;
         nodeModel.detach();
     }
-
-// --------------------- Interface TreeNode ---------------------
 
     @Override
     public javax.swing.tree.TreeNode getChildAt(int childIndex) {

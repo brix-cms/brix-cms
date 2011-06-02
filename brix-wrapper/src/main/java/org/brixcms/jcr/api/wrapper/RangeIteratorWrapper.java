@@ -22,8 +22,6 @@ import javax.jcr.RangeIterator;
  * @author Matej Knopp
  */
 class RangeIteratorWrapper extends AbstractWrapper implements RangeIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static RangeIteratorWrapper wrap(RangeIterator delegate, JcrSession session) {
         if (delegate == null)
             return null;
@@ -31,16 +29,10 @@ class RangeIteratorWrapper extends AbstractWrapper implements RangeIterator {
             return new RangeIteratorWrapper(delegate, session);
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected RangeIteratorWrapper(RangeIterator delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     public boolean hasNext() {
@@ -55,8 +47,6 @@ class RangeIteratorWrapper extends AbstractWrapper implements RangeIterator {
         getDelegate().remove();
     }
 
-// --------------------- Interface RangeIterator ---------------------
-
 
     public void skip(long skipNum) {
         getDelegate().skip(skipNum);
@@ -69,8 +59,6 @@ class RangeIteratorWrapper extends AbstractWrapper implements RangeIterator {
     public long getPosition() {
         return getDelegate().getPosition();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public RangeIterator getDelegate() {

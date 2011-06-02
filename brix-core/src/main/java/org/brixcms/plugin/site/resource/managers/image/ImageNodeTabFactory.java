@@ -31,8 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ImageNodeTabFactory implements ManageNodeTabFactory {
-// -------------------------- STATIC METHODS --------------------------
-
     private static boolean canHandleMimeType(String mimeType) {
         List<String> types = Arrays.asList(new String[]{"image/jpeg", "image/gif", "image/png"});
         return mimeType != null && types.contains(mimeType.toLowerCase());
@@ -51,10 +49,6 @@ public class ImageNodeTabFactory implements ManageNodeTabFactory {
         return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ManageNodeTabFactory ---------------------
 
     public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
         List<IBrixTab> result = new ArrayList<IBrixTab>();

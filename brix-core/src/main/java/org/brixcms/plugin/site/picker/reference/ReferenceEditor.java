@@ -28,11 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReferenceEditor extends BrixGenericPanel<Reference> {
-// ------------------------------ FIELDS ------------------------------
-
     private final ReferenceEditorConfiguration configuration;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ReferenceEditor(String id, ReferenceEditorConfiguration configuration) {
         super(id);
@@ -101,8 +97,6 @@ public class ReferenceEditor extends BrixGenericPanel<Reference> {
         this.configuration = configuration;
         init();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private Reference getReference() {
         return (Reference) getModelObject();

@@ -31,14 +31,8 @@ import java.util.List;
  * @author Matej Knopp
  */
 public abstract class AbstractTreeModel implements Serializable, TreeModel {
-// ------------------------------ FIELDS ------------------------------
-
     private List<TreeModelListener> listeners = new ArrayList<TreeModelListener>(0);
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface TreeModel ---------------------
 
     /**
      * Returns the root node of this tree. This is the only mandatory method to be implemented for custom tree models.
@@ -75,8 +69,6 @@ public abstract class AbstractTreeModel implements Serializable, TreeModel {
     public void removeTreeModelListener(TreeModelListener l) {
         listeners.remove(l);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Notifies the tree that the given node has been changed while it's children remained unchanged.

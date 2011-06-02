@@ -33,16 +33,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class RepositoryFactoryBean implements FactoryBean, InitializingBean, DisposableBean {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(RepositoryFactoryBean.class);
 
     private RepositoryImpl repository;
     private String repositoryHomeDir;
     private Authorizer authorizer;
     private Resource repositoryConfig;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
     public void setRepositoryConfig(Resource repositoryConfig) {
@@ -54,10 +50,6 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
         this.repositoryHomeDir = repositoryHomeDir;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface DisposableBean ---------------------
 
 
     public void destroy() throws Exception {
@@ -69,8 +61,6 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
             }
         }
     }
-
-// --------------------- Interface FactoryBean ---------------------
 
     public Object getObject() throws Exception {
         if (repository == null) {
@@ -91,15 +81,11 @@ public class RepositoryFactoryBean implements FactoryBean, InitializingBean, Dis
         return true;
     }
 
-// --------------------- Interface InitializingBean ---------------------
-
 
     public void afterPropertiesSet() throws Exception {
         // eagerly create repo
         getObject();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private void createRepositoryInstance() {
         logger.info("Initializing JackRabbit repository at {}", repositoryHomeDir);

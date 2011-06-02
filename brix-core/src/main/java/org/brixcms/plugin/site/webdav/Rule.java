@@ -22,23 +22,17 @@ import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class Rule implements IDetachable {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String PROPERTY_PATH_PREFIX = "pathPrefix";
     private static final String PROPERTY_PRIORITY = "priority";
     private static final String PROPERTY_TEMPLATE = "template";
     private static final String PROPERTY_TYPE = "type";
     private static final String PROPERTY_EXTENSIONS = "extension";
-    ;
-
     private String pathPrefix;
     private int priority;
     private IModel<BrixNode> templateModel;
     private Type type;
     final private String name;
     private String extensions;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static Rule load(JcrNode node) {
         Rule r = new Rule(node.getName());
@@ -57,16 +51,12 @@ public class Rule implements IDetachable {
         return r;
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public Rule(String name) {
         if (name == null || name.length() == 0) {
             throw new IllegalArgumentException("Argument 'name' may not be null.");
         }
         this.name = name;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getExtensions() {
         return extensions;
@@ -115,8 +105,6 @@ public class Rule implements IDetachable {
         this.type = type;
     }
 
-// ------------------------ CANONICAL METHODS ------------------------
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -134,18 +122,12 @@ public class Rule implements IDetachable {
         return name != null ? name.hashCode() : null;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
         if (templateModel != null) {
             templateModel.detach();
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public boolean matches(String path) {
         path = path.toLowerCase();
@@ -180,8 +162,6 @@ public class Rule implements IDetachable {
         node.setProperty(PROPERTY_TYPE, type != null ? type.toString() : null);
         node.setProperty(PROPERTY_EXTENSIONS, extensions);
     }
-
-// -------------------------- ENUMERATIONS --------------------------
 
     public enum Type {
         PAGE, TEMPLATE

@@ -18,10 +18,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.application.IComponentOnBeforeRenderListener;
 
 public class PageParametersAwareEnabler implements IComponentOnBeforeRenderListener {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IComponentOnBeforeRenderListener ---------------------
 
     public void onBeforeRender(Component component) {
         if (component instanceof PageParametersAware) {

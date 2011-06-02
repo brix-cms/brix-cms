@@ -18,8 +18,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 public class GenericPanel<T> extends Panel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public GenericPanel(String id) {
         super(id);
     }
@@ -27,8 +25,6 @@ public class GenericPanel<T> extends Panel {
     public GenericPanel(String id, IModel<T> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @SuppressWarnings("unchecked")
     public final IModel<T> getModel() {

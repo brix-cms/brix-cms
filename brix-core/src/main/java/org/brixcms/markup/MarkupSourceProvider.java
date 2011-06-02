@@ -26,7 +26,5 @@ import org.brixcms.markup.web.BrixMarkupNodeWebPage;
  * @see MarkupCache
  */
 public interface MarkupSourceProvider {
-// -------------------------- OTHER METHODS --------------------------
-
     public MarkupSource getMarkupSource();
 }

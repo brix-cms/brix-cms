@@ -22,8 +22,6 @@ import javax.jcr.lock.Lock;
 import javax.jcr.version.Version;
 
 public class AbstractActionHandler {
-// -------------------------- OTHER METHODS --------------------------
-
     public void afterCreateWorkspace(String name, Object object) throws RepositoryException {
 
 

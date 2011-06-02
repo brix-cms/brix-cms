@@ -25,8 +25,6 @@ import org.brixcms.workspace.Workspace;
  * @author ivaynberg
  */
 public interface UriMapper {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Translates a uri path into a node path. This method is used to resolve a jcr node from a url.
      *

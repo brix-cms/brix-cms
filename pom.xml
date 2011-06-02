@@ -48,7 +48,7 @@
         <wicket.version>1.5-RC4.2</wicket.version>
         <jetty.version>6.1.11</jetty.version>
         <inmethod.grid.version>1.5-RC4.2</inmethod.grid.version>
-        <htmllexer.version>2.0-SNAPSHOT</htmllexer.version>
+        <htmllexer.version>2.1</htmllexer.version>
         <jackrabbit.version>2.3-SNAPSHOT</jackrabbit.version>
         <lucene.version>3.0.3</lucene.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -252,6 +252,11 @@
             <dependency>
                 <groupId>org.apache.wicket</groupId>
                 <artifactId>wicket-spring</artifactId>
+                <version>${wicket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-ioc</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
 

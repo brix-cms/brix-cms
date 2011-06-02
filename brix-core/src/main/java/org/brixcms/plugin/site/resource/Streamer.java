@@ -26,16 +26,12 @@ import java.io.InputStream;
  * @author Matej Knopp
  */
 class Streamer {
-// ------------------------------ FIELDS ------------------------------
-
     private final long length;
     private final InputStream inputStream;
     private final String fileName;
     private final boolean attachment;
     private final HttpServletRequest request;
     private final HttpServletResponse response;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public Streamer(long length, InputStream inputStream, String fileName, boolean attachment,
                     HttpServletRequest request, HttpServletResponse response) {
@@ -46,8 +42,6 @@ class Streamer {
         this.request = request;
         this.attachment = attachment;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void stream() {
         Range range = parseRange(request.getHeader("Range"), length);
@@ -147,13 +141,9 @@ class Streamer {
         }
     }
 
-    ;
-
     private boolean isEmpty(String s) {
         return s == null || s.length() == 0;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class Range {
         final Long start;

@@ -24,11 +24,7 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 abstract class PropertyEvent extends NodeEvent {
-// ------------------------------ FIELDS ------------------------------
-
     private final String propertyName;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     PropertyEvent(Property property) throws RepositoryException {
         super(property.getParent());
@@ -40,13 +36,9 @@ abstract class PropertyEvent extends NodeEvent {
         this.propertyName = propertyName;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public String getPropertyName() {
         return propertyName;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Node getNode() {

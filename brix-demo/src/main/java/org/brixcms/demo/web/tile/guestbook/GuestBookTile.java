@@ -22,10 +22,6 @@ import org.brixcms.plugin.site.page.tile.admin.EmptyTileEditorPanel;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class GuestBookTile implements Tile {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tile ---------------------
 
     public String getDisplayName() {
         return "Guest Book";

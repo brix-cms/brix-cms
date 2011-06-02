@@ -25,8 +25,6 @@ import org.brixcms.web.tree.NodeFilter;
 import java.io.Serializable;
 
 public class ReferenceEditorConfiguration implements Serializable {
-// ------------------------------ FIELDS ------------------------------
-
     private boolean allowNodePicker = true;
     private boolean allowURLEdit = true;
     private boolean allowIndexedParameters = true;
@@ -36,8 +34,6 @@ public class ReferenceEditorConfiguration implements Serializable {
     private IModel<BrixNode> rootNode;
 
     private NodeFilter nodeFilter;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public NodeFilter getNodeFilter() {
         return nodeFilter;
@@ -74,8 +70,6 @@ public class ReferenceEditorConfiguration implements Serializable {
     public boolean isDisplayFiles() {
         return displayFiles;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public ReferenceEditorConfiguration setAllowIndexedParameters(boolean allowIndexedParameters) {
         this.allowIndexedParameters = allowIndexedParameters;

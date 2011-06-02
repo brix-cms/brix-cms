@@ -27,8 +27,6 @@ import org.brixcms.plugin.site.resource.ResourceNodeHandler;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class ViewPropertiesTab extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ViewPropertiesTab(String id, final IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
 
@@ -59,7 +57,7 @@ public class ViewPropertiesTab extends BrixGenericPanel<BrixNode> {
         add(new Link<Void>("download") {
             @Override
             public void onClick() {
-                getRequestCycle().setRequestTarget(new ResourceNodeHandler(nodeModel, true));
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceNodeHandler(nodeModel, true));
             }
         });
 

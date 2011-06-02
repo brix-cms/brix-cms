@@ -26,13 +26,9 @@ import org.brixcms.plugin.site.page.PageRenderingPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class PageTileViewerPanel extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageTileViewerPanel(String id, IModel<BrixNode> tileNode) {
         super(id, tileNode);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onBeforeRender() {

@@ -25,8 +25,6 @@ import javax.jcr.query.Row;
  * @author Matej Knopp
  */
 class RowWrapper extends AbstractWrapper implements JcrRow {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrRow wrap(Row delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -35,23 +33,15 @@ class RowWrapper extends AbstractWrapper implements JcrRow {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected RowWrapper(Row delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrRow ---------------------
 
     @Override
     public Row getDelegate() {
         return (Row) super.getDelegate();
     }
-
-// --------------------- Interface Row ---------------------
 
 
     public JcrValue[] getValues() {

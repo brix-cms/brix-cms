@@ -15,8 +15,6 @@
 package org.brixcms.rmiserver.jackrabbit;
 
 public class AuthorizationException extends Exception {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public AuthorizationException(String message) {
         super(message);
     }

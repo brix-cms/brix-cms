@@ -19,8 +19,6 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 
 public class GenericFragment<T> extends Fragment {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public GenericFragment(String id, String markupId, MarkupContainer markupProvider) {
         super(id, markupId, markupProvider);
     }
@@ -28,8 +26,6 @@ public class GenericFragment<T> extends Fragment {
     public GenericFragment(String id, String markupId, MarkupContainer markupProvider, IModel<T> model) {
         super(id, markupId, markupProvider, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @SuppressWarnings("unchecked")
     public final IModel<T> getModel() {

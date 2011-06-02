@@ -24,20 +24,12 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 
 public class NodePathValidator implements IValidator {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel<BrixNode> nodeModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodePathValidator(IModel<BrixNode> nodeModel) {
         this.nodeModel = nodeModel;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IValidator ---------------------
 
     @SuppressWarnings("unchecked")
     public void validate(IValidatable validatable) {

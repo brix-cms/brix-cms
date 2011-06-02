@@ -36,15 +36,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class MenuPlugin implements Plugin {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String ID = MenuPlugin.class.getName();
-    ;
-
     private static String ROOT_NODE_NAME = Brix.NS_PREFIX + "menu";
     private final Brix brix;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static MenuPlugin get() {
         return get(Brix.get());
@@ -53,8 +47,6 @@ public class MenuPlugin implements Plugin {
     public static MenuPlugin get(Brix brix) {
         return (MenuPlugin) brix.getPlugin(ID);
     }
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MenuPlugin(Brix brix) {
         this.brix = brix;
@@ -65,10 +57,6 @@ public class MenuPlugin implements Plugin {
         brix.getConfig().getRegistry().register(Tile.POINT, new FullTreeMenuTile());
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Plugin ---------------------
 
     // for backwards compatibility: todo decide!
 //    private static final String ID = "brix.plugin.menu.MenuPlugin";
@@ -100,8 +88,6 @@ public class MenuPlugin implements Plugin {
                 workspaceModel)};
         return Arrays.asList(tabs);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public List<BrixNode> getMenuNodes(String workspaceId) {
         BrixNode root = getRootNode(workspaceId, false);
@@ -147,8 +133,6 @@ public class MenuPlugin implements Plugin {
         node.getSession().save();
         return node;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     static class Tab extends AbstractWorkspaceTab {
         public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {

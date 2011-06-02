@@ -25,8 +25,6 @@ import org.apache.wicket.model.IModel;
  * @todo it's unclear how this is semantically distinguished from {@link PageParametersCarryingLink}
  */
 public class PageParametersLink extends AbstractPageParametersLink {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageParametersLink(String id) {
         super(id);
     }
@@ -34,8 +32,6 @@ public class PageParametersLink extends AbstractPageParametersLink {
     public PageParametersLink(String id, IModel<?> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected String constructUrl(BrixPageParameters params) {

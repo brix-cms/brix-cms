@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextNodeTabFactory implements ManageNodeTabFactory {
-// -------------------------- STATIC METHODS --------------------------
-
     private static IBrixTab getViewTab(final IModel<BrixNode> nodeModel) {
         return new CachingAbstractTab(new ResourceModel("view", "View"), 100) {
             @Override
@@ -45,10 +43,6 @@ public class TextNodeTabFactory implements ManageNodeTabFactory {
         return SitePlugin.get().canViewNode(model.getObject(), Context.ADMINISTRATION);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ManageNodeTabFactory ---------------------
 
     public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
         List<IBrixTab> result = new ArrayList<IBrixTab>();

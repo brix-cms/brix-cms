@@ -24,12 +24,8 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 abstract class AbstractWrapper {
-// ------------------------------ FIELDS ------------------------------
-
     private final Object delegate;
     private final JcrSession session;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     protected AbstractWrapper(Object delegate, JcrSession session) {
         if (delegate == null) {
@@ -39,13 +35,9 @@ abstract class AbstractWrapper {
         this.session = session;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Object getDelegate() {
         return delegate;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public boolean equals(Object obj) {
@@ -66,8 +58,6 @@ abstract class AbstractWrapper {
     }
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     protected <T> T executeCallback(Callback<T> callback) {
         if (callback == null) {
             throw new IllegalArgumentException("Argument 'callback' may not be null.");
@@ -128,13 +118,9 @@ abstract class AbstractWrapper {
         return newArray;
     }
 
-// -------------------------- INNER CLASSES --------------------------
-
     protected interface Callback<T> {
         public T execute() throws Exception;
     }
-
-    ;
 
     protected interface VoidCallback {
         public void execute() throws Exception;

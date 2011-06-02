@@ -36,15 +36,9 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 public interface JcrProperty extends JcrItem, Property {
-// ------------------------ INTERFACE METHODS ------------------------
-
 
 // --------------------- Interface JcrItem ---------------------
-    ;
-
     public Property getDelegate();
-
-// --------------------- Interface Property ---------------------
 
 
     public void setValue(Value value);
@@ -201,8 +195,6 @@ public interface JcrProperty extends JcrItem, Property {
     public PropertyDefinition getDefinition();
 
     public int getType();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrProperty wrap(Property delegate, JcrSession session) {

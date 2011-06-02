@@ -40,22 +40,14 @@ public class MenuNode extends BrixNode implements TreeAwareNode {
         }
     };
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public MenuNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface TreeAwareNode ---------------------
 
     public JcrTreeNode getTreeNode(BrixNode node) {
         return new MenuTreeNode(node);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public String getUserVisibleName() {
@@ -70,8 +62,6 @@ public class MenuNode extends BrixNode implements TreeAwareNode {
     public String getUserVisibleType() {
         return "Menu";
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class MenuTreeNode extends AbstractJcrTreeNode {
         public MenuTreeNode(BrixNode node) {

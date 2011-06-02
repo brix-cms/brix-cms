@@ -42,8 +42,6 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 public class NodeWrapper extends ItemWrapper implements JcrNode {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrNode wrap(Node delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -59,23 +57,15 @@ public class NodeWrapper extends ItemWrapper implements JcrNode {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public NodeWrapper(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {
         return getPath() + " [" + getPrimaryNodeType().getName() + "]";
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Item ---------------------
 
 
     public void accept(final ItemVisitor visitor) {
@@ -99,14 +89,10 @@ public class NodeWrapper extends ItemWrapper implements JcrNode {
         super.getJcrSession().save();
     }
 
-// --------------------- Interface JcrItem ---------------------
-
     @Override
     public Node getDelegate() {
         return (Node) super.getDelegate();
     }
-
-// --------------------- Interface Node ---------------------
 
 
     public JcrNode addNode(final String relPath) {

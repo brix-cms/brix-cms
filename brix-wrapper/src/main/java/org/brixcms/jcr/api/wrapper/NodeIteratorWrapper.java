@@ -26,8 +26,6 @@ import javax.jcr.RangeIterator;
  * @author Matej Knopp
  */
 class NodeIteratorWrapper extends RangeIteratorWrapper implements JcrNodeIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrNodeIterator wrap(NodeIterator delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -36,16 +34,10 @@ class NodeIteratorWrapper extends RangeIteratorWrapper implements JcrNodeIterato
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected NodeIteratorWrapper(RangeIterator delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     @Override
@@ -53,14 +45,10 @@ class NodeIteratorWrapper extends RangeIteratorWrapper implements JcrNodeIterato
         return JcrNode.Wrapper.wrap((Node) getDelegate().next(), getJcrSession());
     }
 
-// --------------------- Interface JcrNodeIterator ---------------------
-
     @Override
     public NodeIterator getDelegate() {
         return (NodeIterator) super.getDelegate();
     }
-
-// --------------------- Interface NodeIterator ---------------------
 
 
     public JcrNode nextNode() {
