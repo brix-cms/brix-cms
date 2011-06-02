@@ -90,8 +90,6 @@ public interface JcrValueFactory extends ValueFactory {
     public Binary createBinary(InputStream stream);
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public ValueFactory getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

@@ -62,8 +62,6 @@ public class WebRootNode extends FolderNode implements TreeAwareNode {
     }
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     @Override
     public String getUserVisibleName() {
         return "Web";

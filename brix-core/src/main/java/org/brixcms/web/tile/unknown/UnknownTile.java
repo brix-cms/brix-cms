@@ -39,8 +39,6 @@ public class UnknownTile implements Tile {
         return UnknownTile.class.getName();
     }
 
-    ;
-
     public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {
         return new Editor(id);
     }

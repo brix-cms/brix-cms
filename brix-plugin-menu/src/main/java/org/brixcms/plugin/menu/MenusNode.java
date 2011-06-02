@@ -67,8 +67,6 @@ public class MenusNode extends BrixNode implements TreeAwareNode {
         return "";
     }
 
-    ;
-
     @Override
     public boolean isFolder() {
         return true;

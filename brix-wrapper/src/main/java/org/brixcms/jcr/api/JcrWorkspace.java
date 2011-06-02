@@ -147,8 +147,6 @@ public interface JcrWorkspace extends Workspace {
     public void deleteWorkspace(String name);
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Workspace getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

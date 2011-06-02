@@ -40,8 +40,6 @@ public interface JcrProperty extends JcrItem, Property {
 
 
 // --------------------- Interface JcrItem ---------------------
-    ;
-
     public Property getDelegate();
 
 // --------------------- Interface Property ---------------------

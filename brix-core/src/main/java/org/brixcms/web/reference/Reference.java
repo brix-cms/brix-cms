@@ -38,8 +38,6 @@ public class Reference implements Serializable, IDetachable {
     private IModel<BrixNode> nodeModel;
     private String url;
     private BrixPageParameters parameters;
-    ;
-
     private Type type = Type.NODE;
 
 // -------------------------- STATIC METHODS --------------------------

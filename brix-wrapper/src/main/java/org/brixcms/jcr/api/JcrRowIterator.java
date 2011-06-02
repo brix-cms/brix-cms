@@ -30,8 +30,6 @@ public interface JcrRowIterator extends RowIterator {
     public JcrRow nextRow();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public RowIterator getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

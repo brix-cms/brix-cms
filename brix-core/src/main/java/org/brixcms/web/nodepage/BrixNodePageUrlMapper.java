@@ -217,8 +217,6 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
         return iface;
     }
 
-    ;
-
     private String getInterfaceParameter() {
         return Brix.NS_PREFIX + "i";
     }

@@ -37,8 +37,6 @@ public interface Tag extends Item {
      */
     public String getName();
 
-    ;
-
     /**
      * Returns the type of this tag.
      *

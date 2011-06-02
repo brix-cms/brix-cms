@@ -52,8 +52,6 @@ public abstract class QueryParametersTab extends Panel {
     AjaxLink<?> removeSelected;
 
     private Entry newEntry = new Entry();
-    ;
-
     private final DataSource dataSource = new DataSource();
 
 // --------------------------- CONSTRUCTORS ---------------------------

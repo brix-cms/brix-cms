@@ -30,8 +30,6 @@ public interface JcrVersionIterator extends VersionIterator {
     public JcrVersion nextVersion();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public VersionIterator getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

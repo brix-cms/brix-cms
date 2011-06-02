@@ -37,8 +37,6 @@ public abstract class Event {
         return false;
     }
 
-    ;
-
     /**
      * Notifies this event that another event is about to be added to the queue.
      *

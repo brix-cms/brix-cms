@@ -41,8 +41,6 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory {
         };
     }
 
-    ;
-
     private static boolean hasConverterForNode(IModel<BrixNode> nodeModel) {
         Collection<SiteNodePlugin> plugins = SitePlugin.get().getNodePlugins();
         BrixNode node = nodeModel.getObject();
@@ -53,8 +51,6 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory {
         }
         return false;
     }
-
-    ;
 
     private static boolean hasEditPermission(IModel<BrixNode> nodeModel) {
         return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);

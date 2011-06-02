@@ -74,8 +74,6 @@ public interface JcrValue extends Value {
     public int getType();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Value getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

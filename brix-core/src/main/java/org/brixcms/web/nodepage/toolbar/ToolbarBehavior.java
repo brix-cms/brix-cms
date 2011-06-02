@@ -99,8 +99,6 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
         return true;
     }
 
-    ;
-
     @Override
     public boolean isEnabled(Component component) {
         if (!Brix.get().getAuthorizationStrategy().isActionAuthorized(

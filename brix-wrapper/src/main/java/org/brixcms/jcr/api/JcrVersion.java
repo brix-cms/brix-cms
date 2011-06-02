@@ -30,8 +30,6 @@ public interface JcrVersion extends Version, JcrNode {
 
 
 // --------------------- Interface JcrItem ---------------------
-    ;
-
     public Version getDelegate();
 
 // --------------------- Interface Version ---------------------

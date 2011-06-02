@@ -50,11 +50,7 @@ public abstract class IndexedParametersTab extends Panel {
 // ------------------------------ FIELDS ------------------------------
 
     private AjaxLink<?> removeSelected;
-    ;
-
     private Entry newEntry = new Entry();
-    ;
-
     private final DataSource dataSource = new DataSource();
 
 // --------------------------- CONSTRUCTORS ---------------------------

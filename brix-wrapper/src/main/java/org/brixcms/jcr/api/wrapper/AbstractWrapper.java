@@ -66,8 +66,6 @@ abstract class AbstractWrapper {
     }
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     protected <T> T executeCallback(Callback<T> callback) {
         if (callback == null) {
             throw new IllegalArgumentException("Argument 'callback' may not be null.");
@@ -133,8 +131,6 @@ abstract class AbstractWrapper {
     protected interface Callback<T> {
         public T execute() throws Exception;
     }
-
-    ;
 
     protected interface VoidCallback {
         public void execute() throws Exception;

@@ -94,8 +94,6 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
     }
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     private String getWorkspaceName(Workspace workspace) {
         if (workspaceNameCache == null) {
             workspaceNameCache = new HashMap<String, String>();

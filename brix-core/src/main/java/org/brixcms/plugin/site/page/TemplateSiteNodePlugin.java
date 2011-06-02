@@ -54,8 +54,6 @@ public class TemplateSiteNodePlugin extends AbstractSitePagePlugin {
         return new ResourceModel("createTemplate", "Create New Template");
     }
 
-    ;
-
     @Override
     public Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack) {
         return new CreatePageOrTemplatePanel(id, parentNode, getNodeType(), goBack);

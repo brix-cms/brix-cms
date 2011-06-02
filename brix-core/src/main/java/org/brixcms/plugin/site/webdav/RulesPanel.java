@@ -129,8 +129,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
         }
     }
 
-    ;
-
     private class DataSource implements IDataSource {
         public void detach() {
 
@@ -146,8 +144,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
             result.setItems(rules.iterator());
         }
     }
-
-    ;
 
     private final class SubmitColumn extends SubmitCancelColumn {
         private SubmitColumn(String columnId, IModel headerModel) {

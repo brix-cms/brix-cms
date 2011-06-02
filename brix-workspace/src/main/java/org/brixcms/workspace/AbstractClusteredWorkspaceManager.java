@@ -49,8 +49,6 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
     // deleted
     // such workspace can only be deleted manually when all nodes are down
     private final String PROPERTY_DO_NOT_USE = "doNotUse";
-    ;
-
     private final Set<String> availableWorkspaceNames = new HashSet<String>();
 
     private final Set<String> deletedWorkspaceNames = new HashSet<String>();
@@ -413,8 +411,6 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
             availableWorkspaceNames.add(name);
             deletedWorkspaceNames.remove(name);
         }
-
-        ;
 
         private void workspaceRemoved() {
             String name = session.getWorkspace().getName();

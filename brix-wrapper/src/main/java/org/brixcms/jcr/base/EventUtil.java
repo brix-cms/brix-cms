@@ -115,8 +115,6 @@ public class EventUtil {
         }
     }
 
-    ;
-
     private static class EventImpl implements SaveEvent {
         private final JcrNode node;
         private long timestamp = System.currentTimeMillis();

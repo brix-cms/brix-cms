@@ -64,15 +64,11 @@ public class WrapperAccessor {
         }
     }
 
-    ;
-
     public static class JcrNodeWrapper {
         public static JcrNode wrap(Node delegate, JcrSession session) {
             return NodeWrapper.wrap(delegate, session);
         }
     }
-
-    ;
 
     public static class JcrNodeIteratorWrapper {
         public static JcrNodeIterator wrap(NodeIterator delegate, JcrSession session) {
@@ -80,15 +76,11 @@ public class WrapperAccessor {
         }
     }
 
-    ;
-
     public static class JcrPropertyWrapper {
         public static JcrProperty wrap(Property delegate, JcrSession session) {
             return PropertyWrapper.wrap(delegate, session);
         }
     }
-
-    ;
 
     public static class JcrPropertyIteratorWrapper {
         public static JcrPropertyIterator wrap(PropertyIterator delegate, JcrSession session) {
@@ -96,15 +88,11 @@ public class WrapperAccessor {
         }
     }
 
-    ;
-
     public static class JcrQueryWrapper {
         public static JcrQuery wrap(Query delegate, JcrSession session) {
             return QueryWrapper.wrap(delegate, session);
         }
     }
-
-    ;
 
     public static class JcrQueryManagerWrapper {
         public static JcrQueryManager wrap(QueryManager delegate, JcrSession session) {
@@ -118,15 +106,11 @@ public class WrapperAccessor {
         }
     }
 
-    ;
-
     public static class JcrRowWrapper {
         public static JcrRow wrap(Row delegate, JcrSession session) {
             return RowWrapper.wrap(delegate, session);
         }
     }
-
-    ;
 
     public static class JcrRowIteratorWrapper {
         public static JcrRowIterator wrap(RowIterator delegate, JcrSession session) {
@@ -136,15 +120,11 @@ public class WrapperAccessor {
         ;
     }
 
-    ;
-
     public static class JcrSessionWrapper {
         public static JcrSession wrap(Session delegate, JcrSession.Behavior behavior) {
             return SessionWrapper.wrap(delegate, behavior);
         }
     }
-
-    ;
 
     public static class JcrValueWrapper {
         public static JcrValue wrap(Value delegate, JcrSession session) {
@@ -156,15 +136,11 @@ public class WrapperAccessor {
         }
     }
 
-    ;
-
     public static class JcrValueFactoryWrapper {
         public static JcrValueFactory wrap(ValueFactory delegate, JcrSession session) {
             return ValueFactoryWrapper.wrap(delegate, session);
         }
     }
-
-    ;
 
     public static class JcrVersionWrapper {
         public static JcrVersion wrap(Version delegate, JcrSession session) {
@@ -176,15 +152,11 @@ public class WrapperAccessor {
         }
     }
 
-    ;
-
     public static class JcrVersionHistoryWrapper {
         public static JcrVersionHistory wrap(VersionHistory delegate, JcrSession session) {
             return VersionHistoryWrapper.wrap(delegate, session);
         }
     }
-
-    ;
 
     public static class JcrVersionIteratorWrapper {
         public static JcrVersionIterator wrap(VersionIterator delegate, JcrSession session) {
@@ -192,15 +164,11 @@ public class WrapperAccessor {
         }
     }
 
-    ;
-
     public static class JcrWorkspaceWrapper {
         public static JcrWorkspace wrap(Workspace delegate, JcrSession session) {
             return WorkspaceWrapper.wrap(delegate, session);
         }
     }
-
-    ;
 
     public static class JcrNamespaceRegistryWrapper {
         public static JcrNamespaceRegistry wrap(NamespaceRegistry delegate, JcrSession session) {

@@ -335,8 +335,6 @@ public interface JcrSession extends BrixSession {
     public RetentionManager getRetentionManager();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Behavior getBehavior();
 
     public Session getDelegate();
@@ -359,8 +357,6 @@ public interface JcrSession extends BrixSession {
             return wrap(delegate, null);
         }
     }
-
-    ;
 
     /**
      * Allows to customize behavior for nodes within the session to which it was passed.

@@ -102,8 +102,6 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
         }
     }
 
-    ;
-
     protected static class SetTypeConverter implements NodeConverter {
         private final String type;
 

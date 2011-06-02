@@ -475,8 +475,6 @@ public class SitePlugin implements SessionAwarePlugin {
         return workspace.getAttribute(WORKSPACE_ATTRIBUTE_STATE);
     }
 
-    ;
-
     private void handleNewNode(String path, BrixNode node, JcrSession session, boolean save) {
         if (path.startsWith(getSiteRootPath()) == false) {
             return;
@@ -649,8 +647,6 @@ public class SitePlugin implements SessionAwarePlugin {
         }
     }
 
-    ;
-
     static class GlobalTilesTab extends AbstractWorkspaceTab {
         public GlobalTilesTab(IModel<String> title, IModel<Workspace> workspaceModel) {
             super(title, workspaceModel, 999);
@@ -669,8 +665,6 @@ public class SitePlugin implements SessionAwarePlugin {
             return sp.canEditNode(sp.getGlobalContainer(session), Context.ADMINISTRATION);
         }
     }
-
-    ;
 
     static abstract class AuthorizedWorkspaceTab extends AbstractWorkspaceTab {
         public AuthorizedWorkspaceTab(IModel<String> title, IModel<Workspace> workspaceModel) {
@@ -701,8 +695,6 @@ public class SitePlugin implements SessionAwarePlugin {
             return new GlobalVariablesPanel(panelId, workspaceModel);
         }
     }
-
-    ;
 
     static class WebDAVRulesTab extends AuthorizedWorkspaceTab {
         public WebDAVRulesTab(IModel<String> title, IModel<Workspace> workspaceModel) {

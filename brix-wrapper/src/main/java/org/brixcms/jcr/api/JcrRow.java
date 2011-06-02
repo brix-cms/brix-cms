@@ -126,8 +126,6 @@ public interface JcrRow extends Row {
     public double getScore(String selectorName);
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Row getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

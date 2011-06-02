@@ -39,8 +39,6 @@ public class BrixPageParameters extends PageParameters {
     private static final long serialVersionUID = 1L;
 
     private List<String> indexedParameters = null;
-    ;
-
     private List<QueryStringParameter> queryStringParameters = null;
 
 // -------------------------- STATIC METHODS --------------------------
@@ -242,8 +240,6 @@ public class BrixPageParameters extends PageParameters {
                     queryStringParameters));
         }
     }
-
-    ;
 
     public void removeIndexedParam(int index) {
         if (indexedParameters != null) {

@@ -62,8 +62,6 @@ public interface JcrItem extends Item {
     public void remove();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Item getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

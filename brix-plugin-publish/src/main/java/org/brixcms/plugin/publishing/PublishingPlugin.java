@@ -37,8 +37,6 @@ public class PublishingPlugin implements Plugin {
     public static final String STATE_PRODUCTION = "production";
 
     private static String ID = PublishingPlugin.class.getName();
-    ;
-
     private StateComparator stateComparator = new StateComparator();
 
     private final Brix brix;

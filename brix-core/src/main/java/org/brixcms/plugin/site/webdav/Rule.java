@@ -29,8 +29,6 @@ public class Rule implements IDetachable {
     private static final String PROPERTY_TEMPLATE = "template";
     private static final String PROPERTY_TYPE = "type";
     private static final String PROPERTY_EXTENSIONS = "extension";
-    ;
-
     private String pathPrefix;
     private int priority;
     private IModel<BrixNode> templateModel;

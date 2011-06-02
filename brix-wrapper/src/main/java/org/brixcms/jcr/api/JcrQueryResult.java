@@ -45,8 +45,6 @@ public interface JcrQueryResult extends QueryResult {
     public String[] getSelectorNames();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public QueryResult getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

@@ -145,8 +145,6 @@ abstract class FolderDataSource implements IDataSource {
         return 0;
     }
 
-    ;
-
     private <T> int compare(Comparable<T> c1, T c2) {
         if (c1 == null || c2 == null) {
             return 0;

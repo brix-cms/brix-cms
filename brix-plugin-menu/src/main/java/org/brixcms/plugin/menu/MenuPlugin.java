@@ -39,8 +39,6 @@ public class MenuPlugin implements Plugin {
 // ------------------------------ FIELDS ------------------------------
 
     private static final String ID = MenuPlugin.class.getName();
-    ;
-
     private static String ROOT_NODE_NAME = Brix.NS_PREFIX + "menu";
     private final Brix brix;
 

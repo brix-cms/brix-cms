@@ -61,8 +61,6 @@ public interface JcrQuery extends Query {
     public String[] getBindVariableNames();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public Query getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

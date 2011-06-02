@@ -30,8 +30,6 @@ public interface JcrPropertyIterator extends PropertyIterator {
     public JcrProperty nextProperty();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public PropertyIterator getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

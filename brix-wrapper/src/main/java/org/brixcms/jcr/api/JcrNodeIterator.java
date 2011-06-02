@@ -30,8 +30,6 @@ public interface JcrNodeIterator extends NodeIterator {
     public JcrNode nextNode();
 
 // -------------------------- OTHER METHODS --------------------------
-    ;
-
     public NodeIterator getDelegate();
 
 // -------------------------- INNER CLASSES --------------------------

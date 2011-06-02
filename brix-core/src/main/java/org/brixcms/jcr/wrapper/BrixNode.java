@@ -169,8 +169,6 @@ public class BrixNode extends NodeWrapper {
         }
     }
 
-    ;
-
     /**
      * Returns the date of last modification.
      *

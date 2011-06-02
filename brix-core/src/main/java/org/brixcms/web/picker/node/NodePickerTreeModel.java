@@ -44,8 +44,6 @@ public abstract class NodePickerTreeModel extends AbstractTreeModel {
 
     protected abstract boolean displayFoldersOnly();
 
-    ;
-
     public NodePickerTreeNode treeNodeFor(BrixNode node) {
         return new NodePickerTreeNode(node);
     }

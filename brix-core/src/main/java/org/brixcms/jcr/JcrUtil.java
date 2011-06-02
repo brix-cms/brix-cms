@@ -60,8 +60,6 @@ public class JcrUtil {
         cloneNodes(nodes, targetRootNode, null);
     }
 
-    ;
-
     /**
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
      * <p/>
@@ -572,8 +570,6 @@ public class JcrUtil {
     public static interface ParentLimiter {
         public boolean isFinalParent(JcrNode node, JcrNode parent);
     }
-
-    ;
 
     /**
      * Interface for dynamically providing target root nodes for individual cloned nodes.

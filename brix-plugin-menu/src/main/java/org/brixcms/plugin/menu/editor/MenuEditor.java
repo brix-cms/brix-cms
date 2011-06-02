@@ -65,8 +65,6 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
         super.onBeforeRender();
     }
 
-    ;
-
     @SuppressWarnings("unchecked")
     private void init() {
         treeModel = new MenuTreeModel(getModelObject().getRoot());

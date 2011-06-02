@@ -192,8 +192,6 @@ public class PrototypePlugin implements Plugin {
         targetRootNode.getSession().save();
     }
 
-    ;
-
     private String getCommonParentPath(List<JcrNode> nodes) {
         Path current = null;
         String sitePath = SitePlugin.get().getSiteRootPath();

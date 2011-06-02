@@ -110,8 +110,6 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
         super.onDetach();
     }
 
-    ;
-
     private void onSelectLinkClicked(BrixNode node) {
         currentNode.setObject(node);
         currentMenu = new Menu();

@@ -31,8 +31,6 @@ public interface JcrVersionHistory extends VersionHistory, JcrNode {
 
 
 // --------------------- Interface JcrItem ---------------------
-    ;
-
     public VersionHistory getDelegate();
 
 // --------------------- Interface VersionHistory ---------------------

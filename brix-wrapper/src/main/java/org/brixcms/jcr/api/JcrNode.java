@@ -46,8 +46,6 @@ public interface JcrNode extends JcrItem, Node {
 
 
 // --------------------- Interface JcrItem ---------------------
-    ;
-
     public Node getDelegate();
 
 // --------------------- Interface Node ---------------------

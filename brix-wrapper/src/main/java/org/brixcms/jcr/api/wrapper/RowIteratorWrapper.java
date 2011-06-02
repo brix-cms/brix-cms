@@ -53,8 +53,6 @@ class RowIteratorWrapper extends RangeIteratorWrapper implements JcrRowIterator 
     }
 
 // --------------------- Interface JcrRowIterator ---------------------
-    ;
-
     @Override
     public RowIterator getDelegate() {
         return (RowIterator) super.getDelegate();
