@@ -19,26 +19,16 @@ import java.io.InputStream;
 import java.io.StringReader;
 
 public class StringInputStream extends InputStream {
-// ------------------------------ FIELDS ------------------------------
-
     private StringReader in;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public StringInputStream(String source) {
         in = new StringReader(source);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Closeable ---------------------
 
     public void close() throws IOException {
         in.close();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public synchronized void mark(final int limit) {
         try {

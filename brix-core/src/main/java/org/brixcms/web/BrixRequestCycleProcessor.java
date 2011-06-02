@@ -36,8 +36,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 public class BrixRequestCycleProcessor implements IRequestCycleListener {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
 
     private static final String COOKIE_NAME = "brix-revision";
@@ -49,8 +47,6 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
     final BrixUrlMapper urlMapper;
     private boolean handleHomePage = true;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixRequestCycleProcessor(Brix brix) {
         this(brix, new HttpsConfig());
     }
@@ -60,8 +56,6 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
         urlMapper = new BrixUrlMapper(this);
         this.brix = brix;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getWorkspace() {
         String workspace = getWorkspaceFromUrl();
@@ -147,8 +141,6 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
         final Workspace workspace = brix.getConfig().getMapper().getWorkspaceForRequest(RequestCycle.get(), brix);
         return (workspace != null) ? workspace.getId() : null;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public final int getHttpPort() {
         return brix.getConfig().getHttpPort();

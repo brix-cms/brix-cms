@@ -25,8 +25,6 @@ import org.brixcms.plugin.menu.tile.MenuPicker;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 class FullTreeMenuEditor extends TileEditorPanel {
-// ------------------------------ FIELDS ------------------------------
-
     private BrixNodeModel menu = new BrixNodeModel();
     private String selectedLiCssClass;
     private String firstLiCssClass;
@@ -34,8 +32,6 @@ class FullTreeMenuEditor extends TileEditorPanel {
     private Boolean selectAllParentLi;
     private String outerUlCssClass;
     private String innerUlCssClass;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public FullTreeMenuEditor(String id, IModel<BrixNode> tileParent) {
         super(id);
@@ -55,8 +51,6 @@ class FullTreeMenuEditor extends TileEditorPanel {
         form.add(new TextField<String>("innerUlCssClass", new PropertyModel<String>(this,
                 "innerUlCssClass")));
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public void load(BrixNode node) {

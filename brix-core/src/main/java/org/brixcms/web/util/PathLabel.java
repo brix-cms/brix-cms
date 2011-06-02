@@ -28,21 +28,13 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericWebMarkupContainer;
 
 public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> implements ILinkListener {
-// ------------------------------ FIELDS ------------------------------
-
     private final String rootPath;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public PathLabel(String id, IModel<BrixNode> model, String rootPath) {
         super(id, model);
         this.rootPath = rootPath;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ILinkListener ---------------------
 
     public final void onLinkClicked() {
         String path = getRequest().getRequestParameters().getParameterValue("path").toString();
@@ -52,8 +44,6 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
         path = UrlDecoder.QUERY_INSTANCE.decode(path, getRequest().getCharset());
         onPathClicked(new Path(path));
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {

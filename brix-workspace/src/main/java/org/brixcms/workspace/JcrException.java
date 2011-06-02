@@ -22,11 +22,7 @@ import javax.jcr.RepositoryException;
  * @author ivaynberg
  */
 public class JcrException extends RuntimeException {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public JcrException(RepositoryException cause) {
         super("Error accessing repository", cause);

@@ -20,11 +20,7 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public class JcrException extends RuntimeException {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public JcrException(RepositoryException cause) {
         super(cause);
@@ -33,8 +29,6 @@ public class JcrException extends RuntimeException {
     public JcrException(String message, RepositoryException cause) {
         super(message, cause);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public RepositoryException getCause() {

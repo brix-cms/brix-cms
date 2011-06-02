@@ -34,11 +34,7 @@ import org.brixcms.web.util.validators.NodeNameValidator;
 import java.io.Serializable;
 
 public class CreateFolderPanel extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private String name;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public CreateFolderPanel(String id, IModel<BrixNode> model, final SimpleCallback goBack) {
         super(id, model);

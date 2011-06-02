@@ -24,8 +24,6 @@ import javax.jcr.NamespaceRegistry;
  */
 class NamespaceRegistryWrapper extends AbstractWrapper implements
         JcrNamespaceRegistry {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrNamespaceRegistry wrap(NamespaceRegistry delegate,
                                             JcrSession session) {
         if (delegate == null) {
@@ -35,17 +33,11 @@ class NamespaceRegistryWrapper extends AbstractWrapper implements
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private NamespaceRegistryWrapper(NamespaceRegistry delegate,
                                      JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NamespaceRegistry ---------------------
 
 
     public void registerNamespace(final String prefix, final String uri) {
@@ -95,8 +87,6 @@ class NamespaceRegistryWrapper extends AbstractWrapper implements
             }
         });
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public NamespaceRegistry getDelegate() {

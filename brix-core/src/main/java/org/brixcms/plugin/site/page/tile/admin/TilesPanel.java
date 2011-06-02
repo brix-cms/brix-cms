@@ -41,12 +41,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TilesPanel extends NodeManagerPanel {
-// ------------------------------ FIELDS ------------------------------
-
     String selectedTileId;
     private Component editor;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TilesPanel(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);

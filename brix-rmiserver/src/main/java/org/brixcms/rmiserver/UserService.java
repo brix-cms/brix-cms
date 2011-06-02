@@ -24,12 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
-// ------------------------------ FIELDS ------------------------------
-
     private SessionFactory sf;
     private PasswordEncoder encoder;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Proxy constructor for spring injection
@@ -37,8 +33,6 @@ public class UserService {
     public UserService() {
 
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Transactional
     public User create(UserDto dto) {
@@ -113,8 +107,6 @@ public class UserService {
     public void updatePassword(User user, String password) {
         user.setPasswordHash(encoder.encode(password));
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class UserDto implements Serializable {
         private static final long serialVersionUID = 1L;

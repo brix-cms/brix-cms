@@ -27,8 +27,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 public class GlobalContainerNode extends AbstractContainer {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String TYPE = Brix.NS_PREFIX + "globalContainer";
 
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
@@ -49,8 +47,6 @@ public class GlobalContainerNode extends AbstractContainer {
         }
     };
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static GlobalContainerNode initialize(JcrNode node) {
         BrixNode brixNode = (BrixNode) node;
         BrixFileNode.initialize(node, "text/html");
@@ -59,13 +55,9 @@ public class GlobalContainerNode extends AbstractContainer {
         return new GlobalContainerNode(node.getDelegate(), node.getSession());
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public GlobalContainerNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public String getUserVisibleName() {

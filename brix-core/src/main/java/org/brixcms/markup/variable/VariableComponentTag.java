@@ -20,16 +20,10 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.markup.tag.ComponentTag;
 
 public class VariableComponentTag extends VariableTag implements ComponentTag {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public VariableComponentTag(BrixNode pageNode, ComponentTag delegate) {
         super(pageNode, delegate);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ComponentTag ---------------------
 
     public Component getComponent(String id, IModel<BrixNode> pageNodeModel) {
         return getDelegate().getComponent(id, pageNodeModel);
@@ -38,8 +32,6 @@ public class VariableComponentTag extends VariableTag implements ComponentTag {
     public String getUniqueTagId() {
         return getDelegate().getUniqueTagId();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public ComponentTag getDelegate() {

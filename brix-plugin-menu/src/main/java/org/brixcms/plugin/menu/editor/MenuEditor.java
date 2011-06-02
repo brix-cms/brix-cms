@@ -38,14 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuEditor extends BrixGenericPanel<Menu> {
-// ------------------------------ FIELDS ------------------------------
-
     private MenuTreeModel treeModel;
     private AbstractTree tree;
 
     private WebMarkupContainer links;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MenuEditor(String id) {
         super(id);
@@ -54,8 +50,6 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
     public MenuEditor(String id, IModel<Menu> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onBeforeRender() {

@@ -35,8 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewTab extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ViewTab(String id, IModel<BrixNode> model) {
         super(id, model);
 
@@ -82,8 +80,6 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
             }
         });
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class TextPreviewPanel extends Panel {
         public TextPreviewPanel(String id) {

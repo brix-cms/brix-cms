@@ -47,11 +47,7 @@ import org.brixcms.workspace.WorkspaceModel;
 import java.util.List;
 
 public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
-// ------------------------------ FIELDS ------------------------------
-
     private String prototypeName;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ManagePrototypesPanel(String id, final IModel<Workspace> model) {
         super(id, model);
@@ -176,14 +172,10 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
         add(form);
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     private Brix getBrix() {
         // TODO: We don't really have a node here
         return Brix.get();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class UniquePrototypeNameValidator implements IValidator {
         public void validate(IValidatable validatable) {

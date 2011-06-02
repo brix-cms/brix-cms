@@ -24,10 +24,6 @@ import javax.jcr.query.Query;
  * @author Matej Knopp
  */
 public interface JcrQuery extends Query {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Query ---------------------
 
     public JcrQueryResult execute();
 
@@ -62,8 +58,6 @@ public interface JcrQuery extends Query {
 
 // -------------------------- OTHER METHODS --------------------------
     public Query getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrQuery wrap(Query delegate, JcrSession session) {

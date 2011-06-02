@@ -22,17 +22,11 @@ import org.brixcms.markup.tag.Text;
  * @author Matej Knopp
  */
 public class SimpleText implements Text {
-// ------------------------------ FIELDS ------------------------------
-
     private final String text;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SimpleText(String text) {
         this.text = text;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getText() {
         return text;

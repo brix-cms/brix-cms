@@ -25,10 +25,6 @@ import org.brixcms.plugin.site.SimpleCallback;
 import org.brixcms.plugin.site.SiteNodePlugin;
 
 public class FallbackNodePlugin implements SiteNodePlugin {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface SiteNodePlugin ---------------------
 
 
     public String getNodeType() {
@@ -54,8 +50,6 @@ public class FallbackNodePlugin implements SiteNodePlugin {
     public NodeConverter getConverterForNode(BrixNode node) {
         return null;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class EmptyPanel extends Panel {
         public EmptyPanel(String id) {

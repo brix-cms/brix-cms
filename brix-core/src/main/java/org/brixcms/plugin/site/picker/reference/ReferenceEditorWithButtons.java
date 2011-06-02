@@ -22,11 +22,7 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.reference.Reference;
 
 public class ReferenceEditorWithButtons extends BrixGenericPanel<Reference> {
-// ------------------------------ FIELDS ------------------------------
-
     private Reference reference;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ReferenceEditorWithButtons(String id, ReferenceEditorConfiguration configuration) {
         super(id);

@@ -33,8 +33,6 @@ import java.io.InputStream;
  * Created by IntelliJ IDEA. User: korbinianbachl Date: 16.03.11 Time: 14:56
  */
 public class JcrUtils {
-// -------------------------- STATIC METHODS --------------------------
-
     /**
      * Create a {@link brix.workspace.WorkspaceManager} implementation. If <code>url</code> starts with
      * <code>rmi://</code> an rmi based workspace manager will be created and returned. If <code>url</code> is left
@@ -190,8 +188,6 @@ public class JcrUtils {
                     " to destination: " + destination.getAbsolutePath());
         }
     }
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor

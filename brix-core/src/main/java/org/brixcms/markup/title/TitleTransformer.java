@@ -25,19 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TitleTransformer extends MarkupSourceTransformer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String TAG_NAME = Brix.NS_PREFIX + "title";
     private final AbstractContainer container;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TitleTransformer(MarkupSource delegate, AbstractContainer container) {
         super(delegate);
         this.container = container;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected List<Item> transform(List<Item> originalItems) {

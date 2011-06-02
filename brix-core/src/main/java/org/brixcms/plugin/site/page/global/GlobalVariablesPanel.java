@@ -21,13 +21,9 @@ import org.brixcms.plugin.site.page.admin.VariablesPanel;
 import org.brixcms.workspace.Workspace;
 
 public class GlobalVariablesPanel extends AbstractGlobalPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public GlobalVariablesPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, workspaceModel);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected Panel newManagePanel(String id, IModel<BrixNode> containerNodeModel) {

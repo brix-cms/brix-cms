@@ -22,8 +22,6 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public abstract class Event {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Returns true if this event is affected by the specified path. The path is usually path of node being saved and this
      * method should check if this event is event either for the node with given path or it's child node (doesn't have to
@@ -59,8 +57,6 @@ public abstract class Event {
     Event transformBeforeAddingToQueue() throws RepositoryException {
         return this;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     /**
      * Allows event to block adding other events to the queue.

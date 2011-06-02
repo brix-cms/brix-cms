@@ -23,20 +23,14 @@ import org.brixcms.jcr.api.JcrNode;
  * @author Matej Knopp
  */
 public class SelectNewNodeTypeAction extends AbstractAction {
-// ------------------------------ FIELDS ------------------------------
-
     private final JcrNode parentNode;
     private final String nodeType;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SelectNewNodeTypeAction(Context context, JcrNode parentNode, String nodeType) {
         super(context);
         this.parentNode = parentNode;
         this.nodeType = nodeType;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getNodeType() {
         return nodeType;
@@ -45,8 +39,6 @@ public class SelectNewNodeTypeAction extends AbstractAction {
     public JcrNode getParentNode() {
         return parentNode;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {

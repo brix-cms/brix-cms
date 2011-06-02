@@ -24,13 +24,9 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public class AddNodeEvent extends NodeEvent {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     AddNodeEvent(Node node) {
         super(node);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Node getNewNode() {
         return super.getNode();

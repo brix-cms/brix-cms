@@ -23,8 +23,6 @@ import java.util.Iterator;
  * @author Matej Knopp
  */
 public interface Workspace {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Deletes the workspace.
      */

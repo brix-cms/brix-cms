@@ -24,10 +24,6 @@ import org.apache.wicket.model.Model;
  * @author igor.vaynberg
  */
 public class SimpleMarkupEditorFactory implements MarkupEditorFactory {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface MarkupEditorFactory ---------------------
 
     public TextArea<String> newEditor(String id, IModel<String> markup) {
         return new TextArea<String>("content", markup);

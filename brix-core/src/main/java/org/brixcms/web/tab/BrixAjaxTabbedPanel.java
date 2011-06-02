@@ -19,13 +19,9 @@ import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import java.util.List;
 
 public class BrixAjaxTabbedPanel extends AjaxTabbedPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixAjaxTabbedPanel(String id, List<IBrixTab> tabs) {
         super(id, BrixTabbedPanel.sort(tabs));
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected String getTabContainerCssClass() {

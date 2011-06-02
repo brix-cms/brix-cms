@@ -15,7 +15,5 @@
 package org.brixcms.markup.variable;
 
 public interface VariableValueProvider {
-// -------------------------- OTHER METHODS --------------------------
-
     public String getVariableValue(String key);
 }

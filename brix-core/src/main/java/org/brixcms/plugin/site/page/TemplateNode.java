@@ -26,8 +26,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 public class TemplateNode extends AbstractContainer {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String CONTENT_TAG = Brix.NS_PREFIX + "content";
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
@@ -46,8 +44,6 @@ public class TemplateNode extends AbstractContainer {
         }
     };
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static boolean canHandle(JcrNode node) {
         return TemplateSiteNodePlugin.TYPE.equals(getNodeType(node));
     }
@@ -60,13 +56,9 @@ public class TemplateNode extends AbstractContainer {
         return new TemplateNode(node.getDelegate(), node.getSession());
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public TemplateNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public String getUserVisibleType() {

@@ -30,8 +30,6 @@ import java.util.Collection;
 import java.util.List;
 
 public class ConvertNodeTabFactory implements ManageNodeTabFactory {
-// -------------------------- STATIC METHODS --------------------------
-
     private static IBrixTab newTab(final IModel<BrixNode> nodeModel) {
         return new CachingAbstractTab(new ResourceModel("convert", "Convert"), -1) {
             @Override
@@ -56,10 +54,6 @@ public class ConvertNodeTabFactory implements ManageNodeTabFactory {
         return SitePlugin.get().canEditNode(nodeModel.getObject(), Context.ADMINISTRATION);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ManageNodeTabFactory ---------------------
 
     public List<IBrixTab> getManageNodeTabs(IModel<BrixNode> nodeModel) {
         List<IBrixTab> result = new ArrayList<IBrixTab>();

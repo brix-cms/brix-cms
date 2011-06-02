@@ -24,20 +24,14 @@ import org.apache.wicket.request.resource.SharedResourceReference;
  * @author Jeremy Thomerson
  */
 public class VideoNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private static final ResourceReference RESOURCE = new SharedResourceReference(
             PageNodeTreeRenderer.class, "resources/video-x-generic.png");
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public VideoNodeTreeRenderer() {
         super(new String[0], new String[]{"video"});
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {

@@ -29,8 +29,6 @@ import java.util.Calendar;
  * @author Matej Knopp
  */
 class ValueWrapper extends AbstractWrapper implements JcrValue {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrValue wrap(Value delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -51,23 +49,15 @@ class ValueWrapper extends AbstractWrapper implements JcrValue {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected ValueWrapper(Value delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrValue ---------------------
 
     @Override
     public Value getDelegate() {
         return (Value) super.getDelegate();
     }
-
-// --------------------- Interface Value ---------------------
 
 
     public String getString() {

@@ -62,8 +62,6 @@ import org.brixcms.workspace.WorkspaceManager;
  * @author igor.vaynberg
  */
 public abstract class Brix {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String NS = "brix";
     public static final String NS_PREFIX = NS + ":";
 
@@ -92,8 +90,6 @@ public abstract class Brix {
       */
 
     private AuthorizationStrategy authorizationStrategy = null;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static Brix get() {
         Application application = Application.get();
@@ -166,8 +162,6 @@ public abstract class Brix {
 //        return page;
 //    }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public Brix(BrixConfig config) {
         this.config = config;
 
@@ -194,8 +188,6 @@ public abstract class Brix {
         // registry.register(Plugin.POINT, new PublishingPlugin(this));
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public final AuthorizationStrategy getAuthorizationStrategy() {
         if (authorizationStrategy == null) {
             authorizationStrategy = newAuthorizationStrategy();
@@ -208,8 +200,6 @@ public abstract class Brix {
     public final BrixConfig getConfig() {
         return config;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Performs any {@link WebApplication} specific initialization

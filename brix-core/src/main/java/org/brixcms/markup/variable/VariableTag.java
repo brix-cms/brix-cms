@@ -27,13 +27,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class VariableTag implements Tag, VariableKeyProvider {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String ATTRIBUTE_PREFIX = Brix.NS_PREFIX + "var:";
     private final Tag delegate;
     private final BrixNodeModel pageNodeModel;
-
-// -------------------------- STATIC METHODS --------------------------
 
     static String getKey(String value) {
         String key = null;
@@ -46,24 +42,16 @@ public class VariableTag implements Tag, VariableKeyProvider {
         return key;
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public VariableTag(BrixNode pageNode, Tag delegate) {
         this.pageNodeModel = new BrixNodeModel(pageNode);
         this.pageNodeModel.detach();
         this.delegate = delegate;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Tag getDelegate() {
         return delegate;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tag ---------------------
 
     public Map<String, String> getAttributeMap() {
         Map<String, String> original = getDelegate().getAttributeMap();
@@ -93,8 +81,6 @@ public class VariableTag implements Tag, VariableKeyProvider {
     public Type getType() {
         return delegate.getType();
     }
-
-// --------------------- Interface VariableKeyProvider ---------------------
 
 
     public Collection<String> getVariableKeys() {

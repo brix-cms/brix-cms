@@ -21,8 +21,6 @@ import javax.jcr.version.VersionHistory;
 import javax.jcr.version.VersionIterator;
 
 class VersionHistoryWrapper extends NodeWrapper implements VersionHistory {
-// -------------------------- STATIC METHODS --------------------------
-
     public static VersionHistoryWrapper wrap(VersionHistory history, SessionWrapper session) {
         if (history == null) {
             return null;
@@ -31,16 +29,10 @@ class VersionHistoryWrapper extends NodeWrapper implements VersionHistory {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private VersionHistoryWrapper(VersionHistory delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface VersionHistory ---------------------
 
 
     public String getVersionableUUID() throws RepositoryException {
@@ -109,8 +101,6 @@ class VersionHistoryWrapper extends NodeWrapper implements VersionHistory {
     public void removeVersion(String versionName) throws RepositoryException {
         getDelegate().removeVersion(versionName);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public VersionHistory getDelegate() {

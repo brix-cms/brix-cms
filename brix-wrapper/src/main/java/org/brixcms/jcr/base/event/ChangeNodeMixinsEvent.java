@@ -23,13 +23,9 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public class ChangeNodeMixinsEvent extends NodeEvent {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     ChangeNodeMixinsEvent(Node node) {
         super(node);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Node getNode() {

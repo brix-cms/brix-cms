@@ -33,8 +33,6 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
     ;
     private String newName;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public RenamePanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
@@ -75,8 +73,6 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
     }
 
     protected abstract void onLeave();
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class NewNameValidator implements IValidator {
         public void validate(IValidatable validatable) {

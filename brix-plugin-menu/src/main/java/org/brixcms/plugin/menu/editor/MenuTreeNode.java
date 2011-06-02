@@ -23,11 +23,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class MenuTreeNode implements TreeNode {
-// ------------------------------ FIELDS ------------------------------
-
     private final Entry entry;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MenuTreeNode(Entry entry) {
         if (entry == null) {
@@ -35,8 +31,6 @@ public class MenuTreeNode implements TreeNode {
         }
         this.entry = entry;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public List<? extends TreeNode> getChildren() {
         List<MenuTreeNode> children = new ArrayList<MenuTreeNode>();
@@ -49,8 +43,6 @@ public class MenuTreeNode implements TreeNode {
     public Entry getEntry() {
         return entry;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public boolean equals(Object obj) {
@@ -72,15 +64,9 @@ public class MenuTreeNode implements TreeNode {
         return entry.toString();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
     }
-
-// --------------------- Interface TreeNode ---------------------
 
 
     @Override

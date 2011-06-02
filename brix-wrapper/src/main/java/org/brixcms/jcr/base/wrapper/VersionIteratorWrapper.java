@@ -18,8 +18,6 @@ import javax.jcr.version.Version;
 import javax.jcr.version.VersionIterator;
 
 class VersionIteratorWrapper extends BaseWrapper<VersionIterator> implements VersionIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static VersionIteratorWrapper wrap(VersionIterator delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -28,16 +26,10 @@ class VersionIteratorWrapper extends BaseWrapper<VersionIterator> implements Ver
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private VersionIteratorWrapper(VersionIterator delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     public boolean hasNext() {
@@ -52,8 +44,6 @@ class VersionIteratorWrapper extends BaseWrapper<VersionIterator> implements Ver
         getDelegate().remove();
     }
 
-// --------------------- Interface RangeIterator ---------------------
-
 
     public void skip(long skipNum) {
         getDelegate().skip(skipNum);
@@ -66,8 +56,6 @@ class VersionIteratorWrapper extends BaseWrapper<VersionIterator> implements Ver
     public long getPosition() {
         return getDelegate().getPosition();
     }
-
-// --------------------- Interface VersionIterator ---------------------
 
     public Version nextVersion() {
         return VersionWrapper.wrap(getDelegate().nextVersion(), getSessionWrapper());

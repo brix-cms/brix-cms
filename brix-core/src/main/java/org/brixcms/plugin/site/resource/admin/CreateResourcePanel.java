@@ -28,8 +28,6 @@ import org.brixcms.web.tab.AbstractBrixTab;
 import java.util.ArrayList;
 
 public class CreateResourcePanel extends NodeManagerPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public CreateResourcePanel(String id, final IModel<BrixNode> container,
                                final SimpleCallback back) {
         super(id, container);

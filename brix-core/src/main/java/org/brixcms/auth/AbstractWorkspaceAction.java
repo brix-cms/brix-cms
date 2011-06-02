@@ -18,24 +18,16 @@ import org.brixcms.workspace.Workspace;
 
 
 public abstract class AbstractWorkspaceAction extends AbstractAction {
-// ------------------------------ FIELDS ------------------------------
-
     private final Workspace workspace;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractWorkspaceAction(Context context, Workspace workspace) {
         super(context);
         this.workspace = workspace;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Workspace getWorkspace() {
         return workspace;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {

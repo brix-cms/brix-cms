@@ -35,8 +35,6 @@ import java.util.Date;
  * @author Matej Knopp
  */
 public class BrixNode extends NodeWrapper {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Mixin for brix:node
      */
@@ -71,8 +69,6 @@ public class BrixNode extends NodeWrapper {
      * Property for storing user id for user that has created this node
      */
     private static final String JCR_PROP_CREATED_BY = Brix.NS_PREFIX + "createdBy";
-
-// -------------------------- STATIC METHODS --------------------------
 
     /**
      * Returns the type of given node.
@@ -118,8 +114,6 @@ public class BrixNode extends NodeWrapper {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Wrapper constructor. Wraps the delegate node.
      *
@@ -129,8 +123,6 @@ public class BrixNode extends NodeWrapper {
     public BrixNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Convenience method for obtaining Brix instance. This is the preferred way to obtain the instance.
@@ -299,8 +291,6 @@ public class BrixNode extends NodeWrapper {
         setProperty(JCR_PROP_LAST_MODIFIED, now);
         setProperty(JCR_PROP_LAST_MODIFIED_BY, user);
     }
-
-// -------------------------- ENUMERATIONS --------------------------
 
     public enum Protocol {
         HTTP, HTTPS, PRESERVE_CURRENT

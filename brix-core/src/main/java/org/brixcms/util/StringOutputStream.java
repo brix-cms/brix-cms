@@ -17,11 +17,7 @@ package org.brixcms.util;
 import java.io.IOException;
 
 public class StringOutputStream extends java.io.OutputStream {
-// ------------------------------ FIELDS ------------------------------
-
     private final StringBuilder buffer;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public StringOutputStream() {
         buffer = new StringBuilder();
@@ -31,13 +27,9 @@ public class StringOutputStream extends java.io.OutputStream {
         buffer = new StringBuilder(size);
     }
 
-// ------------------------ CANONICAL METHODS ------------------------
-
     public String toString() {
         return buffer.toString();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public int length() {
         return buffer.length();

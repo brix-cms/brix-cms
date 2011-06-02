@@ -26,8 +26,6 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 
 public class PageNode extends AbstractContainer {
-// ------------------------------ FIELDS ------------------------------
-
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
         public boolean canWrap(Brix brix, JcrNode node) {
@@ -46,8 +44,6 @@ public class PageNode extends AbstractContainer {
         }
     };
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static PageNode initialize(JcrNode node) {
         BrixNode brixNode = (BrixNode) node;
         BrixFileNode.initialize(node, "text/html");
@@ -56,13 +52,9 @@ public class PageNode extends AbstractContainer {
         return new PageNode(node.getDelegate(), node.getSession());
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public String getUserVisibleType() {

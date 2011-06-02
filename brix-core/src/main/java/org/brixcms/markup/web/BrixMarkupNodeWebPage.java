@@ -35,11 +35,7 @@ import org.brixcms.web.nodepage.BrixPageParameters;
 
 public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements IMarkupResourceStreamProvider,
         IMarkupCacheKeyProvider, MarkupSourceProvider {
-// ------------------------------ FIELDS ------------------------------
-
     private transient MarkupHelper markupHelper;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixMarkupNodeWebPage(IModel<BrixNode> nodeModel) {
         super(nodeModel);
@@ -49,8 +45,6 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
         super(nodeModel, pageParameters);
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     private MarkupHelper getMarkupHelper() {
         if (markupHelper == null) {
             markupHelper = new MarkupHelper(this);
@@ -58,23 +52,15 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
         return markupHelper;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IMarkupCacheKeyProvider ---------------------
 
     public String getCacheKey(MarkupContainer container, Class<?> containerClass) {
         return null;
     }
 
-// --------------------- Interface IMarkupResourceStreamProvider ---------------------
-
 
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
         return new StringResourceStream(getMarkupHelper().getMarkup(), "text/html");
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onBeforeRender() {

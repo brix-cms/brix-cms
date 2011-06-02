@@ -23,8 +23,6 @@ import java.util.Map;
  * @see ComponentTag
  */
 public interface Tag extends Item {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Returns map of tag attributes. The result map does not have to be modifiable.
      */
@@ -43,8 +41,6 @@ public interface Tag extends Item {
      * @return
      */
     public Type getType();
-
-// -------------------------- ENUMERATIONS --------------------------
 
     /**
      * Tag type

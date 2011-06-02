@@ -41,10 +41,6 @@ import java.io.OutputStream;
  * @author Matej Knopp
  */
 public interface JcrSession extends BrixSession {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Session ---------------------
 
 
     public Repository getRepository();
@@ -345,8 +341,6 @@ public interface JcrSession extends BrixSession {
      * Each wrapped node should call this method when the remove() method is invoked on it.
      */
     public void nodeRemoved(JcrNode node);
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrSession wrap(Session delegate, Behavior behavior) {

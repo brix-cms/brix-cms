@@ -18,12 +18,8 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.Brix;
 
 public class WorkspaceModel implements IModel<Workspace> {
-// ------------------------------ FIELDS ------------------------------
-
     private String workspaceId;
     private transient Workspace workspace;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public WorkspaceModel(String workspaceId) {
         this.workspaceId = workspaceId;
@@ -44,17 +40,11 @@ public class WorkspaceModel implements IModel<Workspace> {
         this.workspace = workspace;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
 
     public void detach() {
         workspace = null;
     }
-
-// --------------------- Interface IModel ---------------------
 
     public Workspace getObject() {
         if (workspace == null && workspaceId != null) {

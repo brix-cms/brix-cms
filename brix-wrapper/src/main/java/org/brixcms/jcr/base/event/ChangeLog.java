@@ -33,17 +33,11 @@ import java.util.List;
  * @see #removeAndGetAffectedEvents(Node)
  */
 public class ChangeLog {
-// ------------------------------ FIELDS ------------------------------
-
     private List<Event> events = new ArrayList<Event>();
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ChangeLog() {
 
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Adds the event to the event queue.

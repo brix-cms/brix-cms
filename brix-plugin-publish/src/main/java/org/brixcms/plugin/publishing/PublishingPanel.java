@@ -31,8 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PublishingPanel extends BrixGenericPanel<Workspace> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PublishingPanel(String id, IModel<Workspace> model) {
         super(id, model);
 
@@ -41,8 +39,6 @@ public class PublishingPanel extends BrixGenericPanel<Workspace> {
         add(new PublishLink("toStaging", PublishingPlugin.STATE_DEVELOPMENT, PublishingPlugin.STATE_STAGING));
         add(new PublishLink("toProduction", PublishingPlugin.STATE_STAGING, PublishingPlugin.STATE_PRODUCTION));
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class PublishLink extends Link<Void> {
         private final String targetState;

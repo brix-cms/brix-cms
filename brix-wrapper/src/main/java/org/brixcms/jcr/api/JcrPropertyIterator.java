@@ -22,17 +22,11 @@ import javax.jcr.PropertyIterator;
  * @author Matej Knopp
  */
 public interface JcrPropertyIterator extends PropertyIterator {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface PropertyIterator ---------------------
 
     public JcrProperty nextProperty();
 
 // -------------------------- OTHER METHODS --------------------------
     public PropertyIterator getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrPropertyIterator wrap(PropertyIterator delegate, JcrSession session) {

@@ -33,8 +33,6 @@ import java.util.Calendar;
  * @author Matej Knopp
  */
 class PropertyWrapper extends ItemWrapper implements JcrProperty {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrProperty wrap(Property delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -43,16 +41,10 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected PropertyWrapper(Property delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Item ---------------------
 
 
     public void accept(final ItemVisitor visitor) {
@@ -63,14 +55,10 @@ class PropertyWrapper extends ItemWrapper implements JcrProperty {
         });
     }
 
-// --------------------- Interface JcrItem ---------------------
-
     @Override
     public Property getDelegate() {
         return (Property) super.getDelegate();
     }
-
-// --------------------- Interface Property ---------------------
 
 
     public void setValue(final Value value) {

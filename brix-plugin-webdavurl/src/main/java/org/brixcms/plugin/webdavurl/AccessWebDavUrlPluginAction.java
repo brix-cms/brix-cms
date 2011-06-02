@@ -18,33 +18,21 @@ import org.brixcms.auth.Action;
 import org.brixcms.workspace.Workspace;
 
 public class AccessWebDavUrlPluginAction implements Action {
-// ------------------------------ FIELDS ------------------------------
-
     private final Workspace workspace;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AccessWebDavUrlPluginAction(Workspace workspace) {
         this.workspace = workspace;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Workspace getWorkspace() {
         return workspace;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {
         return "AccessWebDavUrlPluginAction{" + "workspace=" + workspace + '}';
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Action ---------------------
 
     public Context getContext() {
         return Context.ADMINISTRATION;

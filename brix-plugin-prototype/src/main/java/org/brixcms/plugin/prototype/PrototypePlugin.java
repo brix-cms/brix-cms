@@ -39,8 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 public class PrototypePlugin implements Plugin {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String ID = PrototypePlugin.class.getName();
 
     private static final String WORKSPACE_TYPE = "brix:prototype";
@@ -48,8 +46,6 @@ public class PrototypePlugin implements Plugin {
     private static final String WORKSPACE_ATTRIBUTE_PROTOTYPE_NAME = "brix:prototype-name";
 
     private final Brix brix;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static PrototypePlugin get() {
         return get(Brix.get());
@@ -59,16 +55,10 @@ public class PrototypePlugin implements Plugin {
         return (PrototypePlugin) brix.getPlugin(ID);
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PrototypePlugin(Brix brix) {
         this.brix = brix;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Plugin ---------------------
 
     public String getId() {
         return ID;
@@ -101,8 +91,6 @@ public class PrototypePlugin implements Plugin {
                 workspaceModel)};
         return Arrays.asList(tabs);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void createPrototype(Workspace originalWorkspace, String prototypeName) {
         Workspace workspace = brix.getWorkspaceManager().createWorkspace();
@@ -227,8 +215,6 @@ public class PrototypePlugin implements Plugin {
 
         return current.toString();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     static class Tab extends AbstractWorkspaceTab {
         public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {

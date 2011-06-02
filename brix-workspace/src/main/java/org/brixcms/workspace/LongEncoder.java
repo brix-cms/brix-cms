@@ -24,15 +24,11 @@ package org.brixcms.workspace;
  * @author igor
  */
 public class LongEncoder {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * default alphabet that should be safe to use in most circumstances, while still providing good shortening of long
      * values
      */
     public static String DEFAULT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-// -------------------------- STATIC METHODS --------------------------
 
     /**
      * Encodes the value into the default alphabet: {@value #DEFAULT}
@@ -99,8 +95,6 @@ public class LongEncoder {
         }
         return num;
     }
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     private LongEncoder() {
 

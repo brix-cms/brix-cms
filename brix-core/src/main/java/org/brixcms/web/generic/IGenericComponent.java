@@ -17,8 +17,6 @@ package org.brixcms.web.generic;
 import org.apache.wicket.model.IModel;
 
 public interface IGenericComponent<T> {
-// -------------------------- OTHER METHODS --------------------------
-
     public IModel<T> getModel();
 
     public T getModelObject();

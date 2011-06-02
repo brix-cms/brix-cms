@@ -31,10 +31,6 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 public interface JcrValueFactory extends ValueFactory {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ValueFactory ---------------------
 
     public JcrValue createValue(String value);
 
@@ -91,8 +87,6 @@ public interface JcrValueFactory extends ValueFactory {
 
 // -------------------------- OTHER METHODS --------------------------
     public ValueFactory getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrValueFactory wrap(ValueFactory delegate, JcrSession session) {

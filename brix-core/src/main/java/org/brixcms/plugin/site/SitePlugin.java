@@ -91,8 +91,6 @@ import org.brixcms.workspace.JcrException;
 import org.brixcms.workspace.Workspace;
 
 public class SitePlugin implements SessionAwarePlugin {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String PREFIX = "site";
 
     public static final String WORKSPACE_ATTRIBUTE_STATE = "brix:site-state";
@@ -120,8 +118,6 @@ public class SitePlugin implements SessionAwarePlugin {
 
     private WebDavEventListener webDavEventListener = new WebDavEventListener();
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static SitePlugin get() {
         return get(Brix.get());
     }
@@ -129,8 +125,6 @@ public class SitePlugin implements SessionAwarePlugin {
     public static SitePlugin get(Brix brix) {
         return (SitePlugin) brix.getPlugin(ID);
     }
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SitePlugin(Brix brix) {
         this.brix = brix;
@@ -171,8 +165,6 @@ public class SitePlugin implements SessionAwarePlugin {
         brix.getConfig().getRegistry().register(ManageNodeTabFactory.POINT, factory);
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public final Brix getBrix() {
         return brix;
     }
@@ -185,10 +177,6 @@ public class SitePlugin implements SessionAwarePlugin {
         this.stateComparator = stateComparator;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Plugin ---------------------
 
     public String getId() {
         return ID;
@@ -276,15 +264,11 @@ public class SitePlugin implements SessionAwarePlugin {
         return name;
     }
 
-// --------------------- Interface SessionAwarePlugin ---------------------
-
 
     public void onWebDavSession(final BrixSession session) {
         session.addEventsListener(webDavEventListener);
         session.addActionHandler(new WebDavActionHandler(session));
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public boolean canAddNodeChild(BrixNode node, Context context) {
         if (!isNodeEditable(node)) {
@@ -653,8 +637,6 @@ public class SitePlugin implements SessionAwarePlugin {
             throw new JcrException(e);
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     static class SiteTab extends AbstractWorkspaceTab {
         public SiteTab(IModel<String> title, IModel<Workspace> workspaceModel) {

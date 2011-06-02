@@ -26,13 +26,9 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public class BeforeRemoveNodeEvent extends NodeEvent {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     BeforeRemoveNodeEvent(Node node) {
         super(node);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Event transformBeforeAddingToQueue() throws RepositoryException {

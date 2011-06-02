@@ -18,18 +18,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 public abstract class ChainedLdmModel extends LoadableDetachableModel {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel chained;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ChainedLdmModel(IModel model) {
         super();
         this.chained = model;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected Object load() {

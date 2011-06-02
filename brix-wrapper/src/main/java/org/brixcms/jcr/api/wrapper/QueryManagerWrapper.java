@@ -27,8 +27,6 @@ import javax.jcr.query.qom.QueryObjectModelFactory;
  * @author igor.vaynberg
  */
 class QueryManagerWrapper extends AbstractWrapper implements JcrQueryManager {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrQueryManager wrap(QueryManager delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -37,23 +35,15 @@ class QueryManagerWrapper extends AbstractWrapper implements JcrQueryManager {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected QueryManagerWrapper(QueryManager delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrQueryManager ---------------------
 
     @Override
     public QueryManager getDelegate() {
         return (QueryManager) super.getDelegate();
     }
-
-// --------------------- Interface QueryManager ---------------------
 
 
     public JcrQuery createQuery(final String statement, final String language) {

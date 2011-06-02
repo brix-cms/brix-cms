@@ -18,14 +18,8 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.tree.NodeFilter;
 
 public class FileNodeFilter implements NodeFilter {
-// ------------------------------ FIELDS ------------------------------
-
     public static final FileNodeFilter INSTANCE = new FileNodeFilter();
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NodeFilter ---------------------
 
     public boolean isNodeAllowed(BrixNode node) {
         return node != null && !node.isFolder();

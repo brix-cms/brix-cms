@@ -56,8 +56,6 @@ import javax.jcr.version.VersionIterator;
  * @author Matej Knopp
  */
 public class WrapperAccessor {
-// -------------------------- INNER CLASSES --------------------------
-
     public static class JcrItemWrapper {
         public static JcrItem wrap(Item delegate, JcrSession session) {
             return ItemWrapper.wrap(delegate, session);

@@ -31,8 +31,6 @@ import org.apache.wicket.util.visit.IVisitor;
  * @author Matej Knopp
  */
 public class PageParametersForm<T> extends StatelessForm<T> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageParametersForm(String id) {
         super(id);
     }
@@ -40,8 +38,6 @@ public class PageParametersForm<T> extends StatelessForm<T> {
     public PageParametersForm(String id, IModel<T> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected boolean encodeUrlInHiddenFields() {

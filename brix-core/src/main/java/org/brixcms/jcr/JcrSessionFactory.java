@@ -17,8 +17,6 @@ package org.brixcms.jcr;
 import javax.jcr.Session;
 
 public interface JcrSessionFactory {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Creates a new session. Sessions returned by this method are not managed by the session factory implementation,
      * the callee is responsible for closing the session.

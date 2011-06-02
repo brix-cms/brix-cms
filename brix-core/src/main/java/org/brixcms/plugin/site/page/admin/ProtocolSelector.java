@@ -20,8 +20,6 @@ import org.apache.wicket.model.IModel;
 import java.util.Arrays;
 
 public class ProtocolSelector extends DropDownChoice<Boolean> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ProtocolSelector(String id, IModel<Boolean> model) {
         super(id);
 
@@ -47,8 +45,6 @@ public class ProtocolSelector extends DropDownChoice<Boolean> {
             }
         });
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected String getNullValidKey() {

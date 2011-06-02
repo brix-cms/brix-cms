@@ -34,10 +34,6 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
  * @author igor.vaynberg
  */
 public class StatelessStockQuoteTile implements Tile {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tile ---------------------
 
     /**
      * {@inheritDoc}

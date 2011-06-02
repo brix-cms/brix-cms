@@ -37,8 +37,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public NodeManagerEditorPanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
@@ -171,8 +169,6 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode> {
             return Collections.emptyList();
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class SessionFeedbackPanel extends FeedbackPanel {
         public SessionFeedbackPanel(String id) {

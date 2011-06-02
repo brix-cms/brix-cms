@@ -18,25 +18,17 @@ import org.brixcms.auth.AbstractNodeAction;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class ConvertNodeAction extends AbstractNodeAction {
-// ------------------------------ FIELDS ------------------------------
-
     private final String targetType;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ConvertNodeAction(Context context, BrixNode node, String targetType) {
         super(context, node);
         this.targetType = targetType;
     }
 
-// ------------------------ CANONICAL METHODS ------------------------
-
     @Override
     public String toString() {
         return "ConvertNodeAction{" + "targetType='" + targetType + '\'' + "} " + super.toString();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public String getTargetNodeType() {
         return targetType;

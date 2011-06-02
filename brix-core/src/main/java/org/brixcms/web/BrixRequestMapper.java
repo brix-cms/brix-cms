@@ -156,8 +156,6 @@ public class BrixRequestMapper implements IRequestMapper {
     // ------------------------ INTERFACE METHODS ------------------------
 
 
-// --------------------- Interface IRequestMapper ---------------------
-
 	@Override
     public IRequestHandler mapRequest(Request request) {
         final Url url = request.getClientUrl();

@@ -29,23 +29,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PageTile implements Tile {
-// ------------------------------ FIELDS ------------------------------
-
     public static String TYPE_NAME = PageTile.class.getName();
 
     // needed to detect loop during #requiresSSL call
     private static final MetaDataKey<Set<Path>> NODE_SET_KEY = new MetaDataKey<Set<Path>>() {
     };
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PageTile() {
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tile ---------------------
 
     public String getDisplayName() {
         return "Page Tile";

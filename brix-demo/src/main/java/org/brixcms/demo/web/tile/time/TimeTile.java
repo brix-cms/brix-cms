@@ -22,10 +22,6 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class TimeTile implements Tile {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tile ---------------------
 
 
     public String getDisplayName() {

@@ -39,11 +39,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class UserDtoEditor extends GenericPanel<UserDto> {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public UserDtoEditor(String id, IModel<UserDto> model, Mode mode) {
         super(id, model);
@@ -99,15 +95,11 @@ public abstract class UserDtoEditor extends GenericPanel<UserDto> {
 
     protected abstract void onCancel();
 
-// -------------------------- ENUMERATIONS --------------------------
-
     public static enum Mode {
         CREATE,
         EDIT,
         CHANGE_PASSWORD
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class RoleRenderer implements IChoiceRenderer<Role> {
         private static final long serialVersionUID = 1L;

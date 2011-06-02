@@ -18,8 +18,6 @@ import org.brixcms.jcr.AbstractNodeAdapter;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 class NodeAdapter extends AbstractNodeAdapter {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String P_MENU = "menu";
     private static final String P_SELECTED_LI_CSS_CLASS = "selectedLiCssClass";
     private static final String P_FIRST_LI_CSS_CLASS = "firstLiCssClass";
@@ -28,13 +26,9 @@ class NodeAdapter extends AbstractNodeAdapter {
     private static final String P_OUTER_UL_CSS_CLASS = "outerUlCssClass";
     private static final String P_INNER_UL_CSS_CLASS = "innerUlCssClass";
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public NodeAdapter(BrixNode node) {
         super(node);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public String getFirstLiCssClass() {
         return getProperty(P_FIRST_LI_CSS_CLASS, (String) null);

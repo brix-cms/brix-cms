@@ -23,20 +23,14 @@ import javax.jcr.RepositoryException;
  * @author Matej
  */
 public class RemoveNodeEvent extends NodeEvent {
-// ------------------------------ FIELDS ------------------------------
-
     private final String nodeName;
     private final String nodeUUID;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     RemoveNodeEvent(Node node) throws RepositoryException {
         super(node.getParent());
         this.nodeName = node.getName();
         this.nodeUUID = node.isNodeType("mix:referenceable") ? node.getIdentifier() : null;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public String getNodeName() {
         return nodeName;
@@ -45,8 +39,6 @@ public class RemoveNodeEvent extends NodeEvent {
     public String getNodeUUID() {
         return nodeUUID;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Node getParentNode() {
         return super.getNode();

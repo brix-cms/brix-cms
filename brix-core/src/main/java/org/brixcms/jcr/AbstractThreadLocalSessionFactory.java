@@ -25,8 +25,6 @@ import java.util.Map;
 
 
 public abstract class AbstractThreadLocalSessionFactory {
-// ------------------------------ FIELDS ------------------------------
-
     static final Logger logger = LoggerFactory.getLogger(AbstractThreadLocalSessionFactory.class);
 
     ThreadLocal<Map<String, Session>> container = new ThreadLocal<Map<String, Session>>() {
@@ -36,13 +34,9 @@ public abstract class AbstractThreadLocalSessionFactory {
         }
     };
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public AbstractThreadLocalSessionFactory() {
         super();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void cleanup() {
         for (Session session : container.get().values()) {

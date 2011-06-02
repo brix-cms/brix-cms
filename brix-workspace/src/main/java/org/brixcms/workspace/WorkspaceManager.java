@@ -24,8 +24,6 @@ import java.util.Map;
  * @author Matej Knopp
  */
 public interface WorkspaceManager {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Creates a new workspace.
      *

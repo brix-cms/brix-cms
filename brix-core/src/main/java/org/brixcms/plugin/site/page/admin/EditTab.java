@@ -38,13 +38,9 @@ import org.brixcms.web.tree.NodeFilter;
 import java.util.Collection;
 
 abstract class EditTab extends NodeManagerPanel {
-// ------------------------------ FIELDS ------------------------------
-
     private String currentEditorFactory;
     private final MarkupContainer contentEditorParent;
     private final IModel<String> contentEditorModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public EditTab(String id, final IModel<BrixNode> nodeModel) {
         super(id, nodeModel);

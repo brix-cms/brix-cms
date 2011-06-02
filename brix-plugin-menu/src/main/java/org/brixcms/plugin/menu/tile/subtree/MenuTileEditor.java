@@ -24,11 +24,7 @@ import org.brixcms.plugin.menu.tile.MenuPicker;
 import org.brixcms.plugin.site.page.tile.admin.GenericTileEditorPanel;
 
 class MenuTileEditor extends GenericTileEditorPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private MenuContainer currentEntry = new MenuContainer();
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MenuTileEditor(String id, IModel<BrixNode> containerNode) {
         super(id, containerNode);
@@ -47,8 +43,6 @@ class MenuTileEditor extends GenericTileEditorPanel<BrixNode> {
         form.add(new TextField<Integer>("startAtLevel"));
         form.add(new TextField<Integer>("renderLevels"));
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public void load(BrixNode node) {

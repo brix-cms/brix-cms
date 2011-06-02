@@ -50,8 +50,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
     private DataGrid<Rule> dataGrid;
     private AjaxLink<?> removeSelected;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public RulesPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, new RulesNodeModel(workspaceModel));
 
@@ -112,8 +110,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
             }
         });
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private final static class RulesNodeModel extends LoadableDetachableModel<RulesNode> {
         private final IModel<Workspace> workspaceModel;

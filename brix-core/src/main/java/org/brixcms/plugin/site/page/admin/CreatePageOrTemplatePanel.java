@@ -35,11 +35,7 @@ import org.brixcms.web.ContainerFeedbackPanel;
 import org.brixcms.web.util.validators.NodeNameValidator;
 
 public class CreatePageOrTemplatePanel extends NodeManagerPanel {
-// ------------------------------ FIELDS ------------------------------
-
     private String name;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public CreatePageOrTemplatePanel(String id, IModel<BrixNode> containerNodeModel, final String type,
                                      final SimpleCallback goBack) {

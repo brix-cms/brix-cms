@@ -42,13 +42,9 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 
 class NodeWrapper extends ItemWrapper implements Node {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String UNKNOWN = "unknown";
 
     private String uuid = UNKNOWN;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static NodeWrapper wrap(Node delegate, SessionWrapper session) {
         if (delegate == null) {
@@ -58,13 +54,9 @@ class NodeWrapper extends ItemWrapper implements Node {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected NodeWrapper(Node delegate, SessionWrapper session) {
         super(delegate, session);
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {
@@ -75,10 +67,6 @@ class NodeWrapper extends ItemWrapper implements Node {
         }
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Item ---------------------
 
 
     public boolean isNode() {
@@ -113,8 +101,6 @@ class NodeWrapper extends ItemWrapper implements Node {
         getActionHandler().beforeNodeRemove(this);
         super.remove();
     }
-
-// --------------------- Interface Node ---------------------
 
 
     public Node addNode(String relPath) throws RepositoryException {
@@ -559,8 +545,6 @@ class NodeWrapper extends ItemWrapper implements Node {
             throws UnsupportedRepositoryOperationException, RepositoryException {
         return getDelegate().getAllowedLifecycleTransistions();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private void afterPropertySet(String name, Object value, Property property)
             throws RepositoryException {

@@ -19,8 +19,6 @@ import org.brixcms.registry.ExtensionPointRegistry;
 import org.brixcms.workspace.WorkspaceManager;
 
 public class BrixConfig {
-// ------------------------------ FIELDS ------------------------------
-
     private final ExtensionPointRegistry registry = new ExtensionPointRegistry();
 
     private AdminConfig adminConfig = new AdminConfig();
@@ -33,16 +31,12 @@ public class BrixConfig {
     private final WorkspaceManager workspaceManager;
     private final JcrSessionFactory sessionFactory;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public BrixConfig(JcrSessionFactory sessionFactory, WorkspaceManager workspaceManager,
                       UriMapper mapper) {
         this.sessionFactory = sessionFactory;
         this.workspaceManager = workspaceManager;
         this.mapper = mapper;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public AdminConfig getAdminConfig() {
         return adminConfig;

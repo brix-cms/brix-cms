@@ -27,21 +27,13 @@ import org.brixcms.web.reference.Reference;
  * Created by IntelliJ IDEA. User: korbinianbachl Date: 08.09.2010 Time: 21:11:23
  */
 public class SwitcherColumn extends AbstractColumn {
-// ------------------------------ FIELDS ------------------------------
-
     ReferenceEditorConfiguration conf;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SwitcherColumn(String id, IModel<String> displayModel, ReferenceEditorConfiguration conf) {
         super(id, displayModel);
         this.conf = conf;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGridColumn ---------------------
 
     /**
      * {@inheritDoc}

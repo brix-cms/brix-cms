@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TypePanel extends EditableCellPanel {
-// ------------------------------ FIELDS ------------------------------
-
     private IChoiceRenderer<Type> typeRenderer = new IChoiceRenderer<Type>() {
         public Object getDisplayValue(Type object) {
             return getString(object.toString());
@@ -37,8 +35,6 @@ public class TypePanel extends EditableCellPanel {
             return "" + index;
         }
     };
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TypePanel(String id, AbstractColumn column, IModel rowModel, IModel itemModel) {
         super(id, column, rowModel);
@@ -50,8 +46,6 @@ public class TypePanel extends EditableCellPanel {
         choice.setNullValid(false);
         choice.setRequired(true);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected FormComponent getEditComponent() {

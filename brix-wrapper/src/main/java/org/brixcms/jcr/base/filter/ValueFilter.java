@@ -28,11 +28,7 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 public class ValueFilter {
-// ------------------------------ FIELDS ------------------------------
-
     private final ValueFilter previous;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ValueFilter() {
         previous = null;
@@ -42,13 +38,9 @@ public class ValueFilter {
         this.previous = previous;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public ValueFilter getPrevious() {
         return previous;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Binary getBinary(Property property) throws RepositoryException {
         if (getPrevious() != null) {

@@ -28,8 +28,6 @@ import javax.jcr.version.VersionHistory;
  * @author igor.vaynberg
  */
 class VersionHistoryWrapper extends NodeWrapper implements JcrVersionHistory {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrVersionHistory wrap(VersionHistory delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -38,23 +36,15 @@ class VersionHistoryWrapper extends NodeWrapper implements JcrVersionHistory {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected VersionHistoryWrapper(VersionHistory delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrItem ---------------------
 
     @Override
     public VersionHistory getDelegate() {
         return (VersionHistory) super.getDelegate();
     }
-
-// --------------------- Interface VersionHistory ---------------------
 
 
     /**

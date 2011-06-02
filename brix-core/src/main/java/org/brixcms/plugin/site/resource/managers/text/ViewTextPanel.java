@@ -27,8 +27,6 @@ import org.brixcms.plugin.site.resource.ResourceNodeHandler;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class ViewTextPanel extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ViewTextPanel(String id, final IModel<BrixNode> model) {
         super(id, model);
 

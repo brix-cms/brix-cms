@@ -23,8 +23,6 @@ import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 import javax.servlet.http.HttpServletResponse;
 
 public class ForbiddenPage extends WebPage {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ForbiddenPage() {
         this("");
     }
@@ -38,8 +36,6 @@ public class ForbiddenPage extends WebPage {
             }
         });
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void configureResponse() {

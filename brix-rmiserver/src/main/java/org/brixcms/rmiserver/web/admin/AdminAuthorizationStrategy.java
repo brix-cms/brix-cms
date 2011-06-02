@@ -30,10 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IAuthorizationStrategy ---------------------
 
 
     public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
@@ -116,8 +112,6 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
     public boolean isActionAuthorized(Component component, Action action) {
         return true;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private String[] parseAuthHeader(String auth) {
         if (auth != null && auth.toLowerCase().startsWith("basic ")) {

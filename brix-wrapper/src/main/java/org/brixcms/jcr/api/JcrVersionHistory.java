@@ -27,13 +27,9 @@ import javax.jcr.version.VersionIterator;
  * @author igor.vaynberg
  */
 public interface JcrVersionHistory extends VersionHistory, JcrNode {
-// ------------------------ INTERFACE METHODS ------------------------
-
 
 // --------------------- Interface JcrItem ---------------------
     public VersionHistory getDelegate();
-
-// --------------------- Interface VersionHistory ---------------------
 
 
     /**
@@ -116,8 +112,6 @@ public interface JcrVersionHistory extends VersionHistory, JcrNode {
     public String[] getVersionLabels(Version version);
 
     public void removeVersion(String versionName);
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrVersionHistory wrap(VersionHistory delegate, JcrSession session) {

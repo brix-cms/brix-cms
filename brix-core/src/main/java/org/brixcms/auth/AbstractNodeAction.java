@@ -19,31 +19,21 @@ import org.brixcms.workspace.Workspace;
 
 
 public abstract class AbstractNodeAction extends AbstractAction {
-// ------------------------------ FIELDS ------------------------------
-
     private final BrixNode node;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractNodeAction(Context context, BrixNode node) {
         super(context);
         this.node = node;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public BrixNode getNode() {
         return node;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {
         return "AbstractNodeAction{" + "node=" + node + "} " + super.toString();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Workspace getWorkspace() {
         if (node == null) {

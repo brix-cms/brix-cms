@@ -24,11 +24,7 @@ import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
 public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String PREVIEW_PARAM = Brix.NS_PREFIX + "preview";
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static boolean isPreview() {
         BrixPageParameters params = BrixPageParameters.getCurrent();
@@ -40,14 +36,10 @@ public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
         return false;
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PreviewNodeIFrame(String id, IModel<BrixNode> model) {
         super(id, model);
         setOutputMarkupId(true);
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     private CharSequence getUrl() {
         BrixPageParameters parameters = new BrixPageParameters();
@@ -59,8 +51,6 @@ public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
                 .urlFor(new BrixNodeRequestHandler(nodeModel, parameters)));
         return url;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onComponentTag(ComponentTag tag) {

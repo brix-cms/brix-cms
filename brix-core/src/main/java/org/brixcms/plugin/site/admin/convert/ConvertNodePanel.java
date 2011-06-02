@@ -29,8 +29,6 @@ import org.brixcms.web.util.TextLink;
 import java.util.Collection;
 
 public class ConvertNodePanel extends NodeManagerPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ConvertNodePanel(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
 

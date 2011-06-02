@@ -18,11 +18,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 public abstract class CachingAbstractTab extends AbstractBrixTab {
-// ------------------------------ FIELDS ------------------------------
-
     private Panel panel = null;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public CachingAbstractTab(IModel<String> title) {
         super(title);
@@ -32,10 +28,6 @@ public abstract class CachingAbstractTab extends AbstractBrixTab {
         super(title, priority);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ITab ---------------------
 
 
     @Override
@@ -49,8 +41,6 @@ public abstract class CachingAbstractTab extends AbstractBrixTab {
     public boolean isVisible() {
         return true;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public abstract Panel newPanel(String panelId);
 }

@@ -33,8 +33,6 @@ import java.math.BigInteger;
  * @since 1.0-dev
  */
 public class Base64 implements BinaryEncoder, BinaryDecoder {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Chunk size per RFC 2045 section 6.8.
      *
@@ -169,8 +167,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * this variable.
      */
     private int x;
-
-// -------------------------- STATIC METHODS --------------------------
 
     /**
      * Tests a given byte array to see if it contains only valid characters within the Base64 alphabet.
@@ -641,8 +637,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
         return resizedBytes;
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Default constructor:  lineLength is 76, and the lineSeparator is CRLF
      * when encoding, and all forms can be decoded.
@@ -725,10 +719,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
         return false;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface BinaryDecoder ---------------------
 
 
     /**
@@ -742,8 +732,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
         return decodeBase64(pArray);
     }
 
-// --------------------- Interface BinaryEncoder ---------------------
-
 
     /**
      * Encodes a byte[] containing binary data, into a byte[] containing characters in the Base64 alphabet.
@@ -755,8 +743,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     public byte[] encode(byte[] pArray) {
         return encodeBase64(pArray, false);
     }
-
-// --------------------- Interface Decoder ---------------------
 
 
     /**
@@ -776,8 +762,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
         return decode((byte[]) pObject);
     }
 
-// --------------------- Interface Encoder ---------------------
-
     // Implementation of the Encoder Interface
 
     /**
@@ -796,8 +780,6 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
         }
         return encode((byte[]) pObject);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns true if this Base64 object has buffered data for reading.

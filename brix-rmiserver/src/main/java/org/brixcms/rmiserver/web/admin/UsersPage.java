@@ -41,14 +41,10 @@ import java.util.Iterator;
  */
 @AllowedRoles(Role.ADMIN)
 public class UsersPage extends WebPage {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     @SpringBean
     public UserService users;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor that is invoked when page is invoked without a session.
@@ -106,8 +102,6 @@ public class UsersPage extends WebPage {
         });
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     private void onChangePassword(final IModel<User> model) {
         final User user = model.getObject();
         IModel<UserDto> dto = new Model<UserDto>(users.dto(user));
@@ -149,8 +143,6 @@ public class UsersPage extends WebPage {
             }
         });
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class UsersDataProvider implements IDataProvider<User> {
         private static final long serialVersionUID = 1L;

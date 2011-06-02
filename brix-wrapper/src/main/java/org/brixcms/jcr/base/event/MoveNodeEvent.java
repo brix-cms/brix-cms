@@ -23,24 +23,16 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public class MoveNodeEvent extends NodeEvent {
-// ------------------------------ FIELDS ------------------------------
-
     private final String originalPath;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     MoveNodeEvent(Node node, String originalPath) {
         super(node);
         this.originalPath = originalPath;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public String getOriginalPath() {
         return originalPath;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Node getNode() {

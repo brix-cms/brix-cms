@@ -33,8 +33,6 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class AbstractMenuRenderer extends WebComponent implements IGenericComponent<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      *
@@ -45,10 +43,6 @@ public abstract class AbstractMenuRenderer extends WebComponent implements IGene
         super(id, tileNodeModel);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     @SuppressWarnings("unchecked")
     public IModel<BrixNode> getModel() {
@@ -66,8 +60,6 @@ public abstract class AbstractMenuRenderer extends WebComponent implements IGene
     public void setModelObject(BrixNode object) {
         setDefaultModelObject(object);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected boolean anyChildSelected(ChildEntry entry, Set<ChildEntry> selectedSet) {
         if (entry.getChildren() != null) {

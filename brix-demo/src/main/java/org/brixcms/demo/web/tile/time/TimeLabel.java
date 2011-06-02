@@ -30,11 +30,7 @@ import java.util.Date;
  * @author igor.vaynberg
  */
 public class TimeLabel extends Label {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -45,8 +41,6 @@ public class TimeLabel extends Label {
     public TimeLabel(String id, IModel<BrixNode> nodeModel) {
         super(id, new TimeStringModel(nodeModel));
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     /**
      * Constructs time expression string

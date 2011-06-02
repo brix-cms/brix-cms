@@ -26,8 +26,6 @@ import org.brixcms.jcr.wrapper.BrixNode;
  * @author igor.vaynberg
  */
 public interface NodeTreeContainer {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Called when the tree selection needs to be changed to the specified node
      *

@@ -28,8 +28,6 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 class VersionWrapper extends NodeWrapper implements JcrVersion {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrVersion wrap(Version delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -50,23 +48,15 @@ class VersionWrapper extends NodeWrapper implements JcrVersion {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected VersionWrapper(Version delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrItem ---------------------
 
     @Override
     public Version getDelegate() {
         return (Version) super.getDelegate();
     }
-
-// --------------------- Interface Version ---------------------
 
 
     public JcrVersion getLinearSuccessor() throws RepositoryException {

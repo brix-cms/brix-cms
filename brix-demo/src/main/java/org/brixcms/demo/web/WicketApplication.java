@@ -42,8 +42,6 @@ import org.slf4j.LoggerFactory;
  * @see wicket.myproject.Start#main(String[])
  */
 public final class WicketApplication extends AbstractWicketApplication {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger log = LoggerFactory.getLogger(WicketApplication.class);
 
     /**
@@ -51,13 +49,9 @@ public final class WicketApplication extends AbstractWicketApplication {
      */
     private Brix brix;
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Brix getBrix() {
         return brix;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

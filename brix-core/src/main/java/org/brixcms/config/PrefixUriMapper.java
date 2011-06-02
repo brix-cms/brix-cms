@@ -24,11 +24,7 @@ import org.brixcms.Path;
  * @author ivaynberg
  */
 public abstract class PrefixUriMapper implements UriMapper {
-// ------------------------------ FIELDS ------------------------------
-
     private final Path prefix;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -43,10 +39,6 @@ public abstract class PrefixUriMapper implements UriMapper {
         this.prefix = prefix;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface UriMapper ---------------------
 
     /**
      * {@inheritDoc}

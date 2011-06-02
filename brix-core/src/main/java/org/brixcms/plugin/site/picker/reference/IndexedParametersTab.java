@@ -47,13 +47,9 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class IndexedParametersTab extends Panel {
-// ------------------------------ FIELDS ------------------------------
-
     private AjaxLink<?> removeSelected;
     private Entry newEntry = new Entry();
     private final DataSource dataSource = new DataSource();
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public IndexedParametersTab(String id) {
         super(id);
@@ -165,11 +161,7 @@ public abstract class IndexedParametersTab extends Panel {
         });
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     protected abstract BrixPageParameters getPageParameters();
-
-// -------------------------- INNER CLASSES --------------------------
 
     private abstract class MovePanel extends BrixGenericPanel<Entry> {
         public MovePanel(String id, IModel<Entry> model) {

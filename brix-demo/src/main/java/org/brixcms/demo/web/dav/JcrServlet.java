@@ -21,13 +21,9 @@ import org.brixcms.demo.web.WicketApplication;
 import javax.jcr.Repository;
 
 public class JcrServlet extends JCRWebdavServerServlet {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public JcrServlet() {
 
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected Repository getRepository() {

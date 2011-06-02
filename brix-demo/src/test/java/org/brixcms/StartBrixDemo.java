@@ -24,11 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StartBrixDemo {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(StartBrixDemo.class);
-
-// --------------------------- main() method ---------------------------
 
     public static void main(String[] args) throws Exception {
         ApplicationProperties properties = new ApplicationProperties("brix.demo");

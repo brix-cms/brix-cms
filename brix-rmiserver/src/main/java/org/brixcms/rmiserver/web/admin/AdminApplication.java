@@ -28,15 +28,11 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
  * @see wicket.myproject.StartJackrabbitServer#main(String[])
  */
 public class AdminApplication extends WebApplication {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      */
     public AdminApplication() {
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * @see wicket.Application#getHomePage()

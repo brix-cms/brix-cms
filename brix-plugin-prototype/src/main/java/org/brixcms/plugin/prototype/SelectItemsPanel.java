@@ -30,11 +30,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
-// ------------------------------ FIELDS ------------------------------
-
     private NodePickerTreeGridPanel treeGrid;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SelectItemsPanel(String id, String workspaceName) {
         super(id);
@@ -63,8 +59,6 @@ public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
 
         add(treeGrid);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected String getDependenciesMessage(Map<JcrNode, List<JcrNode>> dependencies) {
         StringBuilder b = new StringBuilder();

@@ -27,11 +27,7 @@ import java.io.StringReader;
  * @author igor.vaynberg
  */
 public class RepositoryUtil {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(Brix.class);
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static void registerNodeType(Workspace workspace, String typeName,
                                         boolean referenceable, boolean orderable, boolean mixin) {

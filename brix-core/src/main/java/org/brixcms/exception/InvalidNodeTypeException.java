@@ -15,8 +15,6 @@
 package org.brixcms.exception;
 
 public class InvalidNodeTypeException extends BrixException {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public InvalidNodeTypeException() {
     }
 

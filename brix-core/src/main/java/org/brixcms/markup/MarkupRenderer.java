@@ -30,19 +30,13 @@ import java.util.Map.Entry;
  * @author Matej Knopp
  */
 public abstract class MarkupRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private final String doctype;
     private final List<Item> items;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     MarkupRenderer(List<Item> items, String doctype) {
         this.items = items;
         this.doctype = doctype;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Renders the items.

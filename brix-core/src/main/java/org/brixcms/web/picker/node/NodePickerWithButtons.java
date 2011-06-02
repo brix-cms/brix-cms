@@ -24,11 +24,7 @@ import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
 public class NodePickerWithButtons extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private IModel<BrixNode> nodeModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodePickerWithButtons(String id, JcrTreeNode rootNode, NodeFilter visibleFilter, NodeFilter enabledFilter) {
         super(id);
@@ -68,13 +64,9 @@ public class NodePickerWithButtons extends BrixGenericPanel<BrixNode> {
         init(rootNode, visibleFilter, enabledFilter);
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     protected IModel<BrixNode> getNodeModel() {
         return nodeModel;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public boolean isDisplayFiles() {
         return true;

@@ -45,8 +45,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ListFolderNodesTab(String id, IModel<BrixNode> folderModel) {
         super(id, folderModel);
 
@@ -90,8 +88,6 @@ public class ListFolderNodesTab extends BrixGenericPanel<BrixNode> {
     private BrixNode getNode() {
         return (BrixNode) getModelObject();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class NameColumn extends AbstractColumn {
         public NameColumn(IModel<String> headerModel) {

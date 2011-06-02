@@ -27,8 +27,6 @@ import org.brixcms.web.tree.NodeFilter;
 import org.brixcms.web.util.AbstractModel;
 
 public abstract class NodeColumnPanel extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public NodeColumnPanel(String id, IModel<BrixNode> model, String workspace) {
         super(id, model);
 

@@ -22,8 +22,6 @@ import java.util.Calendar;
 
 
 class VersionWrapper extends NodeWrapper implements javax.jcr.version.Version {
-// -------------------------- STATIC METHODS --------------------------
-
     public static VersionWrapper wrap(Version delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -44,16 +42,10 @@ class VersionWrapper extends NodeWrapper implements javax.jcr.version.Version {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private VersionWrapper(Version delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Version ---------------------
 
     public VersionHistory getContainingHistory() throws RepositoryException {
         return VersionHistoryWrapper
@@ -83,8 +75,6 @@ class VersionWrapper extends NodeWrapper implements javax.jcr.version.Version {
     public Node getFrozenNode() throws RepositoryException {
         return NodeWrapper.wrap(getDelegate().getFrozenNode(), getSessionWrapper());
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Version getDelegate() {

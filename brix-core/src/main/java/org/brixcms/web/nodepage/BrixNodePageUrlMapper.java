@@ -54,14 +54,8 @@ import org.slf4j.LoggerFactory;
  * @author Matej Knopp
  */
 public class BrixNodePageUrlMapper implements IRequestMapper {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger log = LoggerFactory.getLogger(BrixNodePageUrlMapper.class);
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IRequestTargetUrlCodingStrategy ---------------------
 
 
     public String getMountPath() {
@@ -125,8 +119,6 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
     public boolean matches(String path, boolean caseSensitive) {
         return false;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public IRequestHandler decode(IRequestParameters requestParameters, final IModel<BrixNode> nodeModel) {
         PageInfo pageInfo = null;
@@ -399,8 +391,6 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
             return string;
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static final class HomePage extends WebPage {
     }

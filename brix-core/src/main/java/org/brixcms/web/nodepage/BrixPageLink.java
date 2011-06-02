@@ -30,12 +30,8 @@ import org.brixcms.jcr.wrapper.BrixNode;
  * @author igor.vaynberg
  */
 public class BrixPageLink extends AbstractLink {
-// ------------------------------ FIELDS ------------------------------
-
     // TODO optimize into minimap just like BookmarkablePageLink
     private final BrixPageParameters params;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixPageLink(String id, IModel<BrixNode> destination) {
         super(id, destination);
@@ -46,8 +42,6 @@ public class BrixPageLink extends AbstractLink {
         super(id, destination);
         this.params = params;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @SuppressWarnings("unchecked")
     @Override

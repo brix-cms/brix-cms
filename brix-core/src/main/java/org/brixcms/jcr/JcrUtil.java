@@ -43,8 +43,6 @@ import java.util.Map;
  * @author Matej Knopp
  */
 public class JcrUtil {
-// -------------------------- STATIC METHODS --------------------------
-
     /**
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
      * <p/>
@@ -554,8 +552,6 @@ public class JcrUtil {
             throw e;
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class NodePair {
         JcrNode originalNode;

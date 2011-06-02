@@ -24,8 +24,6 @@ import org.brixcms.plugin.site.resource.ResourceNodeHandler;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ViewImagePanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
@@ -45,8 +43,6 @@ public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
             }
         }.add(behavior));
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private abstract class ResourceBehavior extends AbstractBehavior
             implements

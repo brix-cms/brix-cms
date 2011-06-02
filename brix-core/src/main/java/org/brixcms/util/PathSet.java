@@ -22,11 +22,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class PathSet implements Set<Path> {
-// ------------------------------ FIELDS ------------------------------
-
     private final Set<Path> delegate;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public PathSet() {
         this(new HashSet<Path>());
@@ -36,8 +32,6 @@ public class PathSet implements Set<Path> {
         this.delegate = delegate;
     }
 
-// ------------------------ CANONICAL METHODS ------------------------
-
     public boolean equals(Object o) {
         return delegate.equals(o);
     }
@@ -46,10 +40,6 @@ public class PathSet implements Set<Path> {
         return delegate.hashCode();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Collection ---------------------
 
 
     public int size() {
@@ -95,8 +85,6 @@ public class PathSet implements Set<Path> {
     public void clear() {
         delegate.clear();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public boolean containsAncestor(Path path) {
         for (Path p : this) {

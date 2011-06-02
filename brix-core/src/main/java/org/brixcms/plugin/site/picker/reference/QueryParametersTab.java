@@ -47,14 +47,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public abstract class QueryParametersTab extends Panel {
-// ------------------------------ FIELDS ------------------------------
-
     AjaxLink<?> removeSelected;
 
     private Entry newEntry = new Entry();
     private final DataSource dataSource = new DataSource();
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public QueryParametersTab(String id) {
         super(id);
@@ -154,11 +150,7 @@ public abstract class QueryParametersTab extends Panel {
         });
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     protected abstract BrixPageParameters getPageParameters();
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class DataSource implements IDataSource {
         public void detach() {

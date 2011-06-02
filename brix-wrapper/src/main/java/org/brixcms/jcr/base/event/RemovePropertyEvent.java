@@ -22,8 +22,6 @@ import javax.jcr.Node;
  * @author Matej Knopp
  */
 public class RemovePropertyEvent extends PropertyEvent {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     RemovePropertyEvent(Node node, String propertyName) {
         super(node, propertyName);
     }

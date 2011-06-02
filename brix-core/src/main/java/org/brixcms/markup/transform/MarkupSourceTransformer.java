@@ -30,21 +30,13 @@ import java.util.List;
  * @author Matej Knopp
  */
 public abstract class MarkupSourceTransformer extends MarkupSourceWrapper {
-// ------------------------------ FIELDS ------------------------------
-
     private List<Item> items = null;
     private Iterator<Item> iterator = null;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MarkupSourceTransformer(MarkupSource delegate) {
         super(delegate);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface MarkupSource ---------------------
 
     @Override
     public Item nextMarkupItem() {
@@ -69,8 +61,6 @@ public abstract class MarkupSourceTransformer extends MarkupSourceWrapper {
             return null;
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Performs the actual transformation.

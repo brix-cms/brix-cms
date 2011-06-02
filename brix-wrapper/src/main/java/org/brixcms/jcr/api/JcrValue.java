@@ -29,10 +29,6 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 public interface JcrValue extends Value {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Value ---------------------
 
 
     public String getString();
@@ -75,8 +71,6 @@ public interface JcrValue extends Value {
 
 // -------------------------- OTHER METHODS --------------------------
     public Value getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrValue wrap(Value delegate, JcrSession session) {

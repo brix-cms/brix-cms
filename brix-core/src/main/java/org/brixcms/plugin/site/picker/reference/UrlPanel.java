@@ -21,8 +21,6 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public class UrlPanel extends BrixGenericPanel<String> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public UrlPanel(String id, IModel<String> urlModel) {
         super(id);
 

@@ -19,8 +19,6 @@ import org.brixcms.jcr.base.BrixSession;
 import javax.jcr.Session;
 
 public class WrapperAccessor {
-// -------------------------- STATIC METHODS --------------------------
-
     public static BrixSession wrap(Session session) {
         if (session instanceof SessionWrapper) {
             return (SessionWrapper) session;

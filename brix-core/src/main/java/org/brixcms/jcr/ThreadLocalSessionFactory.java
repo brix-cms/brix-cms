@@ -23,14 +23,10 @@ import javax.jcr.Repository;
 public class ThreadLocalSessionFactory extends AbstractThreadLocalSessionFactory
         implements
         JcrSessionFactory {
-// ------------------------------ FIELDS ------------------------------
-
     static final Logger logger = LoggerFactory.getLogger(ThreadLocalSessionFactory.class);
 
     private final Repository repository;
     private final Credentials credentials;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ThreadLocalSessionFactory(Repository repository, Credentials credentials) {
         if (repository == null) {
@@ -43,8 +39,6 @@ public class ThreadLocalSessionFactory extends AbstractThreadLocalSessionFactory
         this.credentials = credentials;
         this.repository = repository;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Override
     protected Credentials getCredentials() {

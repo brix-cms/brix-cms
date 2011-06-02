@@ -29,8 +29,6 @@ import java.util.List;
  * @author ivaynberg
  */
 public class TileContainerFacet {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Name of the Tile nodes(s)
      */
@@ -44,13 +42,9 @@ public class TileContainerFacet {
 
     private final BrixNode container;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public TileContainerFacet(BrixNode container) {
         this.container = container;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public boolean anyTileRequiresSSL() {
         List<BrixNode> tiles = getTileNodes();
@@ -141,8 +135,6 @@ public class TileContainerFacet {
             return null;
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class Properties {
         public static final String TILE_ID = Brix.NS_PREFIX + "tileId";

@@ -24,14 +24,10 @@ import java.util.Iterator;
 // we query for them. All properties should be copied from server on workspace initialization
 // (in 1 rmi call)
 class ClientWorkspace implements Workspace {
-// ------------------------------ FIELDS ------------------------------
-
     private RemoteWorkspace delegate;
 
     private String id;
     private RemoteWorkspaceManager remoteWorkspaceManager;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ClientWorkspace(RemoteWorkspace delegate) {
         this.delegate = delegate;
@@ -41,8 +37,6 @@ class ClientWorkspace implements Workspace {
         this.id = id;
         this.remoteWorkspaceManager = manager;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public RemoteWorkspace getDelegate() {
         if (delegate == null) {
@@ -65,8 +59,6 @@ class ClientWorkspace implements Workspace {
         }
         return id;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public boolean equals(Object obj) {
@@ -91,10 +83,6 @@ class ClientWorkspace implements Workspace {
         return id != null ? id.hashCode() : 0;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Workspace ---------------------
 
 
     public void setAttribute(String attributeKey, String attributeValue) {

@@ -32,8 +32,6 @@ import javax.jcr.Repository;
  * @author igor.vaynberg
  */
 public abstract class AbstractWicketApplication extends WebApplication {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * logger
      */
@@ -58,16 +56,12 @@ public abstract class AbstractWicketApplication extends WebApplication {
      */
     private WorkspaceManager workspaceManager;
 
-// -------------------------- STATIC METHODS --------------------------
-
     /**
      * @return application instance
      */
     public static AbstractWicketApplication get() {
         return (AbstractWicketApplication) WebApplication.get();
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     /**
      * @return application properties
@@ -89,8 +83,6 @@ public abstract class AbstractWicketApplication extends WebApplication {
     public final WorkspaceManager getWorkspaceManager() {
         return workspaceManager;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * @return jcr session factory

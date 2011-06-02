@@ -28,8 +28,6 @@ import org.brixcms.demo.web.tile.stockquote.StockQuoteRequest;
  * @see StatefulStockQuoteTile
  */
 public class StatefulStockQuotePanel extends Panel {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -41,8 +39,6 @@ public class StatefulStockQuotePanel extends Panel {
      * symbol value
      */
     private String value;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor

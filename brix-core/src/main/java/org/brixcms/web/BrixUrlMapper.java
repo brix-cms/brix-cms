@@ -32,16 +32,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BrixUrlMapper implements IRequestMapper {
-// ------------------------------ FIELDS ------------------------------
-
     Logger logger = LoggerFactory.getLogger(BrixUrlMapper.class);
 
     /**
      * request cycle processor
      */
     private final BrixRequestCycleProcessor brixRequestCycleProcessor;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -52,10 +48,6 @@ public class BrixUrlMapper implements IRequestMapper {
         this.brixRequestCycleProcessor = brixRequestCycleProcessor;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IRequestMapper ---------------------
 
     public IRequestHandler mapRequest(Request request) {
         String pathStr = request.getContextPath();
@@ -86,8 +78,6 @@ public class BrixUrlMapper implements IRequestMapper {
     public Url mapHandler(IRequestHandler requestHandler) {
         return null;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public IRequestHandler targetForPath(String pathStr, IRequestParameters requestParameters) {
         if (!pathStr.startsWith("/")) {

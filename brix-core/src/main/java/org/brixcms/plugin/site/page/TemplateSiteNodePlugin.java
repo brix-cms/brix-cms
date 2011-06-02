@@ -25,20 +25,12 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.admin.CreatePageOrTemplatePanel;
 
 public class TemplateSiteNodePlugin extends AbstractSitePagePlugin {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String TYPE = Brix.NS_PREFIX + "tileTemplate";
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TemplateSiteNodePlugin(SitePlugin plugin) {
         super(plugin);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface SiteNodePlugin ---------------------
 
 
     @Override
@@ -67,8 +59,6 @@ public class TemplateSiteNodePlugin extends AbstractSitePagePlugin {
             return super.getConverterForNode(node);
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class FromPageConverter extends SetTypeConverter {
         public FromPageConverter(String type) {

@@ -18,7 +18,5 @@ import org.brixcms.jcr.wrapper.BrixNode;
 
 
 public interface NodeConverter {
-// -------------------------- OTHER METHODS --------------------------
-
     void convert(BrixNode node);
 }

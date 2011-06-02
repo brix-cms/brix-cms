@@ -21,11 +21,7 @@ import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
 
 public abstract class AbstractWorkspaceTab extends CachingAbstractTab implements IDetachable {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel<Workspace> workspaceModel;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractWorkspaceTab(IModel<String> title, Workspace workspace) {
         this(title, new WorkspaceModel(workspace), 0);
@@ -45,22 +41,14 @@ public abstract class AbstractWorkspaceTab extends CachingAbstractTab implements
         this.workspaceModel = workspaceModel;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public IModel<Workspace> getWorkspaceModel() {
         return workspaceModel;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
     public void detach() {
         workspaceModel.detach();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Panel newPanel(String panelId) {

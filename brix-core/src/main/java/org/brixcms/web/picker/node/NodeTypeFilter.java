@@ -18,11 +18,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.tree.NodeFilter;
 
 public class NodeTypeFilter implements NodeFilter {
-// ------------------------------ FIELDS ------------------------------
-
     private final String nodeTypes[];
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodeTypeFilter(String nodeType) {
         if (nodeType == null) {
@@ -43,10 +39,6 @@ public class NodeTypeFilter implements NodeFilter {
         this.nodeTypes = nodeTypes;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface NodeFilter ---------------------
 
     public boolean isNodeAllowed(BrixNode node) {
         for (String type : nodeTypes) {

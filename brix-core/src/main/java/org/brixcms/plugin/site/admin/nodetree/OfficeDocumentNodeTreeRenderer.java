@@ -24,20 +24,14 @@ import org.apache.wicket.request.resource.SharedResourceReference;
  * @author Jeremy Thomerson
  */
 public class OfficeDocumentNodeTreeRenderer extends AbstractMimeTypeTreeRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private static final ResourceReference RESOURCE = new SharedResourceReference(
             PageNodeTreeRenderer.class, "resources/x-office-document.png");
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public OfficeDocumentNodeTreeRenderer() {
         super(new String[]{"application/msword", "application/vnd.sun.xml.writer"});
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {

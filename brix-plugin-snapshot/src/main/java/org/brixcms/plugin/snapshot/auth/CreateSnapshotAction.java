@@ -18,8 +18,6 @@ import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
 public class CreateSnapshotAction extends AbstractWorkspaceAction {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public CreateSnapshotAction(Context context, Workspace workspace) {
         super(context, workspace);
     }

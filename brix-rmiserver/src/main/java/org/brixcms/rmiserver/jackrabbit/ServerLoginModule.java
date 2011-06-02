@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class ServerLoginModule implements LoginModule {
-// ------------------------------ FIELDS ------------------------------
-
     private Subject subject;
     private CallbackHandler callbackHandler;
 
@@ -44,8 +42,6 @@ public class ServerLoginModule implements LoginModule {
      */
     private final Set<Principal> principals = new HashSet<Principal>();
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      *
@@ -55,10 +51,6 @@ public class ServerLoginModule implements LoginModule {
         this.authorizer = authorizer;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface LoginModule ---------------------
 
     /**
      * {@inheritDoc}
@@ -124,8 +116,6 @@ public class ServerLoginModule implements LoginModule {
         principals.clear();
         return true;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private Credentials getCredentials() throws LoginException {
         if (callbackHandler == null) {

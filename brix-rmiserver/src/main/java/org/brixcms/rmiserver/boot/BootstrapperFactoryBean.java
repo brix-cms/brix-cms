@@ -28,8 +28,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 public class BootstrapperFactoryBean implements ApplicationContextAware, InitializingBean {
-// ------------------------------ FIELDS ------------------------------
-
     private ApplicationContext ctx;
 
     private SessionFactory sessionFactory;
@@ -40,8 +38,6 @@ public class BootstrapperFactoryBean implements ApplicationContextAware, Initial
 
     private String workspaceManagerLogin;
     private String workspaceManagerPassword;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
     public void setDataSource(DataSource dataSource) {
@@ -73,16 +69,10 @@ public class BootstrapperFactoryBean implements ApplicationContextAware, Initial
         this.workspaceManagerPassword = workspaceManagerPassword;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ApplicationContextAware ---------------------
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.ctx = applicationContext;
     }
-
-// --------------------- Interface InitializingBean ---------------------
 
 
     public void afterPropertiesSet() throws Exception {

@@ -41,8 +41,6 @@ import java.util.Collection;
  * @author ivaynberg
  */
 public interface Tile {
-// ------------------------------ FIELDS ------------------------------
-
     public static ExtensionPoint<Tile> POINT = new ExtensionPoint<Tile>() {
         public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity() {
             return Multiplicity.COLLECTION;
@@ -55,8 +53,6 @@ public interface Tile {
             return tileUuid.replace("org.brixcms.", "brix.");
         }
     };
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns the user readable tile name.
@@ -100,8 +96,6 @@ public interface Tile {
      * @return
      */
     boolean requiresSSL(IModel<BrixNode> tileNode);
-
-// -------------------------- INNER CLASSES --------------------------
 
     /**
      * Utility class for retrieving registered tiles

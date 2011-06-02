@@ -31,14 +31,10 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 
 class PropertyWrapper extends ItemWrapper implements Property {
-// ------------------------------ FIELDS ------------------------------
-
     private String name = null;
 
 
     private Node parent = null;
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static PropertyWrapper wrap(Property delegate, SessionWrapper session) {
         if (delegate == null) {
@@ -48,13 +44,9 @@ class PropertyWrapper extends ItemWrapper implements Property {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private PropertyWrapper(Property delegate, SessionWrapper session) {
         super(delegate, session);
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Override
     public String getName() throws RepositoryException {
@@ -72,10 +64,6 @@ class PropertyWrapper extends ItemWrapper implements Property {
         return parent;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Item ---------------------
 
 
     public boolean isNode() {
@@ -94,8 +82,6 @@ class PropertyWrapper extends ItemWrapper implements Property {
         super.remove();
         getActionHandler().afterPropertyRemove(parent, name);
     }
-
-// --------------------- Interface Property ---------------------
 
 
     public void setValue(Value value) throws RepositoryException {
@@ -242,8 +228,6 @@ class PropertyWrapper extends ItemWrapper implements Property {
     public boolean isMultiple() throws RepositoryException {
         return getDelegate().isMultiple();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private void afterValueSet(Object value) throws RepositoryException {
         if (value == null) {

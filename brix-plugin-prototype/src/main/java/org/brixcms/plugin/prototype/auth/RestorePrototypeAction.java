@@ -18,31 +18,21 @@ import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
 public class RestorePrototypeAction extends AbstractWorkspaceAction {
-// ------------------------------ FIELDS ------------------------------
-
     private final Workspace templateWorkspace;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public RestorePrototypeAction(Context context, Workspace targetWorkspace, Workspace templateWorkspace) {
         super(context, targetWorkspace);
         this.templateWorkspace = templateWorkspace;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Workspace getTemplateWorkspace() {
         return templateWorkspace;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {
         return "RestorePrototypeAction{" + "templateWorkspace=" + templateWorkspace + "} " + super.toString();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Workspace getTargetWorkspace() {
         return getWorkspace();

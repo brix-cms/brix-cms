@@ -17,22 +17,14 @@ package org.brixcms.util;
 import java.util.Iterator;
 
 public class ArrayIterator<T> implements Iterator<T> {
-// ------------------------------ FIELDS ------------------------------
-
     private int index = 0;
     private final T[] array;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ArrayIterator(T[] array) {
         super();
         this.array = array;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
     public boolean hasNext() {
         return index < array.length;

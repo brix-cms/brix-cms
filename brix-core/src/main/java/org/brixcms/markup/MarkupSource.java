@@ -23,8 +23,6 @@ import org.brixcms.markup.tag.Item;
  * @author Matej Knopp
  */
 public interface MarkupSource {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Returns the Doctype string of the document or null if there is no doctype present.
      *

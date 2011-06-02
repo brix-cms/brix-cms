@@ -19,8 +19,6 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public abstract class TileEditorPanel extends Panel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public TileEditorPanel(String id) {
         super(id);
     }
@@ -28,8 +26,6 @@ public abstract class TileEditorPanel extends Panel {
     public TileEditorPanel(String id, IModel<?> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     abstract public void load(BrixNode node);
 

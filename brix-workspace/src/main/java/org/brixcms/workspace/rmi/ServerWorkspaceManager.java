@@ -23,11 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ServerWorkspaceManager implements RemoteWorkspaceManager {
-// ------------------------------ FIELDS ------------------------------
-
     private final WorkspaceManager delegate;
-
-// -------------------------- STATIC METHODS --------------------------
 
     private static List<RemoteWorkspace> localToRemote(List<Workspace> local)
             throws RemoteException {
@@ -38,16 +34,10 @@ public class ServerWorkspaceManager implements RemoteWorkspaceManager {
         return remote;
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ServerWorkspaceManager(WorkspaceManager delegate) {
         this.delegate = delegate;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface RemoteWorkspaceManager ---------------------
 
     public RemoteWorkspace createWorkspace() throws RemoteException {
         return new ServerWorkspace(delegate.createWorkspace());

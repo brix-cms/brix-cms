@@ -18,11 +18,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 public class ProtocolLabel extends Label {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ProtocolLabel(String id, final IModel<Boolean> protocolModel) {
         super(id);

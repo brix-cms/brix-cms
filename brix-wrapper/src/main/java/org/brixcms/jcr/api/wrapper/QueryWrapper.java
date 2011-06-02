@@ -26,8 +26,6 @@ import javax.jcr.query.Query;
  * @author Matej Knopp
  */
 class QueryWrapper extends AbstractWrapper implements JcrQuery {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrQuery wrap(Query delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -36,23 +34,15 @@ class QueryWrapper extends AbstractWrapper implements JcrQuery {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected QueryWrapper(Query delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrQuery ---------------------
 
     @Override
     public Query getDelegate() {
         return (Query) super.getDelegate();
     }
-
-// --------------------- Interface Query ---------------------
 
 
     public void setLimit(final long limit) {

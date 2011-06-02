@@ -24,13 +24,9 @@ import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 
 public class NodePickerModalWindow extends ModalWindow implements IGenericComponent<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private final JcrTreeNode rootNode;
     private final NodeFilter enabledFilter;
     private final NodeFilter visibilityFilter;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodePickerModalWindow(String id, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
         super(id);
@@ -60,10 +56,6 @@ public class NodePickerModalWindow extends ModalWindow implements IGenericCompon
         setTitle(new ResourceModel("node-picker-title"));
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     public BrixNode getModelObject() {
         return (BrixNode) getDefaultModelObject();
@@ -76,8 +68,6 @@ public class NodePickerModalWindow extends ModalWindow implements IGenericCompon
     public void setModelObject(BrixNode object) {
         setDefaultModelObject(object);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public void show(AjaxRequestTarget target) {

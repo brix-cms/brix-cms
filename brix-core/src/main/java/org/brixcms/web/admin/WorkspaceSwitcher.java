@@ -31,11 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
-// ------------------------------ FIELDS ------------------------------
-
     private Map<String, String> workspaceNameCache;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public WorkspaceSwitcher(String id, IModel<Workspace> model) {
         super(id, model);
@@ -62,8 +58,6 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
         choice.setNullValid(false);
         add(choice);
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     private List<Workspace> getWorkspaces() {
         Brix brix = getBrix();
@@ -121,8 +115,6 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
         workspaceNameCache = null;
         super.onDetach();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class Renderer implements IChoiceRenderer<Workspace> {
         public Object getDisplayValue(Workspace object) {

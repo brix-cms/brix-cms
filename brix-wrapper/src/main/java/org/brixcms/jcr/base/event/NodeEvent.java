@@ -24,23 +24,15 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 abstract class NodeEvent extends Event {
-// ------------------------------ FIELDS ------------------------------
-
     final Node node;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     NodeEvent(Node node) {
         this.node = node;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     Node getNode() {
         return node;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     boolean isAffected(String path) throws RepositoryException {

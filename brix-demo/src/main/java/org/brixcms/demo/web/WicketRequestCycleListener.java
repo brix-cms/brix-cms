@@ -26,8 +26,6 @@ import javax.jcr.Session;
  */
 public class WicketRequestCycleListener extends AbstractRequestCycleListener {
 
-// -------------------------- OTHER METHODS --------------------------
-
 
     @Override
     public void onEndRequest(RequestCycle cycle) {

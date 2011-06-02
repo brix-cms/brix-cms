@@ -29,11 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Matej Knopp
  */
 public class MarkupCache {
-// ------------------------------ FIELDS ------------------------------
-
     private Map<String, GeneratedMarkup> map = new ConcurrentHashMap<String, GeneratedMarkup>();
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns the {@link GeneratedMarkup} instance for given container. The container must implement {@link

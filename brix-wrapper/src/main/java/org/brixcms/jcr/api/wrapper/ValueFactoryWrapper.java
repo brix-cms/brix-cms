@@ -30,8 +30,6 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 class ValueFactoryWrapper extends AbstractWrapper implements JcrValueFactory {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrValueFactory wrap(ValueFactory delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -40,23 +38,15 @@ class ValueFactoryWrapper extends AbstractWrapper implements JcrValueFactory {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected ValueFactoryWrapper(ValueFactory delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrValueFactory ---------------------
 
     @Override
     public ValueFactory getDelegate() {
         return (ValueFactory) super.getDelegate();
     }
-
-// --------------------- Interface ValueFactory ---------------------
 
 
     public JcrValue createValue(final Node value, final boolean weak) {

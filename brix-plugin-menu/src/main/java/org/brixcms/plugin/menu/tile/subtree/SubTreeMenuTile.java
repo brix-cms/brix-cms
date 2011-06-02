@@ -21,14 +21,8 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class SubTreeMenuTile implements Tile {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String TYPE_NAME = "brix.web.tile.menu.MenuTile";
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tile ---------------------
 
     public String getDisplayName() {
         return "Menu";

@@ -21,10 +21,6 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class FullTreeMenuTile implements Tile {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Tile ---------------------
 
     public String getDisplayName() {
         return "Menu - Full Tree";

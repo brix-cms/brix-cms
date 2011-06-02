@@ -43,8 +43,6 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class NodePickerTreeGridPanel extends Panel {
-// ------------------------------ FIELDS ------------------------------
-
     private final static NodeFilter ALLOW_ALL_FILTER = new NodeFilter() {
         public boolean isNodeAllowed(BrixNode node) {
             return true;
@@ -55,8 +53,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     private final NodeFilter enabledFilter;
 
     private TreeGrid<NodePickerTreeModel, JcrTreeNode> grid;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NodePickerTreeGridPanel(String id, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
         super(id);
@@ -71,8 +67,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public TreeGrid<NodePickerTreeModel, JcrTreeNode> getGrid() {
         return grid;
     }
@@ -80,8 +74,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     public NodeFilter getVisibilityFilter() {
         return visibilityFilter;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected void onBeforeRender() {
@@ -206,8 +198,6 @@ public abstract class NodePickerTreeGridPanel extends Panel {
             }
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class TreeColumn extends AbstractTreeColumn {
         public TreeColumn(String columnId, IModel headerModel) {

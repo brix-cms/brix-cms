@@ -18,8 +18,6 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.web.generic.IGenericComponent;
 
 public abstract class GenericTileEditorPanel<T> extends TileEditorPanel implements IGenericComponent<T> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public GenericTileEditorPanel(String id) {
         super(id);
     }
@@ -28,10 +26,6 @@ public abstract class GenericTileEditorPanel<T> extends TileEditorPanel implemen
         super(id, model);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     @SuppressWarnings("unchecked")
     public final IModel<T> getModel() {

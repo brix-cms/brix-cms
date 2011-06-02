@@ -43,13 +43,9 @@ import java.util.Map;
  * @author igor.vaynberg
  */
 class SessionWrapper extends AbstractWrapper implements JcrSession {
-// ------------------------------ FIELDS ------------------------------
-
     private final Behavior behavior;
 
     private Map<String, JcrNode> uuidMap = new HashMap<String, JcrNode>();
-
-// -------------------------- STATIC METHODS --------------------------
 
     public static JcrSession wrap(Session delegate, Behavior behavior) {
         if (delegate == null) {
@@ -59,23 +55,15 @@ class SessionWrapper extends AbstractWrapper implements JcrSession {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected SessionWrapper(Session delegate, Behavior behavior) {
         super(WrapperAccessor.wrap(delegate), null);
         this.behavior = behavior;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Behavior getBehavior() {
         return behavior;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface BrixSession ---------------------
 
 
     public Map<String, Object> getAttributesMap() {
@@ -98,8 +86,6 @@ class SessionWrapper extends AbstractWrapper implements JcrSession {
         return getDelegate().getValueFilter();
     }
 
-// --------------------- Interface JcrSession ---------------------
-
     @Override
     public BrixSession getDelegate() {
         return (BrixSession) super.getDelegate();
@@ -110,8 +96,6 @@ class SessionWrapper extends AbstractWrapper implements JcrSession {
         // removing the entire subtree
         uuidMap.clear();
     }
-
-// --------------------- Interface Session ---------------------
 
 
     public Repository getRepository() {
@@ -477,8 +461,6 @@ class SessionWrapper extends AbstractWrapper implements JcrSession {
             }
         });
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected JcrSession getJcrSession() {

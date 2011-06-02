@@ -27,8 +27,6 @@ import org.brixcms.registry.ExtensionPoint;
  * @author Jeremy Thomerson
  */
 public interface NodeTreeRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     public static final ExtensionPoint<NodeTreeRenderer> POINT = new ExtensionPoint<NodeTreeRenderer>() {
         public org.brixcms.registry.ExtensionPoint.Multiplicity getMultiplicity() {
             return Multiplicity.COLLECTION;
@@ -38,8 +36,6 @@ public interface NodeTreeRenderer {
             return NodeTreeRenderer.class.getName();
         }
     };
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns a component that renders this node in the site node browsing tree

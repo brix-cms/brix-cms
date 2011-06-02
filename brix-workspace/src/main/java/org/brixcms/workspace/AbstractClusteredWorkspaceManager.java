@@ -38,8 +38,6 @@ import java.util.UUID;
 
 public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspaceManager implements
         ClusteredWorkspaceManager {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger log = LoggerFactory.getLogger(AbstractClusteredWorkspaceManager.class);
 
     private Long lockTimeoutHint = 360L;
@@ -55,16 +53,10 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 
     private final Map<String, Session> workspaceToSessionMap = new HashMap<String, Session>();
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public AbstractClusteredWorkspaceManager() {
 
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ClusteredWorkspaceManager ---------------------
 
     public void workspaceCreated(String workspaceId) {
         // register the listener
@@ -72,8 +64,6 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
             getSession(workspaceId);
         }
     }
-
-// --------------------- Interface WorkspaceManager ---------------------
 
 
     public synchronized List<Workspace> getWorkspaces() {
@@ -112,8 +102,6 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
     public synchronized boolean workspaceExists(String workspaceId) {
         return availableWorkspaceNames.contains(workspaceId);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     abstract protected void createWorkspace(String workspaceId);
 
@@ -388,8 +376,6 @@ public abstract class AbstractClusteredWorkspaceManager extends AbstractWorkspac
 
         setCachedAttribute(workspaceId, attributeKey, attributeValue);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class SessionEventListener implements EventListener {
         private final Session session;

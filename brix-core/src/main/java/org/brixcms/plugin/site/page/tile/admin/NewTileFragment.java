@@ -49,13 +49,9 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private String newTileId;
     private String newTileTypeName;
     private Component newTileEditor;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public NewTileFragment(String id, String fragmentId, MarkupContainer markupContainer,
                            final IModel<BrixNode> nodeModel) {
@@ -140,8 +136,6 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
 
     protected abstract void onAddTile(String tileId, String ntileTypeName);
 
-// -------------------------- OTHER METHODS --------------------------
-
     public TileEditorPanel getEditor() {
         if (newTileEditor instanceof TileEditorPanel) {
             return (TileEditorPanel) newTileEditor;
@@ -153,8 +147,6 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
     private AbstractContainer getTileContainer() {
         return (AbstractContainer) getModelObject();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     class NewTileIdValidator implements IValidator {
         public void validate(IValidatable validatable) {

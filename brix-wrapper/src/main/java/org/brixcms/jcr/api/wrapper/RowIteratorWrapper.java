@@ -25,8 +25,6 @@ import javax.jcr.query.RowIterator;
  * @author Matej Knopp
  */
 class RowIteratorWrapper extends RangeIteratorWrapper implements JcrRowIterator {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrRowIterator wrap(RowIterator delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -35,16 +33,10 @@ class RowIteratorWrapper extends RangeIteratorWrapper implements JcrRowIterator 
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected RowIteratorWrapper(RowIterator delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Iterator ---------------------
 
 
     @Override
@@ -57,8 +49,6 @@ class RowIteratorWrapper extends RangeIteratorWrapper implements JcrRowIterator 
     public RowIterator getDelegate() {
         return (RowIterator) super.getDelegate();
     }
-
-// --------------------- Interface RowIterator ---------------------
 
 
     public JcrRow nextRow() {

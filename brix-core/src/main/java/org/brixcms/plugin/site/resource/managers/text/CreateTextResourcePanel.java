@@ -35,11 +35,7 @@ import org.brixcms.web.model.ModelBuffer;
 import org.brixcms.web.util.validators.NodeNameValidator;
 
 public class CreateTextResourcePanel extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private String fileName;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public CreateTextResourcePanel(String id, IModel<BrixNode> container, final SimpleCallback back) {
         super(id, container);
@@ -95,8 +91,6 @@ public class CreateTextResourcePanel extends BrixGenericPanel<BrixNode> {
             }
         });
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected BrixNode getContainer() {
         return getModelObject();

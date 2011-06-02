@@ -23,11 +23,7 @@ import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixNodePageListenerRequestHandler extends BrixNodePageRequestHandler {
-// ------------------------------ FIELDS ------------------------------
-
     private final String iface;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixNodePageListenerRequestHandler(IModel<BrixNode> node, BrixNodeWebPage page,
                                               String iface) {
@@ -41,16 +37,10 @@ public class BrixNodePageListenerRequestHandler extends BrixNodePageRequestHandl
         this.iface = iface;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IListenerInterfaceRequestTarget ---------------------
 
     public IRequestParameters getRequestParameters() {
         return RequestCycle.get().getRequest().getRequestParameters();
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected void respondWithInitialRedirectHandled(RequestCycle requestCycle) {
         int separator = iface.lastIndexOf(':');

@@ -23,11 +23,7 @@ import org.brixcms.web.generic.BrixGenericPanel;
 import javax.servlet.http.HttpServletRequest;
 
 public class WebdavUrlPanel extends BrixGenericPanel<String> {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public WebdavUrlPanel(String id, IModel<String> model) {
         super(id, model);

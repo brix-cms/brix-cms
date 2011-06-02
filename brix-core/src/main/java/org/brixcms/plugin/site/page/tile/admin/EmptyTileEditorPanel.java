@@ -22,8 +22,6 @@ import org.brixcms.jcr.wrapper.BrixNode;
  * @author igor.vaynberg
  */
 public class EmptyTileEditorPanel extends TileEditorPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      *
@@ -32,8 +30,6 @@ public class EmptyTileEditorPanel extends TileEditorPanel {
     public EmptyTileEditorPanel(String id) {
         super(id);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

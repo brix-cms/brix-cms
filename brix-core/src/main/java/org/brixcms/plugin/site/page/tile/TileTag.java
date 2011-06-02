@@ -36,8 +36,6 @@ public class TileTag extends SimpleTag
         implements
         ComponentTag,
         VariableKeyProvider {
-// ------------------------------ FIELDS ------------------------------
-
     private final static AtomicLong atomicLong = new AtomicLong();
 
     private final static String PREFIX = "tile-";
@@ -49,8 +47,6 @@ public class TileTag extends SimpleTag
     private final BrixNodeModel tileContainerNodeModel;
 
     private String id;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -67,8 +63,6 @@ public class TileTag extends SimpleTag
         tileContainerNodeModel.detach();
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     /**
      * @return name of tile
      */
@@ -76,10 +70,6 @@ public class TileTag extends SimpleTag
         return tileName;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface ComponentTag ---------------------
 
     /**
      * {@inheritDoc}
@@ -107,8 +97,6 @@ public class TileTag extends SimpleTag
         return id;
     }
 
-// --------------------- Interface VariableKeyProvider ---------------------
-
 
     /**
      * {@inheritDoc}
@@ -124,8 +112,6 @@ public class TileTag extends SimpleTag
         }
         return null;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * @return tile container that contains the tile

@@ -26,8 +26,6 @@ import javax.jcr.query.QueryResult;
  * @author igor.vaynberg
  */
 class QueryResultWrapper extends AbstractWrapper implements JcrQueryResult {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrQueryResult wrap(QueryResult delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -36,23 +34,15 @@ class QueryResultWrapper extends AbstractWrapper implements JcrQueryResult {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected QueryResultWrapper(QueryResult delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrQueryResult ---------------------
 
     @Override
     public QueryResult getDelegate() {
         return (QueryResult) super.getDelegate();
     }
-
-// --------------------- Interface QueryResult ---------------------
 
 
     public String[] getColumnNames() {

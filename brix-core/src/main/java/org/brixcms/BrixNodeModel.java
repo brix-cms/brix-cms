@@ -24,13 +24,9 @@ import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixNodeModel implements IModel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private String id;
     private String workspaceName;
     private transient BrixNode node;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public BrixNodeModel() {
         this((BrixNode) null);
@@ -67,8 +63,6 @@ public class BrixNodeModel implements IModel<BrixNode> {
         this.workspaceName = workspaceName;
     }
 
-// ------------------------ CANONICAL METHODS ------------------------
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -90,17 +84,11 @@ public class BrixNodeModel implements IModel<BrixNode> {
                 (workspaceName != null ? workspaceName.hashCode() : 0);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
 
     public void detach() {
         node = null;
     }
-
-// --------------------- Interface IModel ---------------------
 
     public BrixNode getObject() {
         if (node == null) {
@@ -120,8 +108,6 @@ public class BrixNodeModel implements IModel<BrixNode> {
             this.workspaceName = node.getSession().getWorkspace().getName();
         }
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private BrixNode loadNode(String id) {
         if (id != null) {

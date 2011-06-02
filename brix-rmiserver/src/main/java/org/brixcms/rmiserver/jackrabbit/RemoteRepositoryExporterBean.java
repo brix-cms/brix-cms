@@ -35,8 +35,6 @@ import java.rmi.server.UnicastRemoteObject;
  * @author ivaynberg
  */
 public class RemoteRepositoryExporterBean implements InitializingBean, DisposableBean {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory
             .getLogger(RemoteRepositoryExporterBean.class);
 
@@ -46,8 +44,6 @@ public class RemoteRepositoryExporterBean implements InitializingBean, Disposabl
 
     private Registry registry;
     private RemoteRepository remote;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
     public void setRegistryPort(int registryPort) {
@@ -64,10 +60,6 @@ public class RemoteRepositoryExporterBean implements InitializingBean, Disposabl
         this.serviceName = serviceName;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface DisposableBean ---------------------
 
 
     public void destroy() throws Exception {
@@ -75,8 +67,6 @@ public class RemoteRepositoryExporterBean implements InitializingBean, Disposabl
         registry.unbind(serviceName);
         UnicastRemoteObject.unexportObject(remote, false);
     }
-
-// --------------------- Interface InitializingBean ---------------------
 
     public void afterPropertiesSet() throws Exception {
         ServerAdapterFactory factory = new ServerAdapterFactory();

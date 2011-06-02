@@ -54,11 +54,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class VariablesPanel extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
-
     private AjaxLink<?> delete;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public VariablesPanel(String id, IModel<BrixNode> model) {
         super(id, model);
@@ -132,8 +128,6 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
         add(new FeedbackPanel("feedback").setOutputMarkupId(true));
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class DataSource implements IDataSource<Entry> {
         public IModel<Entry> model(Entry object) {

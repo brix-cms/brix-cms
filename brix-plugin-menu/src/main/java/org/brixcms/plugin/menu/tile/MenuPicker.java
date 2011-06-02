@@ -28,8 +28,6 @@ import org.brixcms.web.util.AbstractModel;
 import java.util.List;
 
 public class MenuPicker extends Panel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * @param id
      * @param selection     model containing selected menu node
@@ -40,8 +38,6 @@ public class MenuPicker extends Panel {
         super(id, selection);
         add(new MenuListView("menues", selection, workspaceNode));
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class MenuListView extends ListView<BrixNode> {
         private final IModel<BrixNode> selection;

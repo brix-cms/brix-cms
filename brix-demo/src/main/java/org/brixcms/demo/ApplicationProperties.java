@@ -28,12 +28,8 @@ import java.util.Properties;
  * @author igor.vaynberg
  */
 public class ApplicationProperties {
-// ------------------------------ FIELDS ------------------------------
-
     private final Properties properties;
     private String prefix;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * @deprecated
@@ -61,13 +57,9 @@ public class ApplicationProperties {
         properties = PropertyUtils.merge(MergeMode.OVERRIDE_ONLY, base, user, system);
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public String getPrefix() {
         return prefix;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * @return jcr {@link Credentials} built from username and password

@@ -25,8 +25,6 @@ import org.brixcms.registry.ExtensionPoint;
  * @author igor.vaynberg
  */
 public interface MarkupEditorFactory {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Extension point used to register repository initializers
      */
@@ -39,8 +37,6 @@ public interface MarkupEditorFactory {
             return MarkupEditorFactory.class.getName();
         }
     };
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Create the textarea component that will represent the editor

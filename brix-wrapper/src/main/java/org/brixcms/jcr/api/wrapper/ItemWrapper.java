@@ -30,8 +30,6 @@ import javax.jcr.version.VersionHistory;
  * @author Igor Vaynberg
  */
 abstract class ItemWrapper extends AbstractWrapper implements JcrItem {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrItem wrap(Item delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -48,13 +46,9 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected ItemWrapper(Item delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {
@@ -69,10 +63,6 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem {
         });
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Item ---------------------
 
 
     public String getName() {
@@ -170,8 +160,6 @@ abstract class ItemWrapper extends AbstractWrapper implements JcrItem {
             }
         });
     }
-
-// --------------------- Interface JcrItem ---------------------
 
     public Item getDelegate() {
         return (Item) super.getDelegate();

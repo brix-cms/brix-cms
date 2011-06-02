@@ -34,13 +34,9 @@ import java.util.Map;
  * @author Matej Knopp
  */
 public class HeadTransformer extends MarkupSourceTransformer {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public HeadTransformer(MarkupSource delegate) {
         super(delegate);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected List<Item> transform(List<Item> originalItems) {

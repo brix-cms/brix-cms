@@ -20,10 +20,6 @@ import org.apache.wicket.validation.ValidationError;
 import org.brixcms.jcr.wrapper.BrixFileNode;
 
 public class TextMimeTypeValidator implements IValidator<String> {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IValidator ---------------------
 
     public void validate(IValidatable<String> validatable) {
         final String value = validatable.getValue();

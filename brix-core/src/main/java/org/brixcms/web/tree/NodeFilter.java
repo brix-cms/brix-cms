@@ -19,7 +19,5 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import java.io.Serializable;
 
 public interface NodeFilter extends Serializable {
-// -------------------------- OTHER METHODS --------------------------
-
     public boolean isNodeAllowed(BrixNode node);
 }

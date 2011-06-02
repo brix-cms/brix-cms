@@ -30,8 +30,6 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.web.generic.IGenericComponent;
 
 public abstract class TileEditorFragment extends Fragment implements IGenericComponent<BrixNode> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public TileEditorFragment(String id, String markupId, MarkupContainer markupProvider,
                               final IModel<BrixNode> nodeModel, final String tileId, boolean filterFeedback) {
         super(id, markupId, markupProvider, nodeModel);
@@ -86,10 +84,6 @@ public abstract class TileEditorFragment extends Fragment implements IGenericCom
 
     protected abstract void onDelete(String tileId);
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IGenericComponent ---------------------
 
     @SuppressWarnings("unchecked")
     public IModel<BrixNode> getModel() {
@@ -103,8 +97,6 @@ public abstract class TileEditorFragment extends Fragment implements IGenericCom
     public void setModelObject(BrixNode object) {
         setDefaultModelObject(object);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private AbstractContainer getTileContainerNode() {
         return (AbstractContainer) getModelObject();

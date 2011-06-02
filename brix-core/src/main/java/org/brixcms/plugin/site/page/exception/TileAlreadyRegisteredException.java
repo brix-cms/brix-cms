@@ -17,8 +17,6 @@ package org.brixcms.plugin.site.page.exception;
 import org.brixcms.exception.BrixException;
 
 public class TileAlreadyRegisteredException extends BrixException {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public TileAlreadyRegisteredException() {
     }
 

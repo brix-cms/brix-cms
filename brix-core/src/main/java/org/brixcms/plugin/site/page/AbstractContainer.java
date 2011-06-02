@@ -41,8 +41,6 @@ public abstract class AbstractContainer extends BrixFileNode
         implements
         VariableValueProvider,
         VariableKeyProvider {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Name of markup attribute used to identify tile id inside brix:tile tag
      */
@@ -52,17 +50,11 @@ public abstract class AbstractContainer extends BrixFileNode
 
     private final TileContainerFacet tileManager;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public AbstractContainer(Node delegate, JcrSession session) {
         super(delegate, session);
         tileManager = new TileContainerFacet(this);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface VariableKeyProvider ---------------------
 
 
     /**
@@ -88,13 +80,9 @@ public abstract class AbstractContainer extends BrixFileNode
         return keys;
     }
 
-// --------------------- Interface VariableValueProvider ---------------------
-
     public String getVariableValue(String key) {
         return getVariableValue(key, true);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public AbstractSitePagePlugin getNodePlugin() {
         return (AbstractSitePagePlugin) SitePlugin.get().getNodePluginForNode(this);
@@ -266,8 +254,6 @@ public abstract class AbstractContainer extends BrixFileNode
     public TileContainerFacet tiles() {
         return tileManager;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class Properties {
         public static final String TITLE = Brix.NS_PREFIX + "title";

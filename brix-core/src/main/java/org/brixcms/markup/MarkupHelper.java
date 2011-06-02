@@ -35,8 +35,6 @@ import java.util.Set;
  * @author Matej Knopp
  */
 public class MarkupHelper implements Serializable {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Each tag component ids prefixed by this.
      */
@@ -45,8 +43,6 @@ public class MarkupHelper implements Serializable {
     private final IGenericComponent<BrixNode> component;
 
     private String markup = null;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public MarkupHelper(IGenericComponent<BrixNode> component) {
         this.component = component;
@@ -120,13 +116,9 @@ public class MarkupHelper implements Serializable {
         return COMPONENT_PREFIX + (uid != null ? uid.toString() : "");
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public String getMarkup() {
         return markup;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     private MarkupCache getMarkupCache() {
         return SitePlugin.get().getMarkupCache();

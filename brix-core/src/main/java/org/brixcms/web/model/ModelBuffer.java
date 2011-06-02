@@ -43,15 +43,11 @@ import java.util.Map;
  * org.brixcms.jcr.wrapper.BrixNode>)} provides a solid use case of this class.
  */
 public class ModelBuffer implements IModel<Object> {
-// ------------------------------ FIELDS ------------------------------
-
     private Object target;
 
     private Map<String, IModel> propertyMap;
 
     private List<Model> models = null;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ModelBuffer() {
 
@@ -66,10 +62,6 @@ public class ModelBuffer implements IModel<Object> {
         this.target = target;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
 
     public void detach() {
@@ -78,8 +70,6 @@ public class ModelBuffer implements IModel<Object> {
         }
     }
 
-// --------------------- Interface IModel ---------------------
-
     public Object getObject() {
         return target;
     }
@@ -87,8 +77,6 @@ public class ModelBuffer implements IModel<Object> {
     public void setObject(Object object) {
         target = object;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void apply() {
         if (models != null) {
@@ -160,8 +148,6 @@ public class ModelBuffer implements IModel<Object> {
     public <T> IModel<T> forProperty(String propertyName) {
         return forProperty(propertyName, false);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     /**
      * Internal storage type for non-JcrNode properties

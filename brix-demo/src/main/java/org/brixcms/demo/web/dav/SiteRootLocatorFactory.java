@@ -22,16 +22,12 @@ import org.apache.jackrabbit.webdav.AbstractLocatorFactory;
  * the purposes of the demo since it does not come with any plugins that store anything outside the site's html root.
  */
 public final class SiteRootLocatorFactory extends AbstractLocatorFactory {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * {@inheritDoc}
      */
     SiteRootLocatorFactory(SimpleServlet simpleServlet, String pathPrefix) {
         super(pathPrefix);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

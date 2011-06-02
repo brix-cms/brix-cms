@@ -27,11 +27,7 @@ import org.brixcms.web.tree.NodeFilter;
  * @author Matej Knopp
  */
 public interface TreeAwareNode extends JcrNode {
-// -------------------------- OTHER METHODS --------------------------
-
     public JcrTreeNode getTreeNode(BrixNode node);
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Util {
         public static JcrTreeNode getTreeNode(BrixNode node, NodeFilter filter) {

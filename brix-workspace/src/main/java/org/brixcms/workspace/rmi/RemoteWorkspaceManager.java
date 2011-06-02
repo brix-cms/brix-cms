@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 interface RemoteWorkspaceManager extends Remote {
-// -------------------------- OTHER METHODS --------------------------
-
     public RemoteWorkspace createWorkspace() throws RemoteException;
 
     public RemoteWorkspace getWorkspace(String workspaceId) throws RemoteException;

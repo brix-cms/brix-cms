@@ -21,8 +21,6 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
 class QueryWrapper extends BaseWrapper<Query> implements Query {
-// -------------------------- STATIC METHODS --------------------------
-
     public static QueryWrapper wrap(Query delegate, SessionWrapper session) {
         if (delegate == null) {
             return null;
@@ -31,16 +29,10 @@ class QueryWrapper extends BaseWrapper<Query> implements Query {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     private QueryWrapper(Query delegate, SessionWrapper session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Query ---------------------
 
     public QueryResult execute() throws RepositoryException {
         return QueryResultWrapper.wrap(getDelegate().execute(), getSessionWrapper());

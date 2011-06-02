@@ -22,17 +22,11 @@ import javax.jcr.version.VersionIterator;
  * @author Matej Knopp
  */
 public interface JcrVersionIterator extends VersionIterator {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface VersionIterator ---------------------
 
     public JcrVersion nextVersion();
 
 // -------------------------- OTHER METHODS --------------------------
     public VersionIterator getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrVersionIterator wrap(VersionIterator delegate, JcrSession session) {

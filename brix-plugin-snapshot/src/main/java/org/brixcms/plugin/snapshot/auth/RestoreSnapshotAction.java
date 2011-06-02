@@ -18,11 +18,7 @@ import org.brixcms.auth.AbstractWorkspaceAction;
 import org.brixcms.workspace.Workspace;
 
 public class RestoreSnapshotAction extends AbstractWorkspaceAction {
-// ------------------------------ FIELDS ------------------------------
-
     private final Workspace snapshotWorkspace;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public RestoreSnapshotAction(Context context, Workspace targetWorkspace) {
         super(context, targetWorkspace);
@@ -34,13 +30,9 @@ public class RestoreSnapshotAction extends AbstractWorkspaceAction {
         this.snapshotWorkspace = snapshotWorkspace;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Workspace getSnapshotWorkspace() {
         return snapshotWorkspace;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Workspace getTargetWorkspace() {
         return getWorkspace();

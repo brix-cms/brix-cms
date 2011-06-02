@@ -35,8 +35,6 @@ import java.util.UUID;
  * @author Matej Knopp
  */
 public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceManager {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Collection<String> NODES_TO_LEAVE_WHEN_CLEANING = Arrays
             .asList(NODE_NAME, "jcr:system", "rep:policy");
 
@@ -44,10 +42,6 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
 
     private List<String> deletedWorkspaceNames;
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface WorkspaceManager ---------------------
 
 
     public synchronized List<Workspace> getWorkspaces() {
@@ -100,8 +94,6 @@ public abstract class AbstractSimpleWorkspaceManager extends AbstractWorkspaceMa
     public synchronized boolean workspaceExists(String workspaceId) {
         return availableWorkspaceNames.contains(workspaceId);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     abstract protected void createWorkspace(String workspaceName);
 

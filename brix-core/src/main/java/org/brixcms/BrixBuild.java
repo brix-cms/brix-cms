@@ -24,8 +24,6 @@ import java.util.Properties;
  * @author ivaynberg
  */
 public class BrixBuild {
-// ------------------------------ FIELDS ------------------------------
-
     private static final String NUMBER = "brix-build.number";
     private static final String FILE = "META-INF/brix-build.properties";
 
@@ -39,8 +37,6 @@ public class BrixBuild {
      */
     private String number;
 
-// -------------------------- STATIC METHODS --------------------------
-
     /**
      * @return instance of {@link BrixBuild} singleton
      */
@@ -50,8 +46,6 @@ public class BrixBuild {
         }
         return instance;
     }
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     private BrixBuild() {
         InputStream is = getClass().getClassLoader().getResourceAsStream(FILE);
@@ -71,8 +65,6 @@ public class BrixBuild {
             }
         }
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     /**
      * @return build number

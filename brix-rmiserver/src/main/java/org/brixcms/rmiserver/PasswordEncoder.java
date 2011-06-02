@@ -28,12 +28,8 @@ import java.security.SecureRandom;
  * @author igor.vaynberg
  */
 public final class PasswordEncoder {
-// ------------------------------ FIELDS ------------------------------
-
     private static final char[] hexChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
             'B', 'C', 'D', 'E', 'F'};
-
-// -------------------------- OTHER METHODS --------------------------
 
     /*
      * (non-Javadoc)

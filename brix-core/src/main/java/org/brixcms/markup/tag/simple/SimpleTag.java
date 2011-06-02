@@ -24,21 +24,15 @@ import java.util.Map;
  * @author Matej Knopp
  */
 public class SimpleTag implements Tag {
-// ------------------------------ FIELDS ------------------------------
-
     private final Map<String, String> attributeMap;
     private final String name;
     private final Type type;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public SimpleTag(String name, Type type, Map<String, String> attributeMap) {
         this.name = name;
         this.type = type;
         this.attributeMap = attributeMap;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public Map<String, String> getAttributeMap() {
         return attributeMap;

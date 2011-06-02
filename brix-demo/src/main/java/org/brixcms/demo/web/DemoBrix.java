@@ -32,8 +32,6 @@ import org.brixcms.plugin.site.page.tile.Tile;
  * @author igor.vaynberg
  */
 public class DemoBrix extends Brix {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     /**
      * Constructor
      *
@@ -56,8 +54,6 @@ public class DemoBrix extends Brix {
         config.getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
         config.getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

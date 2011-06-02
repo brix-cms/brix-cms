@@ -50,8 +50,6 @@ import java.io.InputStream;
 import java.util.List;
 
 public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ManageSnapshotsPanel(String id, final IModel<Workspace> model) {
         super(id, model);
 

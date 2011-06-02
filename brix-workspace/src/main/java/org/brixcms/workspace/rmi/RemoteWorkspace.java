@@ -19,8 +19,6 @@ import java.rmi.RemoteException;
 import java.util.Iterator;
 
 interface RemoteWorkspace extends Remote {
-// -------------------------- OTHER METHODS --------------------------
-
     public void delete() throws RemoteException;
 
     public String getAttribute(String attributeKey) throws RemoteException;

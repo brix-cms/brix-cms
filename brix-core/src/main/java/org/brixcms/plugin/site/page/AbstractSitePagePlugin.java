@@ -34,8 +34,6 @@ import org.brixcms.web.nodepage.BrixPageParameters;
 import java.util.Collection;
 
 public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
-// ------------------------------ FIELDS ------------------------------
-
     private final BrixNodePageUrlMapper urlMapper = new BrixNodePageUrlMapper() {
         @Override
         protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
@@ -43,8 +41,6 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
             return new PageRenderingPage(nodeModel, pageParameters);
         }
     };
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractSitePagePlugin(SitePlugin sitePlugin) {
         registerManageNodeTabFactory(sitePlugin);
@@ -65,10 +61,6 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
         }
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface SiteNodePlugin ---------------------
 
     public abstract String getNodeType();
 
@@ -93,8 +85,6 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
 
         return null;
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class FromResourceConverter extends SetTypeConverter {
         public FromResourceConverter(String type) {

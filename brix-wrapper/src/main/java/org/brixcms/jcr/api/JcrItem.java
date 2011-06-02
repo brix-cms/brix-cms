@@ -23,10 +23,6 @@ import javax.jcr.ItemVisitor;
  * @author Matej Knopp
  */
 public interface JcrItem extends Item {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Item ---------------------
 
 
     public String getPath();
@@ -63,8 +59,6 @@ public interface JcrItem extends Item {
 
 // -------------------------- OTHER METHODS --------------------------
     public Item getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrItem wrap(Item delegate, JcrSession session) {

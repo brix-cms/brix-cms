@@ -23,8 +23,6 @@ import org.brixcms.web.picker.node.NodePickerPanel;
 import org.brixcms.web.tree.NodeFilter;
 
 public class SiteNodePickerPanel extends NodePickerPanel {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public SiteNodePickerPanel(String id, String workspaceId, NodeFilter enabledFilter) {
         this(id, workspaceId, false, enabledFilter);
     }

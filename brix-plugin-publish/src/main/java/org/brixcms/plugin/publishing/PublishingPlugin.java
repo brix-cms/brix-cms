@@ -30,8 +30,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class PublishingPlugin implements Plugin {
-// ------------------------------ FIELDS ------------------------------
-
     public static final String STATE_DEVELOPMENT = "development";
     public static final String STATE_STAGING = "staging";
     public static final String STATE_PRODUCTION = "production";
@@ -41,8 +39,6 @@ public class PublishingPlugin implements Plugin {
 
     private final Brix brix;
 
-// -------------------------- STATIC METHODS --------------------------
-
     public static PublishingPlugin get() {
         return get(Brix.get());
     }
@@ -51,22 +47,14 @@ public class PublishingPlugin implements Plugin {
         return (PublishingPlugin) brix.getPlugin(ID);
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public PublishingPlugin(Brix brix) {
         this.brix = brix;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public StateComparator getStateComparator() {
         return stateComparator;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Plugin ---------------------
 
     public String getId() {
         return ID;
@@ -92,8 +80,6 @@ public class PublishingPlugin implements Plugin {
                 workspaceModel)};
         return Arrays.asList(tabs);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void publish(Workspace workspace, String targetState) {
         if (workspace == null) {
@@ -123,8 +109,6 @@ public class PublishingPlugin implements Plugin {
 
         brix.clone(sourceSession, targetSession);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private class StateComparator implements Comparator<String> {
         public int compare(String o1, String o2) {

@@ -19,8 +19,6 @@ import org.apache.wicket.util.string.Strings;
 import org.brixcms.web.reference.Reference;
 
 public class ReferenceRequestHandler extends RedirectRequestHandler {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ReferenceRequestHandler(Reference reference) {
         super(referenceToUrl(reference));
     }

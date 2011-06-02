@@ -21,20 +21,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 
 class ServerWorkspace extends UnicastRemoteObject implements RemoteWorkspace {
-// ------------------------------ FIELDS ------------------------------
-
     private final Workspace delegate;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ServerWorkspace(Workspace delegate) throws RemoteException {
         this.delegate = delegate;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface RemoteWorkspace ---------------------
 
     public void delete() throws RemoteException {
         delegate.delete();

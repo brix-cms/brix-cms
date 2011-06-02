@@ -22,13 +22,9 @@ import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
 
 public class WorkspaceManagerFactoryBean extends AbstractFactoryBean {
-// ------------------------------ FIELDS ------------------------------
-
     private RepositoryImpl repository;
     private String login;
     private String password;
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     @Required
     public void setLogin(String login) {
@@ -45,17 +41,11 @@ public class WorkspaceManagerFactoryBean extends AbstractFactoryBean {
         this.repository = repository;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface FactoryBean ---------------------
 
     @Override
     public Class getObjectType() {
         return JackrabbitWorkspaceManagerImpl.class;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected Object createInstance() throws Exception {

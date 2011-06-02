@@ -24,10 +24,6 @@ import javax.jcr.query.QueryResult;
  * @author igor.vaynberg
  */
 public interface JcrQueryResult extends QueryResult {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface QueryResult ---------------------
 
     public String[] getColumnNames();
 
@@ -46,8 +42,6 @@ public interface JcrQueryResult extends QueryResult {
 
 // -------------------------- OTHER METHODS --------------------------
     public QueryResult getDelegate();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrQueryResult wrap(QueryResult delegate, JcrSession session) {

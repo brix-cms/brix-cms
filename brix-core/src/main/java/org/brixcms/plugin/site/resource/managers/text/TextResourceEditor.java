@@ -28,11 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TextResourceEditor extends Panel {
-// ------------------------------ FIELDS ------------------------------
-
     private DropDownChoice<Protocol> requiredProtocol;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public TextResourceEditor(String id, ModelBuffer model) {
         super(id);
@@ -55,8 +51,6 @@ public class TextResourceEditor extends Panel {
         add(new TextArea<String>("content", contentModel));
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     @Override
     protected void onBeforeRender() {
         // default require protocol to preserve
@@ -66,8 +60,6 @@ public class TextResourceEditor extends Panel {
 
         super.onBeforeRender();
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private final class ProtocolRenderer implements IChoiceRenderer<Protocol> {
         public Object getDisplayValue(Protocol object) {

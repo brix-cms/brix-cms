@@ -24,12 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ClientWorkspaceManager implements WorkspaceManager {
-// ------------------------------ FIELDS ------------------------------
-
     private RemoteWorkspaceManager delegate;
     private String url;
-
-// -------------------------- STATIC METHODS --------------------------
 
     private static List<Workspace> remoteToLocal(List<RemoteWorkspace> remote) {
         ArrayList<Workspace> local = new ArrayList<Workspace>(remote.size());
@@ -39,8 +35,6 @@ public class ClientWorkspaceManager implements WorkspaceManager {
         return local;
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ClientWorkspaceManager(String url) {
         this.url = url;
     }
@@ -48,8 +42,6 @@ public class ClientWorkspaceManager implements WorkspaceManager {
     public ClientWorkspaceManager(RemoteWorkspaceManager delegate) {
         this.delegate = delegate;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public RemoteWorkspaceManager getDelegate() {
         if (delegate == null) {
@@ -66,10 +58,6 @@ public class ClientWorkspaceManager implements WorkspaceManager {
         }
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface WorkspaceManager ---------------------
 
 
     public List<Workspace> getWorkspaces() {

@@ -23,11 +23,7 @@ import org.brixcms.web.reference.Reference;
  * @author igor.vaynberg
  */
 public class AbstractNodeAdapter {
-// ------------------------------ FIELDS ------------------------------
-
     private final BrixNode node;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public AbstractNodeAdapter(BrixNode node) {
         if (node == null) {
@@ -36,13 +32,9 @@ public class AbstractNodeAdapter {
         this.node = node;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     protected BrixNode getNode() {
         return node;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected String getProperty(String name, String defaultValue) {
         if (getNode().hasProperty(name)) {

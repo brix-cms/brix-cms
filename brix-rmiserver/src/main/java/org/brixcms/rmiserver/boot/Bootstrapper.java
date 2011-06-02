@@ -35,8 +35,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Bootstrapper {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(Bootstrapper.class);
 
     private final DataSource datasource;
@@ -46,8 +44,6 @@ public class Bootstrapper {
     private final UserService userService;
     private final String workspaceManagerLogin;
     private final String workspaceManagerPassword;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public Bootstrapper(DataSource datasource, PlatformTransactionManager transactionManager,
                         Configuration configuration, SessionFactory sessionFactory, UserService userService,
@@ -60,8 +56,6 @@ public class Bootstrapper {
         this.workspaceManagerLogin = workspaceManagerLogin;
         this.workspaceManagerPassword = workspaceManagerPassword;
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public void bootstrap() throws Exception {
         logger.info("Bootstrapper executing");

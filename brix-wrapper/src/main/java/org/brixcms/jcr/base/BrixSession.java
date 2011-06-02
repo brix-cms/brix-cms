@@ -22,8 +22,6 @@ import javax.jcr.Session;
 import java.util.Map;
 
 public interface BrixSession extends Session {
-// -------------------------- OTHER METHODS --------------------------
-
     public void addActionHandler(AbstractActionHandler handler);
 
     public void addEventsListener(EventsListener listener);

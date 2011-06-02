@@ -21,14 +21,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface JcrTreeNode extends javax.swing.tree.TreeNode, Serializable{
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface TreeNode ---------------------
 
     public List<? extends JcrTreeNode> getChildren();
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Returns {@link BrixNode} associated with this tree node. Note that it is valid for this method to return null.

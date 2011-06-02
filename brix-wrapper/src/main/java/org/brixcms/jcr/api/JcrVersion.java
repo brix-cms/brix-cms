@@ -26,13 +26,9 @@ import java.util.Calendar;
  * @author igor.vaynberg
  */
 public interface JcrVersion extends Version, JcrNode {
-// ------------------------ INTERFACE METHODS ------------------------
-
 
 // --------------------- Interface JcrItem ---------------------
     public Version getDelegate();
-
-// --------------------- Interface Version ---------------------
 
 
     public JcrVersionHistory getContainingHistory();
@@ -51,8 +47,6 @@ public interface JcrVersion extends Version, JcrNode {
      * @since JCR 2.0
      */
     public Node getFrozenNode();
-
-// -------------------------- INNER CLASSES --------------------------
 
     public static class Wrapper {
         public static JcrVersion wrap(Version delegate, JcrSession session) {

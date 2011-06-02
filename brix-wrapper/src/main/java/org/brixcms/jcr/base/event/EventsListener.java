@@ -25,8 +25,6 @@ import java.util.List;
  * @author Matej Knopp
  */
 public interface EventsListener {
-// -------------------------- OTHER METHODS --------------------------
-
     /**
      * Invoked right after the {@link Item#save()} method was called on the given item or after Session#save is called, in
      * which case the item will be <code>null</code>.

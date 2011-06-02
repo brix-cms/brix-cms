@@ -36,8 +36,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
-// ------------------------------ FIELDS ------------------------------
-
     private static final ResourceReference cssReference = new PackageResourceReference(
             ToolbarBehavior.class, "toolbar.css");
     private static final JavaScriptResourceReference javascriptReference = new JavaScriptResourceReference(
@@ -45,13 +43,9 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
 
     private List<WorkspaceEntry> workspaces;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ToolbarBehavior() {
 
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     private List<WorkspaceEntry> getWorkspaces() {
         if (workspaces == null) {
@@ -82,10 +76,6 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
 
     protected abstract String getCurrentWorkspaceId();
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IBehavior ---------------------
 
 
     @Override
@@ -117,8 +107,6 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
         }
     }
 
-// --------------------- Interface IHeaderContributor ---------------------
-
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
@@ -144,8 +132,6 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
                 defaultWorkspace + ");", "brix-toolbar-init");
     }
 
-// -------------------------- OTHER METHODS --------------------------
-
     private String escape(String s) {
         String res = Strings.escapeMarkup(s).toString();
         res.replace("\\", "\\\\");
@@ -157,8 +143,6 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
     protected void respond(AjaxRequestTarget target) {
 
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class WorkspaceEntry implements Serializable {
         private String id;

@@ -22,10 +22,6 @@ import org.brixcms.auth.Action;
  * @author igor.vaynberg
  */
 public class AccessWorkspaceSwitcherToolbarAction implements Action {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Action ---------------------
 
     public Context getContext() {
         return Context.PRESENTATION;

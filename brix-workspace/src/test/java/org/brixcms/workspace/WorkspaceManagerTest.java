@@ -43,16 +43,12 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 public class WorkspaceManagerTest {
-// ------------------------------ FIELDS ------------------------------
-
     private static final Logger logger = LoggerFactory.getLogger(WorkspaceManagerTest.class);
 
     private Repository repo;
     private WorkspaceManager manager;
 
     private File home;
-
-// -------------------------- OTHER METHODS --------------------------
 
     @After
     public void destroyManager() {
@@ -279,8 +275,6 @@ public class WorkspaceManagerTest {
             assertTrue(30 >= w.getId().length());
         }
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     private static class LocalWorkspaceManager extends AbstractSimpleWorkspaceManager {
         private final Repository repo;

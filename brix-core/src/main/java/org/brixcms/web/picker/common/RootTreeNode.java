@@ -29,19 +29,13 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class RootTreeNode implements JcrTreeNode {
-// ------------------------------ FIELDS ------------------------------
-
     private final String workspaceId;
 
     private List<JcrTreeNode> children = null;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public RootTreeNode(String workpaceId) {
         this.workspaceId = workpaceId;
     }
-
-// --------------------- GETTER / SETTER METHODS ---------------------
 
     public List<? extends JcrTreeNode> getChildren() {
         if (children == null) {
@@ -71,10 +65,6 @@ public class RootTreeNode implements JcrTreeNode {
         });
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrTreeNode ---------------------
 
     public IModel<BrixNode> getNodeModel() {
         return null;
@@ -83,8 +73,6 @@ public class RootTreeNode implements JcrTreeNode {
     public void detach() {
         children = null;
     }
-
-// --------------------- Interface TreeNode ---------------------
 
     @Override
     public TreeNode getChildAt(int childIndex) {

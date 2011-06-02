@@ -22,27 +22,19 @@ public class SiteNodeAction extends AbstractNodeAction {
     ;
     private final Type type;
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public SiteNodeAction(Context context, Type type, BrixNode node) {
         super(context, node);
         this.type = type;
     }
 
-// --------------------- GETTER / SETTER METHODS ---------------------
-
     public Type getType() {
         return type;
     }
-
-// ------------------------ CANONICAL METHODS ------------------------
 
     @Override
     public String toString() {
         return "SiteNodeAction{" + "type=" + type + "} " + super.toString();
     }
-
-// -------------------------- ENUMERATIONS --------------------------
 
     public enum Type {
         NODE_VIEW,

@@ -33,8 +33,6 @@ import java.io.InputStream;
  * @author igor.vaynberg
  */
 class WorkspaceWrapper extends AbstractWrapper implements JcrWorkspace {
-// -------------------------- STATIC METHODS --------------------------
-
     public static JcrWorkspace wrap(Workspace delegate, JcrSession session) {
         if (delegate == null) {
             return null;
@@ -43,23 +41,15 @@ class WorkspaceWrapper extends AbstractWrapper implements JcrWorkspace {
         }
     }
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     protected WorkspaceWrapper(Workspace delegate, JcrSession session) {
         super(delegate, session);
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface JcrWorkspace ---------------------
 
     @Override
     public Workspace getDelegate() {
         return (Workspace) super.getDelegate();
     }
-
-// --------------------- Interface Workspace ---------------------
 
 
     public JcrSession getSession() {

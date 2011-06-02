@@ -34,11 +34,7 @@ import java.util.Set;
  * @author igor.vaynberg
  */
 class MenuRenderer extends AbstractMenuRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     /**
      * Constructor
@@ -49,8 +45,6 @@ class MenuRenderer extends AbstractMenuRenderer {
     public MenuRenderer(String id, IModel<BrixNode> model) {
         super(id, model);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * {@inheritDoc}

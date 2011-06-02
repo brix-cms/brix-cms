@@ -26,14 +26,10 @@ import org.brixcms.plugin.site.page.PageNode;
  * @author Jeremy Thomerson
  */
 public class TemplateNodeTreeRenderer extends AbstractNodeTreeRenderer {
-// ------------------------------ FIELDS ------------------------------
-
     private static final long serialVersionUID = 1L;
 
     private static final ResourceReference RESOURCE = new SharedResourceReference(
             TemplateNodeTreeRenderer.class, "resources/text-x-generic-template.png");
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     protected ResourceReference getImageResourceReference(BaseTree tree, Object node) {

@@ -24,13 +24,9 @@ import javax.jcr.RepositoryException;
  * @author Matej Knopp
  */
 public class SetPropertyEvent extends PropertyEvent {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     SetPropertyEvent(Property property) throws RepositoryException {
         super(property);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     public Property getProperty() throws RepositoryException {
         return getNode().getProperty(getPropertyName());

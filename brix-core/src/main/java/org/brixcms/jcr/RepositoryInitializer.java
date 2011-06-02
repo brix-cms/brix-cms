@@ -26,8 +26,6 @@ import javax.jcr.Session;
  * @author igor.vaynberg
  */
 public interface RepositoryInitializer {
-// ------------------------------ FIELDS ------------------------------
-
     /**
      * Extension point used to register repository initializers
      */
@@ -40,8 +38,6 @@ public interface RepositoryInitializer {
             return RepositoryInitializer.class.getName();
         }
     };
-
-// -------------------------- OTHER METHODS --------------------------
 
     /**
      * Performs repository initialization.

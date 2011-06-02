@@ -22,12 +22,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class VariableText implements Text, VariableKeyProvider {
-// ------------------------------ FIELDS ------------------------------
-
     private final BrixNodeModel pageNodeModel;
     private final String key;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public VariableText(BrixNode pageNode, String key) {
         this.pageNodeModel = new BrixNodeModel(pageNode);
@@ -35,10 +31,6 @@ public class VariableText implements Text, VariableKeyProvider {
         this.pageNodeModel.detach();
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Text ---------------------
 
     public String getText() {
         BrixNode node = new BrixNodeModel(pageNodeModel).getObject();
@@ -49,8 +41,6 @@ public class VariableText implements Text, VariableKeyProvider {
             return "Couldn't resolve variable '" + key + "'";
         }
     }
-
-// --------------------- Interface VariableKeyProvider ---------------------
 
 
     public Collection<String> getVariableKeys() {

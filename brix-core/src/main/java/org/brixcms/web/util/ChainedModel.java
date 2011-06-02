@@ -17,28 +17,18 @@ package org.brixcms.web.util;
 import org.apache.wicket.model.IModel;
 
 public abstract class ChainedModel implements IModel {
-// ------------------------------ FIELDS ------------------------------
-
     private final IModel chained;
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public ChainedModel(IModel model) {
         super();
         this.chained = model;
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface IDetachable ---------------------
 
 
     public void detach() {
         chained.detach();
     }
-
-// --------------------- Interface IModel ---------------------
 
     public final Object getObject() {
         return getObject(chained);
@@ -47,8 +37,6 @@ public abstract class ChainedModel implements IModel {
     public void setObject(Object object) {
         setObject(object, chained);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     protected abstract Object getObject(IModel chained);
 

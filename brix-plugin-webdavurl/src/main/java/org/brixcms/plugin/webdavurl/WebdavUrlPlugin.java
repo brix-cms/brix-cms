@@ -30,10 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class WebdavUrlPlugin implements Plugin {
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface Plugin ---------------------
 
     public String getId() {
         return getClass().getName();
@@ -60,8 +56,6 @@ public class WebdavUrlPlugin implements Plugin {
                 workspaceModel)};
         return Arrays.asList(tabs);
     }
-
-// -------------------------- INNER CLASSES --------------------------
 
     static class Tab extends AbstractWorkspaceTab {
         public Tab(IModel<String> title, IModel<Workspace> workspaceModel) {

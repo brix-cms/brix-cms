@@ -25,16 +25,12 @@ import org.brixcms.web.nodepage.BrixPageParameters;
 import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 
 public class PageRenderingPage extends BrixMarkupNodeWebPage {
-// -------------------------- STATIC METHODS --------------------------
-
     public static MarkupSource transform(MarkupSource source, AbstractContainer container) {
         source = new HeadTransformer(source);
         source = new VariableTransformer(source, container);
         source = new TitleTransformer(source, container);
         return source;
     }
-
-// --------------------------- CONSTRUCTORS ---------------------------
 
     public PageRenderingPage(final IModel<BrixNode> node, BrixPageParameters pageParameters) {
         super(node, pageParameters);
@@ -47,10 +43,6 @@ public class PageRenderingPage extends BrixMarkupNodeWebPage {
         });
     }
 
-// ------------------------ INTERFACE METHODS ------------------------
-
-
-// --------------------- Interface MarkupSourceProvider ---------------------
 
     public MarkupSource getMarkupSource() {
         MarkupSource source = new PageMarkupSource((AbstractContainer) getModelObject());

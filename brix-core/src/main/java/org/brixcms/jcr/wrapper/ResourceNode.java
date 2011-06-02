@@ -27,8 +27,6 @@ import javax.jcr.Node;
  * @author Matej Knopp
  */
 public class ResourceNode extends BrixFileNode {
-// ------------------------------ FIELDS ------------------------------
-
     public static JcrNodeWrapperFactory FACTORY = new JcrNodeWrapperFactory() {
         @Override
         public boolean canWrap(Brix brix, JcrNode node) {
@@ -43,13 +41,9 @@ public class ResourceNode extends BrixFileNode {
 
     private static final String REQUIRED_PROTOCOL = "brix:requiredProtocol";
 
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public ResourceNode(Node delegate, JcrSession session) {
         super(delegate, session);
     }
-
-// -------------------------- OTHER METHODS --------------------------
 
     @Override
     public Protocol getRequiredProtocol() {

@@ -15,8 +15,6 @@
 package org.brixcms.exception;
 
 public class NodeNotFoundException extends BrixException {
-// --------------------------- CONSTRUCTORS ---------------------------
-
     public NodeNotFoundException() {
     }
 
