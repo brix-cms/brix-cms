@@ -52,6 +52,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Matej Knopp
+ * 
+ *         FIXME wicket-15: a lot of ideas from here stil need to be ported to
+ *         BrixRequestMapper, or the latter should be merged into the former.
+ *         two can enter, one may leave.
  */
 public class BrixNodePageUrlMapper implements IRequestMapper {
     private static final Logger log = LoggerFactory.getLogger(BrixNodePageUrlMapper.class);

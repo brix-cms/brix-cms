@@ -48,6 +48,7 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.webdav.RulesNode;
 import org.brixcms.registry.ExtensionPointRegistry;
 import org.brixcms.web.BrixExtensionStringResourceLoader;
+import org.brixcms.web.BrixRequestMapper;
 import org.brixcms.web.nodepage.ForbiddenPage;
 import org.brixcms.web.nodepage.PageParametersAwareEnabler;
 import org.brixcms.web.tile.pagetile.PageTile;
@@ -225,7 +226,7 @@ public abstract class Brix {
 
 
         // allow brix to handle any url that wicket cant
-        // in wicket 1.5 this is done by installing brixrequestmapper as root
+        application.getRootRequestMapperAsCompound().add(new BrixRequestMapper(this));
         // application.mount(new BrixNodePageUrlMapper());
 
         // register a string resource loader that allows any object that acts as
