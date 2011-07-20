@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket</artifactId>
-            <type>pom</type>
+            <packaging>pom</packaging>
         </dependency>
         <dependency>
             <groupId>org.apache.wicket</groupId>
