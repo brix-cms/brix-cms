@@ -40,4 +40,11 @@
             <version>2.4.0.Final</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jboss</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 </project>
