@@ -38,5 +38,5 @@ Community
 ---------
 - Mailing List/Google Group: http://groups.google.com/group/brix-cms-discuss
 - IRC: [##brix on freenode](irc://irc.freenode.net/##brix)
-- [Brix CMS Plugins](http://code.google.com/p/brix-cms-plugins) Repository Google Code Project - A place for developers to contribute and share their plugins for Brix.
+- [Brix CMS Plugins](https://github.com/brix-cms/brix-cms-plugins) Repository Google Code Project - A place for developers to contribute and share their plugins for Brix.
 - Blog Articles: [1](http://mythinkpond.wordpress.com/2010/03/08/how-to-setup-brix-cms-with-apache-jackrabbit-as-a-cluster-part-1-of-3/) [2](http://www.xaloon.org/blog/vytautas.racelis/Wicket_based_BRIX_CMS_from_developer_point_of_view)

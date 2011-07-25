@@ -27,8 +27,6 @@ import org.brixcms.demo.web.admin.AdminPage;
 import org.brixcms.jcr.JcrSessionFactory;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
-import org.brixcms.web.BrixRequestCycleProcessor;
-import org.brixcms.web.BrixRequestMapper;
 import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
@@ -98,8 +96,11 @@ public final class WicketApplication extends AbstractWicketApplication {
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
-            getRootRequestMapperAsCompound().add(new BrixRequestMapper(brix));
-            getRequestCycleListeners().add(new BrixRequestCycleProcessor(brix));
+
+            // we dont need this here anymore since 1.5 - idea of
+            // requestcycleprocessor has been replaced by requestmappers
+            // getRequestCycleListeners().add(new
+            // BrixRequestCycleProcessor(brix));
         } catch (Exception e) {
             log.error("Exception in WicketApplication init()", e);
         } finally {
