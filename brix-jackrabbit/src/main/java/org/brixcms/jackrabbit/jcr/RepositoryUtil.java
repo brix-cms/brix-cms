@@ -12,13 +12,14 @@
  * limitations under the License.
  */
 
-package org.brixcms.jcr;
+package org.brixcms.jackrabbit.jcr;
 
 import org.apache.jackrabbit.commons.cnd.CndImporter;
-import org.brixcms.Brix;
+import org.apache.jackrabbit.core.RepositoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jcr.Repository;
 import javax.jcr.Workspace;
 import javax.jcr.nodetype.NodeTypeManager;
 import java.io.StringReader;
@@ -27,7 +28,7 @@ import java.io.StringReader;
  * @author igor.vaynberg
  */
 public class RepositoryUtil {
-    private static final Logger logger = LoggerFactory.getLogger(Brix.class);
+    private static final Logger logger = LoggerFactory.getLogger(RepositoryUtil.class);
 
     public static void registerNodeType(Workspace workspace, String typeName,
                                         boolean referenceable, boolean orderable, boolean mixin) {
@@ -61,6 +62,14 @@ public class RepositoryUtil {
         catch (Exception e) {
             // TODO should use a well know exception subclass
             throw new RuntimeException("Could not register type: " + typeName, e);
+        }
+    }
+
+    public static void shutdownRepository(Repository repository) {
+        // shutdown the repository cleanly
+        if (repository instanceof RepositoryImpl) {
+            logger.info("Shutting down JackRabbit repository...");
+            ((RepositoryImpl) repository).shutdown();
         }
     }
 }

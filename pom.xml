@@ -47,7 +47,7 @@
     <properties>
         <wicket.version>1.5-RC4.2</wicket.version>
         <jetty.version>6.1.11</jetty.version>
-        <inmethod.grid.version>1.5-RC4.2</inmethod.grid.version>
+        <inmethod.grid.version>1.5-SNAPSHOT</inmethod.grid.version>
         <htmllexer.version>2.1</htmllexer.version>
         <jackrabbit.version>2.3-SNAPSHOT</jackrabbit.version>
         <lucene.version>3.0.3</lucene.version>
@@ -151,6 +151,29 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>jackrabbit-spi</artifactId>
+                <version>${jackrabbit.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>jackrabbit-spi-commons</artifactId>
+                <version>${jackrabbit.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>jackrabbit-core</artifactId>
                 <version>${jackrabbit.version}</version>
                 <exclusions>
@@ -198,6 +221,46 @@
                 <groupId>org.apache.jackrabbit</groupId>
                 <artifactId>jackrabbit-jcr-rmi</artifactId>
                 <version>${jackrabbit.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>jackrabbit-webdav</artifactId>
+                <version>${jackrabbit.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.jackrabbit</groupId>
+                <artifactId>jackrabbit-jcr-tests</artifactId>
+                <version>${jackrabbit.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!--+
                    | HELPERS
@@ -350,7 +413,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wicketstuff</groupId>
-                <artifactId>inmethod-grid</artifactId>
+                <artifactId>wicketstuff-inmethod-grid</artifactId>
                 <version>${inmethod.grid.version}</version>
                 <exclusions>
                     <exclusion>

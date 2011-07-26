@@ -14,9 +14,9 @@
 
 package org.brixcms;
 
+import org.brixcms.jackrabbit.jcr.RepositoryUtil;
 import org.brixcms.jcr.JcrEventListener;
 import org.brixcms.jcr.RepositoryInitializer;
-import org.brixcms.jcr.RepositoryUtil;
 import org.brixcms.jcr.base.EventUtil;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.folder.FolderNodePlugin;

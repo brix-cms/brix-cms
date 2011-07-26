@@ -79,7 +79,7 @@
         </iohandler>
         <iohandler>
             <!--  <class name="org.apache.jackrabbit.server.io.DefaultHandler" />  -->
-            <class name="org.brixcms.jcr.VersionedDefaultHandler"/>
+            <class name="org.brixcms.jackrabbit.jcr.VersionedDefaultHandler"/>
         </iohandler>
     </iomanager>
     <!--

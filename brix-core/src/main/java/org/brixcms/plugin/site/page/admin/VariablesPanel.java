@@ -59,31 +59,31 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
     public VariablesPanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
-        List<IGridColumn<IDataSource<BrixNode>, BrixNode>> columns = new ArrayList<IGridColumn<IDataSource<BrixNode>, BrixNode>>();
-        columns.add(new CheckBoxColumn<IDataSource<BrixNode>, BrixNode>("checkbox"));
-        columns.add(new PropertyColumn<IDataSource<BrixNode>, BrixNode, String>(new ResourceModel("key"), "key"));
-        columns.add(new EditablePropertyColumn<IDataSource<BrixNode>, BrixNode, String>(new ResourceModel("value"), "value") {
+        List<IGridColumn<DataSource, Entry>> columns = new ArrayList<IGridColumn<DataSource, Entry>>();
+        columns.add(new CheckBoxColumn<DataSource, Entry>("checkbox"));
+        columns.add(new PropertyColumn<DataSource, Entry, String>(new ResourceModel("key"), "key"));
+        columns.add(new EditablePropertyColumn<DataSource, Entry, String>(new ResourceModel("value"), "value") {
             @Override
             protected void addValidators(FormComponent component) {
                 component.setRequired(true);
             }
         });
-        columns.add(new SubmitCancelColumn<IDataSource<BrixNode>, BrixNode>("submitcancel", new ResourceModel("edit")) {
+        columns.add(new SubmitCancelColumn<DataSource, Entry>("submitcancel", new ResourceModel("edit")) {
             @Override
             protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
                 target.addChildren(VariablesPanel.this, FeedbackPanel.class);
             }
 
             @Override
-            protected void onSubmitted(AjaxRequestTarget target, IModel<BrixNode> rowModel, WebMarkupContainer rowComponent) {
+            protected void onSubmitted(AjaxRequestTarget target, IModel<Entry> rowModel, WebMarkupContainer rowComponent) {
                 target.addChildren(VariablesPanel.this, FeedbackPanel.class);
                 super.onSubmitted(target, rowModel, rowComponent);
             }
         });
 
-        final DataGrid<BrixNode> grid = new DefaultDataGrid<BrixNode>("grid",  new Model(new DataSource()), columns) {
+        final DataGrid<DataSource, Entry> grid = new DefaultDataGrid<DataSource, Entry>("grid",  new Model<DataSource>(new DataSource()), columns) {
             @Override
-            public void onItemSelectionChanged(IModel<BrixNode> item, boolean newValue) {
+            public void onItemSelectionChanged(IModel<Entry> item, boolean newValue) {
                 AjaxRequestTarget target = AjaxRequestTarget.get();
                 if (target != null) {
                     target.addComponent(delete);

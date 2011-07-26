@@ -14,12 +14,15 @@
 
 package org.brixcms.demo.web;
 
-import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.brixcms.demo.ApplicationProperties;
+import org.brixcms.jackrabbit.jcr.RepositoryUtil;
+import org.brixcms.jackrabbit.util.JcrUtils;
+import org.brixcms.jcr.Jcr2WorkspaceManager;
+import org.brixcms.jcr.JcrSessionFactory;
 import org.brixcms.jcr.ThreadLocalSessionFactory;
-import org.brixcms.util.JcrUtils;
 import org.brixcms.workspace.WorkspaceManager;
+import org.brixcms.workspace.rmi.ClientWorkspaceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +64,30 @@ public abstract class AbstractWicketApplication extends WebApplication {
      */
     public static AbstractWicketApplication get() {
         return (AbstractWicketApplication) WebApplication.get();
+    }
+
+    /**
+     * Create a {@link org.brixcms.workspace.WorkspaceManager} implementation. If <code>url</code> starts with <code>rmi://</code> an rmi
+     * based workspace manager will be created and returned. If <code>url</code> is left blank, a local workspace
+     * manager will be created.
+     *
+     * @param url
+     * @param sessionFactory
+     * @return
+     */
+    public static WorkspaceManager createWorkspaceManager(String url,
+                                                          final JcrSessionFactory sessionFactory) {
+        if (url == null || url.trim().length() == 0) {
+            // create workspace manager for a file system repository
+            Jcr2WorkspaceManager mgr = new Jcr2WorkspaceManager(sessionFactory);
+            mgr.initialize();
+            return mgr;
+        } else if (url.startsWith("rmi://")) {
+            // create rmi workspace manager
+            return new ClientWorkspaceManager(url);
+        } else {
+            throw new RuntimeException("Unsupported workspace manager url: " + url);
+        }
     }
 
     /**
@@ -108,7 +135,7 @@ public abstract class AbstractWicketApplication extends WebApplication {
 
         try {
             // create workspace manager brix will use to access workspace-related functionality
-            workspaceManager = JcrUtils.createWorkspaceManager(properties.getWorkspaceManagerUrl(),
+            workspaceManager = createWorkspaceManager(properties.getWorkspaceManagerUrl(),
                     sessionFactory);
         } finally {
             // since creating workspace manager may require access to session we need to clean up
@@ -140,11 +167,8 @@ public abstract class AbstractWicketApplication extends WebApplication {
      */
     @Override
     protected void onDestroy() {
-        // shutdown the repository cleanly
-        if (repository instanceof RepositoryImpl) {
-            logger.info("Shutting down JackRabbit repository...");
-            ((RepositoryImpl) repository).shutdown();
-        }
+        RepositoryUtil.shutdownRepository(repository);
+        
         super.onDestroy();
     }
 }

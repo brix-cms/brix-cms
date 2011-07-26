@@ -16,6 +16,7 @@ package org.brixcms.demo.web;
 
 import javax.jcr.ImportUUIDBehavior;
 
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Brix;
@@ -49,6 +50,11 @@ public final class WicketApplication extends AbstractWicketApplication {
 
     public Brix getBrix() {
         return brix;
+    }
+
+    public static WicketApplication get(final String applicationKey)
+    {
+        return (WicketApplication) Application.get(applicationKey);
     }
 
     /**

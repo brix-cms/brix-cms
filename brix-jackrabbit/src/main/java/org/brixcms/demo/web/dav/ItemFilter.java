@@ -15,7 +15,6 @@
 package org.brixcms.demo.web.dav;
 
 import org.apache.jackrabbit.webdav.simple.DefaultItemFilter;
-import org.brixcms.jcr.wrapper.BrixNode;
 
 import javax.jcr.Item;
 import javax.jcr.Node;
@@ -32,7 +31,7 @@ public class ItemFilter extends DefaultItemFilter {
         try {
             if (item instanceof Node) {
                 Node node = (Node) item;
-                if (node.isNodeType(BrixNode.JCR_MIXIN_BRIX_HIDDEN)) {
+                if (node.isNodeType("brix:hidden")) {
                     return true;
                 }
             } else {

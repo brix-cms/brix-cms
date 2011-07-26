@@ -15,8 +15,8 @@
 package org.brixcms.plugin.site.page.global;
 
 import org.brixcms.Brix;
+import org.brixcms.jackrabbit.jcr.RepositoryUtil;
 import org.brixcms.jcr.JcrNodeWrapperFactory;
-import org.brixcms.jcr.RepositoryUtil;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.wrapper.BrixFileNode;

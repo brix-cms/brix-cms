@@ -15,7 +15,6 @@
 package org.brixcms.demo.web.dav;
 
 import org.apache.jackrabbit.webdav.jcr.JCRWebdavServerServlet;
-import org.apache.wicket.Application;
 import org.brixcms.demo.web.WicketApplication;
 
 import javax.jcr.Repository;
@@ -27,7 +26,7 @@ public class JcrServlet extends JCRWebdavServerServlet {
 
     @Override
     protected Repository getRepository() {
-        WicketApplication app = (WicketApplication) Application.get("wicket.brix-demo");
+        WicketApplication app = WicketApplication.get("wicket.brix-demo");
         return app.getRepository();
     }
 }

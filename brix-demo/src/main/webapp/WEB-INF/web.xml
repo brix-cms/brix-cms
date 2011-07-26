@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app>
-    <display-name>org.brixcms-demo</display-name>
+    <display-name>org.brixcms.demo</display-name>
 
     <!--+
     | WICKET CONFIG
     +-->
     <filter>
-        <filter-name>wicket.brix-demo</filter-name>
-        <filter-class>org.apache.wicket.protocol.http.WicketFilter
-        </filter-class>
+        <filter-name>org.brixcms.demo</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
         <init-param>
-            <param-name>applicationClassName</param-name>
-            <param-value>org.brixcms.demo.web.WicketApplication</param-value>
+            <param-name>applicationFactoryClassName</param-name>
+            <param-value>org.wicketstuff.osgi.OsgiWebApplicationFactory</param-value>
+        </init-param>
+        <init-param>
+            <param-name>wicket.osgi.application.name</param-name>
+            <param-value>org.brixcms.demo</param-value>
         </init-param>
         <init-param>
             <param-name>wicket.configuration</param-name>
-            <param-value>deployment</param-value>
+            <param-value>development</param-value>
         </init-param>
     </filter>
     <filter-mapping>
-        <filter-name>wicket.brix-demo</filter-name>
+        <filter-name>org.brixcms.demo</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>ERROR</dispatcher>

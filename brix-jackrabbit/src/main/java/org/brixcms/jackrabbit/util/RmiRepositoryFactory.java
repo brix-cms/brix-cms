@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.brixcms.util;
+package org.brixcms.jackrabbit.util;
 
 import org.apache.jackrabbit.rmi.client.ClientAdapterFactory;
 import org.apache.jackrabbit.rmi.client.ClientRepositoryFactory;

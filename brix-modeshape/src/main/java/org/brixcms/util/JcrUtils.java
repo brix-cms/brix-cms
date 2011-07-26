@@ -173,7 +173,7 @@ public class JcrUtils {
      * @param destination destination file
      */
     public static void copyClassResourceToFile(String source, java.io.File destination) {
-        final InputStream in = JcrUtils.class.getResourceAsStream(source);
+        final InputStream in = org.brixcms.jackrabbit.util.JcrUtils.class.getResourceAsStream(source);
         if (in == null) {
             throw new RuntimeException("Class resource: " + source + " does not exist");
         }

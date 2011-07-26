@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.brixcms.jcr;
+package org.brixcms.jackrabbit.jcr;
 
 import org.apache.jackrabbit.server.io.DefaultHandler;
 import org.apache.jackrabbit.server.io.IOManager;

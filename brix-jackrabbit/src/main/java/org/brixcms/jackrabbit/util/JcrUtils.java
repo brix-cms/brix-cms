@@ -12,22 +12,18 @@
  * limitations under the License.
  */
 
-package org.brixcms.util;
+package org.brixcms.jackrabbit.util;
 
 import org.apache.jackrabbit.core.RepositoryImpl;
 import org.apache.jackrabbit.core.config.RepositoryConfig;
-import org.apache.wicket.util.file.File;
-import org.apache.wicket.util.io.Streams;
-import org.brixcms.jcr.Jcr2WorkspaceManager;
-import org.brixcms.jcr.JcrSessionFactory;
-import org.brixcms.workspace.WorkspaceManager;
-import org.brixcms.workspace.rmi.ClientWorkspaceManager;
 
 import javax.jcr.Repository;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Jcr and Jackrabbit related utilities
@@ -35,29 +31,6 @@ import java.io.InputStream;
  * @author igor.vaynberg
  */
 public class JcrUtils {
-    /**
-     * Create a {@link WorkspaceManager} implementation. If <code>url</code> starts with <code>rmi://</code> an rmi
-     * based workspace manager will be created and returned. If <code>url</code> is left blank, a local workspace
-     * manager will be created.
-     *
-     * @param url
-     * @param sessionFactory
-     * @return
-     */
-    public static WorkspaceManager createWorkspaceManager(String url,
-                                                          final JcrSessionFactory sessionFactory) {
-        if (url == null || url.trim().length() == 0) {
-            // create workspace manager for a file system repository
-            Jcr2WorkspaceManager mgr = new Jcr2WorkspaceManager(sessionFactory);
-            mgr.initialize();
-            return mgr;
-        } else if (url.startsWith("rmi://")) {
-            // create rmi workspace manager
-            return new ClientWorkspaceManager(url);
-        } else {
-            throw new RuntimeException("Unsupported workspace manager url: " + url);
-        }
-    }
 
     /**
      * Creates a jackrabbit repository based on the url. Accepted urls are <code>rmi://</code> and <code>file://</code>
@@ -89,7 +62,8 @@ public class JcrUtils {
             JcrUtils.class.getClassLoader().loadClass("org.apache.jackrabbit.rmi.client.ClientRepositoryFactory");
 
             return RmiRepositoryFactory.getRmiRepository(url);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException("Could not create rmi repository instance at url: " + url, e);
         }
     }
@@ -134,7 +108,8 @@ public class JcrUtils {
 //            }
 //
 //            return repository;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException("Could not create file repository at url: " + url, e);
         }
     }
@@ -166,10 +141,11 @@ public class JcrUtils {
 
         try {
             final FileOutputStream fos = new FileOutputStream(destination);
-            Streams.copy(in, fos);
+            copyStream(in, fos, 4096);
             fos.close();
             in.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException("Could not copy class resource: " + source +
                     " to destination: " + destination.getAbsolutePath());
         }
@@ -180,5 +156,34 @@ public class JcrUtils {
      */
     private JcrUtils() {
 
+    }
+
+    /**
+     * Writes the input stream to the output stream. Input is done without a Reader object, meaning that the input is
+     * copied in its raw form.
+     *
+     * @param in      The input stream
+     * @param out     The output stream
+     * @param bufSize The buffer size. A good value is 4096.
+     * @return Number of bytes copied from one stream to the other
+     * @throws IOException
+     */
+    public static int copyStream(final InputStream in, final OutputStream out, final int bufSize)
+            throws IOException {
+        if (bufSize <= 0) {
+            throw new IllegalArgumentException("The parameter 'bufSize' must not be <= 0");
+        }
+
+        final byte[] buffer = new byte[bufSize];
+        int bytesCopied = 0;
+        while (true) {
+            int byteCount = in.read(buffer, 0, buffer.length);
+            if (byteCount <= 0) {
+                break;
+            }
+            out.write(buffer, 0, byteCount);
+            bytesCopied += byteCount;
+        }
+        return bytesCopied;
     }
 }

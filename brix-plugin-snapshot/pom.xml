@@ -31,6 +31,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -52,7 +53,7 @@
                         </Import-Package>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
                         </Bundle-SymbolicName>
-                        <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
+                        <Bundle-RequiredExecutionEnvironment>J2SE-1.5,JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
                     </instructions>
                 </configuration>
             </plugin>

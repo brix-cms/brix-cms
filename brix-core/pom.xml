@@ -29,8 +29,12 @@
             <artifactId>brix-workspace</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.brixcms</groupId>
+            <artifactId>brix-jackrabbit</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.wicketstuff</groupId>
-            <artifactId>inmethod-grid</artifactId>
+            <artifactId>wicketstuff-inmethod-grid</artifactId>
         </dependency>
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
@@ -48,11 +52,7 @@
             <groupId>javax.jcr</groupId>
             <artifactId>jcr</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.jackrabbit</groupId>
-            <artifactId>jackrabbit-jcr-commons</artifactId>
-        </dependency>
-        <!--  WICKET DEPENDENCIES -->
+        <!--<dependency>--><!--<groupId>org.apache.jackrabbit</groupId>--><!--<artifactId>jackrabbit-jcr-commons</artifactId>--><!--</dependency>--><!--  WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket</artifactId>
@@ -153,18 +153,24 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            org.brixcms.plugin.site.page.tile.admin,org.brixcms.plugin.site.page.tile,org.brixcms.jcr,org.brixcms.web.admin,org.brixcms.config,brix.auth,org.brixcms,brix.web,brix.web.nodepage,org.brixcms.registry,org.brixcms.jcr.wrapper,org.brixcms.plugin.site,brix.web.picker.common,org.brixcms.web.reference,org.brixcms.web.util,org.brixcms.web.tab,org.brixcms.web.generic,org.brixcms.plugin.site.page.global,org.brixcms.plugin.site.picker.reference,org.brixcms.plugin.site.picker.node,org.brixcms.web.tree,org.brixcms.exception
+                            org.brixcms.plugin.site.page.tile.admin,org.brixcms.plugin.site.page.tile,org.brixcms.jcr,
+                            org.brixcms.web.admin,org.brixcms.config,org.brixcms,
+                            org.brixcms.registry,org.brixcms.jcr.wrapper,org.brixcms.plugin.site,
+                            org.brixcms.web.reference,org.brixcms.web.util,org.brixcms.web.tab,org.brixcms.web.generic,
+                            org.brixcms.plugin.site.page.global,org.brixcms.plugin.site.picker.reference,
+                            org.brixcms.plugin.site.picker.node,org.brixcms.web.tree,org.brixcms.exception, org.brixcms.auth,
+                            org.brixcms.web.nodepage, org.brixcms.web.picker.common, org.brixcms.web.picker.node, org.htmlparser
                         </Export-Package>
                         <Import-Package>
                             org.osgi*, org.brixcms.jcr.api, org.brixcms.jcr.*, com.inmethod.grid.*, javax.jcr.*,
-                            javax.servlet, javax.servlet.http, javax.swing.event, javax.swing.tree,
-                            org.apache.jackrabbit.api, org.apache.jackrabbit.spi.*, org.apache.jackrabbit.core,
-                            org.apache.jackrabbit.server.io, org.apache.wicket.*, org.htmlparser, org.htmlparser.lexer,
-                            org.htmlparser.util, org.slf4j, brix.workspace.rmi, org.apache.jackrabbit.commons.cnd
+                            javax.servlet, javax.servlet.http, javax.swing.event, javax.swing.tree, org.apache.wicket.*,
+                            org.slf4j, org.brixcms.jackrabbit.jcr
                         </Import-Package>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
                         </Bundle-SymbolicName>
-                        <Bundle-RequiredExecutionEnvironment>J2SE-1.6</Bundle-RequiredExecutionEnvironment>
+                        <Bundle-RequiredExecutionEnvironment>J2SE-1.5,JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+                        <Embed-Transitive>true</Embed-Transitive>
+                        <Embed-Dependency>htmllexer</Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>
