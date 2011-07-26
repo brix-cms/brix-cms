@@ -60,10 +60,6 @@
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-webdav</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.jackrabbit</groupId>-->
-            <!--<artifactId>jackrabbit-jcr-tests</artifactId>-->
-        <!--</dependency>-->
 
         <!-- Transitives required for Jackrabbit so we can load in pax:run -->
         <dependency>
@@ -107,87 +103,23 @@
                         <Export-Package>org.brixcms.jackrabbit.jcr, org.brixcms.jackrabbit.util,
                             org.apache.jackrabbit.server, org.apache.jackrabbit.webdav*
                         </Export-Package>
-                        <!--<Import-Package>-->
-                            <!--EDU.oswego.cs.dl.util.concurrent, javax.jcr*, javax.management, javax.management.openmbean,-->
-                            <!--javax.naming, javax.naming.spi, javax.security.auth, javax.security.auth.callback,-->
-                            <!--javax.security.auth.login, javax.security.auth.spi, javax.sql, javax.transaction.xa,-->
-                            <!--javax.xml.parsers, javax.xml.transform, javax.xml.transform.dom, javax.xml.transform.sax,-->
-                            <!--javax.xml.transform.stream, org.apache.commons.collections*, org.apache.commons.dbcp,-->
-                            <!--org.apache.commons.io, org.apache.commons.io.input, org.apache.lucene*, org.apache.tika*,-->
-                            <!--org.slf4j, org.w3c.dom, org.xml.sax, org.xml.sax.helpers, org.apache.commons.fileupload*,-->
-                            <!--org.apache.commons.httpclient, org.apache.commons.httpclient.methods, junit.framework,-->
-                            <!--javax.servlet, javax.servlet.http, javax.imageio.spi, javax.rmi-->
-                        <!--</Import-Package>-->
-                        <!--<Embed-Dependency>jackrabbit-core, jackrabbit-api, jackrabbit-jcr-commons, jackrabbit-jcr-rmi,-->
-                            <!--jackrabbit-spi, jackrabbit-spi-commons, jackrabbit-jcr-server, jackrabbit-webdav,-->
-                            <!--jackrabbit-jcr-tests-->
-                        <!--</Embed-Dependency>-->
                         <Import-Package>
-                            <!-- JNDI, Security, Transactions -->
-                            javax.naming.*,
-                            javax.security.*,
-                            javax.sql.*,
-                            javax.transaction.xa,
-                            javax.management,
-                            javax.management.openmbean,
-                            <!--  Helpers -->
-                            org.apache.commons.io.*,
-                            org.apache.commons.collections.*,
-                            <!-- JCR and Jackrabbit API -->
-                            javax.jcr.*, org.apache.jackrabbit.api.*,
-                            org.apache.jackrabbit.spi.*,
-
-                            <!-- Logging -->
-                            org.slf4j,
-                            <!-- XML stuff -->
-                            javax.xml.*, org.xml.sax.*, org.w3c.dom.*,
-                            <!-- JAR Service Registry for Query -->
-                            javax.imageio.spi,
-
-                            <!-- Exclude package, see JCR-2412 -->
-                            !org.apache.jackrabbit.test,
-
-                            <!-- playground imports -->
-                            org.apache.tika.*,
-
-                            <!-- Jackrabbit internals -->
-                            org.apache.jackrabbit.rmi.*,
-                            org.apache.jackrabbit.util,
-                            org.apache.jackrabbit.value,
-                            <!--org.apache.jackrabbit.commons.*,-->
-                            <!--org.apache.jackrabbit.spi.commons.*,-->
-
-                            <!-- stuff -->
-                            javax.servlet, javax.servlet.http, org.apache.commons.fileupload,
-                            org.apache.commons.fileupload.disk, org.apache.commons.fileupload.servlet,
-                            org.apache.commons.httpclient,
-                            org.apache.commons.httpclient.methods,
-
-                            <!--org.apache.jackrabbit.server.io;resolution=optional,-->
-                            !org.apache.jackrabbit.server.io,
-
-                            <!-- optional JDBC driver import -->
-                            com.microsoft.sqlserver.jdbc;
-                            oracle.jdbc;
-                            org.apache.derby.jdbc;
-                            org.gjt.mm.mysql;
-                            org.h2;
-                            org.postgresql;
-                                resolution:=optional,
-
-                            <!-- Required by concurrent lib SynchronizationTimer class -->
-                            javax.swing.*;resolution:=optional
+                            javax.naming.*, javax.security.*, javax.sql.*, javax.transaction.xa, javax.management,
+                            javax.management.openmbean, org.apache.commons.io.*, org.apache.commons.collections.*,
+                            javax.jcr.*, org.apache.jackrabbit.api.*, org.apache.jackrabbit.spi.*, org.slf4j,
+                            javax.xml.*, org.xml.sax.*, org.w3c.dom.*, javax.imageio.spi, !org.apache.jackrabbit.test,
+                            org.apache.tika.*, org.apache.jackrabbit.rmi.*, org.apache.jackrabbit.util,
+                            org.apache.jackrabbit.value, javax.servlet, javax.servlet.http,
+                            org.apache.commons.fileupload, org.apache.commons.fileupload.disk,
+                            org.apache.commons.fileupload.servlet, org.apache.commons.httpclient,
+                            org.apache.commons.httpclient.methods, !org.apache.jackrabbit.server.io,
+                            com.microsoft.sqlserver.jdbc; oracle.jdbc; org.apache.derby.jdbc; org.gjt.mm.mysql; org.h2;
+                            org.postgresql; resolution:=optional, javax.swing.*;resolution:=optional
                         </Import-Package>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Embed-Dependency>
-                            jackrabbit-core,
-                            jackrabbit-webdav,
-                            jackrabbit-jcr-commons,
-                            jackrabbit-jcr-server,
-                            lucene-core,
-                            concurrent,
-                            commons-dbcp,
-                            commons-pool
+                            jackrabbit-core, jackrabbit-webdav, jackrabbit-jcr-commons, jackrabbit-jcr-server,
+                            lucene-core, concurrent, commons-dbcp, commons-pool
                         </Embed-Dependency>
 
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
@@ -195,91 +127,6 @@
                         <Bundle-RequiredExecutionEnvironment>J2SE-1.5,JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
                     </instructions>
                 </configuration>
-                <!--<configuration>-->
-                    <!--<instructions>-->
-                        <!--&lt;!&ndash;<Bundle-Category>&ndash;&gt;-->
-                            <!--&lt;!&ndash;sling,jcr,jackrabbit&ndash;&gt;-->
-                        <!--&lt;!&ndash;</Bundle-Category>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<Bundle-Activator>&ndash;&gt;-->
-                            <!--&lt;!&ndash;org.apache.sling.jcr.jackrabbit.server.impl.Activator&ndash;&gt;-->
-                        <!--&lt;!&ndash;</Bundle-Activator>&ndash;&gt;-->
-                        <!--<Export-Package>-->
-                             <!--org.apache.sling.jcr.jackrabbit.server;version=2.1.0,-->
-                             <!--org.apache.sling.jcr.jackrabbit.server.security;version=2.0.4-incubator,-->
-                             <!--org.apache.sling.jcr.jackrabbit.server.security.accessmanager;version=2.1.0,-->
-                             <!--org.apache.jackrabbit.core.security.principal;version=2.2.5-->
-                        <!--</Export-Package>-->
-                        <!--<Private-Package>-->
-                            <!--org.apache.sling.jcr.jackrabbit.server.impl.*,-->
-                            <!--org.apache.commons.*-->
-                        <!--</Private-Package>-->
-                        <!--<Import-Package>-->
-                            <!--&lt;!&ndash; Sling and OSGi &ndash;&gt;-->
-                            <!--org.apache.sling.*, org.osgi.*,-->
-                            <!--&lt;!&ndash; JNDI, Security, Transactions &ndash;&gt;-->
-                            <!--javax.naming.*,-->
-                            <!--javax.security.*,-->
-                            <!--javax.sql.*,-->
-                            <!--javax.transaction.xa,-->
-                            <!--&lt;!&ndash;  Helpers &ndash;&gt;-->
-                            <!--org.apache.commons.io.*,-->
-                            <!--org.apache.commons.collections.*,-->
-                            <!--&lt;!&ndash; JCR and Jackrabbit API &ndash;&gt;-->
-                            <!--javax.jcr.*, org.apache.jackrabbit.api.*,-->
-                            <!--org.apache.jackrabbit.spi.*,-->
-
-                            <!--&lt;!&ndash; Logging &ndash;&gt;-->
-                            <!--org.slf4j,-->
-                            <!--&lt;!&ndash; XML stuff &ndash;&gt;-->
-                            <!--javax.xml.*, org.xml.sax.*, org.w3c.dom.*,-->
-                            <!--&lt;!&ndash; JAR Service Registry for Query &ndash;&gt;-->
-                            <!--javax.imageio.spi,-->
-
-                            <!--&lt;!&ndash; Exclude package, see JCR-2412 &ndash;&gt;-->
-                            <!--!org.apache.jackrabbit.test,-->
-
-                            <!--&lt;!&ndash; playground imports &ndash;&gt;-->
-                            <!--org.apache.tika.*,-->
-
-                            <!--&lt;!&ndash; Jackrabbit internals &ndash;&gt;-->
-                            <!--org.apache.jackrabbit.rmi.*,-->
-                            <!--org.apache.jackrabbit.util,-->
-                            <!--org.apache.jackrabbit.value,-->
-                            <!--org.apache.jackrabbit.commons.*,-->
-                            <!--org.apache.jackrabbit.spi.commons.*,-->
-
-                            <!--&lt;!&ndash; optional JDBC driver import &ndash;&gt;-->
-                            <!--com.microsoft.sqlserver.jdbc;-->
-                            <!--oracle.jdbc;-->
-                            <!--org.apache.derby.jdbc;-->
-                            <!--org.gjt.mm.mysql;-->
-                            <!--org.h2;-->
-                            <!--org.postgresql;-->
-                                <!--resolution:=optional,-->
-
-                            <!--&lt;!&ndash; Required by concurrent lib SynchronizationTimer class &ndash;&gt;-->
-                            <!--javax.swing.*;resolution:=optional-->
-                        <!--</Import-Package>-->
-                        <!--<DynamicImport-Package>*</DynamicImport-Package>-->
-
-                        <!--&lt;!&ndash; Embedd some libraries &ndash;&gt;-->
-                        <!--<Embed-Transitive>true</Embed-Transitive>-->
-                        <!--<Embed-Dependency>-->
-                            <!--jackrabbit-core,-->
-                            <!--lucene-core,-->
-                            <!--concurrent,-->
-                            <!--commons-dbcp,-->
-                            <!--commons-pool-->
-                        <!--</Embed-Dependency>-->
-                        <!--<_removeheaders>-->
-                            <!--Embed-Dependency,-->
-                            <!--Embed-Transitive,-->
-                            <!--Private-Package,-->
-                            <!--Include-Resource-->
-                        <!--</_removeheaders>-->
-                    <!--</instructions>-->
-                <!--</configuration>-->
-
             </plugin>
         </plugins>
     </build>
