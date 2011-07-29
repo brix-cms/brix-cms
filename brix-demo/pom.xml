@@ -103,8 +103,7 @@
                         <param>--profiles=compendium,web,war</param>
                         <param>--log=debug</param>
 
-                        <!-- Uncomment the following to enable remote debugging. --><!-- We use a property to mask the double hyphen within an XML comment... -->
-                        <!--param>${pax.debug}</param -->
+                        <!-- Uncomment the following to enable remote debugging. --><!-- We use a property to mask the double hyphen within an XML comment... --><!--param>${pax.debug}</param -->
                     </provision>
                 </configuration>
             </plugin>
@@ -115,6 +114,12 @@
         <dependency>
             <groupId>org.brixcms</groupId>
             <artifactId>brix-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.brixcms</groupId>
@@ -151,11 +156,11 @@
             <version>3.1.8</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket</artifactId>
-            <type>pom</type>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.wicket</groupId>-->
+            <!--<artifactId>wicket</artifactId>-->
+            <!--<type>pom</type>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -196,16 +201,43 @@
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-osgi</artifactId>
             <version>1.5-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-ioc-bundle</artifactId>
             <version>1.5-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-atinject_1.0_spec</artifactId>
             <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.aries.blueprint</groupId>
+            <artifactId>org.apache.aries.blueprint.core</artifactId>
+            <version>1.0.0-incubating-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.asm</artifactId>
+            <version>3.3_2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wicketstuff</groupId>
+            <artifactId>wicketstuff-bundle</artifactId>
+            <version>1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
