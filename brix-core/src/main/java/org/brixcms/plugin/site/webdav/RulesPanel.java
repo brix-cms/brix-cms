@@ -14,14 +14,10 @@
 
 package org.brixcms.plugin.site.webdav;
 
-import com.inmethod.grid.IDataSource;
-import com.inmethod.grid.IGridColumn;
-import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.CheckBoxColumn;
-import com.inmethod.grid.column.editable.EditableCellPanel;
-import com.inmethod.grid.column.editable.EditablePropertyColumn;
-import com.inmethod.grid.column.editable.SubmitCancelColumn;
-import com.inmethod.grid.datagrid.DataGrid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -39,15 +35,20 @@ import org.brixcms.plugin.site.webdav.Rule.Type;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import com.inmethod.grid.IDataSource;
+import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.SizeUnit;
+import com.inmethod.grid.column.CheckBoxColumn;
+import com.inmethod.grid.column.editable.EditableCellPanel;
+import com.inmethod.grid.column.editable.EditablePropertyColumn;
+import com.inmethod.grid.column.editable.SubmitCancelColumn;
+import com.inmethod.grid.datagrid.DataGrid;
 
 public class RulesPanel extends BrixGenericPanel<RulesNode> {
 // ------------------------------ FIELDS ------------------------------
     ;
     private Component feedback;
-    private DataGrid<Rule> dataGrid;
+    private DataGrid<DataSource, Rule> dataGrid;
     private AjaxLink<?> removeSelected;
 
     public RulesPanel(String id, IModel<Workspace> workspaceModel) {
@@ -56,7 +57,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
 
-        List<IGridColumn<IDataSource<Rule>,Rule>> columns = new ArrayList<IGridColumn<IDataSource<Rule>,Rule>>();
+        List<IGridColumn<DataSource, Rule>> columns = new ArrayList<IGridColumn<DataSource, Rule>>();
 
         columns.add(new CheckBoxColumn("checkbox"));
         columns.add(new PriorityColumn(new ResourceModel("priority"), "priority").setInitialSize(60));
@@ -67,7 +68,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         columns.add(new SubmitColumn("edit", new ResourceModel("edit")));
 
-        dataGrid = new DataGrid<Rule>("grid", new DataSource(), columns) {
+        dataGrid = new DataGrid<DataSource, Rule>("grid", new DataSource(), columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
@@ -125,13 +126,13 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
         }
     }
 
-    private class DataSource implements IDataSource {
+    private class DataSource implements IDataSource<Rule> {
         public void detach() {
 
         }
 
-        public IModel<?> model(Object object) {
-            return new Model<Rule>((Rule) object);
+        public IModel<Rule> model(Rule object) {
+            return new Model<Rule>(object);
         }
 
         public void query(IQuery query, IQueryResult result) {

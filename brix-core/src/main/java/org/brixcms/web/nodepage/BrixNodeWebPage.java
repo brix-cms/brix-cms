@@ -89,8 +89,8 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
     }
 
     @Override
-    protected void configureResponse() {
-        super.configureResponse();
+    protected void configureResponse(WebResponse response) {
+        super.configureResponse(response);
         String mimeType = getMimeType(getModelObject());
         String encoding = Application.get().getRequestCycleSettings().getResponseRequestEncoding();
         ((WebResponse) getResponse()).setContentType(mimeType + "; charset=" + encoding);
@@ -99,7 +99,6 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
         // lastmodified depends on both the page and the tiles, maybe tiles
         // can contribute lastmodified dates and we take the latest...
         // response.setLastModifiedTime(Time.valueOf(node.getObject().getLastModified()));
-
     }
 
     protected static String getMimeType(BrixNode brixNode) {
