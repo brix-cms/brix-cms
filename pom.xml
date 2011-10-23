@@ -45,11 +45,11 @@
     </modules>
 
     <properties>
-        <wicket.version>1.5-RC4.2</wicket.version>
+        <wicket.version>1.5.1</wicket.version>
         <jetty.version>6.1.11</jetty.version>
-        <inmethod.grid.version>1.5-RC4.2</inmethod.grid.version>
+        <inmethod.grid.version>1.5.1</inmethod.grid.version>
         <htmllexer.version>2.1</htmllexer.version>
-        <jackrabbit.version>2.3-SNAPSHOT</jackrabbit.version>
+        <jackrabbit.version>2.3.0</jackrabbit.version>
         <lucene.version>3.0.3</lucene.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -350,7 +350,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wicketstuff</groupId>
-                <artifactId>inmethod-grid</artifactId>
+                <artifactId>wicketstuff-inmethod-grid</artifactId>
                 <version>${inmethod.grid.version}</version>
                 <exclusions>
                     <exclusion>
@@ -476,7 +476,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.5</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
