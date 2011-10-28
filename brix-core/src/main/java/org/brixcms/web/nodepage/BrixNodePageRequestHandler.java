@@ -126,7 +126,7 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
         }
 
         public PageProviderAdapter(BrixNodeWebPage page) {
-            page = page;
+            this.page = page;
         }
 
         @Override
@@ -160,6 +160,22 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
         public void detach() {
             if (page != null)
                 page.detach();
+        }
+
+        @Override
+        public Integer getPageId() {
+            if (page != null) {
+                return page.getPageId();
+            }
+            return null;
+        }
+
+        @Override
+        public Integer getRenderCount() {
+            if (page != null) {
+                return page.getRenderCount();
+            }
+            return null;
         }
     }
 }
