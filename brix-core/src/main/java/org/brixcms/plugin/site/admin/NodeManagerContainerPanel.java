@@ -14,6 +14,14 @@
 
 package org.brixcms.plugin.site.admin;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import javax.jcr.ItemNotFoundException;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
@@ -28,6 +36,7 @@ import org.apache.wicket.markup.html.tree.BaseTree;
 import org.apache.wicket.markup.html.tree.DefaultTreeState;
 import org.apache.wicket.markup.html.tree.ITreeState;
 import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.markup.html.tree.LinkType;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.brixcms.Brix;
@@ -48,13 +57,6 @@ import org.brixcms.web.tree.AbstractTreeModel;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.util.AbstractModel;
 import org.brixcms.workspace.Workspace;
-
-import javax.jcr.ItemNotFoundException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeTreeContainer {
     private static MetaDataKey<String> EDITOR_NODE_TYPE = new MetaDataKey<String>() {

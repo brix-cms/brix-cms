@@ -14,12 +14,12 @@
 
 package org.brixcms.web.picker.common;
 
-import com.inmethod.grid.IGridColumn;
-import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.CheckBoxColumn;
-import com.inmethod.grid.column.PropertyColumn;
-import com.inmethod.grid.column.tree.AbstractTreeColumn;
-import com.inmethod.grid.treegrid.TreeGrid;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractBehavior;
@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.picker.node.NodePickerTreeModel;
@@ -37,10 +38,12 @@ import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
 import org.brixcms.web.util.AbstractModel;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.SizeUnit;
+import com.inmethod.grid.column.CheckBoxColumn;
+import com.inmethod.grid.column.PropertyColumn;
+import com.inmethod.grid.column.tree.AbstractTreeColumn;
+import com.inmethod.grid.treegrid.TreeGrid;
 
 public abstract class NodePickerTreeGridPanel extends Panel {
     private final static NodeFilter ALLOW_ALL_FILTER = new NodeFilter() {
@@ -85,7 +88,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     }
 
     protected void initComponents() {
-        grid = new TreeGrid<NodePickerTreeModel, JcrTreeNode>("grid", (IModel<NodePickerTreeModel>) newTreeModel(), newGridColumns()) {
+        grid = new TreeGrid<NodePickerTreeModel, JcrTreeNode>("grid", new Model((Serializable) newTreeModel()), newGridColumns()) {
             @Override
             protected void onItemSelectionChanged(IModel<JcrTreeNode> rowModel, boolean newValue) {
                 BrixNode node = getNode(rowModel);

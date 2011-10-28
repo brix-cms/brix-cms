@@ -96,4 +96,25 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
             nodeModel.detach();
         }
     }
+
+    @Override
+    public Integer getPageId() {
+        if (page != null) {
+            return page.getPageId();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isPageInstanceCreated() {
+        return page == null;
+    }
+
+    @Override
+    public Integer getRenderCount() {
+        if (page != null) {
+            return page.getRenderCount();
+        }
+        return null;
+    }
 }

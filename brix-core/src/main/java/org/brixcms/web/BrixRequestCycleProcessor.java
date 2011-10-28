@@ -14,9 +14,16 @@
 
 package org.brixcms.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
@@ -29,11 +36,6 @@ import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.workspace.Workspace;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 public class BrixRequestCycleProcessor implements IRequestCycleListener {
     public static final String WORKSPACE_PARAM = Brix.NS_PREFIX + "workspace";
@@ -233,22 +235,38 @@ public class BrixRequestCycleProcessor implements IRequestCycleListener {
     }
 
     @Override
-    public void onRequestHandlerResolved(IRequestHandler handler) {
-
-    }
-
-    @Override
-    public void onRequestHandlerScheduled(IRequestHandler handler) {
-
-    }
-
-    @Override
     public IRequestHandler onException(RequestCycle cycle, Exception ex) {
         return null;
     }
 
     @Override
-    public void onExceptionRequestHandlerResolved(IRequestHandler handler, Exception exception) {
+    public void onRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler) {
+        // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void onRequestHandlerScheduled(RequestCycle cycle, IRequestHandler handler) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onExceptionRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler, Exception exception) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onRequestHandlerExecuted(RequestCycle cycle, IRequestHandler handler) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onUrlMapped(RequestCycle cycle, IRequestHandler handler, Url url) {
+        // TODO Auto-generated method stub
+
+    }
+
 }
