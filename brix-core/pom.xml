@@ -30,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>org.wicketstuff</groupId>
-            <artifactId>inmethod-grid</artifactId>
+            <artifactId>wicketstuff-inmethod-grid</artifactId>
         </dependency>
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>

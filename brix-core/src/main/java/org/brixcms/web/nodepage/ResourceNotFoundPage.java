@@ -14,13 +14,13 @@
 
 package org.brixcms.web.nodepage;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.http.WebResponse;
 import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
-
-import javax.servlet.http.HttpServletResponse;
 
 public class ResourceNotFoundPage extends WebPage {
     public ResourceNotFoundPage() {
@@ -38,10 +38,8 @@ public class ResourceNotFoundPage extends WebPage {
     }
 
     @Override
-    protected void configureResponse() {
-        super.configureResponse();
-
-        WebResponse response = (WebResponse) getResponse();
+    protected void configureResponse(WebResponse response) {
+        super.configureResponse(response);
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
 }

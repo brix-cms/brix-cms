@@ -14,6 +14,14 @@
 
 package org.brixcms.plugin.snapshot;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import javax.jcr.ImportUUIDBehavior;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -42,13 +50,6 @@ import org.brixcms.plugin.snapshot.auth.RestoreSnapshotAction;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
-
-import javax.jcr.ImportUUIDBehavior;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
     public ManageSnapshotsPanel(String id, final IModel<Workspace> model) {
@@ -211,7 +212,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
             }
         };
 
-        final FileUploadField upload = new FileUploadField("upload", new Model<FileUpload>());
+        final FileUploadField upload = new FileUploadField("upload", new Model());
         uploadForm.add(upload);
 
         uploadForm.add(new SubmitLink("submit") {
