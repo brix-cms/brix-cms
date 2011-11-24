@@ -21,7 +21,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.IRequestParameters;
 import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.NodeConverter;
@@ -32,6 +31,7 @@ import org.brixcms.plugin.site.resource.admin.CreateResourcePanel;
 import org.brixcms.plugin.site.resource.admin.ManageResourceNodeTabFactory;
 import org.brixcms.plugin.site.resource.managers.image.ImageNodeTabFactory;
 import org.brixcms.plugin.site.resource.managers.text.TextNodeTabFactory;
+import org.brixcms.web.nodepage.BrixPageParameters;
 
 public class ResourceNodePlugin implements SiteNodePlugin {
     public static final String TYPE = Brix.NS_PREFIX + "resource";
@@ -73,7 +73,7 @@ public class ResourceNodePlugin implements SiteNodePlugin {
         return (new ResourceModel("resource", "Resource")).getObject();
     }
 
-    public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
+    public IRequestHandler respond(IModel<BrixNode> nodeModel, BrixPageParameters requestParameters) {
         // IRequestTarget switchTarget =
         // SwitchProtocolRequestTarget.requireProtocol(Protocol.HTTP);
         // if (switchTarget != null)

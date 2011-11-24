@@ -17,12 +17,12 @@ package org.brixcms.plugin.site.fallback;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.handler.EmptyRequestHandler;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.NodeConverter;
 import org.brixcms.plugin.site.SimpleCallback;
 import org.brixcms.plugin.site.SiteNodePlugin;
+import org.brixcms.web.nodepage.BrixPageParameters;
 
 public class FallbackNodePlugin implements SiteNodePlugin {
 
@@ -35,7 +35,7 @@ public class FallbackNodePlugin implements SiteNodePlugin {
         return "Unknown";
     }
 
-    public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
+    public IRequestHandler respond(IModel<BrixNode> nodeModel, BrixPageParameters requestParameters) {
         return new EmptyRequestHandler();
     }
 

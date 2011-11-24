@@ -14,14 +14,11 @@
 
 package org.brixcms.plugin.site.picker.reference;
 
-import com.inmethod.grid.IDataSource;
-import com.inmethod.grid.IGridColumn;
-import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.AbstractColumn;
-import com.inmethod.grid.column.CheckBoxColumn;
-import com.inmethod.grid.column.editable.EditablePropertyColumn;
-import com.inmethod.grid.column.editable.SubmitCancelColumn;
-import com.inmethod.grid.datagrid.DataGrid;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -41,10 +38,14 @@ import org.apache.wicket.util.lang.Objects;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.inmethod.grid.IDataSource;
+import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.SizeUnit;
+import com.inmethod.grid.column.AbstractColumn;
+import com.inmethod.grid.column.CheckBoxColumn;
+import com.inmethod.grid.column.editable.EditablePropertyColumn;
+import com.inmethod.grid.column.editable.SubmitCancelColumn;
+import com.inmethod.grid.datagrid.DataGrid;
 
 public abstract class IndexedParametersTab extends Panel {
     private AjaxLink<?> removeSelected;
@@ -238,9 +239,9 @@ public abstract class IndexedParametersTab extends Panel {
         private List<Entry> getEntries() {
             if (entries == null) {
                 entries = new ArrayList<Entry>();
-                for (int i = 0; i < getPageParameters().getIndexedParamsCount(); ++i) {
+                for (int i = 0; i < getPageParameters().getIndexedCount(); ++i) {
                     Entry entry = new Entry();
-                    entry.value = getPageParameters().getIndexedParam(i).toString();
+                    entry.value = getPageParameters().get(i).toString();
                     entries.add(entry);
                 }
             }
@@ -249,10 +250,10 @@ public abstract class IndexedParametersTab extends Panel {
 
         private void storeToPageParameters() {
             if (entries != null) {
-                getPageParameters().clearIndexedParams();
+                getPageParameters().clearIndexed();
                 int index = 0;
                 for (Entry entry : entries) {
-                    getPageParameters().setIndexedParam(index, entry.value);
+                    getPageParameters().set(index, entry.value);
                     ++index;
                 }
             }

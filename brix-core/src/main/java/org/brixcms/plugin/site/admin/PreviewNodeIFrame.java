@@ -29,7 +29,7 @@ public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
     public static boolean isPreview() {
         BrixPageParameters params = BrixPageParameters.getCurrent();
         if (params != null) {
-            if (params.getQueryParam(PREVIEW_PARAM).toBoolean(false)) {
+            if (params.get(PREVIEW_PARAM).toBoolean(false)) {
                 return true;
             }
         }
@@ -45,8 +45,8 @@ public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
         BrixPageParameters parameters = new BrixPageParameters();
         IModel<BrixNode> nodeModel = getModel();
         String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
-        parameters.setQueryParam(BrixRequestCycleProcessor.WORKSPACE_PARAM, workspace);
-        parameters.setQueryParam(PREVIEW_PARAM, "true");
+        parameters.set(BrixRequestCycleProcessor.WORKSPACE_PARAM, workspace);
+        parameters.set(PREVIEW_PARAM, "true");
         StringBuilder url = new StringBuilder(getRequestCycle()
                 .urlFor(new BrixNodeRequestHandler(nodeModel, parameters)));
         return url;

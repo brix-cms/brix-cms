@@ -17,9 +17,9 @@ package org.brixcms.plugin.site;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.IRequestParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.registry.ExtensionPoint;
+import org.brixcms.web.nodepage.BrixPageParameters;
 
 /**
  * Plugin that handles node of certain type. This is not a global plugin, the scope if this plugin is {@link
@@ -88,5 +88,5 @@ public interface SiteNodePlugin {
      * @param requestParameters
      * @return
      */
-    IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters);
+    IRequestHandler respond(IModel<BrixNode> nodeModel, BrixPageParameters brixPageParameters);
 }

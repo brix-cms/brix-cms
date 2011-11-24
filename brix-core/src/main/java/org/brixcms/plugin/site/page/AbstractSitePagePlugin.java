@@ -14,10 +14,11 @@
 
 package org.brixcms.plugin.site.page;
 
+import java.util.Collection;
+
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.IRequestParameters;
 import org.brixcms.jcr.wrapper.BrixFileNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.ManageNodeTabFactory;
@@ -30,8 +31,6 @@ import org.brixcms.plugin.site.resource.ResourceNodePlugin;
 import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
-
-import java.util.Collection;
 
 public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
     private final BrixNodePageUrlMapper urlMapper = new BrixNodePageUrlMapper() {
@@ -64,8 +63,9 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
 
     public abstract String getNodeType();
 
-    public IRequestHandler respond(IModel<BrixNode> nodeModel, IRequestParameters requestParameters) {
-        return urlMapper.decode(requestParameters, nodeModel);
+
+    public IRequestHandler respond(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters) {
+        return urlMapper.decode(pageParameters, nodeModel);
     }
 
     public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode,

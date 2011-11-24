@@ -14,6 +14,9 @@
 
 package org.brixcms.web.reference;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
@@ -26,9 +29,6 @@ import org.brixcms.jcr.api.JcrValue;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixPageParameters;
-
-import java.io.Serializable;
-import java.util.List;
 
 public class Reference implements Serializable, IDetachable {
     private static final long serialVersionUID = 1L;
@@ -77,13 +77,13 @@ public class Reference implements Serializable, IDetachable {
         }
         if (node.hasProperty("indexedParameters")) {
             JcrValue values[] = node.getProperty("indexedParameters").getValues();
-            getParameters().clearIndexedParams();
+            getParameters().clearIndexed();
             for (int i = 0; i < values.length; ++i) {
-                getParameters().setIndexedParam(i, values[i].getString());
+                getParameters().set(i, values[i].getString());
             }
         }
         if (node.hasNode("parameter")) {
-            getParameters().clearQueryParams();
+            getParameters().clearNamed();
             JcrNodeIterator i = node.getNodes("parameter");
             while (i.hasNext()) {
                 BrixNode n = (BrixNode) i.nextNode();
@@ -91,7 +91,7 @@ public class Reference implements Serializable, IDetachable {
                     String key = n.getProperty("key").getString();
                     JcrValue values[] = n.getProperty("values").getValues();
                     for (JcrValue v : values) {
-                        getParameters().addQueryParam(key, v.getString());
+                        getParameters().set(key, v.getString());
                     }
                 }
             }
@@ -235,18 +235,18 @@ public class Reference implements Serializable, IDetachable {
         node.setProperty("node", getNodeModel().getObject());
 
         if (parameters != null) {
-            if (parameters.getIndexedParamsCount() > 0) {
-                String array[] = new String[parameters.getIndexedParamsCount()];
+            if (parameters.getIndexedCount() > 0) {
+                String array[] = new String[parameters.getIndexedCount()];
                 for (int i = 0; i < array.length; ++i) {
-                    array[i] = parameters.getIndexedParam(i).toString();
+                    array[i] = parameters.get(i).toString();
                 }
                 node.setProperty("indexedParameters", array);
             }
-            if (parameters.getQueryParamKeys().size() > 0) {
-                for (String s : parameters.getQueryParamKeys()) {
+            if (parameters.getNamedKeys().size() > 0) {
+                for (String s : parameters.getNamedKeys()) {
                     BrixNode param = (BrixNode) node.addNode("parameter", "nt:unstructured");
                     param.setProperty("key", s);
-                    List<StringValue> values = parameters.getQueryParams(s);
+                    List<StringValue> values = parameters.getValues(s);
                     String valuesArray[] = new String[values.size()];
                     for (int i = 0; i < valuesArray.length; ++i) {
                         valuesArray[i] = values.get(i).toString();
@@ -271,8 +271,8 @@ public class Reference implements Serializable, IDetachable {
         if (parameters == null) {
             return false;
         } else {
-            return parameters.getIndexedParamsCount() > 0
-                    && parameters.getQueryParamKeys().size() > 0;
+            return parameters.getIndexedCount() > 0
+                    && parameters.getNamedKeys().size() > 0;
         }
     }
 
