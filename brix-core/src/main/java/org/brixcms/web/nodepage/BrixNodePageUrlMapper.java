@@ -124,55 +124,21 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
         return false;
     }
 
-    public IRequestHandler decode(IRequestParameters requestParameters, final IModel<BrixNode> nodeModel) {
-        PageInfo pageInfo = null;
-//        String query = requestParameters.getQueryString();
-        final BrixPageParameters pageParameters = new BrixPageParameters();
+    public IRequestHandler decode(final BrixPageParameters pageParameters, final IModel<BrixNode> nodeModel) {
 
-        String iface = null;
-
-//        if (query != null) {
-//            pageInfo = extractPageInfo(query);
-//        }
-        iface = addQueryStringParameters(pageParameters, pageInfo, requestParameters);
-
-//        addIndexedParameters(requestParameters.getPath(), pageParameters, nodeModel);
-
-        BrixNodeWebPage page = null;
         PageFactory factory = null;
 
-        if (pageInfo != null) {
-            page = (BrixNodeWebPage) getPage(pageInfo);
-        }
-
-        if (page == null) {
-            factory = new PageFactory() {
-                public BrixNodeWebPage newPage() {
-                    BrixNodeWebPage page = newPageInstance(nodeModel, pageParameters);
-                    return page;
-                }
-
-                public BrixPageParameters getPageParameters() {
-                    return pageParameters;
-                }
-            };
-        } else {
-            page.getBrixPageParameters().assign(pageParameters);
-        }
-
-        if (factory == null) {
-            if (iface == null) {
-                return new BrixNodePageRequestHandler(nodeModel, page);
-            } else {
-                return new BrixNodePageListenerRequestHandler(nodeModel, page, iface);
+        factory = new PageFactory() {
+            public BrixNodeWebPage newPage() {
+                BrixNodeWebPage page = newPageInstance(nodeModel, pageParameters);
+                return page;
             }
-        } else {
-            if (iface == null) {
-                return new BrixNodePageRequestHandler(nodeModel, factory);
-            } else {
-                return new BrixNodePageListenerRequestHandler(nodeModel, factory, iface);
+
+            public BrixPageParameters getPageParameters() {
+                return pageParameters;
             }
-        }
+        };
+        return new BrixNodePageRequestHandler(nodeModel, factory);
     }
 
     private PageInfo extractPageInfo(String query) {
@@ -205,7 +171,7 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
                 // don't add this to page parameters
             } else {
                 for (StringValue value : values) {
-                    pageParameters.addQueryParam(name, value);
+                    pageParameters.set(name, value);
                 }
             }
         }
@@ -230,7 +196,7 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
             Path remaining = new Path(requestPathString, false).toRelative(nodePath);
             int i = 0;
             for (String s : remaining) {
-                parameters.setIndexedParam(i, urlDecode(s));
+                parameters.set(i, urlDecode(s));
                 ++i;
             }
         }
@@ -601,4 +567,5 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
         log.trace("Entering mapHandler");
         return Url.parse(encode(iRequestHandler).toString());
     }
+
 }

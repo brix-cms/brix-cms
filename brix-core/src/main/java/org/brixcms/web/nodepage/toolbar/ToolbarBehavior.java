@@ -14,6 +14,11 @@
 
 package org.brixcms.web.nodepage.toolbar;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,11 +34,6 @@ import org.brixcms.Plugin;
 import org.brixcms.auth.Action.Context;
 import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.workspace.Workspace;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
     private static final ResourceReference cssReference = new PackageResourceReference(
@@ -97,7 +97,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
         }
 
         RequestCycle requestCycle = RequestCycle.get();
-        if (requestCycle.getRequest().getRequestParameters().getParameterValue(BrixRequestCycleProcessor.WORKSPACE_PARAM) != null) {
+        if (!requestCycle.getRequest().getRequestParameters().getParameterValue(BrixRequestCycleProcessor.WORKSPACE_PARAM).isNull()) {
             return false;
         } else {
             List<WorkspaceEntry> workspaces = getWorkspaces();
