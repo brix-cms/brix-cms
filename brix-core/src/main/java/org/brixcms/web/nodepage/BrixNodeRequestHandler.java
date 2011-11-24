@@ -91,6 +91,10 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
 
     public String getNodeURL() {
         try {
+            // BrixRequestCycleProcessor processor = new
+            // BrixRequestCycleProcessor(Brix.get());
+            // return
+            // processor.getUriPathForNode(nodeModel.getObject()).toString();
             return SitePlugin.get().getUriPathForNode(nodeModel.getObject()).toString();
         } finally {
             nodeModel.detach();

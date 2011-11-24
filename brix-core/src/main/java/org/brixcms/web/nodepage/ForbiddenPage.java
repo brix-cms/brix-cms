@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.http.WebResponse;
+import org.brixcms.Brix;
 import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 
@@ -32,7 +33,8 @@ public class ForbiddenPage extends WebPage {
         add(new ToolbarBehavior() {
             @Override
             protected String getCurrentWorkspaceId() {
-                return ((BrixRequestCycleProcessor) getRequestCycle().getActiveRequestHandler()).getWorkspace();
+                BrixRequestCycleProcessor processor = new BrixRequestCycleProcessor(Brix.get());
+                return processor.getWorkspace();
             }
         });
     }

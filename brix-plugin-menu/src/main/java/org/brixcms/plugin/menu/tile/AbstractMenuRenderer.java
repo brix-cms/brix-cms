@@ -14,6 +14,10 @@
 
 package org.brixcms.plugin.menu.tile;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.model.IModel;
 import org.brixcms.auth.Action.Context;
@@ -27,10 +31,6 @@ import org.brixcms.web.nodepage.BrixNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
 import org.brixcms.web.reference.Reference;
 import org.brixcms.web.reference.Reference.Type;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public abstract class AbstractMenuRenderer extends WebComponent implements IGenericComponent<BrixNode> {
     /**
@@ -163,7 +163,7 @@ public abstract class AbstractMenuRenderer extends WebComponent implements IGene
 
     protected boolean comparePageParameters(BrixPageParameters page, BrixPageParameters fromReference) {
         if (fromReference == null ||
-                (fromReference.getIndexedParamsCount() == 0 && fromReference.getQueryParamKeys()
+                (fromReference.getIndexedCount() == 0 && fromReference.getNamedKeys()
                         .isEmpty())) {
             return true;
         } else {

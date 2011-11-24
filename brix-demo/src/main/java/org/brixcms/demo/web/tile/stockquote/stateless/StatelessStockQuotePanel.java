@@ -80,7 +80,7 @@ public class StatelessStockQuotePanel extends Panel implements PageParametersAwa
      */
     public void contributeToPageParameters(BrixPageParameters params) {
         // store the symbol into the url
-        params.setQueryParam("symbol", symbol);
+        params.set("symbol", symbol);
     }
 
     /**
@@ -88,7 +88,7 @@ public class StatelessStockQuotePanel extends Panel implements PageParametersAwa
      */
     public void initializeFromPageParameters(BrixPageParameters params) {
         // restore symbol from url
-        symbol = params.getQueryParam("symbol").toString(null);
+        symbol = params.get("symbol").toString(null);
 
         // restore value by looking it up
         value = new StockQuoteRequest(symbol).getQuote();

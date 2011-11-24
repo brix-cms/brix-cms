@@ -14,6 +14,15 @@
 
 package org.brixcms.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
@@ -23,6 +32,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.Url.QueryParameter;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.request.handler.BookmarkablePageRequestHandler;
@@ -42,8 +52,11 @@ import org.brixcms.config.BrixConfig;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
+import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
+import org.brixcms.plugin.site.page.AbstractSitePagePlugin;
 import org.brixcms.web.nodepage.BrixNodePageRequestHandler;
+import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
@@ -51,14 +64,6 @@ import org.brixcms.web.nodepage.PageParametersAware;
 import org.brixcms.workspace.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Set;
 
 public class BrixRequestMapper implements IRequestMapper {
     // ------------------------------ FIELDS ------------------------------
@@ -177,6 +182,10 @@ public class BrixRequestMapper implements IRequestMapper {
     public IRequestHandler mapRequest(Request request) {
         final Url url = request.getClientUrl();
 
+        if (isInternalWicket(request)) {
+            return null;
+        }
+
         // TODO: This is just a quick fix
         if (url.getSegments().size() > 0) {
             if (url.getSegments().get(0).equals("webdav") || url.getSegments().get(0).equals("jcrwebdav")) {
@@ -184,13 +193,14 @@ public class BrixRequestMapper implements IRequestMapper {
             }
         }
 
-        Path path = new Path("/" + url.toString());
+        Path path = new Path("/" + url.getPath());
 
         // root path handling
         if (path.isRoot()) {
             if (handleHomePage) {
                 final BrixNode node = getNodeForUriPath(path);
-                return SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), request.getRequestParameters());
+                return SitePlugin.get().getNodePluginForNode(node)
+                        .respond(new BrixNodeModel(node), new BrixPageParameters(request.getRequestParameters()));
             } else {
                 return null;
             }
@@ -201,7 +211,14 @@ public class BrixRequestMapper implements IRequestMapper {
             while (handler == null) {
                 final BrixNode node = getNodeForUriPath(path);
                 if (node != null) {
-                    handler = SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node), request.getRequestParameters());
+                    SiteNodePlugin plugin = SitePlugin.get().getNodePluginForNode(node);
+                    if (plugin instanceof AbstractSitePagePlugin) {
+                        handler = SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node),
+                                createBrixPageParams(request.getUrl(), path));
+                    } else {
+                        handler = SitePlugin.get().getNodePluginForNode(node)
+                                .respond(new BrixNodeModel(node), new BrixPageParameters(request.getRequestParameters()));
+                    }
                 }
                 if (handler != null || path.toString().equals(".")) {
                     break;
@@ -219,17 +236,43 @@ public class BrixRequestMapper implements IRequestMapper {
         return handler;
     }
 
+    private BrixPageParameters createBrixPageParams(Url url, Path path) {
+        BrixPageParameters parameters = new BrixPageParameters();
+        Path nodePath = path;
+        Path requestPath = new Path("/" + url.getPath());
+
+        if (nodePath.isAncestorOf(requestPath)) {
+            Path remaining = new Path(requestPath.toString(), false).toRelative(nodePath);
+            int i = 0;
+            for (String s : remaining) {
+                parameters.set(i, BrixNodePageUrlMapper.urlDecode(s));
+                ++i;
+            }
+        }
+        for (QueryParameter parameter : url.getQueryParameters()) {
+            parameters.add(parameter.getName(), parameter.getValue());
+        }
+        return parameters;
+    }
+
     @Override
     public int getCompatibilityScore(Request request) {
+        if (isInternalWicket(request)) {
+            return 0;
+        }
+        // bluff we can parse all segments - makes sure we run first
+        return request.getUrl().getSegments().size();
+    }
+
+    private boolean isInternalWicket(Request request) {
         Url url = request.getUrl();
         if (url.getSegments().size() > 0) {
             if (url.getSegments().get(0).equals((Application.get().getMapperContext().getNamespace()))) {
                 // starts with wicket namespace - is an internal wicket url
-                return 0;
+                return true;
             }
         }
-        // bluff we can parse all segments - makes sure we run first
-        return request.getUrl().getSegments().size();
+        return false;
     }
 
     @Override

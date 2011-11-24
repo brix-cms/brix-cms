@@ -49,9 +49,9 @@ public class PageParametersForm<T> extends StatelessForm<T> {
         super.onComponentTag(tag);
         BrixNodeWebPage page = (BrixNodeWebPage) getPage();
         BrixPageParameters parameters = new BrixPageParameters(page.getBrixPageParameters());
-        for (String s : parameters.getQueryParamKeys()) {
+        for (String s : parameters.getNamedKeys()) {
             if (s.startsWith("brix:") || s.equals("0")) {
-                parameters.removeQueryParam(s);
+                parameters.remove(s);
             }
         }
         tag.put("action", RequestCycle.get().urlFor(new BrixNodeRequestHandler(page, parameters)));

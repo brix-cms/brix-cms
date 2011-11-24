@@ -28,6 +28,7 @@ import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
+import org.brixcms.web.nodepage.BrixPageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +100,7 @@ public class BrixUrlMapper implements IRequestMapper {
                     target = getSwitchTarget(node);
                     if (target == null) {
                         target = SitePlugin.get().getNodePluginForNode(node).respond(
-                                new BrixNodeModel(node), requestParameters);
+                                new BrixNodeModel(node), new BrixPageParameters(requestParameters));
                     }
                 }
                 if (path.isRoot() || path.toString().equals(".")) {

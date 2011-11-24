@@ -14,13 +14,13 @@
 
 package org.brixcms.plugin.site.picker.reference;
 
-import com.inmethod.grid.IDataSource;
-import com.inmethod.grid.IGridColumn;
-import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.CheckBoxColumn;
-import com.inmethod.grid.column.editable.EditablePropertyColumn;
-import com.inmethod.grid.column.editable.SubmitCancelColumn;
-import com.inmethod.grid.datagrid.DataGrid;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -39,12 +39,13 @@ import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.StringValue;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import com.inmethod.grid.IDataSource;
+import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.SizeUnit;
+import com.inmethod.grid.column.CheckBoxColumn;
+import com.inmethod.grid.column.editable.EditablePropertyColumn;
+import com.inmethod.grid.column.editable.SubmitCancelColumn;
+import com.inmethod.grid.datagrid.DataGrid;
 
 public abstract class QueryParametersTab extends Panel {
     AjaxLink<?> removeSelected;
@@ -181,8 +182,8 @@ public abstract class QueryParametersTab extends Panel {
         private Set<Entry> getEntries() {
             if (entries == null) {
                 entries = new TreeSet<Entry>();
-                for (String s : getPageParameters().getQueryParamKeys()) {
-                    for (StringValue v : getPageParameters().getQueryParams(s)) {
+                for (String s : getPageParameters().getNamedKeys()) {
+                    for (StringValue v : getPageParameters().getValues(s)) {
                         Entry e = new Entry();
                         e.key = s;
                         e.value = v.toString();
@@ -208,9 +209,9 @@ public abstract class QueryParametersTab extends Panel {
 
         private void storeToPageParameters() {
             if (entries != null) {
-                getPageParameters().clearQueryParams();
+                getPageParameters().clearNamed();
                 for (Entry entry : entries) {
-                    getPageParameters().addQueryParam(entry.key, entry.value);
+                    getPageParameters().set(entry.key, entry.value);
                 }
             }
         }
