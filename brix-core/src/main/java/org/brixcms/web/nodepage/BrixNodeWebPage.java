@@ -26,7 +26,6 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.generic.IGenericComponent;
 
 public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNode> {
-    private BrixPageParameters pageParameters;
 
     public BrixNodeWebPage(IModel<BrixNode> nodeModel) {
         super(nodeModel);
@@ -34,7 +33,9 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
 
     public BrixNodeWebPage(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters) {
         super(nodeModel);
-        this.pageParameters = pageParameters;
+        if (pageParameters != null) {
+            getPageParameters().overwriteWith(pageParameters);
+        }
     }
 
 
@@ -52,10 +53,7 @@ public class BrixNodeWebPage extends WebPage implements IGenericComponent<BrixNo
     }
 
     public BrixPageParameters getBrixPageParameters() {
-        if (pageParameters == null) {
-            pageParameters = new BrixPageParameters();
-        }
-        return pageParameters;
+        return new BrixPageParameters(getPageParameters());
     }
 
     public BrixNode getPageNode() {
