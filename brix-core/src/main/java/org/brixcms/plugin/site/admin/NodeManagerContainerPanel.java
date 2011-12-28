@@ -172,7 +172,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
 
     public void updateTree() {
         tree.invalidateAll();
-        tree.updateTree();
+        // tree.updateTree();
     }
 
     private Component getEditor() {
