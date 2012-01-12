@@ -194,8 +194,9 @@ public class BrixRequestMapper implements IRequestMapper {
                 return new RenderPageRequestHandler(provider);
             } else {
                 ComponentInfo componentInfo = info.getComponentInfo();
-                PageAndComponentProvider provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), HomePage.class,
-                        renderCount, componentInfo.getComponentPath());
+                PageAndComponentProvider provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), renderCount,
+                        componentInfo.getComponentPath());
+
                 provider.setPageSource(getContext());
                 // listener interface
                 RequestListenerInterface listenerInterface = requestListenerInterfaceFromString(componentInfo.getListenerInterface());
