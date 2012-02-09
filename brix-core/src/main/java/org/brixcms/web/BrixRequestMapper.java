@@ -27,6 +27,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RequestListenerInterface;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
@@ -402,8 +403,7 @@ public class BrixRequestMapper implements IRequestMapper {
 
     protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
         Args.notNull(url, "url");
-
-        if (info != null) {
+        if (info != null && Session.exists() && !Session.get().isSessionInvalidated()) {
             String s = info.toString();
             if (!Strings.isEmpty(s)) {
                 QueryParameter parameter = new QueryParameter(s, "");
