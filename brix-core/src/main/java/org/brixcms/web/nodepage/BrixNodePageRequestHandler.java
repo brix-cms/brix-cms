@@ -30,7 +30,6 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
     // ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> node;
-    private BrixNodeWebPage page;
     private final PageFactory pageFactory;
 
     // --------------------------- CONSTRUCTORS ---------------------------
@@ -38,14 +37,12 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
     public BrixNodePageRequestHandler(IModel<BrixNode> node, BrixNodeWebPage page) {
         super(new PageProviderAdapter(page), RedirectPolicy.NEVER_REDIRECT);
         this.node = node;
-        this.page = page;
         this.pageFactory = null;
     }
 
     public BrixNodePageRequestHandler(IModel<BrixNode> node, PageFactory pageFactory) {
         super(new PageProviderAdapter(pageFactory), RedirectPolicy.NEVER_REDIRECT);
         this.node = node;
-        this.page = null;
         this.pageFactory = pageFactory;
     }
 

@@ -27,15 +27,18 @@ import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RequestListenerInterface;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.Url.QueryParameter;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.request.handler.BookmarkablePageRequestHandler;
+import org.apache.wicket.request.handler.IPageProvider;
 import org.apache.wicket.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.request.handler.PageAndComponentProvider;
 import org.apache.wicket.request.handler.PageProvider;
@@ -43,10 +46,12 @@ import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.IMapperContext;
+import org.apache.wicket.request.mapper.IPageSource;
 import org.apache.wicket.request.mapper.info.ComponentInfo;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.info.PageInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -62,6 +67,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.AbstractSitePagePlugin;
+import org.brixcms.web.nodepage.BrixNodePageRequestHandler;
 import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
 import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
@@ -183,13 +189,91 @@ public class BrixRequestMapper implements IRequestMapper {
             return null;
         }
 
-        PageComponentInfo info = getPageComponentInfo(request.getUrl());
+	    // TODO: This is just a quick fix
+	    if (url.getSegments().size() > 0) {
+		    if (url.getSegments().get(0).equals("webdav") || url.getSegments().get(0).equals("jcrwebdav")) {
+			    return null;
+		    }
+	    }
+
+	    Path path = new Path("/" + url.getPath());
+
+	    // root path handling
+	    if (path.isRoot()) {
+		    if (handleHomePage) {
+			    final BrixNode node = getNodeForUriPath(path);
+			    return SitePlugin.get().getNodePluginForNode(node)
+					    .respond(new BrixNodeModel(node), new BrixPageParameters(request.getRequestParameters()));
+		    } else {
+			    return null;
+		    }
+	    }
+
+	    IRequestHandler handler = null;
+	    try {
+		    while (handler == null) {
+			    final BrixNode node = getNodeForUriPath(path);
+			    if (node != null) {
+				    SiteNodePlugin plugin = SitePlugin.get().getNodePluginForNode(node);
+				    if (plugin instanceof AbstractSitePagePlugin) {
+					    handler = SitePlugin.get().getNodePluginForNode(node)
+							    .respond(new BrixNodeModel(node), createBrixPageParams(request.getUrl(), path));
+				    } else {
+					    handler = SitePlugin.get().getNodePluginForNode(node)
+							    .respond(new BrixNodeModel(node), new BrixPageParameters(request.getRequestParameters()));
+				    }
+			    }
+			    if (handler != null || path.toString().equals(".")) {
+				    break;
+			    }
+			    path = path.parent();
+			    if (path.isRoot()) {
+				    break;
+			    }
+		    }
+	    } catch (JcrException e) {
+		    logger.warn("JcrException caught due to incorrect url", e);
+	    }
+	    
+        final PageComponentInfo info = getPageComponentInfo(request.getUrl());
         if (info != null && info.getPageInfo().getPageId() != null) {
             Integer renderCount = info.getComponentInfo() != null ? info.getComponentInfo().getRenderCount() : null;
 
             if (info.getComponentInfo() == null) {
-                PageProvider provider = new PageProvider(info.getPageInfo().getPageId(), renderCount);
-                provider.setPageSource(getContext());
+	            PageProvider provider;
+	            if (handler instanceof BrixNodePageRequestHandler)
+	            {
+		            provider = new PageProvider(info.getPageInfo().getPageId(), BrixNodeWebPage.class, renderCount);
+		            BrixNodePageRequestHandler brixNodePageRequestHandler = (BrixNodePageRequestHandler) handler;
+		            final IPageProvider pageProviderAdapter = brixNodePageRequestHandler.getPageProvider();
+		            provider.setPageSource(new IPageSource()
+		            {
+			            @Override
+			            public IRequestablePage getPageInstance(int pageId)
+			            {
+				            IRequestablePage page = null;
+				            Integer existingPageId = pageProviderAdapter.getPageId();
+				            if (existingPageId != null && pageId == existingPageId) {
+								page = pageProviderAdapter.getPageInstance();
+				            }
+				            return page;
+			            }
+
+			            @Override
+			            public IRequestablePage newPageInstance(Class<? extends IRequestablePage> pageClass, PageParameters pageParameters)
+			            {
+				            IRequestablePage page = pageProviderAdapter.getPageInstance();
+				            page.getPageParameters().set(info.toString(), "");
+				            return page;
+			            }
+		            });
+	            }
+	            else 
+	            {
+		            provider = new PageProvider(info.getPageInfo().getPageId(), renderCount);
+		            provider.setPageSource(getContext());  
+	            }
+                
                 // render page
                 return new RenderPageRequestHandler(provider);
             } else {
@@ -203,52 +287,6 @@ public class BrixRequestMapper implements IRequestMapper {
 
                 return new ListenerInterfaceRequestHandler(provider, listenerInterface, componentInfo.getBehaviorId());
             }
-        }
-
-        // TODO: This is just a quick fix
-        if (url.getSegments().size() > 0) {
-            if (url.getSegments().get(0).equals("webdav") || url.getSegments().get(0).equals("jcrwebdav")) {
-                return null;
-            }
-        }
-
-        Path path = new Path("/" + url.getPath());
-
-        // root path handling
-        if (path.isRoot()) {
-            if (handleHomePage) {
-                final BrixNode node = getNodeForUriPath(path);
-                return SitePlugin.get().getNodePluginForNode(node)
-                        .respond(new BrixNodeModel(node), new BrixPageParameters(request.getRequestParameters()));
-            } else {
-                return null;
-            }
-        }
-
-        IRequestHandler handler = null;
-        try {
-            while (handler == null) {
-                final BrixNode node = getNodeForUriPath(path);
-                if (node != null) {
-                    SiteNodePlugin plugin = SitePlugin.get().getNodePluginForNode(node);
-                    if (plugin instanceof AbstractSitePagePlugin) {
-                        handler = SitePlugin.get().getNodePluginForNode(node)
-                                .respond(new BrixNodeModel(node), createBrixPageParams(request.getUrl(), path));
-                    } else {
-                        handler = SitePlugin.get().getNodePluginForNode(node)
-                                .respond(new BrixNodeModel(node), new BrixPageParameters(request.getRequestParameters()));
-                    }
-                }
-                if (handler != null || path.toString().equals(".")) {
-                    break;
-                }
-                path = path.parent();
-                if (path.isRoot()) {
-                    break;
-                }
-            }
-        } catch (JcrException e) {
-            logger.warn("JcrException caught due to incorrect url", e);
         }
 
         return handler;
@@ -268,7 +306,11 @@ public class BrixRequestMapper implements IRequestMapper {
             }
         }
         for (QueryParameter parameter : url.getQueryParameters()) {
-            parameters.add(parameter.getName(), parameter.getValue());
+	        String parameterName = parameter.getName();
+	        if (PageComponentInfo.parse(parameterName) == null)
+	        {
+	            parameters.add(parameterName, parameter.getValue());
+	        }
         }
         return parameters;
     }
@@ -402,8 +444,7 @@ public class BrixRequestMapper implements IRequestMapper {
 
     protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
         Args.notNull(url, "url");
-
-        if (info != null) {
+        if (info != null && Session.exists() && !Session.get().isSessionInvalidated()) {
             String s = info.toString();
             if (!Strings.isEmpty(s)) {
                 QueryParameter parameter = new QueryParameter(s, "");
@@ -417,6 +458,11 @@ public class BrixRequestMapper implements IRequestMapper {
         // This is a URL for redirect. Allow components to contribute state to
         // URL if they want to
         final BrixPageParameters parameters = page.getBrixPageParameters();
+        for (NamedPair namedPair : parameters.getAllNamed()) {
+            if (isNumber(namedPair.getKey())) {
+                parameters.remove(namedPair.getKey());
+            }
+        }
         page.visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
             @Override
             public void component(Component component, IVisit iVisit) {
@@ -563,6 +609,24 @@ public class BrixRequestMapper implements IRequestMapper {
 
         // use urimapper to create the uri
         return brix.getConfig().getMapper().getUriPathForNode(nodePath, brix);
+    }
+
+    /**
+     * Method that rigidly checks if the string consists of digits only.
+     * 
+     * @param string
+     * @return
+     */
+    private static boolean isNumber(String string) {
+        if (string == null || string.length() == 0) {
+            return false;
+        }
+        for (int i = 0; i < string.length(); ++i) {
+            if (Character.isDigit(string.charAt(i)) == false) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // -------------------------- INNER CLASSES --------------------------
