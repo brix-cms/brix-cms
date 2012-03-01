@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -114,7 +114,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
             @Override
             protected void onRowPopulated(WebMarkupContainer rowComponent) {
                 super.onRowPopulated(rowComponent);
-                rowComponent.add(new AbstractBehavior() {
+                rowComponent.add(new Behavior() {
                     @Override
                     public void onComponentTag(Component component, ComponentTag tag) {
                         BrixNode node = getNode(component.getDefaultModel());

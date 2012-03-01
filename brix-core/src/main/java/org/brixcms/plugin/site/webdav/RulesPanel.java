@@ -72,8 +72,11 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
-                if (AjaxRequestTarget.get() != null)
-                    AjaxRequestTarget.get().addComponent(removeSelected);
+	            AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
+                if (target != null)
+                {
+                    target.add(removeSelected);
+                }
             }
         };
         add(dataGrid);
@@ -149,12 +152,12 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         @Override
         protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
-            target.addComponent(feedback);
+            target.add(feedback);
         }
 
         @Override
         protected void onSubmitted(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
-            target.addComponent(feedback);
+            target.add(feedback);
             Rule rule = (Rule) rowModel.getObject();
             RulesPanel.this.getModelObject().saveRule(rule);
             dataGrid.markAllItemsDirty();

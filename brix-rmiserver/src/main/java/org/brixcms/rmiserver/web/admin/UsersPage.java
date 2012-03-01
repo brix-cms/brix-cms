@@ -14,6 +14,8 @@
 
 package org.brixcms.rmiserver.web.admin;
 
+import java.util.Iterator;
+
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,8 +35,6 @@ import org.brixcms.rmiserver.User;
 import org.brixcms.rmiserver.UserService;
 import org.brixcms.rmiserver.UserService.UserDto;
 import org.brixcms.rmiserver.web.admin.UserDtoEditor.Mode;
-
-import java.util.Iterator;
 
 /**
  * Homepage
@@ -147,15 +147,15 @@ public class UsersPage extends WebPage {
     private class UsersDataProvider implements IDataProvider<User> {
         private static final long serialVersionUID = 1L;
 
-        public Iterator<User> iterator(int first, int count) {
-            return users.query(first, count).iterator();
+        public Iterator<User> iterator(long first, long count) {
+            return users.query((int)first, (int)count).iterator();
         }
 
         public IModel<User> model(User object) {
             return new UserModel(object);
         }
 
-        public int size() {
+        public long size() {
             return users.queryCount();
         }
 

@@ -69,7 +69,7 @@ public class RestoreItemsPanel extends SelectItemsPanel<Void> {
                 } else {
                     message.setDefaultModelObject("You have to select at least one node.");
                 }
-                target.addComponent(message);
+                target.add(message);
             }
         });
     }

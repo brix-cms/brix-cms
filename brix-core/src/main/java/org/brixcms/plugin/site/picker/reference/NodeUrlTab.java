@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.picker.node.SiteNodePicker;
 import org.brixcms.plugin.site.tree.SiteNodeFilter;
 import org.brixcms.web.generic.BrixGenericPanel;
@@ -51,32 +52,36 @@ public abstract class NodeUrlTab extends BrixGenericPanel<Reference> {
             }
         };
 
-        add(choice = new DropDownChoice<Reference.Type>("type", new PropertyModel<Reference.Type>(this.getModel(),
+	    final ReferenceEditorConfiguration configuration = getConfiguration();
+	    add(choice = new DropDownChoice<Reference.Type>("type", new PropertyModel<Reference.Type>(this.getModel(),
                 "type"), choices, renderer) {
             @Override
             public boolean isVisible() {
-                return getConfiguration().isAllowNodePicker() && getConfiguration().isAllowURLEdit();
+                return configuration.isAllowNodePicker() && configuration.isAllowURLEdit();
             }
         });
 
-        choice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                target.addComponent(NodeUrlTab.this);
-            }
+        choice.add(new AjaxFormComponentUpdatingBehavior("change")
+        {
+	        @Override
+	        protected void onUpdate(AjaxRequestTarget target)
+	        {
+		        target.add(NodeUrlTab.this);
+	        }
         });
 
         NodePicker picker = null;
-        if (getConfiguration().getRootNode() != null) {
-            JcrTreeNode rootNode = TreeAwareNode.Util.getTreeNode(getConfiguration().getRootNode().getObject());
+	    IModel<BrixNode> rootNodeModel = configuration.getRootNode();
+	    if (rootNodeModel != null) {
+            JcrTreeNode rootNode = TreeAwareNode.Util.getTreeNode(rootNodeModel.getObject());
             picker = new NodePicker("nodePicker", getReference().getNodeModel(), rootNode,
-                    new SiteNodeFilter(false, null), getConfiguration().getNodeFilter());
+                    new SiteNodeFilter(false, null), configuration.getNodeFilter());
         } else {
             picker = new SiteNodePicker("nodePicker", getReference().getNodeModel(),
-                    getConfiguration().getWorkspaceName(), getConfiguration().getNodeFilter()) {
+                    configuration.getWorkspaceName(), configuration.getNodeFilter()) {
                 @Override
                 public boolean isVisible() {
-                    return getConfiguration().isAllowNodePicker()
+                    return configuration.isAllowNodePicker()
                             && getReference().getType() == Reference.Type.NODE;
                 }
             };
@@ -86,7 +91,7 @@ public abstract class NodeUrlTab extends BrixGenericPanel<Reference> {
         add(new UrlPanel("urlPanel", new PropertyModel<String>(getModel(), "url")) {
             @Override
             public boolean isVisible() {
-                return getConfiguration().isAllowURLEdit() && getReference().getType() == Reference.Type.URL;
+                return configuration.isAllowURLEdit() && getReference().getType() == Reference.Type.URL;
             }
         });
     }

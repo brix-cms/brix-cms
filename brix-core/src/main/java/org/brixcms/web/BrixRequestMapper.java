@@ -50,8 +50,8 @@ import org.apache.wicket.request.mapper.IPageSource;
 import org.apache.wicket.request.mapper.info.ComponentInfo;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.info.PageInfo;
+import org.apache.wicket.request.mapper.parameter.INamedParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.mapper.parameter.PageParameters.NamedPair;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -458,7 +458,7 @@ public class BrixRequestMapper implements IRequestMapper {
         // This is a URL for redirect. Allow components to contribute state to
         // URL if they want to
         final BrixPageParameters parameters = page.getBrixPageParameters();
-        for (NamedPair namedPair : parameters.getAllNamed()) {
+        for (INamedParameters.NamedPair namedPair : parameters.getAllNamed()) {
             if (isNumber(namedPair.getKey())) {
                 parameters.remove(namedPair.getKey());
             }

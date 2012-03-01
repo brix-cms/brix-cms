@@ -66,7 +66,7 @@ public abstract class ReferenceColumnPanel extends BrixGenericPanel<Reference> {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 super.onUpdate(target);
-                target.addComponent(label);
+                target.add(label);
             }
         };
 

@@ -31,10 +31,10 @@ public class TimeTileEditor extends TileEditorPanel {
 
     public TimeTileEditor(String id, IModel<BrixNode> tileContainerNode) {
         super(id);
-        add(new TextField("format", new PropertyModel(this, "format"))
-                .setLabel(new Model("format")).add(new IValidator() {
-                    public void validate(IValidatable validatable) {
-                        String expr = validatable.getValue().toString();
+        add(new TextField<String>("format", new PropertyModel<String>(this, "format"))
+                .setLabel(Model.of("format")).add(new IValidator<String>() {
+                    public void validate(IValidatable<String> validatable) {
+                        String expr = validatable.getValue();
                         try {
                             new SimpleDateFormat(expr);
                         } catch (IllegalArgumentException e) {

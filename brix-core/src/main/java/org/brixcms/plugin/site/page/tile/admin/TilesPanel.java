@@ -18,7 +18,7 @@
 package org.brixcms.plugin.site.page.tile.admin;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.basic.Label;
@@ -64,7 +64,7 @@ public class TilesPanel extends NodeManagerPanel {
 
             @Override
             protected void populateItem(Item<String> item) {
-                item.add(new AbstractBehavior() {
+                item.add(new Behavior() {
                     private Item<?> item;
 
                     @Override

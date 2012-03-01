@@ -65,7 +65,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
         columns.add(new PropertyColumn<DataSource, Entry, String>(new ResourceModel("key"), "key"));
         columns.add(new EditablePropertyColumn<DataSource, Entry, String>(new ResourceModel("value"), "value") {
             @Override
-            protected void addValidators(FormComponent component) {
+            protected void addValidators(FormComponent<String> component) {
                 component.setRequired(true);
             }
         });
@@ -82,13 +82,13 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        final DataGrid<DataSource, Entry> grid = new DefaultDataGrid<DataSource, Entry>("grid", new Model<DataSource>(new DataSource()),
+        final DataGrid<DataSource, Entry> grid = new DefaultDataGrid<DataSource, Entry>("grid", Model.of(new DataSource()),
                 columns) {
             @Override
             public void onItemSelectionChanged(IModel<Entry> item, boolean newValue) {
-                AjaxRequestTarget target = AjaxRequestTarget.get();
+                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
                 if (target != null) {
-                    target.addComponent(delete);
+                    target.add(delete);
                 }
                 super.onItemSelectionChanged(item, newValue);
             }
@@ -102,15 +102,15 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
-                for (IModel<?> m : grid.getSelectedItems()) {
-                    Entry e = (Entry) m.getObject();
+                for (IModel<Entry> m : grid.getSelectedItems()) {
+                    Entry e = m.getObject();
                     node.setVariableValue(e.getKey(), null);
                 }
                 node.save();
                 grid.markAllItemsDirty();
                 grid.update();
                 grid.resetSelectedItems();
-                target.addComponent(this);
+                target.add(this);
             }
 
             @Override
@@ -131,9 +131,9 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
         add(new FeedbackPanel("feedback").setOutputMarkupId(true));
     }
 
-    private class DataSource implements IDataSource<Entry> {
+    private class DataSource implements IDataSource<Entry>, Serializable {
         public IModel<Entry> model(Entry object) {
-            return new Model<Entry>(object);
+            return Model.of(object);
         }
 
         public void query(IQuery query, IQueryResult<Entry> result) {
@@ -149,7 +149,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             });
             int total = res.size();
             if (total > query.getFrom()) {
-                res = res.subList(query.getFrom(), total);
+                res = res.subList((int) query.getFrom(), total);
             }
             result.setItems(res.iterator());
             result.setTotalCount(total);
@@ -232,8 +232,8 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                 protected void onUpdate(AjaxRequestTarget target) {
                     tf.setModelObject(keySuggestions.getModelObject());
                     keySuggestions.setModelObject(null);
-                    target.addComponent(tf);
-                    target.addComponent(keySuggestions);
+                    target.add(tf);
+                    target.add(keySuggestions);
                     target.focusComponent(tf);
                 }
             });
@@ -249,7 +249,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                     onItemAdded();
                     key = null;
                     value = null;
-                    target.addComponent(form);
+                    target.add(form);
                     target.addChildren(findParent(VariablesPanel.class), FeedbackPanel.class);
                 }
 

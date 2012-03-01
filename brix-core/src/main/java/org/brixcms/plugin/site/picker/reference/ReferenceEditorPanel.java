@@ -93,7 +93,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
                 getModalWindow().setModel(ReferenceEditorPanel.this.getModel());
                 getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
                     public void onClose(AjaxRequestTarget target) {
-                        target.addComponent(ReferenceEditorPanel.this);
+                        target.add(ReferenceEditorPanel.this);
                         ReferenceEditorPanel.this.onUpdate(target);
                     }
                 });
@@ -109,7 +109,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
                 // indicate that reference was changed (might be needed if the
                 // model is buffered)
                 ReferenceEditorPanel.this.setModelObject(ref);
-                target.addComponent(ReferenceEditorPanel.this);
+                target.add(ReferenceEditorPanel.this);
                 ReferenceEditorPanel.this.onUpdate(target);
             }
 

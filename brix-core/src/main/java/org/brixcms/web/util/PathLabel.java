@@ -22,7 +22,6 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlDecoder;
 import org.apache.wicket.util.string.PrependingStringBuffer;
-import org.apache.wicket.util.value.ValueMap;
 import org.brixcms.Path;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericWebMarkupContainer;
@@ -80,7 +79,7 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
     }
 
     private CharSequence createCallbackUrl(String subpath) {
-        Url url=Url.parse(urlFor(ILinkListener.INTERFACE).toString());
+        Url url=Url.parse(urlFor(ILinkListener.INTERFACE, null).toString());
         url.addQueryParameter("path", subpath);
         return url.toString(getRequest().getCharset());
     }

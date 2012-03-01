@@ -89,8 +89,8 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
             protected void onUpdate(AjaxRequestTarget target) {
                 tileId.setModelObject(idSuggestion.getModelObject());
                 idSuggestion.setModelObject(null);
-                target.addComponent(tileId);
-                target.addComponent(idSuggestion);
+                target.add(tileId);
+                target.add(idSuggestion);
                 target.focusComponent(tileId);
             }
         });

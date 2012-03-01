@@ -14,7 +14,7 @@
 
 package org.brixcms.plugin.site.resource.managers.image;
 
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.IBehaviorListener;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -37,14 +37,14 @@ public class ViewImagePanel extends BrixGenericPanel<BrixNode> {
         add(new WebMarkupContainer("image") {
             @Override
             protected void onComponentTag(ComponentTag tag) {
-                CharSequence url = urlFor(behavior, IBehaviorListener.INTERFACE);
+                CharSequence url = urlFor(behavior, IBehaviorListener.INTERFACE, null);
                 tag.put("src", url);
                 super.onComponentTag(tag);
             }
         }.add(behavior));
     }
 
-    private abstract class ResourceBehavior extends AbstractBehavior
+    private abstract class ResourceBehavior extends Behavior
             implements
             IBehaviorListener {
         public void onRequest() {

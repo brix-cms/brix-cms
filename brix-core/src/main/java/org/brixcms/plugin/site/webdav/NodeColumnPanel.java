@@ -62,7 +62,7 @@ public abstract class NodeColumnPanel extends BrixGenericPanel<BrixNode> {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 super.onUpdate(target);
-                target.addComponent(label);
+                target.add(label);
             }
         };
 

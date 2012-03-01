@@ -159,7 +159,19 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
                 page.detach();
         }
 
-        @Override
+	    @Override
+	    public boolean hasPageInstance()
+	    {
+		    return page != null;
+	    }
+
+	    @Override
+	    public boolean isPageInstanceFresh()
+	    {
+		    return !hasPageInstance();
+	    }
+
+	    @Override
         public Integer getPageId() {
             if (page != null) {
                 return page.getPageId();

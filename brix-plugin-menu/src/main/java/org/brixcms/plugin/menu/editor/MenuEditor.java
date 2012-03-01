@@ -22,8 +22,8 @@ import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.treegrid.TreeGrid;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.tree.AbstractTree;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.tree.AbstractTree;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
@@ -72,7 +72,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                 //if (newValue == false)
                 setItemEdit(item, newValue);
 
-                selectionChanged(AjaxRequestTarget.get());
+                selectionChanged(getRequestCycle().find(AjaxRequestTarget.class));
                 // update();
             }
 
@@ -181,7 +181,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
 
                     tree.updateTree();
                 }
-                target.addComponent(links);
+                target.add(links);
             }
 
             @Override
@@ -208,7 +208,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
 
                     tree.updateTree();
                 }
-                target.addComponent(links);
+                target.add(links);
             }
 
             @Override
@@ -272,7 +272,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
 
     private void selectionChanged(AjaxRequestTarget target) {
         if (target != null) {
-            target.addComponent(links);
+            target.add(links);
         }
     }
 }

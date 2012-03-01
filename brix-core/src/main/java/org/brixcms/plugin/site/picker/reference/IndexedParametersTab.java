@@ -71,13 +71,13 @@ public abstract class IndexedParametersTab extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 dataSource.addEntry(newEntry);
                 dataSource.storeToPageParameters();
-                target.addComponent(IndexedParametersTab.this);
+                target.add(IndexedParametersTab.this);
                 newEntry = new Entry();
             }
 
             @Override
             protected void onError(AjaxRequestTarget target, Form form) {
-                target.addComponent(feedback);
+                target.add(feedback);
             }
         });
 
@@ -97,13 +97,13 @@ public abstract class IndexedParametersTab extends Panel {
                                        WebMarkupContainer rowComponent) {
                 dataSource.storeToPageParameters();
                 super.onSubmitted(target, rowModel, rowComponent);
-                target.addComponent(feedback);
+                target.add(feedback);
             }
 
             @Override
             protected void onError(AjaxRequestTarget target, IModel rowModel,
                                    WebMarkupContainer rowComponent) {
-                target.addComponent(feedback);
+                target.add(feedback);
             }
         });
 
@@ -123,9 +123,9 @@ public abstract class IndexedParametersTab extends Panel {
         final DataGrid grid = new DataGrid("grid", dataSource, columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
-                AjaxRequestTarget target = AjaxRequestTarget.get();
+                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
                 if (target != null) {
-                    target.addComponent(removeSelected);
+                    target.add(removeSelected);
                 }
                 super.onItemSelectionChanged(item, newValue);
             }
