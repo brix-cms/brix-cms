@@ -16,13 +16,12 @@ package org.brixcms;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.IPageRequestHandler;
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
 import org.brixcms.auth.AuthorizationStrategy;
@@ -125,7 +124,7 @@ public abstract class Brix {
 
     /**
      * Constructs a URL to the current page. This method can only be called within an active wicket request because it
-     * relies on the {@link org.apache.wicket.RequestCycle} threadlocal.
+     * relies on the {@link RequestCycle} threadlocal.
      *
      * @return url to the current brix page
      * @throws BrixException if the current request was not for a brix page

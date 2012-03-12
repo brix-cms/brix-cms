@@ -14,14 +14,14 @@
 
 package org.brixcms.web.nodepage;
 
+import org.apache.wicket.core.request.handler.IPageProvider;
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.IPageProvider;
-import org.apache.wicket.request.handler.IPageRequestHandler;
-import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 

@@ -19,7 +19,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.IPageRequestHandler;
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.exception.BrixException;
 import org.brixcms.jcr.wrapper.BrixNode;
