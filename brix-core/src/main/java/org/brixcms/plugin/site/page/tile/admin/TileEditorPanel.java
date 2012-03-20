@@ -27,6 +27,9 @@ public abstract class TileEditorPanel extends Panel {
         super(id, model);
     }
 
+    public void initialize() {
+    };
+
     abstract public void load(BrixNode node);
 
     abstract public void save(BrixNode node);
