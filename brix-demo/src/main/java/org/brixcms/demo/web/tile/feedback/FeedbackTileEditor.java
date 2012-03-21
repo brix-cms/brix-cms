@@ -24,35 +24,27 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 public class FeedbackTileEditor extends TileEditorPanel {
 
-    private FeedbackTileConfiguration configuration;
+    private FeedbackTileConfiguration configuration = new FeedbackTileConfiguration();
 
     public FeedbackTileEditor(String id, IModel<BrixNode> tileContainerNode) {
         super(id);
-        add(new TextField<String>("email", new PropertyModel<String>(this, "configuration.email")).setRequired(true)
+        add(new TextField<String>("email", new PropertyModel<String>(configuration, "email")).setRequired(true)
                 .add(EmailAddressValidator.getInstance()).setLabel(new ResourceModel("email")));
-        add(new TextField<String>("feedbackEmailLabel", new PropertyModel<String>(this, "configuration.feedbackEmailLabel"))
+        add(new TextField<String>("feedbackEmailLabel", new PropertyModel<String>(configuration, "feedbackEmailLabel"))
                 .setLabel(new ResourceModel("feedbackEmailLabel")));
-        add(new TextField<String>("feedbackMessageLabel", new PropertyModel<String>(this, "configuration.feedbackMessageLabel"))
+        add(new TextField<String>("feedbackMessageLabel", new PropertyModel<String>(configuration, "feedbackMessageLabel"))
                 .setLabel(new ResourceModel("feedbackMessageLabel")));
-        add(new TextField<String>("feedbackSubmittedMessage", new PropertyModel<String>(this, "configuration.feedbackSubmittedMessage"))
+        add(new TextField<String>("feedbackSubmittedMessage", new PropertyModel<String>(configuration, "feedbackSubmittedMessage"))
                 .setLabel(new ResourceModel("feedbackSubmittedMessage")).setRequired(true));
     }
 
     @Override
-    public void initialize() {
-        configuration = new FeedbackTileConfiguration();
-    }
-
-    @Override
     public void load(BrixNode node) {
-        configuration = new FeedbackTileConfiguration(node);
+        configuration.load(node);
     }
 
     @Override
     public void save(BrixNode node) {
-        node.setProperty("email", configuration.getEmail());
-        node.setProperty("feedbackEmailLabel", configuration.getFeedbackEmailLabel());
-        node.setProperty("feedbackMessageLabel", configuration.getFeedbackMessageLabel());
-        node.setProperty("feedbackSubmittedMessage", configuration.getFeedbackSubmittedMessage());
+        configuration.save(node);
     }
 }

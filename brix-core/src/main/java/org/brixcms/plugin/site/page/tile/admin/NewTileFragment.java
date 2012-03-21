@@ -116,7 +116,6 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
                     final Brix brix = NewTileFragment.this.getModelObject().getBrix();
                     final Tile tile = Tile.Helper.getTileOfType(tileTypeName, brix);
                     TileEditorPanel ed = tile.newEditor(newTileEditor.getId(), nodeModel);
-                    ed.initialize();
                     newTileEditor.replaceWith(ed);
                     newTileEditor = ed;
                 }
