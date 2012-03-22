@@ -14,22 +14,23 @@
 
 package org.brixcms.demo;
 
-import org.brixcms.demo.util.PropertyUtils;
-import org.brixcms.demo.util.PropertyUtils.MergeMode;
+import java.io.File;
+import java.util.Properties;
 
 import javax.jcr.Credentials;
 import javax.jcr.SimpleCredentials;
-import java.io.File;
-import java.util.Properties;
+
+import org.brixcms.demo.util.PropertyUtils;
+import org.brixcms.demo.util.PropertyUtils.MergeMode;
 
 /**
  * Application-wide configuration settings for Brix Demo Application
  *
  * @author igor.vaynberg
  */
-public class ApplicationProperties {
-    private final Properties properties;
-    private String prefix;
+public class ApplicationProperties extends Properties {
+
+    private final String prefix;
 
     /**
      * @deprecated
@@ -39,7 +40,11 @@ public class ApplicationProperties {
     }
 
     public ApplicationProperties(String prefix) {
+        super(createProperties(prefix));
         this.prefix = prefix;
+    }
+
+    private static Properties createProperties(String prefix) {
         // load base properties
         String baseProperties = "org/brixcms/demo" + "/application.properties";
 
@@ -54,7 +59,7 @@ public class ApplicationProperties {
         Properties system = System.getProperties();
 
         // merge properties
-        properties = PropertyUtils.merge(MergeMode.OVERRIDE_ONLY, base, user, system);
+        return PropertyUtils.merge(MergeMode.OVERRIDE_ONLY, base, user, system);
     }
 
     public String getPrefix() {
@@ -72,46 +77,46 @@ public class ApplicationProperties {
      * @return jcr login name
      */
     public String getJcrLogin() {
-        return properties.getProperty(prefix + ".jcr.login");
+        return getProperty(prefix + ".jcr.login");
     }
 
     /**
      * @return http port the server is using
      */
     public int getHttpPort() {
-        return Integer.parseInt(properties.getProperty(prefix + ".httpPort"));
+        return Integer.parseInt(getProperty(prefix + ".httpPort"));
     }
 
     /**
      * @return https port the server is using
      */
     public int getHttpsPort() {
-        return Integer.parseInt(properties.getProperty(prefix + ".httpsPort"));
+        return Integer.parseInt(getProperty(prefix + ".httpsPort"));
     }
 
     /**
      * @return jcr default workspace
      */
     public String getJcrDefaultWorkspace() {
-        return properties.getProperty(prefix + ".jcr.defaultWorkspace");
+        return getProperty(prefix + ".jcr.defaultWorkspace");
     }
 
     /**
      * @return jcr login password
      */
     public String getJcrPassword() {
-        return properties.getProperty(prefix + ".jcr.password");
+        return getProperty(prefix + ".jcr.password");
     }
 
     /**
      * @return jcr repository url
      */
     public String getJcrRepositoryUrl() {
-        String url = properties.getProperty(prefix + ".jcr.url");
+        String url = getProperty(prefix + ".jcr.url");
         if (url == null || url.trim().length() == 0) {
             // if no url was specified generate a unique temporary one
             url = "file://" + getDefaultRepositoryFileName();
-            properties.setProperty(prefix + ".jcr.url", url);
+            setProperty(prefix + ".jcr.url", url);
         }
         return url;
     }
@@ -134,13 +139,13 @@ public class ApplicationProperties {
      * @return default workspace state
      */
     public String getWorkspaceDefaultState() {
-        return properties.getProperty(prefix + ".jcr.defaultWorkspaceState");
+        return getProperty(prefix + ".jcr.defaultWorkspaceState");
     }
 
     /**
      * @return workspace manager url
      */
     public String getWorkspaceManagerUrl() {
-        return properties.getProperty(prefix + ".workspaceManagerUrl");
+        return getProperty(prefix + ".workspaceManagerUrl");
     }
 }
