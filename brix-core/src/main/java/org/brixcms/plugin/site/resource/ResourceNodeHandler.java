@@ -100,6 +100,7 @@ public class ResourceNodeHandler implements IRequestHandler {
 			String fileName = node.getName();
 			long length = node.getContentLength();
 			HttpServletResponse httpServletResponse = (HttpServletResponse) response.getContainerResponse();
+            httpServletResponse.setContentType(node.getMimeType());
 			InputStream stream = node.getDataAsStream();
 
 			new Streamer(length, stream, fileName, save, r, httpServletResponse).stream();
