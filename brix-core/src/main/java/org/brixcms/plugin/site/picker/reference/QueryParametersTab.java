@@ -69,7 +69,7 @@ public abstract class QueryParametersTab extends Panel {
         newForm.add(new TextField<String>("value").setRequired(true));
         newForm.add(new AjaxButton("add") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmitBeforeForm(AjaxRequestTarget target, Form<?> form) {
                 dataSource.addEntry(newEntry);
                 dataSource.storeToPageParameters();
                 target.add(QueryParametersTab.this);

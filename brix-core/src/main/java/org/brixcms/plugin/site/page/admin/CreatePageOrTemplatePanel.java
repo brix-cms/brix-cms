@@ -52,7 +52,7 @@ public class CreatePageOrTemplatePanel extends NodeManagerPanel {
 
         form.add(new SubmitLink("create") {
             @Override
-            public void onSubmit() {
+            public void onSubmitBeforeForm() {
                 createPage(type);
             }
         });

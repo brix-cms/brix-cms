@@ -38,7 +38,7 @@ public abstract class EditTextResourcePanel extends BrixGenericPanel<BrixNode> {
 
         form.add(new SubmitLink("save") {
             @Override
-            public void onSubmit() {
+            public void onSubmitBeforeForm() {
                 model.apply();
                 getNode().save();
                 // done

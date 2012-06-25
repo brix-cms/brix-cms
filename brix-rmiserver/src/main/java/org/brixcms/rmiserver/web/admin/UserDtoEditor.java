@@ -14,6 +14,11 @@
 
 package org.brixcms.rmiserver.web.admin;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
@@ -32,11 +37,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.brixcms.rmiserver.Role;
 import org.brixcms.rmiserver.UserService.UserDto;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 public abstract class UserDtoEditor extends GenericPanel<UserDto> {
     private static final long serialVersionUID = 1L;
@@ -76,7 +76,7 @@ public abstract class UserDtoEditor extends GenericPanel<UserDto> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit() {
+            public void onSubmitBeforeForm() {
                 onOk(UserDtoEditor.this.getModelObject());
             }
         });

@@ -14,6 +14,8 @@
 
 package org.brixcms.plugin.site.folder;
 
+import java.io.Serializable;
+
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
@@ -31,8 +33,6 @@ import org.brixcms.web.ContainerFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.util.validators.NodeNameValidator;
 
-import java.io.Serializable;
-
 public class CreateFolderPanel extends BrixGenericPanel<BrixNode> {
     private String name;
 
@@ -46,7 +46,7 @@ public class CreateFolderPanel extends BrixGenericPanel<BrixNode> {
 
         form.add(new SubmitLink("create") {
             @Override
-            public void onSubmit() {
+            public void onSubmitBeforeForm() {
                 createFolder();
             }
         });

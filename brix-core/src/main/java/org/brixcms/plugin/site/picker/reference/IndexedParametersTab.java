@@ -68,7 +68,7 @@ public abstract class IndexedParametersTab extends Panel {
         newForm.add(new TextField<String>("value").setRequired(true));
         newForm.add(new AjaxButton("add") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmitBeforeForm(AjaxRequestTarget target, Form<?> form) {
                 dataSource.addEntry(newEntry);
                 dataSource.storeToPageParameters();
                 target.add(IndexedParametersTab.this);
@@ -76,7 +76,7 @@ public abstract class IndexedParametersTab extends Panel {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form form) {
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(feedback);
             }
         });

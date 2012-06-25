@@ -14,6 +14,10 @@
 
 package org.brixcms.plugin.menu;
 
+import java.util.List;
+
+import javax.jcr.ReferentialIntegrityException;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -36,9 +40,6 @@ import org.brixcms.plugin.menu.editor.MenuEditor;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.util.AbstractModel;
 import org.brixcms.workspace.Workspace;
-
-import javax.jcr.ReferentialIntegrityException;
-import java.util.List;
 
 public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
 // ------------------------------ FIELDS ------------------------------
@@ -171,7 +172,7 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
 
             form.add(new SubmitLink("save") {
                 @Override
-                public void onSubmit() {
+                public void onSubmitBeforeForm() {
                     MenuPlugin plugin = MenuPlugin.get();
                     currentNode.setObject(plugin.saveMenu(model.getObject(), ManageMenuPanel.this
                             .getModelObject().getId(), currentNode.getObject()));
@@ -181,7 +182,7 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
 
             form.add(new SubmitLink("delete") {
                 @Override
-                public void onSubmit() {
+                public void onSubmitBeforeForm() {
                     try {
                         JcrSession session = currentNode.getObject().getSession();
                         currentNode.getObject().remove();

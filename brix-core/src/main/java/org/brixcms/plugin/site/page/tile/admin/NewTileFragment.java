@@ -128,7 +128,7 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
 
         form.add(new SubmitLink("add") {
             @Override
-            public void onSubmit() {
+            public void onSubmitBeforeForm() {
                 onAddTile(newTileId, newTileTypeName);
             }
         });

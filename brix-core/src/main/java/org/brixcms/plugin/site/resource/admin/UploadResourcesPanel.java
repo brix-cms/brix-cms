@@ -14,6 +14,15 @@
 
 package org.brixcms.plugin.site.resource.admin;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
+
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -32,15 +41,6 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.admin.NodeManagerPanel;
 import org.brixcms.web.ContainerFeedbackPanel;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.UUID;
-
 public class UploadResourcesPanel extends NodeManagerPanel {
     private Collection<FileUpload> uploads = new ArrayList<FileUpload>();
     private boolean overwrite = false;
@@ -55,7 +55,7 @@ public class UploadResourcesPanel extends NodeManagerPanel {
 
         form.add(new SubmitLink("upload") {
             @Override
-            public void onSubmit() {
+            public void onSubmitBeforeForm() {
                 processUploads();
             }
         });
