@@ -48,7 +48,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 // ------------------------------ FIELDS ------------------------------
     ;
     private Component feedback;
-    private DataGrid<DataSource, Rule> dataGrid;
+    private DataGrid<DataSource, Rule, String> dataGrid;
     private AjaxLink<?> removeSelected;
 
     public RulesPanel(String id, IModel<Workspace> workspaceModel) {
@@ -57,7 +57,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
 
-        List<IGridColumn<DataSource, Rule>> columns = new ArrayList<IGridColumn<DataSource, Rule>>();
+        List<IGridColumn<DataSource, Rule, String>> columns = new ArrayList<IGridColumn<DataSource, Rule, String>>();
 
         columns.add(new CheckBoxColumn("checkbox"));
         columns.add(new PriorityColumn(new ResourceModel("priority"), "priority").setInitialSize(60));
@@ -68,7 +68,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         columns.add(new SubmitColumn("edit", new ResourceModel("edit")));
 
-        dataGrid = new DataGrid<DataSource, Rule>("grid", new DataSource(), columns) {
+        dataGrid = new DataGrid<DataSource, Rule, String>("grid", new DataSource(), columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
