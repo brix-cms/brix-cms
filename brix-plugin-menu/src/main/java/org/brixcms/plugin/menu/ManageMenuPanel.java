@@ -172,7 +172,7 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
 
             form.add(new SubmitLink("save") {
                 @Override
-                public void onSubmitBeforeForm() {
+                public void onSubmit() {
                     MenuPlugin plugin = MenuPlugin.get();
                     currentNode.setObject(plugin.saveMenu(model.getObject(), ManageMenuPanel.this
                             .getModelObject().getId(), currentNode.getObject()));
@@ -182,7 +182,7 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
 
             form.add(new SubmitLink("delete") {
                 @Override
-                public void onSubmitBeforeForm() {
+                public void onSubmit() {
                     try {
                         JcrSession session = currentNode.getObject().getSession();
                         currentNode.getObject().remove();

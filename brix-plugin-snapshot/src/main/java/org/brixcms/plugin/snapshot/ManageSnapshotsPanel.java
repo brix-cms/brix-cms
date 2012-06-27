@@ -194,7 +194,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
              * @see org.apache.wicket.markup.html.form.IFormSubmittingComponent#onSubmitBeforeForm()
              */
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 String comment = area.getModelObject();
                 SnapshotPlugin.get().createSnapshot(ManageSnapshotsPanel.this.getModelObject(), comment);
                 area.setModelObject("");
@@ -217,7 +217,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
 
         uploadForm.add(new SubmitLink("submit") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 List<FileUpload> uploadList = upload.getModelObject();
                 if (uploadList != null) {
                     for (FileUpload u : uploadList) {
