@@ -56,7 +56,7 @@ public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode> {
 
         form.add(new SubmitLink("save") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 BrixNode node = nodeModel.getObject();
                 model.apply();
                 node.save();

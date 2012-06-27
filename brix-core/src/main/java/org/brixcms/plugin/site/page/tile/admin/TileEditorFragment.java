@@ -51,7 +51,7 @@ public abstract class TileEditorFragment extends Fragment implements IGenericCom
 
         form.add(new SubmitLink("submit") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 BrixNode node = TileEditorFragment.this.getModelObject();
                 BrixNode tile = getTileContainerNode().tiles().getTile(tileId);
                 node.checkout();

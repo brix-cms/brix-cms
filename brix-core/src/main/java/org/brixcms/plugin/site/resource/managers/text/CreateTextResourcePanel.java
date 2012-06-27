@@ -55,7 +55,7 @@ public class CreateTextResourcePanel extends BrixGenericPanel<BrixNode> {
 
         form.add(new SubmitLink("save") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 if (getContainer().hasNode(fileName)) {
                     error(getString("fileExists", Model.ofMap(new MicroMap<String, String>(
                             "fileName", fileName))));

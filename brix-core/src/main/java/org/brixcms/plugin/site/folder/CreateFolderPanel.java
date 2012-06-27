@@ -46,7 +46,7 @@ public class CreateFolderPanel extends BrixGenericPanel<BrixNode> {
 
         form.add(new SubmitLink("create") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 createFolder();
             }
         });
