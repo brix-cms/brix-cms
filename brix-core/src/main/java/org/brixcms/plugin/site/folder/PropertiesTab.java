@@ -35,7 +35,7 @@ public class PropertiesTab extends BrixGenericPanel<BrixNode> {
 
         form.add(new SubmitLink("submit") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 buffer.apply();
                 folderNodeModel.getObject().save();
                 getSession().info(PropertiesTab.this.getString("propertiesSaved"));

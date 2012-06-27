@@ -149,7 +149,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
 
         form.add(new AjaxButton("submit") {
             @Override
-            public void onSubmitBeforeForm(AjaxRequestTarget target, Form<?> form) {
+            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 String workspaceId = ManagePrototypesPanel.this.getModelObject().getId();
                 CreatePrototypePanel panel = new CreatePrototypePanel(modalWindow.getContentId(), workspaceId,
                         ManagePrototypesPanel.this.prototypeName);

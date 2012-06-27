@@ -76,7 +76,7 @@ public abstract class UserDtoEditor extends GenericPanel<UserDto> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 onOk(UserDtoEditor.this.getModelObject());
             }
         });

@@ -242,7 +242,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
             add(new AjaxButton("submit") {
                 @Override
-                protected void onSubmitBeforeForm(AjaxRequestTarget target, Form<?> form) {
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
                     node.setVariableValue(key, value);
                     node.save();

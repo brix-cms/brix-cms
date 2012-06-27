@@ -55,7 +55,7 @@ public class UploadResourcesPanel extends NodeManagerPanel {
 
         form.add(new SubmitLink("upload") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 processUploads();
             }
         });

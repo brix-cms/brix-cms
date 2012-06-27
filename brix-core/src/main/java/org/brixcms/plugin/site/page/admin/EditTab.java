@@ -106,7 +106,7 @@ abstract class EditTab extends NodeManagerPanel {
 
         form.add(new Button("save") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 JcrNode node = nodeModel.getObject();
                 node.checkout();
                 adapter.apply();

@@ -48,7 +48,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
 
         form.add(new SubmitLink("rename") {
             @Override
-            public void onSubmitBeforeForm() {
+            public void onSubmit() {
                 JcrNode node = RenamePanel.this.getModelObject();
 
                 if (RenamePanel.this.newName.equals(node.getName()) == false) {
