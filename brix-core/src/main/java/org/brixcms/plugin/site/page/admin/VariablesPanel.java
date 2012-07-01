@@ -60,18 +60,18 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
     public VariablesPanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
-        List<IGridColumn<DataSource, Entry>> columns = new ArrayList<IGridColumn<DataSource, Entry>>();
-        columns.add(new CheckBoxColumn<DataSource, Entry>("checkbox"));
-        columns.add(new PropertyColumn<DataSource, Entry, String>(new ResourceModel("key"), "key"));
-        columns.add(new EditablePropertyColumn<DataSource, Entry, String>(new ResourceModel("value"), "value") {
+        List<IGridColumn<DataSource, Entry, String>> columns = new ArrayList<IGridColumn<DataSource, Entry, String>>();
+        columns.add(new CheckBoxColumn<DataSource, Entry, String>("checkbox"));
+        columns.add(new PropertyColumn<DataSource, Entry, String, String>(new ResourceModel("key"), "key"));
+        columns.add(new EditablePropertyColumn<DataSource, Entry, String, String>(new ResourceModel("value"), "value") {
             @Override
             protected void addValidators(FormComponent<String> component) {
                 component.setRequired(true);
             }
         });
-        columns.add(new SubmitCancelColumn<DataSource, Entry>("submitcancel", new ResourceModel("edit")) {
+        columns.add(new SubmitCancelColumn<DataSource, Entry, String>("submitcancel", new ResourceModel("edit")) {
             @Override
-            protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
+            protected void onError(AjaxRequestTarget target, IModel<Entry> rowModel, WebMarkupContainer rowComponent) {
                 target.addChildren(VariablesPanel.this, FeedbackPanel.class);
             }
 
@@ -82,8 +82,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        final DataGrid<DataSource, Entry> grid = new DefaultDataGrid<DataSource, Entry>("grid", Model.of(new DataSource()),
-                columns) {
+        final DataGrid<DataSource, Entry, String> grid = new DefaultDataGrid<DataSource, Entry, String>("grid", Model.of(new DataSource()), columns) {
             @Override
             public void onItemSelectionChanged(IModel<Entry> item, boolean newValue) {
                 AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
@@ -260,8 +259,8 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             });
 
             tf.add(new IValidator<String>() {
-                public void validate(IValidatable validatable) {
-                    String key = (String) validatable.getValue();
+                public void validate(IValidatable<String> validatable) {
+                    String key = validatable.getValue();
 
                     AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
 
@@ -272,8 +271,8 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                     }
                 }
 
-                private void report(IValidatable validatable, String messageKey, String key) {
-                    validatable.error(new ValidationError().addMessageKey(messageKey).setVariable("key", key));
+                private void report(IValidatable<String> validatable, String messageKey, String key) {
+                    validatable.error(new ValidationError().addKey(messageKey).setVariable("key", key));
                 }
             });
         }

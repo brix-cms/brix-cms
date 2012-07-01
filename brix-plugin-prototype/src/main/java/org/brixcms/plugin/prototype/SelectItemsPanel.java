@@ -50,7 +50,7 @@ public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
             }
 
             @Override
-            protected void configureGrid(TreeGrid grid) {
+            protected void configureGrid(TreeGrid<NodePickerTreeModel, JcrTreeNode, String> grid) {
                 super.configureGrid(grid);
                 grid.setAllowSelectMultiple(true);
                 grid.getTree().setRootLess(true);
@@ -122,7 +122,7 @@ public class SelectItemsPanel<T> extends BrixGenericPanel<T> {
         return nodes;
     }
 
-    public TreeGrid<NodePickerTreeModel, JcrTreeNode> getTreeGrid() {
+    public TreeGrid<NodePickerTreeModel, JcrTreeNode, String> getTreeGrid() {
         return treeGrid.getGrid();
     }
 }

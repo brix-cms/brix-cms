@@ -189,8 +189,8 @@ public class Reference implements Serializable, IDetachable {
     }
 
     /**
-     * Checks if the url this reference points to includes a protocol. Should only be called if reference type is {@value
-     * Type#URL}
+     * Checks if the url this reference points to includes a protocol.
+     * Should only be called if reference type is {@linkplain Type#URL}
      *
      * @return true if the url contains a protocol
      */

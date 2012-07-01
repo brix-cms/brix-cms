@@ -18,7 +18,6 @@ import java.io.Serializable;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
 import org.apache.wicket.extensions.markup.html.tree.BaseTree;
 import org.apache.wicket.extensions.markup.html.tree.LinkIconPanel;
 import org.apache.wicket.extensions.markup.html.tree.LinkTree;
