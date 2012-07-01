@@ -14,19 +14,19 @@
 
 package org.brixcms.web.tile.pagetile;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Path;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.AbstractContainer;
 import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class PageTile implements Tile {
     public static String TYPE_NAME = PageTile.class.getName();

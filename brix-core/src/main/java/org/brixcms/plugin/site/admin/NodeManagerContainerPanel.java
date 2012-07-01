@@ -25,6 +25,11 @@ import javax.jcr.ItemNotFoundException;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.extensions.markup.html.tree.BaseTree;
+import org.apache.wicket.extensions.markup.html.tree.DefaultTreeState;
+import org.apache.wicket.extensions.markup.html.tree.ITreeState;
+import org.apache.wicket.extensions.markup.html.tree.LinkTree;
+import org.apache.wicket.extensions.markup.html.tree.LinkType;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,11 +37,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.DefaultTreeState;
-import org.apache.wicket.markup.html.tree.ITreeState;
-import org.apache.wicket.markup.html.tree.LinkTree;
-import org.apache.wicket.markup.html.tree.LinkType;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.brixcms.Brix;
@@ -145,7 +145,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
                         SiteNodePlugin plugin = item.getModelObject().getPlugin();
                         String editorNodeType = getEditor().getMetaData(EDITOR_NODE_TYPE);
                         if (plugin.getNodeType().equals(editorNodeType)) {
-                            CharSequence klass = tag.getString("class");
+                            CharSequence klass = tag.getAttribute("class");
                             if (klass == null) {
                                 klass = "selected";
                             } else {
@@ -283,7 +283,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         }
     }
 
-    private class Tree extends LinkTree {
+    private class Tree extends LinkTree
+    {
         public Tree(String id, TreeModel model) {
             super(id, model);
             setLinkType(LinkType.REGULAR);
@@ -331,7 +332,8 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
         }
     }
 
-    private class TreeState extends DefaultTreeState {
+    private class TreeState extends DefaultTreeState
+    {
         @Override
         public void selectNode(Object node, boolean selected) {
             if (selected) {

@@ -22,7 +22,7 @@ import javax.jcr.ImportUUIDBehavior;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -120,7 +120,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
                  * in case the link is enabled, make sure it is intended...
                  */
                 if (restoreLink.isEnabled()) {
-                    restoreLink.add(new SimpleAttributeModifier("onClick", "return confirm('" + getLocalizer().getString("restoreOnClick", this) + "')"));
+                    restoreLink.add(new AttributeModifier("onclick", "return confirm('" + getLocalizer().getString("restoreOnClick", this) + "')"));
                 }
 
                 item.add(restoreLink);
@@ -191,7 +191,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
 
         commentForm.add(new SubmitLink("createSnapshot") {
             /**
-             * @see org.apache.wicket.markup.html.form.IFormSubmittingComponent#onSubmit()
+             * @see org.apache.wicket.markup.html.form.IFormSubmittingComponent#onSubmitBeforeForm()
              */
             @Override
             public void onSubmit() {

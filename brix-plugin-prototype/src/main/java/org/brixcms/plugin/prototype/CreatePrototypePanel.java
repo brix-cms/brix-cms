@@ -52,7 +52,7 @@ public class CreatePrototypePanel extends SelectItemsPanel<Void> {
                 } else {
                     message.setDefaultModelObject(getString("youHaveToSelectAtLeastOneNode"));
                 }
-                target.addComponent(message);
+                target.add(message);
             }
         });
     }

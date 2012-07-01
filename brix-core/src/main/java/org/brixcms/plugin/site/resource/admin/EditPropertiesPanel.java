@@ -14,6 +14,9 @@
 
 package org.brixcms.plugin.site.resource.admin;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -25,9 +28,6 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.jcr.wrapper.BrixNode.Protocol;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
-
-import java.util.Arrays;
-import java.util.List;
 
 public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode> {
     public EditPropertiesPanel(String id, final IModel<BrixNode> nodeModel) {

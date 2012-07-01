@@ -14,6 +14,8 @@
 
 package org.brixcms.plugin.prototype;
 
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -43,8 +45,6 @@ import org.brixcms.plugin.prototype.auth.RestorePrototypeAction;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
-
-import java.util.List;
 
 public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
     private String prototypeName;
@@ -157,7 +157,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
                 modalWindow.setTitle(new ResourceModel("selectItemsToCreate"));
                 modalWindow.setWindowClosedCallback(new WindowClosedCallback() {
                     public void onClose(AjaxRequestTarget target) {
-                        target.addComponent(ManagePrototypesPanel.this);
+                        target.add(ManagePrototypesPanel.this);
                     }
                 });
                 modalWindow.show(target);
@@ -165,7 +165,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.addComponent(feedback);
+                target.add(feedback);
             }
         });
 

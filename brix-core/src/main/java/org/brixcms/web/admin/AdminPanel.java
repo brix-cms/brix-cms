@@ -15,8 +15,9 @@
 package org.brixcms.web.admin;
 
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -82,7 +83,7 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
 
 
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference(CSS);
+        response.render(CssHeaderItem.forReference(CSS));
     }
 
     private List<Workspace> getAvailableWorkspaces() {

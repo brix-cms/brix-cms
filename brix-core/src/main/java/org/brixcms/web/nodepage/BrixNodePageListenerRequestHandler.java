@@ -15,11 +15,11 @@
 package org.brixcms.web.nodepage;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.RequestListenerInterface;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixNodePageListenerRequestHandler extends BrixNodePageRequestHandler {

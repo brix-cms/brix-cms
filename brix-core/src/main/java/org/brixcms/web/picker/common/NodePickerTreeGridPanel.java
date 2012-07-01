@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AbstractBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -55,7 +55,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     private final NodeFilter visibilityFilter;
     private final NodeFilter enabledFilter;
 
-    private TreeGrid<NodePickerTreeModel, JcrTreeNode> grid;
+    private TreeGrid<NodePickerTreeModel, JcrTreeNode, String> grid;
 
     public NodePickerTreeGridPanel(String id, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
         super(id);
@@ -70,7 +70,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         this.enabledFilter = enabledFilter != null ? enabledFilter : ALLOW_ALL_FILTER;
     }
 
-    public TreeGrid<NodePickerTreeModel, JcrTreeNode> getGrid() {
+    public TreeGrid<NodePickerTreeModel, JcrTreeNode, String> getGrid() {
         return grid;
     }
 
@@ -88,7 +88,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
     }
 
     protected void initComponents() {
-        grid = new TreeGrid<NodePickerTreeModel, JcrTreeNode>("grid", new Model((Serializable) newTreeModel()), newGridColumns()) {
+        grid = new TreeGrid<NodePickerTreeModel, JcrTreeNode, String>("grid", new Model((Serializable) newTreeModel()), newGridColumns()) {
             @Override
             protected void onItemSelectionChanged(IModel<JcrTreeNode> rowModel, boolean newValue) {
                 BrixNode node = getNode(rowModel);
@@ -114,7 +114,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
             @Override
             protected void onRowPopulated(WebMarkupContainer rowComponent) {
                 super.onRowPopulated(rowComponent);
-                rowComponent.add(new AbstractBehavior() {
+                rowComponent.add(new Behavior() {
                     @Override
                     public void onComponentTag(Component component, ComponentTag tag) {
                         BrixNode node = getNode(component.getDefaultModel());
@@ -140,8 +140,9 @@ public abstract class NodePickerTreeGridPanel extends Panel {
 
     protected abstract JcrTreeNode getRootNode();
 
-    protected List<IGridColumn<NodePickerTreeModel,JcrTreeNode>> newGridColumns() {
-        List<IGridColumn<NodePickerTreeModel,JcrTreeNode>> columns = new ArrayList<IGridColumn<NodePickerTreeModel, JcrTreeNode>>();
+    protected List<IGridColumn<NodePickerTreeModel,JcrTreeNode, String>> newGridColumns() {
+        List<IGridColumn<NodePickerTreeModel,JcrTreeNode, String>> columns =
+		        new ArrayList<IGridColumn<NodePickerTreeModel, JcrTreeNode, String>>();
         columns.add(new NodePickerCheckBoxColumn("checkbox"));
         columns.add(new TreeColumn("name", new ResourceModel("name")).setInitialSize(300));
         columns.add(new NodePropertyColumn(new ResourceModel("type"), "userVisibleType"));
@@ -171,7 +172,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
         return enabledFilter.isNodeAllowed(n);
     }
 
-    protected void configureGrid(TreeGrid<NodePickerTreeModel, JcrTreeNode> grid) {
+    protected void configureGrid(TreeGrid<NodePickerTreeModel, JcrTreeNode, String> grid) {
         grid.getTree().setRootLess(true);
         grid.setClickRowToSelect(true);
         grid.setContentHeight(18, SizeUnit.EM);

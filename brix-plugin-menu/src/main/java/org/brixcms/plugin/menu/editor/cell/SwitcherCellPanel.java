@@ -73,7 +73,7 @@ public abstract class SwitcherCellPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 container.addOrReplace(getEditPanel());
-                target.addComponent(container);
+                target.add(container);
             }
         });
 

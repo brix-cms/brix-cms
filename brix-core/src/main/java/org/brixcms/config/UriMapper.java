@@ -57,7 +57,6 @@ public interface UriMapper {
      * @param url           relative url to rewrite
      * @param contextPrefix prefix that will make url context-relative, eg <code>../../</code>
      * @return rewritten url
-     * @see IRequestCodingStrategy#rewriteStaticRelativeUrl(String)
      */
     public String rewriteStaticRelativeUrl(String url, String contextPrefix);
 }
