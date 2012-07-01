@@ -14,13 +14,13 @@
 
 package org.brixcms.web;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 import org.brixcms.jcr.wrapper.BrixNode.Protocol;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class SwitchProtocolRequestHandler implements IRequestHandler {
     private final Protocol protocol;

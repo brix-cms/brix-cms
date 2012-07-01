@@ -145,7 +145,7 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
                         SiteNodePlugin plugin = item.getModelObject().getPlugin();
                         String editorNodeType = getEditor().getMetaData(EDITOR_NODE_TYPE);
                         if (plugin.getNodeType().equals(editorNodeType)) {
-                            CharSequence klass = tag.getString("class");
+                            CharSequence klass = tag.getAttribute("class");
                             if (klass == null) {
                                 klass = "selected";
                             } else {

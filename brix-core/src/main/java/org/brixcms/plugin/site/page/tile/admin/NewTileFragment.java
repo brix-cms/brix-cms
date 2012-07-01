@@ -17,6 +17,10 @@
  */
 package org.brixcms.plugin.site.page.tile.admin;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -43,10 +47,6 @@ import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.web.ContainerFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericFragment;
 import org.brixcms.web.util.validators.NodeNameValidator;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
     private String newTileId;

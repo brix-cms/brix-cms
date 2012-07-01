@@ -76,7 +76,7 @@ public abstract class IndexedParametersTab extends Panel {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form form) {
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(feedback);
             }
         });

@@ -191,7 +191,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
 
         commentForm.add(new SubmitLink("createSnapshot") {
             /**
-             * @see org.apache.wicket.markup.html.form.IFormSubmittingComponent#onSubmit()
+             * @see org.apache.wicket.markup.html.form.IFormSubmittingComponent#onSubmitBeforeForm()
              */
             @Override
             public void onSubmit() {

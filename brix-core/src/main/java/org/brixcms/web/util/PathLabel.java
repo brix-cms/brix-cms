@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.link.ILinkListener;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
-import org.apache.wicket.request.UrlDecoder;
+import org.apache.wicket.util.encoding.UrlDecoder;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.brixcms.Path;
 import org.brixcms.jcr.wrapper.BrixNode;
