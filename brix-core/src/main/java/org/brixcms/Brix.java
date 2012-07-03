@@ -17,11 +17,12 @@ package org.brixcms;
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
 import org.brixcms.auth.AuthorizationStrategy;
@@ -46,11 +47,7 @@ import org.brixcms.plugin.site.webdav.RulesNode;
 import org.brixcms.registry.ExtensionPointRegistry;
 import org.brixcms.web.BrixExtensionStringResourceLoader;
 import org.brixcms.web.BrixRequestMapper;
-import org.brixcms.web.nodepage.BrixNodeRequestHandler;
-import org.brixcms.web.nodepage.BrixNodeWebPage;
-import org.brixcms.web.nodepage.BrixPageParameters;
-import org.brixcms.web.nodepage.ForbiddenPage;
-import org.brixcms.web.nodepage.PageParametersAwareEnabler;
+import org.brixcms.web.nodepage.*;
 import org.brixcms.web.tile.pagetile.PageTile;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
@@ -233,7 +230,7 @@ public abstract class Brix {
 
 
         // allow brix to handle any url that wicket cant
-        application.getRootRequestMapperAsCompound().add(new BrixRequestMapper(this));
+        application.getRootRequestMapperAsCompound().add(new BrixRequestMapper(this, getHttpsConfig()));
         // application.mount(new BrixNodePageUrlMapper());
 
         // register a string resource loader that allows any object that acts as
@@ -328,8 +325,7 @@ public abstract class Brix {
             }
             s.save();
             s.logout();
-        }
-        catch (RepositoryException e) {
+        } catch (RepositoryException e) {
             throw new RuntimeException("Couldn't initialize repository", e);
         }
 
@@ -369,5 +365,9 @@ public abstract class Brix {
 
     public final Collection<Plugin> getPlugins() {
         return config.getRegistry().lookupCollection(Plugin.POINT);
+    }
+
+    public HttpsConfig getHttpsConfig() {
+        return new HttpsConfig(config.getHttpPort(), config.getHttpsPort());
     }
 }

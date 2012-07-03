@@ -17,6 +17,7 @@ package org.brixcms.demo.web;
 import javax.jcr.ImportUUIDBehavior;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Brix;
 import org.brixcms.Path;
