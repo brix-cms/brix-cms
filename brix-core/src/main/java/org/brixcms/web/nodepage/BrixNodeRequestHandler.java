@@ -20,6 +20,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.tester.DummyHomePage;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 
@@ -121,4 +122,6 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
         }
         return null;
     }
+
+
 }

@@ -17,7 +17,9 @@ package org.brixcms.demo.web;
 import javax.jcr.ImportUUIDBehavior;
 
 import org.apache.wicket.Page;
+import org.apache.wicket.SystemMapper;
 import org.apache.wicket.protocol.https.HttpsConfig;
+import org.apache.wicket.protocol.https.HttpsMapper;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.Brix;
 import org.brixcms.Path;
@@ -90,16 +92,14 @@ public final class WicketApplication extends AbstractWicketApplication {
             config.setHttpPort(getProperties().getHttpPort());
             config.setHttpsPort(getProperties().getHttpsPort());
 
+//            setRootRequestMapper(new HttpsMapper(new SystemMapper(this), new HttpsConfig(config.getHttpPort(), config.getHttpsPort())));
+
             // create brix instance and attach it to this application
             brix = new DemoBrix(config);
             brix.attachTo(this);
             initializeRepository();
             initDefaultWorkspace();
 
-            // we dont need this here anymore since 1.5 - idea of
-            // requestcycleprocessor has been replaced by requestmappers
-            // getRequestCycleListeners().add(new
-            // BrixRequestCycleProcessor(brix));
         } catch (Exception e) {
             log.error("Exception in WicketApplication init()", e);
         } finally {
@@ -110,9 +110,6 @@ public final class WicketApplication extends AbstractWicketApplication {
         // mount admin page
         mountPage("/admin", AdminPage.class);
 
-        // FIXME matej: do we need this?
-        // mountBookmarkablePage("/NotFound", ResourceNotFoundPage.class);
-        // mountBookmarkablePage("/Forbiden", ForbiddenPage.class);
     }
 
     /**

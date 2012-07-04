@@ -17,12 +17,16 @@ package org.brixcms;
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.SystemMapper;
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.https.HttpsConfig;
+import org.apache.wicket.protocol.https.HttpsMapper;
+import org.apache.wicket.protocol.https.Scheme;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.CompoundRequestMapper;
 import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
 import org.brixcms.auth.AuthorizationStrategy;
@@ -230,7 +234,10 @@ public abstract class Brix {
 
 
         // allow brix to handle any url that wicket cant
-        application.getRootRequestMapperAsCompound().add(new BrixRequestMapper(this, getHttpsConfig()));
+        application.getRootRequestMapperAsCompound()
+                .add(new BrixRequestMapper(this, getHttpsConfig()));
+
+
         // application.mount(new BrixNodePageUrlMapper());
 
         // register a string resource loader that allows any object that acts as
