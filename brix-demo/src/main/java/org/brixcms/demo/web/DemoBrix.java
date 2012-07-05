@@ -14,7 +14,6 @@
 
 package org.brixcms.demo.web;
 
-import org.apache.wicket.protocol.https.HttpsConfig;
 import org.brixcms.Brix;
 import org.brixcms.Plugin;
 import org.brixcms.auth.AuthorizationStrategy;
