@@ -49,8 +49,8 @@
         <jetty.version>6.1.26</jetty.version>
         <inmethod.grid.version>6.0-SNAPSHOT</inmethod.grid.version>
         <htmllexer.version>2.1</htmllexer.version>
-        <jackrabbit.version>2.3.0</jackrabbit.version>
-        <lucene.version>3.0.3</lucene.version>
+        <jackrabbit.version>2.4.2</jackrabbit.version>
+        <!--<lucene.version>3.0.3</lucene.version>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -284,26 +284,26 @@
                 <version>1.2.16</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-analyzers</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-core</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-misc</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.lucene</groupId>
-                <artifactId>lucene-regex</artifactId>
-                <version>${lucene.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.apache.lucene</groupId>-->
+                <!--<artifactId>lucene-analyzers</artifactId>-->
+                <!--<version>${lucene.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>org.apache.lucene</groupId>-->
+                <!--<artifactId>lucene-core</artifactId>-->
+                <!--<version>${lucene.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>org.apache.lucene</groupId>-->
+                <!--<artifactId>lucene-misc</artifactId>-->
+                <!--<version>${lucene.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>org.apache.lucene</groupId>-->
+                <!--<artifactId>lucene-regex</artifactId>-->
+                <!--<version>${lucene.version}</version>-->
+            <!--</dependency>-->
 
             <!--+
                    | JETTY
