@@ -14,6 +14,7 @@
 
 package org.brixcms.plugin.site.resource;
 
+import org.apache.wicket.util.lang.Bytes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
@@ -43,11 +44,18 @@ class Streamer {
         this.attachment = attachment;
     }
 
+    final static long maxContentLengthForDirectStreamInBytes = Bytes.kilobytes(512).bytes();
+
     public void stream() {
         Range range = parseRange(request.getHeader("Range"), length);
         Long first = range.start;
         Long last = range.end;
         long contentLength = length;
+        boolean isFlushingRequired = false;
+
+        if(contentLength > maxContentLengthForDirectStreamInBytes) {
+            isFlushingRequired = true;
+        }
 
         if (first != null && last != null) {
             response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
@@ -68,16 +76,28 @@ class Streamer {
             response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\";");
         }
         response.addHeader("Accept-Range", "bytes");
-        response.addHeader("Connection", "close");
+
+        /**
+         * should request be kept alive?
+         */
+        String keepAlive = request.getHeader("Connection");
+        if(keepAlive != null && keepAlive.equalsIgnoreCase("keep-alive")) {
+            response.addHeader("Connection", "keep-alive");
+        } else {
+            response.addHeader("Connection", "close");
+        }
 
         InputStream s = null;
 
         try {
+            // flush headers - this is expected to be required for some versions of Firefox
+            response.flushBuffer();
+
             s = new BufferedInputStream(inputStream);
 
             s.skip(first);
 
-            final int bufferSize = 1024 * 10;
+            final int bufferSize = (int) maxContentLengthForDirectStreamInBytes;
             long left = contentLength;
             while (left > 0) {
                 int howMuch = bufferSize;
@@ -89,7 +109,15 @@ class Streamer {
                 int numRead = s.read(buf);
 
                 response.getOutputStream().write(buf, 0, numRead);
-                response.flushBuffer();
+                //only call flushBuffer if partial content delivery is active - saves roundtrip
+                System.out.println(isFlushingRequired);
+                if(isFlushingRequired) {
+                    response.flushBuffer();
+                    System.out.println("Flush Buffer: " + left + " / " + length);
+                }  else {
+                    System.out.println("no flushing");
+                }
+
 
                 if (numRead == -1) {
                     break;
