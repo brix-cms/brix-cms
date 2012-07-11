@@ -110,12 +110,8 @@ class Streamer {
 
                 response.getOutputStream().write(buf, 0, numRead);
                 //only call flushBuffer if partial content delivery is active - saves roundtrip
-                System.out.println(isFlushingRequired);
                 if(isFlushingRequired) {
                     response.flushBuffer();
-                    System.out.println("Flush Buffer: " + left + " / " + length);
-                }  else {
-                    System.out.println("no flushing");
                 }
 
 
