@@ -51,7 +51,8 @@ public abstract class AbstractPageParametersLink extends AbstractLink {
             if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link") ||
                     tag.getName().equalsIgnoreCase("area")) {
                 // generate the href attribute
-                tag.put("href", Strings.replaceAll(url, "&", "&amp;"));
+                // tag.put("href", Strings.replaceAll(url, "&", "&amp;"));
+                tag.put("href", url);
             } else {
                 // or generate an onclick JS handler directly
                 // in firefox when the element is quickly clicked 3 times a
@@ -63,7 +64,8 @@ public abstract class AbstractPageParametersLink extends AbstractLink {
                                 "onclick",
                                 "var win = this.ownerDocument.defaultView || this.ownerDocument.parentWindow; " +
                                         "if (win == window) { window.location.href='" +
-                                        Strings.replaceAll(url, "&", "&amp;") +
+                                        // Strings.replaceAll(url, "&", "&amp;") +
+                                        url +
                                         "'; } ;return false");
             }
         }
