@@ -18,7 +18,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
@@ -51,7 +50,6 @@ public abstract class AbstractPageParametersLink extends AbstractLink {
             if (tag.getName().equalsIgnoreCase("a") || tag.getName().equalsIgnoreCase("link") ||
                     tag.getName().equalsIgnoreCase("area")) {
                 // generate the href attribute
-                // tag.put("href", Strings.replaceAll(url, "&", "&amp;"));
                 tag.put("href", url);
             } else {
                 // or generate an onclick JS handler directly
@@ -64,9 +62,7 @@ public abstract class AbstractPageParametersLink extends AbstractLink {
                                 "onclick",
                                 "var win = this.ownerDocument.defaultView || this.ownerDocument.parentWindow; " +
                                         "if (win == window) { window.location.href='" +
-                                        // Strings.replaceAll(url, "&", "&amp;") +
-                                        url +
-                                        "'; } ;return false");
+                                        url + "'; } ;return false");
             }
         }
     }
