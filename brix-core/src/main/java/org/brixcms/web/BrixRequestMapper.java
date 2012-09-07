@@ -14,8 +14,27 @@
 
 package org.brixcms.web;
 
-import org.apache.wicket.*;
-import org.apache.wicket.core.request.handler.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.MetaDataKey;
+import org.apache.wicket.RequestListenerInterface;
+import org.apache.wicket.Session;
+import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
+import org.apache.wicket.core.request.handler.BookmarkablePageRequestHandler;
+import org.apache.wicket.core.request.handler.IPageProvider;
+import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
+import org.apache.wicket.core.request.handler.PageAndComponentProvider;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.mapper.IMapperContext;
 import org.apache.wicket.core.request.mapper.IPageSource;
 import org.apache.wicket.markup.html.WebPage;
@@ -51,18 +70,15 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.AbstractSitePagePlugin;
-import org.brixcms.web.nodepage.*;
+import org.brixcms.web.nodepage.BrixNodePageRequestHandler;
+import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
+import org.brixcms.web.nodepage.BrixNodeRequestHandler;
+import org.brixcms.web.nodepage.BrixNodeWebPage;
+import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.web.nodepage.PageParametersAware;
 import org.brixcms.workspace.Workspace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.Set;
 
 public class BrixRequestMapper implements IRequestMapper {
 
@@ -268,6 +284,10 @@ public class BrixRequestMapper implements IRequestMapper {
                 provider.setPageSource(getContext());
                 // listener interface
                 RequestListenerInterface listenerInterface = requestListenerInterfaceFromString(componentInfo.getListenerInterface());
+
+                if (listenerInterface == null) {
+                    return null;
+                }
 
                 return new ListenerInterfaceRequestHandler(provider, listenerInterface, componentInfo.getBehaviorId());
             }
