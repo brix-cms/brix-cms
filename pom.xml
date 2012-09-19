@@ -45,7 +45,7 @@
     </modules>
 
     <properties>
-        <wicket.version>6.0-SNAPSHOT</wicket.version>
+        <wicket.version>6.0.0</wicket.version>
         <jetty.version>6.1.26</jetty.version>
         <inmethod.grid.version>6.0-SNAPSHOT</inmethod.grid.version>
         <htmllexer.version>2.1</htmllexer.version>
@@ -259,6 +259,12 @@
                 <artifactId>wicket-ioc</artifactId>
                 <version>${wicket.version}</version>
             </dependency>
+            <!--Temporary fix for 6.0-SNAPSHOT Datetime from inmethod-grid-->
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-datetime</artifactId>
+                <version>${wicket.version}</version>
+            </dependency>
 
             <!--+
                    | LOGGING
@@ -284,26 +290,6 @@
                 <version>1.2.16</version>
             </dependency>
 
-            <!--<dependency>-->
-                <!--<groupId>org.apache.lucene</groupId>-->
-                <!--<artifactId>lucene-analyzers</artifactId>-->
-                <!--<version>${lucene.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.lucene</groupId>-->
-                <!--<artifactId>lucene-core</artifactId>-->
-                <!--<version>${lucene.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.lucene</groupId>-->
-                <!--<artifactId>lucene-misc</artifactId>-->
-                <!--<version>${lucene.version}</version>-->
-            <!--</dependency>-->
-            <!--<dependency>-->
-                <!--<groupId>org.apache.lucene</groupId>-->
-                <!--<artifactId>lucene-regex</artifactId>-->
-                <!--<version>${lucene.version}</version>-->
-            <!--</dependency>-->
 
             <!--+
                    | JETTY
@@ -360,6 +346,10 @@
                     <exclusion>
                         <groupId>log4j</groupId>
                         <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-datetime</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -510,16 +500,17 @@
         </repository>
     </distributionManagement>
 
-    <repositories>
-        <repository>
-            <id>apache-snapshots</id>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <url>https://repository.apache.org/content/repositories/snapshots</url>
-        </repository>
-    </repositories>
+    <!--Was from time it was on 6.0-Snapshot: do we still need this?-->
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>apache-snapshots</id>-->
+            <!--<releases>-->
+                <!--<enabled>false</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+            <!--<url>https://repository.apache.org/content/repositories/snapshots</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 </project>
