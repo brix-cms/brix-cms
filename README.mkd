@@ -31,8 +31,8 @@ At its deepest abstraction, BRIX is not a standalone CMS, but rather a CMS frame
 Getting Started
 ---------------
 
-- How to [run the demo](http://code.google.com/p/brix-cms/wiki/RunningTheDemo)
-- How to [create a custom tile](http://code.google.com/p/brix-cms/wiki/TutorialGuestBookTile)
+- How to [run the demo](https://github.com/brix-cms/brix-cms/wiki/RunningTheDemo)
+- How to [create a custom tile](https://github.com/brix-cms/brix-cms/wiki/GuestBookTileTutorial)
 
 Community
 ---------
