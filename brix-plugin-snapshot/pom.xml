@@ -48,7 +48,7 @@
                         <Import-Package>
                             org.osgi*,javax.servlet, javax.servlet.http, org.apache.wicket*,
                             org.brixcms, org.brixcms.auth, org.brixcms.exception, org.brixcms.jcr.api,
-                            org.brixcms.plugin.site, org.brixcms.web.generic, org.brixcms.web.tab, org.brixcms.workspace
+                            org.brixcms.plugin.site, org.brixcms.web.generic, org.brixcms.web.tab, org.brixcms.workspace, javax.jcr
                         </Import-Package>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
                         </Bundle-SymbolicName>

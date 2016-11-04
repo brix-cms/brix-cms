@@ -49,7 +49,7 @@
         <jetty.version>6.1.26</jetty.version>
         <inmethod.grid.version>6.0-SNAPSHOT</inmethod.grid.version>
         <htmllexer.version>2.1</htmllexer.version>
-        <jackrabbit.version>2.5.1</jackrabbit.version>
+        <jackrabbit.version>2.6.5</jackrabbit.version>
         <!--<lucene.version>3.0.3</lucene.version>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
