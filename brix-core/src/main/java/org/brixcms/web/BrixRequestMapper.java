@@ -96,6 +96,8 @@ public class BrixRequestMapper implements IRequestMapper {
     private boolean handleHomePage = true;
     private HttpsConfig config = null;
 
+    private static final String SPORTAVE = "sportave";
+
 
     public BrixRequestMapper(Brix brix, HttpsConfig config) {
         this.config = config;
@@ -190,6 +192,11 @@ public class BrixRequestMapper implements IRequestMapper {
     @Override
     public IRequestHandler mapRequest(Request request) {
         final Url url = request.getClientUrl();
+
+        // FIXME quick fix for sportave
+        if (request.getUrl().getHost().toLowerCase().startsWith(SPORTAVE)) {
+            return null;
+        }
 
         if (isInternalWicket(request)) {
             return null;

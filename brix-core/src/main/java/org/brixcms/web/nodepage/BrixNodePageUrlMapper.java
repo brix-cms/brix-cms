@@ -36,6 +36,7 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
@@ -363,6 +364,13 @@ public class BrixNodePageUrlMapper implements IRequestMapper {
     }
 
     public static final class HomePage extends WebPage {
+
+        @Override
+        protected void onConfigure() {
+            super.onConfigure();
+            // FIXME quick fix for sportave
+            throw new RedirectToUrlException("/home");
+        }
     }
 
     /**
