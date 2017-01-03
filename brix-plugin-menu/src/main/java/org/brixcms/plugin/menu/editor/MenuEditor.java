@@ -14,12 +14,9 @@
 
 package org.brixcms.plugin.menu.editor;
 
-import com.inmethod.grid.IGridColumn;
-import com.inmethod.grid.SizeUnit;
-import com.inmethod.grid.column.editable.EditablePropertyColumn;
-import com.inmethod.grid.column.editable.EditablePropertyTreeColumn;
-import com.inmethod.grid.column.editable.SubmitCancelColumn;
-import com.inmethod.grid.treegrid.TreeGrid;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.tree.AbstractTree;
@@ -34,8 +31,12 @@ import org.brixcms.plugin.menu.editor.cell.SwitcherColumn;
 import org.brixcms.plugin.site.picker.reference.ReferenceEditorConfiguration;
 import org.brixcms.web.generic.BrixGenericPanel;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.inmethod.grid.IGridColumn;
+import com.inmethod.grid.SizeUnit;
+import com.inmethod.grid.column.editable.EditablePropertyColumn;
+import com.inmethod.grid.column.editable.EditablePropertyTreeColumn;
+import com.inmethod.grid.column.editable.SubmitCancelColumn;
+import com.inmethod.grid.treegrid.TreeGrid;
 
 public class MenuEditor extends BrixGenericPanel<Menu> {
     private MenuTreeModel treeModel;
@@ -69,10 +70,10 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             protected void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
 
-                //if (newValue == false)
+                // if (newValue == false)
                 setItemEdit(item, newValue);
 
-                selectionChanged(getRequestCycle().find(AjaxRequestTarget.class));
+                selectionChanged(getRequestCycle().find(AjaxRequestTarget.class).get());
                 // update();
             }
 
@@ -100,7 +101,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
         links = new WebMarkupContainer("links");
         links.setOutputMarkupId(true);
 
-        links.add(new AjaxLink("addTopLevel") {
+        links.add(new AjaxLink<Void>("addTopLevel") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 MenuTreeNode parent = (MenuTreeNode) treeModel.getRoot();
@@ -114,7 +115,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             }
         });
 
-        links.add(new AjaxLink("add") {
+        links.add(new AjaxLink<Void>("add") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 ChildEntry entry = new ChildEntry(getSelected().getEntry());
@@ -132,7 +133,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             }
         });
 
-        links.add(new AjaxLink("remove") {
+        links.add(new AjaxLink<Void>("remove") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 MenuTreeNode selected = getSelected();
@@ -161,7 +162,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             }
         });
 
-        links.add(new AjaxLink("moveUp") {
+        links.add(new AjaxLink<Void>("moveUp") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 MenuTreeNode selected = getSelected();
@@ -174,7 +175,6 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                     parent.getEntry().getChildren().remove(selected.getEntry());
                     parent.getEntry().getChildren().add(index - 1, (ChildEntry) selected.getEntry());
                     treeModel.nodeInserted(tree, parent, selected);
-
 
                     tree.getTreeState().selectNode(selected, true);
                     tg.setItemEdit(new Model<MenuTreeNode>(selected), editing);
@@ -190,7 +190,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             }
         });
 
-        links.add(new AjaxLink("moveDown") {
+        links.add(new AjaxLink<Void>("moveDown") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 MenuTreeNode selected = getSelected();

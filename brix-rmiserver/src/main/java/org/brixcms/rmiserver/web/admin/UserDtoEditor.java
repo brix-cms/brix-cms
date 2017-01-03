@@ -22,9 +22,9 @@ import java.util.List;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBoxMultipleChoice;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
@@ -49,22 +49,19 @@ public abstract class UserDtoEditor extends GenericPanel<UserDto> {
         Form<?> form = new Form<Void>("form");
         add(form);
 
-        FormComponent<?> login = new TextField<String>("login", new PropertyModel<String>(model,
-                "login")).setRequired(true).add(StringValidator.lengthBetween(4, 32));
+        FormComponent<?> login = new TextField<String>("login", new PropertyModel<String>(model, "login")).setRequired(true)
+                .add(StringValidator.lengthBetween(4, 32));
         login.setLabel(new Model<String>("Login"));
         login.setVisible(mode == Mode.CREATE || mode == Mode.EDIT);
         form.add(login);
 
-
-        FormComponent<?> roles = new CheckBoxMultipleChoice<Role>("roles",
-                new PropertyModel<Collection<Role>>(model, "roles"), new RoleCollection(),
-                new RoleRenderer());
+        FormComponent<?> roles = new CheckBoxMultipleChoice<Role>("roles", new PropertyModel<Collection<Role>>(model, "roles"),
+                new RoleCollection(), new RoleRenderer());
         roles.setVisible(mode == Mode.CREATE || mode == Mode.EDIT);
         form.add(roles);
 
-        FormComponent<?> password1 = new PasswordTextField("password1",
-                new PropertyModel<String>(model, "password")).setRequired(true).add(
-                StringValidator.lengthBetween(4, 32)).setLabel(new Model<String>("Password"));
+        FormComponent<?> password1 = new PasswordTextField("password1", new PropertyModel<String>(model, "password")).setRequired(true)
+                .add(StringValidator.lengthBetween(4, 32)).setLabel(new Model<String>("Password"));
         password1.setVisible(mode == Mode.CREATE || mode == Mode.CHANGE_PASSWORD);
         FormComponent<?> password2 = new PasswordTextField("password2", new Model<String>());
         password2.setLabel(new Model<String>("Confirm Password"));
@@ -96,12 +93,10 @@ public abstract class UserDtoEditor extends GenericPanel<UserDto> {
     protected abstract void onCancel();
 
     public static enum Mode {
-        CREATE,
-        EDIT,
-        CHANGE_PASSWORD
+        CREATE, EDIT, CHANGE_PASSWORD
     }
 
-    private class RoleRenderer implements IChoiceRenderer<Role> {
+    private class RoleRenderer extends ChoiceRenderer<Role> {
         private static final long serialVersionUID = 1L;
 
         public Object getDisplayValue(Role object) {

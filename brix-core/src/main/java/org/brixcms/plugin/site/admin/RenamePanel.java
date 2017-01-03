@@ -29,7 +29,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
+    // ------------------------------ FIELDS ------------------------------
     ;
     private String newName;
 
@@ -40,8 +40,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
 
         newName = model.getObject().getName();
 
-        TextField<String> newName = new TextField<String>("newName", new PropertyModel<String>(
-                this, "newName"));
+        TextField<String> newName = new TextField<String>("newName", new PropertyModel<String>(this, "newName"));
         newName.setRequired(true);
         newName.add(new NewNameValidator());
         form.add(newName);
@@ -52,8 +51,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
                 JcrNode node = RenamePanel.this.getModelObject();
 
                 if (RenamePanel.this.newName.equals(node.getName()) == false) {
-                    node.getSession().move(node.getPath(),
-                            node.getParent().getPath() + "/" + RenamePanel.this.newName);
+                    node.getSession().move(node.getPath(), node.getParent().getPath() + "/" + RenamePanel.this.newName);
                     node.getSession().save();
                 }
                 onLeave();
@@ -81,8 +79,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
             if (getModelObject().getName().equals(name) == false) {
                 JcrNode parent = getModelObject().getParent();
                 if (parent.hasNode(name)) {
-                    validatable.error(new ValidationError().addMessageKey("NewNameValidator")
-                            .setVariable("name", name));
+                    validatable.error(new ValidationError().addKey("NewNameValidator").setVariable("name", name));
                 }
             }
         }

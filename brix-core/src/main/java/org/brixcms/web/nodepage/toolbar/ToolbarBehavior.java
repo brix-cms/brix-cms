@@ -34,8 +34,8 @@ import org.apache.wicket.util.string.Strings;
 import org.brixcms.Brix;
 import org.brixcms.Plugin;
 import org.brixcms.auth.Action.Context;
-import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.workspace.Workspace;
+import org.brixcms.workspace.WorkspaceUtils;
 
 public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
     private static final ResourceReference cssReference = new PackageResourceReference(
@@ -99,7 +99,7 @@ public abstract class ToolbarBehavior extends AbstractDefaultAjaxBehavior {
         }
 
         RequestCycle requestCycle = RequestCycle.get();
-        if (!requestCycle.getRequest().getRequestParameters().getParameterValue(BrixRequestCycleProcessor.WORKSPACE_PARAM).isNull()) {
+        if (!requestCycle.getRequest().getRequestParameters().getParameterValue(WorkspaceUtils.WORKSPACE_PARAM).isNull()) {
             return false;
         } else {
             List<WorkspaceEntry> workspaces = getWorkspaces();

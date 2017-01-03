@@ -135,8 +135,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
             }
         };
 
-        TextField<String> prototypeName = new TextField<String>("prototypeName", new PropertyModel<String>(this,
-                "prototypeName"));
+        TextField<String> prototypeName = new TextField<String>("prototypeName", new PropertyModel<String>(this, "prototypeName"));
         form.add(prototypeName);
 
         prototypeName.setRequired(true);
@@ -149,7 +148,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
 
         form.add(new AjaxButton("submit") {
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onSubmit(AjaxRequestTarget target) {
                 String workspaceId = ManagePrototypesPanel.this.getModelObject().getId();
                 CreatePrototypePanel panel = new CreatePrototypePanel(modalWindow.getContentId(), workspaceId,
                         ManagePrototypesPanel.this.prototypeName);
@@ -164,7 +163,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.add(feedback);
             }
         });
@@ -181,7 +180,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
         public void validate(IValidatable validatable) {
             String name = (String) validatable.getValue();
             if (PrototypePlugin.get().prototypeExists(name)) {
-                validatable.error(new ValidationError().addMessageKey("UniquePrototypeNameValidator"));
+                validatable.error(new ValidationError().addKey("UniquePrototypeNameValidator"));
             }
         }
     }

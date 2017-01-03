@@ -82,10 +82,11 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        final DataGrid<DataSource, Entry, String> grid = new DefaultDataGrid<DataSource, Entry, String>("grid", Model.of(new DataSource()), columns) {
+        final DataGrid<DataSource, Entry, String> grid = new DefaultDataGrid<DataSource, Entry, String>("grid", Model.of(new DataSource()),
+                columns) {
             @Override
             public void onItemSelectionChanged(IModel<Entry> item, boolean newValue) {
-                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
+                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class).get();
                 if (target != null) {
                     target.add(delete);
                 }
@@ -226,7 +227,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             });
             keySuggestions.setNullValid(true);
 
-            keySuggestions.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            keySuggestions.add(new AjaxFormComponentUpdatingBehavior("change") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     tf.setModelObject(keySuggestions.getModelObject());
@@ -241,19 +242,19 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
             add(new AjaxButton("submit") {
                 @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                protected void onSubmit(AjaxRequestTarget target) {
                     AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
                     node.setVariableValue(key, value);
                     node.save();
                     onItemAdded();
                     key = null;
                     value = null;
-                    target.add(form);
+                    target.add(InsertForm.this);
                     target.addChildren(findParent(VariablesPanel.class), FeedbackPanel.class);
                 }
 
                 @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                protected void onError(AjaxRequestTarget target) {
                     target.addChildren(findParent(VariablesPanel.class), FeedbackPanel.class);
                 }
             });

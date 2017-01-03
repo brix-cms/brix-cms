@@ -14,9 +14,10 @@
 
 package org.brixcms.web.util;
 
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
-import org.apache.wicket.markup.html.link.ILinkListener;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
@@ -26,22 +27,24 @@ import org.brixcms.Path;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.web.generic.BrixGenericWebMarkupContainer;
 
-public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> implements ILinkListener {
+public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> {
     private final String rootPath;
+    private final Behavior requestListener;
 
     public PathLabel(String id, IModel<BrixNode> model, String rootPath) {
         super(id, model);
         this.rootPath = rootPath;
-    }
-
-
-    public final void onLinkClicked() {
-        String path = getRequest().getRequestParameters().getParameterValue("path").toString();
-//        if (path == null) {
-//            path = getRequestCycle().getPageParameters().getString("path");
-//        }
-        path = UrlDecoder.QUERY_INSTANCE.decode(path, getRequest().getCharset());
-        onPathClicked(new Path(path));
+        add(requestListener = new AbstractAjaxBehavior(){
+            @Override
+            public void onRequest() {
+                String path = getRequest().getRequestParameters().getParameterValue("path").toString();
+                // if (path == null) {
+                // path = getRequestCycle().getPageParameters().getString("path");
+                // }
+                path = UrlDecoder.QUERY_INSTANCE.decode(path, getRequest().getCharset());
+                onPathClicked(new Path(path));
+            }
+        });
     }
 
     @Override
@@ -79,7 +82,7 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
     }
 
     private CharSequence createCallbackUrl(String subpath) {
-        Url url=Url.parse(urlFor(ILinkListener.INTERFACE, null).toString());
+        Url url = Url.parse(urlForListener(requestListener, null).toString());
         url.addQueryParameter("path", subpath);
         return url.toString(getRequest().getCharset());
     }

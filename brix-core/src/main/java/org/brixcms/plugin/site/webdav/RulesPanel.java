@@ -45,7 +45,7 @@ import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 
 public class RulesPanel extends BrixGenericPanel<RulesNode> {
-// ------------------------------ FIELDS ------------------------------
+    // ------------------------------ FIELDS ------------------------------
     ;
     private Component feedback;
     private DataGrid<DataSource, Rule, String> dataGrid;
@@ -53,7 +53,6 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
     public RulesPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, new RulesNodeModel(workspaceModel));
-
 
         add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
 
@@ -72,9 +71,8 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
-	            AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
-                if (target != null)
-                {
+                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class).get();
+                if (target != null) {
                     target.add(removeSelected);
                 }
             }

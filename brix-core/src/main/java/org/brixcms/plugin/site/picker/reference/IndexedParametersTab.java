@@ -61,14 +61,13 @@ public abstract class IndexedParametersTab extends Panel {
         feedback.setOutputMarkupId(true);
         add(feedback);
 
-        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(this,
-                "newEntry")));
+        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(this, "newEntry")));
         add(newForm);
 
         newForm.add(new TextField<String>("value").setRequired(true));
         newForm.add(new AjaxButton("add") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmit(AjaxRequestTarget target) {
                 dataSource.addEntry(newEntry);
                 dataSource.storeToPageParameters();
                 target.add(IndexedParametersTab.this);
@@ -76,7 +75,7 @@ public abstract class IndexedParametersTab extends Panel {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.add(feedback);
             }
         });
@@ -93,16 +92,14 @@ public abstract class IndexedParametersTab extends Panel {
 
         columns.add(new SubmitCancelColumn("submitCancel", new ResourceModel("edit")) {
             @Override
-            protected void onSubmitted(AjaxRequestTarget target, IModel rowModel,
-                                       WebMarkupContainer rowComponent) {
+            protected void onSubmitted(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
                 dataSource.storeToPageParameters();
                 super.onSubmitted(target, rowModel, rowComponent);
                 target.add(feedback);
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, IModel rowModel,
-                                   WebMarkupContainer rowComponent) {
+            protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
                 target.add(feedback);
             }
         });
@@ -123,7 +120,7 @@ public abstract class IndexedParametersTab extends Panel {
         final DataGrid grid = new DataGrid("grid", dataSource, columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
-                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
+                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class).get();
                 if (target != null) {
                     target.add(removeSelected);
                 }

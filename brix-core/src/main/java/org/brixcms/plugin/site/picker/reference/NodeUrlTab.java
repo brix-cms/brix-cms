@@ -14,8 +14,12 @@
 
 package org.brixcms.plugin.site.picker.reference;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
@@ -30,9 +34,6 @@ import org.brixcms.web.reference.Reference;
 import org.brixcms.web.reference.Reference.Type;
 import org.brixcms.web.tree.JcrTreeNode;
 
-import java.util.Arrays;
-import java.util.List;
-
 public abstract class NodeUrlTab extends BrixGenericPanel<Reference> {
     public NodeUrlTab(String id, IModel<Reference> model) {
         super(id, model);
@@ -42,7 +43,7 @@ public abstract class NodeUrlTab extends BrixGenericPanel<Reference> {
         List<Reference.Type> choices = Arrays.asList(Reference.Type.values());
         DropDownChoice<Reference.Type> choice;
 
-        IChoiceRenderer<Reference.Type> renderer = new IChoiceRenderer<Reference.Type>() {
+        IChoiceRenderer<Reference.Type> renderer = new ChoiceRenderer<Reference.Type>() {
             public Object getDisplayValue(Type object) {
                 return getString(object.toString());
             }
@@ -52,37 +53,34 @@ public abstract class NodeUrlTab extends BrixGenericPanel<Reference> {
             }
         };
 
-	    final ReferenceEditorConfiguration configuration = getConfiguration();
-	    add(choice = new DropDownChoice<Reference.Type>("type", new PropertyModel<Reference.Type>(this.getModel(),
-                "type"), choices, renderer) {
+        final ReferenceEditorConfiguration configuration = getConfiguration();
+        add(choice = new DropDownChoice<Reference.Type>("type", new PropertyModel<Reference.Type>(this.getModel(), "type"), choices,
+                renderer) {
             @Override
             public boolean isVisible() {
                 return configuration.isAllowNodePicker() && configuration.isAllowURLEdit();
             }
         });
 
-        choice.add(new AjaxFormComponentUpdatingBehavior("change")
-        {
-	        @Override
-	        protected void onUpdate(AjaxRequestTarget target)
-	        {
-		        target.add(NodeUrlTab.this);
-	        }
+        choice.add(new AjaxFormComponentUpdatingBehavior("change") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(NodeUrlTab.this);
+            }
         });
 
         NodePicker picker = null;
-	    IModel<BrixNode> rootNodeModel = configuration.getRootNode();
-	    if (rootNodeModel != null) {
+        IModel<BrixNode> rootNodeModel = configuration.getRootNode();
+        if (rootNodeModel != null) {
             JcrTreeNode rootNode = TreeAwareNode.Util.getTreeNode(rootNodeModel.getObject());
-            picker = new NodePicker("nodePicker", getReference().getNodeModel(), rootNode,
-                    new SiteNodeFilter(false, null), configuration.getNodeFilter());
+            picker = new NodePicker("nodePicker", getReference().getNodeModel(), rootNode, new SiteNodeFilter(false, null),
+                    configuration.getNodeFilter());
         } else {
-            picker = new SiteNodePicker("nodePicker", getReference().getNodeModel(),
-                    configuration.getWorkspaceName(), configuration.getNodeFilter()) {
+            picker = new SiteNodePicker("nodePicker", getReference().getNodeModel(), configuration.getWorkspaceName(),
+                    configuration.getNodeFilter()) {
                 @Override
                 public boolean isVisible() {
-                    return configuration.isAllowNodePicker()
-                            && getReference().getType() == Reference.Type.NODE;
+                    return configuration.isAllowNodePicker() && getReference().getType() == Reference.Type.NODE;
                 }
             };
         }

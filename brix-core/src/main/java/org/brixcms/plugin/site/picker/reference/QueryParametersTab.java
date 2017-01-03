@@ -61,15 +61,14 @@ public abstract class QueryParametersTab extends Panel {
         feedback.setOutputMarkupId(true);
         add(feedback);
 
-        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(
-                this, "newEntry")));
+        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(this, "newEntry")));
         add(newForm);
 
         newForm.add(new TextField<String>("key").setRequired(true));
         newForm.add(new TextField<String>("value").setRequired(true));
         newForm.add(new AjaxButton("add") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmit(AjaxRequestTarget target) {
                 dataSource.addEntry(newEntry);
                 dataSource.storeToPageParameters();
                 target.add(QueryParametersTab.this);
@@ -77,7 +76,7 @@ public abstract class QueryParametersTab extends Panel {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.add(feedback);
             }
         });
@@ -113,7 +112,7 @@ public abstract class QueryParametersTab extends Panel {
         final DataGrid grid = new DataGrid("grid", dataSource, columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
-                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class);
+                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class).get();
                 if (target != null) {
                     target.add(removeSelected);
                 }
@@ -246,7 +245,7 @@ public abstract class QueryParametersTab extends Panel {
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(new Object[]{this.key, this.value});
+            return Objects.hashCode(new Object[] { this.key, this.value });
         }
     }
 

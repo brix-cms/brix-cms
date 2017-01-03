@@ -25,10 +25,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -53,8 +53,7 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
     private String newTileTypeName;
     private Component newTileEditor;
 
-    public NewTileFragment(String id, String fragmentId, MarkupContainer markupContainer,
-                           final IModel<BrixNode> nodeModel) {
+    public NewTileFragment(String id, String fragmentId, MarkupContainer markupContainer, final IModel<BrixNode> nodeModel) {
         super(id, fragmentId, markupContainer, nodeModel);
         final Form<Void> form = new Form<Void>("form");
         add(form);
@@ -84,7 +83,7 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
             }
         });
 
-        idSuggestion.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        idSuggestion.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 tileId.setModelObject(idSuggestion.getModelObject());
@@ -96,8 +95,8 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
         });
         idSuggestion.setNullValid(true);
 
-        form.add(new DropDownChoice<String>("tileType", new PropertyModel<String>(this, "newTileTypeName"),
-                new TileTypeNamesModel(), new TileTypeNameRenderer()) {
+        form.add(new DropDownChoice<String>("tileType", new PropertyModel<String>(this, "newTileTypeName"), new TileTypeNamesModel(),
+                new TileTypeNameRenderer()) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -152,7 +151,7 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
         public void validate(IValidatable validatable) {
             final String tileId = (String) validatable.getValue();
             if (getTileContainer().tiles().getTile(tileId) != null) {
-                validatable.error(new ValidationError().addMessageKey("tileExists"));
+                validatable.error(new ValidationError().addKey("tileExists"));
             }
         }
     }
@@ -169,7 +168,7 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
         }
     }
 
-    class TileTypeNameRenderer implements IChoiceRenderer<String> {
+    class TileTypeNameRenderer extends ChoiceRenderer<String> {
         public Object getDisplayValue(String type) {
             return Tile.Helper.getTileOfType(type, getModelObject().getBrix()).getDisplayName();
         }

@@ -14,36 +14,34 @@
 
 package org.brixcms.rmiserver.web.admin;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.authorization.Action;
+import org.apache.wicket.authorization.IAuthorizationStrategy;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestableComponent;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.authorization.Action;
-import org.apache.wicket.authorization.IAuthorizationStrategy;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.IResource;
 import org.brixcms.rmiserver.AuthenticationException;
 import org.brixcms.rmiserver.Role;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
-
 
     public <T extends IRequestableComponent> boolean isInstantiationAuthorized(Class<T> componentClass) {
         boolean authorized = false;
         if (Page.class.isAssignableFrom(componentClass)) {
-            if (Application.get().getApplicationSettings().getAccessDeniedPage().isAssignableFrom(
-                    componentClass)) {
+            if (Application.get().getApplicationSettings().getAccessDeniedPage().isAssignableFrom(componentClass)) {
                 return true;
             }
 
-
             AdminSession session = AdminSession.get();
             HttpServletRequest req = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
-
 
             if (!session.isUserLoggedIn()) {
                 boolean authenticated = false;
@@ -79,9 +77,9 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
                         }
                     });
 
-//                    throw new AbstractRestartResponseException() {
-//                        private static final long serialVersionUID = 1L;
-//                    };
+                    // throw new AbstractRestartResponseException() {
+                    // private static final long serialVersionUID = 1L;
+                    // };
                 }
             }
 
@@ -118,5 +116,10 @@ public class AdminAuthorizationStrategy implements IAuthorizationStrategy {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean isResourceAuthorized(IResource resource, PageParameters parameters) {
+        return true;
     }
 }

@@ -27,7 +27,7 @@ import org.brixcms.demo.web.admin.AdminPage;
 import org.brixcms.jcr.JcrSessionFactory;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
-import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
+import org.brixcms.web.BrixRequestMapper;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
 import org.slf4j.Logger;
@@ -57,7 +57,7 @@ public final class WicketApplication extends AbstractWicketApplication {
         // use special class so that the URL coding strategy knows we want to go home
         // it is not possible to just return null here because some pages (e.g. expired page)
         // rely on knowing the home page
-        return BrixNodePageUrlMapper.HomePage.class;
+        return BrixRequestMapper.HomePage.class;
     }
 
     /**
