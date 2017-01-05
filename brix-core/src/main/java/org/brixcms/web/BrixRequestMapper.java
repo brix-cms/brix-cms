@@ -17,6 +17,7 @@ package org.brixcms.web;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -24,21 +25,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
-import org.apache.wicket.Session;
 import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.handler.IPageProvider;
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.handler.PageAndComponentProvider;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
-import org.apache.wicket.core.request.mapper.IMapperContext;
+import org.apache.wicket.core.request.mapper.AbstractComponentMapper;
 import org.apache.wicket.core.request.mapper.IPageSource;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsMapper;
 import org.apache.wicket.protocol.https.Scheme;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.Url.QueryParameter;
@@ -48,10 +49,10 @@ import org.apache.wicket.request.mapper.info.ComponentInfo;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.info.PageInfo;
 import org.apache.wicket.request.mapper.parameter.INamedParameters;
+import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.brixcms.Brix;
@@ -64,6 +65,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.AbstractSitePagePlugin;
+import org.brixcms.plugin.site.page.PageRenderingPage;
 import org.brixcms.web.nodepage.BrixNodePageRequestHandler;
 import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
@@ -73,7 +75,7 @@ import org.brixcms.workspace.WorkspaceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BrixRequestMapper implements IRequestMapper {
+public class BrixRequestMapper extends AbstractComponentMapper {
 
     private static final Logger log = LoggerFactory.getLogger(BrixRequestMapper.class);
 
@@ -136,7 +138,7 @@ public class BrixRequestMapper implements IRequestMapper {
         }
 
         final PageComponentInfo info = getPageComponentInfo(request.getUrl());
-        if (info != null && info.getPageInfo().getPageId() != null) {
+        if (info != null) {
             Integer renderCount = info.getComponentInfo() != null ? info.getComponentInfo().getRenderCount() : null;
 
             if (info.getComponentInfo() == null) {
@@ -173,11 +175,34 @@ public class BrixRequestMapper implements IRequestMapper {
                 return new RenderPageRequestHandler(provider);
             } else {
                 ComponentInfo componentInfo = info.getComponentInfo();
-                PageAndComponentProvider provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), renderCount,
-                        componentInfo.getComponentPath());
+                PageAndComponentProvider provider;
+                if (info.getPageInfo().getPageId() != null) {
+                    provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), renderCount, componentInfo.getComponentPath());
+                    provider.setPageSource(getContext());
+                    return new ListenerInterfaceRequestHandler(provider, componentInfo.getBehaviorId());
+                } else {
+                    // stateless
+                    if (componentInfo != null) {
+                        renderCount = componentInfo.getRenderCount();
+                    }
+                    final Path finalPath = path;
+                    provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), BrixNodeWebPage.class,
+                            new BrixPageParameters(request.getRequestParameters()), renderCount, componentInfo.getComponentPath());
+                    provider.setPageSource(new IPageSource() {
+                        @Override
+                        public IRequestablePage getPageInstance(int pageId) {
+                            return null;
+                        }
 
-                provider.setPageSource(getContext());
-                return new ListenerInterfaceRequestHandler(provider, componentInfo.getBehaviorId());
+                        @Override
+                        public IRequestablePage newPageInstance(Class<? extends IRequestablePage> pageClass,
+                                PageParameters pageParameters) {
+                            return new PageRenderingPage((IModel<BrixNode>) new BrixNodeModel(getNodeForUriPath(finalPath)),
+                                    new BrixPageParameters(pageParameters));
+                        }
+                    });
+                    return new ListenerInterfaceRequestHandler(provider, componentInfo.getBehaviorId());
+                }
             }
         }
 
@@ -253,6 +278,18 @@ public class BrixRequestMapper implements IRequestMapper {
         return value;
     }
 
+    private static boolean isNumber(String string) {
+        if (string == null || string.length() == 0) {
+            return false;
+        }
+        for (int i = 0; i < string.length(); ++i) {
+            if (Character.isDigit(string.charAt(i)) == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public Url mapHandler(IRequestHandler requestHandler) {
         if (requestHandler instanceof BrixNodeRequestHandler) {
@@ -286,54 +323,37 @@ public class BrixRequestMapper implements IRequestMapper {
                 return null;
             }
         } else if (requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
-            BookmarkableListenerInterfaceRequestHandler target = (BookmarkableListenerInterfaceRequestHandler) requestHandler;
-            BrixNodeWebPage page = (BrixNodeWebPage) target.getPage();
-            BrixNode node = page.getModelObject();
-            PageInfo info = new PageInfo(page.getPageId());
-            return encode(node, page.getBrixPageParameters(), info);
+            // stateless
+            BookmarkableListenerInterfaceRequestHandler handler = (BookmarkableListenerInterfaceRequestHandler) requestHandler;
+            BrixNodeWebPage page = (BrixNodeWebPage) handler.getPage();
+            Integer renderCount = null;
+            if (handler.includeRenderCount()) {
+                renderCount = handler.getRenderCount();
+            }
+            PageInfo pageInfo = getPageInfo(handler);
+            ComponentInfo componentInfo = new ComponentInfo(renderCount, handler.getComponentPath(), handler.getBehaviorIndex());
+            PageComponentInfo info = new PageComponentInfo(pageInfo, componentInfo);
+            Url url = encode(page);
+            encodePageComponentInfo(url, info);
+            return url;
         } else {
             return null;
         }
     }
 
-    /**
-     * Extracts the {@link PageComponentInfo} from the URL. The
-     * {@link PageComponentInfo} is encoded as the very first query parameter
-     * and the parameter consists of name only (no value).
-     *
-     * @param url
-     * @return PageComponentInfo instance if one was encoded in URL,
-     *         <code>null</code> otherwise.
-     */
-    protected PageComponentInfo getPageComponentInfo(final Url url) {
-        if (url == null) {
-            throw new IllegalStateException("Argument 'url' may not be null.");
-        } else {
-            for (QueryParameter queryParameter : url.getQueryParameters()) {
-                if (Strings.isEmpty(queryParameter.getValue())) {
-                    PageComponentInfo pageComponentInfo = PageComponentInfo.parse(queryParameter.getName());
-                    if (pageComponentInfo != null) {
-                        return pageComponentInfo;
-                    }
-                }
+    protected final PageInfo getPageInfo(IPageRequestHandler handler) {
+        Args.notNull(handler, "handler");
+
+        Integer pageId = null;
+        if (handler.isPageInstanceCreated()) {
+            IRequestablePage page = handler.getPage();
+
+            if (page.isPageStateless() == false) {
+                pageId = page.getPageId();
             }
         }
-        return null;
-    }
 
-    protected IMapperContext getContext() {
-        return Application.get().getMapperContext();
-    }
-
-    protected void encodePageComponentInfo(Url url, PageComponentInfo info) {
-        Args.notNull(url, "url");
-        if (info != null && Session.exists() && !Session.get().isSessionInvalidated()) {
-            String s = info.toString();
-            if (!Strings.isEmpty(s)) {
-                QueryParameter parameter = new QueryParameter(s, "");
-                url.getQueryParameters().add(parameter);
-            }
-        }
+        return new PageInfo(pageId);
     }
 
     private Url encode(BrixNodeWebPage page) {
@@ -341,9 +361,16 @@ public class BrixRequestMapper implements IRequestMapper {
         // This is a URL for redirect. Allow components to contribute state to
         // URL if they want to
         final BrixPageParameters parameters = page.getBrixPageParameters();
+        Iterator<NamedPair> it = page.getBrixPageParameters().getAllNamed().iterator();
+        while (it.hasNext()) {
+            INamedParameters.NamedPair namedPair = (INamedParameters.NamedPair) it.next();
+            if (isNumber(namedPair.getKey())) {
+                parameters.remove(namedPair.getKey());
+            }
+        }
         page.visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
             @Override
-            public void component(Component component, IVisit iVisit) {
+            public void component(Component component, IVisit<PageParametersAware> iVisit) {
                 ((PageParametersAware) component).contributeToPageParameters(parameters);
             }
         });
