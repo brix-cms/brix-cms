@@ -111,7 +111,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                 MenuTreeNode node = new MenuTreeNode(entry);
                 treeModel.nodeInserted(tree, parent, node);
                 tree.getTreeState().selectNode(node, true);
-                tree.updateTree();
+                tree.updateTree(target);
             }
         });
 
@@ -124,7 +124,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                 MenuTreeNode node = new MenuTreeNode(entry);
                 treeModel.nodeInserted(tree, getSelected(), node);
                 tree.getTreeState().selectNode(node, true);
-                tree.updateTree();
+                tree.updateTree(target);
             }
 
             @Override
@@ -153,7 +153,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                     tree.getTreeState().selectNode(newSelected, true);
                     tg.setItemEdit(new Model<MenuTreeNode>(newSelected), editing);
                 }
-                tree.updateTree();
+                tree.updateTree(target);
             }
 
             @Override
@@ -179,7 +179,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                     tree.getTreeState().selectNode(selected, true);
                     tg.setItemEdit(new Model<MenuTreeNode>(selected), editing);
 
-                    tree.updateTree();
+                    tree.updateTree(target);
                 }
                 target.add(links);
             }
@@ -206,7 +206,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                     tree.getTreeState().selectNode(selected, true);
                     tg.setItemEdit(new Model<MenuTreeNode>(selected), editing);
 
-                    tree.updateTree();
+                    tree.updateTree(target);
                 }
                 target.add(links);
             }

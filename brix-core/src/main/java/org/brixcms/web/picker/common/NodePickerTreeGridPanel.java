@@ -98,7 +98,7 @@ public abstract class NodePickerTreeGridPanel extends Panel {
                     } else {
                         onNodeDeselected(node);
                     }
-                    update();
+                    //update();
                 }
                 super.onItemSelectionChanged(rowModel, newValue);
             }

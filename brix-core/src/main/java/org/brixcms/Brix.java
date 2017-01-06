@@ -14,6 +14,14 @@
 
 package org.brixcms;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
 import org.apache.wicket.RestartResponseException;
@@ -47,17 +55,14 @@ import org.brixcms.plugin.site.webdav.RulesNode;
 import org.brixcms.registry.ExtensionPointRegistry;
 import org.brixcms.web.BrixExtensionStringResourceLoader;
 import org.brixcms.web.BrixRequestMapper;
-import org.brixcms.web.nodepage.*;
+import org.brixcms.web.nodepage.BrixNodeRequestHandler;
+import org.brixcms.web.nodepage.BrixNodeWebPage;
+import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.web.nodepage.ForbiddenPage;
+import org.brixcms.web.nodepage.PageParametersAwareEnabler;
 import org.brixcms.web.tile.pagetile.PageTile;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
-
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * TODO doc
@@ -226,7 +231,7 @@ public abstract class Brix {
            * aware so they can install their own listeners or have some brix-level
            * registery
            */
-        application.getComponentPreOnBeforeRenderListeners().add(new PageParametersAwareEnabler());
+        application.getComponentOnConfigureListeners().add(new PageParametersAwareEnabler());
 
 
         // allow brix to handle any url that wicket cant

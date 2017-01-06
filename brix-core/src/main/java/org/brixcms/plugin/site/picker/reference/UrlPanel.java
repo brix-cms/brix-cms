@@ -26,7 +26,7 @@ public class UrlPanel extends BrixGenericPanel<String> {
 
         TextField<String> tf;
         add(tf = new TextField<String>("url", urlModel));
-        tf.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+        tf.add(new AjaxFormComponentUpdatingBehavior("blur") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
 

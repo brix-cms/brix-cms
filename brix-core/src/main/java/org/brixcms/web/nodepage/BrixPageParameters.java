@@ -22,6 +22,7 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.brixcms.exception.BrixException;
 import org.brixcms.jcr.wrapper.BrixNode;
 
@@ -49,7 +50,12 @@ public class BrixPageParameters extends PageParameters {
     }
 
     public BrixPageParameters(IRequestParameters params) {
-        // TODO implement
+        for (String name : params.getParameterNames()) {
+            String value = params.getParameterValue(name).toOptionalString();
+            if (!Strings.isEmpty(value)) {
+                add(name, params.getParameterValue(name));
+            }
+        }
     }
 
     void assign(BrixPageParameters other) {

@@ -18,6 +18,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.Session;
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
@@ -68,8 +70,6 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
         return page;
     }
 
-
-
     @Override
     public Class<? extends IRequestablePage> getPageClass() {
         return page.getClass();
@@ -80,9 +80,13 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
     }
 
     public void respond(IRequestCycle requestCycle) {
-        CharSequence url = ((RequestCycle) requestCycle).urlFor(this);
-//        requestCycle.redirect(url.toString());
-        throw new UnsupportedOperationException();
+        String location = ((RequestCycle) requestCycle).urlFor(this).toString();
+        if (location.startsWith("/")) {
+            // context-absolute url
+            location = requestCycle.getUrlRenderer().renderContextRelativeUrl(location);
+        }
+        WebResponse response = (WebResponse) requestCycle.getResponse();
+        response.sendRedirect(location);
     }
 
     public void detach(IRequestCycle requestCycle) {
@@ -121,6 +125,5 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
         }
         return null;
     }
-
 
 }
