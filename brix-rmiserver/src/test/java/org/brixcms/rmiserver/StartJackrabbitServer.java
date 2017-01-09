@@ -14,29 +14,31 @@
 
 package org.brixcms.rmiserver;
 
-
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.bio.SocketConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 public class StartJackrabbitServer {
     public static void main(String[] args) throws Exception {
         final int port = Integer.parseInt(System.getProperty("jetty.port", "10000"));
 
         Server server = new Server();
-        SocketConnector connector = new SocketConnector();
-        // Set some timeout options to make debugging easier.
-        connector.setMaxIdleTime(1000 * 60 * 60);
-        connector.setSoLingerTime(-1);
-        connector.setPort(port);
-        server.setConnectors(new Connector[]{connector});
+
+        HttpConfiguration http_config = new HttpConfiguration();
+        http_config.setOutputBufferSize(32768);
+
+        ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
+        http.setPort(port);
+        http.setIdleTimeout(1000 * 60 * 60);
+
+        server.addConnector(http);
 
         WebAppContext bb = new WebAppContext();
         bb.setServer(server);
         bb.setContextPath("/");
         bb.setWar("src/main/webapp");
-
 
         // START JMX SERVER
         // MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
@@ -44,18 +46,20 @@ public class StartJackrabbitServer {
         // server.getContainer().addEventListener(mBeanContainer);
         // mBeanContainer.start();
 
-        server.addHandler(bb);
+        server.setHandler(bb);
 
         try {
-            System.out.println(">>> STARTING EMBEDDED JETTY SERVER ON PORT: " + port +
-                    ", PRESS ANY KEY TO STOP");
+            System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
             server.start();
-            System.in.read();
+            while (System.in.available() == 0) {
+                Thread.sleep(5000);
+            }
             server.stop();
             server.join();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(100);
         }
+
     }
 }

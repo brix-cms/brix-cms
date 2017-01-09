@@ -14,20 +14,20 @@
 
 package org.brixcms.plugin.site.admin.nodetree;
 
+import java.io.Serializable;
+
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.behavior.SimpleAttributeModifier;
+import org.apache.wicket.extensions.markup.html.tree.BaseTree;
+import org.apache.wicket.extensions.markup.html.tree.LinkIconPanel;
+import org.apache.wicket.extensions.markup.html.tree.LinkTree;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.tree.BaseTree;
-import org.apache.wicket.markup.html.tree.LinkIconPanel;
-import org.apache.wicket.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.NodeTreeRenderer;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.util.AbstractModel;
-
-import java.io.Serializable;
 
 /**
  * A base to build other renderers from.
@@ -75,7 +75,7 @@ public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Seri
         public NodeTreeRenderingComponent(String id, IModel<Object> model, BaseTree tree) {
             super(id, model, tree);
             BrixNode bn = ((JcrTreeNode) model.getObject()).getNodeModel().getObject();
-            add(new SimpleAttributeModifier("class", bn.getNodeType()));
+            add(new AttributeModifier("class", bn.getNodeType()));
         }
 
         @Override
@@ -94,7 +94,7 @@ public abstract class AbstractNodeTreeRenderer implements NodeTreeRenderer, Seri
                     BrixNode n = node.getNodeModel().getObject();
                     return n.getUserVisibleName();
                 }
-            }).add(new SimpleAttributeModifier("style", "padding-left: 4px;"));
+            }).add(new AttributeModifier("style", "padding-left: 4px;"));
         }
     }
 }

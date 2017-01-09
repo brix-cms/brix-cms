@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.brixcms</groupId>
         <artifactId>brix</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>8.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.brixcms</groupId>
     <artifactId>brix-plugin-menu</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>8.0-SNAPSHOT</version>
 
     <packaging>bundle</packaging>
 
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>org.brixcms</groupId>
             <artifactId>brix-core</artifactId>
-            <version>1.3.0-SNAPSHOT</version>
+            <version>8.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

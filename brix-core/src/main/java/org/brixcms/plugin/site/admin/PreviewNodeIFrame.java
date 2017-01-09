@@ -18,10 +18,10 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.model.IModel;
 import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
-import org.brixcms.web.BrixRequestCycleProcessor;
 import org.brixcms.web.generic.BrixGenericWebMarkupContainer;
 import org.brixcms.web.nodepage.BrixNodeRequestHandler;
 import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.workspace.WorkspaceUtils;
 
 public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
     private static final String PREVIEW_PARAM = Brix.NS_PREFIX + "preview";
@@ -45,10 +45,9 @@ public class PreviewNodeIFrame extends BrixGenericWebMarkupContainer<BrixNode> {
         BrixPageParameters parameters = new BrixPageParameters();
         IModel<BrixNode> nodeModel = getModel();
         String workspace = nodeModel.getObject().getSession().getWorkspace().getName();
-        parameters.set(BrixRequestCycleProcessor.WORKSPACE_PARAM, workspace);
+        parameters.set(WorkspaceUtils.WORKSPACE_PARAM, workspace);
         parameters.set(PREVIEW_PARAM, "true");
-        StringBuilder url = new StringBuilder(getRequestCycle()
-                .urlFor(new BrixNodeRequestHandler(nodeModel, parameters)));
+        StringBuilder url = new StringBuilder(getRequestCycle().urlFor(new BrixNodeRequestHandler(nodeModel, parameters)));
         return url;
     }
 

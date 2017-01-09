@@ -30,7 +30,7 @@ public class ReferenceLink extends AbstractLink {
     @Override
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
-        if (!isLinkEnabled()) {
+        if (!isEnabledInHierarchy()) {
             disableLink(tag);
         }
         tag.put("href", reference.getUrl());

@@ -17,6 +17,11 @@
  */
 package org.brixcms.plugin.site.folder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridSortState;
 import com.inmethod.grid.IGridSortState.ISortStateColumn;
@@ -30,12 +35,7 @@ import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.tree.SiteNodeFilter;
 import org.brixcms.web.tree.NodeFilter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-abstract class FolderDataSource implements IDataSource {
+abstract class FolderDataSource implements IDataSource<BrixNode> {
     public static final String PROPERTY_NAME = "name";
     public static final String PROPERTY_TYPE = "type";
     public static final String PROPERTY_CREATED = "created";
@@ -49,11 +49,11 @@ abstract class FolderDataSource implements IDataSource {
 
 
 
-    public void query(IQuery query, IQueryResult result) {
+    public void query(IQuery query, IQueryResult<BrixNode> result) {
         BrixNode node = getFolderNode();
         List<BrixNode> visibleNodes = visibleNodes(node.getNodes());
         if (query.getSortState().getColumns().isEmpty() == false) {
-            sort(visibleNodes, query.getSortState());
+            sort(visibleNodes, query.<String>getSortState());
         } else {
             sort(visibleNodes, PROPERTY_NAME, IGridSortState.Direction.ASC);
         }
@@ -69,8 +69,8 @@ abstract class FolderDataSource implements IDataSource {
         result.setTotalCount(visibleNodes.size());
     }
 
-    public IModel<?> model(Object object) {
-        return new BrixNodeModel((BrixNode) object);
+    public IModel<BrixNode> model(BrixNode brixNode) {
+        return new BrixNodeModel(brixNode);
     }
 
     public void detach() {
@@ -79,10 +79,10 @@ abstract class FolderDataSource implements IDataSource {
 
     abstract BrixNode getFolderNode();
 
-    private void sort(List<BrixNode> node, IGridSortState state) {
+    private void sort(List<BrixNode> node, IGridSortState<String> state) {
         int max = Math.min(state.getColumns().size() - 1, 2);
         for (int i = max; i >= 0; --i) {
-            ISortStateColumn column = state.getColumns().get(i);
+            ISortStateColumn<String> column = state.getColumns().get(i);
             sort(node, column.getPropertyName(), column.getDirection());
         }
     }

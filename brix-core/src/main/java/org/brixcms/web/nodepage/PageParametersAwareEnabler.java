@@ -15,11 +15,12 @@
 package org.brixcms.web.nodepage;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.application.IComponentOnBeforeRenderListener;
+import org.apache.wicket.application.IComponentOnConfigureListener;
 
-public class PageParametersAwareEnabler implements IComponentOnBeforeRenderListener {
+public class PageParametersAwareEnabler implements IComponentOnConfigureListener {
 
-    public void onBeforeRender(Component component) {
+    @Override
+    public void onConfigure(Component component) {
         if (component instanceof PageParametersAware) {
             PageParametersAware aware = (PageParametersAware) component;
             aware.initializeFromPageParameters(BrixPageParameters.getCurrent());

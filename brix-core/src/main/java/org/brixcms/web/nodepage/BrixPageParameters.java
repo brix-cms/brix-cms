@@ -14,19 +14,20 @@
 
 package org.brixcms.web.nodepage;
 
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
+import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.IPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.brixcms.exception.BrixException;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixPageParameters extends PageParameters {
     private static final long serialVersionUID = 1L;
-
 
     public static BrixPageParameters getCurrent() {
         IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
@@ -36,7 +37,7 @@ public class BrixPageParameters extends PageParameters {
         if (target instanceof PageParametersRequestHandler) {
             return ((PageParametersRequestHandler) target).getPageParameters();
         } else {
-            return getCurrentPage().getBrixPageParameters();
+            return new BrixPageParameters(getCurrentPage().getPageParameters());
         }
     }
 
@@ -49,7 +50,12 @@ public class BrixPageParameters extends PageParameters {
     }
 
     public BrixPageParameters(IRequestParameters params) {
-        // TODO implement
+        for (String name : params.getParameterNames()) {
+            String value = params.getParameterValue(name).toOptionalString();
+            if (!Strings.isEmpty(value)) {
+                add(name, params.getParameterValue(name));
+            }
+        }
     }
 
     void assign(BrixPageParameters other) {
@@ -74,19 +80,20 @@ public class BrixPageParameters extends PageParameters {
      * @param page
      * @return url
      */
-    public String urlFor(BrixNodeWebPage page) {
-        IRequestHandler target = new BrixNodeRequestHandler(page, this);
-        return RequestCycle.get().urlFor(target).toString();
+    public String urlFor(WebPage page) {
+        if (page instanceof BrixNodeWebPage) {
+            IRequestHandler target = new BrixNodeRequestHandler((BrixNodeWebPage) page, this);
+            return RequestCycle.get().urlFor(target).toString();
+        }
+        return RequestCycle.get().urlFor(page.getClass(), this).toString();
     }
 
-    static BrixNodeWebPage getCurrentPage() {
+    static WebPage getCurrentPage() {
         IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
-        BrixNodeWebPage page = null;
+        WebPage page = null;
         if (target != null) {
             IRequestablePage p = ((IPageRequestHandler) target).getPage();
-            if (p instanceof BrixNodeWebPage) {
-                page = (BrixNodeWebPage) p;
-            }
+            page = (WebPage) p;
         }
         if (page == null) {
             throw new BrixException("Couldn't obtain the BrixNodeWebPage instance from RequestTarget.");

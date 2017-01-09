@@ -69,11 +69,11 @@ public abstract class SwitcherCellPanel extends Panel {
 
         Form form = new Form("form");
         DropDownChoice choice = new DropDownChoice<Menu.ChildEntry.MenuType>("typeChoice", typeModel, Arrays.asList(Menu.ChildEntry.MenuType.values()));
-        choice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        choice.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 container.addOrReplace(getEditPanel());
-                target.addComponent(container);
+                target.add(container);
             }
         });
 

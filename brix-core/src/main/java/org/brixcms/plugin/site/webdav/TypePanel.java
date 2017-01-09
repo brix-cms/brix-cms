@@ -14,19 +14,21 @@
 
 package org.brixcms.plugin.site.webdav;
 
-import com.inmethod.grid.column.AbstractColumn;
-import com.inmethod.grid.column.editable.EditableCellPanel;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.brixcms.plugin.site.webdav.Rule.Type;
 
-import java.util.Arrays;
-import java.util.List;
+import com.inmethod.grid.column.AbstractColumn;
+import com.inmethod.grid.column.editable.EditableCellPanel;
 
 public class TypePanel extends EditableCellPanel {
-    private IChoiceRenderer<Type> typeRenderer = new IChoiceRenderer<Type>() {
+    private IChoiceRenderer<Type> typeRenderer = new ChoiceRenderer<Type>() {
         public Object getDisplayValue(Type object) {
             return getString(object.toString());
         }

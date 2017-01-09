@@ -30,7 +30,6 @@ public class NodePathValidator implements IValidator {
         this.nodeModel = nodeModel;
     }
 
-
     @SuppressWarnings("unchecked")
     public void validate(IValidatable validatable) {
         Object o = validatable.getValue();
@@ -54,7 +53,7 @@ public class NodePathValidator implements IValidator {
             if (node.getSession().itemExists(path.toString()) == false) {
                 ValidationError error = new ValidationError();
                 error.setMessage("Node ${path} could not be found");
-                error.addMessageKey("NodePathValidator");
+                error.addKey("NodePathValidator");
                 error.getVariables().put("path", path.toString());
                 validatable.error(error);
             }

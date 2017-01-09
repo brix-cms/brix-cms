@@ -110,7 +110,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
                 getModalWindow().setModel(NodePickerPanel.this.getModel());
                 getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
                     public void onClose(AjaxRequestTarget target) {
-                        target.addComponent(NodePickerPanel.this);
+                        target.add(NodePickerPanel.this);
                         NodePickerPanel.this.onUpdate(target);
                     }
                 });
@@ -122,7 +122,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 NodePickerPanel.this.setModelObject(null);
-                target.addComponent(NodePickerPanel.this);
+                target.add(NodePickerPanel.this);
                 NodePickerPanel.this.onUpdate(target);
             }
 

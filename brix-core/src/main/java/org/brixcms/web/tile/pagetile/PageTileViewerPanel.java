@@ -59,8 +59,8 @@ public class PageTileViewerPanel extends BrixGenericPanel<BrixNode> {
     private boolean checkLoop(final IModel<BrixNode> model) {
         final boolean loop[] = {false};
 
-        visitParents(PageTileViewerPanel.class, new IVisitor<Component, BrixNode>() {
-            public void component(Component component, IVisit iVisit) {
+        visitParents(PageTileViewerPanel.class, new IVisitor<PageTileViewerPanel, BrixNode>() {
+            public void component(PageTileViewerPanel component, IVisit iVisit) {
                 // found parent with same model, this indicates a loop
                 if (component != PageTileViewerPanel.this && component.getDefaultModel().equals(model)) {
                     loop[0] = true;

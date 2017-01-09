@@ -13,11 +13,11 @@
  */
 package org.brixcms.plugin.site.page.admin;
 
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.model.IModel;
-
 import java.util.Arrays;
+
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.model.IModel;
 
 public class ProtocolSelector extends DropDownChoice<Boolean> {
     public ProtocolSelector(String id, IModel<Boolean> model) {
@@ -25,24 +25,24 @@ public class ProtocolSelector extends DropDownChoice<Boolean> {
 
         setModel(model);
 
-        setChoices(Arrays.asList(new Boolean[]{new Boolean(true),
-                new Boolean(false)}));
+        setChoices(Arrays.asList(new Boolean[] { new Boolean(true), new Boolean(false) }));
 
-        setChoiceRenderer(new IChoiceRenderer<Boolean>() {
+        setChoiceRenderer(new ChoiceRenderer<Boolean>() {
             private static final long serialVersionUID = 1L;
 
+            @Override
             public Object getDisplayValue(Boolean object) {
                 if (object == null) {
                     return "";
                 }
-                return getLocalizer().getString(
-                        (object ? "protocol.ssl" : "protocol.nossl"),
-                        ProtocolSelector.this);
+                return getLocalizer().getString((object ? "protocol.ssl" : "protocol.nossl"), ProtocolSelector.this);
             }
 
+            @Override
             public String getIdValue(Boolean object, int index) {
                 return object == null ? "" : object.toString();
             }
+
         });
     }
 

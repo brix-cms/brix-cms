@@ -14,6 +14,10 @@
 
 package org.brixcms.plugin.site.resource.admin;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -26,9 +30,6 @@ import org.brixcms.jcr.wrapper.BrixNode.Protocol;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
 
-import java.util.Arrays;
-import java.util.List;
-
 public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode> {
     public EditPropertiesPanel(String id, final IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
@@ -38,7 +39,7 @@ public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode> {
         final ModelBuffer model = new ModelBuffer(nodeModel);
         Form<?> form = new Form<Void>("form");
 
-        IChoiceRenderer<Protocol> renderer = new IChoiceRenderer<Protocol>() {
+        IChoiceRenderer<Protocol> renderer = new ChoiceRenderer<Protocol>() {
             public Object getDisplayValue(Protocol object) {
                 return getString(object.toString());
             }
@@ -48,8 +49,7 @@ public abstract class EditPropertiesPanel extends BrixGenericPanel<BrixNode> {
             }
         };
         IModel<Protocol> protocolModel = model.forProperty("requiredProtocol");
-        form.add(new DropDownChoice<Protocol>("requiredProtocol", protocolModel, protocols,
-                renderer).setNullValid(false));
+        form.add(new DropDownChoice<Protocol>("requiredProtocol", protocolModel, protocols, renderer).setNullValid(false));
 
         IModel<String> mimeTypeModel = model.forProperty("mimeType");
         form.add(new TextField<String>("mimeType", mimeTypeModel));

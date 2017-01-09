@@ -17,6 +17,8 @@
  */
 package org.brixcms.plugin.site.page.admin;
 
+import java.util.Collection;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -34,8 +36,6 @@ import org.brixcms.web.ContainerFeedbackPanel;
 import org.brixcms.web.model.ModelBuffer;
 import org.brixcms.web.picker.node.NodeTypeFilter;
 import org.brixcms.web.tree.NodeFilter;
-
-import java.util.Collection;
 
 abstract class EditTab extends NodeManagerPanel {
     private String currentEditorFactory;
