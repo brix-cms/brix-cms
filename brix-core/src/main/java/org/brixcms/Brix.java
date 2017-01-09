@@ -156,7 +156,7 @@ public abstract class Brix {
      * @return brix page
      * @throws BrixException if current request was not to a brix page
      */
-    private static BrixNodeWebPage getCurrentPage() {
+    public static BrixNodeWebPage getCurrentPage() {
         IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
         BrixNodeWebPage page = null;
         if (target != null && target instanceof IPageRequestHandler) {
