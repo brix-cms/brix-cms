@@ -14,16 +14,14 @@
 
 package org.brixcms.web.nodepage;
 
-import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
-import org.brixcms.exception.BrixException;
+import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
 
 public class BrixPageParameters extends PageParameters {
@@ -37,7 +35,7 @@ public class BrixPageParameters extends PageParameters {
         if (target instanceof PageParametersRequestHandler) {
             return ((PageParametersRequestHandler) target).getPageParameters();
         } else {
-            return new BrixPageParameters(getCurrentPage().getPageParameters());
+            return new BrixPageParameters(Brix.getCurrentPage().getPageParameters());
         }
     }
 
@@ -71,7 +69,7 @@ public class BrixPageParameters extends PageParameters {
     }
 
     public String toCallbackURL() {
-        return urlFor(getCurrentPage());
+        return urlFor(Brix.getCurrentPage());
     }
 
     /**
@@ -86,19 +84,6 @@ public class BrixPageParameters extends PageParameters {
             return RequestCycle.get().urlFor(target).toString();
         }
         return RequestCycle.get().urlFor(page.getClass(), this).toString();
-    }
-
-    static WebPage getCurrentPage() {
-        IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
-        WebPage page = null;
-        if (target != null) {
-            IRequestablePage p = ((IPageRequestHandler) target).getPage();
-            page = (WebPage) p;
-        }
-        if (page == null) {
-            throw new BrixException("Couldn't obtain the BrixNodeWebPage instance from RequestTarget.");
-        }
-        return page;
     }
 
     /**

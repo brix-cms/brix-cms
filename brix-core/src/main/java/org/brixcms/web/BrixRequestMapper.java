@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
+import org.apache.wicket.DefaultMapperContext;
 import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
 import org.apache.wicket.core.request.handler.IPageProvider;
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
@@ -175,34 +176,20 @@ public class BrixRequestMapper extends AbstractComponentMapper {
                 return new RenderPageRequestHandler(provider);
             } else {
                 ComponentInfo componentInfo = info.getComponentInfo();
-                PageAndComponentProvider provider;
-                if (info.getPageInfo().getPageId() != null) {
-                    provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), renderCount, componentInfo.getComponentPath());
-                    provider.setPageSource(getContext());
-                    return new ListenerInterfaceRequestHandler(provider, componentInfo.getBehaviorId());
-                } else {
-                    // stateless
-                    if (componentInfo != null) {
-                        renderCount = componentInfo.getRenderCount();
-                    }
-                    final Path finalPath = path;
-                    provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), BrixNodeWebPage.class,
-                            new BrixPageParameters(request.getRequestParameters()), renderCount, componentInfo.getComponentPath());
-                    provider.setPageSource(new IPageSource() {
-                        @Override
-                        public IRequestablePage getPageInstance(int pageId) {
-                            return null;
-                        }
-
-                        @Override
-                        public IRequestablePage newPageInstance(Class<? extends IRequestablePage> pageClass,
-                                PageParameters pageParameters) {
-                            return new PageRenderingPage((IModel<BrixNode>) new BrixNodeModel(getNodeForUriPath(finalPath)),
-                                    new BrixPageParameters(pageParameters));
-                        }
-                    });
-                    return new ListenerInterfaceRequestHandler(provider, componentInfo.getBehaviorId());
+                final Path finalPath = path;
+                if (componentInfo != null) {
+                    renderCount = componentInfo.getRenderCount();
                 }
+                PageAndComponentProvider provider = new PageAndComponentProvider(info.getPageInfo().getPageId(), PageRenderingPage.class,
+                        new BrixPageParameters(request.getRequestParameters()), renderCount, componentInfo.getComponentPath());
+                provider.setPageSource(new DefaultMapperContext() {
+                    @Override
+                    public IRequestablePage newPageInstance(Class<? extends IRequestablePage> pageClass, PageParameters pageParameters) {
+                        return new PageRenderingPage((IModel<BrixNode>) new BrixNodeModel(getNodeForUriPath(finalPath)),
+                                new BrixPageParameters(pageParameters));
+                    }
+                });
+                return new ListenerInterfaceRequestHandler(provider, componentInfo.getBehaviorId());
             }
         }
 
