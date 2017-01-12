@@ -73,7 +73,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                 // if (newValue == false)
                 setItemEdit(item, newValue);
 
-                selectionChanged(getRequestCycle().find(AjaxRequestTarget.class).get());
+                // selectionChanged(getRequestCycle().find(AjaxRequestTarget.class).get());
                 // update();
             }
 

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -86,9 +87,9 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                 columns) {
             @Override
             public void onItemSelectionChanged(IModel<Entry> item, boolean newValue) {
-                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class).get();
-                if (target != null) {
-                    target.add(delete);
+                Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+                if (target.isPresent()) {
+                    target.get().add(delete);
                 }
                 super.onItemSelectionChanged(item, newValue);
             }

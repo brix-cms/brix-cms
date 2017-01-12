@@ -16,6 +16,7 @@ package org.brixcms.plugin.site.webdav;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.wicket.Component;
@@ -71,9 +72,9 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
-                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class).get();
-                if (target != null) {
-                    target.add(removeSelected);
+                Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+                if (target.isPresent()) {
+                    target.get().add(removeSelected);
                 }
             }
         };
