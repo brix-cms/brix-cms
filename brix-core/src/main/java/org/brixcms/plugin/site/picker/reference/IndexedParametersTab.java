@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -120,9 +121,9 @@ public abstract class IndexedParametersTab extends Panel {
         final DataGrid grid = new DataGrid("grid", dataSource, columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
-                AjaxRequestTarget target = getRequestCycle().find(AjaxRequestTarget.class).get();
-                if (target != null) {
-                    target.add(removeSelected);
+                Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+                if (target.isPresent()) {
+                    target.get().add(removeSelected);
                 }
                 super.onItemSelectionChanged(item, newValue);
             }
