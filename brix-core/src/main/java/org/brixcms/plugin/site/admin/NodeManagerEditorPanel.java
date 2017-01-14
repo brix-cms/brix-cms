@@ -24,7 +24,6 @@ import javax.jcr.ReferentialIntegrityException;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.brixcms.Path;
@@ -33,6 +32,7 @@ import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.ManageNodeTabFactory;
 import org.brixcms.plugin.site.SitePlugin;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.tab.BrixTabbedPanel;
 import org.brixcms.web.tab.IBrixTab;
@@ -173,7 +173,7 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode> {
         }
     }
 
-    private static class SessionFeedbackPanel extends FeedbackPanel {
+    private static class SessionFeedbackPanel extends BrixFeedbackPanel {
         public SessionFeedbackPanel(String id) {
             super(id, new Filter());
         }

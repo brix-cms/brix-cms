@@ -1,3 +1,16 @@
+div.brix-admin {
+	margin-bottom: 3em;
+}
+
+div.brix-admin div.brix-site-manager-container {
+	border: 1px solid #e0e0e0;
+	padding: 15px;
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+
 div.brix-admin div.brix-site-tree-container {
 	overflow: auto; *
 	overflow-x: scroll;
@@ -28,4 +41,70 @@ div.brix-admin div.brix-site-tree-container table.selected * {
 .navbar-toggleable-md {
 	min-height: 3.5rem;
 	background-color: #7894BB;
+}
+
+div.brix-admin div.brix-site-view-text-container {
+	padding-bottom: 2px;
+	border: 1px dotted #aaa;
+	margin-top: 0.5em;
+}
+
+div.brix-admin textarea.brix-site-page-editor {
+	width: 100%;
+	border-width: 0px;
+	padding: 0px;
+	margin: 0px;
+	height: 30em;
+}
+
+div.brix-admin div.brix-site-page-editor {
+	border: 1px dotted #aaa;
+	margin-top: 0.4em;
+}
+
+div.brix-admin div.brix-site-view-text-container div {
+	overflow: auto;
+	height: 35em;
+}
+
+div.brix-admin table.brix-site-tile-container {
+    margin-top: 0.8em;
+}
+
+div.brix-admin td.brix-site-tile-selector {
+    padding-top: 1em;
+    border-right: 1px solid #7894BB;
+    white-space: nowrap;
+}
+
+div.brix-admin td.brix-site-tile-selector ul {
+    border-top: 1px solid #e0e0e0;
+    list-style: none;
+}
+
+div.brix-admin td.brix-site-tile-selector li a {
+    display: block;
+    padding: 4px;
+    padding-right: 1em;
+    border-bottom: 1px solid #e0e0e0;
+    border-left: 1px solid #e0e0e0;
+}
+
+div.brix-admin td.brix-site-tile-selector li > a:hover {
+    background-color: #eee;
+}
+
+div.brix-admin td.brix-site-tile-selector li.selected a {
+    background-color: #7894BB;
+    border-left-color: #63819F;
+    border-bottom-color: #63819F;
+    color: white;
+}
+
+div.brix-admin td.brix-site-tile-editor {
+    border-top: 1px solid #7894BB;
+    border-bottom: 1px solid #7894BB;
+    border-right: 1px solid #7894BB;
+    padding: 0.7em;
+    width: 100%;
 }

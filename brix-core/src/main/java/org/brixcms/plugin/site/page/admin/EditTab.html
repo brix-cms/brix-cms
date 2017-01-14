@@ -1,9 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket>
+<body>
 <wicket:panel>
 
     <form wicket:id="form">
         <fieldset>
 
-            <table class="brix-property-edit">
+            <table class="brix-property-edit table table-sm">
                 <tr>
                     <td class="brix-property-label">
                         <wicket:message key="title"></wicket:message>
@@ -44,15 +47,15 @@
                 </div>
             </div>
 
-            <div class="brix-site-page-buttons">
+            <div class="brix-site-page-buttons float-right mt-3">
                 <div class="brix-buttons-right">
                     <div class="brix-buttons-right1">
-                        <button type="submit" class="brix-button" wicket:id="save">
-                            <wicket:message key="save"/>
-                        </button>
-                        <a class="brix-button" wicket:id="cancel">
+                        <a class="btn btn-secondary" wicket:id="cancel">
                             <wicket:message key="cancel"/>
                         </a>
+                        <button type="submit" class="btn btn-primary" wicket:id="save">
+                            <wicket:message key="save"/>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -60,3 +63,5 @@
         </fieldset>
     </form>
 </wicket:panel>
+</body>
+</html>

@@ -14,8 +14,8 @@
 
 package org.brixcms.plugin.site.resource.admin;
 
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import java.util.ArrayList;
+
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -24,15 +24,15 @@ import org.brixcms.plugin.site.SimpleCallback;
 import org.brixcms.plugin.site.admin.NodeManagerPanel;
 import org.brixcms.plugin.site.resource.managers.text.CreateTextResourcePanel;
 import org.brixcms.web.tab.AbstractBrixTab;
-
-import java.util.ArrayList;
+import org.brixcms.web.tab.BrixCardPanel;
+import org.brixcms.web.tab.IBrixTab;
 
 public class CreateResourcePanel extends NodeManagerPanel {
     public CreateResourcePanel(String id, final IModel<BrixNode> container,
                                final SimpleCallback back) {
         super(id, container);
 
-        ArrayList<ITab> tabs = new ArrayList<ITab>();
+        ArrayList<IBrixTab> tabs = new ArrayList<IBrixTab>();
 
         tabs.add(new AbstractBrixTab(new ResourceModel("upload")) {
             @Override
@@ -49,11 +49,6 @@ public class CreateResourcePanel extends NodeManagerPanel {
         });
 
         tabs.trimToSize();
-        add(new TabbedPanel("tabs", tabs) {
-            @Override
-            protected String getTabContainerCssClass() {
-                return "brix-site-manager-tab-row";
-            }
-        });
+        add(new BrixCardPanel("tabs", tabs));
     }
 }
