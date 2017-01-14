@@ -34,6 +34,7 @@ import org.brixcms.plugin.site.page.TemplateNode;
 import org.brixcms.web.ContainerFeedbackPanel;
 import org.brixcms.web.util.validators.NodeNameValidator;
 
+@SuppressWarnings("serial")
 public class CreatePageOrTemplatePanel extends NodeManagerPanel {
     private String name;
 

@@ -12,16 +12,20 @@
  * limitations under the License.
  */
 
-package org.brixcms.plugin.site.admin;
+package org.brixcms.web.tab;
 
 import java.util.List;
 
-import org.brixcms.web.tab.BrixTabbedPanel;
-import org.brixcms.web.tab.IBrixTab;
-
 @SuppressWarnings("serial")
-public class NodeManagerTabbedPanel extends BrixTabbedPanel {
-    public NodeManagerTabbedPanel(String id, List<IBrixTab> tabs) {
-        super(id, tabs);
+public class BrixCardPanel extends BrixTabbedPanel {
+
+    public BrixCardPanel(String id, List<IBrixTab> tabs) {
+        super(id, sort(tabs));
     }
+
+    @Override
+    protected String getTabContainerCssClass() {
+        return "brix-tab-row nav nav-tabs card-header-tabs";
+    }
+
 }

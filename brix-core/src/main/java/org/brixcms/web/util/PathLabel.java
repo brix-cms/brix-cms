@@ -55,9 +55,10 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
         while (true) {
             StringBuilder builder = new StringBuilder();
             writePath(current, builder, current.equals(getModelObject()));
-            if (b.length() > 0) {
-                b.prepend("&nbsp;/&nbsp;");
-            }
+            // bootstrap does this
+            // if (b.length() > 0) {
+            // b.prepend("&nbsp;/&nbsp;");
+            // }
             b.prepend(builder.toString());
             if (current.getDepth() == 0 || current.getPath().equals(rootPath)) {
                 break;
@@ -70,15 +71,17 @@ public abstract class PathLabel extends BrixGenericWebMarkupContainer<BrixNode> 
     }
 
     private void writePath(BrixNode node, StringBuilder builder, boolean last) {
-        builder.append("<a href=\"");
-        builder.append(createCallbackUrl(node.getPath()));
-        builder.append("\"><span");
         if (last) {
-            builder.append(" class=\"brix-node-path-last\"");
+            builder.append("<span class=\"breadcrumb-item active\">");
+            builder.append(node.getUserVisibleName());
+            builder.append("</span>");
+        }else{
+            builder.append("<a class=\"breadcrumb-item\" href=\"");
+            builder.append(createCallbackUrl(node.getPath()));
+            builder.append("\">");
+            builder.append(node.getUserVisibleName());
+            builder.append("</a>");
         }
-        builder.append(">");
-        builder.append(node.getUserVisibleName());
-        builder.append("</span></a>");
     }
 
     private CharSequence createCallbackUrl(String subpath) {

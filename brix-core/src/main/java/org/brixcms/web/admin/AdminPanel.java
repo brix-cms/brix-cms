@@ -14,34 +14,31 @@
 
 package org.brixcms.web.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.brixcms.Brix;
 import org.brixcms.Plugin;
 import org.brixcms.auth.Action.Context;
+import org.brixcms.web.admin.res.AdminPanelResources;
 import org.brixcms.web.generic.BrixGenericPanel;
-import org.brixcms.web.tab.BrixTabbedPanel;
+import org.brixcms.web.tab.BrixNavbarPanel;
 import org.brixcms.web.tab.IBrixTab;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
 import org.brixcms.workspace.WorkspaceModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@SuppressWarnings("serial")
 public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderContributor {
-    private static final ResourceReference CSS = new CssResourceReference(AdminPanel.class,
-            "res/style.css");
 
-    private TabbedPanel tabbedPanel;
+    private TabbedPanel<IBrixTab> tabbedPanel;
     private final WebMarkupContainer container;
     private WebMarkupContainer noWorkspacesContainer;
 
@@ -49,6 +46,7 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
         super(id);
         setModel(new WorkspaceModel(workspace));
 
+        add(new AdminPanelResources());
         add(container = new WebMarkupContainer("container") {
             @Override
             public boolean isVisible() {
@@ -81,11 +79,6 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
         return Brix.get();
     }
 
-
-    public void renderHead(IHeaderResponse response) {
-        response.render(CssHeaderItem.forReference(CSS));
-    }
-
     private List<Workspace> getAvailableWorkspaces() {
         Brix brix = Brix.get();
         List<Workspace> workspaces = new ArrayList<Workspace>();
@@ -107,7 +100,7 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
     }
 
     @Override
-    protected void onBeforeRender() {
+    protected void onConfigure() {
         fixCurrentWorkspace();
 
         if (noWorkspacesContainer == null) {
@@ -118,10 +111,11 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
 
         if (tabbedPanel == null && container.determineVisibility()) {
             container.add(newWorkspaceSwitcher("switcher", getModel()));
+            container.add(new Image("logo", AdminPanelResources.LOGO));
             setupTabbedPanel();
         }
 
-        super.onBeforeRender();
+        super.onConfigure();
     }
 
     private void fixCurrentWorkspace() {
@@ -169,12 +163,7 @@ public class AdminPanel extends BrixGenericPanel<Workspace> implements IHeaderCo
             }
         }
 
-        tabbedPanel = new BrixTabbedPanel("tabbedPanel", tabs) {
-            @Override
-            protected String getTabContainerCssClass() {
-                return "brix-plugins-tabbed-panel-row";
-            }
-        };
+        tabbedPanel = new BrixNavbarPanel("tabbedPanel", tabs);
         container.add(tabbedPanel);
     }
 }

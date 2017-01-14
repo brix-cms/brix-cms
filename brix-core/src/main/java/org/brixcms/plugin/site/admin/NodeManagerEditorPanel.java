@@ -14,6 +14,13 @@
 
 package org.brixcms.plugin.site.admin;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.jcr.ReferentialIntegrityException;
+
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.link.Link;
@@ -27,15 +34,11 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.ManageNodeTabFactory;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.generic.BrixGenericPanel;
+import org.brixcms.web.tab.BrixTabbedPanel;
 import org.brixcms.web.tab.IBrixTab;
 import org.brixcms.web.util.PathLabel;
 
-import javax.jcr.ReferentialIntegrityException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
+@SuppressWarnings("serial")
 public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode> {
     public NodeManagerEditorPanel(String id, IModel<BrixNode> model) {
         super(id, model);
@@ -134,7 +137,7 @@ public class NodeManagerEditorPanel extends BrixGenericPanel<BrixNode> {
 
         add(new SessionFeedbackPanel("sessionFeedback"));
 
-        add(new NodeManagerTabbedPanel("tabbedPanel", getTabs(getModel())));
+        add(new BrixTabbedPanel("tabbedPanel", getTabs(getModel())));
     }
 
     private void selectNode(BrixNode node, boolean refresh) {

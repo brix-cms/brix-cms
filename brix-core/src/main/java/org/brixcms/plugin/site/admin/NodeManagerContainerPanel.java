@@ -147,18 +147,12 @@ public class NodeManagerContainerPanel extends NodeManagerPanel implements NodeT
                         if (plugin.getNodeType().equals(editorNodeType)) {
                             CharSequence klass = tag.getAttribute("class");
                             if (klass == null) {
-                                klass = "selected";
+                                klass = "active";
                             } else {
-                                klass = klass + " selected";
+                                klass = klass + " active";
                             }
                             tag.put("class", klass);
                         }
-                    }
-                });
-                item.add(new WebMarkupContainer("separator") {
-                    @Override
-                    public boolean isVisible() {
-                        return item.getIndex() != createNodesModel.getObject().size() - 1;
                     }
                 });
                 IModel<BrixNode> parent = getNewNodeParent();
