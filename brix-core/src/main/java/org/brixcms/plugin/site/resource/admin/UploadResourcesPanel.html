@@ -5,8 +5,8 @@
 	<div class="container">
 		<form wicket:id="form">
 		    <div class="form-group row">
-		      <label class="col-sm-4"><wicket:message key="overwriteExistingFiles" /></label>
-		      <div class="col-sm-8">
+		      <label class="col-sm-2"><wicket:message key="overwriteExistingFiles" /></label>
+		      <div class="col-sm-10">
 		        <div class="form-check">
 		          <label class="form-check-label">
 		          	<input class="form-check-input" wicket:id="overwrite" type="checkbox" id="brix-upload-overwrite" />
@@ -15,7 +15,7 @@
 		      </div>
 		    </div>
 			<div class="form-group row">
-				<div class="offset-sm-4 col-sm-8">
+				<div class="offset-sm-2 col-sm-10">
 					<div wicket:id="uploads" class="brix-site-upload-resources"></div>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 				<div wicket:id="feedback" class="brix-feedback"></div>
 			</div>
 			<div class="form-group row">
-				<div class="offset-sm-4 col-sm-8">
+				<div class="offset-sm-2 col-sm-10">
 					<a class="btn btn-secondary" wicket:id="cancel" href="#"> 
 						<wicket:message key="cancel" />
 					</a>

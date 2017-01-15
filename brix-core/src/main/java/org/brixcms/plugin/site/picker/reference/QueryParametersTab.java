@@ -38,7 +38,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
 import org.apache.wicket.util.string.StringValue;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.web.util.DisabledClassAppender;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
@@ -58,7 +60,7 @@ public abstract class QueryParametersTab extends Panel {
         super(id);
         setOutputMarkupId(true);
 
-        final FeedbackPanel feedback = new FeedbackPanel("feedback");
+        final FeedbackPanel feedback = new BrixFeedbackPanel("feedback");
         feedback.setOutputMarkupId(true);
         add(feedback);
 
@@ -149,6 +151,7 @@ public abstract class QueryParametersTab extends Panel {
                 return !grid.getSelectedItems().isEmpty();
             }
         });
+        removeSelected.add(new DisabledClassAppender());
     }
 
     protected abstract BrixPageParameters getPageParameters();

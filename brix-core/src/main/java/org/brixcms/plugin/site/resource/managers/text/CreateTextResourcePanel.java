@@ -18,7 +18,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -30,6 +29,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.jcr.wrapper.ResourceNode;
 import org.brixcms.plugin.site.SimpleCallback;
 import org.brixcms.plugin.site.SitePlugin;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
 import org.brixcms.web.util.validators.NodeNameValidator;
@@ -40,7 +40,7 @@ public class CreateTextResourcePanel extends BrixGenericPanel<BrixNode> {
     public CreateTextResourcePanel(String id, IModel<BrixNode> container, final SimpleCallback back) {
         super(id, container);
 
-        add(new FeedbackPanel("feedback"));
+        add(new BrixFeedbackPanel("feedback"));
 
         Form<?> form = new Form<Void>("form");
         add(form);

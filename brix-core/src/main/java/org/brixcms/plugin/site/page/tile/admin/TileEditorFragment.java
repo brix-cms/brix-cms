@@ -20,13 +20,13 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.brixcms.Brix;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.AbstractContainer;
 import org.brixcms.plugin.site.page.tile.Tile;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.IGenericComponent;
 
 public abstract class TileEditorFragment extends Fragment implements IGenericComponent<BrixNode> {
@@ -37,7 +37,7 @@ public abstract class TileEditorFragment extends Fragment implements IGenericCom
         final Form<Void> form = new Form<Void>("form");
         add(form);
 
-        form.add(new FeedbackPanel("feedback", filterFeedback ? new ContainerFeedbackMessageFilter(form) : null));
+        form.add(new BrixFeedbackPanel("feedback", filterFeedback ? new ContainerFeedbackMessageFilter(form) : null));
 
         Brix brix = nodeModel.getObject().getBrix();
         final String tileClassName = getTileContainerNode().tiles().getTileClassName(tileId);

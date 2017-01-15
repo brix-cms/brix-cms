@@ -1,3 +1,7 @@
+div.wicket-modal h3.w_captionText {
+	font-size: 1.2rem;
+}
+
 div.brix-admin {
 	margin-bottom: 3em;
 }
@@ -68,43 +72,351 @@ div.brix-admin div.brix-site-view-text-container div {
 }
 
 div.brix-admin table.brix-site-tile-container {
-    margin-top: 0.8em;
+	margin-top: 0.8em;
 }
 
 div.brix-admin td.brix-site-tile-selector {
-    padding-top: 1em;
-    border-right: 1px solid #7894BB;
-    white-space: nowrap;
+	padding-top: 1em;
+	border-right: 1px solid #7894BB;
+	white-space: nowrap;
 }
 
 div.brix-admin td.brix-site-tile-selector ul {
-    border-top: 1px solid #e0e0e0;
-    list-style: none;
+	border-top: 1px solid #e0e0e0;
+	list-style: none;
+	padding-left: 0px;
+	margin-left: 0px;
 }
 
 div.brix-admin td.brix-site-tile-selector li a {
-    display: block;
-    padding: 4px;
-    padding-right: 1em;
-    border-bottom: 1px solid #e0e0e0;
-    border-left: 1px solid #e0e0e0;
+	display: block;
+	padding: 4px;
+	padding-right: 1em;
+	border-bottom: 1px solid #e0e0e0;
+	border-left: 1px solid #e0e0e0;
 }
 
-div.brix-admin td.brix-site-tile-selector li > a:hover {
-    background-color: #eee;
+div.brix-admin td.brix-site-tile-selector li>a:hover {
+	background-color: #eee;
 }
 
 div.brix-admin td.brix-site-tile-selector li.selected a {
-    background-color: #7894BB;
-    border-left-color: #63819F;
-    border-bottom-color: #63819F;
-    color: white;
+	background-color: #7894BB;
+	border-left-color: #63819F;
+	border-bottom-color: #63819F;
+	color: white;
 }
 
 div.brix-admin td.brix-site-tile-editor {
+	border-top: 1px solid #7894BB;
+	border-bottom: 1px solid #7894BB;
+	border-right: 1px solid #7894BB;
+	padding: 0.7em;
+	width: 100%;
+}
+/**
+ * Menu Plugin
+ */
+div.brix-admin table.brix-menu-container {
+	margin-top: 0.8em;
+}
+
+div.brix-admin td.brix-menu-selector {
+	border-right: 1px solid #7894BB;
+	white-space: nowrap;
+	vertical-align: top;
+}
+
+div.brix-admin td.brix-menu-selector ul {
+	border-top: 1px solid #e0e0e0;
+	margin-top: 1em;
+	list-style: none;
+	padding-left: 0px;
+	margin-left: 0px;
+}
+
+div.brix-admin td.brix-menu-selector li {
+	border-bottom: 1px solid #e0e0e0;
+}
+
+div.brix-admin td.brix-menu-selector li a {
+	display: block;
+	padding: 4px;
+	padding-right: 1em;
+	border-left: 1px solid #e0e0e0;
+}
+
+div.brix-admin td.brix-menu-selector li>a:hover {
+	background-color: #eee;
+}
+
+div.brix-admin td.brix-menu-selector li span {
+	display: block;
+}
+
+div.brix-admin td.brix-menu-selector li span em {
+	background-color: #7894BB;
+	border-left: 1px solid #e0e0e0;
+	padding: 4px;
+	padding-right: 1em;
+	color: white;
+	display: block;
+}
+
+div.brix-admin td.brix-menu-editor {
+	border-top: 1px solid #7894BB;
+	border-bottom: 1px solid #7894BB;
+	border-right: 1px solid #7894BB;
+	padding: 0.7em;
+	width: 100%;
+}
+
+div.brix-admin div.brix-menu-editor-panel {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+div.brix-admin table.brix-menu-editor {
+	width: 100%;
+	table-layout: fixed;
+}
+
+div.brix-admin div.brix-menu-editor-tree {
+	border: 1px solid #ccc;
+	overflow: auto;
+	height: 24em;
+	margin-bottom: 0.5em;
+	min-width: 24em;
+}
+
+div.brix-admin div.brix-menu-editor-tree span {
+	white-space: nowrap;
+}
+
+div.brix-admin table.brix-menu-container div.brix-feedback ul {
+	margin-bottom: 0.5em;
+}
+
+td.brix-menu-editor-tree table.wicket-tree-content {
+	width: 100%;
+}
+
+div.brix-admin td.brix-menu-editor-form {
+	vertical-align: top;
+}
+
+div.brix-admin div.brix-menu-tile-menu-list {
+	width: 12em;
+}
+
+div.brix-admin div.brix-menu-tile-menu-list a {
+	color: blue;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+div.brix-admin div.brix-menu-tile-menu-list em {
+	background-color: #eee;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+div.brix-admin div.brix-menu-tile-editor span.menu-tile-editor-hint {
+	font-size: 85%;
+	white-space: nowrap;
+	color: #666;
+}
+/*
+* Node Picker, Reference editor
+*/
+div.brix-admin div.brix-reference-editor-container {
+    margin-top: 0.8em;
+}
+
+div.brix-admin div.brix-reference-editor-buttons {
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+
+div.brix-admin div.brix-reference-editor-node-url-tab {
+    margin: 1em;
+    margin-bottom: 0em;
+}
+
+div.brix-admin div.brix-reference-editor-node-url-tab-type {
+    margin-bottom: 1em;
+}
+
+div.brix-admin div.brix-reference-editor-node-url-tab-nodepicker {
+    margin-bottom: 1em;
+}
+
+div.brix-admin input.brix-reference-editor-node-url-tab-url {
+    width: 30em;
+}
+
+div.brix-admin div.brix-reference-editor-parameters-tab {
+    margin: 1em;
+}
+
+div.brix-admin div.brix-reference-editor-parameters-add {
+    overflow: hidden;
+    margin-bottom: 1em;
+}
+
+div.brix-admin div.brix-reference-editor-parameters-add span {
+    float: left;
+    margin-right: 0.5em;
+    margin-top: 0.4em;
+    font-weight: bold;
+}
+
+div.brix-admin div.brix-reference-editor-parameters-add input {
+    float: left;
+    margin-right: 1.5em;
+    margin-top: 0.2em;
+    width: 10em;
+}
+
+div.brix-admin div.brix-reference-editor-parameters-tab div.brix-buttons-left {
+    position: absolute;
+    margin-top: 1em;
+}
+
+div.brix-admin div.brix-reference-editor-parameters-tab div.brix-feedback ul {
+    margin-bottom: 1em;
+}
+
+div.brix-admin div.brix-reference-editor-panel {
+    white-space: nowrap;
+}
+
+div.brix-admin span.brix-reference-editor-panel-label {
+    vertical-align: top;
+    margin-top: 0.15em;
+    display: inline-block;
+    margin-right: 0.4em;
+}
+
+div.brix-admin div.brix-node-picker-with-buttons-container {
+    margin: 1em;
+}
+
+div.brix-admin div.brix-node-picker-with-buttons-container div.brix-buttons-right {
+    margin-top: 1em;
+}
+/**
+ * Prototypes
+ */
+
+div.brix-admin div.brix-prototypes-container {
+    overflow: hidden;
+}
+
+div.brix-admin div.brix-prototypes-container1 {
+    margin-top: 0.7em;
     border-top: 1px solid #7894BB;
     border-bottom: 1px solid #7894BB;
-    border-right: 1px solid #7894BB;
-    padding: 0.7em;
-    width: 100%;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    float: left;
+}
+
+div.brix-admin div.brix-prototypes-container td {
+    vertical-align: top;
+    padding: 5px;
+}
+
+div.brix-admin div.brix-prototypes-caption {
+    font-weight: bold;
+    padding-bottom: 0.2em;
+}
+
+div.brix-admin div.brix-prototypes-item {
+    border-top: 1px dotted #aaa;
+    padding: 0.3em;
+    background-color: #f9f9f9;
+}
+
+div.brix-admin div.brix-prototypes-item div.brix-buttons-left {
+    margin-top: 0.3em;
+}
+
+div.brix-admin div.brix-prototypes-container td.brix-prototypes-actions {
+    border-left: 1px solid #ddd;
+    padding-bottom: 0px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+div.brix-admin div.brix-prototypes-action {
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #eee;
+    padding-top: 0.3em;
+    margin-bottom: 0.2em;
+}
+
+div.brix-admin div.brix-prototypes-action form input {
+    margin-top: 0.5em;
+}
+
+div.brix-admin div.brix-prototypes-action form a.brix-button {
+    margin-top: 0.4em;
+}
+
+div.brix-admin div.brix-publishing-container {
+    margin-top: 0.7em;
+}
+/**
+ * Snapshots
+ */
+div.brix-admin div.brix-snapshots-container {
+    overflow: hidden;
+}
+
+div.brix-admin div.brix-snapshots-container1 {
+    margin-top: 0.7em;
+    border-top: 1px solid #7894BB;
+    border-bottom: 1px solid #7894BB;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    float: left;
+}
+
+div.brix-admin div.brix-snapshots-container td {
+    vertical-align: top;
+    padding: 5px;
+}
+
+div.brix-admin div.brix-snapshots-caption {
+    font-weight: bold;
+    padding-bottom: 0.2em;
+}
+
+div.brix-admin div.brix-snapshots-item {
+    border-top: 1px dotted #aaa;
+    padding: 0.3em;
+    background-color: #f9f9f9;
+}
+
+div.brix-admin div.brix-snapshots-item div.brix-buttons-left {
+    margin-top: 0.3em;
+}
+
+div.brix-admin div.brix-snapshots-container td.brix-snapshots-actions {
+    border-left: 1px solid #ddd;
+    padding-bottom: 0px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+div.brix-admin div.brix-snapshots-action {
+    padding-bottom: 0.5em;
+    border-bottom: 1px solid #eee;
+    padding-top: 0.3em;
+    margin-bottom: 0.2em;
+}
+
+div.brix-admin div.brix-snapshots-action form a.brix-button {
+    margin-top: 0.4em;
 }

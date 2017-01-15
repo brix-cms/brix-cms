@@ -32,7 +32,6 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -47,6 +46,7 @@ import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.snapshot.auth.CreateSnapshotAction;
 import org.brixcms.plugin.snapshot.auth.DeleteSnapshotAction;
 import org.brixcms.plugin.snapshot.auth.RestoreSnapshotAction;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
@@ -55,7 +55,7 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
     public ManageSnapshotsPanel(String id, final IModel<Workspace> model) {
         super(id, model);
 
-        add(new FeedbackPanel("feedback"));
+        add(new BrixFeedbackPanel("feedback"));
 
         IModel<List<Workspace>> snapshotsModel = new LoadableDetachableModel<List<Workspace>>() {
             @Override

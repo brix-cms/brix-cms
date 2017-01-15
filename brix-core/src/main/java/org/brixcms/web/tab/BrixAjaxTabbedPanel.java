@@ -14,7 +14,9 @@
 
 package org.brixcms.web.tab;
 
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 
 import java.util.List;
 
@@ -25,6 +27,20 @@ public class BrixAjaxTabbedPanel extends AjaxTabbedPanel {
 
     @Override
     protected String getTabContainerCssClass() {
-        return "brix-tab-row";
+        return "nav nav-tabs";
+    }
+
+    @Override
+    protected String getSelectedTabCssClass() {
+        return "active";
+    }
+
+    @Override
+    protected WebMarkupContainer newLink(final String linkId, final int index) {
+        WebMarkupContainer link = super.newLink(linkId, index);
+        if (index == getSelectedTab()) {
+            link.add(new AttributeAppender("class", getSelectedTabCssClass(), " "));
+        }
+        return link;
     }
 }

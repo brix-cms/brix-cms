@@ -36,8 +36,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.web.util.DisabledClassAppender;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
@@ -58,7 +60,7 @@ public abstract class IndexedParametersTab extends Panel {
 
         setOutputMarkupId(true);
 
-        final FeedbackPanel feedback = new FeedbackPanel("feedback");
+        final FeedbackPanel feedback = new BrixFeedbackPanel("feedback");
         feedback.setOutputMarkupId(true);
         add(feedback);
 
@@ -158,6 +160,7 @@ public abstract class IndexedParametersTab extends Panel {
                 return !grid.getSelectedItems().isEmpty();
             }
         });
+        removeSelected.add(new DisabledClassAppender());
     }
 
     protected abstract BrixPageParameters getPageParameters();
@@ -178,7 +181,7 @@ public abstract class IndexedParametersTab extends Panel {
                     getGrid().markAllItemsDirty();
                     getGrid().update();
                 }
-            });
+            }.add(new DisabledClassAppender()));
 
             add(new AjaxLink<Void>("down") {
                 @Override
@@ -192,7 +195,7 @@ public abstract class IndexedParametersTab extends Panel {
                     getGrid().markAllItemsDirty();
                     getGrid().update();
                 }
-            });
+            }.add(new DisabledClassAppender()));
         }
 
         private Entry getEntry() {

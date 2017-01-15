@@ -42,6 +42,7 @@ import org.brixcms.auth.Action.Context;
 import org.brixcms.plugin.prototype.auth.CreatePrototypeAction;
 import org.brixcms.plugin.prototype.auth.DeletePrototypeAction;
 import org.brixcms.plugin.prototype.auth.RestorePrototypeAction;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
@@ -67,7 +68,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
         final ModalWindow modalWindow = new ModalWindow("modalWindow");
         modalWindow.setInitialWidth(64);
         modalWindow.setWidthUnit("em");
-        modalWindow.setUseInitialHeight(false);
+        modalWindow.setUseInitialHeight(true);
         modalWindow.setResizable(false);
         modalWindow.setTitle(new ResourceModel("selectItems"));
         modalWindowForm.add(modalWindow);
@@ -143,7 +144,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
 
         final FeedbackPanel feedback;
 
-        add(feedback = new FeedbackPanel("feedback"));
+        add(feedback = new BrixFeedbackPanel("feedback"));
         feedback.setOutputMarkupId(true);
 
         form.add(new AjaxButton("submit") {
