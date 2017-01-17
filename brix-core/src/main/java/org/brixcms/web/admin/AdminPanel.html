@@ -1,23 +1,21 @@
-<wicket:head>
-    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
-</wicket:head>
-<wicket:panel>
-
-    <div style="margin: 1em; border: 0px solid gray">
-
-        <wicket:container wicket:id="container">
-            <div class="brix-admin">
-                <div wicket:id="switcher"></div>
-
-                <div wicket:id="tabbedPanel" class="brix-plugins-tabbed-panel">
-                </div>
-            </div>
-        </wicket:container>
-        <wicket:container wicket:id="no-workspaces">
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket>
+<body>
+	<wicket:panel>
+		<div class="container-fluid">
+			<wicket:container wicket:id="container">
+				<div class="brix-admin">
+					<div class="clearfix">
+						<img class="float-left logo-img" alt="Brix CMS" wicket:id="logo"></img>
+						<div wicket:id="switcher"></div>
+					</div>
+					<wicket:container wicket:id="tabbedPanel"></wicket:container>
+				</div>
+			</wicket:container>
+			<wicket:container wicket:id="no-workspaces">
             No workspaces are available
         </wicket:container>
-        <br/>
-
-    </div>
-
-</wicket:panel>
+		</div>
+	</wicket:panel>
+</body>
+</html>

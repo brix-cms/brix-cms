@@ -18,7 +18,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
@@ -26,6 +25,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
@@ -65,7 +65,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        form.add(new FeedbackPanel("feedback"));
+        form.add(new BrixFeedbackPanel("feedback"));
 
         add(form);
     }

@@ -30,6 +30,7 @@ import org.brixcms.plugin.menu.Menu.ChildEntry;
 import org.brixcms.plugin.menu.editor.cell.SwitcherColumn;
 import org.brixcms.plugin.site.picker.reference.ReferenceEditorConfiguration;
 import org.brixcms.web.generic.BrixGenericPanel;
+import org.brixcms.web.util.DisabledClassAppender;
 
 import com.inmethod.grid.IGridColumn;
 import com.inmethod.grid.SizeUnit;
@@ -131,7 +132,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             public boolean isEnabled() {
                 return !getSelected().equals(treeModel.getRoot());
             }
-        });
+        }.add(new DisabledClassAppender()));
 
         links.add(new AjaxLink<Void>("remove") {
             @Override
@@ -160,7 +161,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             public boolean isEnabled() {
                 return getSelected() != treeModel.getRoot();
             }
-        });
+        }.add(new DisabledClassAppender()));
 
         links.add(new AjaxLink<Void>("moveUp") {
             @Override
@@ -188,7 +189,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
             public boolean isEnabled() {
                 return getIndex(getSelected()) > 0;
             }
-        });
+        }.add(new DisabledClassAppender()));
 
         links.add(new AjaxLink<Void>("moveDown") {
             @Override
@@ -217,7 +218,7 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                 MenuTreeNode parent = (MenuTreeNode) tree.getParentNode(getSelected());
                 return parent != null && index < parent.getChildren().size() - 1;
             }
-        });
+        }.add(new DisabledClassAppender()));
 
         add(links);
 

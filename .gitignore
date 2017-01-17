@@ -8,3 +8,5 @@ derby.log
 **.project
 **.classpath
 **.settings/
+**.DS_Store
+**.tern-project

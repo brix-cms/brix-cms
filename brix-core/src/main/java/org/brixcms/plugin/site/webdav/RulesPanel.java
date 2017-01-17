@@ -24,7 +24,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -33,7 +32,9 @@ import org.brixcms.Brix;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.webdav.Rule.Type;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
+import org.brixcms.web.util.DisabledClassAppender;
 import org.brixcms.workspace.Workspace;
 
 import com.inmethod.grid.IDataSource;
@@ -55,7 +56,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
     public RulesPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, new RulesNodeModel(workspaceModel));
 
-        add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
+        add(feedback = new BrixFeedbackPanel("feedback").setOutputMarkupId(true));
 
         List<IGridColumn<DataSource, Rule, String>> columns = new ArrayList<IGridColumn<DataSource, Rule, String>>();
 
@@ -99,6 +100,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
                 dataGrid.update();
             }
         });
+        removeSelected.add(new DisabledClassAppender());
         removeSelected.setOutputMarkupId(true);
 
         add(new AjaxLink<Void>("add") {

@@ -43,7 +43,9 @@ import org.apache.wicket.validation.ValidationError;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.AbstractContainer;
 import org.brixcms.plugin.site.page.global.GlobalContainerNode;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
+import org.brixcms.web.util.DisabledClassAppender;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
@@ -119,6 +121,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                 return grid.getSelectedItems().isEmpty() == false;
             }
         });
+        delete.add(new DisabledClassAppender());
         delete.setOutputMarkupId(true);
 
         add(new InsertForm("form") {
@@ -129,7 +132,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        add(new FeedbackPanel("feedback").setOutputMarkupId(true));
+        add(new BrixFeedbackPanel("feedback").setOutputMarkupId(true));
     }
 
     private class DataSource implements IDataSource<Entry>, Serializable {

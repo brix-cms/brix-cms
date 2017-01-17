@@ -14,25 +14,28 @@
 
 package org.brixcms.web.tab;
 
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class BrixTabbedPanel extends TabbedPanel {
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+
+@SuppressWarnings("serial")
+public class BrixTabbedPanel extends TabbedPanel<IBrixTab> {
+
     public BrixTabbedPanel(String id, List<IBrixTab> tabs) {
         super(id, sort(tabs));
     }
 
-    static List<ITab> sort(List<IBrixTab> tabs) {
-        List<ITab> result = new ArrayList<ITab>();
+    static List<IBrixTab> sort(List<IBrixTab> tabs) {
+        List<IBrixTab> result = new ArrayList<IBrixTab>();
 
         result.addAll(tabs);
-        Collections.sort(result, new Comparator<ITab>() {
-            public int compare(ITab o1, ITab o2) {
+        Collections.sort(result, new Comparator<IBrixTab>() {
+            public int compare(IBrixTab o1, IBrixTab o2) {
                 IBrixTab t1 = (IBrixTab) o1;
                 IBrixTab t2 = (IBrixTab) o2;
 
@@ -45,6 +48,21 @@ public class BrixTabbedPanel extends TabbedPanel {
 
     @Override
     protected String getTabContainerCssClass() {
-        return "brix-tab-row";
+        return "nav nav-tabs";
     }
+
+    @Override
+    protected String getSelectedTabCssClass() {
+        return "active";
+    }
+
+    @Override
+    protected WebMarkupContainer newLink(final String linkId, final int index) {
+        WebMarkupContainer link = super.newLink(linkId, index);
+        if (index == getSelectedTab()) {
+            link.add(new AttributeAppender("class", getSelectedTabCssClass(), " "));
+        }
+        return link;
+    }
+
 }

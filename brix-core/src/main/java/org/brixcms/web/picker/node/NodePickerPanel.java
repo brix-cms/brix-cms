@@ -27,6 +27,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
+import org.brixcms.web.util.DisabledClassAppender;
 
 public class NodePickerPanel extends FormComponentPanel<BrixNode> {
     protected static final String MODAL_WINDOW_ID = "modalWindow";
@@ -130,7 +131,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
             public boolean isEnabled() {
                 return NodePickerPanel.this.getModelObject() != null;
             }
-        });
+        }.add(new DisabledClassAppender()));
     }
 
     protected Component newModalWindow(String id) {
