@@ -10,3 +10,4 @@ derby.log
 **.settings/
 **.DS_Store
 **.tern-project
+.idea/
