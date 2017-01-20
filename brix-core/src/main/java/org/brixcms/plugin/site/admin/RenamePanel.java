@@ -18,7 +18,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
@@ -26,10 +25,11 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 
 public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
-// ------------------------------ FIELDS ------------------------------
+    // ------------------------------ FIELDS ------------------------------
     ;
     private String newName;
 
@@ -40,8 +40,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
 
         newName = model.getObject().getName();
 
-        TextField<String> newName = new TextField<String>("newName", new PropertyModel<String>(
-                this, "newName"));
+        TextField<String> newName = new TextField<String>("newName", new PropertyModel<String>(this, "newName"));
         newName.setRequired(true);
         newName.add(new NewNameValidator());
         form.add(newName);
@@ -52,8 +51,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
                 JcrNode node = RenamePanel.this.getModelObject();
 
                 if (RenamePanel.this.newName.equals(node.getName()) == false) {
-                    node.getSession().move(node.getPath(),
-                            node.getParent().getPath() + "/" + RenamePanel.this.newName);
+                    node.getSession().move(node.getPath(), node.getParent().getPath() + "/" + RenamePanel.this.newName);
                     node.getSession().save();
                 }
                 onLeave();
@@ -67,7 +65,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        form.add(new FeedbackPanel("feedback"));
+        form.add(new BrixFeedbackPanel("feedback"));
 
         add(form);
     }
@@ -81,8 +79,7 @@ public abstract class RenamePanel extends BrixGenericPanel<BrixNode> {
             if (getModelObject().getName().equals(name) == false) {
                 JcrNode parent = getModelObject().getParent();
                 if (parent.hasNode(name)) {
-                    validatable.error(new ValidationError().addMessageKey("NewNameValidator")
-                            .setVariable("name", name));
+                    validatable.error(new ValidationError().addKey("NewNameValidator").setVariable("name", name));
                 }
             }
         }

@@ -111,9 +111,7 @@ public interface Tile {
         public static Tile getTileOfType(String type, Brix brix) {
             //hackish-fix for backward-compatibility required!!!
             //TODO: better solutions?
-            if (!type.equalsIgnoreCase("org.brixcms.web.tile.pagetile.PageTile")) {
-                type = type.replace("org.brixcms.", "brix.");
-            }
+            type = type.replace("org.brixcms.", "brix.");
 
             for (Tile t : getTiles(brix)) {
                 if (t.getTypeName().equals(type)) {

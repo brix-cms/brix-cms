@@ -27,7 +27,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.admin.PreviewNodeIFrame;
 import org.brixcms.web.generic.BrixGenericPanel;
-import org.brixcms.web.tab.BrixTabbedPanel;
+import org.brixcms.web.tab.BrixCardPanel;
 import org.brixcms.web.tab.CachingAbstractTab;
 import org.brixcms.web.tab.IBrixTab;
 
@@ -59,7 +59,7 @@ public class ViewTab extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        add(new BrixTabbedPanel("previewTabbedPanel", tabs));
+        add(new BrixCardPanel("previewTabbedPanel", tabs));
 
         add(new Link<Void>("edit") {
             @Override

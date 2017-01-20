@@ -1,9 +1,12 @@
 target
 *.*~
-.project
-.classpath
 derby.log
 *.*.orig
 *.ipr
 *.iml
 *.iws
+**.project
+**.classpath
+**.settings/
+**.DS_Store
+**.tern-project

@@ -14,21 +14,14 @@
 
 package org.brixcms.plugin.site.admin;
 
-import org.apache.wicket.markup.html.panel.Panel;
+import java.util.List;
+
 import org.brixcms.web.tab.BrixTabbedPanel;
 import org.brixcms.web.tab.IBrixTab;
 
-import java.util.List;
-
-public class NodeManagerTabbedPanel extends Panel {
+@SuppressWarnings("serial")
+public class NodeManagerTabbedPanel extends BrixTabbedPanel {
     public NodeManagerTabbedPanel(String id, List<IBrixTab> tabs) {
-        super(id);
-
-        add(new BrixTabbedPanel("tabbedPanel", tabs) {
-            @Override
-            protected String getTabContainerCssClass() {
-                return "brix-site-manager-tab-row";
-            }
-        });
+        super(id, tabs);
     }
 }

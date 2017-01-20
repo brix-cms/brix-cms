@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,8 +36,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.lang.Objects;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.nodepage.BrixPageParameters;
+import org.brixcms.web.util.DisabledClassAppender;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
@@ -57,27 +60,26 @@ public abstract class IndexedParametersTab extends Panel {
 
         setOutputMarkupId(true);
 
-        final FeedbackPanel feedback = new FeedbackPanel("feedback");
+        final FeedbackPanel feedback = new BrixFeedbackPanel("feedback");
         feedback.setOutputMarkupId(true);
         add(feedback);
 
-        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(this,
-                "newEntry")));
+        Form<Entry> newForm = new Form<Entry>("newForm", new CompoundPropertyModel<Entry>(new PropertyModel<Entry>(this, "newEntry")));
         add(newForm);
 
         newForm.add(new TextField<String>("value").setRequired(true));
         newForm.add(new AjaxButton("add") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmit(AjaxRequestTarget target) {
                 dataSource.addEntry(newEntry);
                 dataSource.storeToPageParameters();
-                target.addComponent(IndexedParametersTab.this);
+                target.add(IndexedParametersTab.this);
                 newEntry = new Entry();
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form form) {
-                target.addComponent(feedback);
+            protected void onError(AjaxRequestTarget target) {
+                target.add(feedback);
             }
         });
 
@@ -93,17 +95,15 @@ public abstract class IndexedParametersTab extends Panel {
 
         columns.add(new SubmitCancelColumn("submitCancel", new ResourceModel("edit")) {
             @Override
-            protected void onSubmitted(AjaxRequestTarget target, IModel rowModel,
-                                       WebMarkupContainer rowComponent) {
+            protected void onSubmitted(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
                 dataSource.storeToPageParameters();
                 super.onSubmitted(target, rowModel, rowComponent);
-                target.addComponent(feedback);
+                target.add(feedback);
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, IModel rowModel,
-                                   WebMarkupContainer rowComponent) {
-                target.addComponent(feedback);
+            protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
+                target.add(feedback);
             }
         });
 
@@ -123,9 +123,9 @@ public abstract class IndexedParametersTab extends Panel {
         final DataGrid grid = new DataGrid("grid", dataSource, columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
-                AjaxRequestTarget target = AjaxRequestTarget.get();
-                if (target != null) {
-                    target.addComponent(removeSelected);
+                Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+                if (target.isPresent()) {
+                    target.get().add(removeSelected);
                 }
                 super.onItemSelectionChanged(item, newValue);
             }
@@ -160,6 +160,7 @@ public abstract class IndexedParametersTab extends Panel {
                 return !grid.getSelectedItems().isEmpty();
             }
         });
+        removeSelected.add(new DisabledClassAppender());
     }
 
     protected abstract BrixPageParameters getPageParameters();
@@ -180,7 +181,7 @@ public abstract class IndexedParametersTab extends Panel {
                     getGrid().markAllItemsDirty();
                     getGrid().update();
                 }
-            });
+            }.add(new DisabledClassAppender()));
 
             add(new AjaxLink<Void>("down") {
                 @Override
@@ -194,7 +195,7 @@ public abstract class IndexedParametersTab extends Panel {
                     getGrid().markAllItemsDirty();
                     getGrid().update();
                 }
-            });
+            }.add(new DisabledClassAppender()));
         }
 
         private Entry getEntry() {

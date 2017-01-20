@@ -17,9 +17,9 @@ package org.brixcms.plugin.site.resource.managers.text;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.wrapper.BrixNode;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.model.ModelBuffer;
 
@@ -27,7 +27,7 @@ public abstract class EditTextResourcePanel extends BrixGenericPanel<BrixNode> {
     public EditTextResourcePanel(String id, IModel<BrixNode> node) {
         super(id, node);
 
-        add(new FeedbackPanel("feedback"));
+        add(new BrixFeedbackPanel("feedback"));
 
         Form<?> form = new Form<Void>("form");
         add(form);

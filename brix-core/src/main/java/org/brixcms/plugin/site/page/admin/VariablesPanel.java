@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -42,7 +43,9 @@ import org.apache.wicket.validation.ValidationError;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.page.AbstractContainer;
 import org.brixcms.plugin.site.page.global.GlobalContainerNode;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
+import org.brixcms.web.util.DisabledClassAppender;
 
 import com.inmethod.grid.IDataSource;
 import com.inmethod.grid.IGridColumn;
@@ -60,18 +63,18 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
     public VariablesPanel(String id, IModel<BrixNode> model) {
         super(id, model);
 
-        List<IGridColumn<DataSource, Entry>> columns = new ArrayList<IGridColumn<DataSource, Entry>>();
-        columns.add(new CheckBoxColumn<DataSource, Entry>("checkbox"));
-        columns.add(new PropertyColumn<DataSource, Entry, String>(new ResourceModel("key"), "key"));
-        columns.add(new EditablePropertyColumn<DataSource, Entry, String>(new ResourceModel("value"), "value") {
+        List<IGridColumn<DataSource, Entry, String>> columns = new ArrayList<IGridColumn<DataSource, Entry, String>>();
+        columns.add(new CheckBoxColumn<DataSource, Entry, String>("checkbox"));
+        columns.add(new PropertyColumn<DataSource, Entry, String, String>(new ResourceModel("key"), "key"));
+        columns.add(new EditablePropertyColumn<DataSource, Entry, String, String>(new ResourceModel("value"), "value") {
             @Override
-            protected void addValidators(FormComponent component) {
+            protected void addValidators(FormComponent<String> component) {
                 component.setRequired(true);
             }
         });
-        columns.add(new SubmitCancelColumn<DataSource, Entry>("submitcancel", new ResourceModel("edit")) {
+        columns.add(new SubmitCancelColumn<DataSource, Entry, String>("submitcancel", new ResourceModel("edit")) {
             @Override
-            protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
+            protected void onError(AjaxRequestTarget target, IModel<Entry> rowModel, WebMarkupContainer rowComponent) {
                 target.addChildren(VariablesPanel.this, FeedbackPanel.class);
             }
 
@@ -82,13 +85,13 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        final DataGrid<DataSource, Entry> grid = new DefaultDataGrid<DataSource, Entry>("grid", new Model<DataSource>(new DataSource()),
+        final DataGrid<DataSource, Entry, String> grid = new DefaultDataGrid<DataSource, Entry, String>("grid", Model.of(new DataSource()),
                 columns) {
             @Override
             public void onItemSelectionChanged(IModel<Entry> item, boolean newValue) {
-                AjaxRequestTarget target = AjaxRequestTarget.get();
-                if (target != null) {
-                    target.addComponent(delete);
+                Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+                if (target.isPresent()) {
+                    target.get().add(delete);
                 }
                 super.onItemSelectionChanged(item, newValue);
             }
@@ -102,15 +105,15 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
-                for (IModel<?> m : grid.getSelectedItems()) {
-                    Entry e = (Entry) m.getObject();
+                for (IModel<Entry> m : grid.getSelectedItems()) {
+                    Entry e = m.getObject();
                     node.setVariableValue(e.getKey(), null);
                 }
                 node.save();
                 grid.markAllItemsDirty();
                 grid.update();
                 grid.resetSelectedItems();
-                target.addComponent(this);
+                target.add(this);
             }
 
             @Override
@@ -118,6 +121,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                 return grid.getSelectedItems().isEmpty() == false;
             }
         });
+        delete.add(new DisabledClassAppender());
         delete.setOutputMarkupId(true);
 
         add(new InsertForm("form") {
@@ -128,12 +132,12 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             }
         });
 
-        add(new FeedbackPanel("feedback").setOutputMarkupId(true));
+        add(new BrixFeedbackPanel("feedback").setOutputMarkupId(true));
     }
 
-    private class DataSource implements IDataSource<Entry> {
+    private class DataSource implements IDataSource<Entry>, Serializable {
         public IModel<Entry> model(Entry object) {
-            return new Model<Entry>(object);
+            return Model.of(object);
         }
 
         public void query(IQuery query, IQueryResult<Entry> result) {
@@ -149,7 +153,7 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             });
             int total = res.size();
             if (total > query.getFrom()) {
-                res = res.subList(query.getFrom(), total);
+                res = res.subList((int) query.getFrom(), total);
             }
             result.setItems(res.iterator());
             result.setTotalCount(total);
@@ -227,13 +231,13 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
             });
             keySuggestions.setNullValid(true);
 
-            keySuggestions.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            keySuggestions.add(new AjaxFormComponentUpdatingBehavior("change") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     tf.setModelObject(keySuggestions.getModelObject());
                     keySuggestions.setModelObject(null);
-                    target.addComponent(tf);
-                    target.addComponent(keySuggestions);
+                    target.add(tf);
+                    target.add(keySuggestions);
                     target.focusComponent(tf);
                 }
             });
@@ -242,26 +246,26 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
 
             add(new AjaxButton("submit") {
                 @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                protected void onSubmit(AjaxRequestTarget target) {
                     AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
                     node.setVariableValue(key, value);
                     node.save();
                     onItemAdded();
                     key = null;
                     value = null;
-                    target.addComponent(form);
+                    target.add(InsertForm.this);
                     target.addChildren(findParent(VariablesPanel.class), FeedbackPanel.class);
                 }
 
                 @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                protected void onError(AjaxRequestTarget target) {
                     target.addChildren(findParent(VariablesPanel.class), FeedbackPanel.class);
                 }
             });
 
             tf.add(new IValidator<String>() {
-                public void validate(IValidatable validatable) {
-                    String key = (String) validatable.getValue();
+                public void validate(IValidatable<String> validatable) {
+                    String key = validatable.getValue();
 
                     AbstractContainer node = (AbstractContainer) VariablesPanel.this.getModelObject();
 
@@ -272,8 +276,8 @@ public class VariablesPanel extends BrixGenericPanel<BrixNode> {
                     }
                 }
 
-                private void report(IValidatable validatable, String messageKey, String key) {
-                    validatable.error(new ValidationError().addMessageKey(messageKey).setVariable("key", key));
+                private void report(IValidatable<String> validatable, String messageKey, String key) {
+                    validatable.error(new ValidationError().addKey(messageKey).setVariable("key", key));
                 }
             });
         }

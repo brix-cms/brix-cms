@@ -27,6 +27,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.web.tree.JcrTreeNode;
 import org.brixcms.web.tree.NodeFilter;
+import org.brixcms.web.util.DisabledClassAppender;
 
 public class NodePickerPanel extends FormComponentPanel<BrixNode> {
     protected static final String MODAL_WINDOW_ID = "modalWindow";
@@ -110,7 +111,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
                 getModalWindow().setModel(NodePickerPanel.this.getModel());
                 getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
                     public void onClose(AjaxRequestTarget target) {
-                        target.addComponent(NodePickerPanel.this);
+                        target.add(NodePickerPanel.this);
                         NodePickerPanel.this.onUpdate(target);
                     }
                 });
@@ -122,7 +123,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 NodePickerPanel.this.setModelObject(null);
-                target.addComponent(NodePickerPanel.this);
+                target.add(NodePickerPanel.this);
                 NodePickerPanel.this.onUpdate(target);
             }
 
@@ -130,7 +131,7 @@ public class NodePickerPanel extends FormComponentPanel<BrixNode> {
             public boolean isEnabled() {
                 return NodePickerPanel.this.getModelObject() != null;
             }
-        });
+        }.add(new DisabledClassAppender()));
     }
 
     protected Component newModalWindow(String id) {

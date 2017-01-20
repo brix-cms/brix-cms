@@ -28,18 +28,12 @@ import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.admin.ManageTileNodeTabFactory;
 import org.brixcms.plugin.site.resource.ResourceNodePlugin;
-import org.brixcms.web.nodepage.BrixNodePageUrlMapper;
+import org.brixcms.web.nodepage.BrixNodePageRequestHandler;
+import org.brixcms.web.nodepage.BrixNodePageRequestHandler.PageFactory;
 import org.brixcms.web.nodepage.BrixNodeWebPage;
 import org.brixcms.web.nodepage.BrixPageParameters;
 
 public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
-    private final BrixNodePageUrlMapper urlMapper = new BrixNodePageUrlMapper() {
-        @Override
-        protected BrixNodeWebPage newPageInstance(IModel<BrixNode> nodeModel,
-                                                  BrixPageParameters pageParameters) {
-            return new PageRenderingPage(nodeModel, pageParameters);
-        }
-    };
 
     public AbstractSitePagePlugin(SitePlugin sitePlugin) {
         registerManageNodeTabFactory(sitePlugin);
@@ -60,24 +54,29 @@ public abstract class AbstractSitePagePlugin implements SiteNodePlugin {
         }
     }
 
-
     public abstract String getNodeType();
 
-
     public IRequestHandler respond(IModel<BrixNode> nodeModel, BrixPageParameters pageParameters) {
-        return urlMapper.decode(pageParameters, nodeModel);
+        PageFactory factory = new PageFactory() {
+            public BrixNodeWebPage newPage() {
+                return new PageRenderingPage(nodeModel, pageParameters);
+            }
+
+            public BrixPageParameters getPageParameters() {
+                return pageParameters;
+            }
+        };
+        return new BrixNodePageRequestHandler(nodeModel, factory);
     }
 
-    public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode,
-                                             SimpleCallback goBack);
+    public abstract Panel newCreateNodePanel(String id, IModel<BrixNode> parentNode, SimpleCallback goBack);
 
     public NodeConverter getConverterForNode(BrixNode node) {
         if (node instanceof BrixFileNode) {
             BrixFileNode fileNode = (BrixFileNode) node;
             if (ResourceNodePlugin.TYPE.equals(fileNode.getNodeType())) {
                 String mimeType = fileNode.getMimeType();
-                if (mimeType != null &&
-                        (mimeType.startsWith("text/") || mimeType.equals("application/xml"))) {
+                if (mimeType != null && (mimeType.startsWith("text/") || mimeType.equals("application/xml"))) {
                     return new FromResourceConverter(getNodeType());
                 }
             }

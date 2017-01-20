@@ -1,21 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
 <wicket:panel>
 
-    <div class="brix-site-edit-node-top">
-        <div class="brix-node-path">
-            <div wicket:id="path2"></div>
-        </div>
+    <div class="brix-site-edit-node-top clearfix">
+        <nav class="breadcrumb brix-node-path">
+            <div class="float-left" wicket:id="path2"></div>
 
-        <div class="brix-buttons">
-            <a wicket:id="rename">
-                <wicket:message key="rename"/>
-            </a>
-            <a wicket:id="makeVersionable">
-                <wicket:message key="makeVersionable"/>
-            </a>
-            <a wicket:id="delete" onclick="return confirm('Are you sure?');">
-                <wicket:message key="delete"/>
-            </a>
-        </div>
+	        <div class="float-right brix-buttons">
+	            <a class="btn btn-outline-primary btn-sm" wicket:id="rename">
+	                <wicket:message key="rename"/>
+	            </a>
+	            <a class="btn btn-outline-primary btn-sm" wicket:id="makeVersionable">
+	                <wicket:message key="makeVersionable"/>
+	            </a>
+	            <a class="btn btn-outline-danger btn-sm" wicket:id="delete" onclick="return confirm('Are you sure?');">
+	                <wicket:message key="delete"/>
+	            </a>
+	        </div>
+        </nav>
     </div>
 
     <div wicket:id="sessionFeedback" class="brix-site-session-feedback"></div>
@@ -23,3 +26,5 @@
     <div wicket:id="tabbedPanel">
     </div>
 </wicket:panel>
+</body>
+</html>

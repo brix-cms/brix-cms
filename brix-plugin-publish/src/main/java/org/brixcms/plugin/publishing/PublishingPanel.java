@@ -14,8 +14,11 @@
 
 package org.brixcms.plugin.publishing;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.brixcms.Brix;
@@ -23,18 +26,15 @@ import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
 import org.brixcms.plugin.publishing.auth.PublishWorkspaceAction;
 import org.brixcms.plugin.site.SitePlugin;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PublishingPanel extends BrixGenericPanel<Workspace> {
     public PublishingPanel(String id, IModel<Workspace> model) {
         super(id, model);
 
-        add(new FeedbackPanel("feedback"));
+        add(new BrixFeedbackPanel("feedback"));
 
         add(new PublishLink("toStaging", PublishingPlugin.STATE_DEVELOPMENT, PublishingPlugin.STATE_STAGING));
         add(new PublishLink("toProduction", PublishingPlugin.STATE_STAGING, PublishingPlugin.STATE_PRODUCTION));

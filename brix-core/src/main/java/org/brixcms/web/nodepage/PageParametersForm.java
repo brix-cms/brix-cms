@@ -15,11 +15,9 @@
 package org.brixcms.web.nodepage;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -40,24 +38,6 @@ public class PageParametersForm<T> extends StatelessForm<T> {
     }
 
     @Override
-    protected boolean encodeUrlInHiddenFields() {
-        return true;
-    }
-
-    @Override
-    protected void onComponentTag(ComponentTag tag) {
-        super.onComponentTag(tag);
-        BrixNodeWebPage page = (BrixNodeWebPage) getPage();
-        BrixPageParameters parameters = new BrixPageParameters(page.getBrixPageParameters());
-        for (String s : parameters.getNamedKeys()) {
-            if (s.startsWith("brix:") || s.equals("0")) {
-                parameters.remove(s);
-            }
-        }
-        tag.put("action", RequestCycle.get().urlFor(new BrixNodeRequestHandler(page, parameters)));
-    }
-
-    @Override
     protected void onSubmit() {
         super.onSubmit();
         getRequestCycle().replaceAllRequestHandlers(getRequestHandler());
@@ -67,8 +47,7 @@ public class PageParametersForm<T> extends StatelessForm<T> {
         final BrixPageParameters parameters = new BrixPageParameters(getInitialParameters());
         getPage().visitChildren(PageParametersAware.class, new IVisitor<Component, PageParametersAware>() {
             public void component(Component component, IVisit<PageParametersAware> pageParametersAwareIVisit) {
-                throw new UnsupportedOperationException();
-//                component.contributeToPageParameters(parameters);
+                ((PageParametersAware) component).contributeToPageParameters(parameters);
             }
         });
         contributeToPageParameters(parameters);

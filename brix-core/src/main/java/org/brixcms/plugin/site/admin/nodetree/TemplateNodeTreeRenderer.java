@@ -14,7 +14,7 @@
 
 package org.brixcms.plugin.site.admin.nodetree;
 
-import org.apache.wicket.markup.html.tree.BaseTree;
+import org.apache.wicket.extensions.markup.html.tree.BaseTree;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.request.resource.SharedResourceReference;
 import org.brixcms.jcr.wrapper.BrixNode;

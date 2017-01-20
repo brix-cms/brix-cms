@@ -14,14 +14,14 @@
 
 package org.brixcms.web.util.validators;
 
+import java.util.Arrays;
+
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import java.util.Arrays;
-
 public class NodeNameValidator implements IValidator<String> {
-    public static final char[] forbidden = new char[]{'\\', '/', ':', '?', '<', '>'};
+    public static final char[] forbidden = new char[] { '\\', '/', ':', '?', '<', '>' };
 
     private static final NodeNameValidator INSTANCE = new NodeNameValidator();
 
@@ -38,7 +38,6 @@ public class NodeNameValidator implements IValidator<String> {
         return INSTANCE;
     }
 
-
     @SuppressWarnings("unchecked")
     public void validate(IValidatable validatable) {
         String s = validatable.getValue().toString();
@@ -48,9 +47,8 @@ public class NodeNameValidator implements IValidator<String> {
                 String forbiddenStr = Arrays.toString(forbidden);
                 forbiddenStr = forbiddenStr.substring(1, forbiddenStr.length() - 1);
                 ValidationError error = new ValidationError();
-                error
-                        .setMessage("Field ${label} may not contain any of the forbidden characters (${forbidden}).");
-                error.addMessageKey("NodeNameValidator");
+                error.setMessage("Field ${label} may not contain any of the forbidden characters (${forbidden}).");
+                error.addKey("NodeNameValidator");
                 error.getVariables().put("forbidden", forbiddenStr);
                 validatable.error(error);
                 return;

@@ -14,6 +14,8 @@
 
 package org.brixcms.plugin.prototype;
 
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -40,11 +42,10 @@ import org.brixcms.auth.Action.Context;
 import org.brixcms.plugin.prototype.auth.CreatePrototypeAction;
 import org.brixcms.plugin.prototype.auth.DeletePrototypeAction;
 import org.brixcms.plugin.prototype.auth.RestorePrototypeAction;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceModel;
-
-import java.util.List;
 
 public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
     private String prototypeName;
@@ -67,7 +68,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
         final ModalWindow modalWindow = new ModalWindow("modalWindow");
         modalWindow.setInitialWidth(64);
         modalWindow.setWidthUnit("em");
-        modalWindow.setUseInitialHeight(false);
+        modalWindow.setUseInitialHeight(true);
         modalWindow.setResizable(false);
         modalWindow.setTitle(new ResourceModel("selectItems"));
         modalWindowForm.add(modalWindow);
@@ -135,8 +136,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
             }
         };
 
-        TextField<String> prototypeName = new TextField<String>("prototypeName", new PropertyModel<String>(this,
-                "prototypeName"));
+        TextField<String> prototypeName = new TextField<String>("prototypeName", new PropertyModel<String>(this, "prototypeName"));
         form.add(prototypeName);
 
         prototypeName.setRequired(true);
@@ -144,12 +144,12 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
 
         final FeedbackPanel feedback;
 
-        add(feedback = new FeedbackPanel("feedback"));
+        add(feedback = new BrixFeedbackPanel("feedback"));
         feedback.setOutputMarkupId(true);
 
         form.add(new AjaxButton("submit") {
             @Override
-            public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            public void onSubmit(AjaxRequestTarget target) {
                 String workspaceId = ManagePrototypesPanel.this.getModelObject().getId();
                 CreatePrototypePanel panel = new CreatePrototypePanel(modalWindow.getContentId(), workspaceId,
                         ManagePrototypesPanel.this.prototypeName);
@@ -157,15 +157,15 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
                 modalWindow.setTitle(new ResourceModel("selectItemsToCreate"));
                 modalWindow.setWindowClosedCallback(new WindowClosedCallback() {
                     public void onClose(AjaxRequestTarget target) {
-                        target.addComponent(ManagePrototypesPanel.this);
+                        target.add(ManagePrototypesPanel.this);
                     }
                 });
                 modalWindow.show(target);
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.addComponent(feedback);
+            protected void onError(AjaxRequestTarget target) {
+                target.add(feedback);
             }
         });
 
@@ -181,7 +181,7 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
         public void validate(IValidatable validatable) {
             String name = (String) validatable.getValue();
             if (PrototypePlugin.get().prototypeExists(name)) {
-                validatable.error(new ValidationError().addMessageKey("UniquePrototypeNameValidator"));
+                validatable.error(new ValidationError().addKey("UniquePrototypeNameValidator"));
             }
         }
     }

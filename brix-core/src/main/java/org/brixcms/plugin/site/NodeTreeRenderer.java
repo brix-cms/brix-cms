@@ -15,7 +15,7 @@
 package org.brixcms.plugin.site;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.tree.LinkTree;
+import org.apache.wicket.extensions.markup.html.tree.LinkTree;
 import org.apache.wicket.model.IModel;
 import org.brixcms.registry.ExtensionPoint;
 

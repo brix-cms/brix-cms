@@ -15,6 +15,7 @@
 package org.brixcms.web.picker.node;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -38,7 +39,8 @@ public class NodePickerModalWindow extends ModalWindow implements IGenericCompon
         init();
     }
 
-    public NodePickerModalWindow(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter, NodeFilter enabledFilter) {
+    public NodePickerModalWindow(String id, IModel<BrixNode> model, JcrTreeNode rootNode, NodeFilter visibilityFilter,
+            NodeFilter enabledFilter) {
         super(id, model);
 
         this.rootNode = rootNode;
@@ -56,7 +58,6 @@ public class NodePickerModalWindow extends ModalWindow implements IGenericCompon
         setTitle(new ResourceModel("node-picker-title"));
     }
 
-
     public BrixNode getModelObject() {
         return (BrixNode) getDefaultModelObject();
     }
@@ -70,7 +71,7 @@ public class NodePickerModalWindow extends ModalWindow implements IGenericCompon
     }
 
     @Override
-    public void show(AjaxRequestTarget target) {
+    public void show(IPartialPageRequestHandler target) {
         if (isShown() == false) {
             initContent();
         }

@@ -14,7 +14,6 @@
 
 package org.brixcms.web.tree;
 
-import org.apache.wicket.markup.html.tree.AbstractTree;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -23,6 +22,8 @@ import javax.swing.tree.TreePath;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.wicket.extensions.markup.html.tree.AbstractTree;
 
 /**
  * AbstractTreeModel that delegates the tree structure to {@link TreeNode}. It also contains convenience methods that

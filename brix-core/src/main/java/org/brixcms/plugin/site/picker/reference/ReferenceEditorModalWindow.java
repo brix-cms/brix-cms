@@ -15,6 +15,7 @@
 package org.brixcms.plugin.site.picker.reference;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -42,7 +43,6 @@ public class ReferenceEditorModalWindow extends ModalWindow implements IGenericC
         setDefaultModel(model);
     }
 
-
     public Reference getModelObject() {
         return (Reference) getDefaultModelObject();
     }
@@ -52,7 +52,7 @@ public class ReferenceEditorModalWindow extends ModalWindow implements IGenericC
     }
 
     @Override
-    public void show(AjaxRequestTarget target) {
+    public void show(IPartialPageRequestHandler target) {
         if (isShown() == false) {
             initContent();
         }

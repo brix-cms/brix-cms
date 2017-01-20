@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.brixcms.web.reference.Reference;
+import org.brixcms.web.util.DisabledClassAppender;
 
 public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
     protected static final String MODAL_WINDOW_ID = "modalWindow";
@@ -93,7 +94,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
                 getModalWindow().setModel(ReferenceEditorPanel.this.getModel());
                 getModalWindow().setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
                     public void onClose(AjaxRequestTarget target) {
-                        target.addComponent(ReferenceEditorPanel.this);
+                        target.add(ReferenceEditorPanel.this);
                         ReferenceEditorPanel.this.onUpdate(target);
                     }
                 });
@@ -109,7 +110,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
                 // indicate that reference was changed (might be needed if the
                 // model is buffered)
                 ReferenceEditorPanel.this.setModelObject(ref);
-                target.addComponent(ReferenceEditorPanel.this);
+                target.add(ReferenceEditorPanel.this);
                 ReferenceEditorPanel.this.onUpdate(target);
             }
 
@@ -118,7 +119,7 @@ public class ReferenceEditorPanel extends FormComponentPanel<Reference> {
                 Reference ref = ReferenceEditorPanel.this.getModelObject();
                 return ref != null && !ref.isEmpty();
             }
-        });
+        }.add(new DisabledClassAppender()));
     }
 
     protected Component newModalWindow(String id) {

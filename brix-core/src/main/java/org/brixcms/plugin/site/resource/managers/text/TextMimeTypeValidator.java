@@ -26,7 +26,7 @@ public class TextMimeTypeValidator implements IValidator<String> {
         if (!BrixFileNode.isText(value)) {
             ValidationError error = new ValidationError();
             error.setMessage("Only text mime types are allowed (text/* or application/xml)");
-            error.addMessageKey(getClass().getSimpleName());
+            error.addKey(getClass().getSimpleName());
             validatable.error(error);
         }
     }

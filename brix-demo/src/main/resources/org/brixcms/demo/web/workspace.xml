@@ -1329,88 +1329,6 @@
 						</sv:property>
 					</sv:node>
 				</sv:node>
-				<sv:node sv:name="feedback.html">
-					<sv:property sv:name="jcr:primaryType" sv:type="Name">
-						<sv:value>nt:file</sv:value>
-					</sv:property>
-					<sv:property sv:name="jcr:mixinTypes" sv:type="Name"
-						sv:multiple="true">
-						<sv:value>brix:node</sv:value>
-					</sv:property>
-					<sv:property sv:name="jcr:uuid" sv:type="String">
-						<sv:value>eb71da10-1a16-4aef-858e-ce86cad1390e</sv:value>
-					</sv:property>
-					<sv:property sv:name="brix:created" sv:type="Date">
-						<sv:value>2012-03-20T03:01:44.622+01:00</sv:value>
-					</sv:property>
-					<sv:property sv:name="brix:createdBy" sv:type="String">
-						<sv:value>demo</sv:value>
-					</sv:property>
-					<sv:property sv:name="brix:lastModified" sv:type="Date">
-						<sv:value>2012-03-20T03:24:26.959+01:00</sv:value>
-					</sv:property>
-					<sv:property sv:name="brix:lastModifiedBy"
-						sv:type="String">
-						<sv:value>demo</sv:value>
-					</sv:property>
-					<sv:property sv:name="brix:nodeType" sv:type="String">
-						<sv:value>brix:tilePage</sv:value>
-					</sv:property>
-					<sv:property sv:name="brix:template" sv:type="Reference">
-						<sv:value>40ec235e-cad2-4188-ba63-6d2c0fa0b139</sv:value>
-					</sv:property>
-					<sv:property sv:name="brix:title" sv:type="String">
-						<sv:value>Feedback Tile Demo</sv:value>
-					</sv:property>
-					<sv:property sv:name="jcr:created" sv:type="Date">
-						<sv:value>2012-03-20T03:01:44.598+01:00</sv:value>
-					</sv:property>
-					<sv:property sv:name="jcr:createdBy" sv:type="String">
-						<sv:value>demo</sv:value>
-					</sv:property>
-					<sv:node sv:name="jcr:content">
-						<sv:property sv:name="jcr:primaryType" sv:type="Name">
-							<sv:value>nt:resource</sv:value>
-						</sv:property>
-						<sv:property sv:name="jcr:uuid" sv:type="String">
-							<sv:value>0ff83a09-dcfd-4c04-a5d3-7d0e2a3c3434</sv:value>
-						</sv:property>
-						<sv:property sv:name="jcr:data" sv:type="Binary">
-							<sv:value>PHAgY2xhc3M9ImxhYmVsIj4NClRoaXMgcGFnZSBkZW1vbnN0cmF0ZXMgYSB0aWxlIGNhbGxlZCBGZWVkYmFjayBUaWxlLiBUaGUgdGlsZSBpcyBpbmNsdWRlZCBpbiBtYXJrdXAgdXNpbmc8YnIvPjxici8+DQo8Y29kZT4mbHQ7YnJpeDp0aWxlIGlkPSZxdW90O2ZlZWRiYWNrJnF1b3Q7LyZndDs8L2NvZGU+PGJyLz48YnIvPg0KbWFya3VwIGFuZCBpcyBjb25maWd1cmVkIHVzaW5nIEJyaXgncyBhZG1pbiBjb25zb2xlLiBUaWxlIHJlcXVpcmVzIHByb3BlciBtYWlsIHNlcnZlciBjb25maWd1cmF0aW9uIChzZWUgYXBwbGljYXRpb24ucHJvcGVydGllcywgbWFpbC4qIHByb3BlcnRpZXMpLjxici8+PGJyLz4NCjwvcD4NCjxwIGNsYXNzPSJmZWVkYmFjayI+DQo8YnJpeDp0aWxlIGlkPSJmZWVkYmFjayIvPg0KPC9wPg==</sv:value>
-						</sv:property>
-						<sv:property sv:name="jcr:encoding" sv:type="String">
-							<sv:value>UTF-8</sv:value>
-						</sv:property>
-						<sv:property sv:name="jcr:lastModified" sv:type="Date">
-							<sv:value>2012-03-20T03:01:44.600+01:00</sv:value>
-						</sv:property>
-						<sv:property sv:name="jcr:lastModifiedBy"
-							sv:type="String">
-							<sv:value>demo</sv:value>
-						</sv:property>
-						<sv:property sv:name="jcr:mimeType" sv:type="String">
-							<sv:value>text/html</sv:value>
-						</sv:property>
-					</sv:node>
-					<sv:node sv:name="brix:tile">
-						<sv:property sv:name="jcr:primaryType" sv:type="Name">
-							<sv:value>brix:tile</sv:value>
-						</sv:property>
-						<sv:property sv:name="brix:tileClass" sv:type="String">
-							<sv:value>brix.web.FeedbackTile</sv:value>
-						</sv:property>
-						<sv:property sv:name="brix:tileId" sv:type="String">
-							<sv:value>feedback</sv:value>
-						</sv:property>
-						<sv:property sv:name="email" sv:type="String">
-							<sv:value>localuser@localhost.localdomain</sv:value>
-						</sv:property>
-						<sv:property sv:name="feedbackSubmittedMessage"
-							sv:type="String">
-							<sv:value>Feedback has been submitted</sv:value>
-						</sv:property>
-					</sv:node>
-				</sv:node>
 			</sv:node>
 		</sv:node>
 		<sv:node sv:name="brix:webDavRules">
@@ -1455,9 +1373,6 @@
 					<sv:property sv:name="jcr:primaryType" sv:type="Name">
 						<sv:value>nt:unstructured</sv:value>
 					</sv:property>
-					<sv:property sv:name="menuType" sv:type="String">
-						<sv:value>REFERENCE</sv:value>
-					</sv:property>
 					<sv:property sv:name="title" sv:type="String">
 						<sv:value>Home</sv:value>
 					</sv:property>
@@ -1481,18 +1396,12 @@
 					<sv:property sv:name="jcr:primaryType" sv:type="Name">
 						<sv:value>nt:unstructured</sv:value>
 					</sv:property>
-					<sv:property sv:name="menuType" sv:type="String">
-						<sv:value>REFERENCE</sv:value>
-					</sv:property>
 					<sv:property sv:name="title" sv:type="String">
 						<sv:value>Demos</sv:value>
 					</sv:property>
 					<sv:node sv:name="child">
 						<sv:property sv:name="jcr:primaryType" sv:type="Name">
 							<sv:value>nt:unstructured</sv:value>
-						</sv:property>
-						<sv:property sv:name="menuType" sv:type="String">
-							<sv:value>REFERENCE</sv:value>
 						</sv:property>
 						<sv:property sv:name="title" sv:type="String">
 							<sv:value>Tiles</sv:value>
@@ -1501,15 +1410,11 @@
 							<sv:property sv:name="jcr:primaryType" sv:type="Name">
 								<sv:value>nt:unstructured</sv:value>
 							</sv:property>
-							<sv:property sv:name="menuType" sv:type="String">
-								<sv:value>REFERENCE</sv:value>
-							</sv:property>
 							<sv:property sv:name="title" sv:type="String">
 								<sv:value>Time Tile</sv:value>
 							</sv:property>
 							<sv:node sv:name="reference">
 								<sv:property sv:name="jcr:primaryType" sv:type="Name">
-									sv:type="Name">
 									<sv:value>nt:unstructured</sv:value>
 								</sv:property>
 								<sv:property sv:name="jcr:mixinTypes" sv:type="Name"
@@ -1527,9 +1432,6 @@
 						<sv:node sv:name="child">
 							<sv:property sv:name="jcr:primaryType" sv:type="Name">
 								<sv:value>nt:unstructured</sv:value>
-							</sv:property>
-							<sv:property sv:name="menuType" sv:type="String">
-								<sv:value>REFERENCE</sv:value>
 							</sv:property>
 							<sv:property sv:name="title" sv:type="String">
 								<sv:value>Stockquote Tiles</sv:value>
@@ -1550,41 +1452,10 @@
 								</sv:property>
 							</sv:node>
 						</sv:node>
-						<sv:node sv:name="child">
-							<sv:property sv:name="jcr:primaryType"
-								sv:type="Name">
-								<sv:value>nt:unstructured</sv:value>
-							</sv:property>
-							<sv:property sv:name="menuType" sv:type="String">
-								<sv:value>REFERENCE</sv:value>
-							</sv:property>
-							<sv:property sv:name="title" sv:type="String">
-								<sv:value>Feedback Tile</sv:value>
-							</sv:property>
-							<sv:node sv:name="reference">
-								<sv:property sv:name="jcr:primaryType"
-									sv:type="Name">
-									<sv:value>nt:unstructured</sv:value>
-								</sv:property>
-								<sv:property sv:name="jcr:mixinTypes"
-									sv:type="Name" sv:multiple="true">
-									<sv:value>brix:hidden</sv:value>
-								</sv:property>
-								<sv:property sv:name="node" sv:type="Reference">
-									<sv:value>eb71da10-1a16-4aef-858e-ce86cad1390e</sv:value>
-								</sv:property>
-								<sv:property sv:name="type" sv:type="String">
-									<sv:value>NODE</sv:value>
-								</sv:property>
-							</sv:node>
-						</sv:node>
 					</sv:node>
 					<sv:node sv:name="child">
 						<sv:property sv:name="jcr:primaryType" sv:type="Name">
 							<sv:value>nt:unstructured</sv:value>
-						</sv:property>
-						<sv:property sv:name="menuType" sv:type="String">
-							<sv:value>REFERENCE</sv:value>
 						</sv:property>
 						<sv:property sv:name="title" sv:type="String">
 							<sv:value>SSL Page</sv:value>
@@ -1609,9 +1480,6 @@
 						<sv:property sv:name="jcr:primaryType" sv:type="Name">
 							<sv:value>nt:unstructured</sv:value>
 						</sv:property>
-						<sv:property sv:name="menuType" sv:type="String">
-							<sv:value>REFERENCE</sv:value>
-						</sv:property>
 						<sv:property sv:name="title" sv:type="String">
 							<sv:value>Variables</sv:value>
 						</sv:property>
@@ -1634,9 +1502,6 @@
 					<sv:node sv:name="child">
 						<sv:property sv:name="jcr:primaryType" sv:type="Name">
 							<sv:value>nt:unstructured</sv:value>
-						</sv:property>
-						<sv:property sv:name="menuType" sv:type="String">
-							<sv:value>REFERENCE</sv:value>
 						</sv:property>
 						<sv:property sv:name="title" sv:type="String">
 							<sv:value>Header Contribution</sv:value>

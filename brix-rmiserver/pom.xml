@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.brixcms</groupId>
         <artifactId>brix</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>8.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.brixcms</groupId>
     <artifactId>brix-rmiserver</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>8.0-SNAPSHOT</version>
 
     <packaging>war</packaging>
 
@@ -24,8 +24,8 @@
         +-->
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate</artifactId>
-            <version>3.2.6.ga</version>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.6.9.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -99,18 +99,11 @@
         <!--+
         | JETTY
         +-->
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty-util</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty-management</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.aggregate</groupId>
+			<artifactId>jetty-all</artifactId>
+			<classifier>uber</classifier>
+		</dependency>
         <!--+
               | LOGGING
               +-->

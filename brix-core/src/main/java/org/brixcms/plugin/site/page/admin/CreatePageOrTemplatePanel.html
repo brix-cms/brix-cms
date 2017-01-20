@@ -1,39 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket="http://wicket.apache.org">
+<body>
 <wicket:extend>
-
-    <div class="brix-site-simple-panel">
-        <div class="brix-site-simple-panel1">
-
-            <div class="brix-site-simple-panel-caption">
-                <wicket:message key="createNew"/>
-                <span wicket:id="typeName"></span>
-            </div>
-
-            <form wicket:id="form">
-
-                <table class="brix-property-edit">
-                    <tr>
-                        <td class="brix-property-label">
-                            <wicket:message key="name"/>
-                        </td>
-                        <td class="brix-property-value"><input wicket:id="name" type="text" size="50"/></td>
-                    </tr>
-                </table>
-
-                <div class="brix-feedback" wicket:id="feedback"></div>
-
-                <div class="brix-buttons-right">
-                    <div class="brix-buttons-right1">
-                        <a wicket:id="create" href="#" class="brix-button">
-                            <wicket:message key="create"/>
-                        </a>
-                        <a wicket:id="cancel" href="#" class="brix-button">
-                            <wicket:message key="cancel"/>
-                        </a>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
+		<div class="card">
+			<div class="card-header"><wicket:message key="createNew" /> <span wicket:id="typeName"></span></div>
+			<div class="card-block">
+				<div class="container">
+					<form wicket:id="form">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label"><wicket:message key="name" /></label>
+							<div class="col-sm-10">
+								<input wicket:id="name" type="text" class="form-control" wicket:message="placeholder:name" />
+							</div>
+						</div>
+						<div class="form-group row">
+							<div wicket:id="feedback" class="brix-feedback"></div>
+						</div>
+						<div class="form-group row">
+							<div class="offset-sm-2 col-sm-10">
+								<a class="btn btn-secondary" wicket:id="cancel" href="#"> 
+									<wicket:message key="cancel" />
+								</a>
+								<a class="btn btn-primary" wicket:id="create" href="#"> 
+									<wicket:message key="create" />
+								</a> 
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 </wicket:extend>
+</body>
+</html>

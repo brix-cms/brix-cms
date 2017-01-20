@@ -18,13 +18,13 @@
                             <div wicket:id="commentlabel" class="brix-snapshots-item">AnyComment</div>
                             <div class="brix-buttons-left">
                                 <div class="brix-buttons-left1">
-                                    <a class="brix-button-thin" wicket:id="browse">
+                                    <a class="btn btn-outline-primary btn-sm" wicket:id="browse">
                                         <wicket:message key="browse"/>
                                     </a>
-                                    <a class="brix-button-thin" wicket:id="restore">
+                                    <a class="btn btn-outline-primary btn-sm" wicket:id="restore">
                                         <wicket:message key="restore"/>
                                     </a>
-                                    <a class="brix-button-thin" wicket:id="delete"
+                                    <a class="btn btn-outline-danger btn-sm" wicket:id="delete"
                                        wicket:message="onclick:deleteOnClick">
                                         <wicket:message key="delete"/>
                                     </a>
@@ -40,14 +40,14 @@
                                 <wicket:message key="commentSnapshot"/>
                                 <br>
                                 <textarea rows="6" cols="24" wicket:id="area"></textarea><br>
-                                <a wicket:id="createSnapshot" class="brix-button">
+                                <a wicket:id="createSnapshot" class="btn btn-primary btn-sm">
                                     <wicket:message key="createSnapshot"/>
                                 </a>
                             </form>
 
                         </div>
                         <div class="brix-snapshots-action">
-                            <a wicket:id="downloadWorkspace" class="brix-button">
+                            <a wicket:id="downloadWorkspace" class="btn btn-secondary btn-sm">
                                 <wicket:message key="downloadWorkspace"/>
                             </a>
                         </div>
@@ -56,7 +56,7 @@
                                 <wicket:message key="restoreWorkspace"/>
                                 <br/>
                                 <input wicket:id="upload" type="file"/> <br/>
-                                <a wicket:id="submit" class="brix-button">
+                                <a wicket:id="submit" class="btn btn-primary btn-sm mt-2">
                                     <wicket:message key="submit"/>
                                 </a>
                             </form>

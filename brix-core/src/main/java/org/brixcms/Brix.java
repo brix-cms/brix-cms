@@ -14,15 +14,23 @@
 
 package org.brixcms;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.MetaDataKey;
-import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.IPageRequestHandler;
 import org.brixcms.auth.Action;
 import org.brixcms.auth.Action.Context;
 import org.brixcms.auth.AuthorizationStrategy;
@@ -55,13 +63,6 @@ import org.brixcms.web.nodepage.PageParametersAwareEnabler;
 import org.brixcms.web.tile.pagetile.PageTile;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
-
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * TODO doc
@@ -125,7 +126,7 @@ public abstract class Brix {
 
     /**
      * Constructs a URL to the current page. This method can only be called within an active wicket request because it
-     * relies on the {@link org.apache.wicket.RequestCycle} threadlocal.
+     * relies on the {@link RequestCycle} threadlocal.
      *
      * @return url to the current brix page
      * @throws BrixException if the current request was not for a brix page
@@ -155,7 +156,7 @@ public abstract class Brix {
      * @return brix page
      * @throws BrixException if current request was not to a brix page
      */
-    private static BrixNodeWebPage getCurrentPage() {
+    public static BrixNodeWebPage getCurrentPage() {
         IRequestHandler target = RequestCycle.get().getActiveRequestHandler();
         BrixNodeWebPage page = null;
         if (target != null && target instanceof IPageRequestHandler) {
@@ -230,11 +231,16 @@ public abstract class Brix {
            * aware so they can install their own listeners or have some brix-level
            * registery
            */
-        application.getComponentPreOnBeforeRenderListeners().add(new PageParametersAwareEnabler());
+        application.getComponentOnConfigureListeners().add(new PageParametersAwareEnabler());
 
 
         // allow brix to handle any url that wicket cant
-        application.getRootRequestMapperAsCompound().add(new BrixRequestMapper(this));
+        // todo: make sure that BrixRequestMapper is changed so that it can work together with HttpsMapper, problem seems that
+        // HttpsMapper wants the target class before it is decided which one to chose;
+        application.getRootRequestMapperAsCompound()
+                .add(new BrixRequestMapper(this, getHttpsConfig()));
+
+
         // application.mount(new BrixNodePageUrlMapper());
 
         // register a string resource loader that allows any object that acts as
@@ -329,8 +335,7 @@ public abstract class Brix {
             }
             s.save();
             s.logout();
-        }
-        catch (RepositoryException e) {
+        } catch (RepositoryException e) {
             throw new RuntimeException("Couldn't initialize repository", e);
         }
 
@@ -370,5 +375,9 @@ public abstract class Brix {
 
     public final Collection<Plugin> getPlugins() {
         return config.getRegistry().lookupCollection(Plugin.POINT);
+    }
+
+    public HttpsConfig getHttpsConfig() {
+        return new HttpsConfig(config.getHttpPort(), config.getHttpsPort());
     }
 }

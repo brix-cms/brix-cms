@@ -14,6 +14,10 @@
 
 package org.brixcms.plugin.menu;
 
+import java.util.List;
+
+import javax.jcr.ReferentialIntegrityException;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -22,7 +26,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -33,12 +36,10 @@ import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.menu.editor.MenuEditor;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.web.util.AbstractModel;
 import org.brixcms.workspace.Workspace;
-
-import javax.jcr.ReferentialIntegrityException;
-import java.util.List;
 
 public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
 // ------------------------------ FIELDS ------------------------------
@@ -207,7 +208,7 @@ public class ManageMenuPanel extends BrixGenericPanel<Workspace> {
                 }
             }.setDefaultFormProcessing(false));
 
-            add(new FeedbackPanel("feedback"));
+            add(new BrixFeedbackPanel("feedback"));
         }
     }
 }

@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.brixcms</groupId>
         <artifactId>brix</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>8.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.brixcms</groupId>
     <artifactId>brix-wrapper</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>8.0-SNAPSHOT</version>
 
     <packaging>bundle</packaging>
 
@@ -41,30 +41,30 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.1.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Export-Package>
-                            org.brixcms.jcr.base,
-                            org.brixcms.jcr.api,org.brixcms.jcr.exception,org.brixcms.jcr.api.wrapper,org.brixcms.jcr.base.event,org.brixcms.jcr.base.action
-                        </Export-Package>
-                        <Import-Package>
-                            org.osgi*, javax.jcr, javax.jcr.lock, javax.jcr.nodetype, javax.jcr.observation,
-                            javax.jcr.query, javax.jcr.query.qom, javax.jcr.retention, javax.jcr.security,
-                            javax.jcr.version, org.xml.sax
-                        </Import-Package>
-                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
-                        </Bundle-SymbolicName>
-                        <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+<!--     <build> -->
+<!--         <plugins> -->
+<!--             <plugin> -->
+<!--                 <groupId>org.apache.felix</groupId> -->
+<!--                 <artifactId>maven-bundle-plugin</artifactId> -->
+<!--                 <version>2.1.0</version> -->
+<!--                 <extensions>true</extensions> -->
+<!--                 <configuration> -->
+<!--                     <instructions> -->
+<!--                         <Export-Package> -->
+<!--                             org.brixcms.jcr.base, -->
+<!--                             org.brixcms.jcr.api,org.brixcms.jcr.exception,org.brixcms.jcr.api.wrapper,org.brixcms.jcr.base.event,org.brixcms.jcr.base.action -->
+<!--                         </Export-Package> -->
+<!--                         <Import-Package> -->
+<!--                             org.osgi*, javax.jcr, javax.jcr.lock, javax.jcr.nodetype, javax.jcr.observation, -->
+<!--                             javax.jcr.query, javax.jcr.query.qom, javax.jcr.retention, javax.jcr.security, -->
+<!--                             javax.jcr.version, org.xml.sax -->
+<!--                         </Import-Package> -->
+<!--                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true -->
+<!--                         </Bundle-SymbolicName> -->
+<!--                         <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment> -->
+<!--                     </instructions> -->
+<!--                 </configuration> -->
+<!--             </plugin> -->
+<!--         </plugins> -->
+<!--     </build> -->
 </project>

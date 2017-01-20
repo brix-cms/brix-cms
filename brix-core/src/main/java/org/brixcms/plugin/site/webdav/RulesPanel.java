@@ -16,6 +16,7 @@ package org.brixcms.plugin.site.webdav;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.wicket.Component;
@@ -23,7 +24,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -32,7 +32,9 @@ import org.brixcms.Brix;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.webdav.Rule.Type;
+import org.brixcms.web.BrixFeedbackPanel;
 import org.brixcms.web.generic.BrixGenericPanel;
+import org.brixcms.web.util.DisabledClassAppender;
 import org.brixcms.workspace.Workspace;
 
 import com.inmethod.grid.IDataSource;
@@ -45,19 +47,18 @@ import com.inmethod.grid.column.editable.SubmitCancelColumn;
 import com.inmethod.grid.datagrid.DataGrid;
 
 public class RulesPanel extends BrixGenericPanel<RulesNode> {
-// ------------------------------ FIELDS ------------------------------
+    // ------------------------------ FIELDS ------------------------------
     ;
     private Component feedback;
-    private DataGrid<DataSource, Rule> dataGrid;
+    private DataGrid<DataSource, Rule, String> dataGrid;
     private AjaxLink<?> removeSelected;
 
     public RulesPanel(String id, IModel<Workspace> workspaceModel) {
         super(id, new RulesNodeModel(workspaceModel));
 
+        add(feedback = new BrixFeedbackPanel("feedback").setOutputMarkupId(true));
 
-        add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true));
-
-        List<IGridColumn<DataSource, Rule>> columns = new ArrayList<IGridColumn<DataSource, Rule>>();
+        List<IGridColumn<DataSource, Rule, String>> columns = new ArrayList<IGridColumn<DataSource, Rule, String>>();
 
         columns.add(new CheckBoxColumn("checkbox"));
         columns.add(new PriorityColumn(new ResourceModel("priority"), "priority").setInitialSize(60));
@@ -68,12 +69,14 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         columns.add(new SubmitColumn("edit", new ResourceModel("edit")));
 
-        dataGrid = new DataGrid<DataSource, Rule>("grid", new DataSource(), columns) {
+        dataGrid = new DataGrid<DataSource, Rule, String>("grid", new DataSource(), columns) {
             @Override
             public void onItemSelectionChanged(IModel item, boolean newValue) {
                 super.onItemSelectionChanged(item, newValue);
-                if (AjaxRequestTarget.get() != null)
-                    AjaxRequestTarget.get().addComponent(removeSelected);
+                Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+                if (target.isPresent()) {
+                    target.get().add(removeSelected);
+                }
             }
         };
         add(dataGrid);
@@ -97,6 +100,7 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
                 dataGrid.update();
             }
         });
+        removeSelected.add(new DisabledClassAppender());
         removeSelected.setOutputMarkupId(true);
 
         add(new AjaxLink<Void>("add") {
@@ -149,12 +153,12 @@ public class RulesPanel extends BrixGenericPanel<RulesNode> {
 
         @Override
         protected void onError(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
-            target.addComponent(feedback);
+            target.add(feedback);
         }
 
         @Override
         protected void onSubmitted(AjaxRequestTarget target, IModel rowModel, WebMarkupContainer rowComponent) {
-            target.addComponent(feedback);
+            target.add(feedback);
             Rule rule = (Rule) rowModel.getObject();
             RulesPanel.this.getModelObject().saveRule(rule);
             dataGrid.markAllItemsDirty();

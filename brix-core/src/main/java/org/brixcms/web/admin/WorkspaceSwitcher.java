@@ -14,8 +14,13 @@
 
 package org.brixcms.web.admin;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.brixcms.Brix;
@@ -24,11 +29,6 @@ import org.brixcms.auth.Action.Context;
 import org.brixcms.web.generic.BrixGenericPanel;
 import org.brixcms.workspace.Workspace;
 import org.brixcms.workspace.WorkspaceManager;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
     private Map<String, String> workspaceNameCache;
@@ -42,8 +42,7 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
                 return getWorkspaces();
             }
         };
-        DropDownChoice<Workspace> choice = new DropDownChoice<Workspace>("workspaces", model, workspaceModel,
-                new Renderer()) {
+        DropDownChoice<Workspace> choice = new DropDownChoice<Workspace>("workspaces", model, workspaceModel, new Renderer()) {
             @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
@@ -66,8 +65,7 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
         Workspace current = getModelObject();
 
         for (Plugin p : brix.getPlugins()) {
-            List<Workspace> filtered = brix.filterVisibleWorkspaces(p.getWorkspaces(current, false),
-                    Context.ADMINISTRATION);
+            List<Workspace> filtered = brix.filterVisibleWorkspaces(p.getWorkspaces(current, false), Context.ADMINISTRATION);
             for (Workspace w : filtered) {
                 if (workspaceNameCache == null) {
                     workspaceNameCache = new HashMap<String, String>();
@@ -87,7 +85,7 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
         return Brix.get();
     }
 
-// -------------------------- OTHER METHODS --------------------------
+    // -------------------------- OTHER METHODS --------------------------
     private String getWorkspaceName(Workspace workspace) {
         if (workspaceNameCache == null) {
             workspaceNameCache = new HashMap<String, String>();
@@ -116,7 +114,7 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
         super.onDetach();
     }
 
-    private class Renderer implements IChoiceRenderer<Workspace> {
+    private class Renderer extends ChoiceRenderer<Workspace> {
         public Object getDisplayValue(Workspace object) {
             return getWorkspaceName(object);
         }

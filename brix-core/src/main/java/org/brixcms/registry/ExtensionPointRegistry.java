@@ -20,18 +20,17 @@ import org.brixcms.registry.ExtensionPointRegistry.Callback.Status;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ExtensionPointRegistry {
-    private final Map<ExtensionPoint<?>, Collection<?>> registrations = new HashMap<ExtensionPoint<?>, Collection<?>>();
+    private final ConcurrentHashMap<ExtensionPoint<?>, Collection<?>> registrations = new ConcurrentHashMap<ExtensionPoint<?>, Collection<?>>();
 
-    private final List<Listener> listeners = new ArrayList<Listener>();
+    private final CopyOnWriteArrayList<Listener> listeners = new CopyOnWriteArrayList<Listener>();
 
-    public synchronized <T> Collection<T> lookupCollection(ExtensionPoint<T> point) {
+    public <T> Collection<T> lookupCollection(ExtensionPoint<T> point) {
         // check multiplicity
         switch (point.getMultiplicity()) {
             case COLLECTION:
@@ -46,7 +45,7 @@ public class ExtensionPointRegistry {
         return extensions;
     }
 
-    private synchronized <T> Collection<T> lookup(ExtensionPoint<T> point) {
+    private <T> Collection<T> lookup(ExtensionPoint<T> point) {
         Collection<T> extensions = get(point);
         if (extensions == null) {
             return Collections.emptySet();
@@ -57,7 +56,7 @@ public class ExtensionPointRegistry {
         }
     }
 
-    public synchronized <T> void lookupCollection(ExtensionPoint<T> point, Callback<T> callback) {
+    public <T> void lookupCollection(ExtensionPoint<T> point, Callback<T> callback) {
         Collection<T> extensions = lookupCollection(point);
         for (T extension : extensions) {
             Status status = callback.processExtension(extension);
@@ -67,7 +66,7 @@ public class ExtensionPointRegistry {
         }
     }
 
-    public synchronized <T> T lookupSingleton(ExtensionPoint<T> point) {
+    public <T> T lookupSingleton(ExtensionPoint<T> point) {
         // check multiplicity
         switch (point.getMultiplicity()) {
             case SINGLETON:
@@ -95,7 +94,7 @@ public class ExtensionPointRegistry {
      * @param replay   if {@code true} the listener will receive registration events for all currently registered
      *                 extensions
      */
-    public synchronized void register(Listener listener, boolean replay) {
+    public void register(Listener listener, boolean replay) {
         listeners.add(listener);
 
         if (replay) {
@@ -109,7 +108,7 @@ public class ExtensionPointRegistry {
         }
     }
 
-    public synchronized <T> void register(ExtensionPoint<T> point, T extension) {
+    public <T> void register(ExtensionPoint<T> point, T extension) {
         Collection<T> extensions = get(point);
         if (extensions == null) {
             extensions = new LinkedList<T>();

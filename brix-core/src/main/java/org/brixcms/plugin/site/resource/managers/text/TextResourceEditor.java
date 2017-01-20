@@ -14,6 +14,10 @@
 
 package org.brixcms.plugin.site.resource.managers.text;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -23,9 +27,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.brixcms.jcr.wrapper.BrixNode.Protocol;
 import org.brixcms.web.model.ModelBuffer;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class TextResourceEditor extends Panel {
     private DropDownChoice<Protocol> requiredProtocol;
@@ -37,14 +38,12 @@ public class TextResourceEditor extends Panel {
         List<Protocol> protocols = Arrays.asList(Protocol.values());
         IChoiceRenderer<Protocol> renderer = new ProtocolRenderer();
         IModel<Protocol> protocolModel = model.forProperty("requiredProtocol");
-        requiredProtocol = new DropDownChoice<Protocol>("requiredProtocol", protocolModel,
-                protocols, renderer);
+        requiredProtocol = new DropDownChoice<Protocol>("requiredProtocol", protocolModel, protocols, renderer);
         add(requiredProtocol.setNullValid(false));
 
         // mimetype field
         IModel<String> mimeTypeModel = model.forProperty("mimeType");
-        add(new TextField<String>("mimeType", mimeTypeModel).add(new TextMimeTypeValidator())
-                .setLabel(new ResourceModel("mimeType")));
+        add(new TextField<String>("mimeType", mimeTypeModel).add(new TextMimeTypeValidator()).setLabel(new ResourceModel("mimeType")));
 
         // content field
         IModel<String> contentModel = model.forProperty("dataAsString");
@@ -61,7 +60,7 @@ public class TextResourceEditor extends Panel {
         super.onBeforeRender();
     }
 
-    private final class ProtocolRenderer implements IChoiceRenderer<Protocol> {
+    private final class ProtocolRenderer extends ChoiceRenderer<Protocol> {
         public Object getDisplayValue(Protocol object) {
             return getString(object.toString());
         }
