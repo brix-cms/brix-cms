@@ -23,16 +23,16 @@ import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.wrapper.BrixNode;
 
-public class BrixNodeModel implements IModel<BrixNode> {
+public class BrixNodeModel<T extends BrixNode> implements IModel<T> {
     private String id;
     private String workspaceName;
-    private transient BrixNode node;
+    private transient T node;
 
     public BrixNodeModel() {
-        this((BrixNode) null);
+        this((T) null);
     }
 
-    public BrixNodeModel(BrixNode node) {
+    public BrixNodeModel(T node) {
         this.node = node;
         if (node != null) {
             this.id = getId(node);
@@ -48,7 +48,7 @@ public class BrixNodeModel implements IModel<BrixNode> {
         }
     }
 
-    public BrixNodeModel(BrixNodeModel other) {
+    public BrixNodeModel(BrixNodeModel<T> other) {
         if (other == null) {
             throw new IllegalArgumentException("Argument 'other' may not be null.");
         }
@@ -90,14 +90,14 @@ public class BrixNodeModel implements IModel<BrixNode> {
         node = null;
     }
 
-    public BrixNode getObject() {
+    public T getObject() {
         if (node == null) {
             node = loadNode(id);
         }
         return node;
     }
 
-    public void setObject(BrixNode node) {
+    public void setObject(T node) {
         if (node == null) {
             id = null;
             workspaceName = null;
@@ -109,13 +109,13 @@ public class BrixNodeModel implements IModel<BrixNode> {
         }
     }
 
-    private BrixNode loadNode(String id) {
+    private T loadNode(String id) {
         if (id != null) {
             JcrSession session = Brix.get().getCurrentSession(workspaceName);
             if (id.startsWith("/")) {
-                return (BrixNode) session.getItem(id);
+                return (T) session.getItem(id);
             } else {
-                return (BrixNode) session.getNodeByIdentifier(id);
+                return (T) session.getNodeByIdentifier(id);
             }
         } else {
             return null;
