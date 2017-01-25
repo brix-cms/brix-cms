@@ -16,6 +16,7 @@ package org.brixcms.config;
 
 import org.brixcms.Brix;
 import org.brixcms.Path;
+import org.brixcms.plugin.site.SitePlugin;
 
 /**
  * Uri mapper that mounts cms urls on a certain prefix. Eg <code>new PrefixUriMapper(new Path("/docs/cms"))</code> will
@@ -64,6 +65,13 @@ public abstract class PrefixUriMapper implements UriMapper {
         if (!nodePath.isRoot()) {
             // nodePath is not root, we have to append it to prefix
             uriPath = prefix.append(nodePath.toRelative(Path.ROOT));
+        }
+
+        if(nodePath.toString().endsWith(SitePlugin.BRIX_INDEX_PAGE)) {
+            final String orgUrl = nodePath.toString();
+            String url = orgUrl.substring(0, orgUrl.length() - SitePlugin.BRIX_INDEX_PAGE.length());
+
+            uriPath = new Path(url);
         }
 
         return uriPath;
