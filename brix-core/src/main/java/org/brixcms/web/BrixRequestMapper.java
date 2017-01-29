@@ -112,6 +112,11 @@ public class BrixRequestMapper extends AbstractComponentMapper {
 
         Path path = new Path("/" + url.getPath());
 
+        //fix for ROOT AJAX requests...-> to index.brix
+        if(path.isRoot() && ((WebRequest)request).isAjax()) {
+            path = new Path("/" + SitePlugin.BRIX_INDEX_PAGE);
+        }
+
         // root path handling
         if (path.isRoot()) {
             final BrixNode node = getNodeForUriPath(path);
