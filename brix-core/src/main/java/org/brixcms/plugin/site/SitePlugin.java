@@ -108,6 +108,8 @@ public class SitePlugin implements SessionAwarePlugin {
 
     private static final String WEBDAV_RULES_NODE_NAME = Brix.NS_PREFIX + "webDavRules";
 
+    public static final String BRIX_INDEX_PAGE = "index.brix";
+
     private final Brix brix;
 
     private FallbackNodePlugin fallbackNodePlugin = new FallbackNodePlugin();

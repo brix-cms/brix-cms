@@ -46,6 +46,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.Url.QueryParameter;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.info.ComponentInfo;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.info.PageInfo;
@@ -103,7 +104,18 @@ public class BrixRequestMapper extends AbstractComponentMapper {
             }
         }
 
+        // index.brix handling
+        if (url.toString().endsWith(SitePlugin.BRIX_INDEX_PAGE)) {
+            url.getSegments().remove(SitePlugin.BRIX_INDEX_PAGE);
+            return new RedirectRequestHandler("/" + url.getPath());
+        }
+
         Path path = new Path("/" + url.getPath());
+
+        //fix for ROOT AJAX requests...-> to index.brix
+        if(path.isRoot() && ((WebRequest)request).isAjax()) {
+            path = new Path("/" + SitePlugin.BRIX_INDEX_PAGE);
+        }
 
         // root path handling
         if (path.isRoot()) {
@@ -305,6 +317,7 @@ public class BrixRequestMapper extends AbstractComponentMapper {
                 PageComponentInfo info = new PageComponentInfo(i, null);
                 Url url = encode(page);
                 encodePageComponentInfo(url, info);
+                url.getSegments().remove(SitePlugin.BRIX_INDEX_PAGE);
                 return url;
             } else {
                 return null;
@@ -371,13 +384,13 @@ public class BrixRequestMapper extends AbstractComponentMapper {
     private Url encode(String nodeURL, PageParameters parameters, PageInfo info) {
         StringBuilder builder = new StringBuilder();
 
-        if (nodeURL.startsWith("/")) {
+        if (nodeURL.startsWith("/") && nodeURL.length() > 1) {
             nodeURL = nodeURL.substring(1);
         }
 
         builder.append(urlEncodePath(new Path(nodeURL, false)));
 
-        boolean skipFirstSlash = builder.charAt(builder.length() - 1) == '/';
+        boolean skipFirstSlash = builder.length() > 1 && builder.charAt(builder.length() - 1) == '/';
 
         for (int i = 0; i < parameters.getIndexedCount(); ++i) {
             if (!skipFirstSlash) {
