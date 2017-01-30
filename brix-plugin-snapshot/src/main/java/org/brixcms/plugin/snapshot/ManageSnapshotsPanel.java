@@ -229,9 +229,12 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
 
                             if (session.itemExists(brix.getRootPath())) {
                                 session.getItem(brix.getRootPath()).remove();
+                                session.save();
                             }
+
+
                             session.importXML("/", s,
-                                    ImportUUIDBehavior.IMPORT_UUID_CREATE_NEW);
+                                    ImportUUIDBehavior.IMPORT_UUID_COLLISION_REMOVE_EXISTING);
                             session.save();
 
                             brix.initWorkspace(ManageSnapshotsPanel.this.getModelObject(), session);
