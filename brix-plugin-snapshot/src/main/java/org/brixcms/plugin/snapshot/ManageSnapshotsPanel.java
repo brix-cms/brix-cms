@@ -156,11 +156,11 @@ public class ManageSnapshotsPanel extends BrixGenericPanel<Workspace> {
 
                     public void respond(IRequestCycle requestCycle) {
                         WebResponse resp = (WebResponse) requestCycle.getResponse();
-                        resp.setAttachmentHeader("workspace.xml");
                         String id = ManageSnapshotsPanel.this.getModelObject().getId();
                         Brix brix = getBrix();
                         JcrSession session = brix.getCurrentSession(id);
                         HttpServletResponse containerResponse = (HttpServletResponse) resp.getContainerResponse();
+                        containerResponse.setHeader("Content-Disposition", "attachement; filename=\"workspace.xml\"");
                         ServletOutputStream containerResponseOutputStream = null;
                         try {
                             containerResponseOutputStream = containerResponse.getOutputStream();
