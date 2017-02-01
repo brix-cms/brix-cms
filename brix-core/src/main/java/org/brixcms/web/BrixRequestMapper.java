@@ -26,17 +26,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.DefaultMapperContext;
-import org.apache.wicket.core.request.handler.BookmarkableListenerInterfaceRequestHandler;
+import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
 import org.apache.wicket.core.request.handler.IPageProvider;
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
-import org.apache.wicket.core.request.handler.ListenerInterfaceRequestHandler;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.handler.PageAndComponentProvider;
 import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.core.request.mapper.AbstractComponentMapper;
 import org.apache.wicket.core.request.mapper.IPageSource;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.protocol.https.HttpsMapper;
 import org.apache.wicket.protocol.https.Scheme;
@@ -197,11 +196,11 @@ public class BrixRequestMapper extends AbstractComponentMapper {
                 provider.setPageSource(new DefaultMapperContext() {
                     @Override
                     public IRequestablePage newPageInstance(Class<? extends IRequestablePage> pageClass, PageParameters pageParameters) {
-                        return new PageRenderingPage((IModel<BrixNode>) new BrixNodeModel(getNodeForUriPath(finalPath)),
+                        return new PageRenderingPage(new BrixNodeModel(getNodeForUriPath(finalPath)),
                                 new BrixPageParameters(pageParameters));
                     }
                 });
-                return new ListenerInterfaceRequestHandler(provider, componentInfo.getBehaviorId());
+                return new ListenerRequestHandler(provider, componentInfo.getBehaviorId());
             }
         }
 
@@ -295,8 +294,8 @@ public class BrixRequestMapper extends AbstractComponentMapper {
             BrixNodeRequestHandler handler = (BrixNodeRequestHandler) requestHandler;
             String nodeURL = handler.getNodeURL();
             return encode(nodeURL, handler.getPageParameters(), null);
-        } else if (requestHandler instanceof ListenerInterfaceRequestHandler) {
-            ListenerInterfaceRequestHandler handler = (ListenerInterfaceRequestHandler) requestHandler;
+        } else if (requestHandler instanceof ListenerRequestHandler) {
+            ListenerRequestHandler handler = (ListenerRequestHandler) requestHandler;
             if (handler.getPage() instanceof BrixNodeWebPage) {
                 BrixNodeWebPage page = (BrixNodeWebPage) handler.getPage();
                 String componentPath = handler.getComponentPath();
@@ -322,9 +321,9 @@ public class BrixRequestMapper extends AbstractComponentMapper {
             } else {
                 return null;
             }
-        } else if (requestHandler instanceof BookmarkableListenerInterfaceRequestHandler) {
+        } else if (requestHandler instanceof BookmarkableListenerRequestHandler) {
             // stateless
-            BookmarkableListenerInterfaceRequestHandler handler = (BookmarkableListenerInterfaceRequestHandler) requestHandler;
+            BookmarkableListenerRequestHandler handler = (BookmarkableListenerRequestHandler) requestHandler;
             BrixNodeWebPage page = (BrixNodeWebPage) handler.getPage();
             Integer renderCount = null;
             if (handler.includeRenderCount()) {
@@ -363,7 +362,7 @@ public class BrixRequestMapper extends AbstractComponentMapper {
         final BrixPageParameters parameters = page.getBrixPageParameters();
         Iterator<NamedPair> it = page.getBrixPageParameters().getAllNamed().iterator();
         while (it.hasNext()) {
-            INamedParameters.NamedPair namedPair = (INamedParameters.NamedPair) it.next();
+            INamedParameters.NamedPair namedPair = it.next();
             if (isNumber(namedPair.getKey())) {
                 parameters.remove(namedPair.getKey());
             }
