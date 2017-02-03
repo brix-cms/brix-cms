@@ -65,6 +65,7 @@ import org.brixcms.plugin.site.admin.nodetree.OfficeSpreadsheetNodeTreeRenderer;
 import org.brixcms.plugin.site.admin.nodetree.PageNodeTreeRenderer;
 import org.brixcms.plugin.site.admin.nodetree.TemplateNodeTreeRenderer;
 import org.brixcms.plugin.site.admin.nodetree.VideoNodeTreeRenderer;
+import org.brixcms.plugin.site.auth.AccessSitePluginAction;
 import org.brixcms.plugin.site.auth.SiteNodeAction;
 import org.brixcms.plugin.site.auth.SiteNodeAction.Type;
 import org.brixcms.plugin.site.fallback.FallbackNodePlugin;
@@ -649,6 +650,12 @@ public class SitePlugin implements SessionAwarePlugin {
         public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
             return new NodeManagerContainerPanel(panelId, workspaceModel);
         }
+        
+        @Override
+        public boolean isVisible() {
+            final Action action = new AccessSitePluginAction(getWorkspaceModel().getObject());
+            return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+        }
     }
 
     static class GlobalTilesTab extends AbstractWorkspaceTab {
@@ -663,10 +670,14 @@ public class SitePlugin implements SessionAwarePlugin {
 
         @Override
         public boolean isVisible() {
-            JcrSession session = Brix.get().getCurrentSession(
-                    getWorkspaceModel().getObject().getId());
-            SitePlugin sp = SitePlugin.get();
-            return sp.canEditNode(sp.getGlobalContainer(session), Context.ADMINISTRATION);
+            final Action action = new AccessSitePluginAction(getWorkspaceModel().getObject());
+            final boolean granted = Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+            if (granted) {
+                JcrSession session = Brix.get().getCurrentSession(getWorkspaceModel().getObject().getId());
+                SitePlugin sp = SitePlugin.get();
+                return sp.canEditNode(sp.getGlobalContainer(session), Context.ADMINISTRATION);
+            }
+            return false;
         }
     }
 
@@ -682,10 +693,14 @@ public class SitePlugin implements SessionAwarePlugin {
 
         @Override
         public boolean isVisible() {
-            JcrSession session = Brix.get().getCurrentSession(
-                    getWorkspaceModel().getObject().getId());
-            SitePlugin sp = SitePlugin.get();
-            return sp.canEditNode(sp.getGlobalContainer(session), Context.ADMINISTRATION);
+            final Action action = new AccessSitePluginAction(getWorkspaceModel().getObject());
+            final boolean granted = Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+            if (granted) {
+                JcrSession session = Brix.get().getCurrentSession(getWorkspaceModel().getObject().getId());
+                SitePlugin sp = SitePlugin.get();
+                return sp.canEditNode(sp.getGlobalContainer(session), Context.ADMINISTRATION);
+            }
+            return false;
         }
     }
 

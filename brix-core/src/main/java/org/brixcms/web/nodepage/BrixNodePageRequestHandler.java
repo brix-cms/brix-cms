@@ -25,8 +25,8 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.brixcms.jcr.wrapper.BrixNode;
 
-public class BrixNodePageRequestHandler extends RenderPageRequestHandler implements IRequestHandler, IPageRequestHandler,
-        PageParametersRequestHandler {
+public class BrixNodePageRequestHandler extends RenderPageRequestHandler
+        implements IRequestHandler, IPageRequestHandler, PageParametersRequestHandler {
     // ------------------------------ FIELDS ------------------------------
 
     private final IModel<BrixNode> node;
@@ -48,15 +48,16 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
 
     // --------------------- GETTER / SETTER METHODS ---------------------
 
+    @Override
     public BrixNodeWebPage getPage() {
         return (BrixNodeWebPage) super.getPage();
     }
 
     // ------------------------ INTERFACE METHODS ------------------------
 
-
     // --------------------- Interface IRequestHandler ---------------------
 
+    @Override
     public final void respond(IRequestCycle requestCycle) {
         // if (page == null) {
         // page = pageFactory.newPage();
@@ -75,6 +76,7 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
         respondWithInitialRedirectHandled(requestCycle);
     }
 
+    @Override
     public void detach(IRequestCycle requestCycle) {
         super.detach(requestCycle);
         node.detach();
@@ -83,6 +85,7 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
     // --------------------- Interface PageParametersRequestTarget
     // ---------------------
 
+    @Override
     public BrixPageParameters getPageParameters() {
         if (pageFactory != null) {
             return pageFactory.getPageParameters();
@@ -103,8 +106,6 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
         }
     }
 
-
-
     // -------------------------- INNER CLASSES --------------------------
 
     public static interface PageFactory {
@@ -112,7 +113,6 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
 
         public BrixPageParameters getPageParameters();
     }
-
 
     private static class PageProviderAdapter implements IPageProvider {
         private BrixNodeWebPage page;
@@ -159,19 +159,17 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
                 page.detach();
         }
 
-	    @Override
-	    public boolean hasPageInstance()
-	    {
-		    return page != null;
-	    }
+        @Override
+        public boolean hasPageInstance() {
+            return page != null;
+        }
 
-	    @Override
-	    public boolean isPageInstanceFresh()
-	    {
-		    return !hasPageInstance();
-	    }
+        @Override
+        public boolean isPageInstanceFresh() {
+            return !hasPageInstance();
+        }
 
-	    @Override
+        @Override
         public Integer getPageId() {
             if (page != null) {
                 return page.getPageId();
@@ -185,6 +183,11 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler impleme
                 return page.getRenderCount();
             }
             return null;
+        }
+
+        @Override
+        public boolean wasExpired() {
+            return getPageId() != null && isPageInstanceFresh();
         }
     }
 }
