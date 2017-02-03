@@ -19,10 +19,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.brixcms.Brix;
 import org.brixcms.Plugin;
+import org.brixcms.auth.Action;
 import org.brixcms.jcr.JcrNodeWrapperFactory;
 import org.brixcms.jcr.api.JcrNodeIterator;
 import org.brixcms.jcr.api.JcrSession;
 import org.brixcms.jcr.wrapper.BrixNode;
+import org.brixcms.plugin.menu.auth.AccessMenuPluginAction;
 import org.brixcms.plugin.menu.tile.fulltree.FullTreeMenuTile;
 import org.brixcms.plugin.menu.tile.subtree.SubTreeMenuTile;
 import org.brixcms.plugin.site.page.tile.Tile;
@@ -62,27 +64,33 @@ public class MenuPlugin implements Plugin {
 //    private static final String ID = "brix.plugin.menu.MenuPlugin";
 
 
+    @Override
     public String getId() {
 //		System.out.print(ID);
         return ID;
     }
 
+    @Override
     public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
         return null;
     }
 
+    @Override
     public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
         return null;
     }
 
+    @Override
     public void initWorkspace(Workspace workspace, JcrSession workspaceSession) {
 
     }
 
+    @Override
     public boolean isPluginWorkspace(Workspace workspace) {
         return false;
     }
 
+    @Override
     public List<IBrixTab> newTabs(final IModel<Workspace> workspaceModel) {
         IBrixTab tabs[] = new IBrixTab[]{new Tab(new ResourceModel("menus", "Menus"),
                 workspaceModel)};
@@ -142,6 +150,12 @@ public class MenuPlugin implements Plugin {
         @Override
         public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
             return new ManageMenuPanel(panelId, workspaceModel);
+        }
+        
+        @Override
+        public boolean isVisible() {
+            final Action action = new AccessMenuPluginAction(getWorkspaceModel().getObject());
+            return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
         }
     }
 }
