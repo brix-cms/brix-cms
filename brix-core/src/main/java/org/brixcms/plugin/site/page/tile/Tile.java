@@ -47,10 +47,7 @@ public interface Tile {
         }
 
         public String getUuid() {
-            String tileUuid = Tile.class.getName();
-            //hackish-fix for backward-compatibility required!!!
-            //TODO: better solutions?
-            return tileUuid.replace("org.brixcms.", "brix.");
+            return Tile.class.getName();
         }
     };
 
@@ -109,10 +106,6 @@ public interface Tile {
         }
 
         public static Tile getTileOfType(String type, Brix brix) {
-            //hackish-fix for backward-compatibility required!!!
-            //TODO: better solutions?
-            type = type.replace("org.brixcms.", "brix.");
-
             for (Tile t : getTiles(brix)) {
                 if (t.getTypeName().equals(type)) {
                     return t;
