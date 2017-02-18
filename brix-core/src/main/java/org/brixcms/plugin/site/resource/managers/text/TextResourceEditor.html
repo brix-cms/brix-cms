@@ -1,27 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket>
+<body>
 <wicket:panel>
 
-    <tr>
-        <td class="brix-property-label">
-            <wicket:message key="mimeType"/>
-        </td>
-        <td class="brix-property-value"><input class="form-control" wicket:id="mimeType" type="text" size="15"/></td>
-    </tr>
-    <tr>
-        <td class="brix-property-label">
-            <wicket:message key="requiredProtocol"/>
-        </td>
-        <td class="brix-property-value"><select class="form-control" wicket:id="requiredProtocol"></select></td>
-    </tr>
-    <tr>
-        <td class="brix-property-label">
-            <wicket:message key="content"/>
-        </td>
-        <td class="brix-property-value">&nbsp;</td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <textarea wicket:id="content" class="form-control" cols="60" rows="25"></textarea>
-        </td>
-    </tr>
-
+	<div class="form-group row">
+		<label class="col-sm-2 col-form-label col-form-label-sm"><wicket:message key="mimeType"/></label>
+		<div class="col-sm-10">
+			<input class="form-control form-control-sm" wicket:id="mimeType" type="text"/>
+		</div>
+	</div>
+	<div class="form-group row">
+		<label class="col-sm-2 col-form-label col-form-label-sm"><wicket:message key="requiredProtocol"/></label>
+		<div class="col-sm-10">
+			<select class="form-control form-control-sm" wicket:id="requiredProtocol"></select>
+		</div>
+	</div>
+	<div class="form-group row">
+        <label class="col-sm-2 col-form-label col-form-label-sm"><wicket:message key="content"/></label>
+		<div class="col-sm-12">
+			<textarea wicket:id="content" class="form-control" cols="60" rows="25"></textarea>
+		</div>
+	</div>
 </wicket:panel>
+</body>
+</html>

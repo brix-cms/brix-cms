@@ -1,17 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket>
+<body>
 <wicket:panel>
     <div wicket:id="feedback" class="brix-feedback"></div>
     <form wicket:id="form">
-
-        <table class="brix-property-edit table table-sm" style="width:100%;">
-            <wicket:container wicket:id="editor"></wicket:container>
-        </table>
-        <div style="float:right;">
-            <a class="btn btn-secondary" wicket:id="cancel">
+        <wicket:container wicket:id="editor"></wicket:container>
+        <div class="float-right">
+            <a class="btn btn-secondary btn-sm" wicket:id="cancel">
                 <wicket:message key="cancel"/>
             </a>
-            <a class="btn btn-primary" wicket:id="save">
+            <a class="btn btn-primary btn-sm" wicket:id="save">
                 <wicket:message key="save"/>
             </a>
         </div>
     </form>
 </wicket:panel>
+</body>
+</html>
