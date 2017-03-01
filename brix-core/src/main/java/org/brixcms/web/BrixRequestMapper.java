@@ -322,19 +322,22 @@ public class BrixRequestMapper extends AbstractComponentMapper {
                 return null;
             }
         } else if (requestHandler instanceof BookmarkableListenerRequestHandler) {
-            // stateless
             BookmarkableListenerRequestHandler handler = (BookmarkableListenerRequestHandler) requestHandler;
-            BrixNodeWebPage page = (BrixNodeWebPage) handler.getPage();
-            Integer renderCount = null;
-            if (handler.includeRenderCount()) {
-                renderCount = handler.getRenderCount();
+            if (handler.getPage() instanceof BrixNodeWebPage) {
+                BrixNodeWebPage page = (BrixNodeWebPage) handler.getPage();
+                Integer renderCount = null;
+                if (handler.includeRenderCount()) {
+                    renderCount = handler.getRenderCount();
+                }
+                PageInfo pageInfo = getPageInfo(handler);
+                ComponentInfo componentInfo = new ComponentInfo(renderCount, handler.getComponentPath(), handler.getBehaviorIndex());
+                PageComponentInfo info = new PageComponentInfo(pageInfo, componentInfo);
+                Url url = encode(page);
+                encodePageComponentInfo(url, info);
+                return url;
+            } else {
+                return null;
             }
-            PageInfo pageInfo = getPageInfo(handler);
-            ComponentInfo componentInfo = new ComponentInfo(renderCount, handler.getComponentPath(), handler.getBehaviorIndex());
-            PageComponentInfo info = new PageComponentInfo(pageInfo, componentInfo);
-            Url url = encode(page);
-            encodePageComponentInfo(url, info);
-            return url;
         } else {
             return null;
         }
