@@ -14,6 +14,12 @@
 
 package org.brixcms.plugin.prototype;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -21,22 +27,18 @@ import org.apache.wicket.util.lang.Objects;
 import org.brixcms.Brix;
 import org.brixcms.Path;
 import org.brixcms.Plugin;
+import org.brixcms.auth.Action;
 import org.brixcms.jcr.JcrUtil;
 import org.brixcms.jcr.JcrUtil.ParentLimiter;
 import org.brixcms.jcr.JcrUtil.TargetRootNodeProvider;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.api.JcrSession;
+import org.brixcms.plugin.prototype.auth.AccessPrototypePluginAction;
 import org.brixcms.plugin.site.SitePlugin;
 import org.brixcms.plugin.site.page.global.GlobalContainerNode;
 import org.brixcms.web.tab.AbstractWorkspaceTab;
 import org.brixcms.web.tab.IBrixTab;
 import org.brixcms.workspace.Workspace;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class PrototypePlugin implements Plugin {
     private static final String ID = PrototypePlugin.class.getName();
@@ -225,5 +227,12 @@ public class PrototypePlugin implements Plugin {
         public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
             return new ManagePrototypesPanel(panelId, workspaceModel);
         }
+        
+        @Override
+        public boolean isVisible() {
+            final Action action = new AccessPrototypePluginAction(getWorkspaceModel().getObject());
+            return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+        }
+
     }
 }

@@ -14,17 +14,6 @@
 
 package org.brixcms.plugin.snapshot;
 
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.ResourceModel;
-import org.brixcms.Brix;
-import org.brixcms.Plugin;
-import org.brixcms.jcr.api.JcrSession;
-import org.brixcms.plugin.site.SitePlugin;
-import org.brixcms.web.tab.AbstractWorkspaceTab;
-import org.brixcms.web.tab.IBrixTab;
-import org.brixcms.workspace.Workspace;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -33,6 +22,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.ResourceModel;
+import org.brixcms.Brix;
+import org.brixcms.Plugin;
+import org.brixcms.auth.Action;
+import org.brixcms.jcr.api.JcrSession;
+import org.brixcms.plugin.site.SitePlugin;
+import org.brixcms.plugin.snapshot.auth.AccessSnapshotPluginAction;
+import org.brixcms.web.tab.AbstractWorkspaceTab;
+import org.brixcms.web.tab.IBrixTab;
+import org.brixcms.workspace.Workspace;
 
 public class SnapshotPlugin implements Plugin {
     private static final String ID = SnapshotPlugin.class.getName();
@@ -194,5 +196,12 @@ public class SnapshotPlugin implements Plugin {
         public Panel newPanel(String panelId, IModel<Workspace> workspaceModel) {
             return new ManageSnapshotsPanel(panelId, workspaceModel);
         }
+        
+        @Override
+        public boolean isVisible() {
+            final Action action = new AccessSnapshotPluginAction(getWorkspaceModel().getObject());
+            return Brix.get().getAuthorizationStrategy().isActionAuthorized(action);
+        }
+
     }
 }
