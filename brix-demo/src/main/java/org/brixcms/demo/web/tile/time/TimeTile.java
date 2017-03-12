@@ -29,7 +29,7 @@ public class TimeTile implements Tile {
     }
 
     public String getTypeName() {
-        return "brix.web.TimeTile";
+        return "org.brixcms.demo.TimeTile";
     }
 
     public TileEditorPanel newEditor(String id, IModel<BrixNode> tileContainerNode) {

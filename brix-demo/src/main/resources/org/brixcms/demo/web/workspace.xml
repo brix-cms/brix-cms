@@ -794,7 +794,7 @@
 							<sv:value>brix:tile</sv:value>
 						</sv:property>
 						<sv:property sv:name="brix:tileClass" sv:type="String">
-							<sv:value>brix.web.tile.menu.MenuTile</sv:value>
+							<sv:value>org.brixcms.web.tile.menu.MenuTile</sv:value>
 						</sv:property>
 						<sv:property sv:name="brix:tileId" sv:type="String">
 							<sv:value>top-menu</sv:value>
@@ -872,7 +872,7 @@
 							<sv:value>brix:tile</sv:value>
 						</sv:property>
 						<sv:property sv:name="brix:tileClass" sv:type="String">
-							<sv:value>brix.web.tile.menu.MenuTile</sv:value>
+							<sv:value>org.brixcms.web.tile.menu.MenuTile</sv:value>
 						</sv:property>
 						<sv:property sv:name="brix:tileId" sv:type="String">
 							<sv:value>right-menu</sv:value>
@@ -1319,7 +1319,7 @@
 							<sv:value>brix:tile</sv:value>
 						</sv:property>
 						<sv:property sv:name="brix:tileClass" sv:type="String">
-							<sv:value>org.brixcms.web.TimeTile</sv:value>
+							<sv:value>org.brixcms.demo.TimeTile</sv:value>
 						</sv:property>
 						<sv:property sv:name="brix:tileId" sv:type="String">
 							<sv:value>time</sv:value>
