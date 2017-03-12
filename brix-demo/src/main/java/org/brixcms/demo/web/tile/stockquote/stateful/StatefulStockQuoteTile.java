@@ -46,7 +46,7 @@ public class StatefulStockQuoteTile implements Tile {
      * {@inheritDoc}
      */
     public String getTypeName() {
-        return "brix.demo.StatefulStockQuoteTile";
+        return "org.brixcms.demo.StatefulStockQuoteTile";
     }
 
     /**
