@@ -165,7 +165,7 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler
         }
 
         @Override
-        public boolean isPageInstanceFresh() {
+        public boolean doesProvideNewPage() {
             return !hasPageInstance();
         }
 
@@ -187,7 +187,7 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler
 
         @Override
         public boolean wasExpired() {
-            return getPageId() != null && isPageInstanceFresh();
+            return getPageId() != null && doesProvideNewPage();
         }
     }
 }

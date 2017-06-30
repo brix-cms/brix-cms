@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.FormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.brixcms.Brix;
@@ -42,18 +43,13 @@ public class WorkspaceSwitcher extends BrixGenericPanel<Workspace> {
                 return getWorkspaces();
             }
         };
-        DropDownChoice<Workspace> choice = new DropDownChoice<Workspace>("workspaces", model, workspaceModel, new Renderer()) {
+        DropDownChoice<Workspace> choice = new DropDownChoice<Workspace>("workspaces", model, workspaceModel, new Renderer());
+        choice.add(new FormComponentUpdatingBehavior(){
             @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
+            protected void onUpdate() {
+                getFormComponent().detach();
             }
-
-            @Override
-            protected void onSelectionChanged(Workspace newSelection) {
-                detach();
-                super.onSelectionChanged(newSelection);
-            }
-        };
+        });
         choice.setNullValid(false);
         add(choice);
     }

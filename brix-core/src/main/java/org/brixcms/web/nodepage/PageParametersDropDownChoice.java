@@ -16,6 +16,7 @@ package org.brixcms.web.nodepage;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.FormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.IRequestHandler;
@@ -34,19 +35,47 @@ import java.util.List;
 public class PageParametersDropDownChoice<T> extends DropDownChoice<T> {
     public PageParametersDropDownChoice(String id, IModel<T> model, List<? extends T> choices) {
         super(id, model, choices);
+        add(new FormComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate() {
+                super.onUpdate();
+                onSelectionChanged();
+            }
+        });
     }
 
     public PageParametersDropDownChoice(String id, IModel<T> model, IModel<List<? extends T>> choices) {
         super(id, model, choices);
+        add(new FormComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate() {
+                super.onUpdate();
+                onSelectionChanged();
+            }
+        });
     }
 
     public PageParametersDropDownChoice(String id, IModel<T> model, List<? extends T> data, IChoiceRenderer<T> renderer) {
         super(id, model, data, renderer);
+        add(new FormComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate() {
+                super.onUpdate();
+                onSelectionChanged();
+            }
+        });
     }
 
     public PageParametersDropDownChoice(String id, IModel<T> model, IModel<List<? extends T>> choices,
                                         IChoiceRenderer<T> renderer) {
         super(id, model, choices, renderer);
+        add(new FormComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate() {
+                super.onUpdate();
+                onSelectionChanged();
+            }
+        });
     }
 
     @Override
@@ -54,8 +83,8 @@ public class PageParametersDropDownChoice<T> extends DropDownChoice<T> {
         return true;
     }
 
-    @Override
-    protected void onSelectionChanged(Object newSelection) {
+
+    protected void onSelectionChanged() {
         getRequestCycle().replaceAllRequestHandlers(getRequestHandler());
     }
 
