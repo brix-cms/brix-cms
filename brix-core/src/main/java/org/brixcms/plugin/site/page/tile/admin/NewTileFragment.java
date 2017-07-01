@@ -25,12 +25,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -96,17 +91,12 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
         idSuggestion.setNullValid(true);
 
         form.add(new DropDownChoice<String>("tileType", new PropertyModel<String>(this, "newTileTypeName"), new TileTypeNamesModel(),
-                new TileTypeNameRenderer()) {
-            private static final long serialVersionUID = 1L;
-
+                new TileTypeNameRenderer())
+                .setRequired(true)
+                .add(new FormComponentUpdatingBehavior() {
             @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-
-            @Override
-            protected void onSelectionChanged(String tileTypeName) {
-                ;
+            protected void onUpdate() {
+                String tileTypeName = ((DropDownChoice<String>) getFormComponent()).getModelObject();
                 if (tileTypeName == null) {
                     EmptyPanel ep = new EmptyPanel(newTileEditor.getId());
                     newTileEditor.replaceWith(ep);
@@ -119,8 +109,7 @@ public abstract class NewTileFragment extends BrixGenericFragment<BrixNode> {
                     newTileEditor = ed;
                 }
             }
-
-        }.setRequired(true));
+        }));
 
         newTileEditor = new EmptyPanel("tile-editor");
         form.add(newTileEditor);

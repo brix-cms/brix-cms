@@ -14,7 +14,6 @@
 package org.brixcms.plugin.site.page.admin;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 public class ProtocolLabel extends Label {
@@ -22,7 +21,7 @@ public class ProtocolLabel extends Label {
 
     public ProtocolLabel(String id, final IModel<Boolean> protocolModel) {
         super(id);
-        setDefaultModel(new AbstractReadOnlyModel<String>() {
+        setDefaultModel(new IModel<Object>() {
             @Override
             public String getObject() {
                 Boolean proto = protocolModel.getObject();
