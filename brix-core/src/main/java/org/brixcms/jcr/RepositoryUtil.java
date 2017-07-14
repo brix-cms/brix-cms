@@ -41,16 +41,15 @@ public class RepositoryUtil {
                 "  - * (undefined) " +
                 "  + * (nt:base) sns version ";
 
-        NodeTypeManager manager = null;
         try {
-            manager = workspace.getNodeTypeManager();
+            NodeTypeManager manager = workspace.getNodeTypeManager();
 
             if (manager.hasNodeType("brix:unstructured") == false) {
                 CndImporter.registerNodeTypes(new StringReader(cnd), workspace.getSession());
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("JCR error - could not create the brix:unstructured mixin", e);
         }
 
 
