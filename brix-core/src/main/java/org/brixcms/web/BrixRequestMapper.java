@@ -571,18 +571,6 @@ public class BrixRequestMapper extends AbstractComponentMapper {
                 return Scheme.HTTP;
             case HTTPS:
                 return Scheme.HTTPS;
-            /**
-             * could be seen as not really correct as PRESERVE_CURRENT could
-             * also relate to "not change the scheme", however, Brix
-             * traditionally respected this as "NON SSL" like described on the
-             * SSL Page in the brix-demo:
-             *
-             * "... The URL will revert back to a non-secure one once the user navigates to a page that does not require SSL. "
-             *
-             */
-            case PRESERVE_CURRENT:
-                return Scheme.HTTP;
-
             }
         }
         return Scheme.ANY;

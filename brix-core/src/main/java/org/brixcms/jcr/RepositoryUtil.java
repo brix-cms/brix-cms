@@ -29,6 +29,32 @@ import java.io.StringReader;
 public class RepositoryUtil {
     private static final Logger logger = LoggerFactory.getLogger(Brix.class);
 
+    /**
+     * register a brix basic node as a unstructured node type, reason is: accoring to JCR spec 2,
+     * a mixin may only have other mixins as supertypes
+     *
+     * @param workspace
+     */
+    public static void registerBrixUnstructuredMixin(Workspace workspace) {
+        String cnd = "[brix:unstructured] mixin" +
+                "  - * (undefined) multiple " +
+                "  - * (undefined) " +
+                "  + * (nt:base) sns version ";
+
+        try {
+            NodeTypeManager manager = workspace.getNodeTypeManager();
+
+            if (manager.hasNodeType("brix:unstructured") == false) {
+                CndImporter.registerNodeTypes(new StringReader(cnd), workspace.getSession());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("JCR error - could not create the brix:unstructured mixin", e);
+        }
+
+
+    }
+
     public static void registerNodeType(Workspace workspace, String typeName,
                                         boolean referenceable, boolean orderable, boolean mixin) {
         try {
@@ -38,7 +64,7 @@ public class RepositoryUtil {
                 logger.info("Registering node type: {} in workspace {}", typeName, workspace
                         .getName());
 
-                String type = "[" + typeName + "] > nt:unstructured ";
+                String type = "[" + typeName + "] > brix:unstructured ";
 
                 if (referenceable) {
                     type += ", mix:referenceable ";

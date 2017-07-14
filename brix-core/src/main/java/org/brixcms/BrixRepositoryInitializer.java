@@ -60,6 +60,9 @@ public class BrixRepositoryInitializer implements RepositoryInitializer {
 
         EventUtil.registerSaveEventListener(new JcrEventListener());
 
+        //register the unstructured brix:unstructured base so it can be used as mixin
+        RepositoryUtil.registerBrixUnstructuredMixin(w);
+
         RepositoryUtil.registerNodeType(w, BrixNode.JCR_TYPE_BRIX_NODE, true, true, true);
 
         // the following three have always brix:node mixin too

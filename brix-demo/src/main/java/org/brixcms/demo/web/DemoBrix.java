@@ -18,6 +18,7 @@ import org.brixcms.Brix;
 import org.brixcms.Plugin;
 import org.brixcms.auth.AuthorizationStrategy;
 import org.brixcms.config.BrixConfig;
+import org.brixcms.demo.web.tile.ajax.AjaxDemoTile;
 import org.brixcms.demo.web.tile.guestbook.GuestBookTile;
 import org.brixcms.demo.web.tile.stockquote.stateful.StatefulStockQuoteTile;
 import org.brixcms.demo.web.tile.stockquote.stateless.StatelessStockQuoteTile;
@@ -55,6 +56,7 @@ public class DemoBrix extends Brix {
         config.getRegistry().register(Tile.POINT, new TimeTile());
         config.getRegistry().register(Tile.POINT, new StatefulStockQuoteTile());
         config.getRegistry().register(Tile.POINT, new StatelessStockQuoteTile());
+        config.getRegistry().register(Tile.POINT, new AjaxDemoTile());
     }
 
     /**
