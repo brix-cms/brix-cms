@@ -64,7 +64,14 @@ public class RepositoryUtil {
                 logger.info("Registering node type: {} in workspace {}", typeName, workspace
                         .getName());
 
-                String type = "[" + typeName + "] > brix:unstructured ";
+                String type;
+                //todo: find a version that satisfies jackrabbit and modeshape as well
+                if(manager.getClass().getName().contains("jackrabbit")) {
+                    type  = "[" + typeName + "] > nt:unstructured ";
+                } else {
+                    type  = "[" + typeName + "] > brix:unstructured ";
+                }
+
 
                 if (referenceable) {
                     type += ", mix:referenceable ";
