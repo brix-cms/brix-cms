@@ -66,7 +66,7 @@ public class RepositoryUtil {
 
                 String type;
                 //todo: find a version that satisfies jackrabbit and modeshape as well
-                if(manager.getClass().toString().contains("jackrabbit")) {
+                if(manager.getClass().getName().contains("jackrabbit")) {
                     type  = "[" + typeName + "] > nt:unstructured ";
                 } else {
                     type  = "[" + typeName + "] > brix:unstructured ";

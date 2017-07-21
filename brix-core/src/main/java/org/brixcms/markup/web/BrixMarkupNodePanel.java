@@ -58,9 +58,9 @@ public abstract class BrixMarkupNodePanel extends BrixGenericPanel<BrixNode> imp
     }
 
     @Override
-    protected void onBeforeRender() {
+    protected void onInitialize() {
         this.markupHelper = new MarkupHelper(this);
-        super.onBeforeRender();
+        super.onInitialize();
     }
 
     @Override
