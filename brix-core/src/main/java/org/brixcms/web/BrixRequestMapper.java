@@ -90,7 +90,7 @@ public class BrixRequestMapper extends AbstractComponentMapper {
 
     @Override
     public IRequestHandler mapRequest(Request request) {
-        final Url url = request.getClientUrl();
+        final Url url = request.getUrl();
 
         if (isInternalWicket(request)) {
             return null;
