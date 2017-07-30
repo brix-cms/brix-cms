@@ -65,6 +65,7 @@ import org.brixcms.jcr.exception.JcrException;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SiteNodePlugin;
 import org.brixcms.plugin.site.SitePlugin;
+import org.brixcms.plugin.site.folder.FolderNode;
 import org.brixcms.plugin.site.page.AbstractSitePagePlugin;
 import org.brixcms.plugin.site.page.PageRenderingPage;
 import org.brixcms.web.nodepage.BrixNodePageRequestHandler;
@@ -111,22 +112,21 @@ public class BrixRequestMapper extends AbstractComponentMapper {
 
         Path path = new Path("/" + url.getPath());
 
-        //fix for ROOT AJAX requests...-> to index.brix
-        if(path.isRoot() && ((WebRequest)request).isAjax()) {
-            path = new Path("/" + SitePlugin.BRIX_INDEX_PAGE);
-        }
-
+        BrixNode node = null;
         // root path handling
         if (path.isRoot()) {
-            final BrixNode node = getNodeForUriPath(path);
-            return SitePlugin.get().getNodePluginForNode(node).respond(new BrixNodeModel(node),
-                    new BrixPageParameters(request.getRequestParameters()));
+            node = getNodeForUriPath(path);
+            if(node instanceof FolderNode) {
+                node = ((FolderNode) node).getRedirectReference().getNodeModel().getObject();
+            }
         }
 
         IRequestHandler handler = null;
         try {
             while (handler == null) {
-                final BrixNode node = getNodeForUriPath(path);
+                if(node == null) {
+                    node = getNodeForUriPath(path);
+                }
                 if (node != null) {
                     SiteNodePlugin plugin = SitePlugin.get().getNodePluginForNode(node);
                     if (plugin instanceof AbstractSitePagePlugin) {
@@ -481,6 +481,11 @@ public class BrixRequestMapper extends AbstractComponentMapper {
 
         // create desired nodepath
         final Path nodePath = brix.getConfig().getMapper().getNodePathForUriPath(uriPath.toAbsolute(), brix);
+
+//        if(nodePath.isRoot() && nodePath != null) {
+//            final BrixNode rootNode = getNodeForUriPath(nodePath);
+//
+//        }
 
         if (nodePath != null) {
             // allow site plugin to translate the node path into an actual jcr
