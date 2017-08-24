@@ -63,9 +63,9 @@ public abstract class BrixMarkupNodeWebPage extends BrixNodeWebPage implements I
     }
 
     @Override
-    protected void onBeforeRender() {
+    protected void onInitialize() {
         getMarkupHelper();
-        super.onBeforeRender();
+        super.onInitialize();
     }
 
     @Override

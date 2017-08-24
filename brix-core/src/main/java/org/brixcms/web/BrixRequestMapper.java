@@ -197,7 +197,7 @@ public class BrixRequestMapper extends AbstractComponentMapper {
                     @Override
                     public IRequestablePage newPageInstance(Class<? extends IRequestablePage> pageClass, PageParameters pageParameters) {
                         return new PageRenderingPage(new BrixNodeModel(getNodeForUriPath(finalPath)),
-                                new BrixPageParameters(pageParameters));
+                                createBrixPageParams(request.getUrl(), finalPath));
                     }
                 });
                 return new ListenerRequestHandler(provider, componentInfo.getBehaviorId());
