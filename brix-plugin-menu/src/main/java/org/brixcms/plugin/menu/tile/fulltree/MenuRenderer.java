@@ -93,6 +93,11 @@ public class MenuRenderer extends AbstractMenuRenderer {
             cssClasses.deleteCharAt(cssClasses.length() - 1);
         }
 
+        StringBuilder additionalTags = new StringBuilder();
+        if(!Strings.isEmpty(entry.getAdditionalTags())) {
+            additionalTags.append(entry.getAdditionalTags().trim());
+        }
+
         response.write("<li");
         if (cssClasses.length() > 0) {
             response.write(" class=\"");
@@ -108,6 +113,9 @@ public class MenuRenderer extends AbstractMenuRenderer {
                 response.write(" class=\"");
                 response.write(cssClasses);
                 response.write("\"");
+            }
+            if(additionalTags.length() >0) {
+                response.write(" " + additionalTags + " ");
             }
             response.write(" href=\"");
             response.write(getUrl(entry));

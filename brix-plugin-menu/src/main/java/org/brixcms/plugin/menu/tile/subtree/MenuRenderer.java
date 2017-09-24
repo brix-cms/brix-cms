@@ -109,6 +109,10 @@ class MenuRenderer extends AbstractMenuRenderer {
         if (skipLevels <= 0) {
             String listItemCssClass = "";
             String anchorCssClass = "";
+            StringBuilder additionalTags = new StringBuilder();
+            if(!Strings.isEmpty(entry.getAdditionalTags())) {
+                additionalTags.append(entry.getAdditionalTags().trim());
+            }
             if (selected && !Strings.isEmpty(container.getSelectedItemStyleClass())) {
                 listItemCssClass = container.getSelectedItemStyleClass();
                 anchorCssClass = container.getSelectedItemStyleClass();
@@ -146,6 +150,9 @@ class MenuRenderer extends AbstractMenuRenderer {
                     response.write(" class=\"");
                     response.write(anchorCssClass);
                     response.write("\"");
+                }
+                if(additionalTags.length() >0) {
+                    response.write(" " + additionalTags + " ");
                 }
                 response.write(" href=\"");
                 response.write(url);
