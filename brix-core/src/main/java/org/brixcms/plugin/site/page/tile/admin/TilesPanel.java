@@ -34,6 +34,7 @@ import org.apache.wicket.util.string.Strings;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.admin.NodeManagerPanel;
 import org.brixcms.plugin.site.page.AbstractContainer;
+import org.brixcms.plugin.site.page.tile.Tile;
 import org.brixcms.plugin.site.page.tile.TileContainerFacet;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import java.util.List;
 public class TilesPanel extends NodeManagerPanel {
     String selectedTileId;
     private Component editor;
+    private Component tileName;
 
     public TilesPanel(String id, IModel<BrixNode> nodeModel) {
         super(id, nodeModel);
@@ -97,6 +99,9 @@ public class TilesPanel extends NodeManagerPanel {
 
         editor = new WebComponent("tile-editor");
         add(editor);
+        tileName = new Label("tile-name", "");
+        tileName.setVisible(false);
+        add(tileName);
 
         // init first editor
         setupTileEditor();
@@ -113,6 +118,7 @@ public class TilesPanel extends NodeManagerPanel {
 
     private void setupTileEditor() {
         Fragment newEditor = null;
+        Component newTileName = null;
 
         if (Strings.isEmpty(selectedTileId)) {
             newEditor = new NewTileFragment(editor.getId(), "new-tile-form-fragment", this, getModel()) {
@@ -128,6 +134,7 @@ public class TilesPanel extends NodeManagerPanel {
                     setupTileEditor();
                 }
             };
+            newTileName = new Label(tileName.getId(),"").setVisible(false);
         } else {
             newEditor = new TileEditorFragment(editor.getId(), "editor-form-fragment", this, getModel(),
                     selectedTileId, filterFeedback()) {
@@ -144,9 +151,17 @@ public class TilesPanel extends NodeManagerPanel {
                     setupTileEditor();
                 }
             };
+
+            BrixNode tileNode = getTileContainerNode().tiles().getTile(selectedTileId);
+            String currentTileClassType = TileContainerFacet.getTileClassName(tileNode);
+            String currentTileName = Tile.Helper.getTileOfType(currentTileClassType, getModelObject().getBrix()).getDisplayName();
+            newTileName = new Label(tileName.getId(), currentTileName + " (" + currentTileClassType + ")");
+
         }
         editor.replaceWith(newEditor);
         editor = newEditor;
+        tileName.replaceWith(newTileName);
+        tileName = newTileName;
     }
 
     private AbstractContainer getTileContainerNode() {
