@@ -91,6 +91,10 @@ public class Menu implements IDetachable {
         if (node.hasProperty("menuType") && ChildEntry.MenuType.valueOf(node.getProperty("menuType").getString()) != null) {
             entry.setMenuType(ChildEntry.MenuType.valueOf(node.getProperty("menuType").getString()));
         }
+
+        if(node.hasProperty("additionalTags")) {
+            entry.setAdditionalTags(node.getProperty("additionalTags").getString());
+        }
     }
 
     public void save(BrixNode node) {
@@ -112,6 +116,7 @@ public class Menu implements IDetachable {
             node.setProperty("cssClass", childEntry.getCssClass());
             node.setProperty("menuType", childEntry.getMenuType().toString());
             node.setProperty("labelOrCode", childEntry.getLabelOrCode());
+            node.setProperty("additionalTags", childEntry.getAdditionalTags());
             if (childEntry.getReference() != null) {
                 childEntry.getReference().save(node, "reference");
             }
@@ -195,6 +200,7 @@ public class Menu implements IDetachable {
         private Reference reference;
         private String labelOrCode;
         private String cssClass;
+        private String additionalTags;
 
         public String getTitle() {
             return title;
@@ -226,6 +232,14 @@ public class Menu implements IDetachable {
 
         public void setCssClass(String cssClass) {
             this.cssClass = cssClass;
+        }
+
+        public String getAdditionalTags() {
+            return additionalTags;
+        }
+
+        public void setAdditionalTags(String additionalTags) {
+            this.additionalTags = additionalTags;
         }
 
         @Override

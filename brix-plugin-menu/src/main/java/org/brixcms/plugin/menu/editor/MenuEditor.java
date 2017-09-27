@@ -245,6 +245,14 @@ public class MenuEditor extends BrixGenericPanel<Menu> {
                 return false;
             }
         }.setInitialSize(200));
+        columns.add(new EditablePropertyColumn(new ResourceModel("additionalTags"), "entry.additionalTags") {
+            @Override
+            protected boolean isClickToEdit() {
+                return false;
+            }
+        }.setInitialSize(200));
+
+
 
         columns.add(new SwitcherColumn("referenceEditor", new ResourceModel("referenceLabelCode"), conf).setInitialSize(400));
 
