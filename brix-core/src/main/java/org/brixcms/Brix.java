@@ -29,6 +29,7 @@ import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.https.HttpsConfig;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.brixcms.auth.Action;
@@ -148,6 +149,26 @@ public abstract class Brix {
         String url = RequestCycle.get().urlFor(target).toString();
         target.detach(RequestCycle.get());
         return url;
+    }
+
+    /**
+     * Creates a full URL from the current relative one and then renders it without protocol, host and
+     * port; e.g.: https://123.123.123.123:8443/foo/bar?query=param#has gets to /foo/bar?query=param#has
+     *
+     * this is handy for any situation where you want to cache rendered content and reuse this on different
+     * pages/ paths e.g.: big mega menus with hundred of nodes can have the resulting html cached as pure string
+     * without the need to recreate them each time
+     *
+     * @param relativeUrl any relative url from anywhere in brix
+     * @return a String representation of the url that is absolute to the root,
+     *          e.g.: /foo/bar?query=param#has
+     */
+    public static String toAbsolutePathWithoutHost(final String relativeUrl) {
+        Url url = Url.parse(relativeUrl);
+        String _fullUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(url);
+        Url fullUrl = Url.parse(_fullUrl);
+        _fullUrl = fullUrl.toString(Url.StringMode.LOCAL);
+        return _fullUrl;
     }
 
     /**
