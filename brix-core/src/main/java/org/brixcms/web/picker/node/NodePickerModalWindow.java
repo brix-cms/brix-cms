@@ -51,11 +51,11 @@ public class NodePickerModalWindow extends ModalWindow implements IGenericCompon
     }
 
     private void init() {
-        setWidthUnit("em");
-        setInitialWidth(64);
+        setWidthUnit("vw");
+        setInitialWidth(70);
         setUseInitialHeight(true);
-        setInitialHeight(40);
-        setHeightUnit("em");
+        setInitialHeight(70);
+        setHeightUnit("vh");
         setResizable(false);
         setTitle(new ResourceModel("node-picker-title"));
     }

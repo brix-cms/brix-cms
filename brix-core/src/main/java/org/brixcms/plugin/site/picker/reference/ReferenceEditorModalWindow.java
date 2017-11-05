@@ -31,9 +31,11 @@ public class ReferenceEditorModalWindow extends ModalWindow implements IGenericC
 
         this.configuration = configuration;
 
-        setWidthUnit("em");
-        setInitialWidth(64);
-        setUseInitialHeight(false);
+        setWidthUnit("vw");
+        setInitialWidth(70);
+        setHeightUnit("vh");
+        setInitialHeight(70);
+        setUseInitialHeight(true);
         setResizable(false);
         setCookieName("reference-editor");
         setTitle(new ResourceModel("title"));

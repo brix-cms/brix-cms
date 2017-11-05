@@ -66,9 +66,11 @@ public class ManagePrototypesPanel extends BrixGenericPanel<Workspace> {
         add(modalWindowForm);
 
         final ModalWindow modalWindow = new ModalWindow("modalWindow");
-        modalWindow.setInitialWidth(64);
-        modalWindow.setWidthUnit("em");
+        modalWindow.setInitialWidth(70);
+        modalWindow.setWidthUnit("vw");
         modalWindow.setUseInitialHeight(true);
+        modalWindow.setInitialHeight(70);
+        modalWindow.setHeightUnit("vh");
         modalWindow.setResizable(false);
         modalWindow.setTitle(new ResourceModel("selectItems"));
         modalWindowForm.add(modalWindow);
