@@ -59,7 +59,7 @@
 		<deployment.disabled>false</deployment.disabled>
 		<sources.disabled>false</sources.disabled>
 
-		<wicket.version>8.0.0-M7</wicket.version>
+		<wicket.version>8.0.0-M8</wicket.version>
 		<jetty.version>9.4.2.v20170220</jetty.version>
 		<inmethod.grid.version>8.0.0-M7</inmethod.grid.version>
 		<htmllexer.version>2.1</htmllexer.version>
