@@ -21,6 +21,8 @@ import org.brixcms.markup.title.TitleTransformer;
 import org.brixcms.markup.transform.HeadTransformer;
 import org.brixcms.markup.variable.VariableTransformer;
 import org.brixcms.markup.web.BrixMarkupNodeWebPage;
+import org.brixcms.plugin.site.SiteRootNode;
+import org.brixcms.plugin.site.folder.FolderNode;
 import org.brixcms.web.nodepage.BrixPageParameters;
 import org.brixcms.web.nodepage.toolbar.ToolbarBehavior;
 
@@ -45,6 +47,12 @@ public class PageRenderingPage extends BrixMarkupNodeWebPage {
 
 
     public MarkupSource getMarkupSource() {
+
+        if(getModelObject() instanceof SiteRootNode) {
+            BrixNode targetNode = ((FolderNode) getModelObject()).getRedirectReference().getNodeModel().getObject();
+            setModelObject(targetNode);
+        }
+
         MarkupSource source = new PageMarkupSource((AbstractContainer) getModelObject());
         return transform(source, (AbstractContainer) getModelObject());
     }
