@@ -14,22 +14,70 @@
 
 package org.brixcms.demo.web;
 
-import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
+import org.apache.wicket.core.request.handler.ComponentNotFoundException;
+import org.apache.wicket.core.request.mapper.MapperUtils;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.handler.RedirectRequestHandler;
+import org.apache.wicket.request.mapper.info.PageComponentInfo;
 
 import javax.jcr.Session;
 
 /**
- * Subclass of {@link AbstractRequestCycleListener} that cleans any open Jcr {@link Session}s at the end of request
+ * Implemention of {@link IRequestCycleListener} that cleans any open Jcr {@link Session}s at the end of request
  *
  * @author igor.vaynberg
  */
-public class WicketRequestCycleListener extends AbstractRequestCycleListener {
+public class WicketRequestCycleListener implements IRequestCycleListener {
 
+    @Override
+    public void onBeginRequest(RequestCycle cycle) {
+        System.out.println("fo1?");
+    }
 
     @Override
     public void onEndRequest(RequestCycle cycle) {
-        super.onEndRequest(cycle);
         AbstractWicketApplication.get().cleanupSessionFactory();
+    }
+
+    /**
+     *
+     * this is an example how one can fix errors that may arise in production when the URLs change over time
+     * as the components on a page evolve because id of components change
+     *
+     * e.g.:
+     * ./stockquote.html?2-1.-brix~tile~6-form -> may be ok now
+     * ./stockquote.html?2-1.-brix~tile~6-coolform -> may be ok in future
+     *
+     * -> if not found does a 302 to the base path
+     * ./stockquote.html
+     *
+     * @param cycle
+     * @param ex
+     * @return
+     */
+    @Override
+    public IRequestHandler onException(RequestCycle cycle, Exception ex) {
+        if(ex instanceof ComponentNotFoundException) {
+            Url originalUrl = cycle.getRequest().getUrl();
+            PageComponentInfo info = MapperUtils.getPageComponentInfo(originalUrl);
+            String _newUrl = originalUrl.toString().replace(info.toString(), "");
+            if(_newUrl.endsWith("?")) {
+                _newUrl = _newUrl.substring(0, _newUrl.length()-1);
+            }
+            cycle.replaceAllRequestHandlers(new RedirectRequestHandler("/" + _newUrl));
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onExceptionRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler, Exception exception) {
+        if(exception instanceof ComponentNotFoundException) {
+           System.out.println("fooo");
+        }
+
     }
 }
