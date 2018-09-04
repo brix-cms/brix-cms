@@ -126,4 +126,11 @@ public class BrixNodeRequestHandler implements IPageRequestHandler {
         return null;
     }
 
+    public IModel<BrixNode> getNodeModel() {
+        return nodeModel;
+    }
+
+    public BrixPageParameters getParameters() {
+        return parameters;
+    }
 }

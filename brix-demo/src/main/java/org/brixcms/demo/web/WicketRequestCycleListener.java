@@ -33,11 +33,6 @@ import javax.jcr.Session;
 public class WicketRequestCycleListener implements IRequestCycleListener {
 
     @Override
-    public void onBeginRequest(RequestCycle cycle) {
-        System.out.println("fo1?");
-    }
-
-    @Override
     public void onEndRequest(RequestCycle cycle) {
         AbstractWicketApplication.get().cleanupSessionFactory();
     }
@@ -73,11 +68,4 @@ public class WicketRequestCycleListener implements IRequestCycleListener {
         return null;
     }
 
-    @Override
-    public void onExceptionRequestHandlerResolved(RequestCycle cycle, IRequestHandler handler, Exception exception) {
-        if(exception instanceof ComponentNotFoundException) {
-           System.out.println("fooo");
-        }
-
-    }
 }
