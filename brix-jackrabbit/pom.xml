@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.brixcms</groupId>
         <artifactId>brix</artifactId>
-        <version>8.0-SNAPSHOT</version>
+        <version>${revision}${changelist}</version>
     </parent>
 
     <groupId>org.brixcms</groupId>
     <artifactId>brix-jackrabbit</artifactId>
-    <version>8.0-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
 
     <name>Brix Jackrabbit Module</name>
     <description>

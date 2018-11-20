@@ -10,7 +10,8 @@
 
 	<groupId>org.brixcms</groupId>
 	<artifactId>brix</artifactId>
-	<version>8.0-SNAPSHOT</version>
+	<!-- works from maven 3.5 on, we now declare the version centrally in properties revision + changelist -->
+	<version>${revision}${changelist}</version>
 
 	<packaging>pom</packaging>
 
@@ -49,6 +50,10 @@
 	</modules>
 
 	<properties>
+		<!-- brix version is now set here -->
+		<revision>8.0.0</revision>
+		<changelist>-SNAPSHOT</changelist>
+
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 
@@ -73,62 +78,62 @@
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-wrapper</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-core</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-rmiserver</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-workspace</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-plugin-snapshot</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-plugin-prototype</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-plugin-menu</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-plugin-webdavurl</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-plugin-publish</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-jackrabbit</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-jackrabbit-testdeps</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.brixcms</groupId>
 				<artifactId>brix-modeshape</artifactId>
-				<version>8.0-SNAPSHOT</version>
+				<version>${revision}${changelist}</version>
 			</dependency>
 
 			<dependency>

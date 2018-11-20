@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.brixcms</groupId>
         <artifactId>brix</artifactId>
-        <version>8.0-SNAPSHOT</version>
+        <version>${revision}${changelist}</version>
     </parent>
 
     <groupId>org.brixcms</groupId>
     <artifactId>brix-rmiserver</artifactId>
-    <version>8.0-SNAPSHOT</version>
+    <version>${revision}${changelist}</version>
 
     <packaging>war</packaging>
 
