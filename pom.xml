@@ -52,7 +52,7 @@
 	<properties>
 		<!-- brix version is now set here -->
 		<revision>8.0.0</revision>
-		<changelist>-SNAPSHOTXY</changelist>
+		<changelist>-SNAPSHOT</changelist>
 
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
