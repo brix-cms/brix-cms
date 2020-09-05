@@ -34,7 +34,7 @@ import java.io.InputStream;
  */
 public class JcrUtils {
     /**
-     * Create a {@link brix.workspace.WorkspaceManager} implementation. If <code>url</code> starts with
+     * Create a {@link org.brixcms.workspace.WorkspaceManager} implementation. If <code>url</code> starts with
      * <code>rmi://</code> an rmi based workspace manager will be created and returned. If <code>url</code> is left
      * blank, a local workspace manager will be created.
      *

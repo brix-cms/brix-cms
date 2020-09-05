@@ -37,7 +37,6 @@
 		<module>brix-core</module>
 		<module>brix-wrapper</module>
 		<module>brix-demo</module>
-		<module>brix-rmiserver</module>
 		<module>brix-workspace</module>
 		<module>brix-plugin-snapshot</module>
 		<module>brix-plugin-prototype</module>
