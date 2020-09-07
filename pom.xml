@@ -745,7 +745,7 @@
 	<distributionManagement>
 		<repository>
 			<id>sonatype</id>
-			<url>http://repository.sonatype.org/content/groups/public/</url>
+			<url>https://repository.sonatype.org/content/groups/public/</url>
 		</repository>
 	</distributionManagement>
 
