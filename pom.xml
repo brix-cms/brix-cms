@@ -29,10 +29,6 @@
 		</license>
 	</licenses>
 
-	<prerequisites>
-		<maven>3.6.0</maven>
-	</prerequisites>
-
 	<modules>
 		<module>brix-core</module>
 		<module>brix-wrapper</module>
@@ -296,27 +292,6 @@
 				<version>1.2.16</version>
 			</dependency>
 
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-analyzers</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-core</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-misc</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-regex</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
-
 			<!--+ | JETTY + -->
 			<dependency>
 				<groupId>org.eclipse.jetty.aggregate</groupId>
@@ -397,6 +372,27 @@
 			</testResource>
 		</testResources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6.3</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>flatten-maven-plugin</artifactId>
