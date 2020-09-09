@@ -207,17 +207,12 @@
 				<version>${jackrabbit.version}</version>
 			</dependency>
 			<!--+ | HELPERS + -->
-			<!-- Attention: do not user a *-java7 version of xstream! - it is only for pure java 7 runtimes, see https://github.com/x-stream/xstream/issues/112		-->
+			<!-- Attention: do not use a *-java7 version of xstream! - it is only for pure java 7 runtimes, see https://github.com/x-stream/xstream/issues/112		-->
 			<dependency>
 				<groupId>com.thoughtworks.xstream</groupId>
 				<artifactId>xstream</artifactId>
 				<version>1.4.13</version>
 			</dependency>
-<!--			<dependency>-->
-<!--				<groupId>xpp3</groupId>-->
-<!--				<artifactId>xpp3_min</artifactId>-->
-<!--				<version>1.1.4c</version>-->
-<!--			</dependency>-->
 			<dependency>
 				<groupId>org.ogce</groupId>
 				<artifactId>xpp3</artifactId>
