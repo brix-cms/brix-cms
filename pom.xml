@@ -29,15 +29,10 @@
 		</license>
 	</licenses>
 
-	<prerequisites>
-		<maven>3.3.9</maven>
-	</prerequisites>
-
 	<modules>
 		<module>brix-core</module>
 		<module>brix-wrapper</module>
 		<module>brix-demo</module>
-		<module>brix-rmiserver</module>
 		<module>brix-workspace</module>
 		<module>brix-plugin-snapshot</module>
 		<module>brix-plugin-prototype</module>
@@ -51,7 +46,7 @@
 
 	<properties>
 		<!-- brix version is now set here -->
-		<revision>8.0.0</revision>
+		<revision>8.9.0</revision>
 		<changelist>-SNAPSHOT</changelist>
 
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -64,11 +59,11 @@
 		<deployment.disabled>false</deployment.disabled>
 		<sources.disabled>false</sources.disabled>
 
-		<wicket.version>8.2.0</wicket.version>
-		<inmethod.grid.version>8.2.0</inmethod.grid.version>
+		<wicket.version>8.9.0</wicket.version>
+		<inmethod.grid.version>8.9.0</inmethod.grid.version>
 		<jetty.version>9.4.2.v20170220</jetty.version>
 		<htmllexer.version>2.1</htmllexer.version>
-		<jackrabbit.version>2.14.2</jackrabbit.version>
+		<jackrabbit.version>2.14.6</jackrabbit.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
 	</properties>
 
@@ -212,16 +207,18 @@
 				<version>${jackrabbit.version}</version>
 			</dependency>
 			<!--+ | HELPERS + -->
+			<!-- Attention: do not use a *-java7 version of xstream! - it is only for pure java 7 runtimes, see https://github.com/x-stream/xstream/issues/112		-->
 			<dependency>
 				<groupId>com.thoughtworks.xstream</groupId>
 				<artifactId>xstream</artifactId>
-				<version>1.4.10-java7</version>
+				<version>1.4.13</version>
 			</dependency>
 			<dependency>
-				<groupId>xpp3</groupId>
-				<artifactId>xpp3_min</artifactId>
-				<version>1.1.4c</version>
+				<groupId>org.ogce</groupId>
+				<artifactId>xpp3</artifactId>
+				<version>1.1.6</version>
 			</dependency>
+
 			<dependency>
 				<groupId>org.htmlparser</groupId>
 				<artifactId>htmllexer</artifactId>
@@ -289,27 +286,6 @@
 				<artifactId>log4j</artifactId>
 				<version>1.2.16</version>
 			</dependency>
-
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-analyzers</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-core</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-misc</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
-			<!--<dependency> -->
-			<!--<groupId>org.apache.lucene</groupId> -->
-			<!--<artifactId>lucene-regex</artifactId> -->
-			<!--<version>${lucene.version}</version> -->
-			<!--</dependency> -->
 
 			<!--+ | JETTY + -->
 			<dependency>
@@ -391,6 +367,27 @@
 			</testResource>
 		</testResources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6.3</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>flatten-maven-plugin</artifactId>

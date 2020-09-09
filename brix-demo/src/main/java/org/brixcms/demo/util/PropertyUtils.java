@@ -24,7 +24,6 @@ public class PropertyUtils {
     /**
      * Loads properties from a classpath resource
      *
-     * @param props
      * @param resource
      * @param throwExceptionIfNotFound
      * @return loaded properties
