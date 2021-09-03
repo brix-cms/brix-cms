@@ -147,6 +147,8 @@ public class BrixRequestMapper extends AbstractComponentMapper {
             }
         } catch (JcrException e) {
             log.warn("JcrException caught due to incorrect url", e);
+            log.warn("Tracing: URL: {}", request.getUrl());
+            log.warn("Tracing: Referer: {}",((WebRequest) request.getContainerRequest()).getHeader("referer"));
         }
 
         final PageComponentInfo info = getPageComponentInfo(request.getUrl());
