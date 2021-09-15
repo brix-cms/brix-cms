@@ -16,12 +16,8 @@ package org.brixcms.plugin.snapshot;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -68,7 +64,7 @@ public class SnapshotPlugin implements Plugin {
 
     public String getUserVisibleName(Workspace workspace, boolean isFrontend) {
         DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-        return "Snapshot - " + getSnapshotSiteName(workspace) + " - " + df.format(getCreated(workspace));
+        return "Snapshot - " + getSnapshotSiteName(workspace) + " - " + getCreated(workspace);
     }
 
     public List<Workspace> getWorkspaces(Workspace currentWorkspace, boolean isFrontend) {
@@ -127,21 +123,25 @@ public class SnapshotPlugin implements Plugin {
         return workspace.getAttribute(WORKSPACE_COMMENT);
     }
 
-    public Date getCreated(Workspace workspace) {
-        String formatted = workspace.getAttribute(WORKSPACE_ATTRIBUTE_CREATED);
-        if (formatted == null) {
-            return null;
-        } else {
-            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
-            Date date;
-            try {
-                date = df.parse(formatted);
-                return date;
-            } catch (ParseException e) {
-                return null;
-            }
-        }
+    public String getCreated(Workspace workspace) {
+        return workspace.getAttribute(WORKSPACE_ATTRIBUTE_CREATED);
     }
+
+//    public Date getCreated(Workspace workspace) {
+//        String formatted = workspace.getAttribute(WORKSPACE_ATTRIBUTE_CREATED);
+//        if (formatted == null) {
+//            return null;
+//        } else {
+//            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+//            Date date;
+//            try {
+//                date = df.parse(formatted);
+//                return date;
+//            } catch (ParseException e) {
+//                return new Date(); //fix null PE
+//            }
+//        }
+//    }
 
     public List<Workspace> getSnapshotsForWorkspace(Workspace workspace) {
         String siteName = null;
