@@ -46,8 +46,8 @@
 
 	<properties>
 		<!-- brix version is now set here -->
-		<revision>8.9.0</revision>
-		<changelist>-SNAPSHOT</changelist>
+		<revision>8.13.1</revision>
+		<changelist>-SNAPSHOT-WW</changelist>
 
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -59,8 +59,8 @@
 		<deployment.disabled>false</deployment.disabled>
 		<sources.disabled>false</sources.disabled>
 
-		<wicket.version>8.9.0</wicket.version>
-		<inmethod.grid.version>8.9.0</inmethod.grid.version>
+		<wicket.version>8.13.0</wicket.version>
+		<inmethod.grid.version>8.13.0</inmethod.grid.version>
 		<jetty.version>9.4.2.v20170220</jetty.version>
 		<htmllexer.version>2.1</htmllexer.version>
 		<jackrabbit.version>2.14.6</jackrabbit.version>
@@ -211,7 +211,7 @@
 			<dependency>
 				<groupId>com.thoughtworks.xstream</groupId>
 				<artifactId>xstream</artifactId>
-				<version>1.4.17</version>
+				<version>1.4.18</version>
 			</dependency>
 			<dependency>
 				<groupId>org.ogce</groupId>
