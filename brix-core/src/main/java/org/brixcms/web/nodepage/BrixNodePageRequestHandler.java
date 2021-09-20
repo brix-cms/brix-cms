@@ -18,6 +18,7 @@ import org.apache.wicket.core.request.handler.IPageProvider;
 import org.apache.wicket.core.request.handler.IPageRequestHandler;
 import org.apache.wicket.core.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.protocol.http.PageExpiredException;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.component.IRequestablePage;
@@ -143,15 +144,13 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler
             }
         }
 
-        @Override
-        public boolean isNewPageInstance() {
-            return page == null;
-        }
 
         @Override
         public Class<? extends IRequestablePage> getPageClass() {
             return BrixNodeWebPage.class;
         }
+
+
 
         @Override
         public void detach() {

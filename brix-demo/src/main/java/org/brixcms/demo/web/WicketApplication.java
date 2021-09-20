@@ -70,6 +70,7 @@ public final class WicketApplication extends AbstractWicketApplication {
         final JcrSessionFactory sf = getJcrSessionFactory();
         final WorkspaceManager wm = getWorkspaceManager();
 
+        getCspSettings().blocking().disabled();
         getDebugSettings().setOutputMarkupContainerClassName(true);
 
         try {

@@ -2,11 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
-	</parent>
+<!--	<parent>-->
+<!--		<groupId>org.sonatype.oss</groupId>-->
+<!--		<artifactId>oss-parent</artifactId>-->
+<!--		<version>7</version>-->
+<!--	</parent>-->
 
 	<groupId>org.brixcms</groupId>
 	<artifactId>brix</artifactId>
@@ -46,11 +46,11 @@
 
 	<properties>
 		<!-- brix version is now set here -->
-		<revision>8.13.1</revision>
-		<changelist>-SNAPSHOT-WW</changelist>
+		<revision>9.0.0</revision>
+		<changelist>-SNAPSHOT</changelist>
 
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -59,8 +59,8 @@
 		<deployment.disabled>false</deployment.disabled>
 		<sources.disabled>false</sources.disabled>
 
-		<wicket.version>8.13.0</wicket.version>
-		<inmethod.grid.version>8.13.0</inmethod.grid.version>
+		<wicket.version>9.5.0</wicket.version>
+		<inmethod.grid.version>9.5.0</inmethod.grid.version>
 		<jetty.version>9.4.2.v20170220</jetty.version>
 		<htmllexer.version>2.1</htmllexer.version>
 		<jackrabbit.version>2.14.6</jackrabbit.version>
@@ -370,7 +370,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<id>enforce-maven</id>
@@ -469,7 +469,7 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.5.3</version>
+				<version>4.2.1</version>
 				<inherited>true</inherited>
 				<extensions>true</extensions>
 			</plugin>
@@ -484,7 +484,7 @@
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
-					<version>2.5.3</version>
+					<version>4.2.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

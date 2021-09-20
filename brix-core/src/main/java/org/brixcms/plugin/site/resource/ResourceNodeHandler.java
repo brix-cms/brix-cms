@@ -18,6 +18,7 @@
 package org.brixcms.plugin.site.resource;
 
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,7 +82,7 @@ public class ResourceNodeHandler implements IRequestHandler {
 		response.setContentType(node.getMimeType());
 
 		Date lastModified = node.getLastModified();
-		response.setLastModifiedTime(Time.valueOf(lastModified));
+		response.setLastModifiedTime(lastModified.toInstant());
 
 		try {
 			final HttpServletRequest r = (HttpServletRequest) requestCycle.getRequest().getContainerRequest();

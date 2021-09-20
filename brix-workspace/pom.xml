@@ -117,30 +117,30 @@
              <plugin>
                  <artifactId>maven-compiler-plugin</artifactId>
                  <configuration>
-                     <source>1.8</source>
-                     <target>1.8</target>
+                     <source>11</source>
+                     <target>11</target>
                  </configuration>
                  <version>2.0.2</version>
              </plugin>
-             <plugin>
-                 <groupId>org.apache.felix</groupId>
-                 <artifactId>maven-bundle-plugin</artifactId>
-                 <version>3.2.0</version>
-                 <extensions>true</extensions>
-                 <configuration>
-                     <instructions>
-                         <Export-Package>
-                             org.brixcms.workspace.rmi,org.brixcms.workspace
-                         </Export-Package>
-                         <Import-Package>
-                             org.osgi*, javax.jcr, javax.jcr.lock, javax.jcr.observation, org.slf4j
-                         </Import-Package>
-                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
-                         </Bundle-SymbolicName>
-                         <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
-                     </instructions>
-                 </configuration>
-             </plugin>
+<!--             <plugin>-->
+<!--                 <groupId>org.apache.felix</groupId>-->
+<!--                 <artifactId>maven-bundle-plugin</artifactId>-->
+<!--                 <version>4.2.1</version>-->
+<!--                 <extensions>true</extensions>-->
+<!--                 <configuration>-->
+<!--                     <instructions>-->
+<!--                         <Export-Package>-->
+<!--                             org.brixcms.workspace.rmi,org.brixcms.workspace-->
+<!--                         </Export-Package>-->
+<!--                         <Import-Package>-->
+<!--                             org.osgi*, javax.jcr, javax.jcr.lock, javax.jcr.observation, org.slf4j-->
+<!--                         </Import-Package>-->
+<!--                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true-->
+<!--                         </Bundle-SymbolicName>-->
+<!--                         <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>-->
+<!--                     </instructions>-->
+<!--                 </configuration>-->
+<!--             </plugin>-->
         </plugins>
     </build>
 </project>
