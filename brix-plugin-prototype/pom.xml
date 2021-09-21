@@ -31,29 +31,29 @@
 
      <build>
          <plugins>
-<!--             <plugin>-->
-<!--                 <groupId>org.apache.felix</groupId>-->
-<!--                 <artifactId>maven-bundle-plugin</artifactId>-->
-<!--                 <version>4.2.1</version>-->
-<!--                 <extensions>true</extensions>-->
-<!--                 <configuration>-->
-<!--                     <instructions>-->
-<!--                         <Export-Package>-->
-<!--                             org.brixcms.plugin.prototype-->
-<!--                         </Export-Package>-->
-<!--                         <Import-Package>-->
-<!--                             org.osgi*,org.brixcms, org.brixcms.auth, org.brixcms.jcr, org.brixcms.jcr.api,-->
-<!--                             org.brixcms.jcr.wrapper, org.brixcms.plugin.site, org.brixcms.plugin.site.page.global,-->
-<!--                             org.brixcms.plugin.site.picker.node, org.brixcms.web.generic, org.brixcms.web.picker.common,-->
-<!--                             org.brixcms.web.picker.node, org.brixcms.web.tab, org.brixcms.web.tree, org.brixcms.workspace,-->
-<!--                             com.inmethod.grid.treegrid, org.apache.wicket*-->
-<!--                         </Import-Package>-->
-<!--                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true-->
-<!--                         </Bundle-SymbolicName>-->
-<!--                         <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>-->
-<!--                     </instructions>-->
-<!--                 </configuration>-->
-<!--             </plugin>-->
+             <plugin>
+                 <groupId>org.apache.felix</groupId>
+                 <artifactId>maven-bundle-plugin</artifactId>
+                 <version>4.2.1</version>
+                 <extensions>true</extensions>
+                 <configuration>
+                     <instructions>
+                         <Export-Package>
+                             org.brixcms.plugin.prototype
+                         </Export-Package>
+                         <Import-Package>
+                             org.osgi*,org.brixcms, org.brixcms.auth, org.brixcms.jcr, org.brixcms.jcr.api,
+                             org.brixcms.jcr.wrapper, org.brixcms.plugin.site, org.brixcms.plugin.site.page.global,
+                             org.brixcms.plugin.site.picker.node, org.brixcms.web.generic, org.brixcms.web.picker.common,
+                             org.brixcms.web.picker.node, org.brixcms.web.tab, org.brixcms.web.tree, org.brixcms.workspace,
+                             com.inmethod.grid.treegrid, org.apache.wicket*
+                         </Import-Package>
+                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId};singleton:=true
+                         </Bundle-SymbolicName>
+                         <Bundle-RequiredExecutionEnvironment>JavaSE-11</Bundle-RequiredExecutionEnvironment>
+                     </instructions>
+                 </configuration>
+             </plugin>
          </plugins>
      </build>
 </project>
