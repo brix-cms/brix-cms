@@ -61,9 +61,10 @@
 
 		<wicket.version>9.5.0</wicket.version>
 		<inmethod.grid.version>9.5.0</inmethod.grid.version>
-		<jetty.version>9.4.2.v20170220</jetty.version>
+		<jetty.version>9.4.43.v20210629</jetty.version>
 		<htmllexer.version>2.1</htmllexer.version>
-		<jackrabbit.version>2.14.6</jackrabbit.version>
+		<jackrabbit.version>2.20.3</jackrabbit.version>
+		<jackrabbit.oak-api.version>1.34.0</jackrabbit.oak-api.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
 	</properties>
 
@@ -147,8 +148,8 @@
 			<!--+ | JACKRABBIT + -->
 			<dependency>
 				<groupId>org.apache.jackrabbit</groupId>
-				<artifactId>jackrabbit-api</artifactId>
-				<version>${jackrabbit.version}</version>
+				<artifactId>oak-jackrabbit-api</artifactId>
+				<version>${jackrabbit.oak-api.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>log4j</groupId>
