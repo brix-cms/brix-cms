@@ -136,23 +136,23 @@ public interface JcrNode extends JcrItem, Node {
     /**
      * Gets all child nodes of this node accessible through the current <code>Session</code> that match one or more of
      * the <code>nameGlob</code> strings in the passed array.
-     * <p/>
+     * <p>
      * A glob may be a full name or a partial name with one or more wildcard characters (" <code>*</code>"). For
      * example,
-     * <p/>
+     * <p>
      * <code>N.getNodes(new String[] {"jcr:*", "myapp:report", "my doc"})</code>
-     * <p/>
+     * <p>
      * would return a <code>NodeIterator</code> holding all accessible child nodes of <code>N</code> that are either
      * called '<code>myapp:report</code>', begin with the prefix '<code>jcr:</code>' or are called '<code>my
      * doc</code>'.
-     * <p/>
+     * <p>
      * Note that unlike in the case of the {@link #getNodes(String)} leading and trailing whitespace around a glob is
      * <i>not</i> ignored.
-     * <p/>
+     * <p>
      * The globs are matched against the names (not the paths) of the immediate child nodes of this node.
-     * <p/>
+     * <p>
      * If this node has no accessible matching child nodes, then an empty iterator is returned.
-     * <p/>
+     * <p>
      * The same reacquisition semantics apply as with <code>{@link #getNode(String)}</code>.
      *
      * @param nameGlobs an array of globbing strings.
@@ -171,23 +171,23 @@ public interface JcrNode extends JcrItem, Node {
     /**
      * Gets all properties of this node accessible through the current <code>Session</code> that match one or more of
      * the <code>nameGlob</code> strings in the passed array.
-     * <p/>
+     * <p>
      * A glob may be a full name or a partial name with one or more wildcard characters (" <code>*</code>"). For
      * example,
-     * <p/>
+     * <p>
      * <code>N.getProperties(new String[] {"jcr:*", "myapp:report", "my doc"})</code>
-     * <p/>
+     * <p>
      * would return a <code>PropertyIterator</code> holding all accessible properties of <code>N</code> that are either
      * called '<code>myapp:report</code>', begin with the prefix ' <code>jcr:</code>' or are called '<code>my
      * doc</code>'.
-     * <p/>
+     * <p>
      * Note that unlike in the case of the {@link #getProperties(String)} leading and trailing whitespace around a glob
      * is <i>not</i> ignored.
-     * <p/>
+     * <p>
      * The globs are matched against the names (not the paths) of the properties of this node.
-     * <p/>
+     * <p>
      * If this node has no accessible matching properties, then an empty iterator is returned.
-     * <p/>
+     * <p>
      * The same reacquisition semantics apply as with <code>{@link #getProperty(String)}</code>.
      *
      * @param nameGlobs an array of globbing strings.
@@ -207,7 +207,7 @@ public interface JcrNode extends JcrItem, Node {
 
     /**
      * Returns the identifier of this node. Applies to both referenceable and non-referenceable nodes.
-     * <p/>
+     * <p>
      * A <code>RepositoryException</code> is thrown if an error occurs.
      *
      * @return the identifier of this node.
@@ -223,18 +223,18 @@ public interface JcrNode extends JcrItem, Node {
     /**
      * This method returns all <code>REFERENCE</code> properties that refer to this node, have the specified
      * <code>name</code> and that are accessible through the current <code>Session</code>.
-     * <p/>
+     * <p>
      * If the <code>name</code> parameter is <code>null</code> then all referring <code>REFERENCES</code> are returned
      * regardless of name.
-     * <p/>
+     * <p>
      * Some implementations may only return properties that have been persisted. Some may return both properties that
      * have been persisted and those that have been dispatched but not persisted (for example, those saved within a
      * transaction but not yet committed) while others implementations may return these two categories of property as
      * well as properties that are still pending and not yet dispatched.
-     * <p/>
+     * <p>
      * In implementations that support versioning, this method does not return properties that are part of the frozen
      * state of a version in version storage.
-     * <p/>
+     * <p>
      * If this node has no referring <code>REFERENCE</code> properties with the specified name, an empty iterator is
      * returned. This includes the case where this node is not referenceable.
      *
@@ -249,7 +249,7 @@ public interface JcrNode extends JcrItem, Node {
     /**
      * This method returns all <code>WEAKREFERENCE</code> properties that refer to this node and that are accessible
      * through the current <code>Session</code>. Equivalent to <code>Node.getWeakReferences(null)</code>.
-     * <p/>
+     * <p>
      * If this node has no referring <code>WEAKREFERENCE</code> properties, an empty iterator is returned. This includes
      * the case where this node is not referenceable.
      *
@@ -263,18 +263,18 @@ public interface JcrNode extends JcrItem, Node {
     /**
      * This method returns all <code>WEAKREFERENCE</code> properties that refer to this node, have the specified
      * <code>name</code> and that are accessible through the current <code>Session</code>.
-     * <p/>
+     * <p>
      * If the <code>name</code> parameter is <code>null</code> then all referring <code>WEAKREFERENCE</code> are
      * returned regardless of name.
-     * <p/>
+     * <p>
      * Some implementations may only return properties that have been persisted. Some may return both properties that
      * have been persisted and those that have been dispatched but not persisted (for example, those saved within a
      * transaction but not yet committed) while others implementations may return these two categories of property as
      * well as properties that are still pending and not yet dispatched.
-     * <p/>
+     * <p>
      * In implementations that support versioning, this method does not return properties that are part of the frozen
      * state of a version in version storage.
-     * <p/>
+     * <p>
      * If this node has no referring <code>WEAKREFERENCE</code> properties with the specified name, an empty iterator is
      * returned. This includes the case where this node is not referenceable.
      *
@@ -305,26 +305,26 @@ public interface JcrNode extends JcrItem, Node {
      * <code>jcr:primaryType</code> property appropriately. Semantically, the new node type may take effect immediately
      * or on dispatch but <i>must</i> take effect on persist. The behavior adopted must be the same as the behavior
      * adopted for {@link #addMixin} and the behavior that occurs when a node is first created.
-     * <p/>
+     * <p>
      * If the presence of an existing property or child node would cause an incompatibility with the new node type then
      * a <code>ConstraintViolationException</code> is thrown either immediately, on dispatch or on persist.
-     * <p/>
+     * <p>
      * If the new node type would cause this node to be incompatible with the node type of its parent then a
      * <code>ConstraintViolationException</code> is thrown either immediately, on dispatch or on persist.
-     * <p/>
+     * <p>
      * A <code>ConstraintViolationException</code> is also thrown either immediately, on dispatch or on persist if a
      * conflict with an already assigned mixin occurs.
-     * <p/>
+     * <p>
      * A <code>ConstraintViolationException</code> may also be thrown either immediately , on dispatch or on persist if
      * the attempted change violates implementation-specific node type transition rules. A repository that disallows all
      * primary node type changes would simple throw this exception in all cases.
-     * <p/>
+     * <p>
      * If the specified node type is not recognized a <code>NoSuchNodeTypeException</code> is thrown either immediately,
      * on dispatch or on persist.
-     * <p/>
+     * <p>
      * A <code>VersionException</code> is thrown either immediately , on dispatch or on persist if this node is
      * read-only dues to a check-in.
-     * <p/>
+     * <p>
      * A <code>LockException</code> is thrown either immediately, on dispatch or on persist if a lock prevents the
      * change of node type.
      *
@@ -397,10 +397,10 @@ public interface JcrNode extends JcrItem, Node {
 
     /**
      * Removes this node and every other node in the shared set of this node.
-     * <p/>
+     * <p>
      * This removal must be done atomically, i.e., if one of the nodes cannot be removed, the method throws the
      * exception {@link Node#remove()} would have thrown in that case, and none of the nodes are removed.
-     * <p/>
+     * <p>
      * If this node is not shared this method removes only this node.
      *
      * @throws VersionException             if the parent node of this item is versionable and checked-in or is
@@ -509,7 +509,7 @@ public interface JcrNode extends JcrItem, Node {
 
     /**
      * Causes the lifecycle state of this node to undergo the specified <code>transition</code>.
-     * <p/>
+     * <p>
      * This method may change the value of the <code>jcr:currentLifecycleState</code> property, in most cases it is
      * expected that the implementation will change the value to that of the passed <code>transition</code> parameter,
      * though this is an implementation-specific issue. If the <code>jcr:currentLifecycleState</code> property is

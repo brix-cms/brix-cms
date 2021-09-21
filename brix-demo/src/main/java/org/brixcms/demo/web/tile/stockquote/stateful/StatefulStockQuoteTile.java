@@ -24,10 +24,10 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 /**
  * Stateful stock quote tile definition.
- * <p/>
+ * <p>
  * This tile is stateful because its {@link StatefulStockQuotePanel} keeps state like a regular Wicket component and
  * thus gains all the advantages of Wicket's automatic state management.
- * <p/>
+ * <p>
  * Brix supports both stateful and stateless tiles, for a stateless variant of this tile see {@link
  * StatelessStockQuoteTile}
  *

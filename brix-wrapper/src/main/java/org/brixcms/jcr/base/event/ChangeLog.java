@@ -24,7 +24,7 @@ import java.util.List;
  * ChangeLog keep tracks of events happening in a single {@link Session}. At certain points (usually when Item#save() or
  * {@link Session#save()} is about to be called) ChangeLog can provide normalized list of events that have happened
  * before the point.
- * <p/>
+ * <p>
  * The session must add proper events to the {@link ChangeLog} using {@link #addEvent(Event)} and {@link ChangeLog} will
  * make sure that the events will be normalized (i.e. redundant events will be removed, etc).
  *

@@ -32,7 +32,7 @@ import java.util.Arrays;
 
 /**
  * A Panel that is used to change the type of a MenuType to any of the possible options
- * <p/>
+ * <p>
  * Created by IntelliJ IDEA. User: korbinianbachl Date: 08.09.2010 Time: 20:55:51
  */
 public abstract class SwitcherCellPanel extends Panel {

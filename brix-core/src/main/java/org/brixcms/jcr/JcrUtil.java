@@ -45,7 +45,7 @@ import java.util.Map;
 public class JcrUtil {
     /**
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
-     * <p/>
+     * <p>
      * If a node being cloned is referenceable and there is already node with same UUID in the target workspace, the
      * location of the node in target workspace determines the result. If node being cloned would become child of the
      * same parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node
@@ -60,7 +60,7 @@ public class JcrUtil {
 
     /**
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
-     * <p/>
+     * <p>
      * If a node being cloned is referenceable and there is already node with same UUID in the target workspace, the
      * location of the node in target workspace determines the result. If node being cloned would become child of the
      * same parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node
@@ -161,7 +161,7 @@ public class JcrUtil {
     /**
      * Ensures all nodes from originalNode parent hierarchy exist as children of targetRootNode. Missing nodes will be
      * created having same primary node type as original node.
-     * <p/>
+     * <p>
      * Example: If originalNode is /foo/bar/baz/node and targetRootNode is /x/y having child /x/y/foo , this method will
      * create nodes x/y/foo/bar and x/y/foo/bar/baz .
      *
@@ -221,7 +221,7 @@ public class JcrUtil {
 
     /**
      * Creates a node that is child of parentNode having same name (and possibly uuid) as originalNode.
-     * <p/>
+     * <p>
      * What happens if there is node with same UUID in target workspace depends on the location of the node. If the node
      * with same uuid is a direct child of {@link parentNode}, it gets replaced. Otherwise node with new UUID is created
      * and the original one is preserved.
@@ -401,7 +401,7 @@ public class JcrUtil {
 
     /**
      * Clones the given list of nodes. The clones will be located relative to targetRootNode.
-     * <p/>
+     * <p>
      * If a node being cloned is referenceable and there is already node with same UUID in the target workspace, the
      * location of the node in target workspace determines the result. If node being cloned would become child of the
      * same parent as the existing node in target workspace, the existing node will be replaced. Otherwise the node

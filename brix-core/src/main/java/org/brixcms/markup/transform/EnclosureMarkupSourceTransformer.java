@@ -30,13 +30,13 @@ import java.util.Map;
 
 /**
  * Enables the use of wicket:enclosures with brix:tile tags.
- * <p/>
+ * <p>
  * It will resolve the enclosure child elements based on either "brix:tile id" or wicket:id attributes. You can
  * reference wicket components within the tile using the 'child' attribute and a comma separated path.
- * <p/>
+ * <p>
  * e.g. where the tile has the wicket component title as a child of wrapper &lt;wicket:enclosure
  * child="mytile,wrapper,title"&gt; &lt;brix:tile id="mytile" /&gt; &lt;/wicket:enclosure&gt;
- * <p/>
+ * <p>
  * TODO: - investigate if it is possible to have commas in brix:tile id or wicket:id as this would break id matching -
  * investigate if this works with wicket auto-tags
  *

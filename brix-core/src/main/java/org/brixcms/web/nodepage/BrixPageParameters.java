@@ -89,7 +89,7 @@ public class BrixPageParameters extends PageParameters {
     /**
      * Constructs a url to the specified page appending these page parameters
      * 
-     * @param
+     * @param node
      * @return url
      */
     public String urlFor(IModel<BrixNode> node) {

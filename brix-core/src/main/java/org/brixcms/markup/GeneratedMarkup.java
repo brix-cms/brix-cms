@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * Contains list of generated markup items and expiration token.
- * <p/>
+ * <p>
  * TODO: Consider optimizing the list of items by grouping static items together (as text).
  *
  * @author Matej Knopp

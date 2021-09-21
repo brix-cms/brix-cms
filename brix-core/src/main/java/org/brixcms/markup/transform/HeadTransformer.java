@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Transformer that gathers content from all &lt;head&gt; and &lt;wicket:head&gt; sections in markup. It groups the head
  * content and inserts it all into the first &lt;head&gt; section removing all other head sections.
- * <p/>
+ * <p>
  * Also if there are nested &lt;body&gt; sections it removes the inner &lt;body&gt; sections leaving one one (outer)
  * &lt;body&gt; section.
  *

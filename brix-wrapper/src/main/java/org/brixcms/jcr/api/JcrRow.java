@@ -83,11 +83,11 @@ public interface JcrRow extends Row {
     /**
      * Returns the full text search score for this row associated with the default selector. This corresponds to the
      * score of a particular node.
-     * <p/>
+     * <p>
      * If no <code>FullTextSearchScore</code> AQM object is associated with the default selector this method will still
      * return a value. However, in that case the returned value may not be meaningful or may simply reflect the minimum
      * possible relevance level (for example, in some systems this might be a score of 0).
-     * <p/>
+     * <p>
      * Note, in JCR-SQL2 a <code>FullTextSearchScore</code> AQM object is represented by a <code>SCORE()</code>
      * function. In JCR-JQOM it is represented by a Java object of type <code>javax.jcr.query.qom.FullTextSearchScore</code>.
      *
@@ -101,14 +101,14 @@ public interface JcrRow extends Row {
     /**
      * Returns the full text search score for this row associated with the specified selector. This corresponds to the
      * score of a particular node.
-     * <p/>
+     * <p>
      * If no <code>FullTextSearchScore</code> AQM object is associated with the selector <code>selectorName</code> this
      * method will still return a value. However, in that case the returned value may not be meaningful or may simply
      * reflect the minimum possible relevance level (for example, in some systems this might be a score of 0).
-     * <p/>
+     * <p>
      * Note, in JCR-SQL2 a <code>FullTextSearchScore</code> AQM object is represented by a <code>SCORE()</code>
      * function. In JCR-JQOM it is represented by a Java object of type <code>javax.jcr.query.qom.FullTextSearchScore</code>.
-     * <p/>
+     * <p>
      * If this <code>Row</code> is from a result involving outer joins, it may have no <code>Node</code> corresponding
      * to the specified selector. In such a case this method returns an implementation selected value, as it would if
      * there were no <code>FullTextSearchScore</code> associated with the selector.

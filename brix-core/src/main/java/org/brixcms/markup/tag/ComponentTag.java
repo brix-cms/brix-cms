@@ -36,7 +36,7 @@ public interface ComponentTag extends Tag {
     /**
      * The unique identifier is required to keep track of components on page. It is used to remove components that no
      * longer have their items present in markup stream and add components which items are new in the markup stream.
-     * <p/>
+     * <p>
      * The identifier must be unique for every tag instance and must not change during the life of that instance.
      *
      * @return

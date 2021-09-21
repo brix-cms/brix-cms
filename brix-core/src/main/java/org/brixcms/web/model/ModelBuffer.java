@@ -30,15 +30,15 @@ import java.util.Map;
  * org.brixcms.web.model.ModelBuffer.Model#apply} method. Properties of a target model are exposed as models themselves
  * and maintain status regarding whether changes have been made. When the apply method is called, the changes in the
  * cached models are iterated and flushed.
- * <p/>
+ * <p>
  * This is typically used by clients that wish to present a cancelable user interface, without maintaining the original
  * state of target model object. If the user cancels the operation, the buffer is deallocated without ever applying the
  * changes to the target.
- * <p/>
+ * <p>
  * After creating a ModelBuffer, use {@link ModelBuffer#forProperty(java.lang.String)} and {@link
  * ModelBuffer#forNodeProperty(java.lang.String)} to create and return these cached model objects. These can be provided
  * to user interface objects.
- * <p/>
+ * <p>
  * {@link org.brixcms.plugin.site.page.admin.EditTab#EditTab(java.lang.String, org.apache.wicket.model.IModel<
  * org.brixcms.jcr.wrapper.BrixNode>)} provides a solid use case of this class.
  */

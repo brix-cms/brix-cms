@@ -29,7 +29,7 @@ import java.util.Date;
 /**
  * Base wrapper that all other wrappers in Brix must extend. Contains convenience methods for setting/getting node type
  * and common properties.
- * <p/>
+ * <p>
  * Every node obtained from {@link JcrSession} in {@link Brix} is guaranteed to extend {@link BrixNode}.
  *
  * @author Matej Knopp
@@ -72,7 +72,7 @@ public class BrixNode extends NodeWrapper {
 
     /**
      * Returns the type of given node.
-     * <p/>
+     * <p>
      * TODO: There are two special cases (resource, type) that create special dependency on the site plugin. The folder
      * and Resource nodes should be moved away from site plugin.
      *
