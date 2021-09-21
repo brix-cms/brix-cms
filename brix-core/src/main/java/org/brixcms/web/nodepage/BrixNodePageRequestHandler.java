@@ -144,13 +144,10 @@ public class BrixNodePageRequestHandler extends RenderPageRequestHandler
             }
         }
 
-
         @Override
         public Class<? extends IRequestablePage> getPageClass() {
             return BrixNodeWebPage.class;
         }
-
-
 
         @Override
         public void detach() {
