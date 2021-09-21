@@ -66,6 +66,7 @@
 		<jackrabbit.version>2.20.3</jackrabbit.version>
 		<jackrabbit.oak-api.version>1.34.0</jackrabbit.oak-api.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
+		<felix.maven-bundle-plugin>5.1.2</felix.maven-bundle-plugin>
 	</properties>
 
 	<dependencyManagement>
@@ -431,7 +432,7 @@
 						<link>https://logback.qos.ch/apidocs</link>
 					</links>
 					<failOnError>false</failOnError>
-					<additionalparam>-Xdoclint:none</additionalparam>
+<!--					<additionalparam>-Xdoclint:none</additionalparam>-->
 					<skip>${javadoc.disabled}</skip>
 				</configuration>
 				<executions>
@@ -470,7 +471,7 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>4.2.1</version>
+				<version>${felix.maven-bundle-plugin}</version>
 				<inherited>true</inherited>
 				<extensions>true</extensions>
 			</plugin>
@@ -485,7 +486,7 @@
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
-					<version>4.2.1</version>
+					<version>${felix.maven-bundle-plugin}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
