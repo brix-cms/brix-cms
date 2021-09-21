@@ -27,7 +27,7 @@ import java.util.List;
  * Plugin is a top-level component in Brix. Plugins can <ul> <li>contribute tabs to the main tabbed panel <li>contribute
  * workspaces they are responsible for to the workspace switcher </ul> When plugin creates a workspace it is responsible
  * for it. For such workspaces {@link #isPluginWorkspace(Workspace)} must return true.
- * <p/>
+ * <p>
  * TODO: Make it possible for plugins to intercept HTTP requests to serve content
  *
  * @author Matej Knopp
@@ -74,7 +74,7 @@ public interface Plugin {
     /**
      * Initializes the given workspace. If this plugin can handle the workspace (i.e. newTabs return non-empty list) the
      * method must make sure that the workspace contains all required nodes.
-     * <p/>
+     * <p>
      * This method is called on Brix startup for every plugin and workspace. It is also when new workspace is created.
      *
      * @param workspace
@@ -85,7 +85,7 @@ public interface Plugin {
     /**
      * Returns <code>true</code> if the plugin is responsible for the given workspace. E.g. for snapshot workspaces the
      * SnapshotPlugin should return <code>true</code>, all other plugins should return <code>false</code>.
-     * <p/>
+     * <p>
      * Returning <code>true</code> here is not the same as returning non-empty list from {@link #newTabs(IModel)}. Even
      * if plugin contributes tabs for certain workspace, it doesn't make it responsible for it. Plugin is usually
      * responsible only for workspace that it creates.

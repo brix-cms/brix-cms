@@ -53,17 +53,17 @@ public interface JcrVersionHistory extends VersionHistory, JcrNode {
      * This method returns an iterator over all the versions in the <i>line of descent</i> from the root version to that
      * base version within this history <i>that is bound to the workspace through which this <code>VersionHistory</code>
      * was accessed</i>.
-     * <p/>
+     * <p>
      * Within a version history <code>H</code>, <code>B</code> is the base version bound to workspace <code>W</code> if
      * and only if there exists a versionable node <code>N</code> in <code>W</code> whose version history is
      * <code>H</code> and <code>B</code> is the base version of <code>N</code>.
-     * <p/>
+     * <p>
      * The <i>line of descent</i> from version <code>V1</code> to <code>V2</code>, where <code>V2</code> is a successor
      * of <code>V1</code>, is the ordered list of versions starting with <code>V1</code> and proceeding through each
      * direct successor to <code>V2</code>.
-     * <p/>
+     * <p>
      * The versions are returned in order of creation date, from oldest to newest.
-     * <p/>
+     * <p>
      * Note that in a simple versioning repository the behavior of this method is equivalent to returning all versions
      * in the version history in order from oldest to newest.
      *

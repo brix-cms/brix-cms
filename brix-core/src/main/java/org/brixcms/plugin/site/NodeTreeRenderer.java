@@ -21,7 +21,7 @@ import org.brixcms.registry.ExtensionPoint;
 
 /**
  * Factory for rendering nodes in the site plugin tree view.
- * <p/>
+ * <p>
  * Allows plugins to register new renderers for different types of nodes within the site tree
  *
  * @author Jeremy Thomerson

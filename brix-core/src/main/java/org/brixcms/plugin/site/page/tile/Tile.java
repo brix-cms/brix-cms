@@ -32,7 +32,7 @@ import java.util.Collection;
 /**
  * Tiles allow the placement of Wicket components on Brix pages and templates. Tile (the class that implements Tile
  * interface) is a singleton that acts like a factory for a tile editor and viewer panel.
- * <p/>
+ * <p>
  * When a user adds a tile to a page or a template, a new node is created that can contain the tile instance
  * configuration options. The node is passed to the {@link #newViewer(String, IModel)} method. The editor can the node
  * passed as argument of the {@link TileEditorPanel#save(BrixNode)} method.

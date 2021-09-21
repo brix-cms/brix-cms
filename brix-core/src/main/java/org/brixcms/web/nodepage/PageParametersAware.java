@@ -16,7 +16,7 @@ package org.brixcms.web.nodepage;
 
 /**
  * Interface implemented by components that want to store certain state in page URL.
- * <p/>
+ * <p>
  * Used by the PageParameters* components when generating URL. All components implementing this interface are visited
  * and asked to contribute their state to {@link BrixPageParameters}.
  *

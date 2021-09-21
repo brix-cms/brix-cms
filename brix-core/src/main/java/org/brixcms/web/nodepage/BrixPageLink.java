@@ -21,12 +21,12 @@ import org.brixcms.jcr.wrapper.BrixNode;
 
 /**
  * A component that links to a page with specified page parameters.
- * <p/>
+ * <p>
  * This component is different from {@link PageParametersLink} because it does
  * not allow other components to contribute their page parameters to the
  * generated url and therefore does not propagate state from one page to the
  * next.
- * <p/>
+ * <p>
  * TODO expand to support tags other then anchor
  *
  * @author igor.vaynberg

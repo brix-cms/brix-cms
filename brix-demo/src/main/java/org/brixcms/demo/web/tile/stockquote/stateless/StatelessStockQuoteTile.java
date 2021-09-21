@@ -24,11 +24,11 @@ import org.brixcms.plugin.site.page.tile.admin.TileEditorPanel;
 
 /**
  * Stateless stock quote tile definition.
- * <p/>
+ * <p>
  * This tile is stateless which means it will not generate session if a page that only contains stateless tiles will be
  * accessed. Because this tile is stateless it does not take advantage of Wicket's automatic state management and thus
  * exposes extra work on the user to manage state. See {@link StatelessStockQuotePanel} for details.
- * <p/>
+ * <p>
  * For a stateful variant of tile see {@link StatefulStockQuoteTile}
  *
  * @author igor.vaynberg

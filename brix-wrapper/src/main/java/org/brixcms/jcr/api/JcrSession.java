@@ -127,32 +127,32 @@ public interface JcrSession extends BrixSession {
 
     /**
      * Removes the specified item and its subgraph.
-     * <p/>
+     * <p>
      * This is a session-write method and therefore requires a <code>save</code> in order to dispatch the change.
-     * <p/>
+     * <p>
      * If a node with same-name siblings is removed, this decrements by one the indices of all the siblings with indices
      * greater than that of the removed node. In other words, a removal compacts the array of same-name siblings and
      * causes the minimal re-numbering required to maintain the original order but leave no gaps in the numbering.
-     * <p/>
+     * <p>
      * A <code>ReferentialIntegrityException</code> will be thrown on dispatch if the specified item or an item in its
      * subgraph is currently the target of a <code>REFERENCE</code> property located in this workspace but outside the
      * specified item's subgraph and the current <code>Session</code> has read access to that <code>REFERENCE</code>
      * property.
-     * <p/>
+     * <p>
      * A <code>ConstraintViolationException</code> will be thrown either immediately, on dispatch or on persist, if
      * removing the specified item would violate a node type or implementation-specific constraint. Implementations may
      * differ on when this validation is performed.
-     * <p/>
+     * <p>
      * A <code>VersionException</code> will be thrown either immediately, on dispatch or on persist, if the parent node
      * of the specified item is read-only due to a checked-in node. Implementations may differ on when this validation
      * is performed.
-     * <p/>
+     * <p>
      * A <code>LockException</code> will be thrown either immediately, on dispatch or on persist, if a lock prevents the
      * removal of the specified item. Implementations may differ on when this validation is performed.
-     * <p/>
+     * <p>
      * A <code>PathNotFoundException</code> will be thrown either immediately, on dispatch or on persist, if no
      * accessible item is found at at <code>absPath</code>.
-     * <p/>
+     * <p>
      * A <code>AccessDeniedException</code> will be thrown either immediately, on dispatch or on persist, if the
      * specified item or an item in its subgraph is currently the target of a <code>REFERENCE</code> property located in
      * this workspace but outside the specified item's subgraph and the current <code>Session</code> <i>does not</i>
@@ -190,7 +190,7 @@ public interface JcrSession extends BrixSession {
     /**
      * Returns <code>true</code> if this <code>Session</code> has permission to perform the specified actions at the
      * specified <code>absPath</code> and <code>false</code> otherwise.
-     * <p/>
+     * <p>
      * The <code>actions</code> parameter is a comma separated list of action strings. The following action strings are
      * defined: <ul> <li> {@link #ACTION_ADD_NODE <code>add_node</code>}: If <code>hasPermission(path,
      * "add_node")</code> returns <code>true</code>, then this <code>Session</code> has permission to add a node at
@@ -204,7 +204,7 @@ public interface JcrSession extends BrixSession {
      * than one action is specified in the <code>actions</code> parameter, this method will only return
      * <code>true</code> if this <code>Session</code> has permission to perform <i>all</i> of the listed actions at the
      * specified path.
-     * <p/>
+     * <p>
      * The information returned through this method will only reflect the access control status (both JCR defined and
      * implementation-specific) and not other restrictions that may exist, such as node type constraints. For example,
      * even though <code>hasPermission</code> may indicate that a particular <code>Session</code> may add a property at
@@ -232,22 +232,22 @@ public interface JcrSession extends BrixSession {
      * guarantee the opposite. The repository implementation should use this to give priority to performance over
      * completeness. An exception should be thrown only for important failures such as loss of connectivity to the
      * back-end.
-     * <p/>
+     * <p>
      * The implementation of this method is best effort: returning false guarantees that the operation cannot be
      * performed, but returning true does not guarantee the opposite.
-     * <p/>
+     * <p>
      * The <code>methodName</code> parameter identifies the method in question by its name as defined in the Javadoc.
-     * <p/>
+     * <p>
      * The <code>target</code> parameter identifies the object on which the specified method is called.
-     * <p/>
+     * <p>
      * The <code>arguments</code> parameter contains an array of type <code>Object</code> object consisting of the
      * arguments to be passed to the method in question. In cases where a parameter is a Java primitive type it must be
      * converted to its corresponding Java object form.
-     * <p/>
+     * <p>
      * For example, given a <code>Session</code> <code>S</code> and <code>Node</code> <code>N</code> then
-     * <p/>
+     * <p>
      * <code>boolean b = S.hasCapability("addNode", N, new Object[]{"foo"});</code>
-     * <p/>
+     * <p>
      * will result in <code>b == false</code> if a child node called <code>foo</code> cannot be added to the node
      * <code>N</code> within the session <code>S</code>.
      *

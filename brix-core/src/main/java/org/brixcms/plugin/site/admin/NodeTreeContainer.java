@@ -20,7 +20,7 @@ import org.brixcms.jcr.wrapper.BrixNode;
 /**
  * Allows nested or related components to affect changes to the node tree contained and managed by the component that
  * implements this interface.
- * <p/>
+ * <p>
  * This interface must be implemented by a subclass of {@link WebMarkupContainer}
  *
  * @author igor.vaynberg

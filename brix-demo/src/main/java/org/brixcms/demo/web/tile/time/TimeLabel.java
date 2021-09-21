@@ -15,7 +15,6 @@
 package org.brixcms.demo.web.tile.time;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.brixcms.jcr.api.JcrNode;
 import org.brixcms.jcr.wrapper.BrixNode;
@@ -47,7 +46,7 @@ public class TimeLabel extends Label {
      *
      * @author igor.vaynberg
      */
-    private static class TimeStringModel extends AbstractReadOnlyModel<String> {
+    private static class TimeStringModel implements IModel<String> {
         private static final long serialVersionUID = 1L;
 
         /**
@@ -90,8 +89,6 @@ public class TimeLabel extends Label {
         public void detach() {
             // detach inner model
             tileNode.detach();
-
-            super.detach();
         }
     }
 }

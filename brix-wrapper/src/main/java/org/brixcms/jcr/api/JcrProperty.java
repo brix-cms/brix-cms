@@ -159,19 +159,19 @@ public interface JcrProperty extends JcrItem, Property {
     /**
      * If this property is of type <code>PATH</code> (or convertible to this type) this method returns the
      * <code>Property</code> to which <i>this</i> property refers.
-     * <p/>
+     * <p>
      * If this property contains a relative path, it is interpreted relative to the parent node of this property.
      * Therefore, when resolving such a relative path, the segment "<code>.</code>" refers to the parent node itself,
      * "<code>..</code>" to the parent of the parent node and " <code>foo</code>" to a sibling property of this property
      * or this property itself.
-     * <p/>
+     * <p>
      * For example, if this property is located at <code>/a/b/c</code> and it has a value of " <code>../d</code>" then
      * this method will return the property at <code>/a/d</code> if such exists.
-     * <p/>
+     * <p>
      * If this property is multi-valued, this method throws a <code>ValueFormatException</code>.
-     * <p/>
+     * <p>
      * If this property cannot be converted to a <code>PATH</code> then a <code>ValueFormatException</code> is thrown.
-     * <p/>
+     * <p>
      * If this property is currently part of the frozen state of a version in version storage, this method will throw a
      * <code>ValueFormatException</code>.
      *

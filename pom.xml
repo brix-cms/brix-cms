@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<version>9</version>
 	</parent>
 
 	<groupId>org.brixcms</groupId>
@@ -46,25 +46,27 @@
 
 	<properties>
 		<!-- brix version is now set here -->
-		<revision>8.13.1</revision>
-		<changelist>-SNAPSHOT-WW</changelist>
+		<revision>9.0.0</revision>
+		<changelist>-SNAPSHOT</changelist>
 
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<javadoc.disabled>false</javadoc.disabled>
+		<javadoc.disabled>true</javadoc.disabled>
 		<deployment.disabled>false</deployment.disabled>
 		<sources.disabled>false</sources.disabled>
 
-		<wicket.version>8.13.0</wicket.version>
-		<inmethod.grid.version>8.13.0</inmethod.grid.version>
-		<jetty.version>9.4.2.v20170220</jetty.version>
+		<wicket.version>9.5.0</wicket.version>
+		<inmethod.grid.version>9.5.0</inmethod.grid.version>
+		<jetty.version>9.4.43.v20210629</jetty.version>
 		<htmllexer.version>2.1</htmllexer.version>
-		<jackrabbit.version>2.14.6</jackrabbit.version>
+		<jackrabbit.version>2.20.3</jackrabbit.version>
+		<jackrabbit.oak-api.version>1.34.0</jackrabbit.oak-api.version>
 		<servlet-api.version>3.1.0</servlet-api.version>
+		<felix.maven-bundle-plugin>5.1.2</felix.maven-bundle-plugin>
 	</properties>
 
 	<dependencyManagement>
@@ -147,8 +149,8 @@
 			<!--+ | JACKRABBIT + -->
 			<dependency>
 				<groupId>org.apache.jackrabbit</groupId>
-				<artifactId>jackrabbit-api</artifactId>
-				<version>${jackrabbit.version}</version>
+				<artifactId>oak-jackrabbit-api</artifactId>
+				<version>${jackrabbit.oak-api.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>log4j</groupId>
@@ -370,7 +372,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<id>enforce-maven</id>
@@ -415,7 +417,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+				<version>3.3.1</version>
 				<configuration>
 					<detectOfflineLinks>false</detectOfflineLinks>
 					<minmemory>128m</minmemory>
@@ -423,14 +425,14 @@
 					<notimestamp>true</notimestamp>
 					<quiet>true</quiet>
 					<links>
-						<link>http://download.oracle.com/javase/1.5.0/docs/api</link>
-						<link>http://download.oracle.com/javaee/5/api</link>
-						<link>http://ci.apache.org/projects/wicket/apidocs/6.x</link>
-						<link>http://docs.spring.io/spring/docs/3.0.x/javadoc-api</link>
-						<link>http://logback.qos.ch/apidocs</link>
+						<link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
+						<link>https://javaee.github.io/javaee-spec/javadocs/</link>
+						<link>https://ci.apache.org/projects/wicket/apidocs/9.x</link>
+						<link>https://docs.spring.io/spring/docs/3.0.x/javadoc-api</link>
+						<link>https://logback.qos.ch/apidocs</link>
 					</links>
 					<failOnError>false</failOnError>
-					<additionalparam>-Xdoclint:none</additionalparam>
+<!--					<additionalparam>-Xdoclint:none</additionalparam>-->
 					<skip>${javadoc.disabled}</skip>
 				</configuration>
 				<executions>
@@ -469,7 +471,7 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.5.3</version>
+				<version>${felix.maven-bundle-plugin}</version>
 				<inherited>true</inherited>
 				<extensions>true</extensions>
 			</plugin>
@@ -484,7 +486,7 @@
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
-					<version>2.5.3</version>
+					<version>${felix.maven-bundle-plugin}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

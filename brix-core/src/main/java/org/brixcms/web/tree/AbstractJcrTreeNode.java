@@ -23,7 +23,6 @@ import org.brixcms.jcr.api.JcrNodeIterator;
 import org.brixcms.jcr.wrapper.BrixNode;
 import org.brixcms.plugin.site.SitePlugin;
 
-import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -153,7 +152,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
     }
 
     @Override
-    public int getIndex(TreeNode node) {
+    public int getIndex(javax.swing.tree.TreeNode node) {
         return 0;
     }
 
@@ -166,7 +165,7 @@ public class AbstractJcrTreeNode implements JcrTreeNode, IDetachable {
         return nodeModel.getObject().isFolder() == false;
     }
 
-    public Enumeration<?> children() {
+    public Enumeration<? extends javax.swing.tree.TreeNode> children() {
         return Collections.enumeration(getChildren());
     }
 }
